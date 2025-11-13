@@ -4,8 +4,8 @@ import 'package:ttproj/core/theme/app_text_styles.dart';
 import 'package:ttproj/features/templete/presentation/widget/app_button.dart';
 import 'package:ttproj/utility.dart';
 
-class Sp1 extends StatelessWidget {
-  const Sp1({super.key});
+class Sp3 extends StatelessWidget {
+  const Sp3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class Sp1 extends StatelessWidget {
         children: [
           //! image
           Image.asset(
-            'assets/images/splash_screen/Pyramids.jpg',
+            'assets/images/splash_screen/Budget_Optimizer.png',
             width: double.infinity,
             height: 544,
             fit: BoxFit.cover,
@@ -32,7 +32,7 @@ class Sp1 extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Discover ',
+                              text: 'Budget ',
                               style: AppTextStyles
                                   .headLine4SemiBold
                                   .copyWith(
@@ -41,7 +41,7 @@ class Sp1 extends StatelessWidget {
                                   ),
                             ),
                             TextSpan(
-                              text: 'Egypt',
+                              text: 'Optimizer',
                               style: AppTextStyles
                                   .headLine4SemiBold
                                   .copyWith(
@@ -55,7 +55,7 @@ class Sp1 extends StatelessWidget {
                       addVertical(38),
                       Text(
                         textAlign: TextAlign.center,
-                        'Start your greatest exploration where legends began.',
+                        'Smart AI matches your budget to your trip',
                         style: AppTextStyles.headLine8Light
                             .copyWith(
                               color: AppColors.darkGray1,

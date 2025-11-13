@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ttproj/core/theme/app_colors.dart';
+import 'package:ttproj/core/theme/app_shadows.dart';
+import 'package:ttproj/core/theme/app_text_styles.dart';
 
 ThemeData getLightTheme() {
   return ThemeData(
-    scaffoldBackgroundColor: Colors.transparent,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        textStyle: AppTextStyles.headLine7Regular.copyWith(
+          color: AppColors.darkGray1,
+        ),
+      ),
+    ),
   );
 }

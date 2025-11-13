@@ -4,8 +4,8 @@ import 'package:ttproj/core/theme/app_text_styles.dart';
 import 'package:ttproj/features/templete/presentation/widget/app_button.dart';
 import 'package:ttproj/utility.dart';
 
-class Sp1 extends StatelessWidget {
-  const Sp1({super.key});
+class Sp4 extends StatelessWidget {
+  const Sp4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class Sp1 extends StatelessWidget {
         children: [
           //! image
           Image.asset(
-            'assets/images/splash_screen/Pyramids.jpg',
+            'assets/images/splash_screen/Hidden_Gems.png',
             width: double.infinity,
             height: 544,
             fit: BoxFit.cover,
@@ -32,7 +32,7 @@ class Sp1 extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Discover ',
+                              text: 'Hidden ',
                               style: AppTextStyles
                                   .headLine4SemiBold
                                   .copyWith(
@@ -41,7 +41,7 @@ class Sp1 extends StatelessWidget {
                                   ),
                             ),
                             TextSpan(
-                              text: 'Egypt',
+                              text: 'Gems',
                               style: AppTextStyles
                                   .headLine4SemiBold
                                   .copyWith(
@@ -55,7 +55,7 @@ class Sp1 extends StatelessWidget {
                       addVertical(38),
                       Text(
                         textAlign: TextAlign.center,
-                        'Start your greatest exploration where legends began.',
+                        'Discover secret cafes, cozy restaurants, and fun spots across Egypt.',
                         style: AppTextStyles.headLine8Light
                             .copyWith(
                               color: AppColors.darkGray1,

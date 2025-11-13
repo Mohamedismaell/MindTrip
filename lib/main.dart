@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ttproj/core/theme/theme_data/light_theme_data.dart';
+import 'package:ttproj/features/templete/presentation/screens/splash_screens/interests_screen.dart';
 import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp1.dart';
+import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp2.dart';
+import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp3.dart';
+import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp4.dart';
 
 import 'core/theme/theme_data/dark_theme_data.dart';
 
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: getLightTheme(),
       darkTheme: getDarkTheme(),
       themeMode: ThemeMode.light,
-      home: Sp1(),
+      home: InterestsScreen(),
     );
   }
 }

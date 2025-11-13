@@ -8,7 +8,8 @@ class AppColors {
   static const Color primaryLightBlue2 = Color(0xFF97CDFF);
   static const Color primaryLightGray = Color(0xFFF3F4F6);
   static const Color mediumLightGray = Color(0xFF9CA3AF);
-  static const Color darkGray = Color(0xFF374151);
+  static const Color darkGray1 = Color(0xFF374151);
+  static const Color darkGray2 = Color(0xFF717171);
   static const Color pureBlack = Colors.black;
   static const Color pureWhite = Colors.white;
 
