@@ -1,0 +1,3 @@
+// class NewsEntity {
+//   NewsEntity();
+// }
