@@ -49,11 +49,14 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         return;
       },
-      title: 'Flutter Demo',
-      theme: getLightTheme(),
-      darkTheme: getDarkTheme(),
-      themeMode: ThemeMode.light,
-      home: MaterialApp.router(routerConfig: _router),
+
+      home: MaterialApp.router(
+        title: 'Flutter Demo',
+        theme: getLightTheme(),
+        darkTheme: getDarkTheme(),
+        themeMode: ThemeMode.light,
+        routerConfig: _router,
+      ),
     );
   }
 }
