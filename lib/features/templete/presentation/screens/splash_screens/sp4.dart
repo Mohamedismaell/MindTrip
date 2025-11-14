@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ttproj/core/theme/app_colors.dart';
 import 'package:ttproj/core/theme/app_text_styles.dart';
 import 'package:ttproj/features/templete/presentation/widget/app_button.dart';
@@ -123,19 +124,11 @@ class Sp4 extends StatelessWidget {
             ],
           ),
           addVertical(58),
-          Column(
-            children: [
-              AppButton.solid(
-                text: 'Next',
-                onPressed: () {},
-              ),
-              addVertical(20),
-              TextButton(
-                onPressed: () {},
-                child: Text('Skip'),
-              ),
-            ],
+          AppButton.solid(
+            text: 'Get Started ',
+            onPressed: () => context.go('/interests'),
           ),
+          addVertical(20),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ttproj/core/theme/app_colors.dart';
 import 'package:ttproj/core/theme/app_text_styles.dart';
 import 'package:ttproj/features/templete/presentation/widget/app_button.dart';
@@ -126,12 +127,19 @@ class Sp2 extends StatelessWidget {
           Column(
             children: [
               AppButton.solid(
+                onPressed: () => context.go('/sp3'),
                 text: 'Next',
-                onPressed: () {},
               ),
               addVertical(20),
               TextButton(
-                onPressed: () {},
+                onPressed: () => context.go(
+                  '/interests',
+                ), //  Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => InterestsScreen(),
+                //   ),
+                // ),
                 child: Text('Skip'),
               ),
             ],
