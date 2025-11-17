@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import '../../../../../core/routes/navigation_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 2, milliseconds: 500),
       () {
         if (mounted) {
-          context.go('/sp1');
+          NavigationHelper.goToOnBoarding1(context);
         }
       },
     );

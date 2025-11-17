@@ -31,5 +31,21 @@ ThemeData getLightTheme() {
         textStyle: AppTextStyles.headLine7Bold.copyWith(),
       ),
     ),
+    //   outlinedButtonTheme: OutlinedButtonThemeData(
+    //     style: OutlinedButton.styleFrom(
+    //       side: BorderSide(
+    //         color``: AppColors.blueLightGradient,
+    //         width: 1.5,
+    //       ),
+    //       padding: const EdgeInsets.symmetric(
+    //         horizontal: 62.5,
+    //         vertical: 12,
+    //       ),
+    //       foregroundColor: AppColors.darkGray1,
+    //       textStyle: AppTextStyles.headLine7Regular
+    //           .copyWith(),
+    //     ),
+    //   ),
+    // );
   );
 }

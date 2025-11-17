@@ -46,6 +46,7 @@ flutter:
     - assets/images/
     - assets/images/splash_screen/
     - assets/images/on_boarding/
+    - assets/images/authentication/
     - assets/images/animation/
   fonts:
     - family: SFProText

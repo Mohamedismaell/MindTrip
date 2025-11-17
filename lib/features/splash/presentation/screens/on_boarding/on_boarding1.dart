@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ttproj/core/theme/app_colors.dart';
 import 'package:ttproj/core/theme/app_text_styles.dart';
-import 'package:ttproj/features/templete/presentation/widget/app_button.dart';
-import 'package:ttproj/features/templete/presentation/widget/onboarding_progress_bar.dart';
+import 'package:ttproj/features/splash/presentation/widget/onboarding_progress_bar.dart';
 import 'package:ttproj/utility.dart';
+import '../../../../../core/routes/navigation_helper.dart';
+import '../../../../../core/widget/app_button.dart';
 
-class Sp4 extends StatelessWidget {
-  const Sp4({super.key});
+class OnBoarding1 extends StatelessWidget {
+  const OnBoarding1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class Sp4 extends StatelessWidget {
         children: [
           //! image
           Image.asset(
-            'assets/images/splash_screen/Hidden_Gems.png',
+            'assets/images/splash_screen/Pyramids.jpg',
             width: double.infinity,
             height: 544,
             fit: BoxFit.cover,
@@ -30,7 +30,7 @@ class Sp4 extends StatelessWidget {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Hidden ',
+                        text: 'Discover ',
                         style: AppTextStyles
                             .headLine4SemiBold
                             .copyWith(
@@ -38,7 +38,7 @@ class Sp4 extends StatelessWidget {
                             ),
                       ),
                       TextSpan(
-                        text: 'Gems',
+                        text: 'Egypt',
                         style: AppTextStyles
                             .headLine4SemiBold
                             .copyWith(
@@ -51,7 +51,7 @@ class Sp4 extends StatelessWidget {
                 addVertical(38),
                 Text(
                   textAlign: TextAlign.center,
-                  'Discover secret cafes, cozy restaurants, and fun spots across Egypt.',
+                  'Start your greatest exploration where legends began.',
                   style: AppTextStyles.headLine8Light
                       .copyWith(color: AppColors.darkGray1),
                 ),
@@ -59,15 +59,31 @@ class Sp4 extends StatelessWidget {
               ],
             ),
           ),
-          OnboardingProgress(currentPage: 3),
+          OnboardingProgress(currentPage: 0),
           addVertical(58),
-          AppButton(
-            button: TextButton(
-              onPressed: () => context.go('/interests'),
-              child: Text('Get Started'),
-            ),
+          Column(
+            children: [
+              AppButton(
+                button: TextButton(
+                  onPressed: () =>
+                      NavigationHelper.goToOnBoarding2(
+                        context,
+                      ),
+                  child: Text('Next'),
+                ),
+              ),
+              addVertical(20),
+              TextButton(
+                onPressed: () =>
+                    NavigationHelper.goToInterests(context),
+                child: Text(
+                  'Skip',
+                  style: AppTextStyles.headLine7Regular
+                      .copyWith(color: AppColors.darkGray2),
+                ),
+              ),
+            ],
           ),
-          addVertical(20),
         ],
       ),
     );

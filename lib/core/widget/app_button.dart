@@ -7,10 +7,12 @@ class AppButton extends StatelessWidget {
   final TextButton button;
   // final Color textColor;
   final LinearGradient? gradientColor;
+  final double? width;
   const AppButton({
     super.key,
     required this.button,
     this.gradientColor,
+    this.width,
     // required this.textColor,
   });
 
@@ -21,6 +23,7 @@ class AppButton extends StatelessWidget {
       //   horizontal: 62.5,
       //   vertical: 12,
       // ),
+      width: width,
       decoration: BoxDecoration(
         gradient:
             gradientColor ?? AppColors.blueLightGradient,

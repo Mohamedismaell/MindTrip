@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../errors/exceptions.dart';
 import 'api_consumer.dart';
@@ -49,8 +50,10 @@ class DioConsumer extends ApiConsumer {
     bool isFormData = false,
   }) async {
     try {
-      print('🔍 Request URL: ${dio.options.baseUrl}$path');
-      print('🔍 Query Parameters: $queryParameters');
+      debugPrint(
+        '🔍 Request URL: ${dio.options.baseUrl}$path',
+      );
+      debugPrint('🔍 Query Parameters: $queryParameters');
 
       final response = await dio.get(
         path,
@@ -58,16 +61,16 @@ class DioConsumer extends ApiConsumer {
         queryParameters: queryParameters,
       );
 
-      print(
+      debugPrint(
         '📥 Total Results: ${response.data['totalResults']}',
       );
-      print(
+      debugPrint(
         '📥 Posts Count: ${response.data['posts']?.length ?? 0}',
       );
-      print(
+      debugPrint(
         '📥 Requests Left: ${response.data['requestsLeft']}',
       );
-      print(
+      debugPrint(
         '📥 Response URL: ${dio.options.baseUrl}$path?${Uri(queryParameters: queryParameters).query}',
       );
       // print(

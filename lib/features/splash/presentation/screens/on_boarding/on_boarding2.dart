@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:ttproj/core/routes/navigation_helper.dart';
 import 'package:ttproj/core/theme/app_colors.dart';
 import 'package:ttproj/core/theme/app_text_styles.dart';
-import 'package:ttproj/features/templete/presentation/widget/app_button.dart';
-import 'package:ttproj/features/templete/presentation/widget/onboarding_progress_bar.dart';
+import 'package:ttproj/features/splash/presentation/widget/onboarding_progress_bar.dart';
 import 'package:ttproj/utility.dart';
 
-class Sp2 extends StatelessWidget {
-  const Sp2({super.key});
+import '../../../../../core/widget/app_button.dart';
+
+class OnBoarding2 extends StatelessWidget {
+  const OnBoarding2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +66,17 @@ class Sp2 extends StatelessWidget {
             children: [
               AppButton(
                 button: TextButton(
-                  onPressed: () => context.go('/sp3'),
+                  onPressed: () =>
+                      NavigationHelper.goToOnBoarding3(
+                        context,
+                      ),
                   child: Text('Next'),
                 ),
               ),
               addVertical(20),
               TextButton(
-                onPressed: () => context.go('/interests'),
+                onPressed: () =>
+                    NavigationHelper.goToInterests(context),
                 child: Text(
                   'Skip',
                   style: AppTextStyles.headLine7Regular
