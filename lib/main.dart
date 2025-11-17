@@ -6,6 +6,7 @@ import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp1
 import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp2.dart';
 import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp3.dart';
 import 'package:ttproj/features/templete/presentation/screens/splash_screens/sp4.dart';
+import 'package:ttproj/features/templete/presentation/screens/splash_screens/splash_screen.dart';
 import 'core/theme/theme_data/dark_theme_data.dart';
 
 void main() async {
@@ -15,8 +16,12 @@ void main() async {
 }
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/sp1',
+  initialLocation: '/splash',
   routes: [
+    GoRoute(
+      path: '/splash',
+      builder: (context, state) => const SplashScreen(),
+    ),
     GoRoute(
       path: '/sp1',
       builder: (context, state) => const Sp1(),
