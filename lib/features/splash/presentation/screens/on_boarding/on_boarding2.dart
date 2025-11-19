@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ttproj/core/routes/navigation_helper.dart';
-import 'package:ttproj/core/theme/app_colors.dart';
-import 'package:ttproj/core/theme/app_text_styles.dart';
+import 'package:ttproj/features/splash/presentation/widget/main_title.dart';
 import 'package:ttproj/features/splash/presentation/widget/onboarding_progress_bar.dart';
 import 'package:ttproj/utility.dart';
-
-import '../../../../../core/widget/app_button.dart';
+import '../../widget/main_image.dart';
+import '../../widget/navigation_area.dart';
 
 class OnBoarding2 extends StatelessWidget {
   const OnBoarding2({super.key});
@@ -15,75 +14,27 @@ class OnBoarding2 extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          //! image
-          Image.asset(
-            'assets/images/splash_screen/Ai_Planner.png',
-            width: double.infinity,
-            height: 544,
-            fit: BoxFit.cover,
+          //! Image
+          MainImage(
+            imageAssets:
+                'assets/images/splash_screen/Ai_Planner.png',
           ),
-          SizedBox(
-            width: 340,
-            child: Column(
-              children: [
-                //! mian text
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'AI ',
-                        style: AppTextStyles
-                            .headLine4SemiBold
-                            .copyWith(
-                              color: AppColors.primaryBlue,
-                            ),
-                      ),
-                      TextSpan(
-                        text: 'Planner',
-                        style: AppTextStyles
-                            .headLine4SemiBold
-                            .copyWith(
-                              color: AppColors.darkGray1,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                addVertical(38),
-                Text(
-                  textAlign: TextAlign.center,
-                  'Let AI create your dream trip across Egypt',
-                  style: AppTextStyles.headLine8Light
-                      .copyWith(color: AppColors.darkGray1),
-                ),
-                addVertical(58),
-              ],
-            ),
+          //! Title
+          MainTitle(
+            firstTitle: 'AI ',
+            secTitle: 'Planner',
+            describtion:
+                'Let AI create your dream trip across Egypt',
           ),
+          //! Nav_Bars
           OnboardingProgress(currentPage: 1),
           addVertical(58),
-          Column(
-            children: [
-              AppButton(
-                button: TextButton(
-                  onPressed: () =>
-                      NavigationHelper.goToOnBoarding3(
-                        context,
-                      ),
-                  child: Text('Next'),
-                ),
-              ),
-              addVertical(20),
-              TextButton(
-                onPressed: () =>
-                    NavigationHelper.goToInterests(context),
-                child: Text(
-                  'Skip',
-                  style: AppTextStyles.headLine7Regular
-                      .copyWith(color: AppColors.darkGray2),
-                ),
-              ),
-            ],
+          //! Nav_Button
+          NavigationArea(
+            navigateToNext: () =>
+                NavigationHelper.goToOnBoarding3(context),
+            navigateSkip: () =>
+                NavigationHelper.goToInterests(context),
           ),
         ],
       ),

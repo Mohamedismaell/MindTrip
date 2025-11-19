@@ -6,6 +6,9 @@ import 'package:ttproj/utility.dart';
 
 import '../../../../../core/routes/navigation_helper.dart';
 import '../../../../../core/widget/app_button.dart';
+import '../../widget/main_image.dart';
+import '../../widget/main_title.dart';
+import '../../widget/navigation_area.dart';
 
 class Sp4 extends StatelessWidget {
   const Sp4({super.key});
@@ -16,60 +19,26 @@ class Sp4 extends StatelessWidget {
       body: Column(
         children: [
           //! image
-          Image.asset(
-            'assets/images/splash_screen/Hidden_Gems.png',
-            width: double.infinity,
-            height: 544,
-            fit: BoxFit.cover,
+          MainImage(
+            imageAssets:
+                'assets/images/splash_screen/Hidden_Gems.png',
           ),
-          SizedBox(
-            width: 340,
-            child: Column(
-              children: [
-                //! mian text
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Hidden ',
-                        style: AppTextStyles
-                            .headLine4SemiBold
-                            .copyWith(
-                              color: AppColors.primaryBlue,
-                            ),
-                      ),
-                      TextSpan(
-                        text: 'Gems',
-                        style: AppTextStyles
-                            .headLine4SemiBold
-                            .copyWith(
-                              color: AppColors.darkGray1,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                addVertical(38),
-                Text(
-                  textAlign: TextAlign.center,
-                  'Discover secret cafes, cozy restaurants, and fun spots across Egypt.',
-                  style: AppTextStyles.headLine8Light
-                      .copyWith(color: AppColors.darkGray1),
-                ),
-                addVertical(58),
-              ],
-            ),
+          //! Title
+          MainTitle(
+            firstTitle: 'Hidden ',
+            secTitle: 'Gems',
+            describtion:
+                'Discover secret cafes, cozy restaurants, and fun spots across Egypt.',
           ),
+          //! Nav_Bars
           OnboardingProgress(currentPage: 3),
           addVertical(58),
-          AppButton(
-            button: TextButton(
-              onPressed: () =>
-                  NavigationHelper.goToInterests(context),
-              child: Text('Get Started'),
-            ),
+          //! Nav_Button
+          NavigationArea(
+            navigateToNext: () =>
+                NavigationHelper.goToInterests(context),
+            nextButtonText: 'Get Started',
           ),
-          addVertical(20),
         ],
       ),
     );
