@@ -27,6 +27,7 @@ class OnBoarding1 extends StatelessWidget {
                 'Start your greatest exploration where legends began.',
           ),
           //! Nav_Bars
+          addVertical(58),
           OnboardingProgress(currentPage: 0),
           addVertical(58),
           //! Nav_Button

@@ -15,7 +15,6 @@ class OnboardingProgress extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(4, (index) {
         final bool isActive = index == currentPage;
-
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           margin: const EdgeInsets.only(right: 8),

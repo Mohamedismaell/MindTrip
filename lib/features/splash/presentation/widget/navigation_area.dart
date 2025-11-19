@@ -12,12 +12,10 @@ class NavigationArea extends StatelessWidget {
     this.nextButtonText = 'Next',
     this.skipButtonText = 'Skip',
   });
-
   final void Function() navigateToNext;
   final void Function()? navigateSkip;
   final String nextButtonText;
   final String skipButtonText;
-
   @override
   Widget build(BuildContext context) {
     return Column(

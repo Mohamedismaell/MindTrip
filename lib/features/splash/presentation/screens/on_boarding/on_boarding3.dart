@@ -27,6 +27,7 @@ class OnBoarding3 extends StatelessWidget {
                 'Smart AI matches your budget to your trip',
           ),
           //! Nav_Bars
+          addVertical(58),
           OnboardingProgress(currentPage: 2),
           addVertical(58),
           //! Nav_Button

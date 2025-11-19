@@ -27,6 +27,7 @@ class OnBoarding2 extends StatelessWidget {
                 'Let AI create your dream trip across Egypt',
           ),
           //! Nav_Bars
+          addVertical(58),
           OnboardingProgress(currentPage: 1),
           addVertical(58),
           //! Nav_Button

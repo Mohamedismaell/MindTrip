@@ -47,7 +47,6 @@ class MainTitle extends StatelessWidget {
               color: AppColors.darkGray1,
             ),
           ),
-          addVertical(58),
         ],
       ),
     );
