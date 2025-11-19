@@ -1,3 +1,3 @@
-# ttproj
+# MindTrip
 
 A new Flutter project.
