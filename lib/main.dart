@@ -1,12 +1,99 @@
+import 'package:ttproj/core/connections/retry_runner.dart';
+import 'package:ttproj/core/database/cache/app_hive.dart';
+import 'package:ttproj/core/helper/hydrated_storage.dart';
+import 'package:ttproj/core/shared/injection/service_locator.dart';
+import 'package:ttproj/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:ttproj/core/shared/presentation/manager/connection_cubit/connection_cubit.dart';
+import 'package:ttproj/core/shared/routes/app_router.dart';
+import 'package:ttproj/core/theme/theme_data_/dark_theme_data.dart';
+import 'package:ttproj/core/theme/theme_data_/light_theme_data.dart';
+import 'package:ttproj/features/onboarding/domain/repositories/auth_repository.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ttproj/core/theme/theme_data/light_theme_data.dart';
-import 'package:ttproj/core/routes/app_router.dart';
-import 'core/theme/theme_data/dark_theme_data.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'core/observers/app_bloc_observer.dart';
+import 'core/theme/cubit/theme_cubit.dart';
 
-void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await initServiceLocator();
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  print('Step 1: ensureInitialized done');
+  Bloc.observer = AppBlocObserver();
+  print('Step 2: Bloc observer set');
+  HydratedBloc.storage = await buildHydratedStorage();
+  print('Step 3: HydratedStorage built');
+  await AppHive.init();
+  await initializeDependencies(onboardingBox: AppHive.onboardingBox);
+  print('Step 4: Service Locator initialized');
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  runApp(
+    DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
+    // AppBootstrap(),
+  );
+}
+
+//!providers
+class AppBootstrap extends StatelessWidget {
+  const AppBootstrap({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AppConnectionCubit>(
+          create: (_) =>
+              AppConnectionCubit(sl<InternetConnection>(), sl<RetryRunner>()),
+        ),
+        BlocProvider<AppGateCubit>(
+          create: (_) =>
+              AppGateCubit(onboardingRepository: sl<OnboardingRepository>()),
+        ),
+
+        BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+
+        // BlocProvider<BooksCubit>(
+        //   create: (context) => BooksCubit(sl<GetBooksUseCase>()),
+        // ),
+        // BlocProvider<BookCubit>(
+        //   create: (context) => BookCubit(sl<GetBooksIdUseCase>()),
+        // ),
+        // BlocProvider<ChaptersCubit>(
+        //   create: (context) => ChaptersCubit(sl<GetChaptersUseCase>()),
+        // ),
+        // BlocProvider<ReadingProgressCubit>(
+        //   create: (context) => ReadingProgressCubit(
+        //     sl<InsertReadingPregress>(),
+        //     sl<GetReadingProgress>(),
+        //   ),
+        // ),
+        // BlocProvider<UserStatsCubit>(
+        //   create: (context) =>
+        //       UserStatsCubit(sl<UpdateUserStats>(), sl<GetUserStats>()),
+        // ),
+        // BlocProvider<ProfileCubit>(
+        //   create: (context) => ProfileCubit(
+        //     sl<GetUserProfile>(),
+        //     sl<UpdateUserProfile>(),
+        //     sl<UploadAvatar>(),
+        //     // sl<GetAvatar>(),
+        //   ),
+        // ),
+        // BlocProvider<BookMarksCubit>(
+        //   create: (context) => BookMarksCubit(
+        //     sl<InsertBookMarks>(),
+        //     sl<RemoveBookMarks>(),
+        //     sl<GetBookMarks>(),
+        //   ),
+        // ),
+      ],
+      child: const MyApp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -14,12 +101,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'MindTrip',
-      theme: getLightTheme(),
-      darkTheme: getDarkTheme(),
-      themeMode: ThemeMode.light,
-      routerConfig: AppRouter.router,
+    // if (kDebugMode) {
+    //   print(
+    //     "USER EMAIL ===> **** ${sl<SupabaseClient>().auth.currentUser?.email} ****",
+    //   );
+    // }
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, mode) {
+        return ScreenUtilInit(
+          designSize: const Size(393, 852),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) => MaterialApp.router(
+            // locale: DevicePreview.locale(context),
+            // builder: DevicePreview.appBuilder,
+            debugShowCheckedModeBanner: false,
+            theme: getLightTheme(),
+            darkTheme: getDarkTheme(),
+            themeMode: mode.themeMode,
+            routerConfig: sl<AppRouter>().appRouter,
+            builder: DevicePreview.appBuilder,
+          ),
+        );
+      },
     );
   }
 }

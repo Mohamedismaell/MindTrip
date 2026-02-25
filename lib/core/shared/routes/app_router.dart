@@ -1,0 +1,111 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ttproj/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:ttproj/core/shared/routes/app_routes.dart';
+import 'package:ttproj/core/shared/routes/go_router_refresh_stream.dart';
+import 'package:ttproj/features/onboarding/routes/onboarding_routes.dart';
+
+//Todo Add onBorading Route
+class AppRouter {
+  final AppGateCubit appGateCubit;
+  AppRouter({required this.appGateCubit});
+
+  late final GoRouter appRouter = GoRouter(
+    initialLocation: AppRoutes.splash,
+    refreshListenable: GoRouterRefreshStream(appGateCubit.stream),
+    redirect: _redirect,
+    routes: [
+      ...OnBoardingRoutes.routes,
+      // ...AuthRoutes.routes,
+      // ShellRoute(
+      //   builder: (context, state, child) {
+      //     return AppShell(location: state.uri.toString(), child: child);
+      //   },
+      //   routes: [
+      //     StatefulShellRoute.indexedStack(
+      //       builder: (context, state, navigationShell) {
+      //         return TabsShell(navigationShell: navigationShell);
+      //       },
+      //       branches: [
+      //         StatefulShellBranch(routes: [HomeRoutes.homeRoute]),
+      //         StatefulShellBranch(routes: [ExploreRoutes.routes]),
+      //         StatefulShellBranch(routes: [LibraryRoutes.bookmarksRoute]),
+      //         StatefulShellBranch(routes: [ProfileRoutes.routes]),
+      //       ],
+      //     ),
+      //     ...BookRoutes.routes,
+      //     ExploreRoutes.extraRoute,
+      //     // ...CategoriesRoutes.extraRoutes,
+      //     // ...PostDetailsRoutes.routes,
+      //   ],
+      // ),
+      // ...GeneraleRoutes.routes,
+    ],
+    errorBuilder: (context, state) => ErrorScreen(error: state.error),
+  );
+
+  String? _redirect(BuildContext context, GoRouterState state) {
+    final gateState = appGateCubit.state;
+    final location = state.matchedLocation;
+    // final isRecovering = authNotifier.isRecoveringPassword;
+
+    switch (gateState) {
+      //ToDo loading would be splash screen
+      // case AppGateLoading():
+      case AppGateOnboarding():
+        if (location != AppRoutes.onBoarding) return AppRoutes.onBoarding;
+
+      case AppGateAuthenticated():
+        if (state.matchedLocation == AppRoutes.login) {
+          return AppRoutes.home;
+        }
+        return null;
+
+      case AppGateUnauthenticated():
+        if (location != AppRoutes.login) {
+          return AppRoutes.login;
+        }
+
+      default:
+        return null;
+    }
+    return null;
+  }
+}
+
+//! Error Screen
+class ErrorScreen extends StatelessWidget {
+  final Exception? error;
+
+  const ErrorScreen({super.key, this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Error')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              'Something went wrong!',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error?.toString() ?? 'Unknown error occurred',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => context.go(AppRoutes.home),
+              child: const Text('Go Home'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

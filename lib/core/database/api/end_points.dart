@@ -1,12 +1,15 @@
 class EndPoints {
-  static String baseUrl = 'https://api.webz.io/';
-  static String news = 'newsApiLite';
-  static String token =
-      '73e2257b-4e9a-41cb-9c34-a205e678e46a';
+  static String baseUrl = 'https://newsapi.org/v2/';
+  //  'https://api.webz.io/';
+  static String allNews = 'everything';
+  static String topHeadLines = 'top-headlines';
+  static String token = '3ef0781d7ca94cbd917401b00f3d00f1';
+  static String country = 'us';
+  // '263c0ff3-d380-4285-8bca-fb187fb47d76';
   static String defaultCategory = 'Politics';
-  static String formatCategoryQuery(String category) {
-    return 'category:"$category"';
-  }
+  // static String formatCategoryQuery(String category) {
+  //   return 'category:"$category"';
+  // }
 
   // static String formatDateQuery(DateTime time) {
   //   return 'ts:"$time"';
