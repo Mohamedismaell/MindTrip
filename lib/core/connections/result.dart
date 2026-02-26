@@ -1,4 +1,4 @@
-import 'package:ttproj/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
 
 /// Utility class that simplifies handling errors.
 ///

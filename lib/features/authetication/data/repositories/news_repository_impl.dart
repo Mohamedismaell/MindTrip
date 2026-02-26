@@ -1,8 +1,8 @@
-// import 'package:ttproj/core/connections/result.dart';
+// import 'package:mindtrip/core/connections/result.dart';
 
-// import 'package:ttproj/core/params/params.dart';
+// import 'package:mindtrip/core/params/params.dart';
 
-// import 'package:ttproj/features/templete/domain/entities/post_entitiy.dart';
+// import 'package:mindtrip/features/templete/domain/entities/post_entitiy.dart';
 
 // import '../../../../core/connections/network_info.dart';
 // // import '../../../../core/errors/exceptions.dart';

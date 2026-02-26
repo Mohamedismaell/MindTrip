@@ -1,9 +1,8 @@
-
 import 'package:dio/dio.dart';
-import 'package:ttproj/core/connections/network_info.dart';
-import 'package:ttproj/core/connections/retry_queue.dart';
-import 'package:ttproj/core/database/api/end_points.dart';
-import 'package:ttproj/core/errors/exceptions/no_internet_exception.dart';
+import 'package:mindtrip/core/connections/network_info.dart';
+import 'package:mindtrip/core/connections/retry_queue.dart';
+import 'package:mindtrip/core/database/api/end_points.dart';
+import 'package:mindtrip/core/errors/exceptions/no_internet_exception.dart';
 
 class ApiInterceptor extends Interceptor {
   final NetworkInfo networkInfo;

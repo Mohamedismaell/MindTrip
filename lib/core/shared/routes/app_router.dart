@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ttproj/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:ttproj/core/shared/routes/app_routes.dart';
-import 'package:ttproj/core/shared/routes/go_router_refresh_stream.dart';
-import 'package:ttproj/features/onboarding/routes/onboarding_routes.dart';
+import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
+import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 
 //Todo Add onBorading Route
 class AppRouter {
@@ -53,6 +53,9 @@ class AppRouter {
     }
 
     if (gateState is AppGateOnboarding) {
+      if (location == AppRoutes.interests) {
+        return null;
+      }
       return location == AppRoutes.onBoarding ? null : AppRoutes.onBoarding;
     }
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ttproj/features/onboarding/domain/repositories/auth_repository.dart';
+import 'package:mindtrip/features/onboarding/domain/repositories/auth_repository.dart';
 part 'app_gate_state.dart';
 
 class AppGateCubit extends Cubit<AppGateState> {

@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "MindTrip",
+            "name": "mindtrip",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "MindTrip (profile mode)",
+            "name": "mindtrip (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "MindTrip (release mode)",
+            "name": "mindtrip (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

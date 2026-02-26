@@ -1,6 +1,6 @@
 {
-    "name": "ttproj",
-    "short_name": "ttproj",
+    "name": "mindtrip",
+    "short_name": "mindtrip",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

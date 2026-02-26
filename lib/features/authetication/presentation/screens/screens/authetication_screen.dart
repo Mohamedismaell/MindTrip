@@ -1,8 +1,8 @@
 // import 'package:flutter/material.dart';
-// import 'package:ttproj/core/theme/app_colors.dart';
-// import 'package:ttproj/core/widget/app_button.dart';
-// import 'package:ttproj/core/widget/gradient_border_button.dart';
-// import 'package:ttproj/utility.dart';
+// import 'package:mindtrip/core/theme/app_colors.dart';
+// import 'package:mindtrip/core/widget/app_button.dart';
+// import 'package:mindtrip/core/widget/gradient_border_button.dart';
+// import 'package:mindtrip/utility.dart';
 // import '../../widget/main_image.dart';
 
 // class AutheticationScreen extends StatelessWidget {

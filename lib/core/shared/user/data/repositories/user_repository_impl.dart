@@ -1,5 +1,5 @@
-import 'package:ttproj/core/shared/user/data/datasources/user_remote_data_source.dart';
-import 'package:ttproj/core/shared/user/domain/repositories/user_repository.dart';
+import 'package:mindtrip/core/shared/user/data/datasources/user_remote_data_source.dart';
+import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl extends UserRepository {
   final UserRemoteDataSource remoteDataSource;

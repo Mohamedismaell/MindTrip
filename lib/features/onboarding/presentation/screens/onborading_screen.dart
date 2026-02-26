@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ttproj/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
-import 'package:ttproj/features/onboarding/presentation/widgets/onboarding_content.dart';
-import 'package:ttproj/features/onboarding/presentation/widgets/onboarding_pages.dart';
+import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
+import 'package:mindtrip/features/onboarding/presentation/widgets/onboarding_content.dart';
+import 'package:mindtrip/features/onboarding/presentation/widgets/onboarding_pages.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

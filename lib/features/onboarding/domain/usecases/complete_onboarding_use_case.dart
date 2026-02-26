@@ -1,4 +1,4 @@
-import 'package:ttproj/features/onboarding/domain/repositories/auth_repository.dart';
+import 'package:mindtrip/features/onboarding/domain/repositories/auth_repository.dart';
 
 class CompleteOnboardingUseCase {
   final OnboardingRepository repo;

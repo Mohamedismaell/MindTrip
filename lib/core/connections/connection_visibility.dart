@@ -1,6 +1,4 @@
-
-
-import 'package:ttproj/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 
 bool shouldShowConnectionBanner(String location) {
   return !location.startsWith(AppRoutes.splash) &&

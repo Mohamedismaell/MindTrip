@@ -1,4 +1,4 @@
-package com.example.ttproj
+package com.example.mindtrip
 
 import io.flutter.embedding.android.FlutterActivity
 

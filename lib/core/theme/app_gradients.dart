@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ttproj/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 
 class AppGradients {
   const AppGradients._();

@@ -1,4 +1,4 @@
-import 'package:ttproj/core/database/api/api_consumer.dart';
+import 'package:mindtrip/core/database/api/api_consumer.dart';
 
 class UserRemoteDataSource {
   UserRemoteDataSource();

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ttproj/core/connections/retry_queue.dart';
+import 'package:mindtrip/core/connections/retry_queue.dart';
 
 class RetryRunner {
   RetryRunner(this.dio, this.queue);

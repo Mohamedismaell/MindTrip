@@ -1,5 +1,5 @@
-import 'package:ttproj/features/onboarding/data/sources/onboarding_local_data_source.dart';
-import 'package:ttproj/features/onboarding/domain/repositories/auth_repository.dart';
+import 'package:mindtrip/features/onboarding/data/sources/onboarding_local_data_source.dart';
+import 'package:mindtrip/features/onboarding/domain/repositories/auth_repository.dart';
 
 class OnboardingRepositoryImpl implements OnboardingRepository {
   final OnboardingLocalDataSource local;

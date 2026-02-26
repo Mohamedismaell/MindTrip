@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:ttproj/core/connections/retry_runner.dart';
+import 'package:mindtrip/core/connections/retry_runner.dart';
 
 part 'connection_state.dart';
 

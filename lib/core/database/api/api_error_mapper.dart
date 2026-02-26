@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:ttproj/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
 
 class ApiErrorMapper {
   static Failure fromException(Object e) {

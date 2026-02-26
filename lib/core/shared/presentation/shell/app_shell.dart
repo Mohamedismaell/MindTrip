@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ttproj/core/shared/presentation/widget/connection_banner.dart';
+import 'package:mindtrip/core/shared/presentation/widget/connection_banner.dart';
 // import 'package:news_app/core/connection/connection_visibility.dart';
 
 class AppShell extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ttproj/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
+import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
 
 part 'on_boarding_state.dart';
 
@@ -20,5 +20,17 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   Future<void> finishOnboarding(int index) async {
     await completeOnboarding.call();
+  }
+
+  void editSelectedCategory(String category) {
+    final currentSelected = List<String>.from(state.selectedCategories ?? []);
+
+    if (currentSelected.contains(category)) {
+      currentSelected.remove(category);
+    } else {
+      currentSelected.add(category);
+    }
+    emit(state.copyWith(selectedCategories: currentSelected));
+    print('$currentSelected');
   }
 }

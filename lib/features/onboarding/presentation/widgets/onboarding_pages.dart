@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ttproj/core/theme/extensions/theme_extension.dart';
-import 'package:ttproj/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
-import 'package:ttproj/features/onboarding/presentation/models/user_details.dart';
+import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
+import 'package:mindtrip/features/onboarding/presentation/models/onboarding_model.dart';
 
 class OnboardingPages extends StatelessWidget {
-  const OnboardingPages({
-    super.key,
-    required this.pageController,
-    // required this.carouselController,
-  });
+  const OnboardingPages({super.key, required this.pageController});
   final PageController pageController;
-  // final CarouselSliderController carouselController;
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: SizedBox.expand(
         child: PageView.builder(
-          // physics: const NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (value) {
             context.read<OnboardingCubit>().updateIndex(
               pageController.page!.toInt(),

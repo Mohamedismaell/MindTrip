@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ttproj/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 
 //! LIGHT SCHEME
 final ColorScheme lightColorScheme = ColorScheme.light(
@@ -16,8 +16,7 @@ final ColorScheme lightColorScheme = ColorScheme.light(
   // Surfaces
   surface: AppColors.pureWhite,
   onSurface: AppColors.darkGray1,
-
-  surfaceContainerHighest: AppColors.mediumLightGray,
+  outline: AppColors.mediumLightGray,
   onSurfaceVariant: AppColors.darkGray2,
   // Status
   error: Colors.red,

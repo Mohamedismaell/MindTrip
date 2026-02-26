@@ -1,4 +1,4 @@
-# GoRouter Navigation Setup for MindTrip
+# GoRouter Navigation Setup for mindtrip
 
 ## Project Structure
 

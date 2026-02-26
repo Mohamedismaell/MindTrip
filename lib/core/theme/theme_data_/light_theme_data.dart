@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ttproj/core/theme/app_color_schemes.dart';
-import 'package:ttproj/core/theme/app_colors.dart';
-import 'package:ttproj/core/theme/app_text_theme.dart';
+import 'package:mindtrip/core/theme/app_color_schemes.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_theme.dart';
 
 ThemeData getLightTheme() {
   final rawTextTheme = AppTextTheme.from(lightColorScheme);

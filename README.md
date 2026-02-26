@@ -1,3 +1,3 @@
-# MindTrip
+# mindtrip
 
 A new Flutter project.

@@ -1,4 +1,4 @@
-import 'package:ttproj/core/shared/user/domain/repositories/user_repository.dart';
+import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 
 class GetCurrentUser {
   final UserRepository repository;

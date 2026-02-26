@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ttproj/core/theme/app_gradients.dart';
-import 'package:ttproj/core/theme/app_shadows.dart';
+import 'package:mindtrip/core/theme/app_gradients.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 
 class CustomGradientButton extends StatelessWidget {
   const CustomGradientButton({super.key, required this.child});

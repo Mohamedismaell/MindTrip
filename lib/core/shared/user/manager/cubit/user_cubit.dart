@@ -1,6 +1,6 @@
 // import 'package:bloc/bloc.dart';
-// import 'package:ttproj/core/shared/user/data/models/user_model.dart';
-// import 'package:ttproj/core/shared/user/domain/usecases/get_current_user.dart';
+// import 'package:mindtrip/core/shared/user/data/models/user_model.dart';
+// import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
 // import 'package:equatable/equatable.dart';
 
 // part 'user_state.dart';

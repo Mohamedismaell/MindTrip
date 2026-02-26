@@ -1,5 +1,5 @@
-// import 'package:ttproj/core/helper/size_provider/sized_helper_extension.dart';
-// import 'package:ttproj/core/theme/extensions/theme_extension.dart';
+// import 'package:mindtrip/core/helper/size_provider/sized_helper_extension.dart';
+// import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 
