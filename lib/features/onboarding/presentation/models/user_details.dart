@@ -1,31 +1,46 @@
 class OnboardingModel {
-  final String title;
+  final String firstTitle;
+  final String secondTitle;
   final String quote;
   // final String nextAction;
-  final List<String> imagePath;
+  final String imagePath;
 
   const OnboardingModel({
-    required this.title,
+    required this.firstTitle,
+    required this.secondTitle,
     required this.quote,
     // required this.nextAction,
     required this.imagePath,
   });
   static List<OnboardingModel> onboardingList = [
     OnboardingModel(
-      title: 'First to know',
-      quote: 'All news in one place, be the first to know last news',
+      firstTitle: 'Discover ',
+      secondTitle: 'Egypt',
+      quote: 'Start your greatest exploration where legends began.',
       // nextAction: 'Start Searching',
-      imagePath: [
-        'assets/images/Rectangle 18.png',
-        'assets/images/Rectangle 17.png',
-        'assets/images/Rectangle 16.png'
-      ],
+      imagePath: 'assets/images/onboarding/Pyramids.jpg',
     ),
     OnboardingModel(
-      title: 'QuickRead',
-      quote: 'All news in one place, be the first to know last news',
+      firstTitle: 'AI',
+      secondTitle: 'Planner ',
+      quote: 'Let AI create your dream trip across Egypt',
       // nextAction: 'Start Searching',
-      imagePath: ['assets/images/3d-illustration.png'],
+      imagePath: 'assets/images/onboarding/Ai_Planner.png',
+    ),
+    OnboardingModel(
+      firstTitle: 'Budget ',
+      secondTitle: 'Optimizer',
+      quote: 'Smart AI matches your budget to your trip',
+      // nextAction: 'Start Searching',
+      imagePath: 'assets/images/onboarding/Budget_Optimizer.png',
+    ),
+    OnboardingModel(
+      firstTitle: 'Hidden ',
+      secondTitle: 'Gems',
+      quote:
+          'Discover secret cafes, cozy restaurants, and fun spots across Egypt.',
+      // nextAction: 'Start Searching',
+      imagePath: 'assets/images/onboarding/Hidden_Gems.png',
     ),
   ];
 }

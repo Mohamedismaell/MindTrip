@@ -8,7 +8,7 @@ class AppTextTheme {
 
   static TextTheme from(ColorScheme c) {
     return TextTheme(
-      headlineLarge: AppTextStyles.h4Bold.copyWith(color: c.onSurface),
+      headlineLarge: AppTextStyles.h4SemiBold.copyWith(color: c.onSurface),
       headlineMedium: AppTextStyles.h5Medium.copyWith(color: c.onSurface),
 
       bodyLarge: AppTextStyles.h8Regular.copyWith(color: c.onSurface),

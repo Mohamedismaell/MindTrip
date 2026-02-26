@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ttproj/core/theme/app_color_schemes.dart';
 import 'package:ttproj/core/theme/app_colors.dart';
-import 'package:ttproj/core/theme/app_text_styles.dart';
 import 'package:ttproj/core/theme/app_text_theme.dart';
 
 ThemeData getLightTheme() {
@@ -25,11 +24,13 @@ ThemeData getLightTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 62.5, vertical: 12),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         foregroundColor: AppColors.pureWhite,
+        shadowColor: Colors.transparent,
+
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.r),
+        ),
         // textStyle: AppTextStyles.headLine7Bold.copyWith(),
       ),
     ),

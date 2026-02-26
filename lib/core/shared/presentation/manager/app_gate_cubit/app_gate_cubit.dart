@@ -9,9 +9,7 @@ class AppGateCubit extends Cubit<AppGateState> {
 
   StreamSubscription? _authSubscription;
 
-  AppGateCubit({required this.onboardingRepository}) : super(AppGateLoading()) {
-    start();
-  }
+  AppGateCubit({required this.onboardingRepository}) : super(AppGateLoading());
 
   Future<void> start() async {
     final isFirstTime = await onboardingRepository.isFirstTime();

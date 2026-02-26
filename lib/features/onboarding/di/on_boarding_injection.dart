@@ -34,9 +34,9 @@ class OnboardingDi {
     sl.registerLazySingleton<OnboardingCubit>(
       () => OnboardingCubit(sl<CompleteOnboardingUseCase>()),
     );
-    sl.registerLazySingleton(() => AppRouter(appGateCubit: sl<AppGateCubit>()));
     sl.registerLazySingleton(
       () => AppGateCubit(onboardingRepository: sl<OnboardingRepository>()),
     );
+    sl.registerLazySingleton(() => AppRouter(appGateCubit: sl<AppGateCubit>()));
   }
 }

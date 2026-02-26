@@ -9,12 +9,12 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   final CompleteOnboardingUseCase completeOnboarding;
 
   void updateIndex(int index) {
-    if (index == 0) {
+    if (index == 2) {
       emit(state.copyWith(currentIndex: index, isLastPage: true));
-      finishOnboarding(index);
+      // finishOnboarding(index);
       return;
     }
-    emit(state.copyWith(currentIndex: index));
+    emit(state.copyWith(currentIndex: index, isLastPage: false));
     // print(state.isLastPage);
   }
 

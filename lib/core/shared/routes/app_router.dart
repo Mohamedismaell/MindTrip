@@ -47,28 +47,23 @@ class AppRouter {
   String? _redirect(BuildContext context, GoRouterState state) {
     final gateState = appGateCubit.state;
     final location = state.matchedLocation;
-    // final isRecovering = authNotifier.isRecoveringPassword;
 
-    switch (gateState) {
-      //ToDo loading would be splash screen
-      // case AppGateLoading():
-      case AppGateOnboarding():
-        if (location != AppRoutes.onBoarding) return AppRoutes.onBoarding;
-
-      case AppGateAuthenticated():
-        if (state.matchedLocation == AppRoutes.login) {
-          return AppRoutes.home;
-        }
-        return null;
-
-      case AppGateUnauthenticated():
-        if (location != AppRoutes.login) {
-          return AppRoutes.login;
-        }
-
-      default:
-        return null;
+    if (gateState is AppGateLoading) {
+      return location == AppRoutes.splash ? null : AppRoutes.splash;
     }
+
+    if (gateState is AppGateOnboarding) {
+      return location == AppRoutes.onBoarding ? null : AppRoutes.onBoarding;
+    }
+
+    if (gateState is AppGateUnauthenticated) {
+      return location == AppRoutes.login ? null : AppRoutes.login;
+    }
+
+    if (gateState is AppGateAuthenticated) {
+      return location == AppRoutes.home ? null : AppRoutes.home;
+    }
+
     return null;
   }
 }

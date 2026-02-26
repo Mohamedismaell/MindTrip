@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:ttproj/core/connections/retry_runner.dart';
 import 'package:ttproj/core/database/cache/app_hive.dart';
 import 'package:ttproj/core/helper/hydrated_storage.dart';
@@ -7,9 +8,7 @@ import 'package:ttproj/core/shared/presentation/manager/connection_cubit/connect
 import 'package:ttproj/core/shared/routes/app_router.dart';
 import 'package:ttproj/core/theme/theme_data_/dark_theme_data.dart';
 import 'package:ttproj/core/theme/theme_data_/light_theme_data.dart';
-import 'package:ttproj/features/onboarding/domain/repositories/auth_repository.dart';
 import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +28,6 @@ Future<void> main() async {
   await AppHive.init();
   await initializeDependencies(onboardingBox: AppHive.onboardingBox);
   print('Step 4: Service Locator initialized');
-
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(
     DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
@@ -49,47 +47,9 @@ class AppBootstrap extends StatelessWidget {
           create: (_) =>
               AppConnectionCubit(sl<InternetConnection>(), sl<RetryRunner>()),
         ),
-        BlocProvider<AppGateCubit>(
-          create: (_) =>
-              AppGateCubit(onboardingRepository: sl<OnboardingRepository>()),
-        ),
+        BlocProvider<AppGateCubit>(create: (_) => sl<AppGateCubit>()),
 
         BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
-
-        // BlocProvider<BooksCubit>(
-        //   create: (context) => BooksCubit(sl<GetBooksUseCase>()),
-        // ),
-        // BlocProvider<BookCubit>(
-        //   create: (context) => BookCubit(sl<GetBooksIdUseCase>()),
-        // ),
-        // BlocProvider<ChaptersCubit>(
-        //   create: (context) => ChaptersCubit(sl<GetChaptersUseCase>()),
-        // ),
-        // BlocProvider<ReadingProgressCubit>(
-        //   create: (context) => ReadingProgressCubit(
-        //     sl<InsertReadingPregress>(),
-        //     sl<GetReadingProgress>(),
-        //   ),
-        // ),
-        // BlocProvider<UserStatsCubit>(
-        //   create: (context) =>
-        //       UserStatsCubit(sl<UpdateUserStats>(), sl<GetUserStats>()),
-        // ),
-        // BlocProvider<ProfileCubit>(
-        //   create: (context) => ProfileCubit(
-        //     sl<GetUserProfile>(),
-        //     sl<UpdateUserProfile>(),
-        //     sl<UploadAvatar>(),
-        //     // sl<GetAvatar>(),
-        //   ),
-        // ),
-        // BlocProvider<BookMarksCubit>(
-        //   create: (context) => BookMarksCubit(
-        //     sl<InsertBookMarks>(),
-        //     sl<RemoveBookMarks>(),
-        //     sl<GetBookMarks>(),
-        //   ),
-        // ),
       ],
       child: const MyApp(),
     );
