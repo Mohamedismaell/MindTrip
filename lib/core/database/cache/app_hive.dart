@@ -1,7 +1,7 @@
 import 'package:hive_ce_flutter/adapters.dart';
 
 class AppHive {
-  static late Box<bool> onboardingBox;
+  static late Box onboardingBox;
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -16,6 +16,6 @@ class AppHive {
   }
 
   static Future<void> openBoxes() async {
-    onboardingBox = await Hive.openBox<bool>('onboardingBox');
+    onboardingBox = await Hive.openBox('onboardingBox');
   }
 }

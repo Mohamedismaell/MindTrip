@@ -5,19 +5,20 @@ import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gat
 import 'package:mindtrip/features/onboarding/data/repositories/on_boarding_impl.dart';
 import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data_source.dart';
 import 'package:mindtrip/features/onboarding/data/sources/onboarding_local_data_source.dart';
-import 'package:mindtrip/features/onboarding/domain/repositories/auth_repository.dart';
+import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
+import 'package:mindtrip/features/onboarding/domain/usecases/save_selected_categories.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 
 class OnboardingDi {
   OnboardingDi._();
 
-  static void init({required Box<bool> onboardingBox}) {
-    sl.registerLazySingleton<Box<bool>>(() => onboardingBox);
+  static void init({required Box onboardingBox}) {
+    sl.registerLazySingleton<Box>(() => onboardingBox);
 
     //! Data Sources
     sl.registerLazySingleton<OnboardingLocalDataSource>(
-      () => OnboardingLocalDataSourceImpl(box: sl<Box<bool>>()),
+      () => OnboardingLocalDataSourceImpl(box: sl<Box>()),
     );
     //! Repositories
     sl.registerLazySingleton<OnboardingRepository>(
@@ -30,9 +31,15 @@ class OnboardingDi {
     sl.registerLazySingleton<CompleteOnboardingUseCase>(
       () => CompleteOnboardingUseCase(sl<OnboardingRepository>()),
     );
+    sl.registerLazySingleton<SaveSelectedCategories>(
+      () => SaveSelectedCategories(sl<OnboardingRepository>()),
+    );
     //!Cubit
     sl.registerLazySingleton<OnboardingCubit>(
-      () => OnboardingCubit(sl<CompleteOnboardingUseCase>()),
+      () => OnboardingCubit(
+        completeOnboarding: sl<CompleteOnboardingUseCase>(),
+        saveSelectedCategories: sl<SaveSelectedCategories>(),
+      ),
     );
     sl.registerLazySingleton(
       () => AppGateCubit(onboardingRepository: sl<OnboardingRepository>()),

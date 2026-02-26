@@ -4,17 +4,23 @@ import 'onboarding_local_data_source.dart';
 
 class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
   final Box box;
-  static const _key = 'isfirsttime';
+  static const _key1 = 'isfirsttime';
+  static const _key2 = 'selectedcategories';
 
   OnboardingLocalDataSourceImpl({required this.box});
 
   @override
   bool getIsFirstTime() {
-    return box.get(_key, defaultValue: true);
+    return box.get(_key1, defaultValue: true);
   }
 
   @override
   Future<void> saveIsFirstTime(bool value) async {
-    await box.put(_key, value);
+    await box.put(_key1, value);
+  }
+
+  @override
+  Future<void> saveSelectedCategories(List<String> categories) async {
+    await box.put(_key2, categories);
   }
 }

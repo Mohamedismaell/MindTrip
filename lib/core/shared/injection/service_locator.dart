@@ -6,7 +6,7 @@ import 'package:mindtrip/features/onboarding/di/on_boarding_injection.dart';
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies({
-  required Box<bool> onboardingBox,
+  required Box onboardingBox,
   // required Box<String> profileBox,
 }) async {
   await CommonDi.init();
