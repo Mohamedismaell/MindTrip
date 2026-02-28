@@ -12,6 +12,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   }) : super(const OnboardingState());
   final CompleteOnboardingUseCase completeOnboarding;
   final SaveSelectedCategories saveSelectedCategories;
+
   void updateIndex(int index) {
     if (index == 2) {
       emit(state.copyWith(currentIndex: index, isLastPage: true));
@@ -22,7 +23,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     // print(state.isLastPage);
   }
 
-  Future<void> finishOnboarding(int index) async {
+  Future<void> finishOnboarding() async {
     await completeOnboarding.call();
   }
 
@@ -35,7 +36,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       currentSelected.add(category);
     }
     emit(state.copyWith(selectedCategories: currentSelected));
-    print('$currentSelected');
+    // print('$currentSelected');
   }
 
   void storeSelectedCategories() {

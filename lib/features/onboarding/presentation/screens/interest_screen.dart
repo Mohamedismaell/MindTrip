@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/onboarding/presentation/widgets/interest_buttons.dart';
@@ -32,10 +32,11 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 child: InkWell(
                   onTap: () {
                     context.read<OnboardingCubit>().storeSelectedCategories();
+                    context.read<OnboardingCubit>().finishOnboarding();
+                    context.read<AppGateCubit>().start();
+                    // context.push(AppRoutes.welcomeAuth);
                   },
-                  child: CustomGradientButton(
-                    child: Text('Save', style: context.textTheme.labelLarge),
-                  ),
+                  child: CustomGradientButton(text: 'Save'),
                 ),
               ),
             ],

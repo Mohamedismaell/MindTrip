@@ -1,25 +1,17 @@
-// import 'package:go_router/go_router.dart';
-// import '../presentation/screens/screens/authetication_screen.dart';
-// import '../../../core/routes/app_routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/features/authetication/manager/cubit/auth_cubit.dart';
+import 'package:mindtrip/features/authetication/presentation/screens/sign_up_screen.dart';
 
-// class AuthenticationRoutes {
-//   static List<RouteBase> routes = [
-//     GoRoute(
-//       path: AppRoutes.mainAuth,
-//       name: 'authentication',
-//       builder: (context, state) =>
-//           const AutheticationScreen(),
-//     ),
-//     // Add more authentication routes here as you create them
-//     // GoRoute(
-//     //   path: AppRoutes.register,
-//     //   name: 'register',
-//     //   builder: (context, state) => const RegisterScreen(),
-//     // ),
-//     // GoRoute(
-//     //   path: AppRoutes.forgotPassword,
-//     //   name: 'forgotPassword',
-//     //   builder: (context, state) => const ForgotPasswordScreen(),
-//     // ),
-//   ];
-// }
+class AuthRoutes {
+  static List<RouteBase> routes = [
+    GoRoute(
+      path: AppRoutes.signup,
+      builder: (context, state) => BlocProvider(
+        create: (context) => AuthCubit(),
+        child: const SignUpScreen(),
+      ),
+    ),
+  ];
+}

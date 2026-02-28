@@ -6,6 +6,7 @@ import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_board
 import 'package:mindtrip/features/onboarding/presentation/screens/interest_screen.dart';
 import 'package:mindtrip/features/onboarding/presentation/screens/onborading_screen.dart';
 import 'package:mindtrip/features/onboarding/presentation/screens/splash_screen.dart';
+import 'package:mindtrip/features/onboarding/presentation/screens/welcome_auth_screen.dart';
 
 class OnBoardingRoutes {
   static List<RouteBase> routes = [
@@ -25,6 +26,10 @@ class OnBoardingRoutes {
         GoRoute(
           path: AppRoutes.interests,
           builder: (context, state) => const InterestsScreen(),
+        ),
+        GoRoute(
+          path: AppRoutes.welcomeAuth,
+          builder: (context, state) => const WelcomeAuthScreen(),
         ),
       ],
     ),

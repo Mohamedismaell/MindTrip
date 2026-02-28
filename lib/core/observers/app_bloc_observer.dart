@@ -15,8 +15,8 @@ class AppBlocObserver extends BlocObserver {
     super.onChange(bloc, change);
     if (kDebugMode) {
       print('🔄 onChange -- ${bloc.runtimeType}');
-      // print('   currentState: ${change.currentState}');
-      // print('   nextState: ${change.nextState}');
+      print('👀 currentState: ${change.currentState}');
+      print('⏭️ nextState: ${change.nextState}');
     }
   }
 

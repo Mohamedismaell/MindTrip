@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/onboarding/presentation/models/onboarding_model.dart';
 
@@ -42,23 +43,9 @@ class OnboardingPages extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: item.firstTitle,
-                                  style: context.textTheme.headlineLarge!
-                                      .copyWith(
-                                        color: context.colorTheme.primary,
-                                      ),
-                                ),
-                                TextSpan(
-                                  text: item.secondTitle,
-                                  style: context.textTheme.headlineLarge,
-                                ),
-                              ],
-                            ),
+                          CustomHeadLine(
+                            firstTitle: item.firstTitle,
+                            secondTitle: item.secondTitle,
                           ),
                           SizedBox(height: 16.h),
                           Text(

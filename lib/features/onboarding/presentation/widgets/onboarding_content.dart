@@ -62,10 +62,7 @@ class OnboardingContent extends StatelessWidget {
                           );
                   },
                   child: CustomGradientButton(
-                    child: Text(
-                      isLastpage ? 'Get Started' : 'Next',
-                      style: context.textTheme.labelLarge,
-                    ),
+                    text: isLastpage ? 'Get Started' : 'Next',
                   ),
                 ),
                 SizedBox(height: 20.h),

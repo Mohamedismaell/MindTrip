@@ -21,25 +21,61 @@ ThemeData getLightTheme() {
         // textStyle: AppTextStyles.headLine7Regular.copyWith(),
       ),
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        foregroundColor: AppColors.pureWhite,
-        shadowColor: Colors.transparent,
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 14.w),
 
-        padding: EdgeInsets.symmetric(vertical: 12.h),
+      //* Default Border
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(60.r),
+        borderSide: BorderSide(color: lightColorScheme.outline),
+      ),
+
+      //* Enabled
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(60.r),
+        borderSide: BorderSide(color: lightColorScheme.outline),
+      ),
+
+      //* Focused
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(60.r),
+        borderSide: BorderSide(color: lightColorScheme.primary, width: 1.5),
+      ),
+
+      //* Error
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(60.r),
+        borderSide: BorderSide(color: lightColorScheme.error),
+      ),
+
+      //* Focused Error
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(60.r),
+        borderSide: BorderSide(color: lightColorScheme.error, width: 1.5),
+      ),
+    ),
+    // elevatedButtonTheme: ElevatedButtonThemeData(
+    //   style: ElevatedButton.styleFrom(
+    //     backgroundColor: Colors.transparent,
+    //     foregroundColor: AppColors.pureWhite,
+    //     shadowColor: Colors.transparent,
+
+    //     padding: EdgeInsets.symmetric(vertical: 12.h),
+    //     shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.circular(25.r),
+    //     ),
+    //     // textStyle: AppTextStyles.headLine7Bold.copyWith(),
+    //   ),
+    // ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 14.h),
+        side: BorderSide(color: lightColorScheme.primary, width: 2),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.r),
         ),
-        // textStyle: AppTextStyles.headLine7Bold.copyWith(),
-      ),
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        side: BorderSide(color: AppColors.mediumLightGray, width: 1.5),
-        padding: const EdgeInsets.symmetric(horizontal: 62.5, vertical: 12),
-        foregroundColor: AppColors.darkGray1,
-        // textStyle: AppTextStyles.headLine7Regular.copyWith(),
+        textStyle: responsiveTextTheme.labelLarge,
+        foregroundColor: lightColorScheme.primary,
       ),
     ),
   );

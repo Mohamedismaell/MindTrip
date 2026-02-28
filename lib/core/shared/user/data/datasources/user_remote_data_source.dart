@@ -1,5 +1,3 @@
-import 'package:mindtrip/core/database/api/api_consumer.dart';
-
 class UserRemoteDataSource {
   UserRemoteDataSource();
   // Future<UserModel> getCurrentUser() async {

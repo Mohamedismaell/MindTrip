@@ -12,4 +12,13 @@ class AppGradients {
       AppColors.primaryLightBlue2,
     ],
   );
+  static LinearGradient backgroundGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.center,
+    colors: [
+      AppColors.primaryLightBlue2,
+      Color(0xFFEDEDED),
+      AppColors.pureWhite,
+    ],
+  );
 }

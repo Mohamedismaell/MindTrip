@@ -3,6 +3,7 @@ class AppRoutes {
   static const String splash = '/splash';
   static const String onBoarding = '/onboarding';
   static const String interests = '/interests';
+  static const String welcomeAuth = '/welcomeauth';
 
   //! Authentication routes
   static const String login = '/login';

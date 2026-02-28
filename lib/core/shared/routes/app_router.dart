@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/enums/app_flow.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
+import 'package:mindtrip/core/shared/routes/route_register.dart';
+import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 
 //Todo Add onBorading Route
@@ -16,7 +19,7 @@ class AppRouter {
     redirect: _redirect,
     routes: [
       ...OnBoardingRoutes.routes,
-      // ...AuthRoutes.routes,
+      ...AuthRoutes.routes,
       // ShellRoute(
       //   builder: (context, state, child) {
       //     return AppShell(location: state.uri.toString(), child: child);
@@ -48,23 +51,24 @@ class AppRouter {
     final gateState = appGateCubit.state;
     final location = state.matchedLocation;
 
+    final routeFlow = RouteRegister.getFlow(location);
+
+    if (routeFlow == null) return null;
+
     if (gateState is AppGateLoading) {
-      return location == AppRoutes.splash ? null : AppRoutes.splash;
+      return routeFlow == AppFlow.splash ? null : AppRoutes.splash;
     }
 
     if (gateState is AppGateOnboarding) {
-      if (location == AppRoutes.interests) {
-        return null;
-      }
-      return location == AppRoutes.onBoarding ? null : AppRoutes.onBoarding;
+      return routeFlow == AppFlow.onboarding ? null : AppRoutes.onBoarding;
     }
 
     if (gateState is AppGateUnauthenticated) {
-      return location == AppRoutes.login ? null : AppRoutes.login;
+      return routeFlow == AppFlow.auth ? null : AppRoutes.welcomeAuth;
     }
 
     if (gateState is AppGateAuthenticated) {
-      return location == AppRoutes.home ? null : AppRoutes.home;
+      return routeFlow == AppFlow.app ? null : AppRoutes.home;
     }
 
     return null;
