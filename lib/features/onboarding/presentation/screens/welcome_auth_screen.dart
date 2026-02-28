@@ -20,14 +20,10 @@ class WelcomeAuthScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               WelcomeImage(),
-              InkWell(
-                onTap: () {
-                  context.push(AppRoutes.signup);
-                },
-                child: CustomGradientButton(
-                  width: double.infinity,
-                  text: 'Create account',
-                ),
+              CustomGradientButton(
+                width: double.infinity,
+                text: 'Create account',
+                onTap: () => context.push(AppRoutes.signup),
               ),
               SizedBox(height: 33.h),
               SizedBox(

@@ -41,7 +41,8 @@ class OnboardingContent extends StatelessWidget {
             final isLastpage = state.isLastPage;
             return Column(
               children: [
-                InkWell(
+                CustomGradientButton(
+                  text: isLastpage ? 'Get Started' : 'Next',
                   onTap: () {
                     // context.read<OnboardingCubit>().updateIndex(
                     //   pageController.page!.toInt(),
@@ -61,9 +62,6 @@ class OnboardingContent extends StatelessWidget {
                             curve: Curves.easeInSine,
                           );
                   },
-                  child: CustomGradientButton(
-                    text: isLastpage ? 'Get Started' : 'Next',
-                  ),
                 ),
                 SizedBox(height: 20.h),
                 Visibility(

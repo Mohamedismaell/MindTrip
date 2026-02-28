@@ -29,14 +29,14 @@ class _InterestsScreenState extends State<InterestsScreen> {
               Expanded(child: InterestesButton()),
               SizedBox(height: 34.h),
               Center(
-                child: InkWell(
+                child: CustomGradientButton(
+                  text: 'Save',
                   onTap: () {
                     context.read<OnboardingCubit>().storeSelectedCategories();
                     context.read<OnboardingCubit>().finishOnboarding();
                     context.read<AppGateCubit>().start();
                     // context.push(AppRoutes.welcomeAuth);
                   },
-                  child: CustomGradientButton(text: 'Save'),
                 ),
               ),
             ],

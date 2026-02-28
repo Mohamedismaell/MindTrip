@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/validators/auth_validator.dart';
+import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/widget/app_text_field.dart';
+import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/authetication/manager/cubit/auth_cubit.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -26,6 +29,7 @@ class _SignUpFormState extends State<SignUpForm> {
     emailController.dispose();
     passwordController.dispose();
     confirmController.dispose();
+
     super.dispose();
   }
 
@@ -55,7 +59,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 controller: nameController,
                 validator: AppValidator.name,
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 28.h),
 
               AppTextField(
                 hint: "Enter your email",
@@ -64,38 +68,58 @@ class _SignUpFormState extends State<SignUpForm> {
                 keyboardType: TextInputType.emailAddress,
                 validator: AppValidator.email,
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 28.h),
 
               AppTextField(
                 hint: "Enter your password",
                 prefixIcon: Icons.lock_outline,
                 controller: passwordController,
                 isPassword: true,
-                obscureText: cubit.obscurePassword,
+                obscureText: state.obscurePassword,
                 onToggleVisibility: cubit.togglePassword,
                 validator: AppValidator.password,
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 28.h),
 
               AppTextField(
                 hint: "Confirm your password",
                 prefixIcon: Icons.lock_outline,
                 controller: confirmController,
                 isPassword: true,
-                obscureText: cubit.obscureConfirm,
+                obscureText: state.obscureConfirm,
                 onToggleVisibility: cubit.toggleConfirmPassword,
                 validator: (value) => AppValidator.confirmPassword(
                   value,
                   passwordController.text,
                 ),
               ),
+              SizedBox(height: 20.h),
+              Row(
+                children: [
+                  Checkbox(
+                    value: state.rememberMe,
+                    onChanged: (value) {
+                      print(value);
+                      context.read<AuthCubit>().toggleRememberMe(
+                        value ?? false,
+                      );
+                    },
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    "Remember me",
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      color: context.colorTheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(height: 24.h),
-
-              ElevatedButton(
-                onPressed: state is AuthLoading ? null : _submit,
-                child: state is AuthLoading
-                    ? const CircularProgressIndicator()
-                    : const Text("Sign Up"),
+              CustomGradientButton(
+                text: "Sign Up",
+                onTap: () {
+                  _submit();
+                },
               ),
             ],
           ),

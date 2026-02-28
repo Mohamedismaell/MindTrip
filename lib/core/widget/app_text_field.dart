@@ -23,7 +23,7 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.onToggleVisibility,
   });
-
+  //TODO  Extract the Icons
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -32,25 +32,29 @@ class AppTextField extends StatelessWidget {
       validator: validator,
       keyboardType: keyboardType,
       cursorColor: context.colorTheme.primary,
-
-      // style: TextStyle(fontSize: 14.sp),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: context.textTheme.bodyLarge?.copyWith(
           color: context.colorTheme.outline,
         ),
-        prefixIcon: Icon(
-          prefixIcon,
-          size: 20.sp,
-          color: context.colorTheme.outline,
+        prefixIcon: Padding(
+          padding: EdgeInsets.only(left: 20.w, right: 10.w),
+          child: Icon(
+            prefixIcon,
+            size: 20.sp,
+            color: context.colorTheme.outline,
+          ),
         ),
         suffixIcon: isPassword
-            ? IconButton(
-                onPressed: onToggleVisibility,
-                icon: Icon(
-                  obscureText ? Icons.visibility_off : Icons.visibility,
-                  size: 17.sp,
-                  color: context.colorTheme.outline,
+            ? Padding(
+                padding: EdgeInsets.only(right: 10.w),
+                child: IconButton(
+                  onPressed: onToggleVisibility,
+                  icon: Icon(
+                    obscureText ? Icons.visibility_off : Icons.visibility,
+                    size: 17.sp,
+                    color: context.colorTheme.outline,
+                  ),
                 ),
               )
             : null,

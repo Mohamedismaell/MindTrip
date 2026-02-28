@@ -1,21 +1,21 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/enums/auth_status.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
-  bool obscurePassword = true;
-  bool obscureConfirm = true;
-
+  AuthCubit() : super(const AuthState());
   void togglePassword() {
-    obscurePassword = !obscurePassword;
-    emit(AuthUiUpdated());
+    emit(state.copyWith(obscurePassword: !state.obscurePassword));
   }
 
   void toggleConfirmPassword() {
-    obscureConfirm = !obscureConfirm;
-    emit(AuthUiUpdated());
+    emit(state.copyWith(obscureConfirm: !state.obscureConfirm));
+  }
+
+  void toggleRememberMe(bool value) {
+    emit(state.copyWith(rememberMe: value));
   }
 
   Future<void> signUp({
@@ -23,14 +23,19 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String password,
   }) async {
-    emit(AuthLoading());
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
     try {
       await Future.delayed(const Duration(seconds: 2));
 
-      emit(AuthSuccess());
+      emit(state.copyWith(status: AuthStatus.success));
     } catch (e) {
-      emit(AuthFailure("Something went wrong"));
+      emit(
+        state.copyWith(
+          status: AuthStatus.failure,
+          errorMessage: "Something went wrong",
+        ),
+      );
     }
   }
 }
