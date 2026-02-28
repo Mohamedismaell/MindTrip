@@ -21,6 +21,7 @@ ThemeData getLightTheme() {
         // textStyle: AppTextStyles.headLine7Regular.copyWith(),
       ),
     ),
+
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 14.w),
 
@@ -69,12 +70,13 @@ ThemeData getLightTheme() {
     // ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 14.h),
+        padding: EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
         side: BorderSide(color: lightColorScheme.primary, width: 2),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.r),
         ),
-        textStyle: responsiveTextTheme.labelLarge,
+        textStyle: responsiveTextTheme.labelMedium,
+        alignment: Alignment.center,
         foregroundColor: lightColorScheme.primary,
       ),
     ),

@@ -12,8 +12,10 @@ class AppTextTheme {
       headlineMedium: AppTextStyles.h5Medium.copyWith(color: c.onSurface),
 
       bodyLarge: AppTextStyles.h8Regular.copyWith(color: c.onSurface),
+      bodyMedium: AppTextStyles.h9Regular.copyWith(color: c.onSurface),
 
-      labelLarge: AppTextStyles.h7Bold.copyWith(color: c.onPrimary),
+      labelLarge: AppTextStyles.h9SemiBold.copyWith(color: c.onSurface),
+      labelMedium: AppTextStyles.h7Bold.copyWith(color: c.onPrimary),
     );
   }
 }

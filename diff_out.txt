@@ -1,0 +1,231 @@
+diff --git a/lib/core/theme/app_text_theme.dart b/lib/core/theme/app_text_theme.dart
+index 615d32d..57cfc31 100644
+--- a/lib/core/theme/app_text_theme.dart
++++ b/lib/core/theme/app_text_theme.dart
+@@ -12,8 +12,10 @@ class AppTextTheme {
+       headlineMedium: AppTextStyles.h5Medium.copyWith(color: c.onSurface),
+ 
+       bodyLarge: AppTextStyles.h8Regular.copyWith(color: c.onSurface),
++      bodyMedium: AppTextStyles.h9Regular.copyWith(color: c.onSurface),
+ 
+-      labelLarge: AppTextStyles.h7Bold.copyWith(color: c.onPrimary),
++      labelLarge: AppTextStyles.h9SemiBold.copyWith(color: c.onSurface),
++      labelMedium: AppTextStyles.h7Bold.copyWith(color: c.onPrimary),
+     );
+   }
+ }
+diff --git a/lib/core/theme/theme_data_/light_theme_data.dart b/lib/core/theme/theme_data_/light_theme_data.dart
+index b077d0f..b52de7c 100644
+--- a/lib/core/theme/theme_data_/light_theme_data.dart
++++ b/lib/core/theme/theme_data_/light_theme_data.dart
+@@ -21,6 +21,7 @@ ThemeData getLightTheme() {
+         // textStyle: AppTextStyles.headLine7Regular.copyWith(),
+       ),
+     ),
++
+     inputDecorationTheme: InputDecorationTheme(
+       contentPadding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 14.w),
+ 
+@@ -69,12 +70,13 @@ ThemeData getLightTheme() {
+     // ),
+     outlinedButtonTheme: OutlinedButtonThemeData(
+       style: OutlinedButton.styleFrom(
+-        padding: EdgeInsets.symmetric(vertical: 14.h),
++        padding: EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
+         side: BorderSide(color: lightColorScheme.primary, width: 2),
+         shape: RoundedRectangleBorder(
+           borderRadius: BorderRadius.circular(25.r),
+         ),
+-        textStyle: responsiveTextTheme.labelLarge,
++        textStyle: responsiveTextTheme.labelMedium,
++        alignment: Alignment.center,
+         foregroundColor: lightColorScheme.primary,
+       ),
+     ),
+diff --git a/lib/core/widget/custom_gradient_button.dart b/lib/core/widget/custom_gradient_button.dart
+index 8054882..7c15e08 100644
+--- a/lib/core/widget/custom_gradient_button.dart
++++ b/lib/core/widget/custom_gradient_button.dart
+@@ -29,11 +29,12 @@ class CustomGradientButton extends StatelessWidget {
+           // color: Colors.amberAccent,
+           gradient: AppGradients.mainBlueGradient,
+           boxShadow: [AppShadows.mainElevationButton],
+-          borderRadius: BorderRadius.circular(25.r),
++          borderRadius: BorderRadius.circular(50.r),
+         ),
+         child: Center(
+           child:
+-              child ?? Text(text, style: style ?? context.textTheme.labelLarge),
++              child ??
++              Text(text, style: style ?? context.textTheme.labelMedium),
+         ),
+       ),
+     );
+diff --git a/lib/core/widget/custom_head_line.dart b/lib/core/widget/custom_head_line.dart
+index f0cea5a..c1710eb 100644
+--- a/lib/core/widget/custom_head_line.dart
++++ b/lib/core/widget/custom_head_line.dart
+@@ -6,9 +6,14 @@ class CustomHeadLine extends StatelessWidget {
+     super.key,
+     required this.firstTitle,
+     required this.secondTitle,
++    this.firstStyle,
++    this.secondStyle,
+   });
+   final String firstTitle;
+   final String secondTitle;
++  final TextStyle? firstStyle;
++  final TextStyle? secondStyle;
++
+   @override
+   Widget build(BuildContext context) {
+     return RichText(
+@@ -17,11 +22,16 @@ class CustomHeadLine extends StatelessWidget {
+         children: [
+           TextSpan(
+             text: firstTitle,
+-            style: context.textTheme.headlineLarge!.copyWith(
+-              color: context.colorTheme.primary,
+-            ),
++            style:
++                firstStyle ??
++                context.textTheme.headlineLarge!.copyWith(
++                  color: context.colorTheme.primary,
++                ),
++          ),
++          TextSpan(
++            text: secondTitle,
++            style: secondStyle ?? context.textTheme.headlineLarge,
+           ),
+-          TextSpan(text: secondTitle, style: context.textTheme.headlineLarge),
+         ],
+       ),
+     );
+diff --git a/lib/features/authetication/presentation/screens/sign_up_screen.dart b/lib/features/authetication/presentation/screens/sign_up_screen.dart
+index 907cc9d..d609518 100644
+--- a/lib/features/authetication/presentation/screens/sign_up_screen.dart
++++ b/lib/features/authetication/presentation/screens/sign_up_screen.dart
+@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
+ import 'package:flutter_screenutil/flutter_screenutil.dart';
+ import 'package:mindtrip/core/widget/app_background.dart';
+ import 'package:mindtrip/core/widget/custom_head_line.dart';
++import 'package:mindtrip/features/authetication/presentation/widget/authoptions_content.dart';
+ import 'package:mindtrip/features/authetication/presentation/widget/sign_up_form.dart';
+ 
+ class SignUpScreen extends StatelessWidget {
+@@ -13,10 +14,13 @@ class SignUpScreen extends StatelessWidget {
+       child: Center(
+         child: Column(
+           mainAxisSize: MainAxisSize.min,
++          crossAxisAlignment: CrossAxisAlignment.center,
+           children: [
+-            CustomHeadLine(firstTitle: 'Sign ', secondTitle: 'In'),
++            const CustomHeadLine(firstTitle: 'Sign ', secondTitle: 'Up'),
+             SizedBox(height: 40.h),
+             const SignUpForm(),
++            SizedBox(height: 24.h),
++            const AuthoptionsContent(),
+           ],
+         ),
+       ),
+diff --git a/lib/features/authetication/presentation/widget/sign_up_form.dart b/lib/features/authetication/presentation/widget/sign_up_form.dart
+index 3617ec6..b050e70 100644
+--- a/lib/features/authetication/presentation/widget/sign_up_form.dart
++++ b/lib/features/authetication/presentation/widget/sign_up_form.dart
+@@ -1,7 +1,6 @@
+ import 'package:flutter/material.dart';
+ import 'package:flutter_bloc/flutter_bloc.dart';
+ import 'package:flutter_screenutil/flutter_screenutil.dart';
+-import 'package:mindtrip/core/enums/auth_status.dart';
+ import 'package:mindtrip/core/shared/validators/auth_validator.dart';
+ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+ import 'package:mindtrip/core/widget/app_text_field.dart';
+@@ -17,7 +16,6 @@ class SignUpForm extends StatefulWidget {
+ 
+ class _SignUpFormState extends State<SignUpForm> {
+   final _formKey = GlobalKey<FormState>();
+-
+   final nameController = TextEditingController();
+   final emailController = TextEditingController();
+   final passwordController = TextEditingController();
+@@ -105,10 +103,9 @@ class _SignUpFormState extends State<SignUpForm> {
+                       );
+                     },
+                   ),
+-                  SizedBox(width: 8.w),
+                   Text(
+                     "Remember me",
+-                    style: context.textTheme.bodyLarge?.copyWith(
++                    style: context.textTheme.bodyMedium?.copyWith(
+                       color: context.colorTheme.onSurfaceVariant,
+                     ),
+                   ),
+@@ -116,6 +113,7 @@ class _SignUpFormState extends State<SignUpForm> {
+               ),
+               SizedBox(height: 24.h),
+               CustomGradientButton(
++                width: double.infinity,
+                 text: "Sign Up",
+                 onTap: () {
+                   _submit();
+diff --git a/lib/features/onboarding/presentation/widgets/onboarding_content.dart b/lib/features/onboarding/presentation/widgets/onboarding_content.dart
+index 180ee64..678656e 100644
+--- a/lib/features/onboarding/presentation/widgets/onboarding_content.dart
++++ b/lib/features/onboarding/presentation/widgets/onboarding_content.dart
+@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
+ import 'package:flutter_bloc/flutter_bloc.dart';
+ import 'package:flutter_screenutil/flutter_screenutil.dart';
+ import 'package:go_router/go_router.dart';
+-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+-import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+ import 'package:mindtrip/core/shared/routes/app_routes.dart';
+ import 'package:mindtrip/core/theme/app_colors.dart';
+ import 'package:mindtrip/core/theme/app_text_styles.dart';
+ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+ import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+ import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
++import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+ 
+ class OnboardingContent extends StatelessWidget {
+   const OnboardingContent({
+diff --git a/lib/main.dart b/lib/main.dart
+index 4cc5fd8..5b72c8f 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -1,4 +1,10 @@
+-import 'package:flutter/foundation.dart';
++import 'package:device_preview/device_preview.dart';
++import 'package:flutter/material.dart';
++import 'package:flutter/services.dart';
++import 'package:flutter_bloc/flutter_bloc.dart';
++import 'package:flutter_screenutil/flutter_screenutil.dart';
++import 'package:hydrated_bloc/hydrated_bloc.dart';
++import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+ import 'package:mindtrip/core/connections/retry_runner.dart';
+ import 'package:mindtrip/core/database/cache/app_hive.dart';
+ import 'package:mindtrip/core/helper/hydrated_storage.dart';
+@@ -8,13 +14,6 @@ import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/conne
+ import 'package:mindtrip/core/shared/routes/app_router.dart';
+ import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
+ import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
+-import 'package:device_preview/device_preview.dart';
+-import 'package:flutter/material.dart';
+-import 'package:flutter/services.dart';
+-import 'package:flutter_bloc/flutter_bloc.dart';
+-import 'package:flutter_screenutil/flutter_screenutil.dart';
+-import 'package:hydrated_bloc/hydrated_bloc.dart';
+-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+ import 'core/observers/app_bloc_observer.dart';
+ import 'core/theme/cubit/theme_cubit.dart';
+ 
+@@ -30,8 +29,8 @@ Future<void> main() async {
+   print('Step 4: Service Locator initialized');
+   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+   runApp(
+-    DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
+-    // AppBootstrap(),
++    // DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
++    AppBootstrap(),
+   );
+ }
+ 

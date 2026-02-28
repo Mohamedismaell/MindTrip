@@ -1,4 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mindtrip/core/connections/retry_runner.dart';
 import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/core/helper/hydrated_storage.dart';
@@ -8,13 +14,6 @@ import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/conne
 import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 
@@ -30,8 +29,8 @@ Future<void> main() async {
   print('Step 4: Service Locator initialized');
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(
-    DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
-    // AppBootstrap(),
+    // DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
+    AppBootstrap(),
   );
 }
 

@@ -1,0 +1,15 @@
+ M lib/core/theme/app_text_theme.dart
+ M lib/core/theme/theme_data_/light_theme_data.dart
+ M lib/core/widget/custom_gradient_button.dart
+ M lib/core/widget/custom_head_line.dart
+ M lib/features/authetication/presentation/screens/sign_up_screen.dart
+ M lib/features/authetication/presentation/widget/sign_up_form.dart
+ M lib/features/onboarding/presentation/widgets/onboarding_content.dart
+ M lib/main.dart
+?? assets/icons/
+?? diff.txt
+?? lib/features/authetication/presentation/widget/auth_options_button.dart
+?? lib/features/authetication/presentation/widget/authoptions_content.dart
+?? lib/features/authetication/presentation/widget/divider_row.dart
+?? lib/features/authetication/presentation/widget/log_in_form.dart
+?? status_out.txt

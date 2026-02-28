@@ -29,11 +29,12 @@ class CustomGradientButton extends StatelessWidget {
           // color: Colors.amberAccent,
           gradient: AppGradients.mainBlueGradient,
           boxShadow: [AppShadows.mainElevationButton],
-          borderRadius: BorderRadius.circular(25.r),
+          borderRadius: BorderRadius.circular(50.r),
         ),
         child: Center(
           child:
-              child ?? Text(text, style: style ?? context.textTheme.labelLarge),
+              child ??
+              Text(text, style: style ?? context.textTheme.labelMedium),
         ),
       ),
     );

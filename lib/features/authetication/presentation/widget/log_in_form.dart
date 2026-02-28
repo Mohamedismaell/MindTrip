@@ -7,14 +7,14 @@ import 'package:mindtrip/core/widget/app_text_field.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/authetication/manager/cubit/auth_cubit.dart';
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+class LogInForm extends StatefulWidget {
+  const LogInForm({super.key});
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  State<LogInForm> createState() => _LogInFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _LogInFormState extends State<LogInForm> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -52,14 +52,6 @@ class _SignUpFormState extends State<SignUpForm> {
           child: Column(
             children: [
               AppTextField(
-                hint: "Enter your name",
-                prefixIcon: Icons.person_outline,
-                controller: nameController,
-                validator: AppValidator.name,
-              ),
-              SizedBox(height: 28.h),
-
-              AppTextField(
                 hint: "Enter your email",
                 prefixIcon: Icons.email_outlined,
                 controller: emailController,
@@ -76,20 +68,6 @@ class _SignUpFormState extends State<SignUpForm> {
                 obscureText: state.obscurePassword,
                 onToggleVisibility: cubit.togglePassword,
                 validator: AppValidator.password,
-              ),
-              SizedBox(height: 28.h),
-
-              AppTextField(
-                hint: "Confirm your password",
-                prefixIcon: Icons.lock_outline,
-                controller: confirmController,
-                isPassword: true,
-                obscureText: state.obscureConfirm,
-                onToggleVisibility: cubit.toggleConfirmPassword,
-                validator: (value) => AppValidator.confirmPassword(
-                  value,
-                  passwordController.text,
-                ),
               ),
               SizedBox(height: 20.h),
               Row(
@@ -109,12 +87,19 @@ class _SignUpFormState extends State<SignUpForm> {
                       color: context.colorTheme.onSurfaceVariant,
                     ),
                   ),
+                  const Spacer(),
+                  Text(
+                    "Forgot Password?",
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorTheme.outline,
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 24.h),
               CustomGradientButton(
                 width: double.infinity,
-                text: "Sign Up",
+                text: "Sign In",
                 onTap: () {
                   _submit();
                 },
