@@ -13,6 +13,7 @@ class RouteRegister {
     // Auth flow
     AppRouteConfig(path: AppRoutes.welcomeAuth, flow: AppFlow.auth),
     AppRouteConfig(path: AppRoutes.login, flow: AppFlow.auth),
+    AppRouteConfig(path: AppRoutes.signup, flow: AppFlow.auth),
 
     // Main app flow
     AppRouteConfig(path: AppRoutes.home, flow: AppFlow.app),

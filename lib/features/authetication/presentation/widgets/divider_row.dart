@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
+/// ──────────────────────────────────────────────────────────────────────────────
+/// [PRESENTATION LAYER] — Widget
+///
+/// [DividerRow] renders the "──── or with ────" visual separator used between
+/// the main auth form and social login options.
+/// ──────────────────────────────────────────────────────────────────────────────
 class DividerRow extends StatelessWidget {
   const DividerRow({super.key});
 

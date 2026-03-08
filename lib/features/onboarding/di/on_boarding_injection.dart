@@ -2,6 +2,7 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/onboarding/data/repositories/on_boarding_impl.dart';
 import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data_source.dart';
 import 'package:mindtrip/features/onboarding/data/sources/onboarding_local_data_source.dart';
@@ -42,7 +43,10 @@ class OnboardingDi {
       ),
     );
     sl.registerLazySingleton(
-      () => AppGateCubit(onboardingRepository: sl<OnboardingRepository>()),
+      () => AppGateCubit(
+        onboardingRepository: sl<OnboardingRepository>(),
+        authCubit: sl<AuthCubit>(),
+      ),
     );
     sl.registerLazySingleton(() => AppRouter(appGateCubit: sl<AppGateCubit>()));
   }

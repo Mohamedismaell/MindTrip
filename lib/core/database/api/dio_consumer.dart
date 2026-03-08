@@ -1,26 +1,32 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'api_consumer.dart';
-import 'api_interceptor.dart';
+import 'interceptors/api_interceptor.dart';
 import 'end_points.dart';
+import 'interceptors/auth_interceptor.dart';
 
 class DioConsumer extends ApiConsumer {
   final Dio dio;
   final ApiInterceptor apiInterceptor;
-  DioConsumer(this.dio, this.apiInterceptor) {
-    dio.options.baseUrl = EndPoints.baseUrl;
+  final AuthInterceptor authInterceptor;
+  DioConsumer(this.dio, this.apiInterceptor, this.authInterceptor) {
+    dio.interceptors.addAll([
+      apiInterceptor,
+      authInterceptor,
+      if (kDebugMode)
+        LogInterceptor(
+          request: true,
+          requestHeader: true,
+          requestBody: true,
+          error: true,
+        ),
+    ]);
 
-    dio.interceptors.add(apiInterceptor);
-
-    dio.interceptors.add(
-      LogInterceptor(
-        request: kDebugMode,
-        requestHeader: kDebugMode,
-        requestBody: kDebugMode,
-        // responseBody: kDebugMode,
-        // responseHeader: kDebugMode,
-        error: kDebugMode,
-      ),
+    dio.options = BaseOptions(
+      baseUrl: EndPoints.baseUrl,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      sendTimeout: const Duration(seconds: 10),
     );
   }
 

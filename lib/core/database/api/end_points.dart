@@ -1,12 +1,10 @@
 class EndPoints {
-  static String baseUrl = 'https://newsapi.org/v2/';
-  //  'https://api.webz.io/';
-  static String allNews = 'everything';
-  static String topHeadLines = 'top-headlines';
-  static String token = '3ef0781d7ca94cbd917401b00f3d00f1';
-  static String country = 'us';
-  // '263c0ff3-d380-4285-8bca-fb187fb47d76';
-  static String defaultCategory = 'Politics';
+  static String baseUrl = 'https://tripmind.runasp.net/';
+  static String login = 'api/auth/login';
+  static String register = 'api/auth/register';
+  static String refreshToken = 'api/auth/refresh';
+  static String getCurrentUser = 'api/auth/me';
+  static String logout = 'api/auth/logout';
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }

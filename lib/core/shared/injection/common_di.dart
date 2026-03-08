@@ -3,8 +3,9 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:mindtrip/core/connections/network_info.dart';
 import 'package:mindtrip/core/connections/retry_queue.dart';
 import 'package:mindtrip/core/connections/retry_runner.dart';
-import 'package:mindtrip/core/database/api/api_interceptor.dart';
+import 'package:mindtrip/core/database/api/interceptors/api_interceptor.dart';
 import 'package:mindtrip/core/database/api/dio_consumer.dart';
+import 'package:mindtrip/core/database/api/interceptors/auth_interceptor.dart';
 import 'package:mindtrip/core/database/cache/cache_helper.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:mindtrip/core/shared/user/data/datasources/user_remote_data_sour
 import 'package:mindtrip/core/shared/user/data/repositories/user_repository_impl.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
+import 'package:mindtrip/core/stoarge/secure_token_storage.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 
 CacheHelper get cacheHelper => sl<CacheHelper>();
@@ -34,8 +36,11 @@ class CommonDi {
     sl.registerLazySingleton(
       () => ApiInterceptor(sl<NetworkInfo>(), sl<RetryQueue>()),
     );
+    sl.registerLazySingleton(() => SecureTokenStorage());
+
+    sl.registerLazySingleton(() => AuthInterceptor(sl<SecureTokenStorage>()));
     sl.registerLazySingleton(
-      () => DioConsumer(sl<Dio>(), sl<ApiInterceptor>()),
+      () => DioConsumer(sl<Dio>(), sl<ApiInterceptor>(), sl<AuthInterceptor>()),
     );
 
     //! Validators
