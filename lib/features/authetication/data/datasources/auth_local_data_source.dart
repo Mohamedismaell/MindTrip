@@ -24,6 +24,11 @@ class AuthLocalDataSource {
     return _storage.getRefreshToken();
   }
 
+  Future<bool> hasSession() async {
+    final token = await _storage.getAccessToken();
+    return token != null && token.isNotEmpty;
+  }
+
   Future<void> clear() async {
     await _storage.clearTokens();
   }

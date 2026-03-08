@@ -12,8 +12,6 @@ Future<void> initializeDependencies({
 }) async {
   await CommonDi.init();
 
-  // Auth must be initialized before Onboarding because AppGateCubit
-  // (registered in OnboardingDi) depends on AuthCubit.
   AuthDi.init();
   OnboardingDi.init(onboardingBox: onboardingBox);
 }

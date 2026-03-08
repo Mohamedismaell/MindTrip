@@ -8,15 +8,6 @@ import 'package:mindtrip/core/widget/app_text_field.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 
-/// ──────────────────────────────────────────────────────────────────────────────
-/// [PRESENTATION LAYER] — Widget
-///
-/// [SignInForm] renders the email + password fields and the "Sign In" button.
-///
-/// • Uses [BlocBuilder] to reactively toggle password visibility & show loading.
-/// • Delegates the actual sign-in action to [AuthCubit.signIn].
-/// • Form validation is handled by [AppValidator] — no business logic here.
-/// ──────────────────────────────────────────────────────────────────────────────
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
 
@@ -56,7 +47,6 @@ class _SignInFormState extends State<SignInForm> {
           key: _formKey,
           child: Column(
             children: [
-              // ── Email Field ──
               AppTextField(
                 hint: "Enter your email",
                 prefixIcon: Icons.email_outlined,
@@ -66,7 +56,6 @@ class _SignInFormState extends State<SignInForm> {
               ),
               SizedBox(height: 28.h),
 
-              // ── Password Field ──
               AppTextField(
                 hint: "Enter your password",
                 prefixIcon: Icons.lock_outline,
@@ -78,7 +67,6 @@ class _SignInFormState extends State<SignInForm> {
               ),
               SizedBox(height: 20.h),
 
-              // ── Remember Me & Forgot Password ──
               Row(
                 children: [
                   Checkbox(
@@ -108,7 +96,6 @@ class _SignInFormState extends State<SignInForm> {
               ),
               SizedBox(height: 24.h),
 
-              // ── Submit Button ──
               CustomGradientButton(
                 width: double.infinity,
                 text: isLoading ? "Signing In..." : "Sign In",

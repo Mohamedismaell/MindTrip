@@ -1,10 +1,14 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 
 class ApiErrorMapper {
   static Failure fromException(Object e) {
+    if (kDebugMode) {
+      print("API ERROR: $e");
+    }
     if (e is DioException) {
       return fromDioException(e);
     }
@@ -49,19 +53,20 @@ class ApiErrorMapper {
           message: 'No internet connection',
           debugMessage: e.message,
         );
+      case DioExceptionType.badCertificate:
+        return const NetworkFailure(message: 'Secure connection failed');
 
       case DioExceptionType.badResponse:
         return _mapBadResponse(e);
-
       case DioExceptionType.cancel:
       case DioExceptionType.unknown:
-      default:
         return const UnknownFailure();
     }
   }
 
   static Failure _mapBadResponse(DioException e) {
     final response = e.response;
+
     if (response == null) {
       return const ServerFailure('Server error');
     }
@@ -69,13 +74,23 @@ class ApiErrorMapper {
     final statusCode = response.statusCode ?? 0;
     final data = response.data;
 
-    if (statusCode == 401 || statusCode == 403) {
+    if (statusCode == 401) {
       return const UnauthorizedFailure();
     }
 
-    final message = _extractMessage(data);
+    if (statusCode == 403) {
+      return const UnauthorizedFailure(message: 'Access forbidden');
+    }
 
-    return ServerFailure(message, debugMessage: e.message);
+    if (statusCode == 404) {
+      return const ServerFailure('Resource not found');
+    }
+
+    if (statusCode == 400) {
+      return ServerFailure(_extractMessage(data));
+    }
+
+    return ServerFailure(_extractMessage(data), debugMessage: e.message);
   }
 
   static String _extractMessage(dynamic data) {

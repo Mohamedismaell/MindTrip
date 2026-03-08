@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/database/api/dio_consumer.dart';
-import 'package:mindtrip/core/database/cache/cache_helper.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
+import 'package:mindtrip/core/stoarge/secure_token_storage.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/data/repositories/auth_repository_impl.dart';
@@ -11,7 +11,6 @@ import 'package:mindtrip/features/authetication/domain/usecases/refresh_token_us
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
-import 'package:mindtrip/core/stoarge/secure_token_storage.dart';
 
 class AuthDi {
   AuthDi._();

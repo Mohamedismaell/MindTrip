@@ -6,6 +6,7 @@ import 'package:mindtrip/core/connections/retry_runner.dart';
 import 'package:mindtrip/core/database/api/interceptors/api_interceptor.dart';
 import 'package:mindtrip/core/database/api/dio_consumer.dart';
 import 'package:mindtrip/core/database/api/interceptors/auth_interceptor.dart';
+import 'package:mindtrip/core/database/api/interceptors/logging_interceptor.dart';
 import 'package:mindtrip/core/database/cache/cache_helper.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_cubit.dart';
@@ -39,8 +40,14 @@ class CommonDi {
     sl.registerLazySingleton(() => SecureTokenStorage());
 
     sl.registerLazySingleton(() => AuthInterceptor(sl<SecureTokenStorage>()));
+    sl.registerLazySingleton(() => LoggingInterceptor());
     sl.registerLazySingleton(
-      () => DioConsumer(sl<Dio>(), sl<ApiInterceptor>(), sl<AuthInterceptor>()),
+      () => DioConsumer(
+        sl<Dio>(),
+        sl<ApiInterceptor>(),
+        sl<AuthInterceptor>(),
+        sl<LoggingInterceptor>(),
+      ),
     );
 
     //! Validators

@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
 import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
+import 'package:mindtrip/features/home/routes/home_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 
 //Todo Add onBorading Route
@@ -20,6 +21,7 @@ class AppRouter {
     routes: [
       ...OnBoardingRoutes.routes,
       ...AuthRoutes.routes,
+      ...HomeRoutes.routes,
       // ShellRoute(
       //   builder: (context, state, child) {
       //     return AppShell(location: state.uri.toString(), child: child);

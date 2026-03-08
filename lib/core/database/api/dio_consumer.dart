@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mindtrip/core/database/api/interceptors/logging_interceptor.dart';
 import 'api_consumer.dart';
 import 'interceptors/api_interceptor.dart';
 import 'end_points.dart';
@@ -9,17 +10,17 @@ class DioConsumer extends ApiConsumer {
   final Dio dio;
   final ApiInterceptor apiInterceptor;
   final AuthInterceptor authInterceptor;
-  DioConsumer(this.dio, this.apiInterceptor, this.authInterceptor) {
+  final LoggingInterceptor loggingInterceptor;
+  DioConsumer(
+    this.dio,
+    this.apiInterceptor,
+    this.authInterceptor,
+    this.loggingInterceptor,
+  ) {
     dio.interceptors.addAll([
       apiInterceptor,
       authInterceptor,
-      if (kDebugMode)
-        LogInterceptor(
-          request: true,
-          requestHeader: true,
-          requestBody: true,
-          error: true,
-        ),
+      if (kDebugMode) loggingInterceptor,
     ]);
 
     dio.options = BaseOptions(

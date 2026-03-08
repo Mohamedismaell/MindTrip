@@ -26,11 +26,7 @@ class AuthInterceptor extends Interceptor {
     ErrorInterceptorHandler handler,
   ) async {
     if (err.response?.statusCode == 401) {
-      // Token expired or invalid
       await storage.clearTokens();
-
-      // Optional: trigger logout logic here later
-      // example: AppGateCubit -> go to login
     }
 
     handler.next(err);
