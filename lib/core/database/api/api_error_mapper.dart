@@ -75,15 +75,15 @@ class ApiErrorMapper {
     final data = response.data;
 
     if (statusCode == 401) {
-      return const UnauthorizedFailure();
+      return UnauthorizedFailure(message: _extractMessage(data));
     }
 
     if (statusCode == 403) {
-      return const UnauthorizedFailure(message: 'Access forbidden');
+      return UnauthorizedFailure(message: _extractMessage(data));
     }
 
     if (statusCode == 404) {
-      return const ServerFailure('Resource not found');
+      return ServerFailure(_extractMessage(data));
     }
 
     if (statusCode == 400) {
@@ -95,13 +95,18 @@ class ApiErrorMapper {
 
   static String _extractMessage(dynamic data) {
     if (data is Map<String, dynamic>) {
+      if (data['detail'] != null) return data['detail'].toString();
+      if (data['title'] != null) return data['title'].toString();
+
       if (data['message'] != null) return data['message'].toString();
       if (data['errorMessage'] != null) return data['errorMessage'].toString();
       if (data['error'] != null) return data['error'].toString();
+
       if (data['errors'] is List && data['errors'].isNotEmpty) {
         return data['errors'].first.toString();
       }
     }
+
     return 'Server error occurred';
   }
 }

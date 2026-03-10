@@ -1,10 +1,10 @@
 class EndPoints {
   static String baseUrl = 'https://tripmind.runasp.net/';
-  static String login = 'api/auth/login';
-  static String register = 'api/auth/register';
-  static String refreshToken = 'api/auth/refresh';
-  static String getCurrentUser = 'api/auth/me';
-  static String logout = 'api/auth/logout';
+  static String login = 'api/v1/auth/login';
+  static String register = 'api/v1/auth/register';
+  static String refreshToken = 'api/v1/auth/refresh';
+  static String getCurrentUser = 'api/v1/auth/me';
+  static String logout = 'api/v1/auth/logout';
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }
@@ -15,32 +15,6 @@ class EndPoints {
 }
 
 class ApiKeys {
-  static String status = 'status';
-  static String errorMessage = 'errorMessage';
-  static String shares = 'shares';
-  static String thread = 'thread';
-  static String uuid = 'uuid';
-  static String url = 'url';
-  static String siteFull = 'site_full';
-  static String site = 'site';
-  static String siteSection = 'site_section';
-  static String siteCategories = 'site_categories';
-  static String sectionTitle = 'section_title';
-  static String titleFull = 'title_full';
-  static String published = 'published';
-  static String repliesCount = 'replies_count';
-  static String participantsCount = 'participants_count';
-  static String siteType = 'site_type';
-  static String country = 'country';
-  static String mainImage = 'main_image';
-  static String performanceScore = 'performance_score';
-  static String domainRank = 'domain_rank';
-  static String domainRankUpdated = 'domain_rank_updated';
-  static String social = 'social';
-  static String updated = 'updated';
-  static String facebook = 'facebook';
-  static String likes = 'likes';
-  static String comments = 'comments';
-  static String faShares = 'shares';
-  static String vkShares = 'shares';
+  static String authorization = 'Authorization';
+  static String bearer = 'Bearer';
 }

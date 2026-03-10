@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 
 /// ──────────────────────────────────────────────────────────────────────────────
 /// [PRESENTATION LAYER] — Reusable Widget
@@ -11,9 +12,8 @@ import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.da
 ///
 /// It listens for [AuthStatus] changes and:
 ///   • On [AuthStatus.failure]  → shows a [SnackBar] with the error message.
-///
-/// Navigation on success is handled declaratively by [AppGateCubit] +
-/// GoRouter's redirect — no imperative `context.go()` needed here.
+///   • On [AuthStatus.success]  → calls `loginSuccess()` on the global [AppGateCubit]
+///     to handle navigation declaratively.
 /// ──────────────────────────────────────────────────────────────────────────────
 class AuthStatusListener extends StatelessWidget {
   /// The child widget tree — typically the screen body.
@@ -26,7 +26,9 @@ class AuthStatusListener extends StatelessWidget {
     return BlocListener<AuthCubit, AuthState>(
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
-        if (state.status == AuthStatus.failure) {
+        if (state.status == AuthStatus.success) {
+          context.read<AppGateCubit>().loginSuccess();
+        } else if (state.status == AuthStatus.failure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(

@@ -1,4 +1,4 @@
-import 'package:mindtrip/core/stoarge/secure_token_storage.dart';
+import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 
 class AuthLocalDataSource {
   final SecureTokenStorage _storage;
@@ -8,12 +8,10 @@ class AuthLocalDataSource {
 
   Future<void> saveTokens({
     required String accessToken,
-    String? refreshToken,
+    required String refreshToken,
   }) async {
     await _storage.saveAccessToken(accessToken);
-    if (refreshToken != null) {
-      await _storage.saveRefreshToken(refreshToken);
-    }
+    await _storage.saveRefreshToken(refreshToken);
   }
 
   Future<String?> getAccessToken() async {

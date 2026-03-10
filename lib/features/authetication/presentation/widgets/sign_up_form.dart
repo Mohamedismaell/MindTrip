@@ -8,15 +8,6 @@ import 'package:mindtrip/core/widget/app_text_field.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 
-/// ──────────────────────────────────────────────────────────────────────────────
-/// [PRESENTATION LAYER] — Widget
-///
-/// [SignUpForm] renders name + email + password + confirm-password fields and
-/// the "Sign Up" button with loading state awareness.
-///
-/// • Uses [BlocBuilder] for reactive UI (toggle visibility, loading indicator).
-/// • Delegates the actual sign-up to [AuthCubit.signUp].
-/// ──────────────────────────────────────────────────────────────────────────────
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
 
@@ -30,7 +21,6 @@ class _SignUpFormState extends State<SignUpForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -42,10 +32,12 @@ class _SignUpFormState extends State<SignUpForm> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
+      final authCubit = context.read<AuthCubit>();
       context.read<AuthCubit>().signUp(
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+        rememberMe: authCubit.state.rememberMe,
       );
     }
   }
@@ -61,7 +53,7 @@ class _SignUpFormState extends State<SignUpForm> {
           key: _formKey,
           child: Column(
             children: [
-              // ── Name Field ──
+              //  Name Field
               AppTextField(
                 hint: "Enter your name",
                 prefixIcon: Icons.person_outline,
@@ -70,7 +62,7 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               SizedBox(height: 28.h),
 
-              // ── Email Field ──
+              //  Email Field
               AppTextField(
                 hint: "Enter your email",
                 prefixIcon: Icons.email_outlined,
@@ -80,7 +72,7 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               SizedBox(height: 28.h),
 
-              // ── Password Field ──
+              //  Password Field
               AppTextField(
                 hint: "Enter your password",
                 prefixIcon: Icons.lock_outline,
@@ -92,7 +84,7 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               SizedBox(height: 28.h),
 
-              // ── Confirm Password Field ──
+              //  Confirm Password Field
               AppTextField(
                 hint: "Confirm your password",
                 prefixIcon: Icons.lock_outline,
@@ -106,8 +98,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
               ),
               SizedBox(height: 20.h),
-
-              // ── Remember Me Checkbox ──
+              //  Remember Me Checkbox
               Row(
                 children: [
                   Checkbox(
@@ -125,7 +116,7 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               SizedBox(height: 24.h),
 
-              // ── Submit Button ──
+              //  Submit Button
               CustomGradientButton(
                 width: double.infinity,
                 text: isLoading ? "Signing Up..." : "Sign Up",

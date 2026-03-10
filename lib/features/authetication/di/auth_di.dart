@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/database/api/dio_consumer.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/core/stoarge/secure_token_storage.dart';
+import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/data/repositories/auth_repository_impl.dart';
@@ -16,13 +16,6 @@ class AuthDi {
   AuthDi._();
 
   static void init() {
-    sl.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSource(api: sl<DioConsumer>()),
-    );
-    sl.registerLazySingleton<AuthLocalDataSource>(
-      () => AuthLocalDataSource(storage: sl<SecureTokenStorage>()),
-    );
-
     sl.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
         remoteDataSource: sl<AuthRemoteDataSource>(),
@@ -50,7 +43,6 @@ class AuthDi {
       () => AuthCubit(
         signInUseCase: sl<SignInUseCase>(),
         signUpUseCase: sl<SignUpUseCase>(),
-        logoutUseCase: sl<LogoutUseCase>(),
         getCurrentUserUseCase: sl<GetCurrentUserUseCase>(),
       ),
     );

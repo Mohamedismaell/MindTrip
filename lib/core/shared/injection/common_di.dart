@@ -8,14 +8,17 @@ import 'package:mindtrip/core/database/api/dio_consumer.dart';
 import 'package:mindtrip/core/database/api/interceptors/auth_interceptor.dart';
 import 'package:mindtrip/core/database/api/interceptors/logging_interceptor.dart';
 import 'package:mindtrip/core/database/cache/cache_helper.dart';
+import 'package:mindtrip/core/shared/auth/token_manager.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_cubit.dart';
 import 'package:mindtrip/core/shared/user/data/datasources/user_remote_data_source.dart';
 import 'package:mindtrip/core/shared/user/data/repositories/user_repository_impl.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
-import 'package:mindtrip/core/stoarge/secure_token_storage.dart';
+import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
+import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
+import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 
 CacheHelper get cacheHelper => sl<CacheHelper>();
 
@@ -39,7 +42,25 @@ class CommonDi {
     );
     sl.registerLazySingleton(() => SecureTokenStorage());
 
-    sl.registerLazySingleton(() => AuthInterceptor(sl<SecureTokenStorage>()));
+    sl.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSource(api: sl<DioConsumer>()),
+    );
+    sl.registerLazySingleton<AuthLocalDataSource>(
+      () => AuthLocalDataSource(storage: sl<SecureTokenStorage>()),
+    );
+    sl.registerLazySingleton(
+      () => TokenManager(
+        authRemoteDataSource: sl<AuthRemoteDataSource>(),
+        authLocalDataSource: sl<AuthLocalDataSource>(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => AuthInterceptor(
+        storage: sl<SecureTokenStorage>(),
+        dio: sl<Dio>(),
+        getTokenManager: () => sl<TokenManager>(),
+      ),
+    );
     sl.registerLazySingleton(() => LoggingInterceptor());
     sl.registerLazySingleton(
       () => DioConsumer(

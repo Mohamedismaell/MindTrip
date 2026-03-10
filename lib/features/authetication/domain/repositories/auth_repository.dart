@@ -5,12 +5,14 @@ abstract class AuthRepository {
   Future<Result<UserEntity>> signIn({
     required String email,
     required String password,
+    required bool rememberMe,
   });
 
   Future<Result<UserEntity>> signUp({
     required String name,
     required String email,
     required String password,
+    required bool rememberMe,
   });
 
   Future<Result<void>> logout();

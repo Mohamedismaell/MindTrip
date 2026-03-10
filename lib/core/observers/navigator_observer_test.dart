@@ -67,7 +67,9 @@ class NavigatorObserverTest extends NavigatorObserver {
   /// to disable hero animations during such interactions.
   @override
   void didStartUserGesture(
-      Route<dynamic> route, Route<dynamic>? previousRoute) {
+    Route<dynamic> route,
+    Route<dynamic>? previousRoute,
+  ) {
     // print("STARTED USER GESTURE: ${route.settings.name}");
   }
 

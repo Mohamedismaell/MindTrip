@@ -6,12 +6,14 @@ import 'package:mindtrip/features/authetication/domain/entities/auth_tokens.dart
 class AuthResponseModel extends Equatable {
   final UserModel user;
   final String accessToken;
+  final String refreshToken;
   final String tokenType;
   final int expiresIn;
 
   const AuthResponseModel({
     required this.user,
     required this.accessToken,
+    required this.refreshToken,
     required this.tokenType,
     required this.expiresIn,
   });
@@ -20,6 +22,7 @@ class AuthResponseModel extends Equatable {
     return AuthResponseModel(
       user: UserModel.fromJson(json),
       accessToken: json['accessToken'] as String,
+      refreshToken: json['refreshToken'] as String,
       tokenType: json['tokenType'] as String? ?? 'Bearer',
       expiresIn: json['expiresIn'] as int? ?? 0,
     );
@@ -31,6 +34,7 @@ class AuthResponseModel extends Equatable {
       'accessToken': accessToken,
       'tokenType': tokenType,
       'expiresIn': expiresIn,
+      'refreshToken': refreshToken,
     };
   }
 
@@ -44,9 +48,16 @@ class AuthResponseModel extends Equatable {
       accessToken: accessToken,
       tokenType: tokenType,
       expiresIn: expiresIn,
+      refreshToken: refreshToken,
     );
   }
 
   @override
-  List<Object?> get props => [user, accessToken, tokenType, expiresIn];
+  List<Object?> get props => [
+    user,
+    accessToken,
+    tokenType,
+    expiresIn,
+    refreshToken,
+  ];
 }

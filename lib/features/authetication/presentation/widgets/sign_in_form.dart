@@ -29,9 +29,11 @@ class _SignInFormState extends State<SignInForm> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      context.read<AuthCubit>().signIn(
+      final authCubit = context.read<AuthCubit>();
+      authCubit.signIn(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+        rememberMe: authCubit.state.rememberMe,
       );
     }
   }

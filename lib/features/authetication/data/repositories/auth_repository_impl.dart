@@ -6,11 +6,6 @@ import 'package:mindtrip/features/authetication/data/models/auth_response_model.
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 
-/// [DATA LAYER] — Repository Implementation
-///
-/// [AuthRepositoryImpl] coordinates between:
-///   • [AuthRemoteDataSource]  — network calls.
-///   • [AuthLocalDataSource]   — token persistence.
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
   final AuthLocalDataSource _localDataSource;
@@ -21,43 +16,54 @@ class AuthRepositoryImpl implements AuthRepository {
   }) : _remoteDataSource = remoteDataSource,
        _localDataSource = localDataSource;
 
-  // ──────────────── Sign In ────────────────
+  //  Sign In
 
   @override
   Future<Result<UserEntity>> signIn({
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
     try {
       final AuthResponseModel response = await _remoteDataSource.signIn(
         email: email,
         password: password,
+        rememberMe: rememberMe,
       );
 
-      await _localDataSource.saveTokens(accessToken: response.accessToken);
+      await _localDataSource.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
 
       return Result.ok(response.user.toEntity());
     } catch (e) {
+      print('Error here ===== > $e');
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
 
-  // ──────────────── Sign Up ────────────────
+  //  Sign Up
 
   @override
   Future<Result<UserEntity>> signUp({
     required String name,
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
     try {
       final AuthResponseModel response = await _remoteDataSource.signUp(
         name: name,
         email: email,
         password: password,
+        rememberMe: rememberMe,
       );
 
-      await _localDataSource.saveTokens(accessToken: response.accessToken);
+      await _localDataSource.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
 
       return Result.ok(response.user.toEntity());
     } catch (e) {
@@ -65,27 +71,25 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  // ──────────────── Logout ────────────────
+  //  Logout
 
   @override
   Future<Result<void>> logout() async {
     try {
       // Attempt server-side invalidation (best-effort).
-      final accessToken = _localDataSource.getAccessToken();
+      // final accessToken = _localDataSource.getAccessToken();
       // await _remoteDataSource.logout(accessToken: accessToken);
 
-      // Always clear local data regardless of server response.
-      // await _localDataSource.clearAll();
+      await _localDataSource.clear();
 
       return const Result.ok(null);
     } catch (e) {
-      // Even if the server call fails, clear local data to force re-login.
-      // await _localDataSource.clearAll();
+      await _localDataSource.clear();
       return const Result.ok(null);
     }
   }
 
-  // ──────────────── Refresh Token ────────────────
+  //  Refresh Token
 
   // @override
   // Future<Result<AuthTokens>> refreshToken() async {
@@ -118,7 +122,7 @@ class AuthRepositoryImpl implements AuthRepository {
   //   }
   // }
 
-  // ──────────────── Get Current User ────────────────
+  //  Get Current User
 
   // @override
   // Future<Result<UserEntity>> getCurrentUser() async {

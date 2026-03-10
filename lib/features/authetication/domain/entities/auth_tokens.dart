@@ -1,11 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-/// [DOMAIN LAYER] — Entity
-///
-/// [AuthTokens] holds the authentication tokens returned from a successful
-/// sign-in / sign-up flow. This is a pure value object with no behaviour.
 class AuthTokens extends Equatable {
   final String accessToken;
+  final String refreshToken;
   final String tokenType;
   final int expiresIn;
 
@@ -13,8 +10,9 @@ class AuthTokens extends Equatable {
     required this.accessToken,
     required this.tokenType,
     required this.expiresIn,
+    required this.refreshToken,
   });
 
   @override
-  List<Object?> get props => [accessToken, tokenType, expiresIn];
+  List<Object?> get props => [accessToken, tokenType, expiresIn, refreshToken];
 }

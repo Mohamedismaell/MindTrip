@@ -1,21 +1,18 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
-import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 part 'app_gate_state.dart';
 
 class AppGateCubit extends Cubit<AppGateState> {
   final OnboardingRepository onboardingRepository;
-  final AuthCubit authCubit;
+  final LogoutUseCase logoutUseCase;
   final AuthLocalDataSource authLocal;
-  StreamSubscription? _authSubscription;
 
   AppGateCubit({
     required this.onboardingRepository,
-    required this.authCubit,
+    required this.logoutUseCase,
     required this.authLocal,
   }) : super(AppGateLoading());
 
@@ -33,24 +30,24 @@ class AppGateCubit extends Cubit<AppGateState> {
     } else {
       emit(AppGateUnauthenticated());
     }
-    _listenToAuthChanges();
   }
 
-  void _listenToAuthChanges() {
-    _authSubscription = authCubit.stream.listen((authState) {
-      if (authState.status == AuthStatus.success) {
-        emit(AppGateAuthenticated());
-      } else if (authState.status == AuthStatus.initial) {
-        if (state is AppGateAuthenticated) {
-          emit(AppGateUnauthenticated());
-        }
-      }
-    });
+  void loginSuccess() {
+    emit(AppGateAuthenticated());
   }
 
-  @override
-  Future<void> close() async {
-    await _authSubscription?.cancel();
-    return super.close();
+  Future<void> logout() async {
+    emit(AppGateLoading());
+    final result = await logoutUseCase();
+    result.when(
+      success: (_) {
+        emit(AppGateUnauthenticated());
+      },
+      failure: (error) {
+        // You could emit an error state here if needed,
+        // but typically you still log the user out locally or show a toast.
+        emit(AppGateUnauthenticated());
+      },
+    );
   }
 }

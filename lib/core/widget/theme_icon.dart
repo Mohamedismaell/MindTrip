@@ -22,8 +22,8 @@ class ThemeIcon extends StatelessWidget {
 
             color: Colors.transparent,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               // crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
                   child: ElevatedButton(

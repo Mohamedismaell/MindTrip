@@ -20,7 +20,7 @@ class DioConsumer extends ApiConsumer {
     dio.interceptors.addAll([
       apiInterceptor,
       authInterceptor,
-      if (kDebugMode) loggingInterceptor,
+      loggingInterceptor,
     ]);
 
     dio.options = BaseOptions(

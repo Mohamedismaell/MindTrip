@@ -12,10 +12,11 @@ class AuthRemoteDataSource {
   Future<AuthResponseModel> signIn({
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
     final response = await _api.post(
       EndPoints.login,
-      data: {'email': email, 'password': password},
+      data: {'email': email, 'password': password, 'rememberMe': rememberMe},
     );
 
     return AuthResponseModel.fromJson(response);
@@ -27,6 +28,7 @@ class AuthRemoteDataSource {
     required String name,
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
     final response = await _api.post(
       EndPoints.register,
@@ -35,7 +37,7 @@ class AuthRemoteDataSource {
         'email': email,
         'password': password,
         'confirmPassword': password,
-        'rememberMe': true,
+        'rememberMe': rememberMe,
       },
     );
 
@@ -43,25 +45,13 @@ class AuthRemoteDataSource {
   }
 
   //  Refresh Token
+  Future<AuthResponseModel> refreshToken({required String refreshToken}) async {
+    final response = await _api.post(
+      EndPoints.refreshToken,
+      data: {"refreshToken": refreshToken},
+    );
 
-  /// POST /auth/refresh
-  ///
-  /// Sends the existing access token and receives a new one.
-  Future<AuthResponseModel> refreshToken({required String accessToken}) async {
-    // TODO: Replace with real API call when endpoint is available
-    // final response = await _api.post('/auth/refresh', data: { ... });
-    await Future.delayed(const Duration(seconds: 1));
-
-    return AuthResponseModel.fromJson({
-      'accessToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new_access_token',
-      'tokenType': 'Bearer',
-      'expiresIn': 604800,
-      'userId': 'usr_001',
-      'displayName': 'Mohamed Ismaeel',
-      'email': 'user@example.com',
-      'profilePhotoUrl': null,
-      'languagePreference': 'AR',
-    });
+    return AuthResponseModel.fromJson(response);
   }
 
   //  Get Current User

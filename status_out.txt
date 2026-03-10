@@ -1,15 +1,35 @@
- M lib/core/theme/app_text_theme.dart
- M lib/core/theme/theme_data_/light_theme_data.dart
- M lib/core/widget/custom_gradient_button.dart
- M lib/core/widget/custom_head_line.dart
- M lib/features/authetication/presentation/screens/sign_up_screen.dart
- M lib/features/authetication/presentation/widget/sign_up_form.dart
- M lib/features/onboarding/presentation/widgets/onboarding_content.dart
- M lib/main.dart
-?? assets/icons/
-?? diff.txt
-?? lib/features/authetication/presentation/widget/auth_options_button.dart
-?? lib/features/authetication/presentation/widget/authoptions_content.dart
-?? lib/features/authetication/presentation/widget/divider_row.dart
-?? lib/features/authetication/presentation/widget/log_in_form.dart
-?? status_out.txt
+ M lib/core/database/api/api_error_mapper.dart
+ M lib/core/database/api/dio_consumer.dart
+ M lib/core/database/api/end_points.dart
+ M lib/core/database/api/interceptors/api_interceptor.dart
+ M lib/core/database/api/interceptors/auth_interceptor.dart
+ M lib/core/database/cache/cache_helper.dart
+ M lib/core/observers/navigator_observer_test.dart
+ M lib/core/shared/injection/common_di.dart
+ D lib/core/shared/params/news_category_params.dart
+ D lib/core/shared/params/params.dart
+ M lib/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart
+ M lib/core/shared/presentation/widget/app_cached_image.dart
+ M lib/core/shared/routes/app_router.dart
+ M lib/core/shared/user/domain/repositories/user_repository.dart
+ D lib/core/stoarge/secure_token_storage.dart
+ M lib/core/theme/cubit/theme_cubit.dart
+ M lib/core/widget/theme_icon.dart
+ M lib/features/authetication/data/datasources/auth_local_data_source.dart
+ M lib/features/authetication/data/datasources/auth_remote_data_source.dart
+ M lib/features/authetication/data/models/auth_response_model.dart
+ M lib/features/authetication/data/repositories/auth_repository_impl.dart
+ M lib/features/authetication/di/auth_di.dart
+ M lib/features/authetication/domain/entities/auth_tokens.dart
+ M lib/features/authetication/domain/repositories/auth_repository.dart
+ M lib/features/authetication/domain/usecases/logout_use_case.dart
+ M lib/features/authetication/domain/usecases/sign_in_use_case.dart
+ M lib/features/authetication/domain/usecases/sign_up_use_case.dart
+ M lib/features/authetication/presentation/cubit/auth_cubit.dart
+ M lib/features/authetication/presentation/widgets/auth_status_listener.dart
+ M lib/features/authetication/presentation/widgets/sign_in_form.dart
+ M lib/features/authetication/presentation/widgets/sign_up_form.dart
+ M lib/features/authetication/routes/auth_routes.dart
+ M lib/features/home/presentation/screens/home_screen.dart
+ M lib/features/onboarding/di/on_boarding_injection.dart
+ M status_out.txt

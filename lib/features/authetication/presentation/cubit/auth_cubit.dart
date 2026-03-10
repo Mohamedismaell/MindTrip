@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/get_current_user_use_case.dart';
-import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
 part 'auth_state.dart';
@@ -11,17 +10,14 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   final SignInUseCase _signInUseCase;
   final SignUpUseCase _signUpUseCase;
-  final LogoutUseCase _logoutUseCase;
   // final GetCurrentUserUseCase _getCurrentUserUseCase;
 
   AuthCubit({
     required SignInUseCase signInUseCase,
     required SignUpUseCase signUpUseCase,
-    required LogoutUseCase logoutUseCase,
     required GetCurrentUserUseCase getCurrentUserUseCase,
   }) : _signInUseCase = signInUseCase,
        _signUpUseCase = signUpUseCase,
-       _logoutUseCase = logoutUseCase,
        //  _getCurrentUserUseCase = getCurrentUserUseCase,
        super(const AuthState());
 
@@ -37,10 +33,18 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(rememberMe: value));
   }
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<void> signIn({
+    required String email,
+    required String password,
+    required bool rememberMe,
+  }) async {
     emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
-    final result = await _signInUseCase(email: email, password: password);
+    final result = await _signInUseCase(
+      email: email,
+      password: password,
+      rememberMe: rememberMe,
+    );
 
     result.when(
       success: (user) {
@@ -61,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String name,
     required String email,
     required String password,
-    // required String confirmPassword,
+    required bool rememberMe,
   }) async {
     emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
@@ -69,31 +73,12 @@ class AuthCubit extends Cubit<AuthState> {
       name: name,
       email: email,
       password: password,
+      rememberMe: rememberMe,
     );
 
     result.when(
       success: (user) {
         emit(state.copyWith(status: AuthStatus.success, user: user));
-      },
-      failure: (error) {
-        emit(
-          state.copyWith(
-            status: AuthStatus.failure,
-            errorMessage: error.message,
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> logout() async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
-
-    final result = await _logoutUseCase();
-
-    result.when(
-      success: (_) {
-        emit(const AuthState());
       },
       failure: (error) {
         emit(
