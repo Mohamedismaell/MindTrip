@@ -1,11 +1,11 @@
-import 'package:mindtrip/core/database/api/dio_consumer.dart';
+import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/data/repositories/auth_repository_impl.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/get_current_user_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/refresh_token_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
@@ -22,7 +22,6 @@ class AuthDi {
         localDataSource: sl<AuthLocalDataSource>(),
       ),
     );
-
     sl.registerLazySingleton(
       () => SignInUseCase(repository: sl<AuthRepository>()),
     );
@@ -38,12 +37,17 @@ class AuthDi {
     sl.registerLazySingleton(
       () => GetCurrentUserUseCase(repository: sl<AuthRepository>()),
     );
+    // GoogleAuthProvider is registered in CommonDi (shared by AuthCubit + AppGateCubit)
+    sl.registerLazySingleton(
+      () => GoogleAuthUseCase(repository: sl<AuthRepository>()),
+    );
 
     sl.registerLazySingleton<AuthCubit>(
       () => AuthCubit(
         signInUseCase: sl<SignInUseCase>(),
         signUpUseCase: sl<SignUpUseCase>(),
-        getCurrentUserUseCase: sl<GetCurrentUserUseCase>(),
+        googleAuthProvider: sl<GoogleAuthProvider>(),
+        googleAuthUseCase: sl<GoogleAuthUseCase>(),
       ),
     );
   }

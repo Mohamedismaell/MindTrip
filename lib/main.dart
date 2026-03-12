@@ -14,6 +14,7 @@ import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/conne
 import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
+import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 
@@ -46,9 +47,9 @@ class AppBootstrap extends StatelessWidget {
           create: (_) =>
               AppConnectionCubit(sl<InternetConnection>(), sl<RetryRunner>()),
         ),
+        BlocProvider<ThemeCubit>(create: (_) => sl<ThemeCubit>()),
         BlocProvider<AppGateCubit>(create: (_) => sl<AppGateCubit>()),
-
-        BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+        BlocProvider<AuthCubit>(create: (_) => sl<AuthCubit>()),
       ],
       child: const MyApp(),
     );

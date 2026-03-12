@@ -32,6 +32,8 @@ class ApiInterceptor extends Interceptor {
     handler.next(options);
   }
 
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {}
+  // @override
+  // void onError(DioException err, ErrorInterceptorHandler handler) {
+  //   handler.next(err);
+  // }
 }

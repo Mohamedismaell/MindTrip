@@ -3,12 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
-/// ──────────────────────────────────────────────────────────────────────────────
-/// [PRESENTATION LAYER] — Widget
-///
-/// [AuthOptionsButton] renders a social login option (Google, Facebook, etc.)
-/// as an outlined button with an SVG icon.
-/// ──────────────────────────────────────────────────────────────────────────────
 class AuthOptionsButton extends StatelessWidget {
   const AuthOptionsButton({
     super.key,

@@ -71,6 +71,23 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  //Gooogle
+
+  @override
+  Future<Result<UserEntity>> googleAuth({required String token}) async {
+    try {
+      final response = await _remoteDataSource.signInWithGoogle(idToken: token);
+
+      await _localDataSource.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+
+      return Result.ok(response.user.toEntity());
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
   //  Logout
 
   @override

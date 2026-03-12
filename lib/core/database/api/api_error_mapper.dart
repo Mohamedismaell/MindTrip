@@ -7,7 +7,8 @@ import 'package:mindtrip/core/errors/failure/failure.dart';
 class ApiErrorMapper {
   static Failure fromException(Object e) {
     if (kDebugMode) {
-      print("API ERROR: $e");
+      print("ERROR TYPE: ${e.runtimeType}");
+      print("ERROR OBJECT: $e");
     }
     if (e is DioException) {
       return fromDioException(e);

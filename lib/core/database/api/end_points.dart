@@ -5,6 +5,7 @@ class EndPoints {
   static String refreshToken = 'api/v1/auth/refresh';
   static String getCurrentUser = 'api/v1/auth/me';
   static String logout = 'api/v1/auth/logout';
+  static String googleLogin = 'api/v1/auth/google';
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }

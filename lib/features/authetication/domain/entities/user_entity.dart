@@ -1,10 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// [DOMAIN LAYER] — Entity
-///
-/// [UserEntity] is a pure domain object that represents an authenticated user.
-/// It lives in the domain layer and has **zero** dependency on any framework,
-/// API response shape, or database schema.
 class UserEntity extends Equatable {
   final String userId;
   final String displayName;

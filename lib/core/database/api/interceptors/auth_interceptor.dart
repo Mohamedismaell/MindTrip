@@ -21,10 +21,10 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await tokenManager.getAccessToken();
+    final accessToken = await tokenManager.getAccessToken();
 
-    if (token != null && token.isNotEmpty) {
-      options.headers[ApiKeys.authorization] = "${ApiKeys.bearer} $token";
+    if (accessToken != null && accessToken.isNotEmpty) {
+      options.headers[ApiKeys.authorization] = "${ApiKeys.bearer} $accessToken";
     }
 
     handler.next(options);
