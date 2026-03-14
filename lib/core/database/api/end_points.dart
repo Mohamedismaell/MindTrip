@@ -6,6 +6,7 @@ class EndPoints {
   static String getCurrentUser = 'api/v1/auth/me';
   static String logout = 'api/v1/auth/logout';
   static String googleLogin = 'api/v1/auth/google';
+  static String facebookLogin = 'api/v1/auth/facebook';
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }
@@ -18,4 +19,6 @@ class EndPoints {
 class ApiKeys {
   static String authorization = 'Authorization';
   static String bearer = 'Bearer';
+  static String googleAndroidClientId =
+      '316222442921-faaef736j2ule3pneimge0n46t3tdfd6.apps.googleusercontent.com';
 }

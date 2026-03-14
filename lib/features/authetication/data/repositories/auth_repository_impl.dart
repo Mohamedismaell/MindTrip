@@ -106,6 +106,24 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  @override
+  Future<Result<UserEntity>> facebookAuth({required String token}) async {
+    try {
+      final response = await _remoteDataSource.signInWithFacebook(
+        accessToken: token,
+      );
+
+      await _localDataSource.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+
+      return Result.ok(response.user.toEntity());
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
   //  Refresh Token
 
   // @override

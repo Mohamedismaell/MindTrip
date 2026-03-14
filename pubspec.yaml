@@ -35,8 +35,9 @@ dependencies:
   hydrated_bloc: ^10.1.1
   path_provider: ^2.1.5
   smooth_page_indicator: ^2.0.1
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^9.2.4
   google_sign_in: ^7.2.0
+  flutter_facebook_auth: ^7.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

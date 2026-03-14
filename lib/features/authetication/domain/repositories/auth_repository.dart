@@ -17,6 +17,7 @@ abstract class AuthRepository {
 
   Future<Result<UserEntity>> googleAuth({required String token});
 
+  Future<Result<UserEntity>> facebookAuth({required String token});
   Future<Result<void>> logout();
 
   // Future<Result<AuthTokens>> refreshToken();

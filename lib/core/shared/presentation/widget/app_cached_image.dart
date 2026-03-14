@@ -27,7 +27,7 @@ class AppCachedImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      placeholder: (_, __) => Skeletonizer(
+      placeholder: (_, _) => Skeletonizer(
         effect: ShimmerEffect(
           baseColor: Colors.grey.shade300,
           highlightColor: Colors.grey.shade100,

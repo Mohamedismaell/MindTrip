@@ -43,6 +43,9 @@ class AuthoptionsContent extends StatelessWidget {
               AuthOptionsButton(
                 icon: 'assets/icons/icon-park_facebook.svg',
                 text: 'Facebook',
+                onTap: () {
+                  context.read<AuthCubit>().loginWithFacebook();
+                },
               ),
             ],
           ),

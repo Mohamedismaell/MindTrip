@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
@@ -11,11 +12,13 @@ class AppGateCubit extends Cubit<AppGateState> {
   final LogoutUseCase logoutUseCase;
   final AuthLocalDataSource authLocal;
   final GoogleAuthProvider googleAuthProvider;
+  final FacebookAuthProvider facebookAuthProvider;
   AppGateCubit({
     required this.onboardingRepository,
     required this.logoutUseCase,
     required this.authLocal,
     required this.googleAuthProvider,
+    required this.facebookAuthProvider,
   }) : super(AppGateLoading());
 
   Future<void> start() async {
@@ -42,13 +45,14 @@ class AppGateCubit extends Cubit<AppGateState> {
     emit(AppGateLoading());
     final result = await logoutUseCase();
     await googleAuthProvider.signOut();
+    await facebookAuthProvider.signOut();
     result.when(
       success: (_) {
         emit(AppGateUnauthenticated());
       },
       failure: (error) {
-        // You could emit an error state here if needed,
-        // but typically you still log the user out locally or show a toast.
+        // error state here later if needed,
+        // log the user out locally .
         emit(AppGateUnauthenticated());
       },
     );

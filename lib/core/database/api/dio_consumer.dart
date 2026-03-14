@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:mindtrip/core/database/api/interceptors/logging_interceptor.dart';
 import 'api_consumer.dart';
 import 'interceptors/api_interceptor.dart';

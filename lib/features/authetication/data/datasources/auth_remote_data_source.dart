@@ -1,7 +1,6 @@
 import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
-import 'package:mindtrip/features/authetication/data/models/user_model.dart';
 
 class AuthRemoteDataSource {
   final ApiConsumer _api;
@@ -71,6 +70,17 @@ class AuthRemoteDataSource {
     final response = await _api.post(
       EndPoints.googleLogin,
       data: {"idToken": idToken},
+    );
+
+    return AuthResponseModel.fromJson(response);
+  }
+
+  Future<AuthResponseModel> signInWithFacebook({
+    required String accessToken,
+  }) async {
+    final response = await _api.post(
+      EndPoints.facebookLogin,
+      data: {"AccessToken": accessToken},
     );
 
     return AuthResponseModel.fromJson(response);

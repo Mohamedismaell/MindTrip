@@ -8,6 +8,7 @@ import 'package:mindtrip/core/database/api/dio_consumer.dart';
 import 'package:mindtrip/core/database/api/interceptors/auth_interceptor.dart';
 import 'package:mindtrip/core/database/api/interceptors/logging_interceptor.dart';
 import 'package:mindtrip/core/database/cache/cache_helper.dart';
+import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/token_manager.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
@@ -31,12 +32,12 @@ class CommonDi {
   CommonDi._();
 
   static Future<void> init() async {
-    //! ──────────────────── Infrastructure ────────────────────
+    //  Infrastructure
     sl.registerLazySingleton(() => ThemeCubit());
     sl.registerLazySingleton(() => Dio());
     sl.registerLazySingleton(() => InternetConnection());
 
-    //! Core — Network
+    // Core — Network
     sl.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(sl<InternetConnection>()),
     );
@@ -47,10 +48,10 @@ class CommonDi {
       () => ApiInterceptor(sl<NetworkInfo>(), sl<RetryQueue>()),
     );
 
-    //! Core — Security / Tokens
+    // Core — Security / Tokens
     sl.registerLazySingleton(() => SecureTokenStorage());
 
-    //! Core — HTTP (DioConsumer MUST be registered before any DataSource that needs it)
+    // Core — HTTP (DioConsumer MUST be registered before any DataSource that needs it)
     sl.registerLazySingleton(() => LoggingInterceptor());
 
     // AuthLocalDataSource needs to exist before AuthInterceptor/TokenManager
@@ -77,12 +78,10 @@ class CommonDi {
       ),
     );
 
-    // Now DioConsumer is available — register AuthRemoteDataSource
     sl.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSource(api: sl<DioConsumer>()),
     );
 
-    // TokenManager depends on both AuthRemoteDataSource and AuthLocalDataSource
     sl.registerLazySingleton(
       () => TokenManager(
         authRemoteDataSource: sl<AuthRemoteDataSource>(),
@@ -90,41 +89,37 @@ class CommonDi {
       ),
     );
 
-    //! ──────────────────── User ────────────────────
+    //  User
     sl.registerLazySingleton<UserRemoteDataSource>(
       () => UserRemoteDataSource(),
     );
     sl.registerLazySingleton<UserRepository>(
-      () => UserRepositoryImpl(
-        remoteDataSource: sl<UserRemoteDataSource>(),
-      ),
+      () => UserRepositoryImpl(remoteDataSource: sl<UserRemoteDataSource>()),
     );
     sl.registerLazySingleton(
       () => GetCurrentUser(repository: sl<UserRepository>()),
     );
 
-    //! ──────────────────── Local Storage ────────────────────
+    //  Local Storage
     final cacheHelper = CacheHelper();
     await cacheHelper.init();
     sl.registerSingleton<CacheHelper>(cacheHelper);
 
-    //! ──────────────────── App-Level Cubits ────────────────────
+    //  App-Level Cubits
     sl.registerLazySingleton(
       () => AppConnectionCubit(sl<InternetConnection>(), sl<RetryRunner>()),
     );
 
-    // GoogleAuthProvider — needed by AppGateCubit for sign-out
     sl.registerLazySingleton(() => GoogleAuthProvider());
+    sl.registerLazySingleton(() => FacebookAuthProvider());
 
-    // AppGateCubit — app-level, registered here after OnboardingDi provides OnboardingRepository
-    // NOTE: This is registered as a late-resolving lazy singleton.
-    //       OnboardingRepository will be available by the time it's first accessed.
     sl.registerLazySingleton(
       () => AppGateCubit(
         onboardingRepository: sl<OnboardingRepository>(),
         logoutUseCase: sl<LogoutUseCase>(),
         authLocal: sl<AuthLocalDataSource>(),
         googleAuthProvider: sl<GoogleAuthProvider>(),
+        facebookAuthProvider: sl<FacebookAuthProvider>(),
       ),
     );
 
