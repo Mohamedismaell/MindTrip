@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">mindtrip</string>
     <string name="facebook_app_id">2293959057766344</string>
     <string name="facebook_client_token">25ca91b9b909c7d479211ae34183c5d3</string>
     <string name="fb_login_protocol_scheme">fb2293959057766344</string>

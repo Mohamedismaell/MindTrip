@@ -7,6 +7,9 @@ class EndPoints {
   static String logout = 'api/v1/auth/logout';
   static String googleLogin = 'api/v1/auth/google';
   static String facebookLogin = 'api/v1/auth/facebook';
+  static String forgetPassword = 'api/v1/auth/password/forgot';
+  static String verifyOtp = 'api/v1/auth/password/verifyotp';
+
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }

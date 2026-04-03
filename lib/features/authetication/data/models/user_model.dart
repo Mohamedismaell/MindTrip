@@ -2,9 +2,6 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 
-/// [DATA LAYER] — Model
-///
-/// [UserModel] maps between the API JSON shape and the domain [UserEntity].
 class UserModel extends Equatable {
   final String userId;
   final String displayName;

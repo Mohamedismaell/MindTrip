@@ -8,12 +8,13 @@ class CustomHeadLine extends StatelessWidget {
     required this.secondTitle,
     this.firstStyle,
     this.secondStyle,
+    this.thirdTitle,
   });
   final String firstTitle;
   final String secondTitle;
+  final String? thirdTitle;
   final TextStyle? firstStyle;
   final TextStyle? secondStyle;
-
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -23,14 +24,24 @@ class CustomHeadLine extends StatelessWidget {
           TextSpan(
             text: firstTitle,
             style:
-                firstStyle ??
+                firstStyle?.copyWith(color: context.colorTheme.primary) ??
                 context.textTheme.headlineLarge!.copyWith(
                   color: context.colorTheme.primary,
                 ),
           ),
           TextSpan(
             text: secondTitle,
-            style: secondStyle ?? context.textTheme.headlineLarge,
+            style:
+                secondStyle?.copyWith(color: context.colorTheme.onSurface) ??
+                context.textTheme.headlineLarge,
+          ),
+          TextSpan(
+            text: thirdTitle,
+            style:
+                firstStyle?.copyWith(color: context.colorTheme.primary) ??
+                context.textTheme.headlineLarge!.copyWith(
+                  color: context.colorTheme.primary,
+                ),
           ),
         ],
       ),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/validators/auth_validator.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/widget/app_text_field.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
+import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -55,8 +58,13 @@ class _SignUpFormState extends State<SignUpForm> {
             children: [
               //  Name Field
               AppTextField(
-                hint: "Enter your name",
-                prefixIcon: Icons.person_outline,
+                hint: AppStrings.enterYourName,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.personIcon,
+                  width: 20.w,
+                  height: 20.h,
+                ),
+
                 controller: _nameController,
                 validator: AppValidator.name,
               ),
@@ -64,8 +72,12 @@ class _SignUpFormState extends State<SignUpForm> {
 
               //  Email Field
               AppTextField(
-                hint: "Enter your email",
-                prefixIcon: Icons.email_outlined,
+                hint: AppStrings.enterYourEmail,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.emailIcon,
+                  width: 20.w,
+                  height: 20.h,
+                ),
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: AppValidator.email,
@@ -74,8 +86,12 @@ class _SignUpFormState extends State<SignUpForm> {
 
               //  Password Field
               AppTextField(
-                hint: "Enter your password",
-                prefixIcon: Icons.lock_outline,
+                hint: AppStrings.enterYourPassword,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.lockIcon,
+                  width: 20.w,
+                  height: 20.h,
+                ),
                 controller: _passwordController,
                 isPassword: true,
                 obscureText: state.obscurePassword,
@@ -86,8 +102,12 @@ class _SignUpFormState extends State<SignUpForm> {
 
               //  Confirm Password Field
               AppTextField(
-                hint: "Confirm your password",
-                prefixIcon: Icons.lock_outline,
+                hint: AppStrings.confirmYourPassword,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.lockIcon,
+                  width: 20.w,
+                  height: 20.h,
+                ),
                 controller: _confirmController,
                 isPassword: true,
                 obscureText: state.obscureConfirm,
@@ -107,7 +127,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         cubit.toggleRememberMe(value ?? false),
                   ),
                   Text(
-                    "Remember me",
+                    AppStrings.rememberMe,
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: context.colorTheme.onSurfaceVariant,
                     ),
@@ -119,7 +139,7 @@ class _SignUpFormState extends State<SignUpForm> {
               //  Submit Button
               CustomGradientButton(
                 width: double.infinity,
-                text: isLoading ? "Signing Up..." : "Sign Up",
+                text: isLoading ? AppStrings.signingUp : AppStrings.signUp,
                 onTap: isLoading ? null : () => _submit(),
               ),
             ],

@@ -4,9 +4,20 @@
 
     <!-- Facebook queries -->
     <queries>
-        <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
-    </queries>
 
+    <!-- Facebook app -->
+    <package android:name="com.facebook.katana" />
+
+    <!-- Facebook Lite -->
+    <package android:name="com.facebook.lite" />
+
+    <!-- Required for Chrome Custom Tabs -->
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+    </intent>
+
+</queries>
     <application
         android:label="mindtrip"
         android:name="${applicationName}"

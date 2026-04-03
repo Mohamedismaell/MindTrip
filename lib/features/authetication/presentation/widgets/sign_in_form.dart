@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/validators/auth_validator.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/widget/app_text_field.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
+import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 
 class SignInForm extends StatefulWidget {
@@ -50,8 +55,12 @@ class _SignInFormState extends State<SignInForm> {
           child: Column(
             children: [
               AppTextField(
-                hint: "Enter your email",
-                prefixIcon: Icons.email_outlined,
+                hint: AppStrings.enterYourEmail,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.emailIcon,
+                  width: 17.sp,
+                  height: 17.sp,
+                ),
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: AppValidator.email,
@@ -59,8 +68,12 @@ class _SignInFormState extends State<SignInForm> {
               SizedBox(height: 28.h),
 
               AppTextField(
-                hint: "Enter your password",
-                prefixIcon: Icons.lock_outline,
+                hint: AppStrings.enterYourPassword,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.lockIcon,
+                  width: 17.w,
+                  height: 17.h,
+                ),
                 controller: _passwordController,
                 isPassword: true,
                 obscureText: state.obscurePassword,
@@ -75,22 +88,26 @@ class _SignInFormState extends State<SignInForm> {
                     value: state.rememberMe,
                     onChanged: (value) =>
                         cubit.toggleRememberMe(value ?? false),
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.r),
+                    ),
                   ),
                   Text(
-                    "Remember me",
+                    AppStrings.rememberMe,
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: context.colorTheme.onSurfaceVariant,
                     ),
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () {
-                      // TODO: Navigate to Forgot Password screen
-                    },
+                    onTap: () => context.push(AppRoutes.forgetPassword),
                     child: Text(
-                      "Forgot Password?",
-                      style: context.textTheme.bodyMedium?.copyWith(
-                        color: context.colorTheme.outline,
+                      AppStrings.forgotPassword,
+                      style: context.textTheme.labelLarge?.copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationThickness: 1,
+                        decorationStyle: TextDecorationStyle.solid,
                       ),
                     ),
                   ),
@@ -100,7 +117,7 @@ class _SignInFormState extends State<SignInForm> {
 
               CustomGradientButton(
                 width: double.infinity,
-                text: isLoading ? "Signing In..." : "Sign In",
+                text: isLoading ? AppStrings.signingIn : AppStrings.signIn,
                 onTap: isLoading ? null : () => _submit(),
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/widget/app_background.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/features/authetication/presentation/widgets/auth_status_listener.dart';
 import 'package:mindtrip/features/authetication/presentation/widgets/sign_up_form.dart';
 import 'package:mindtrip/features/authetication/presentation/widgets/authoptions_content.dart';
@@ -29,13 +30,15 @@ class SignUpScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const CustomHeadLine(firstTitle: 'Sign ', secondTitle: 'Up'),
+                CustomHeadLine(
+                    firstTitle: AppStrings.signTitle,
+                    secondTitle: AppStrings.upTitle),
                 SizedBox(height: 40.h),
                 const SignUpForm(),
                 SizedBox(height: 24.h),
                 AuthoptionsContent(
-                  promptText: 'Already have an account? ',
-                  actionText: 'Sign In',
+                  promptText: AppStrings.alreadyHaveAccount,
+                  actionText: AppStrings.signIn,
                   onActionTap: () => context.push(AppRoutes.login),
                 ),
               ],

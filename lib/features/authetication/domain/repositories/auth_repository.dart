@@ -18,6 +18,11 @@ abstract class AuthRepository {
   Future<Result<UserEntity>> googleAuth({required String token});
 
   Future<Result<UserEntity>> facebookAuth({required String token});
+
+  Future<Result<void>> forgetPassword({required String email});
+  //Todo Later check the return type
+  Future<Result<void>> verifyOtp({required String email, required String otp});
+
   Future<Result<void>> logout();
 
   // Future<Result<AuthTokens>> refreshToken();

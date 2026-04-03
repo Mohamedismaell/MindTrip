@@ -86,6 +86,14 @@ class AuthRemoteDataSource {
     return AuthResponseModel.fromJson(response);
   }
 
+  Future<void> forgetPassword({required String email}) async {
+    await _api.post(EndPoints.forgetPassword, data: {"email": email});
+  }
+
+  Future<void> verifyOtp({required String email, required String otp}) async {
+    await _api.post(EndPoints.verifyOtp, data: {"email": email, "otp": otp});
+  }
+
   // Logout
   Future<void> logout({required String refreshToken}) async {
     await _api.post(EndPoints.logout, data: {"refreshToken": refreshToken});

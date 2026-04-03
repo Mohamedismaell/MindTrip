@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Opacity(
             opacity: 0.12,
             child: Image.asset(
-              'assets/images/splash/Pattern.jpg',
+              AppAssets.splashPattern,
               fit: BoxFit.cover,
             ),
           ),
@@ -42,14 +43,14 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 236.w,
                   height: 236.h,
                   child: Image.asset(
-                    'assets/images/splash/logo.png',
+                    AppAssets.splashLogo,
                     fit: BoxFit.contain, // recommended
                   ),
                 ),
                 SizedBox(
                   width: 100.w,
                   child: Lottie.asset(
-                    'assets/images/animation/Loading.json',
+                    AppAssets.loadingAnimation,
                     fit: BoxFit.cover,
                   ),
                 ),

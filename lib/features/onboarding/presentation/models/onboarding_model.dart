@@ -1,3 +1,6 @@
+import 'package:mindtrip/core/utils/app_assets.dart';
+import 'package:mindtrip/core/utils/app_strings.dart';
+
 class OnboardingModel {
   final String firstTitle;
   final String secondTitle;
@@ -14,33 +17,32 @@ class OnboardingModel {
   });
   static List<OnboardingModel> onboardingList = [
     OnboardingModel(
-      firstTitle: 'Discover ',
-      secondTitle: 'Egypt',
-      quote: 'Start your greatest exploration where legends began.',
+      firstTitle: AppStrings.discover,
+      secondTitle: AppStrings.egypt,
+      quote: AppStrings.discoverQuote,
       // nextAction: 'Start Searching',
-      imagePath: 'assets/images/onboarding/Pyramids.jpg',
+      imagePath: AppAssets.pyramidsImage,
     ),
     OnboardingModel(
-      firstTitle: 'AI',
-      secondTitle: 'Planner ',
-      quote: 'Let AI create your dream trip across Egypt',
+      firstTitle: AppStrings.ai,
+      secondTitle: AppStrings.planner,
+      quote: AppStrings.aiQuote,
       // nextAction: 'Start Searching',
-      imagePath: 'assets/images/onboarding/Ai_Planner.png',
+      imagePath: AppAssets.aiPlannerImage,
     ),
     OnboardingModel(
-      firstTitle: 'Budget ',
-      secondTitle: 'Optimizer',
-      quote: 'Smart AI matches your budget to your trip',
+      firstTitle: AppStrings.budget,
+      secondTitle: AppStrings.optimizer,
+      quote: AppStrings.budgetQuote,
       // nextAction: 'Start Searching',
-      imagePath: 'assets/images/onboarding/Budget_Optimizer.png',
+      imagePath: AppAssets.budgetOptimizerImage,
     ),
     OnboardingModel(
-      firstTitle: 'Hidden ',
-      secondTitle: 'Gems',
-      quote:
-          'Discover secret cafes, cozy restaurants, and fun spots across Egypt.',
+      firstTitle: AppStrings.hidden,
+      secondTitle: AppStrings.gems,
+      quote: AppStrings.hiddenQuote,
       // nextAction: 'Start Searching',
-      imagePath: 'assets/images/onboarding/Hidden_Gems.png',
+      imagePath: AppAssets.hiddenGemsImage,
     ),
   ];
 }

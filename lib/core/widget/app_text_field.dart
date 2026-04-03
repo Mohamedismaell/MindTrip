@@ -4,7 +4,7 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class AppTextField extends StatelessWidget {
   final String hint;
-  final IconData prefixIcon;
+  final Widget prefixIcon;
   final bool isPassword;
   final bool obscureText;
   final VoidCallback? onToggleVisibility;
@@ -23,7 +23,7 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.onToggleVisibility,
   });
-  //TODO  Extract the Icons
+  //TODO  Extract Eye icon **** => for password need to be extracted booth stats
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -39,11 +39,7 @@ class AppTextField extends StatelessWidget {
         ),
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 10.w),
-          child: Icon(
-            prefixIcon,
-            size: 20.sp,
-            color: context.colorTheme.outline,
-          ),
+          child: prefixIcon,
         ),
         suffixIcon: isPassword
             ? Padding(
@@ -51,8 +47,10 @@ class AppTextField extends StatelessWidget {
                 child: IconButton(
                   onPressed: onToggleVisibility,
                   icon: Icon(
-                    obscureText ? Icons.visibility_off : Icons.visibility,
-                    size: 17.sp,
+                    obscureText
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    size: 24.sp,
                     color: context.colorTheme.outline,
                   ),
                 ),

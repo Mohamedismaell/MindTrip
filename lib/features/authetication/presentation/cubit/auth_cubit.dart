@@ -5,9 +5,11 @@ import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart'
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/forget_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/verify_otp_use_case.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -16,8 +18,9 @@ class AuthCubit extends Cubit<AuthState> {
   final GoogleAuthProvider _googleAuthProvider;
   final GoogleAuthUseCase _googleAuthUseCase;
   final FacebookAuthProvider _facebookAuthProvider;
-
+  final ForgetPasswordUseCase _forgetPasswordUseCase;
   final FacebookAuthUseCase _facebookAuthUseCase;
+  final VerifyOtpUseCase _verifyOtpUseCase;
   AuthCubit({
     required SignInUseCase signInUseCase,
     required SignUpUseCase signUpUseCase,
@@ -25,12 +28,16 @@ class AuthCubit extends Cubit<AuthState> {
     required GoogleAuthUseCase googleAuthUseCase,
     required FacebookAuthProvider facebookAuthProvider,
     required FacebookAuthUseCase facebookAuthUseCase,
+    required ForgetPasswordUseCase forgetPasswordUseCase,
+    required VerifyOtpUseCase verifyOtpUseCase,
   }) : _signInUseCase = signInUseCase,
        _signUpUseCase = signUpUseCase,
        _googleAuthProvider = googleAuthProvider,
        _googleAuthUseCase = googleAuthUseCase,
        _facebookAuthProvider = facebookAuthProvider,
+       _forgetPasswordUseCase = forgetPasswordUseCase,
        _facebookAuthUseCase = facebookAuthUseCase,
+       _verifyOtpUseCase = verifyOtpUseCase,
        super(const AuthState());
 
   void togglePassword() {
@@ -147,6 +154,49 @@ class AuthCubit extends Cubit<AuthState> {
       print('Error Facebook here**********$e');
       emit(state.copyWith(status: AuthStatus.failure));
     }
+  }
+
+  Future<void> forgetPassword({required String email}) async {
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+
+    final result = await _forgetPasswordUseCase(email: email);
+
+    result.when(
+      success: (_) {
+        emit(state.copyWith(status: AuthStatus.otpSent));
+      },
+      failure: (error) {
+        emit(state.copyWith(status: AuthStatus.otpSent));
+        // emit(
+        //   state.copyWith(
+        //     status: AuthStatus.failure,
+        //     errorMessage: error.message,
+        //   ),
+        // );
+      },
+    );
+  }
+
+  Future<void> verifyOtp({required String email, required String otp}) async {
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+
+    final result = await _verifyOtpUseCase(email: email, otp: otp);
+
+    result.when(
+      success: (_) {
+        emit(state.copyWith(status: AuthStatus.otpVerified));
+      },
+      failure: (error) {
+        emit(state.copyWith(status: AuthStatus.otpVerified));
+
+        // emit(
+        //   state.copyWith(
+        //     status: AuthStatus.failure,
+        //     errorMessage: error.message,
+        //   ),
+        // );
+      },
+    );
   }
 
   // Future<void> checkAutoLogin() async {

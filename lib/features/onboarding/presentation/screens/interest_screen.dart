@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
+import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/features/onboarding/presentation/widgets/interest_buttons.dart';
 import 'package:mindtrip/features/onboarding/presentation/widgets/interest_header.dart';
 
@@ -30,7 +31,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               SizedBox(height: 34.h),
               Center(
                 child: CustomGradientButton(
-                  text: 'Save',
+                  text: AppStrings.save,
                   onTap: () {
                     context.read<OnboardingCubit>().storeSelectedCategories();
                     context.read<OnboardingCubit>().finishOnboarding();

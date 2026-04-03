@@ -1,1 +1,1 @@
-enum AuthStatus { initial, loading, success, failure }
+enum AuthStatus { initial, loading, otpSent, otpVerified, success, failure }

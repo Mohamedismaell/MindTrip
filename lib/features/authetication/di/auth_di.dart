@@ -6,12 +6,14 @@ import 'package:mindtrip/features/authetication/data/datasources/auth_remote_dat
 import 'package:mindtrip/features/authetication/data/repositories/auth_repository_impl.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/forget_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/get_current_user_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/refresh_token_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/verify_otp_use_case.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 
 class AuthDi {
@@ -39,14 +41,18 @@ class AuthDi {
     sl.registerLazySingleton(
       () => GetCurrentUserUseCase(repository: sl<AuthRepository>()),
     );
-    // GoogleAuthProvider is registered in CommonDi (shared by AuthCubit + AppGateCubit)
     sl.registerLazySingleton(
       () => GoogleAuthUseCase(repository: sl<AuthRepository>()),
     );
     sl.registerLazySingleton(
       () => FacebookAuthUseCase(repository: sl<AuthRepository>()),
     );
-
+    sl.registerLazySingleton(
+      () => ForgetPasswordUseCase(repository: sl<AuthRepository>()),
+    );
+    sl.registerLazySingleton(
+      () => VerifyOtpUseCase(repository: sl<AuthRepository>()),
+    );
     sl.registerLazySingleton<AuthCubit>(
       () => AuthCubit(
         signInUseCase: sl<SignInUseCase>(),
@@ -55,6 +61,8 @@ class AuthDi {
         googleAuthUseCase: sl<GoogleAuthUseCase>(),
         facebookAuthProvider: sl<FacebookAuthProvider>(),
         facebookAuthUseCase: sl<FacebookAuthUseCase>(),
+        forgetPasswordUseCase: sl<ForgetPasswordUseCase>(),
+        verifyOtpUseCase: sl<VerifyOtpUseCase>(),
       ),
     );
   }

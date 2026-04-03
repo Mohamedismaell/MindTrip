@@ -55,6 +55,7 @@ ThemeData getLightTheme() {
         borderSide: BorderSide(color: lightColorScheme.error, width: 1.5),
       ),
     ),
+
     // elevatedButtonTheme: ElevatedButtonThemeData(
     //   style: ElevatedButton.styleFrom(
     //     backgroundColor: Colors.transparent,
@@ -71,7 +72,7 @@ ThemeData getLightTheme() {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
-        side: BorderSide(color: lightColorScheme.primary, width: 2),
+        side: BorderSide(color: lightColorScheme.primary, width: 1.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.r),
         ),
