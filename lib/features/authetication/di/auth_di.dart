@@ -14,6 +14,8 @@ import 'package:mindtrip/features/authetication/domain/usecases/refresh_token_us
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/verify_otp_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/verify_email_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/resend_email_otp_use_case.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 
 class AuthDi {
@@ -53,6 +55,12 @@ class AuthDi {
     sl.registerLazySingleton(
       () => VerifyOtpUseCase(repository: sl<AuthRepository>()),
     );
+    sl.registerLazySingleton(
+      () => VerifyEmailUseCase(repository: sl<AuthRepository>()),
+    );
+    sl.registerLazySingleton(
+      () => ResendEmailOtpUseCase(repository: sl<AuthRepository>()),
+    );
     sl.registerLazySingleton<AuthCubit>(
       () => AuthCubit(
         signInUseCase: sl<SignInUseCase>(),
@@ -63,6 +71,8 @@ class AuthDi {
         facebookAuthUseCase: sl<FacebookAuthUseCase>(),
         forgetPasswordUseCase: sl<ForgetPasswordUseCase>(),
         verifyOtpUseCase: sl<VerifyOtpUseCase>(),
+        verifyEmailUseCase: sl<VerifyEmailUseCase>(),
+        resendEmailOtpUseCase: sl<ResendEmailOtpUseCase>(),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/enums/otp_flow.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 
@@ -19,9 +20,14 @@ class AuthStatusListener extends StatelessWidget {
         if (state.status == AuthStatus.success) {
           context.read<AppGateCubit>().loginSuccess();
         } else if (state.status == AuthStatus.otpSent) {
-          context.push(AppRoutes.otpVerification);
+          context.push(AppRoutes.otpVerification, extra: state.otpFlow);
         } else if (state.status == AuthStatus.otpVerified) {
-          context.push(AppRoutes.resetPassword);
+          if (state.otpFlow == OtpFlow.forgetPassword) {
+            context.push(AppRoutes.resetPassword);
+          } else {
+            // Sign-up email verified → user must log in manually
+            context.go(AppRoutes.login);
+          }
         } else if (state.status == AuthStatus.failure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()

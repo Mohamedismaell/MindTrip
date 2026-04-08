@@ -1,5 +1,4 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 
 class SignUpUseCase {
@@ -8,7 +7,7 @@ class SignUpUseCase {
   const SignUpUseCase({required AuthRepository repository})
     : _repository = repository;
 
-  Future<Result<UserEntity>> call({
+  Future<Result<void>> call({
     required String name,
     required String email,
     required String password,

@@ -46,26 +46,21 @@ class AuthRepositoryImpl implements AuthRepository {
   //  Sign Up
 
   @override
-  Future<Result<UserEntity>> signUp({
+  Future<Result<void>> signUp({
     required String name,
     required String email,
     required String password,
     required bool rememberMe,
   }) async {
     try {
-      final AuthResponseModel response = await _remoteDataSource.signUp(
+      await _remoteDataSource.signUp(
         name: name,
         email: email,
         password: password,
         rememberMe: rememberMe,
       );
 
-      await _localDataSource.saveTokens(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-      );
-
-      return Result.ok(response.user.toEntity());
+      return const Result.ok(null);
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -144,6 +139,35 @@ class AuthRepositoryImpl implements AuthRepository {
       await _remoteDataSource.verifyOtp(email: email, otp: otp);
 
       return Result.ok(null);
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  //  Verify Email (after sign up)
+
+  @override
+  Future<Result<void>> verifyEmail({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      await _remoteDataSource.verifyEmail(email: email, otp: otp);
+
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  //  Resend Email OTP
+
+  @override
+  Future<Result<void>> resendEmailOtp({required String email}) async {
+    try {
+      await _remoteDataSource.resendEmailOtp(email: email);
+
+      return const Result.ok(null);
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

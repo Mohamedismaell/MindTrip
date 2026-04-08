@@ -8,7 +8,7 @@ abstract class AuthRepository {
     required bool rememberMe,
   });
 
-  Future<Result<UserEntity>> signUp({
+  Future<Result<void>> signUp({
     required String name,
     required String email,
     required String password,
@@ -22,6 +22,10 @@ abstract class AuthRepository {
   Future<Result<void>> forgetPassword({required String email});
   //Todo Later check the return type
   Future<Result<void>> verifyOtp({required String email, required String otp});
+
+  Future<Result<void>> verifyEmail({required String email, required String otp});
+
+  Future<Result<void>> resendEmailOtp({required String email});
 
   Future<Result<void>> logout();
 

@@ -49,6 +49,8 @@ class AppStrings {
   // Authentication - Reset Password
   static const String resetTitle = 'Reset ';
   static const String resetePasswordTitle = 'Password';
+  static const String resetePasswordDescription =
+      'Your new password must be different from previously used password';
 
   // Authentication - Sign In & Sign Up
   static const String signTitle = 'Sign ';

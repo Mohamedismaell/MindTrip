@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
+import 'package:mindtrip/core/enums/otp_flow.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
@@ -21,17 +22,21 @@ class _OtpFormState extends State<OtpForm> {
   String _otp = "";
 
   void _submit() {
-    if (_otp.length < 4) {
+    if (_otp.length < 6) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Enter complete code")));
       return;
     }
 
-    context.read<AuthCubit>().verifyOtp(
-      email: "email-from-previous-screen",
-      otp: _otp,
-    );
+    final cubit = context.read<AuthCubit>();
+    final email = cubit.state.email ?? '';
+
+    if (cubit.state.otpFlow == OtpFlow.signUp) {
+      cubit.verifyEmail(email: email, otp: _otp);
+    } else {
+      cubit.verifyOtp(email: email, otp: _otp);
+    }
   }
 
   @override
@@ -96,7 +101,7 @@ class _OtpInput extends StatefulWidget {
 
 class _OtpInputState extends State<_OtpInput> {
   final List<TextEditingController> controllers = List.generate(
-    4,
+    6,
     (_) => TextEditingController(),
   );
   late final List<FocusNode> focusNodes;
@@ -106,7 +111,7 @@ class _OtpInputState extends State<_OtpInput> {
     super.initState();
 
     focusNodes = List.generate(
-      4,
+      6,
       (index) => FocusNode(
         onKeyEvent: (node, event) {
           if (event is KeyDownEvent &&
@@ -139,22 +144,22 @@ class _OtpInputState extends State<_OtpInput> {
     // paste or rapid typing
     if (value.length > 1) {
       int focusIndex = index;
-      for (int i = 0; i < value.length && index + i < 4; i++) {
+      for (int i = 0; i < value.length && index + i < 6; i++) {
         controllers[index + i].text = value[i];
         focusIndex = index + i;
       }
 
-      if (focusIndex < 3) {
+      if (focusIndex < 5) {
         focusNodes[focusIndex + 1].requestFocus();
       } else {
-        focusNodes[3].requestFocus();
-        controllers[3].selection = const TextSelection.collapsed(offset: 1);
+        focusNodes[5].requestFocus();
+        controllers[5].selection = const TextSelection.collapsed(offset: 1);
         FocusScope.of(context).unfocus();
       }
     }
     // normal
     else if (value.length == 1) {
-      if (index < 3) {
+      if (index < 5) {
         focusNodes[index + 1].requestFocus();
       } else {
         FocusScope.of(context).unfocus();
@@ -173,7 +178,7 @@ class _OtpInputState extends State<_OtpInput> {
   void _emitOtp() {
     final otp = controllers.map((e) => e.text).join();
 
-    if (otp.length == 4) {
+    if (otp.length == 6) {
       widget.onCompleted(otp);
     }
   }
@@ -182,9 +187,9 @@ class _OtpInputState extends State<_OtpInput> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(4, (index) {
+      children: List.generate(6, (index) {
         return SizedBox(
-          width: 50.w,
+          width: 42.w,
           child: TextField(
             controller: controllers[index],
             focusNode: focusNodes[index],

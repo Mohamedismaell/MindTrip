@@ -1,6 +1,7 @@
 import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
+import 'package:mindtrip/features/authetication/data/models/signup_auth_model.dart';
 
 class AuthRemoteDataSource {
   final ApiConsumer _api;
@@ -21,7 +22,7 @@ class AuthRemoteDataSource {
   }
 
   //  Sign Up
-  Future<AuthResponseModel> signUp({
+  Future<SignUpAuthModel> signUp({
     required String name,
     required String email,
     required String password,
@@ -38,7 +39,7 @@ class AuthRemoteDataSource {
       },
     );
 
-    return AuthResponseModel.fromJson(response);
+    return SignUpAuthModel.fromJson(response);
   }
 
   //  Refresh Token
@@ -92,6 +93,22 @@ class AuthRemoteDataSource {
 
   Future<void> verifyOtp({required String email, required String otp}) async {
     await _api.post(EndPoints.verifyOtp, data: {"email": email, "otp": otp});
+  }
+
+  //  Verify Email (after sign up)
+  Future<void> verifyEmail({required String email, required String otp}) async {
+    await _api.post(
+      EndPoints.verifyEmail,
+      data: {'email': email, 'otp': otp},
+    );
+  }
+
+  //  Resend Email OTP
+  Future<void> resendEmailOtp({required String email}) async {
+    await _api.post(
+      EndPoints.resendEmailOtp,
+      data: {'email': email},
+    );
   }
 
   // Logout

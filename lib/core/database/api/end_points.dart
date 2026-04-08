@@ -9,6 +9,8 @@ class EndPoints {
   static String facebookLogin = 'api/v1/auth/facebook';
   static String forgetPassword = 'api/v1/auth/password/forgot';
   static String verifyOtp = 'api/v1/auth/password/verifyotp';
+  static String verifyEmail = 'api/v1/auth/email/verify';
+  static String resendEmailOtp = 'api/v1/auth/email/resend-otp';
 
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';

@@ -25,6 +25,8 @@ class AppAssets {
   static const String emailCampaignSvg =
       '$_authImagesPath/Email campaign-cuate 1(1).svg';
   static const String otpSvg = '$_authImagesPath/Email campaign-cuate 1(2).svg';
+  static const String resetePasswordSvg =
+      '$_authImagesPath/Email campaign-cuate 1(3).svg';
 
   // Icons
   static const String emailIcon = '$_iconsPath/email.svg';
