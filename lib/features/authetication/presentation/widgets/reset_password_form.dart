@@ -18,11 +18,13 @@ class ResetPasswordForm extends StatefulWidget {
 }
 
 class _ResetPasswordFormState extends State<ResetPasswordForm> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
-    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmController.dispose();
     super.dispose();
   }
 
@@ -40,17 +42,36 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       child: Column(
         children: [
           AppTextField(
-            hint: AppStrings.enterYourEmail,
+            hint: AppStrings.enterYourPassword,
             prefixIcon: SvgPicture.asset(
-              AppAssets.emailIcon,
-              width: 17.sp,
-              height: 17.sp,
+              AppAssets.lockIcon,
+              width: 20.w,
+              height: 20.h,
             ),
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
+            controller: _passwordController,
+            isPassword: true,
+            obscureText: state.obscurePassword,
+            onToggleVisibility: cubit.togglePassword,
             validator: AppValidator.password,
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 28.h),
+
+          //  Confirm Password Field
+          AppTextField(
+            hint: AppStrings.confirmPassword,
+            prefixIcon: SvgPicture.asset(
+              AppAssets.lockIcon,
+              width: 20.w,
+              height: 20.h,
+            ),
+            controller: _confirmController,
+            isPassword: true,
+            obscureText: state.obscureConfirm,
+            onToggleVisibility: cubit.toggleConfirmPassword,
+            validator: (value) =>
+                AppValidator.confirmPassword(value, _passwordController.text),
+          ),
+
           BlocBuilder<AuthCubit, AuthState>(
             builder: (context, state) {
               final isLoading = state.status == AuthStatus.loading;

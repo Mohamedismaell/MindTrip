@@ -34,13 +34,14 @@ class AppStrings {
   static const String passwordTitle = 'Password ?';
   static const String enterYourEmail = 'Enter your email';
   static const String recoverPassword = 'Recover Password';
+  static const String passwordResetSuccessfuly = 'Your password is reset';
 
   // Authentication - Otp
   static const String verifyTitle = 'Verify ';
   static const String yourTitle = 'your ';
   static const String emailTitle = 'Email';
   static const String enterOtp =
-      'please enter 4 digit code that sent to your email address';
+      'please enter 6 digit code that sent to your email address';
   static const String ifYouDontReceiveCode = 'if you don’t receive code ! ';
   static const String resendCode = 'Resend';
   static const String verify = 'Verify';
@@ -51,6 +52,8 @@ class AppStrings {
   static const String resetePasswordTitle = 'Password';
   static const String resetePasswordDescription =
       'Your new password must be different from previously used password';
+  static const String newpassword = 'New password';
+  static const String confirmPassword = 'Confirm password';
 
   // Authentication - Sign In & Sign Up
   static const String signTitle = 'Sign ';
@@ -67,6 +70,8 @@ class AppStrings {
   static const String enterYourName = 'Enter your name';
   static const String rememberMe = 'Remember me';
   static const String forgotPassword = 'Forgot Password?';
+  static const String emailVerified = 'your email has been verified';
+  static const String backToLogin = 'Back to login';
 
   // Home Screen
   static const String homeScreen = 'Home Screen';

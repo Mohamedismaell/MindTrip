@@ -20,8 +20,12 @@ abstract class AuthRepository {
   Future<Result<UserEntity>> facebookAuth({required String token});
 
   Future<Result<void>> forgetPassword({required String email});
-  //Todo Later check the return type
-  Future<Result<void>> verifyOtp({required String email, required String otp});
+  
+  Future<Result<String>> verifyOtp({required String email, required String otp});
+
+  Future<Result<void>> resetPassword({required String resetToken, required String newPassword});
+
+  Future<Result<void>> resendPasswordOtp({required String email});
 
   Future<Result<void>> verifyEmail({required String email, required String otp});
 

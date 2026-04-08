@@ -25,8 +25,8 @@ class AuthStatusListener extends StatelessWidget {
           if (state.otpFlow == OtpFlow.forgetPassword) {
             context.push(AppRoutes.resetPassword);
           } else {
-            // Sign-up email verified → user must log in manually
-            context.go(AppRoutes.login);
+            //! user must log in manually
+            context.go(AppRoutes.completeSignUpScreen);
           }
         } else if (state.status == AuthStatus.failure) {
           ScaffoldMessenger.of(context)

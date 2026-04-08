@@ -7,7 +7,7 @@ class VerifyOtpUseCase {
   const VerifyOtpUseCase({required AuthRepository repository})
     : _repository = repository;
 
-  Future<Result<void>> call({required String email, required String otp}) {
+  Future<Result<String>> call({required String email, required String otp}) {
     return _repository.verifyOtp(email: email, otp: otp);
   }
 }

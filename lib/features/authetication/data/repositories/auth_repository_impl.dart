@@ -130,15 +130,47 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  //! reset Token and message Care......................
   @override
-  Future<Result<void>> verifyOtp({
+  Future<Result<String>> verifyOtp({
     required String email,
     required String otp,
   }) async {
     try {
-      await _remoteDataSource.verifyOtp(email: email, otp: otp);
+      final resetToken = await _remoteDataSource.verifyOtp(
+        email: email,
+        otp: otp,
+      );
 
-      return Result.ok(null);
+      return Result.ok(resetToken);
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
+  Future<Result<void>> resetPassword({
+    required String resetToken,
+    required String newPassword,
+  }) async {
+    try {
+      await _remoteDataSource.resetPassword(
+        resetToken: resetToken,
+        newPassword: newPassword,
+      );
+
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
+  Future<Result<void>> resendPasswordOtp({required String email}) async {
+    try {
+      await _remoteDataSource.resendPasswordOtp(email: email);
+
+      return const Result.ok(null);
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

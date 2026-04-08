@@ -91,8 +91,17 @@ class AuthRemoteDataSource {
     await _api.post(EndPoints.forgetPassword, data: {"email": email});
   }
 
-  Future<void> verifyOtp({required String email, required String otp}) async {
-    await _api.post(EndPoints.verifyOtp, data: {"email": email, "otp": otp});
+  Future<String> verifyOtp({required String email, required String otp}) async {
+    final response = await _api.post(EndPoints.verifyPasswordOtp, data: {"email": email, "otp": otp});
+    return response['resetToken'] as String;
+  }
+
+  Future<void> resetPassword({required String resetToken, required String newPassword}) async {
+    await _api.post(EndPoints.resetPassword, data: {"resetToken": resetToken, "newPassword": newPassword});
+  }
+
+  Future<void> resendPasswordOtp({required String email}) async {
+    await _api.post(EndPoints.resendPasswordOtp, data: {"email": email});
   }
 
   //  Verify Email (after sign up)

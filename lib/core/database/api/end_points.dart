@@ -8,7 +8,9 @@ class EndPoints {
   static String googleLogin = 'api/v1/auth/google';
   static String facebookLogin = 'api/v1/auth/facebook';
   static String forgetPassword = 'api/v1/auth/password/forgot';
-  static String verifyOtp = 'api/v1/auth/password/verifyotp';
+  static String verifyPasswordOtp = 'api/v1/auth/password/verifyotp';
+  static String resetPassword = 'api/v1/auth/password/reset';
+  static String resendPasswordOtp = 'api/v1/auth/password/resend-otp';
   static String verifyEmail = 'api/v1/auth/email/verify';
   static String resendEmailOtp = 'api/v1/auth/email/resend-otp';
 

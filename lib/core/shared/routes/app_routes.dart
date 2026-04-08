@@ -11,6 +11,9 @@ class AppRoutes {
   static const String forgetPassword = '/forgetPassword';
   static const String otpVerification = '/otpVerification';
   static const String resetPassword = '/resetPassword';
+  static const String completeSignUpScreen = '/completeSignUpScreen';
+  static const String completeResetPasswordScreen =
+      '/completeResetPasswordScreen';
 
   //! home
   static const String home = '/home';
