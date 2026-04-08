@@ -23,7 +23,7 @@ class AuthStatusListener extends StatelessWidget {
           context.push(AppRoutes.otpVerification, extra: state.otpFlow);
         } else if (state.status == AuthStatus.otpVerified) {
           if (state.otpFlow == OtpFlow.forgetPassword) {
-            context.push(AppRoutes.resetPassword);
+            context.push(AppRoutes.completeResetPasswordScreen);
           } else {
             //! user must log in manually
             context.go(AppRoutes.completeSignUpScreen);

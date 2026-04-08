@@ -31,59 +31,73 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       final authCubit = context.read<AuthCubit>();
-      authCubit.forgetPassword(email: _emailController.text.trim());
+      authCubit.resetPassword(
+        email: authCubit.state.email!,
+        resetToken: authCubit.state.resetToken!,
+        newPassword: _passwordController.text.trim(),
+        confirmNewPassword: _confirmController.text.trim(),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          AppTextField(
-            hint: AppStrings.enterYourPassword,
-            prefixIcon: SvgPicture.asset(
-              AppAssets.lockIcon,
-              width: 20.w,
-              height: 20.h,
-            ),
-            controller: _passwordController,
-            isPassword: true,
-            obscureText: state.obscurePassword,
-            onToggleVisibility: cubit.togglePassword,
-            validator: AppValidator.password,
-          ),
-          SizedBox(height: 28.h),
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        final cubit = context.read<AuthCubit>();
+        final isLoading = state.status == AuthStatus.loading;
+        return Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              AppTextField(
+                hint: AppStrings.enterYourPassword,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.lockIcon,
+                  width: 20.w,
+                  height: 20.h,
+                ),
+                controller: _passwordController,
+                isPassword: true,
+                obscureText: state.obscurePassword,
+                onToggleVisibility: cubit.togglePassword,
+                validator: AppValidator.password,
+              ),
+              SizedBox(height: 28.h),
 
-          //  Confirm Password Field
-          AppTextField(
-            hint: AppStrings.confirmPassword,
-            prefixIcon: SvgPicture.asset(
-              AppAssets.lockIcon,
-              width: 20.w,
-              height: 20.h,
-            ),
-            controller: _confirmController,
-            isPassword: true,
-            obscureText: state.obscureConfirm,
-            onToggleVisibility: cubit.toggleConfirmPassword,
-            validator: (value) =>
-                AppValidator.confirmPassword(value, _passwordController.text),
-          ),
+              //  Confirm Password Field
+              AppTextField(
+                hint: AppStrings.confirmPassword,
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.lockIcon,
+                  width: 20.w,
+                  height: 20.h,
+                ),
+                controller: _confirmController,
+                isPassword: true,
+                obscureText: state.obscureConfirm,
+                onToggleVisibility: cubit.toggleConfirmPassword,
+                validator: (value) => AppValidator.confirmPassword(
+                  value,
+                  _passwordController.text,
+                ),
+              ),
+              SizedBox(height: 34.h),
 
-          BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              final isLoading = state.status == AuthStatus.loading;
-              return CustomGradientButton(
-                width: double.infinity,
-                text: isLoading ? AppStrings.verifying : AppStrings.verify,
-                onTap: isLoading ? null : () => _submit(),
-              );
-            },
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 14.5.w),
+                child: CustomGradientButton(
+                  width: double.infinity,
+                  text: isLoading
+                      ? AppStrings.resetting
+                      : AppStrings.resetTitle,
+                  onTap: isLoading ? null : () => _submit(),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

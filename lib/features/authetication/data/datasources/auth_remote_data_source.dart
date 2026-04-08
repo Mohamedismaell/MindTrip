@@ -1,7 +1,9 @@
 import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
+import 'package:mindtrip/features/authetication/data/models/resete_password_model.dart';
 import 'package:mindtrip/features/authetication/data/models/signup_auth_model.dart';
+import 'package:mindtrip/features/authetication/data/models/verify_passowrd_otp.dart';
 
 class AuthRemoteDataSource {
   final ApiConsumer _api;
@@ -91,13 +93,33 @@ class AuthRemoteDataSource {
     await _api.post(EndPoints.forgetPassword, data: {"email": email});
   }
 
-  Future<String> verifyOtp({required String email, required String otp}) async {
-    final response = await _api.post(EndPoints.verifyPasswordOtp, data: {"email": email, "otp": otp});
-    return response['resetToken'] as String;
+  Future<VerifyPassowrdOtp> verifyPasswordOtp({
+    required String email,
+    required String otp,
+  }) async {
+    final response = await _api.post(
+      EndPoints.verifyPasswordOtp,
+      data: {"email": email, "otp": otp},
+    );
+    return VerifyPassowrdOtp.fromJson(response);
   }
 
-  Future<void> resetPassword({required String resetToken, required String newPassword}) async {
-    await _api.post(EndPoints.resetPassword, data: {"resetToken": resetToken, "newPassword": newPassword});
+  Future<ResetePasswordModel> resetPassword({
+    required String email,
+    required String resetToken,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    final response = await _api.post(
+      EndPoints.resetPassword,
+      data: {
+        "email": email,
+        "resetToken": resetToken,
+        "newPassword": newPassword,
+        "confirmNewPassword": confirmNewPassword,
+      },
+    );
+    return ResetePasswordModel.fromJson(response);
   }
 
   Future<void> resendPasswordOtp({required String email}) async {
@@ -106,18 +128,12 @@ class AuthRemoteDataSource {
 
   //  Verify Email (after sign up)
   Future<void> verifyEmail({required String email, required String otp}) async {
-    await _api.post(
-      EndPoints.verifyEmail,
-      data: {'email': email, 'otp': otp},
-    );
+    await _api.post(EndPoints.verifyEmail, data: {'email': email, 'otp': otp});
   }
 
   //  Resend Email OTP
   Future<void> resendEmailOtp({required String email}) async {
-    await _api.post(
-      EndPoints.resendEmailOtp,
-      data: {'email': email},
-    );
+    await _api.post(EndPoints.resendEmailOtp, data: {'email': email});
   }
 
   // Logout

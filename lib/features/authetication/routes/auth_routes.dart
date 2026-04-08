@@ -27,12 +27,12 @@ class AuthRoutes {
       builder: (context, state) => const OtpScreen(),
     ),
     GoRoute(
-      path: AppRoutes.resetPassword,
-      builder: (context, state) => const ResetPasswordScreen(),
-    ),
-    GoRoute(
       path: AppRoutes.completeSignUpScreen,
       builder: (context, state) => const CompleteSignUpScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.completeResetPasswordScreen,
+      builder: (context, state) => const ResetPasswordScreen(),
     ),
   ];
 }

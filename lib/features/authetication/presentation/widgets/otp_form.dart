@@ -35,7 +35,7 @@ class _OtpFormState extends State<OtpForm> {
     if (cubit.state.otpFlow == OtpFlow.signUp) {
       cubit.verifyEmail(email: email, otp: _otp);
     } else {
-      cubit.verifyOtp(email: email, otp: _otp);
+      cubit.verifyPasswordOtp(email: email, otp: _otp);
     }
   }
 

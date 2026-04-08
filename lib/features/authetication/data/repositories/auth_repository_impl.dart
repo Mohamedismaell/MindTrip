@@ -3,7 +3,10 @@ import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
+import 'package:mindtrip/features/authetication/data/models/resete_password_model.dart';
+import 'package:mindtrip/features/authetication/data/models/verify_passowrd_otp.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
+import 'package:mindtrip/features/authetication/domain/entities/verify_password_otp_entity.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -132,34 +135,38 @@ class AuthRepositoryImpl implements AuthRepository {
 
   //! reset Token and message Care......................
   @override
-  Future<Result<String>> verifyOtp({
+  Future<Result<VerifyPasswordOtpEntity>> verifyPasswordOtp({
     required String email,
     required String otp,
   }) async {
     try {
-      final resetToken = await _remoteDataSource.verifyOtp(
+      final resetToken = await _remoteDataSource.verifyPasswordOtp(
         email: email,
         otp: otp,
       );
 
-      return Result.ok(resetToken);
+      return Result.ok(resetToken.toEntity());
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
 
   @override
-  Future<Result<void>> resetPassword({
+  Future<Result<ResetePasswordModel>> resetPassword({
+    required String email,
     required String resetToken,
     required String newPassword,
+    required String confirmNewPassword,
   }) async {
     try {
-      await _remoteDataSource.resetPassword(
+      final response = await _remoteDataSource.resetPassword(
+        email: email,
         resetToken: resetToken,
         newPassword: newPassword,
+        confirmNewPassword: confirmNewPassword,
       );
 
-      return const Result.ok(null);
+      return Result.ok(response);
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

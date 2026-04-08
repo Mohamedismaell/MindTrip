@@ -12,6 +12,7 @@ class AuthState extends Equatable {
 
   final OtpFlow otpFlow;
   final String? email;
+  final String? resetToken;
 
   const AuthState({
     this.status = AuthStatus.initial,
@@ -22,6 +23,7 @@ class AuthState extends Equatable {
     this.rememberMe = false,
     this.otpFlow = OtpFlow.forgetPassword,
     this.email,
+    this.resetToken,
   });
 
   //  copyWith
@@ -35,6 +37,7 @@ class AuthState extends Equatable {
     bool? rememberMe,
     OtpFlow? otpFlow,
     String? email,
+    String? resetToken,
   }) {
     return AuthState(
       status: status ?? this.status,
@@ -45,6 +48,7 @@ class AuthState extends Equatable {
       rememberMe: rememberMe ?? this.rememberMe,
       otpFlow: otpFlow ?? this.otpFlow,
       email: email ?? this.email,
+      resetToken: resetToken ?? this.resetToken,
     );
   }
 
@@ -60,5 +64,6 @@ class AuthState extends Equatable {
     rememberMe,
     otpFlow,
     email,
+    resetToken,
   ];
 }

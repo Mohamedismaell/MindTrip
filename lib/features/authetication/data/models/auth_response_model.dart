@@ -9,6 +9,8 @@ class AuthResponseModel extends Equatable {
   final String refreshToken;
   final String tokenType;
   final int expiresIn;
+  final bool isEmailVerified;
+  final bool twoFactorEnabled;
 
   const AuthResponseModel({
     required this.user,
@@ -16,6 +18,8 @@ class AuthResponseModel extends Equatable {
     required this.refreshToken,
     required this.tokenType,
     required this.expiresIn,
+    required this.isEmailVerified,
+    required this.twoFactorEnabled,
   });
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +29,8 @@ class AuthResponseModel extends Equatable {
       refreshToken: json['refreshToken'] as String,
       tokenType: json['tokenType'] as String? ?? 'Bearer',
       expiresIn: json['expiresIn'] as int? ?? 0,
+      isEmailVerified: json['isEmailVerified'] as bool? ?? false,
+      twoFactorEnabled: json['twoFactorEnabled'] as bool? ?? false,
     );
   }
 
@@ -35,6 +41,8 @@ class AuthResponseModel extends Equatable {
       'tokenType': tokenType,
       'expiresIn': expiresIn,
       'refreshToken': refreshToken,
+      'isEmailVerified': isEmailVerified,
+      'twoFactorEnabled': twoFactorEnabled,
     };
   }
 

@@ -33,7 +33,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   AppStrings.resetePasswordDescription,
                   style: context.textTheme.bodyLarge!.copyWith(
-                    color: context.colorTheme.onSurfaceVariant,
+                    // color: context.colorTheme.onSurfaceVariant,
                   ),
                 ),
                 SizedBox(height: 40.h),

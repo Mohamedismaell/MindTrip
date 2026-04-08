@@ -8,9 +8,10 @@ import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart
 import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/forget_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/resete_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
-import 'package:mindtrip/features/authetication/domain/usecases/verify_otp_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/verify_password_otp_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/verify_email_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/resend_email_otp_use_case.dart';
 part 'auth_state.dart';
@@ -23,7 +24,8 @@ class AuthCubit extends Cubit<AuthState> {
   final FacebookAuthProvider _facebookAuthProvider;
   final ForgetPasswordUseCase _forgetPasswordUseCase;
   final FacebookAuthUseCase _facebookAuthUseCase;
-  final VerifyOtpUseCase _verifyOtpUseCase;
+  final VerifyPsswordOtpUseCase _verifyPasswordOtpUseCase;
+  final ResetePasswordUseCase _resetPasswordUseCase;
   final VerifyEmailUseCase _verifyEmailUseCase;
   final ResendEmailOtpUseCase _resendEmailOtpUseCase;
   AuthCubit({
@@ -34,7 +36,8 @@ class AuthCubit extends Cubit<AuthState> {
     required FacebookAuthProvider facebookAuthProvider,
     required FacebookAuthUseCase facebookAuthUseCase,
     required ForgetPasswordUseCase forgetPasswordUseCase,
-    required VerifyOtpUseCase verifyOtpUseCase,
+    required VerifyPsswordOtpUseCase verifyPasswordOtpUseCase,
+    required ResetePasswordUseCase resetPasswordUseCase,
     required VerifyEmailUseCase verifyEmailUseCase,
     required ResendEmailOtpUseCase resendEmailOtpUseCase,
   }) : _signInUseCase = signInUseCase,
@@ -44,7 +47,8 @@ class AuthCubit extends Cubit<AuthState> {
        _facebookAuthProvider = facebookAuthProvider,
        _forgetPasswordUseCase = forgetPasswordUseCase,
        _facebookAuthUseCase = facebookAuthUseCase,
-       _verifyOtpUseCase = verifyOtpUseCase,
+       _verifyPasswordOtpUseCase = verifyPasswordOtpUseCase,
+       _resetPasswordUseCase = resetPasswordUseCase,
        _verifyEmailUseCase = verifyEmailUseCase,
        _resendEmailOtpUseCase = resendEmailOtpUseCase,
        super(const AuthState());
@@ -106,11 +110,13 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(
-          status: AuthStatus.otpSent,
-          otpFlow: OtpFlow.signUp,
-          email: email,
-        ));
+        emit(
+          state.copyWith(
+            status: AuthStatus.otpSent,
+            otpFlow: OtpFlow.signUp,
+            email: email,
+          ),
+        );
       },
       failure: (error) {
         emit(
@@ -176,10 +182,22 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: AuthStatus.otpSent, otpFlow: OtpFlow.forgetPassword, email: email));
+        emit(
+          state.copyWith(
+            status: AuthStatus.otpSent,
+            otpFlow: OtpFlow.forgetPassword,
+            email: email,
+          ),
+        );
       },
       failure: (error) {
-        emit(state.copyWith(status: AuthStatus.otpSent, otpFlow: OtpFlow.forgetPassword, email: email));
+        emit(
+          state.copyWith(
+            status: AuthStatus.otpSent,
+            otpFlow: OtpFlow.forgetPassword,
+            email: email,
+          ),
+        );
         // emit(
         //   state.copyWith(
         //     status: AuthStatus.failure,
@@ -190,14 +208,22 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<void> verifyOtp({required String email, required String otp}) async {
+  Future<void> verifyPasswordOtp({
+    required String email,
+    required String otp,
+  }) async {
     emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
-    final result = await _verifyOtpUseCase(email: email, otp: otp);
+    final result = await _verifyPasswordOtpUseCase(email: email, otp: otp);
 
     result.when(
-      success: (_) {
-        emit(state.copyWith(status: AuthStatus.otpVerified));
+      success: (verifyPassowrdOtp) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.otpVerified,
+            resetToken: verifyPassowrdOtp.resetToken,
+          ),
+        );
       },
       failure: (error) {
         emit(state.copyWith(status: AuthStatus.otpVerified));
@@ -208,6 +234,36 @@ class AuthCubit extends Cubit<AuthState> {
         //     errorMessage: error.message,
         //   ),
         // );
+      },
+    );
+  }
+
+  Future<void> resetPassword({
+    required String email,
+    required String resetToken,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+
+    final result = await _resetPasswordUseCase(
+      email: email,
+      resetToken: resetToken,
+      newPassword: newPassword,
+      confirmNewPassword: confirmNewPassword,
+    );
+
+    result.when(
+      success: (_) {
+        emit(state.copyWith(status: AuthStatus.otpVerified));
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.failure,
+            errorMessage: error.message,
+          ),
+        );
       },
     );
   }

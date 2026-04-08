@@ -34,9 +34,7 @@ class OtpScreen extends StatelessWidget {
                   child: Text(
                     textAlign: TextAlign.center,
                     AppStrings.enterOtp,
-                    style: context.textTheme.bodyLarge!.copyWith(
-                      color: context.colorTheme.onSurfaceVariant,
-                    ),
+                    style: context.textTheme.bodyLarge,
                   ),
                 ),
 
