@@ -10,6 +10,7 @@ class AppTextTheme {
     return TextTheme(
       headlineLarge: AppTextStyles.h4SemiBold.copyWith(color: c.onSurface),
       headlineMedium: AppTextStyles.h5Medium.copyWith(color: c.onSurface),
+      headlineSmall: AppTextStyles.h7SemiBold.copyWith(color: c.onSurface),
 
       bodyLarge: AppTextStyles.h8Regular.copyWith(color: c.onSurface),
       bodyMedium: AppTextStyles.h9Regular.copyWith(color: c.onSurface),

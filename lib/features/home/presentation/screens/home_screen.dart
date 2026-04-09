@@ -39,6 +39,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 28.h),
             const HomeSectionHeader(title: 'Popular Destinations'),
             SizedBox(height: 16.h),
+            //! there is no functionallity for this right now
             HomePopularDestinations(
               destinations: HomeMockData.popularDestinations,
             ),

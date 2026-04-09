@@ -1,4 +1,4 @@
 class AppFontFamily {
   const AppFontFamily._();
-  static const String sfPro = 'SFProText';
+  static const String sfPro = 'SFPro';
 }

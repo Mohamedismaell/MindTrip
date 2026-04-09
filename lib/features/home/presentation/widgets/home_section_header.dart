@@ -22,31 +22,16 @@ class HomeSectionHeader extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Text(
-                title,
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
-                  color: context.colorTheme.onSurface,
-                ),
-              ),
+              child: Text(title, style: context.textTheme.headlineSmall),
             ),
-            Text(
-              actionLabel,
-              style: context.textTheme.bodySmall?.copyWith(
-                fontSize: 12.sp,
-                color: context.colorTheme.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text(actionLabel, style: context.textTheme.bodyMedium),
           ],
         ),
         if (subtitle != null) ...[
           SizedBox(height: 4.h),
           Text(
             subtitle!,
-            style: context.textTheme.bodySmall?.copyWith(
-              fontSize: 12.sp,
+            style: context.textTheme.bodyMedium!.copyWith(
               color: context.colorTheme.outline,
             ),
           ),
