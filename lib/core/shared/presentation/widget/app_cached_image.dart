@@ -7,6 +7,7 @@ class AppCachedImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit fit;
+
   const AppCachedImage({
     super.key,
     required this.imageUrl,
@@ -34,18 +35,16 @@ class AppCachedImage extends StatelessWidget {
         ),
         child: SizedBox(width: width, height: height),
       ),
-      errorWidget: (BuildContext context, String url, Object error) {
-        // debugPrint('❌ Image failed');
-        // debugPrint('URL: $url');
-        // debugPrint('ErrorImageHere: $error');
-        return Image.asset(
-          'assets/images/Rectangle 18.png',
-          width: width,
-          height: height,
-          fit: fit,
-        );
-        // Icon(Icons.broken_image);
-      },
+      errorWidget: (_, _, _) => Container(
+        width: width,
+        height: height,
+        color: Colors.grey.shade200,
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.image_not_supported_outlined,
+          color: Colors.grey.shade500,
+        ),
+      ),
     );
   }
 }

@@ -1,11 +1,15 @@
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
-//Todo Add real SVG
 class BottomNav extends StatelessWidget {
-  const BottomNav({super.key, required this.currentIndex, required this.onTap});
+  const BottomNav({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
   final int currentIndex;
   final ValueChanged<int> onTap;
 
@@ -13,52 +17,109 @@ class BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return _CustomBottomNav(
       currentIndex: currentIndex,
-      onTap: (index) => onTap(index),
+      onTap: onTap,
     );
   }
 }
 
 class _CustomBottomNav extends StatelessWidget {
-  const _CustomBottomNav({required this.currentIndex, required this.onTap});
+  const _CustomBottomNav({
+    required this.currentIndex,
+    required this.onTap,
+  });
+
   final int currentIndex;
   final ValueChanged<int> onTap;
+
+  static const _items = [
+    _NavItemData(icon: Icons.home_rounded, label: 'Home'),
+    _NavItemData(icon: Icons.favorite_border_rounded, label: 'Saved'),
+    _NavItemData(icon: Icons.explore_outlined, label: 'Explore'),
+    _NavItemData(icon: Icons.auto_awesome_outlined, label: 'AI'),
+    _NavItemData(icon: Icons.person_outline_rounded, label: 'Profile'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 96.h,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(25),
-          topRight: Radius.circular(25),
-        ),
-        color: context.colorTheme.surface,
-      ),
+      height: 108.h,
+      color: AppColors.primaryLightGray,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 44.w),
+        padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 18.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(_items.length, (index) {
+            final item = _items[index];
+            return _NavIcon(
+              label: item.label,
+              icon: item.icon,
+              isActive: currentIndex == index,
+              onTap: () => onTap(index),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
+class _NavIcon extends StatelessWidget {
+  const _NavIcon({
+    required this.label,
+    required this.icon,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isActive
+        ? context.colorTheme.primary
+        : context.colorTheme.onSurfaceVariant;
+
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 56.w,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _NavSvgIcon(
-              path: 'assets/images/Vector(1).svg',
-              // icon: Icons.home,
-              onTap: () => onTap(0),
-              isActive: currentIndex == 0,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 220),
+              width: 42.w,
+              height: 42.w,
+              decoration: BoxDecoration(
+                color: isActive
+                    ? context.colorTheme.primary.withOpacity(0.16)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(18.r),
+              ),
+              alignment: Alignment.center,
+              child: Icon(
+                icon,
+                size: 23.sp,
+                color: color,
+              ),
             ),
-            _NavSvgIcon(
-              path: 'assets/images/Vector(2).svg',
-              onTap: () => onTap(1),
-              isActive: currentIndex == 1,
-            ),
-            _NavSvgIcon(
-              path: 'assets/images/Vector(3).svg',
-              // icon: Icons.bookmark_outline_sharp,
-              onTap: () => onTap(2),
-              isActive: currentIndex == 2,
-            ),
-            _NavSvgIcon(
-              path: 'assets/images/Vector(4).svg',
-              onTap: () => onTap(3),
-              isActive: currentIndex == 3,
+            SizedBox(height: 6.h),
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 180),
+              opacity: isActive ? 1 : 0.55,
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: context.textTheme.bodySmall?.copyWith(
+                  fontSize: isActive ? 12.sp : 11.sp,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  color: color,
+                ),
+              ),
             ),
           ],
         ),
@@ -67,40 +128,12 @@ class _CustomBottomNav extends StatelessWidget {
   }
 }
 
-class _NavSvgIcon extends StatelessWidget {
-  const _NavSvgIcon({
-    required this.onTap,
-    required this.isActive,
-    // ignore: unused_element_parameter
-    this.path,
-    // ignore: unused_element_parameter
-    this.icon,
+class _NavItemData {
+  const _NavItemData({
+    required this.icon,
+    required this.label,
   });
-  final String? path;
-  final IconData? icon;
-  final VoidCallback onTap;
-  final bool isActive;
-  @override
-  Widget build(BuildContext context) {
-    Color color = isActive ? context.colorTheme.primary : Colors.grey;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedScale(
-        duration: const Duration(milliseconds: 180),
-        key: ValueKey(isActive),
-        curve: Curves.easeOut,
-        scale: isActive ? 1.2.sp : 1.0.sp,
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: path == null
-              ? Icon(icon, size: 24.sp, color: color)
-              : SvgPicture.asset(
-                  path!,
-                  fit: BoxFit.contain,
-                  colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-                ),
-        ),
-      ),
-    );
-  }
+
+  final IconData icon;
+  final String label;
 }
