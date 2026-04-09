@@ -17,6 +17,11 @@ class RouteRegister {
     AppRouteConfig(path: AppRoutes.forgetPassword, flow: AppFlow.auth),
     AppRouteConfig(path: AppRoutes.otpVerification, flow: AppFlow.auth),
     AppRouteConfig(path: AppRoutes.resetPassword, flow: AppFlow.auth),
+    AppRouteConfig(path: AppRoutes.completeSignUpScreen, flow: AppFlow.auth),
+    AppRouteConfig(
+      path: AppRoutes.completeResetPasswordScreen,
+      flow: AppFlow.auth,
+    ),
     // Main app flow
     AppRouteConfig(path: AppRoutes.home, flow: AppFlow.app),
   ];

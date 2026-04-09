@@ -193,17 +193,10 @@ class AuthCubit extends Cubit<AuthState> {
       failure: (error) {
         emit(
           state.copyWith(
-            status: AuthStatus.otpSent,
-            otpFlow: OtpFlow.forgetPassword,
-            email: email,
+            status: AuthStatus.failure,
+            errorMessage: error.message,
           ),
         );
-        // emit(
-        //   state.copyWith(
-        //     status: AuthStatus.failure,
-        //     errorMessage: error.message,
-        //   ),
-        // );
       },
     );
   }
@@ -226,14 +219,12 @@ class AuthCubit extends Cubit<AuthState> {
         );
       },
       failure: (error) {
-        emit(state.copyWith(status: AuthStatus.otpVerified));
-
-        // emit(
-        //   state.copyWith(
-        //     status: AuthStatus.failure,
-        //     errorMessage: error.message,
-        //   ),
-        // );
+        emit(
+          state.copyWith(
+            status: AuthStatus.failure,
+            errorMessage: error.message,
+          ),
+        );
       },
     );
   }
@@ -255,7 +246,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: AuthStatus.otpVerified));
+        emit(state.copyWith(status: AuthStatus.passwordResetSuccess));
       },
       failure: (error) {
         emit(
@@ -292,7 +283,8 @@ class AuthCubit extends Cubit<AuthState> {
     final email = state.email;
     if (email == null) return;
 
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    emit(state.copyWith(status: AuthStatus.initial, errorMessage: null));
+    print('pressed');
 
     final result = await _resendEmailOtpUseCase(email: email);
 

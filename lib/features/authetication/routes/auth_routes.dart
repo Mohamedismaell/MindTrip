@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/features/authetication/presentation/screens/complete_reset_password.dart';
 import 'package:mindtrip/features/authetication/presentation/screens/complete_signup_screen.dart';
 import 'package:mindtrip/features/authetication/presentation/screens/forget_password_screen.dart';
 import 'package:mindtrip/features/authetication/presentation/screens/otp_screen.dart';
@@ -27,12 +28,16 @@ class AuthRoutes {
       builder: (context, state) => const OtpScreen(),
     ),
     GoRoute(
+      path: AppRoutes.resetPassword,
+      builder: (context, state) => const ResetPasswordScreen(),
+    ),
+    GoRoute(
       path: AppRoutes.completeSignUpScreen,
       builder: (context, state) => const CompleteSignUpScreen(),
     ),
     GoRoute(
       path: AppRoutes.completeResetPasswordScreen,
-      builder: (context, state) => const ResetPasswordScreen(),
+      builder: (context, state) => const CompleteResetPassword(),
     ),
   ];
 }

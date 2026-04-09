@@ -21,7 +21,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthStatusListener(
+    return OtpRequestStatusListener(
       child: AppBackground(
         child: Center(
           child: SingleChildScrollView(
@@ -39,7 +39,7 @@ class SignUpScreen extends StatelessWidget {
                 AuthoptionsContent(
                   promptText: AppStrings.alreadyHaveAccount,
                   actionText: AppStrings.signIn,
-                  onActionTap: () => context.push(AppRoutes.login),
+                  onActionTap: () => context.pushReplacement(AppRoutes.login),
                 ),
               ],
             ),

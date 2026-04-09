@@ -13,7 +13,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthStatusListener(
+    return ResetPasswordStatusListener(
       child: Scaffold(
         body: Center(
           child: SingleChildScrollView(

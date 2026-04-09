@@ -44,6 +44,7 @@ class AppStrings {
       'please enter 6 digit code that sent to your email address';
   static const String ifYouDontReceiveCode = 'if you don’t receive code ! ';
   static const String resendCode = 'Resend';
+  static const String verificationCodeResent = 'Verification code resent';
   static const String verify = 'Verify';
   static const String verifying = 'Verifying...';
 

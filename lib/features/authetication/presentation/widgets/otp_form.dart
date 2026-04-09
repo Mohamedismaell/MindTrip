@@ -41,6 +41,9 @@ class _OtpFormState extends State<OtpForm> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AuthCubit>().state;
+    final isLoading = state.status == AuthStatus.loading;
+
     return Form(
       key: _formKey,
       child: Column(
@@ -54,35 +57,35 @@ class _OtpFormState extends State<OtpForm> {
             ),
           ),
           SizedBox(height: 10.h),
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: AppStrings.ifYouDontReceiveCode,
-                  style: AppTextStyles.h8SemiBold.copyWith(
-                    color: context.colorTheme.outline,
-                  ),
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                AppStrings.ifYouDontReceiveCode,
+                style: AppTextStyles.h8SemiBold.copyWith(
+                  color: context.colorTheme.outline,
                 ),
-                TextSpan(
-                  text: AppStrings.resendCode,
+                textAlign: TextAlign.center,
+              ),
+              GestureDetector(
+                onTap: isLoading
+                    ? null
+                    : () => context.read<AuthCubit>().resendOtp(),
+                child: Text(
+                  AppStrings.resendCode,
                   style: AppTextStyles.h8SemiBold.copyWith(
                     color: context.colorTheme.onSurface,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           SizedBox(height: 24.h),
-          BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              final isLoading = state.status == AuthStatus.loading;
-              return CustomGradientButton(
-                width: double.infinity,
-                text: isLoading ? AppStrings.verifying : AppStrings.verify,
-                onTap: isLoading ? null : () => _submit(),
-              );
-            },
+          CustomGradientButton(
+            width: double.infinity,
+            text: isLoading ? AppStrings.verifying : AppStrings.verify,
+            onTap: isLoading ? null : () => _submit(),
           ),
         ],
       ),

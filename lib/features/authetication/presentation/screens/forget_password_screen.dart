@@ -14,7 +14,7 @@ class ForgetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthStatusListener(
+    return OtpRequestStatusListener(
       child: Scaffold(
         body: Center(
           child: SingleChildScrollView(
