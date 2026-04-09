@@ -24,11 +24,15 @@ class HomeSpotlight {
   final String title;
   final String location;
   final String imageUrl;
+  final List<String> previewImageUrls;
+  final int extraPhotoCount;
 
   const HomeSpotlight({
     required this.title,
     required this.location,
     required this.imageUrl,
+    required this.previewImageUrls,
+    required this.extraPhotoCount,
   });
 }
 

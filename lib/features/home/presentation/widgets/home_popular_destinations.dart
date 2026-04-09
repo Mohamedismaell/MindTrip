@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
@@ -105,45 +104,18 @@ class HomePopularDestinations extends StatelessWidget {
                               ],
                             ),
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      destination.title,
-                                      style: context.textTheme.titleMedium
-                                          ?.copyWith(
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.pureWhite,
-                                          ),
-                                    ),
-                                    SizedBox(height: 6.h),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.location_on_rounded,
-                                          size: 14.sp,
-                                          color: AppColors.pureWhite
-                                              .withOpacity(0.86),
-                                        ),
-                                        SizedBox(width: 4.w),
-                                        Text(
-                                          destination.location,
-                                          style: context.textTheme.bodySmall
-                                              ?.copyWith(
-                                                fontSize: 12.sp,
-                                                color: AppColors.pureWhite
-                                                    .withOpacity(0.86),
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                for (final previewImageUrl
+                                    in destination.previewImageUrls.take(
+                                      2,
+                                    )) ...[
+                                  _PreviewImageTile(imageUrl: previewImageUrl),
+                                  SizedBox(width: 8.w),
+                                ],
+                                _ExtraPhotosTile(
+                                  extraPhotoCount: destination.extraPhotoCount,
                                 ),
-
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -175,6 +147,52 @@ class HomePopularDestinations extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _PreviewImageTile extends StatelessWidget {
+  const _PreviewImageTile({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.r),
+      child: SizedBox(
+        width: 47.r,
+        height: 47.r,
+        child: AppCachedImage(imageUrl: imageUrl),
+      ),
+    );
+  }
+}
+
+class _ExtraPhotosTile extends StatelessWidget {
+  const _ExtraPhotosTile({required this.extraPhotoCount});
+
+  final int extraPhotoCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.r),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+        child: Container(
+          width: 47.r,
+          height: 47.r,
+          alignment: Alignment.center,
+          color: AppColors.pureWhite.withValues(alpha: 0.1),
+          child: Text(
+            '+$extraPhotoCount',
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: AppColors.pureWhite,
+            ),
+          ),
+        ),
       ),
     );
   }
