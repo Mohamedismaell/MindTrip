@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, required this.profileImageUrl});
@@ -37,11 +39,13 @@ class HomeHeader extends StatelessWidget {
               SizedBox(height: 8.h),
               Row(
                 children: [
-                  Icon(
-                    Icons.location_on_rounded,
-                    size: 16.sp,
-                    color: context.colorTheme.outline,
-                  ),
+                  //* You may give it exact size idk
+                  SvgPicture.asset(HomeAssets.locationIcon),
+                  // Icon(
+                  //   Icons.location_on_rounded,
+                  //   size: 16.sp,
+                  //   color: context.colorTheme.outline,
+                  // ),
                   SizedBox(width: 6.w),
                   Text(
                     'Cairo, Egypt',
@@ -56,34 +60,37 @@ class HomeHeader extends StatelessWidget {
           ),
         ),
         SizedBox(width: 12.w),
-        //Todo replace with real icons
-        _HeaderAction(icon: Icons.notifications_none_rounded, onTap: () {}),
+        _HeaderAction(iconPath: HomeAssets.notificaitonIcon, onTap: () {}),
         SizedBox(width: 10.w),
-        _HeaderAction(icon: Icons.menu_rounded, onTap: () {}),
+        _HeaderAction(iconPath: HomeAssets.drawerIcon, onTap: () {}),
       ],
     );
   }
 }
 
 class _HeaderAction extends StatelessWidget {
-  const _HeaderAction({required this.icon, required this.onTap});
+  const _HeaderAction({required this.iconPath, required this.onTap});
 
-  final IconData icon;
+  final String iconPath;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(24.r),
+      // borderRadius: BorderRadius.circular(24.r),
       child: Container(
         width: 47.w,
-        height: 47.w,
+        height: 47.h,
         decoration: BoxDecoration(
           color: AppColors.primaryLightGray,
           borderRadius: BorderRadius.circular(23.5.r),
         ),
-        child: Icon(icon, size: 24.sp, color: context.colorTheme.onSurface),
+        child: Padding(
+          padding: EdgeInsets.all(10.sp),
+          child: SvgPicture.asset(iconPath),
+        ),
+        // Icon(icon, size: 24.sp, color: context.colorTheme.onSurface),
       ),
     );
   }

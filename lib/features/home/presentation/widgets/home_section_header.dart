@@ -24,7 +24,12 @@ class HomeSectionHeader extends StatelessWidget {
             Expanded(
               child: Text(title, style: context.textTheme.headlineSmall),
             ),
-            Text(actionLabel, style: context.textTheme.bodyMedium),
+            Text(
+              actionLabel,
+              style: context.textTheme.bodyMedium!.copyWith(
+                color: context.colorTheme.onSurfaceVariant,
+              ),
+            ),
           ],
         ),
         if (subtitle != null) ...[

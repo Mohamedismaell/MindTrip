@@ -35,3 +35,25 @@ class AppAssets {
   static const String lockIcon = '$_iconsPath/lock.svg';
   static const String personIcon = '$_iconsPath/person.svg';
 }
+
+class HomeAssets {
+  HomeAssets._();
+
+  static const String _iconPath = 'assets/icons/home';
+
+  // Splash
+  static const String notificaitonIcon =
+      '$_iconPath/carbon_notification-new.svg';
+  static const String notificaitonWithoutDotIcon =
+      '$_iconPath/notification_without_dot.svg';
+  static const String locationIcon = '$_iconPath/location.svg';
+  static const String drawerIcon = '$_iconPath/drawer.svg';
+  static const String personIcon = '$_iconPath/person.svg';
+  static const String redDotIcon = '$_iconPath/red_dot.svg';
+  static const String filterIcon = '$_iconPath/filter1.svg';
+  static const String blackHeartIcon = '$_iconPath/black_heart.svg';
+  static const String upTRightArrowtIcon = '$_iconPath/up_t_right_arrow.svg';
+  static const String homeIcon = '$_iconPath/home.svg';
+  static const String exploreHeartIcon = '$_iconPath/explore.svg';
+  static const String whiteHeartIcon = '$_iconPath/white_heart.svg';
+}

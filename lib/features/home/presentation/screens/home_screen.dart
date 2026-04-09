@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
             //! Not working right now
             const HomeSearchBar(),
             SizedBox(height: 20.h),
-            //! there is no functionallity for this right now
+            //! there is no functionallity for this right now + need ui edits still
             HomeCategoryList(categories: HomeMockData.categories),
             SizedBox(height: 22.h),
             //! there is no functionallity for this right now

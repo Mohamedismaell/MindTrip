@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 
 class HomeSearchBar extends StatelessWidget {
   const HomeSearchBar({super.key});
@@ -52,11 +54,15 @@ class HomeSearchBar extends StatelessWidget {
               width: 0.8,
             ),
           ),
-          child: Icon(
-            Icons.tune_rounded,
-            size: 22.sp,
-            color: context.colorTheme.outline,
+          child: Padding(
+            padding: EdgeInsets.all(12.r),
+            child: SvgPicture.asset(HomeAssets.filterIcon),
           ),
+          // Icon(
+          //   Icons.tune_rounded,
+          //   size: 22.sp,
+          //   color: context.colorTheme.outline,
+          // ),
         ),
       ],
     );
