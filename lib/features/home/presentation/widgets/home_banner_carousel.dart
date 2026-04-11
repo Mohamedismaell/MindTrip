@@ -39,17 +39,19 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragEnd: (details) {
-        if (details.primaryVelocity! < 0) {
-          // swipe left
-          _next();
-        } else if (details.primaryVelocity! > 0) {
-          // swipe right
-          _prev();
-        }
-      },
-      child: _buildBanner(),
+    return SliverToBoxAdapter(
+      child: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity! < 0) {
+            // swipe left
+            _next();
+          } else if (details.primaryVelocity! > 0) {
+            // swipe right
+            _prev();
+          }
+        },
+        child: _buildBanner(),
+      ),
     );
   }
 
@@ -95,7 +97,7 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               ),
             ),
 
-            // CONTENT
+            // Content
             IgnorePointer(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

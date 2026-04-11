@@ -22,45 +22,47 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: context.colorTheme.surface,
       bottomNavigationBar: BottomNav(currentIndex: 0, onTap: (_) {}),
       body: SafeArea(
-        child: ListView(
+        child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          children: [
-            //Todo replace with real user info
-            HomeHeader(profileImageUrl: HomeMockData.profileImageUrl),
-            SizedBox(height: 40.h),
-            //! Not working right now
-            const HomeSearchBar(),
-            SizedBox(height: 20.h),
-            //! there is no functionallity for this right now + need ui edits still
-            HomeCategoryList(categories: HomeMockData.categories),
-            SizedBox(height: 22.h),
-            //! there is no functionallity for this right now
-            HomeBannerCarousel(banners: HomeMockData.banners),
-            SizedBox(height: 28.h),
-            const HomeSectionHeader(title: 'Popular Destinations'),
-            SizedBox(height: 16.h),
-            //! there is no functionallity for this right now
-            HomePopularDestinations(
-              destinations: HomeMockData.popularDestinations,
-            ),
-            SizedBox(height: 28.h),
-            const HomeSectionHeader(
-              title: 'Recommended',
-              subtitle: 'Based on your interests',
-            ),
-            SizedBox(height: 16.h),
-            HomeRecommendedGrid(
-              destinations: HomeMockData.recommendedDestinations,
-            ),
-            SizedBox(height: 28.h),
-            const HomeSectionHeader(title: 'Tour Packages'),
-            SizedBox(height: 16.h),
-            HomeTourPackages(packages: HomeMockData.tourPackages),
-            SizedBox(height: 28.h),
-            const HomeSectionHeader(title: 'AI Planner', actionLabel: 'Try'),
-            SizedBox(height: 16.h),
-            HomeAiPlannerSection(plans: HomeMockData.plannerPreviews),
-          ],
+          child: CustomScrollView(
+            slivers: [
+              //Todo replace with real user info
+              HomeHeader(profileImageUrl: HomeMockData.profileImageUrl),
+              SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+              // //! Not working right now
+              const HomeSearchBar(),
+              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+              // //! there is no functionallity for this right now + need ui edits still
+              HomeCategoryList(categories: HomeMockData.categories),
+              SliverToBoxAdapter(child: SizedBox(height: 22.h)),
+              // //! there is no functionallity for this right now
+              HomeBannerCarousel(banners: HomeMockData.banners),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              const HomeSectionHeader(title: 'Popular Destinations'),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              // //! there is no functionallity for this right now
+              HomePopularDestinations(
+                destinations: HomeMockData.popularDestinations,
+              ),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              const HomeSectionHeader(
+                title: 'Recommended',
+                subtitle: 'Based on your interests',
+              ),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              HomeRecommendedGrid(
+                destinations: HomeMockData.recommendedDestinations,
+              ),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              const HomeSectionHeader(title: 'Tour Packages'),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              HomeTourPackages(packages: HomeMockData.tourPackages),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              // const HomeSectionHeader(title: 'AI Planner', actionLabel: 'Try'),
+              // SizedBox(height: 16.h),
+              // HomeAiPlannerSection(plans: HomeMockData.plannerPreviews),
+            ],
+          ),
         ),
       ),
     );

@@ -15,115 +15,121 @@ class HomePopularDestinations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 198.h,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: destinations.length,
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 198.h,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: destinations.length,
 
-        itemBuilder: (context, index) {
-          final destination = destinations[index];
-          return Row(
-            children: [
-              Container(
-                width: 289.w,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(40.r),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      AppCachedImage(imageUrl: destination.imageUrl),
+          itemBuilder: (context, index) {
+            final destination = destinations[index];
+            return Row(
+              children: [
+                Container(
+                  width: 289.w,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40.r),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        AppCachedImage(imageUrl: destination.imageUrl),
 
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.3),
-                              Colors.transparent,
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.black.withValues(alpha: 0.3),
+                                Colors.transparent,
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                          child: Container(color: Colors.transparent),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: 20.w,
+                            left: 20.w,
+                            top: 30.h,
+                            bottom: 20.h,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    destination.title,
+                                    style: context.textTheme.headlineSmall!
+                                        .copyWith(color: AppColors.pureWhite),
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  Text(
+                                    destination.location,
+                                    style: context.textTheme.bodyMedium!
+                                        .copyWith(
+                                          color: AppColors.primaryLightGray,
+                                        ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                                  for (final previewImageUrl
+                                      in destination.previewImageUrls.take(
+                                        2,
+                                      )) ...[
+                                    _PreviewImageTile(
+                                      imageUrl: previewImageUrl,
+                                    ),
+                                    SizedBox(width: 8.w),
+                                  ],
+                                  _ExtraPhotosTile(
+                                    extraPhotoCount:
+                                        destination.extraPhotoCount,
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
-                      ),
 
-                      BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-                        child: Container(color: Colors.transparent),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.only(
+                        Positioned(
+                          top: 20.h,
                           right: 20.w,
-                          left: 20.w,
-                          top: 30.h,
+                          child: _CircleIcon(
+                            icon: HomeAssets.blackHeartIcon,
+                            size: 24,
+                          ),
+                        ),
+
+                        Positioned(
                           bottom: 20.h,
+                          right: 20.w,
+                          child: _CircleIcon(
+                            icon: HomeAssets.upTRightArrowtIcon,
+                            size: 16,
+                          ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  destination.title,
-                                  style: context.textTheme.headlineSmall!
-                                      .copyWith(color: AppColors.pureWhite),
-                                ),
-                                SizedBox(height: 6.h),
-                                Text(
-                                  destination.location,
-                                  style: context.textTheme.bodyMedium!.copyWith(
-                                    color: AppColors.primaryLightGray,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              children: [
-                                for (final previewImageUrl
-                                    in destination.previewImageUrls.take(
-                                      2,
-                                    )) ...[
-                                  _PreviewImageTile(imageUrl: previewImageUrl),
-                                  SizedBox(width: 8.w),
-                                ],
-                                _ExtraPhotosTile(
-                                  extraPhotoCount: destination.extraPhotoCount,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      Positioned(
-                        top: 20.h,
-                        right: 20.w,
-                        child: _CircleIcon(
-                          icon: HomeAssets.blackHeartIcon,
-                          size: 24,
-                        ),
-                      ),
-
-                      Positioned(
-                        bottom: 20.h,
-                        right: 20.w,
-                        child: _CircleIcon(
-                          icon: HomeAssets.upTRightArrowtIcon,
-                          size: 16,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(width: 24.w),
-            ],
-          );
-        },
+                SizedBox(width: 24.w),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

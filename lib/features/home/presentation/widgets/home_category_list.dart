@@ -11,64 +11,66 @@ class HomeCategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 60.h,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        separatorBuilder: (_, _) => SizedBox(width: 14.w),
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          final isSelected = category.isSelected;
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 60.h,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: categories.length,
+          separatorBuilder: (_, _) => SizedBox(width: 14.w),
+          itemBuilder: (context, index) {
+            final category = categories[index];
+            final isSelected = category.isSelected;
 
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 220),
-            padding: EdgeInsets.symmetric(
-              horizontal: isSelected ? 8.w : 10.w,
-              vertical: 8.h,
-            ),
-            decoration: BoxDecoration(
-              color: context.colorTheme.surface,
-              borderRadius: BorderRadius.circular(80.r),
-              border: Border.all(
-                color: context.colorTheme.outline.withOpacity(0.5),
-                width: 0.8,
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 220),
+              padding: EdgeInsets.symmetric(
+                horizontal: isSelected ? 8.w : 10.w,
+                vertical: 8.h,
               ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40.w,
-                  height: 40.w,
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? context.colorTheme.primary
-                        : AppColors.primaryLightGray,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    category.emoji,
-                    style: TextStyle(fontSize: isSelected ? 20.sp : 22.sp),
-                  ),
+              decoration: BoxDecoration(
+                color: context.colorTheme.surface,
+                borderRadius: BorderRadius.circular(80.r),
+                border: Border.all(
+                  color: context.colorTheme.outline.withOpacity(0.5),
+                  width: 0.8,
                 ),
-                if (isSelected) ...[
-                  SizedBox(width: 10.w),
-                  Text(
-                    category.label,
-                    style: context.textTheme.bodyLarge?.copyWith(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: context.colorTheme.onSurface,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 40.w,
+                    height: 40.w,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? context.colorTheme.primary
+                          : AppColors.primaryLightGray,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      category.emoji,
+                      style: TextStyle(fontSize: isSelected ? 20.sp : 22.sp),
                     ),
                   ),
-                  SizedBox(width: 4.w),
+                  if (isSelected) ...[
+                    SizedBox(width: 10.w),
+                    Text(
+                      category.label,
+                      style: context.textTheme.bodyLarge?.copyWith(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: context.colorTheme.onSurface,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                  ],
                 ],
-              ],
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

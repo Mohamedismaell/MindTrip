@@ -134,7 +134,7 @@ class HomeMockData {
       location: 'Fayoum',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/b57bb337-5ceb-4f23-b123-b5f5424d72e2',
-      price: '\$350 / person',
+      price: '\$350',
       rating: 4.5,
     ),
     HomePackage(
@@ -142,7 +142,7 @@ class HomeMockData {
       location: 'Farafra',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/7ca7a24d-98e1-4160-b8a6-25ad588d9515',
-      price: '\$350 / person',
+      price: '\$350',
       rating: 4.7,
     ),
     HomePackage(
@@ -150,7 +150,7 @@ class HomeMockData {
       location: 'Aswan',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/d79ef4b5-b669-4d5c-82d6-f7a4fed5c5e4',
-      price: '\$390 / person',
+      price: '\$390',
       rating: 4.6,
     ),
   ];

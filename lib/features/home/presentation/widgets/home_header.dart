@@ -13,57 +13,59 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ClipOval(
-          child: AppCachedImage(
-            imageUrl: profileImageUrl,
-            width: 47.w,
-            height: 47.w,
+    return SliverToBoxAdapter(
+      child: Row(
+        children: [
+          ClipOval(
+            child: AppCachedImage(
+              imageUrl: profileImageUrl,
+              width: 47.w,
+              height: 47.w,
+            ),
           ),
-        ),
-        SizedBox(width: 13.w),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //Todo replace with real user name
-              Text(
-                'HI, Laila',
-                style: context.textTheme.titleSmall?.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: context.colorTheme.onSurface,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Row(
-                children: [
-                  //* You may give it exact size idk
-                  SvgPicture.asset(HomeAssets.locationIcon),
-                  // Icon(
-                  //   Icons.location_on_rounded,
-                  //   size: 16.sp,
-                  //   color: context.colorTheme.outline,
-                  // ),
-                  SizedBox(width: 6.w),
-                  Text(
-                    'Cairo, Egypt',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      fontSize: 14.sp,
-                      color: context.colorTheme.outline,
-                    ),
+          SizedBox(width: 13.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Todo replace with real user name
+                Text(
+                  'HI, Laila',
+                  style: context.textTheme.titleSmall?.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: context.colorTheme.onSurface,
                   ),
-                ],
-              ),
-            ],
+                ),
+                SizedBox(height: 8.h),
+                Row(
+                  children: [
+                    //* You may give it exact size idk
+                    SvgPicture.asset(HomeAssets.locationIcon),
+                    // Icon(
+                    //   Icons.location_on_rounded,
+                    //   size: 16.sp,
+                    //   color: context.colorTheme.outline,
+                    // ),
+                    SizedBox(width: 6.w),
+                    Text(
+                      'Cairo, Egypt',
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        fontSize: 14.sp,
+                        color: context.colorTheme.outline,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        SizedBox(width: 12.w),
-        _HeaderAction(iconPath: HomeAssets.notificaitonIcon, onTap: () {}),
-        SizedBox(width: 10.w),
-        _HeaderAction(iconPath: HomeAssets.drawerIcon, onTap: () {}),
-      ],
+          SizedBox(width: 12.w),
+          _HeaderAction(iconPath: HomeAssets.notificaitonIcon, onTap: () {}),
+          SizedBox(width: 10.w),
+          _HeaderAction(iconPath: HomeAssets.drawerIcon, onTap: () {}),
+        ],
+      ),
     );
   }
 }
