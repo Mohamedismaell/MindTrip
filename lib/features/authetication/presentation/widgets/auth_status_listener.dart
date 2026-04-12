@@ -20,7 +20,7 @@ class SignInStatusListener extends StatelessWidget {
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
         if (state.status == AuthStatus.success) {
-          context.read<AppGateCubit>().loginSuccess();
+          context.read<AppGateCubit>().loginSuccess(state.user!);
         } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
             context,

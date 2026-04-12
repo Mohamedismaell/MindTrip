@@ -8,13 +8,17 @@ class UserModel extends Equatable {
   final String email;
   final String? profilePhotoUrl;
   final String? languagePreference;
-
+  final String? homeGovernorate;
+  final List<String>? interests;
   const UserModel({
     required this.userId,
     required this.displayName,
     required this.email,
     this.profilePhotoUrl,
     this.languagePreference,
+    this.homeGovernorate,
+    //!Check Could be empty ?
+    this.interests,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +28,10 @@ class UserModel extends Equatable {
       email: json['email'] as String,
       profilePhotoUrl: json['profilePhotoUrl'] as String?,
       languagePreference: json['languagePreference'] as String?,
+      homeGovernorate: json['homeGovernorate'] as String?,
+      interests: (json['interests'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
   }
 
@@ -34,6 +42,8 @@ class UserModel extends Equatable {
       'email': email,
       'profilePhotoUrl': profilePhotoUrl,
       'languagePreference': languagePreference,
+      'homeGovernorate': homeGovernorate,
+      'interests': interests,
     };
   }
 
@@ -68,6 +78,8 @@ class UserModel extends Equatable {
     String? email,
     String? profilePhotoUrl,
     String? languagePreference,
+    String? homeGovernorate,
+    List<String>? interests,
   }) {
     return UserModel(
       userId: userId ?? this.userId,
@@ -75,6 +87,8 @@ class UserModel extends Equatable {
       email: email ?? this.email,
       profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
       languagePreference: languagePreference ?? this.languagePreference,
+      homeGovernorate: homeGovernorate ?? this.homeGovernorate,
+      interests: interests ?? this.interests,
     );
   }
 
@@ -85,5 +99,7 @@ class UserModel extends Equatable {
     email,
     profilePhotoUrl,
     languagePreference,
+    homeGovernorate,
+    interests,
   ];
 }

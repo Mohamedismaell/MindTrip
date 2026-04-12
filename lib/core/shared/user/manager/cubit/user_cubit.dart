@@ -1,24 +1,35 @@
-// import 'package:bloc/bloc.dart';
-// import 'package:mindtrip/core/shared/user/data/models/user_model.dart';
-// import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
-// import 'package:equatable/equatable.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
+import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 
-// part 'user_state.dart';
+part 'user_state.dart';
 
-// class UserCubit extends Cubit<UserState> {
-//   UserCubit(this.getCurrentUser) : super(const UserState());
-//   final GetCurrentUser getCurrentUser;
+class UserCubit extends Cubit<UserState> {
+  final GetCurrentUser _getCurrentUser;
 
-//   Future<void> loadUser() async {
-//     emit(state.copyWith(status: LoadStatus.loading));
+  UserCubit({required GetCurrentUser getCurrentUser})
+    : _getCurrentUser = getCurrentUser,
+      super(const UserState());
 
-//     final result = await getCurrentUser.call();
+  Future<void> loadUser() async {
+    emit(state.copyWith(status: UserStatus.loading));
 
-//     result.when(
-//       success: (user) =>
-//           emit(state.copyWith(user: user, status: LoadStatus.loaded)),
-//       failure: (f) =>
-//           emit(state.copyWith(status: LoadStatus.error, message: f.message)),
-//     );
-//   }
-// }
+    final result = await _getCurrentUser.call();
+
+    result.when(
+      success: (user) =>
+          emit(state.copyWith(user: user, status: UserStatus.loaded)),
+      failure: (f) =>
+          emit(state.copyWith(status: UserStatus.error, message: f.message)),
+    );
+  }
+
+  void setUser(UserEntity user) {
+    emit(state.copyWith(user: user, status: UserStatus.loaded));
+  }
+
+  void clear() {
+    emit(const UserState());
+  }
+}

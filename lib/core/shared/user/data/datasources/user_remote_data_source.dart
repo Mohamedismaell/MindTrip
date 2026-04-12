@@ -1,12 +1,14 @@
+import 'package:mindtrip/core/database/api/api_consumer.dart';
+import 'package:mindtrip/core/database/api/end_points.dart';
+import 'package:mindtrip/features/authetication/data/models/user_model.dart';
+
 class UserRemoteDataSource {
-  UserRemoteDataSource();
-  // Future<UserModel> getCurrentUser() async {
-  //   final userId = apiConsumer.auth.currentUser!.id;
-  //   final response = await apiConsumer
-  //       .from('profiles')
-  //       .select()
-  //       .eq('id', userId)
-  //       .single();
-  //   return UserModel.fromJsonMap(response);
-  // }
+  final ApiConsumer _api;
+
+  UserRemoteDataSource({required ApiConsumer api}) : _api = api;
+
+  Future<UserModel> getCurrentUser() async {
+    final response = await _api.get(EndPoints.getCurrentUser);
+    return UserModel.fromJson(response as Map<String, dynamic>);
+  }
 }

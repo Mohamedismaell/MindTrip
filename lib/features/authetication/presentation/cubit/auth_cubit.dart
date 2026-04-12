@@ -142,9 +142,22 @@ class AuthCubit extends Cubit<AuthState> {
         return;
       }
 
-      await _googleAuthUseCase(token: idToken);
+      final result = await _googleAuthUseCase(token: idToken);
       if (isClosed) return;
-      emit(state.copyWith(status: AuthStatus.success));
+
+      result.when(
+        success: (user) {
+          emit(state.copyWith(status: AuthStatus.success, user: user));
+        },
+        failure: (error) {
+          emit(
+            state.copyWith(
+              status: AuthStatus.failure,
+              errorMessage: error.message,
+            ),
+          );
+        },
+      );
     } catch (e) {
       if (isClosed) return;
       print('Error google here**********$e');
@@ -165,9 +178,22 @@ class AuthCubit extends Cubit<AuthState> {
         return;
       }
 
-      await _facebookAuthUseCase(token: accessToken);
+      final result = await _facebookAuthUseCase(token: accessToken);
       if (isClosed) return;
-      emit(state.copyWith(status: AuthStatus.success));
+
+      result.when(
+        success: (user) {
+          emit(state.copyWith(status: AuthStatus.success, user: user));
+        },
+        failure: (error) {
+          emit(
+            state.copyWith(
+              status: AuthStatus.failure,
+              errorMessage: error.message,
+            ),
+          );
+        },
+      );
     } catch (e) {
       if (isClosed) return;
       print('Error Facebook here**********$e');

@@ -1,20 +1,26 @@
-// part of 'user_cubit.dart';
+part of 'user_cubit.dart';
 
-// class UserState extends Equatable {
-//   final UserModel? user;
-//   final LoadStatus status;
-//   final String? message;
+enum UserStatus { initial, loading, loaded, error }
 
-//   const UserState({this.user, this.status = LoadStatus.initial, this.message});
+class UserState extends Equatable {
+  final UserEntity? user;
+  final UserStatus status;
+  final String? message;
 
-//   UserState copyWith({UserModel? user, LoadStatus? status, String? message}) {
-//     return UserState(
-//       user: user ?? this.user,
-//       status: status ?? this.status,
-//       message: message ?? this.message,
-//     );
-//   }
+  const UserState({
+    this.user,
+    this.status = UserStatus.initial,
+    this.message,
+  });
 
-//   @override
-//   List<Object?> get props => [user, status, message];
-// }
+  UserState copyWith({UserEntity? user, UserStatus? status, String? message}) {
+    return UserState(
+      user: user ?? this.user,
+      status: status ?? this.status,
+      message: message ?? this.message,
+    );
+  }
+
+  @override
+  List<Object?> get props => [user, status, message];
+}
