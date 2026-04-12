@@ -17,32 +17,35 @@ class HomeSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(title, style: context.textTheme.headlineSmall),
-              ),
+      child: Padding(
+        padding: EdgeInsets.only(right: 10.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(title, style: context.textTheme.headlineSmall),
+                ),
+                Text(
+                  actionLabel,
+                  style: context.textTheme.bodyMedium!.copyWith(
+                    color: context.colorTheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            if (subtitle != null) ...[
+              SizedBox(height: 4.h),
               Text(
-                actionLabel,
+                subtitle!,
                 style: context.textTheme.bodyMedium!.copyWith(
-                  color: context.colorTheme.onSurfaceVariant,
+                  color: context.colorTheme.outline,
                 ),
               ),
             ],
-          ),
-          if (subtitle != null) ...[
-            SizedBox(height: 4.h),
-            Text(
-              subtitle!,
-              style: context.textTheme.bodyMedium!.copyWith(
-                color: context.colorTheme.outline,
-              ),
-            ),
           ],
-        ],
+        ),
       ),
     );
   }

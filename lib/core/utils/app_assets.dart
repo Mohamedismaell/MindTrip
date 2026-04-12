@@ -56,4 +56,5 @@ class HomeAssets {
   static const String homeIcon = '$_iconPath/home.svg';
   static const String exploreHeartIcon = '$_iconPath/explore.svg';
   static const String whiteHeartIcon = '$_iconPath/white_heart.svg';
+  static const String aiStars = '$_iconPath/ai_stars.svg';
 }

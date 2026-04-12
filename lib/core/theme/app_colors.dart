@@ -14,6 +14,7 @@ class AppColors {
   static const Color pureBlack = Colors.black;
   static const Color pureWhite = Colors.white;
   static const Color customYellow = Color(0xFFF8BD00);
+  static const Color customLightBlue = Color(0xFFC4E0F9);
 
   //! Shadow
   static const Color primaryShadow = Color(0xFFD9D9D9);
