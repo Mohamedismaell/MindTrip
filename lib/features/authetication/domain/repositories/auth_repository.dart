@@ -45,7 +45,7 @@ abstract class AuthRepository {
 
   Future<Result<void>> logout();
 
-  // Future<Result<AuthTokens>> refreshToken();
+  Future<Result<UserEntity>> refreshToken();
 
   // Future<Result<UserEntity>> getCurrentUser();
 }

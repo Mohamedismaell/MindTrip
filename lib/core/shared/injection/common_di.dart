@@ -59,14 +59,12 @@ class CommonDi {
       () => AuthLocalDataSource(storage: sl<SecureTokenStorage>()),
     );
 
-    // DioConsumer depends on interceptors — register interceptors first, then DioConsumer
-    // AuthInterceptor depends on TokenManager, but TokenManager depends on AuthRemoteDataSource
-    // which depends on DioConsumer. Break the cycle with a lazy getter for TokenManager.
     sl.registerLazySingleton(
       () => AuthInterceptor(
         storage: sl<SecureTokenStorage>(),
         dio: sl<Dio>(),
         getTokenManager: () => sl<TokenManager>(),
+        onLogout: () => sl<AppGateCubit>().logout(),
       ),
     );
     sl.registerLazySingleton(

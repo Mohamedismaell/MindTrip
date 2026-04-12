@@ -1,5 +1,6 @@
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
@@ -7,6 +8,7 @@ import 'package:mindtrip/features/authetication/data/models/resete_password_mode
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/entities/verify_password_otp_entity.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
+
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -213,36 +215,33 @@ class AuthRepositoryImpl implements AuthRepository {
 
   //  Refresh Token
 
-  // @override
-  // Future<Result<AuthTokens>> refreshToken() async {
-  //   try {
-  //     final storedAccess = _localDataSource.getAccessToken();
+  @override
+  Future<Result<UserEntity>> refreshToken() async {
+    try {
+      final storedRefreshToken = await _localDataSource.getRefreshToken();
 
-  //     // if (storedAccess == null || storedAccess.isEmpty) {
-  //     //   return const Result.error(
-  //     //     UnauthorizedFailure(message: 'No access token available'),
-  //     //   );
-  //     // }
+      if (storedRefreshToken == null || storedRefreshToken.isEmpty) {
+        return const Result.error(
+          UnauthorizedFailure(message: 'No refresh token available'),
+        );
+      }
 
-  //     final response = await _remoteDataSource.refreshToken(
-  //       accessToken: storedAccess!,
-  //     );
+      final response = await _remoteDataSource.refreshToken(
+        refreshToken: storedRefreshToken,
+      );
 
-  //     // // Save the new token.
-  //     // await _localDataSource.saveAccessToken(response.accessToken);
+      await _localDataSource.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
 
-  //     return Result.ok(response.toAuthTokens());
-  //   } catch (e) {
-  //     // Token expired → user must re-login.
-  //     // await _localDataSource.clearAll();
-  //     return Result.error(
-  //       UnauthorizedFailure(
-  //         message: 'Session expired. Please sign in again.',
-  //         debugMessage: e.toString(),
-  //       ),
-  //     );
-  //   }
-  // }
+      return Result.ok(response.user.toEntity());
+    } catch (e) {
+      // Refresh token is expired or invalid — force the user to re-login.
+      await _localDataSource.clear();
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
 
   //  Get Current User
 

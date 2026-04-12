@@ -1,3 +1,6 @@
+import 'package:mindtrip/core/connections/result.dart';
+import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
+
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 
 class RefreshTokenUseCase {
@@ -6,7 +9,7 @@ class RefreshTokenUseCase {
   const RefreshTokenUseCase({required AuthRepository repository})
     : _repository = repository;
 
-  //   Future<Result<AuthTokens>> call() {
-  //     return _repository.refreshToken();
-  //   }
+  Future<Result<UserEntity>> call() {
+    return _repository.refreshToken();
+  }
 }
