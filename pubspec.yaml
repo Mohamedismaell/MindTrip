@@ -64,8 +64,10 @@ flutter:
     - assets/images/onboarding/
     - assets/images/authentication/
     - assets/images/animation/
+    - assets/images/profile/
     - assets/icons/
     - assets/icons/home/
+    - assets/icons/profile/
   fonts:
     - family: SFPro
       fonts:

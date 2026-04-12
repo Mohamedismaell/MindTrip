@@ -70,3 +70,19 @@ class ExploreAssets {
   static const String sortIcon = '$_iconPath/sort.svg';
   static const String mapIcon = '$_iconPath/map.svg';
 }
+
+class ProfileAssets {
+  ProfileAssets._();
+
+  static const String _iconPath = 'assets/icons/profile';
+
+  static const String drawerIcon = '$_iconPath/drawer.svg';
+  static const String earthIcon = '$_iconPath/earth.svg';
+  static const String policesIcon = '$_iconPath/policies.svg';
+  static const String questionsrIcon = '$_iconPath/quesitons.svg';
+  static const String notificaitonOfftIcon =
+      '$_iconPath/ri_notification-off-line.svg';
+  static const String settingIcon = '$_iconPath/rounded_setting.svg';
+  static const String termsIcon = '$_iconPath/terms.svg';
+  static const String walletIcon = '$_iconPath/wallet.svg';
+}

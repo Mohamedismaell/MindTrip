@@ -13,20 +13,26 @@ class ProfileFlowScaffold extends StatelessWidget {
     required this.routeLocation,
     required this.child,
     this.title,
-    this.headdingIcon,
-    this.trailingIcon,
+    this.leading,
+    this.trailing,
+    this.showHeader = true,
     this.showBackButton = false,
+    this.horizontalPadding,
   });
 
   final String routeLocation;
   final Widget child;
   final String? title;
-  final Widget? headdingIcon;
-  final Widget? trailingIcon;
+  final Widget? leading;
+  final Widget? trailing;
+  final bool showHeader;
   final bool showBackButton;
+  final double? horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
+    final sidePadding = horizontalPadding ?? 20.w;
+
     return Scaffold(
       backgroundColor: context.colorTheme.surface,
       bottomNavigationBar: BottomNav(
@@ -38,78 +44,97 @@ class ProfileFlowScaffold extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 8.h),
-              child: Row(
-                children: [
-                  //! change to svg pic
-                  headdingIcon != null
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryLightGray,
-                            shape: BoxShape.circle,
-                          ),
-                          width: 50.w,
-                          height: 50.w,
-                          child: headdingIcon,
-                        )
-                      : const SizedBox(),
-                  //!edit the place of the head title
-                  SizedBox(
-                    width: 44.w,
-                    child: showBackButton
-                        ? IconButton(
-                            key: Key('$title-back-button'),
-                            onPressed: () {
-                              if (context.canPop()) {
-                                context.pop();
-                                return;
-                              }
-                              context.go(AppRoutes.profile);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back_ios_new_rounded,
-                              color: context.colorTheme.onSurface,
-                              size: 18.sp,
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                  Expanded(
-                    child: Text(
-                      title ?? '',
-                      textAlign: TextAlign.center,
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w700,
-                        color: context.colorTheme.onSurface,
-                      ),
-                    ),
-                  ),
+            if (showHeader)
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  sidePadding,
+                  14.h,
+                  sidePadding,
+                  8.h,
+                ),
+                child: SizedBox(
+                  height: 50.w,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      if (showBackButton || leading != null)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: _HeaderCircleButton(
+                            child: showBackButton
+                                ? IconButton(
+                                    key: Key('$title-back-button'),
+                                    onPressed: () {
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                        return;
+                                      }
 
-                  trailingIcon != null
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryLightGray,
-                            shape: BoxShape.circle,
+                                      context.go(AppRoutes.profile);
+                                    },
+                                    icon: Icon(
+                                      Icons.arrow_back_ios_new_rounded,
+                                      color: context.colorTheme.onSurface,
+                                      size: 18.sp,
+                                    ),
+                                  )
+                                : leading!,
                           ),
-                          width: 50.w,
-                          height: 50.w,
-                          child: trailingIcon,
-                        )
-                      : const SizedBox(),
-                ],
+                        ),
+                      if (title != null)
+                        Center(
+                          child: Text(
+                            title!,
+                            textAlign: TextAlign.center,
+                            style: context.textTheme.titleLarge?.copyWith(
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.w700,
+                              color: context.colorTheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      if (trailing != null)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: _HeaderCircleButton(child: trailing!),
+                        ),
+                    ],
+                  ),
+                ),
               ),
-            ),
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                padding: EdgeInsets.fromLTRB(
+                  sidePadding,
+                  10.h,
+                  sidePadding,
+                  24.h,
+                ),
                 child: child,
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _HeaderCircleButton extends StatelessWidget {
+  const _HeaderCircleButton({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 50.w,
+      height: 50.w,
+      decoration: const BoxDecoration(
+        color: AppColors.primaryLightGray,
+        shape: BoxShape.circle,
+      ),
+      child: child,
     );
   }
 }

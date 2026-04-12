@@ -24,6 +24,7 @@ import 'package:mindtrip/features/authetication/domain/repositories/auth_reposit
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
@@ -95,8 +96,8 @@ void main() {
 
       expect(find.byKey(const Key('profile-avatar')), findsOneWidget);
       expect(find.text(sampleUser.displayName), findsOneWidget);
-      expect(find.text(sampleUser.email), findsOneWidget);
-      expect(find.text('Preferred language: ${sampleUser.languagePreference}'), findsOneWidget);
+      expect(find.text(ProfileMockData.username), findsOneWidget);
+      expect(find.text(ProfileMockData.location), findsOneWidget);
     });
 
     testWidgets('edit profile screen renders initial user values', (

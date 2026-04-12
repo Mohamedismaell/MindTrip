@@ -135,7 +135,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             spacing: 8.w,
             runSpacing: 8.h,
             children: ProfileMockData.interests
-                .map((interest) => _InterestPill(label: interest))
+                .map((interest) => _InterestPill(label: interest.toString()))
                 .toList(),
           ),
           SizedBox(height: 26.h),

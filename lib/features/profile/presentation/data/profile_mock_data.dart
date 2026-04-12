@@ -1,93 +1,116 @@
 class ProfileStatData {
-  const ProfileStatData({
-    required this.label,
-    required this.value,
-  });
+  const ProfileStatData({required this.label, required this.value});
 
   final String label;
   final String value;
+}
+
+class ProfileInterestData {
+  const ProfileInterestData({required this.emoji, required this.label});
+
+  final String emoji;
+  final String label;
 }
 
 class ProfileTripData {
   const ProfileTripData({
     required this.title,
     required this.subtitle,
-    required this.badge,
+    required this.imageUrl,
+    this.isFavorite = true,
   });
 
   final String title;
   final String subtitle;
-  final String badge;
+  final String imageUrl;
+  final bool isFavorite;
 }
 
 class ProfileReviewData {
   const ProfileReviewData({
     required this.title,
-    required this.subtitle,
-    required this.dateLabel,
+    required this.location,
+    required this.body,
+    this.rating = 5,
   });
 
   final String title;
-  final String subtitle;
-  final String dateLabel;
+  final String location;
+  final String body;
+  final int rating;
 }
 
 class ProfileMockData {
   const ProfileMockData._();
 
-  static const String username = '@mindtrip.traveler';
+  static const String defaultAvatarUrl =
+      'https://www.figma.com/api/mcp/asset/888d807a-6f15-4aab-9464-faf83a5d4c94';
+  static const String username = '@laila_mohamed';
   static const String phoneNumber = '+20 109 555 0184';
+  static const String location = 'Cairo,Egypt';
+  static const String bio =
+      'Adventure seeker 🌊 | History Lover 🏛️ Always Planning the next trip across Egypt';
 
   static const List<ProfileStatData> stats = [
-    ProfileStatData(label: 'Trips', value: '12'),
-    ProfileStatData(label: 'Saved', value: '28'),
-    ProfileStatData(label: 'Reviews', value: '08'),
+    ProfileStatData(label: 'Trips', value: '5'),
+    ProfileStatData(label: 'Reviews', value: '3'),
+    ProfileStatData(label: 'Saved', value: '10'),
   ];
 
-  static const List<String> interests = [
-    'Adventure',
-    'Culture',
-    'Food',
-    'Nature',
-    'Weekend escapes',
+  static const List<ProfileInterestData> interests = [
+    ProfileInterestData(emoji: '🔥', label: 'Camping'),
+    ProfileInterestData(emoji: '🛶', label: 'Kayaking'),
+    ProfileInterestData(emoji: '🧺', label: 'Picnic'),
+    ProfileInterestData(emoji: '⛺', label: 'Adventure'),
+    ProfileInterestData(emoji: '🎭', label: 'Culture'),
   ];
 
   static const List<ProfileTripData> savedTrips = [
     ProfileTripData(
-      title: 'Santorini Sunset Escape',
-      subtitle: '4 days • Ocean views • Saved for summer',
-      badge: 'Saved',
+      title: 'Dahab',
+      subtitle: 'Saved destination',
+      imageUrl:
+          'https://www.figma.com/api/mcp/asset/942ac9bb-0a22-4c80-8aaf-e5e8535a1ee0',
     ),
     ProfileTripData(
-      title: 'Cairo Old Town Walk',
-      subtitle: '2 days • Local food • History stops',
-      badge: 'Popular',
+      title: 'El-Alamein',
+      subtitle: 'Saved destination',
+      imageUrl:
+          'https://www.figma.com/api/mcp/asset/6f6a5481-09ca-4c7a-8b4d-6ccf3c4c7d85',
     ),
   ];
 
   static const List<ProfileTripData> myTrips = [
     ProfileTripData(
-      title: 'Alexandria Weekend',
-      subtitle: 'Planned for next month',
-      badge: 'Upcoming',
+      title: 'The Caves',
+      subtitle: 'Dahab | Mar 2026',
+      imageUrl:
+          'https://www.figma.com/api/mcp/asset/4f6f22df-9ba2-4d55-b473-58c8248bcbf8',
     ),
     ProfileTripData(
-      title: 'Nile Cruise Notes',
-      subtitle: 'Private draft itinerary',
-      badge: 'Draft',
+      title: 'Lighthouse Reef',
+      subtitle: 'Dahab | Mar 2026',
+      imageUrl:
+          'https://www.figma.com/api/mcp/asset/e455c99a-0618-4fb1-bcf9-7c1680ee019a',
+      isFavorite: false,
     ),
   ];
 
   static const List<ProfileReviewData> reviews = [
     ProfileReviewData(
-      title: 'Blue Lagoon Stay',
-      subtitle: '“Beautiful spot, easy booking, and worth the early start.”',
-      dateLabel: '2 weeks ago',
+      title: 'The Blue Hole',
+      location: 'Dahab, Sinai',
+      body:
+          'Absolutely breathtaking! A hidden gem that every diver must '
+          'experience. The crystal clear water is beyond words.',
     ),
     ProfileReviewData(
-      title: 'Old Cairo Market Tour',
-      subtitle: '“Great guide and a very relaxed pace for first-timers.”',
-      dateLabel: '1 month ago',
+      title: 'Karnak Temple',
+      location: 'Luxor,Egypt',
+      body:
+          'Walking through these ancient pillars feels like stepping back in '
+          'time. A must-visit for history lovers! The scale is just '
+          'unbelievable.',
     ),
   ];
 
