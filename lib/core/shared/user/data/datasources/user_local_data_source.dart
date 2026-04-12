@@ -15,7 +15,7 @@
 //   }
 
 //   @override
-//   NewsResponseDto? getTopHeadlinesNews() {
+//   NewsResponseDto? getTopHeadlinesNews() {`
 //     return newsBox.get('top_headlines');
 //   }
 
