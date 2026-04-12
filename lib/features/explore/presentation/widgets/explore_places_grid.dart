@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/features/explore/presentation/models/explore_models.dart';
+import 'package:mindtrip/features/explore/presentation/widgets/explore_place_card.dart';
+
+class ExplorePlacesGrid extends StatelessWidget {
+  const ExplorePlacesGrid({super.key, required this.places});
+
+  final List<ExplorePlace> places;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverGrid.builder(
+      itemCount: places.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 16.h,
+        crossAxisSpacing: 14.w,
+        childAspectRatio: 0.72,
+      ),
+      itemBuilder: (context, index) {
+        return ExplorePlaceCard(place: places[index]);
+      },
+    );
+  }
+}

@@ -81,8 +81,10 @@ class _NavIcon extends StatelessWidget {
     final color = isActive
         ? context.colorTheme.primary
         : context.colorTheme.onSurfaceVariant;
+    final normalizedLabel = label.toLowerCase();
 
     return GestureDetector(
+      key: Key('bottom-nav-$normalizedLabel-${isActive ? 'active' : 'inactive'}'),
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(

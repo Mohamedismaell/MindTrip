@@ -58,3 +58,15 @@ class HomeAssets {
   static const String whiteHeartIcon = '$_iconPath/white_heart.svg';
   static const String aiStars = '$_iconPath/ai_stars.svg';
 }
+
+class ExploreAssets {
+  ExploreAssets._();
+
+  static const String _iconPath = 'assets/icons/explore';
+
+  // Placeholder paths — replace with actual SVGs when available
+  static const String micIcon = '$_iconPath/mic.svg';
+  static const String filterIcon = '$_iconPath/filter.svg';
+  static const String sortIcon = '$_iconPath/sort.svg';
+  static const String mapIcon = '$_iconPath/map.svg';
+}

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/bottom_nav.dart';
+import 'package:mindtrip/core/shared/presentation/widget/bottom_nav_route_helper.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_ai_planner_section.dart';
@@ -20,7 +22,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorTheme.surface,
-      bottomNavigationBar: BottomNav(currentIndex: 0, onTap: (_) {}),
+      bottomNavigationBar: BottomNav(
+        currentIndex: BottomNavRouteHelper.currentIndexForLocation(
+          AppRoutes.home,
+        ),
+        onTap: (index) => BottomNavRouteHelper.onTap(context, index),
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),

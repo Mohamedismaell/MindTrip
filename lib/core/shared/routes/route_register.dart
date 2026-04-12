@@ -24,6 +24,10 @@ class RouteRegister {
     ),
     // Main app flow
     AppRouteConfig(path: AppRoutes.home, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.explore, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.profile, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.editProfile, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.profileSettings, flow: AppFlow.app),
   ];
 
   static AppFlow? getFlow(String location) {

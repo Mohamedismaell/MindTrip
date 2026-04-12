@@ -17,4 +17,12 @@ class AppRoutes {
 
   //! home
   static const String home = '/home';
+
+  //! explore
+  static const String explore = '/explore';
+
+  //! profile
+  static const String profile = '/profile';
+  static const String editProfile = '/profile/edit';
+  static const String profileSettings = '/profile/settings';
 }

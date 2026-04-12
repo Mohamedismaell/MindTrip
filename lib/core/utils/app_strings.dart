@@ -78,4 +78,25 @@ class AppStrings {
   // Home Screen
   static const String homeScreen = 'Home Screen';
   static const String logout = 'logout';
+
+  // Explore Screen
+  static const String goodMorning = 'Good morning, ';
+  static const String whereExplore = 'Where do you\nwant to ';
+  static const String explore = 'explore?';
+  static const String searchPlaceholder = 'Destinations, trips, activities...';
+  static const String allCategories = 'All Categories';
+  static const String resultsFound = ' results found';
+  static const String trendingNow = 'Trending now';
+  static const String otherPlaces = 'Other Places';
+  static const String showMore = 'Show More';
+  static const String filter = 'Filter';
+  static const String sort = 'Sort';
+  static const String filters = 'Filters';
+  static const String resetAll = 'Reset All';
+  static const String showResults = 'Show Results';
+  static const String priceRange = 'Price Range';
+  static const String minimumRating = 'Minimum Rating';
+  static const String duration = 'Duration';
+  static const String tripType = 'Trip Type';
+  static const String location = 'Location';
 }
