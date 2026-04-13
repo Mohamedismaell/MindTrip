@@ -116,26 +116,12 @@ void main() {
         appGateCubit: harness.appGateCubit,
       );
 
-      final displayNameField = tester.widget<TextFormField>(
-        find
-            .descendant(
-              of: find.byKey(const Key('edit-profile-display-name-field')),
-              matching: find.byType(TextFormField),
-            )
-            .first,
-      );
-      final emailField = tester.widget<TextFormField>(
-        find
-            .descendant(
-              of: find.byKey(const Key('edit-profile-email-field')),
-              matching: find.byType(TextFormField),
-            )
-            .first,
-      );
-
-      expect(displayNameField.controller?.text, sampleUser.displayName);
-      expect(emailField.controller?.text, sampleUser.email);
-      expect(find.text('Arabic'), findsOneWidget);
+      expect(find.byKey(const Key('edit-profile-display-name-row')), findsOneWidget);
+      expect(find.byKey(const Key('edit-profile-email-row')), findsOneWidget);
+      expect(find.text(sampleUser.displayName), findsOneWidget);
+      expect(find.text(sampleUser.email), findsOneWidget);
+      expect(find.text(ProfileMockData.phoneNumber), findsOneWidget);
+      expect(find.text(ProfileMockData.username), findsWidgets);
     });
 
     testWidgets('settings dark mode switch updates ThemeCubit', (

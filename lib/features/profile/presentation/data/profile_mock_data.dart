@@ -46,7 +46,7 @@ class ProfileMockData {
   static const String defaultAvatarUrl =
       'https://www.figma.com/api/mcp/asset/888d807a-6f15-4aab-9464-faf83a5d4c94';
   static const String username = '@laila_mohamed';
-  static const String phoneNumber = '+20 109 555 0184';
+  static const String phoneNumber = '0122 547 8541';
   static const String location = 'Cairo,Egypt';
   static const String bio =
       'Adventure seeker 🌊 | History Lover 🏛️ Always Planning the next trip across Egypt';

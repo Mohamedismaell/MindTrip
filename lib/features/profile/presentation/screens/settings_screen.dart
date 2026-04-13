@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -10,10 +12,17 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
-  void _showPlaceholder(BuildContext context, String title) {
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _pauseNotifications = true;
+
+  void _showPlaceholder(String title) {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('$title is coming soon.')));
@@ -21,70 +30,189 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final language = context.watch<UserCubit>().state.user?.languagePreference;
+    final user = context.watch<UserCubit>().state.user;
+    final displayName = user?.displayName ?? 'Traveler';
+    final photoUrl = user?.profilePhotoUrl ?? ProfileMockData.defaultAvatarUrl;
+    final language = user?.languagePreference ?? 'English';
 
     return ProfileFlowScaffold(
       routeLocation: AppRoutes.profileSettings,
-      title: 'Settings',
-      showBackButton: true,
+      showHeader: false,
+      horizontalPadding: 16.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SettingsSection(
-            title: 'Appearance',
+          SizedBox(height: 6.h),
+          _SettingsTopBar(
+            onBackTap: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+                return;
+              }
+
+              context.go(AppRoutes.profile);
+            },
+          ),
+          SizedBox(height: 27.h),
+          _UserSummaryCard(
+            displayName: displayName,
+            photoUrl: photoUrl,
+            onTap: () => _showPlaceholder('Profile details'),
+          ),
+          SizedBox(height: 22.h),
+          _SettingsGroupCard(
             children: [
-              _SettingsSwitchTile(
+              _SettingsRow(
+                icon: Icons.notifications_off_outlined,
+                title: 'Pause notifications',
+                trailing: _FigmaSwitch(
+                  value: _pauseNotifications,
+                  onTap: () {
+                    setState(() {
+                      _pauseNotifications = !_pauseNotifications;
+                    });
+                  },
+                ),
+              ),
+              _SettingsDivider(),
+              _SettingsRow(
+                icon: Icons.tune_rounded,
+                title: 'General Settings',
+                trailing: const _ChevronArrow(),
+                onTap: () => _showPlaceholder('General Settings'),
+              ),
+              _SettingsDivider(),
+              _SettingsRow(
+                icon: Icons.account_balance_wallet_outlined,
+                title: 'Wallet',
+                trailing: const _ChevronArrow(),
+                onTap: () => _showPlaceholder('Wallet'),
+              ),
+            ],
+          ),
+          SizedBox(height: 20.h),
+          _SettingsGroupCard(
+            children: [
+              _SettingsRow(
+                icon: Icons.dark_mode_outlined,
                 title: 'Dark Mode',
-                value: context.isDark,
-                switchKey: const Key('settings-dark-mode-switch'),
-                onChanged: (_) => context.read<ThemeCubit>().toggleTheme(),
+                trailing: _FigmaSwitch(
+                  key: const Key('settings-dark-mode-switch'),
+                  value: context.isDark,
+                  isActiveBlue: false,
+                  onTap: () => context.read<ThemeCubit>().toggleTheme(),
+                ),
               ),
-            ],
-          ),
-          SizedBox(height: 18.h),
-          _SettingsSection(
-            title: 'Preferences',
-            children: [
-              _SettingsTile(
+              _SettingsDivider(),
+              _SettingsRow(
+                icon: Icons.language,
                 title: 'Language',
-                subtitle: language ?? 'English',
-                onTap: () => _showPlaceholder(context, 'Language'),
-              ),
-              ...ProfileMockData.settingsPlaceholders
-                  .where((item) => item != 'Language')
-                  .map(
-                    (item) => _SettingsTile(
-                      title: item,
-                      onTap: () => _showPlaceholder(context, item),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      language,
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        fontSize: 16.sp,
+                        color: context.colorTheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
+                    SizedBox(width: 9.w),
+                    const _ChevronArrow(),
+                  ],
+                ),
+                onTap: () => _showPlaceholder('Language'),
+              ),
             ],
           ),
-          SizedBox(height: 26.h),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              key: const Key('settings-logout-button'),
-              onPressed: () => context.read<AppGateCubit>().logout(),
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16.h),
-                side: BorderSide(color: context.colorTheme.error, width: 1.4),
-                foregroundColor: context.colorTheme.error,
+          SizedBox(height: 20.h),
+          _SettingsGroupCard(
+            children: [
+              _SettingsRow(
+                icon: Icons.help_outline_rounded,
+                title: 'FAQ',
+                trailing: const _ChevronArrow(),
+                onTap: () => _showPlaceholder('FAQ'),
               ),
-              child: const Text('Log Out'),
+              _SettingsDivider(),
+              _SettingsRow(
+                icon: Icons.info_outline_rounded,
+                title: 'Terms of service',
+                trailing: const _ChevronArrow(),
+                onTap: () => _showPlaceholder('Terms of service'),
+              ),
+              _SettingsDivider(),
+              _SettingsRow(
+                icon: Icons.policy_outlined,
+                title: 'User Policy',
+                trailing: const _ChevronArrow(),
+                onTap: () => _showPlaceholder('User Policy'),
+              ),
+            ],
+          ),
+          SizedBox(height: 32.h),
+          Center(
+            child: SizedBox(
+              width: 259.w,
+              height: 55.h,
+              child: OutlinedButton.icon(
+                key: const Key('settings-logout-button'),
+                onPressed: () => context.read<AppGateCubit>().logout(),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: context.colorTheme.error, width: 1),
+                  foregroundColor: context.colorTheme.error,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                ),
+                icon: Icon(Icons.logout_rounded, size: 24.sp),
+                label: Text(
+                  'Log Out',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: context.colorTheme.error,
+                  ),
+                ),
+              ),
             ),
           ),
-          SizedBox(height: 12.h),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () => _showPlaceholder(context, 'Delete account'),
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16.h),
-                side: BorderSide(color: context.colorTheme.error, width: 1.0),
-                foregroundColor: context.colorTheme.error.withOpacity(0.75),
+          SizedBox(height: 24.h),
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsTopBar extends StatelessWidget {
+  const _SettingsTopBar({required this.onBackTap});
+
+  final VoidCallback onBackTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 52.h,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+              onPressed: onBackTap,
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                size: 30.sp,
+                color: context.colorTheme.onSurfaceVariant,
               ),
-              child: const Text('Delete Account'),
+            ),
+          ),
+          Text(
+            'Settings',
+            style: context.textTheme.titleLarge?.copyWith(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w700,
+              color: context.colorTheme.onSurface,
             ),
           ),
         ],
@@ -93,112 +221,198 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-class _SettingsSection extends StatelessWidget {
-  const _SettingsSection({required this.title, required this.children});
+class _UserSummaryCard extends StatelessWidget {
+  const _UserSummaryCard({
+    required this.displayName,
+    required this.photoUrl,
+    required this.onTap,
+  });
 
-  final String title;
+  final String displayName;
+  final String photoUrl;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20.r),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 13.h),
+        decoration: BoxDecoration(
+          color: AppColors.primaryLightGray,
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Row(
+          children: [
+            ClipOval(
+              child: SizedBox(
+                width: 54.w,
+                height: 54.w,
+                child: AppCachedImage(imageUrl: photoUrl),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    displayName,
+                    style: context.textTheme.titleMedium?.copyWith(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: context.colorTheme.onSurface,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    ProfileMockData.username,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: context.colorTheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const _ChevronArrow(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsGroupCard extends StatelessWidget {
+  const _SettingsGroupCard({required this.children});
+
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(18.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 13.h),
       decoration: BoxDecoration(
         color: AppColors.primaryLightGray,
-        borderRadius: BorderRadius.circular(24.r),
+        borderRadius: BorderRadius.circular(20.r),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: context.textTheme.titleMedium?.copyWith(
-              fontSize: 17.sp,
-              fontWeight: FontWeight.w700,
-              color: context.colorTheme.onSurface,
-            ),
-          ),
-          SizedBox(height: 10.h),
-          ...children,
-        ],
-      ),
+      child: Column(children: children),
     );
   }
 }
 
-class _SettingsTile extends StatelessWidget {
-  const _SettingsTile({
+class _SettingsRow extends StatelessWidget {
+  const _SettingsRow({
+    required this.icon,
     required this.title,
-    required this.onTap,
-    this.subtitle,
+    required this.trailing,
+    this.onTap,
   });
 
+  final IconData icon;
   final String title;
-  final String? subtitle;
-  final VoidCallback onTap;
+  final Widget trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        title,
-        style: context.textTheme.bodyLarge?.copyWith(
-          fontSize: 15.sp,
-          fontWeight: FontWeight.w600,
-          color: context.colorTheme.onSurface,
-        ),
-      ),
-      subtitle: subtitle == null
-          ? null
-          : Text(
-              subtitle!,
-              style: context.textTheme.bodySmall?.copyWith(
-                fontSize: 12.sp,
-                color: context.colorTheme.onSurfaceVariant,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12.r),
+      child: SizedBox(
+        height: 41.h,
+        child: Row(
+          children: [
+            Icon(icon, size: 24.sp, color: context.colorTheme.onSurfaceVariant),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                title,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w700,
+                  color: context.colorTheme.onSurfaceVariant,
+                ),
               ),
             ),
-      trailing: Icon(
-        Icons.chevron_right_rounded,
-        color: context.colorTheme.onSurfaceVariant,
-        size: 22.sp,
+            trailing,
+          ],
+        ),
       ),
-      onTap: onTap,
     );
   }
 }
 
-class _SettingsSwitchTile extends StatelessWidget {
-  const _SettingsSwitchTile({
-    required this.title,
-    required this.value,
-    required this.onChanged,
-    required this.switchKey,
-  });
+class _SettingsDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 11.h),
+      height: 0.5,
+      color: AppColors.mediumLightGray.withOpacity(0.35),
+    );
+  }
+}
 
-  final String title;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-  final Key switchKey;
+class _ChevronArrow extends StatelessWidget {
+  const _ChevronArrow();
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        title,
-        style: context.textTheme.bodyLarge?.copyWith(
-          fontSize: 15.sp,
-          fontWeight: FontWeight.w600,
-          color: context.colorTheme.onSurface,
+    return Icon(
+      Icons.chevron_right_rounded,
+      size: 28.sp,
+      color: context.colorTheme.onSurfaceVariant,
+    );
+  }
+}
+
+class _FigmaSwitch extends StatelessWidget {
+  const _FigmaSwitch({
+    super.key,
+    required this.value,
+    required this.onTap,
+    this.isActiveBlue = true,
+  });
+
+  final bool value;
+  final VoidCallback onTap;
+  final bool isActiveBlue;
+
+  @override
+  Widget build(BuildContext context) {
+    final activeColor = isActiveBlue
+        ? context.colorTheme.primary
+        : AppColors.mediumLightGray;
+
+    return InkWell(
+      key: key,
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(70.r),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: 52.w,
+        height: 30.h,
+        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
+        decoration: BoxDecoration(
+          color: value ? activeColor : AppColors.mediumLightGray,
+          borderRadius: BorderRadius.circular(70.r),
         ),
-      ),
-      trailing: Switch.adaptive(
-        key: switchKey,
-        value: value,
-        activeColor: context.colorTheme.primary,
-        onChanged: onChanged,
+        child: Align(
+          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+          child: Container(
+            width: 24.w,
+            height: 24.w,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
       ),
     );
   }
