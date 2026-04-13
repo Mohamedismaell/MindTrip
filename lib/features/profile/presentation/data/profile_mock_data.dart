@@ -6,10 +6,9 @@ class ProfileStatData {
 }
 
 class ProfileInterestData {
-  const ProfileInterestData({required this.emoji, required this.label});
+  const ProfileInterestData({required this.category});
 
-  final String emoji;
-  final String label;
+  final String category;
 }
 
 class ProfileTripData {
@@ -57,13 +56,13 @@ class ProfileMockData {
     ProfileStatData(label: 'Saved', value: '10'),
   ];
 
-  static const List<ProfileInterestData> interests = [
-    ProfileInterestData(emoji: '🔥', label: 'Camping'),
-    ProfileInterestData(emoji: '🛶', label: 'Kayaking'),
-    ProfileInterestData(emoji: '🧺', label: 'Picnic'),
-    ProfileInterestData(emoji: '⛺', label: 'Adventure'),
-    ProfileInterestData(emoji: '🎭', label: 'Culture'),
-  ];
+  // static const List<ProfileInterestData> interests = [
+  //   ProfileInterestData(emoji: '🔥', label: 'Camping'),
+  //   ProfileInterestData(emoji: '🛶', label: 'Kayaking'),
+  //   ProfileInterestData(emoji: '🧺', label: 'Picnic'),
+  //   ProfileInterestData(emoji: '⛺', label: 'Adventure'),
+  //   ProfileInterestData(emoji: '🎭', label: 'Culture'),
+  // ];
 
   static const List<ProfileTripData> savedTrips = [
     ProfileTripData(

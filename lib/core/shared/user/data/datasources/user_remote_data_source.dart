@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
-import 'package:mindtrip/features/authetication/data/models/user_model.dart';
+import 'package:mindtrip/core/shared/user/data/models/user_model.dart';
 
 class UserRemoteDataSource {
   final ApiConsumer _api;
@@ -13,9 +13,6 @@ class UserRemoteDataSource {
   }
 
   Future<void> updateInterests(List<String> interests) async {
-    await _api.put(
-      EndPoints.insertInterests,
-      data: {'interests': interests},
-    );
+    await _api.put(EndPoints.insertInterests, data: {'interests': interests});
   }
 }

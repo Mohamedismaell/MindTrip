@@ -5,7 +5,6 @@ import 'onboarding_local_data_source.dart';
 class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
   final Box box;
   static const _key1 = 'isfirsttime';
-  static const _key2 = 'selectedcategories';
 
   OnboardingLocalDataSourceImpl({required this.box});
 

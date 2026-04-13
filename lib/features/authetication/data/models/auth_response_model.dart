@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/features/authetication/data/models/user_model.dart';
+import 'package:mindtrip/core/shared/user/data/models/user_model.dart';
 import 'package:mindtrip/features/authetication/domain/entities/auth_tokens.dart';
 
 class AuthResponseModel extends Equatable {

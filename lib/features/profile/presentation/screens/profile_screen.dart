@@ -28,7 +28,12 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  //Todo start from bio
+  //! there is no User Name
+  //! there is no locaiotn
+  //! there is no trips - reviews - saved
+  //! there is no saved Trips
+  //! there is no my Trips
+  //! there is no reviews
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
@@ -37,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
         final displayName = user?.displayName ?? 'Traveler';
         final photoUrl =
             user?.profilePhotoUrl ?? ProfileMockData.defaultAvatarUrl;
-
+        final interestes = user?.interests;
         return ProfileFlowScaffold(
           routeLocation: AppRoutes.profile,
           showHeader: false,
@@ -72,8 +77,8 @@ class ProfileScreen extends StatelessWidget {
               Wrap(
                 spacing: 12.w,
                 runSpacing: 18.h,
-                children: ProfileMockData.interests
-                    .map((interest) => InterestChip(data: interest))
+                children: interestes!
+                    .map((interest) => InterestChip(category: interest))
                     .toList(),
               ),
               SizedBox(height: 26.h),

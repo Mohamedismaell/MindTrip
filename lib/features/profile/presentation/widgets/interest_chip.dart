@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 
 class InterestChip extends StatelessWidget {
-  const InterestChip({super.key, required this.data});
+  const InterestChip({super.key, required this.category});
 
-  final ProfileInterestData data;
+  final String category;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class InterestChip extends StatelessWidget {
         border: Border.all(color: context.colorTheme.outline),
       ),
       child: Text(
-        '${data.emoji} ${data.label}',
+        '$category ',
         style: context.textTheme.bodyLarge?.copyWith(
           color: context.colorTheme.outline,
         ),
