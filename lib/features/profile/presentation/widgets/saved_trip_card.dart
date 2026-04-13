@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
@@ -23,19 +25,35 @@ class SavedTripCard extends StatelessWidget {
             AppCachedImage(imageUrl: data.imageUrl, fit: BoxFit.cover),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 36.h,
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-                color: Colors.black.withOpacity(0.3),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  data.title,
-                  style: context.textTheme.titleSmall?.copyWith(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(15.r),
+                ),
+                child: Stack(
+                  children: [
+                    BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                      child: Container(
+                        height: 36.h,
+                        width: double.infinity,
+                        color: Colors.transparent,
+                      ),
+                    ),
+
+                    Container(
+                      height: 36.h,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      alignment: Alignment.centerLeft,
+                      color: Colors.black.withOpacity(0.3),
+                      child: Text(
+                        data.title,
+                        style: context.textTheme.labelLarge?.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

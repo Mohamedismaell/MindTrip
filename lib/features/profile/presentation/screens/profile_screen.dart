@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit_profile_button.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/interest_chip.dart';
@@ -48,20 +50,25 @@ class ProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 18.h),
               ProfileIdentity(displayName: displayName, photoUrl: photoUrl),
-              SizedBox(height: 22.h),
+              SizedBox(height: 24.h),
               const EditProfileButton(),
-              SizedBox(height: 26.h),
+              SizedBox(height: 34.h),
               Center(child: StatsCard(stats: ProfileMockData.stats)),
               SizedBox(height: 28.h),
               SectionHeading(
                 title: 'My interests',
-                trailing: Icon(
-                  Icons.edit_square,
-                  size: 18.sp,
-                  color: context.colorTheme.onSurface,
+                trailing: SizedBox(
+                  width: 20.w,
+                  child: SvgPicture.asset(
+                    ProfileAssets.editIcon,
+                    colorFilter: ColorFilter.mode(
+                      context.colorTheme.onSurface,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 24.h),
               Wrap(
                 spacing: 12.w,
                 runSpacing: 18.h,
@@ -76,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
                 height: 101.h,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.none,
+                  // clipBehavior: Clip.none,
                   itemCount: ProfileMockData.savedTrips.length,
                   separatorBuilder: (_, _) => SizedBox(width: 28.w),
                   itemBuilder: (context, index) {
@@ -101,9 +108,9 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 28.h),
               const SectionHeading(title: 'My Reviews', actionText: 'See all'),
-              SizedBox(height: 20.h),
+              SizedBox(height: 24.h),
               ...ProfileMockData.reviews.map(
                 (review) => Padding(
                   padding: EdgeInsets.only(bottom: 18.h),

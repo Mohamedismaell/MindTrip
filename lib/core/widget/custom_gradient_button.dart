@@ -18,6 +18,7 @@ class CustomGradientButton extends StatelessWidget {
   final TextStyle? style;
   final double? width;
   final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(

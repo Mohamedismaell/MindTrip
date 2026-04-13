@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class SectionHeading extends StatelessWidget {
@@ -21,9 +21,7 @@ class SectionHeading extends StatelessWidget {
       children: [
         Text(
           title,
-          style: context.textTheme.titleMedium?.copyWith(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w700,
+          style: AppTextStyles.h8Bold.copyWith(
             color: context.colorTheme.onSurface,
           ),
         ),
@@ -32,10 +30,8 @@ class SectionHeading extends StatelessWidget {
         if (actionText != null)
           Text(
             actionText!,
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.mediumLightGray,
+            style: context.textTheme.labelLarge!.copyWith(
+              color: context.colorTheme.outline,
             ),
           ),
       ],

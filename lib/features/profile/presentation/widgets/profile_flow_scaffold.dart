@@ -104,12 +104,7 @@ class ProfileFlowScaffold extends StatelessWidget {
               ),
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                  sidePadding,
-                  10.h,
-                  sidePadding,
-                  24.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: child,
               ),
             ),

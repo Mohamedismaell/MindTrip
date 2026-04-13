@@ -85,4 +85,5 @@ class ProfileAssets {
   static const String settingIcon = '$_iconPath/rounded_setting.svg';
   static const String termsIcon = '$_iconPath/terms.svg';
   static const String walletIcon = '$_iconPath/wallet.svg';
+  static const String editIcon = '$_iconPath/boxicons_edit.svg';
 }

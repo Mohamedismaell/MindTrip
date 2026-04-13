@@ -92,7 +92,6 @@ class ProfileIdentity extends StatelessWidget {
             textAlign: TextAlign.center,
             style: context.textTheme.bodyMedium,
           ),
-          SizedBox(height: 8.h),
         ],
       ),
     );
