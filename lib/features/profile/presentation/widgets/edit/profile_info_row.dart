@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class ProfileInfoRow extends StatelessWidget {
@@ -15,21 +15,16 @@ class ProfileInfoRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w700,
+            style: AppTextStyles.h9Bold.copyWith(
               color: context.colorTheme.onSurface,
             ),
           ),
         ),
-        Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.right,
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontSize: 16.sp,
-              color: context.colorTheme.onSurfaceVariant,
-            ),
+        Text(
+          value,
+          textAlign: TextAlign.right,
+          style: context.textTheme.bodyMedium?.copyWith(
+            color: context.colorTheme.onSurfaceVariant,
           ),
         ),
       ],

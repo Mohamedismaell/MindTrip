@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/profile_info_row.dart';
 
 class InfoCard extends StatelessWidget {
@@ -27,7 +28,7 @@ class InfoCard extends StatelessWidget {
               if (index != rows.length - 1)
                 Container(
                   height: 0.5,
-                  color: AppColors.mediumLightGray.withValues(alpha: 0.35),
+                  color: context.colorTheme.outline.withValues(alpha: 0.35),
                 ),
             ],
           );

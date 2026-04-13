@@ -21,10 +21,7 @@ class EditAvatar extends StatelessWidget {
         Container(
           width: 120.w,
           height: 120.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: context.colorTheme.primary, width: 1.5),
-          ),
+          decoration: BoxDecoration(shape: BoxShape.circle),
           clipBehavior: Clip.antiAlias,
           child: AppCachedImage(imageUrl: imageUrl),
         ),

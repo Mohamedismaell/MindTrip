@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
+import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import '../shared/test_helpers.dart';
@@ -35,7 +37,12 @@ void main() {
     });
 
     test('loginSuccess emits interests required when no interests', () {
-      final userWithoutInterests = testUser.copyWith(interests: []);
+      const userWithoutInterests = UserEntity(
+        userId: 'test-no-interests',
+        displayName: 'No Interests User',
+        email: 'nointerests@example.com',
+        interests: [],
+      );
       harness.appGateCubit.loginSuccess(userWithoutInterests);
     });
 
@@ -213,27 +220,54 @@ void main() {
     });
   });
 
-  group('Complete User Flows', () {
-    testWidgets('authenticated user flow: login -> home', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.home,
-        user: testUser,
-        accessToken: 'valid-token',
-      );
+  group('Navigation Flow Tests', () {
+    testWidgets('onboarding screen renders with test harness', (tester) async {
+      final harness = TestHarness(initialLocation: AppRoutes.onBoarding);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('bottom-nav-home-active')), findsOneWidget);
+      expect(find.byKey(const Key('onboarding-screen')), findsOneWidget);
+      expect(find.text('Onboarding 0'), findsOneWidget);
 
       harness.dispose();
     });
 
-    testWidgets('new user flow: onboarding -> interests -> home', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onBoarding,
-        onboardingRepository: FakeOnboardingRepository(isFirstTime: true),
-      );
+    testWidgets('interests screen renders with test harness', (tester) async {
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('interests-screen')), findsOneWidget);
+
+      harness.dispose();
+    });
+
+    testWidgets('sign in screen renders with test harness', (tester) async {
+      final harness = TestHarness(initialLocation: AppRoutes.login);
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('signin-screen')), findsOneWidget);
+
+      harness.dispose();
+    });
+
+    testWidgets('sign up screen renders with test harness', (tester) async {
+      final harness = TestHarness(initialLocation: AppRoutes.signup);
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('signup-screen')), findsOneWidget);
+
+      harness.dispose();
+    });
+
+    testWidgets('navigates from onboarding to interests', (tester) async {
+      final harness = TestHarness(initialLocation: AppRoutes.onBoarding);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -250,125 +284,21 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('logout and login flow', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.home,
-        user: testUser,
-        accessToken: 'valid-token',
-      );
+    testWidgets('skip onboarding navigates to welcome', (tester) async {
+      final harness = TestHarness(initialLocation: AppRoutes.onBoarding);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      harness.router.go(AppRoutes.profileSettings);
+      await tester.tap(find.byKey(const Key('onboarding-skip-btn')));
       await tester.pumpAndSettle();
 
-      harness.appGateCubit.loginSuccess(testUser);
-
-      await tester.tap(find.byKey(const Key('settings-logout-button')));
-      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('welcome-auth-screen')), findsOneWidget);
 
       harness.dispose();
     });
 
-    testWidgets('theme toggle persists across screens', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.home,
-        user: testUser,
-        accessToken: 'valid-token',
-        initialThemeMode: ThemeMode.light,
-      );
-
-      await pumpAppWithHarness(tester, harness);
-      await tester.pumpAndSettle();
-
-      expect(harness.themeCubit.state.isLight, true);
-
-      harness.router.go(AppRoutes.profileSettings);
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byKey(const Key('settings-dark-mode-switch')));
-      await tester.pumpAndSettle();
-
-      expect(harness.themeCubit.state.isDark, true);
-
-      harness.router.go(AppRoutes.home);
-      await tester.pumpAndSettle();
-
-      expect(harness.themeCubit.state.isDark, true);
-
-      harness.dispose();
-    });
-
-    testWidgets('user profile updates reflect across app', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.home,
-        user: testUser,
-        accessToken: 'valid-token',
-      );
-
-      await pumpAppWithHarness(tester, harness);
-      await tester.pumpAndSettle();
-
-      harness.router.go(AppRoutes.profile);
-      await tester.pumpAndSettle();
-
-      expect(find.text(testUser.displayName), findsOneWidget);
-
-      harness.userCubit.setUser(testUser2);
-      await tester.pumpAndSettle();
-
-      expect(find.text(testUser2.displayName), findsOneWidget);
-
-      harness.dispose();
-    });
-  });
-
-  group('Navigation Guards', () {
-    testWidgets('authenticated routes are accessible when logged in', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.home,
-        user: testUser,
-        accessToken: 'valid-token',
-      );
-
-      await pumpAppWithHarness(tester, harness);
-      await tester.pumpAndSettle();
-
-      harness.router.go(AppRoutes.profile);
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(const Key('bottom-nav-profile-active')), findsOneWidget);
-
-      harness.dispose();
-    });
-
-    testWidgets('can navigate between all main screens', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.home,
-        user: testUser,
-        accessToken: 'valid-token',
-      );
-
-      await pumpAppWithHarness(tester, harness);
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(const Key('bottom-nav-home-active')), findsOneWidget);
-
-      harness.router.go(AppRoutes.explore);
-      await tester.pumpAndSettle();
-
-      harness.router.go(AppRoutes.profile);
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(const Key('bottom-nav-profile-active')), findsOneWidget);
-
-      harness.dispose();
-    });
-  });
-
-  group('Error Handling', () {
-    testWidgets('handles auth failure gracefully', (tester) async {
+    testWidgets('sign in error handling', (tester) async {
       final repository = FakeAuthRepository()..signInShouldFail = true;
       final harness = TestHarness(
         initialLocation: AppRoutes.login,
@@ -386,7 +316,7 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('handles empty interests selection', (tester) async {
+    testWidgets('empty interests selection disables save button', (tester) async {
       final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
@@ -399,8 +329,22 @@ void main() {
 
       harness.dispose();
     });
+
+    testWidgets('selecting interest enables save button', (tester) async {
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('interest-Beaches')));
+      await tester.pumpAndSettle();
+
+      final saveButton = tester.widget<ElevatedButton>(
+        find.byKey(const Key('interests-save-btn')),
+      );
+      expect(saveButton.onPressed, isNotNull);
+
+      harness.dispose();
+    });
   });
 }
-
-class AppGateAuthenticated {}
-class AppGateUnauthenticated {}

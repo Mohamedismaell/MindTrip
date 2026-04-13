@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mindtrip/core/connections/result.dart';
+import 'package:mindtrip/core/enums/auth_status.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
@@ -29,6 +32,7 @@ import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/verify_email_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/verify_password_otp_use_case.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
@@ -65,93 +69,58 @@ class TestHarness {
     AuthRepository? authRepository,
     UserRepository? userRepository,
     OnboardingRepository? onboardingRepository,
-  })  : themeCubit = ThemeCubit(),
-        userCubit = _buildUserCubit(user ?? testUser, userRepository),
-        onboardingCubit = OnboardingCubit(
-          completeOnboarding: CompleteOnboardingUseCase(
-            onboardingRepository ?? FakeOnboardingRepository(isFirstTime: isFirstTime),
-          ),
-        ),
-        authCubit = _buildAuthCubit(authRepository ?? FakeAuthRepository()),
-        appGateCubit = _buildAppGateCubit(
-          userCubit,
-          onboardingRepository ?? FakeOnboardingRepository(isFirstTime: isFirstTime),
-          authRepository ?? FakeAuthRepository(),
-          accessToken: accessToken,
-        ),
-        router = _buildRouter(
-          initialLocation,
-          themeCubit,
-          userCubit,
-          appGateCubit,
-          onboardingCubit,
-          authCubit,
-        );
-
-  final ThemeCubit themeCubit;
-  final UserCubit userCubit;
-  final OnboardingCubit onboardingCubit;
-  final AuthCubit authCubit;
-  final AppGateCubit appGateCubit;
-  final GoRouter router;
-
-  static UserCubit _buildUserCubit(UserEntity user, UserRepository? repository) {
-    final repo = repository ?? FakeUserRepository(user);
-    final cubit = UserCubit(
-      getCurrentUser: GetCurrentUser(repository: repo),
-      updateUserInterests: UpdateUserInterestsUseCase(repo),
-    );
-    cubit.setUser(user);
-    return cubit;
-  }
-
-  static AuthCubit _buildAuthCubit(AuthRepository repository) {
-    return AuthCubit(
-      signInUseCase: SignInUseCase(repository: repository),
-      signUpUseCase: SignUpUseCase(repository: repository),
-      googleAuthProvider: FakeGoogleAuthProvider(),
-      googleAuthUseCase: GoogleAuthUseCase(
-        repository: repository,
-        provider: FakeGoogleAuthProvider(),
-      ),
-      facebookAuthProvider: FakeFacebookAuthProvider(),
-      facebookAuthUseCase: FacebookAuthUseCase(
-        repository: repository,
-        provider: FakeFacebookAuthProvider(),
-      ),
-      forgetPasswordUseCase: ForgetPasswordUseCase(repository: repository),
-      verifyPasswordOtpUseCase: VerifyPsswordOtpUseCase(repository: repository),
-      resetPasswordUseCase: ResetePasswordUseCase(repository: repository),
-      verifyEmailUseCase: VerifyEmailUseCase(repository: repository),
-      resendEmailOtpUseCase: ResendEmailOtpUseCase(repository: repository),
-    );
-  }
-
-  static AppGateCubit _buildAppGateCubit(
-    UserCubit userCubit,
-    OnboardingRepository onboardingRepository,
-    AuthRepository authRepository, {
-    String? accessToken,
   }) {
+    final userEntity = user ?? testUser;
+    final userRepo = userRepository ?? FakeUserRepository(userEntity);
+    final authRepo = authRepository ?? FakeAuthRepository();
+    final onBoardingRepo = onboardingRepository ?? FakeOnboardingRepository(isFirstTime: isFirstTime);
+
+    themeCubit = ThemeCubit();
+    userCubit = UserCubit(
+      getCurrentUser: GetCurrentUser(repository: userRepo),
+      updateUserInterests: UpdateUserInterestsUseCase(userRepo),
+    );
+    userCubit.setUser(userEntity);
+
+    onboardingCubit = OnboardingCubit(
+      completeOnboarding: CompleteOnboardingUseCase(onBoardingRepo),
+    );
+
+    authCubit = AuthCubit(
+      signInUseCase: SignInUseCase(repository: authRepo),
+      signUpUseCase: SignUpUseCase(repository: authRepo),
+      googleAuthProvider: FakeGoogleAuthProvider(),
+      googleAuthUseCase: GoogleAuthUseCase(repository: authRepo),
+      facebookAuthProvider: FakeFacebookAuthProvider(),
+      facebookAuthUseCase: FacebookAuthUseCase(repository: authRepo),
+      forgetPasswordUseCase: ForgetPasswordUseCase(repository: authRepo),
+      verifyPasswordOtpUseCase: VerifyPsswordOtpUseCase(repository: authRepo),
+      resetPasswordUseCase: ResetePasswordUseCase(repository: authRepo),
+      verifyEmailUseCase: VerifyEmailUseCase(repository: authRepo),
+      resendEmailOtpUseCase: ResendEmailOtpUseCase(repository: authRepo),
+    );
+
     final storage = FakeSecureTokenStorage(accessToken: accessToken);
-    return AppGateCubit(
-      onboardingRepository: onboardingRepository,
-      logoutUseCase: LogoutUseCase(repository: authRepository),
+    appGateCubit = AppGateCubit(
+      onboardingRepository: onBoardingRepo,
+      logoutUseCase: LogoutUseCase(repository: authRepo),
       authLocal: AuthLocalDataSource(storage: storage),
       googleAuthProvider: FakeGoogleAuthProvider(),
       facebookAuthProvider: FakeFacebookAuthProvider(),
       userCubit: userCubit,
     );
+
+    router = _buildRouter(initialLocation);
   }
 
-  static GoRouter _buildRouter(
-    String initialLocation,
-    ThemeCubit themeCubit,
-    UserCubit userCubit,
-    AppGateCubit appGateCubit,
-    OnboardingCubit onboardingCubit,
-    AuthCubit authCubit,
-  ) {
+  late final ThemeCubit themeCubit;
+  late final UserCubit userCubit;
+  late final OnboardingCubit onboardingCubit;
+  late final AuthCubit authCubit;
+  late final AppGateCubit appGateCubit;
+  late final GoRouter router;
+
+  GoRouter _buildRouter(String initialLocation) {
     return GoRouter(
       initialLocation: initialLocation,
       routes: [
@@ -225,6 +194,7 @@ class TestHarness {
 
 class _TestOnboardingScreen extends StatelessWidget {
   const _TestOnboardingScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -262,6 +232,7 @@ class _TestOnboardingScreen extends StatelessWidget {
 
 class _TestInterestsScreen extends StatelessWidget {
   const _TestInterestsScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -297,6 +268,7 @@ class _TestInterestsScreen extends StatelessWidget {
 
 class _TestWelcomeAuthScreen extends StatelessWidget {
   const _TestWelcomeAuthScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -323,6 +295,7 @@ class _TestWelcomeAuthScreen extends StatelessWidget {
 
 class _TestSignInScreen extends StatelessWidget {
   const _TestSignInScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -398,6 +371,7 @@ class _TestSignInScreen extends StatelessWidget {
 
 class _TestSignUpScreen extends StatelessWidget {
   const _TestSignUpScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -462,6 +436,7 @@ class _TestSignUpScreen extends StatelessWidget {
 
 class _TestForgetPasswordScreen extends StatelessWidget {
   const _TestForgetPasswordScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -502,6 +477,7 @@ class _TestForgetPasswordScreen extends StatelessWidget {
 
 class _TestOtpScreen extends StatelessWidget {
   const _TestOtpScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -550,6 +526,7 @@ class _TestOtpScreen extends StatelessWidget {
 
 class _TestResetPasswordScreen extends StatelessWidget {
   const _TestResetPasswordScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -599,6 +576,7 @@ class _TestResetPasswordScreen extends StatelessWidget {
 
 class _TestCompleteSignUpScreen extends StatelessWidget {
   const _TestCompleteSignUpScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -620,6 +598,7 @@ class _TestCompleteSignUpScreen extends StatelessWidget {
 
 class _TestCompleteResetPasswordScreen extends StatelessWidget {
   const _TestCompleteResetPasswordScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -777,7 +756,7 @@ class FakeUserRepository implements UserRepository {
   Future<Result<UserEntity>> getCurrentUser() async => Result.ok(user);
 
   @override
-  Future<Result<void>> updateInterests(List<String> interests) async => const Result.ok(null);
+  Future<Result<void>> updateInterests(List<String> interests) async => Result.ok(null);
 }
 
 class FakeAuthRepository implements AuthRepository {
@@ -796,7 +775,7 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signInShouldFail) {
-      return Result.fail(_TestFailure('Invalid credentials'));
+      return Result.error(const UnknownFailure(message: 'Invalid credentials'));
     }
     mockUser ??= testUser;
     return Result.ok(mockUser!);
@@ -811,16 +790,16 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signUpShouldFail) {
-      return Result.fail(_TestFailure('Email already exists'));
+      return Result.error(const UnknownFailure(message: 'Email already exists'));
     }
-    return const Result.ok(null);
+    return Result.ok(null);
   }
 
   @override
   Future<Result<UserEntity>> googleAuth({required String token}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signInShouldFail) {
-      return Result.fail(_TestFailure('Google auth failed'));
+      return Result.error(const UnknownFailure(message: 'Google auth failed'));
     }
     return Result.ok(testUser);
   }
@@ -829,7 +808,7 @@ class FakeAuthRepository implements AuthRepository {
   Future<Result<UserEntity>> facebookAuth({required String token}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signInShouldFail) {
-      return Result.fail(_TestFailure('Facebook auth failed'));
+      return Result.error(const UnknownFailure(message: 'Facebook auth failed'));
     }
     return Result.ok(testUser);
   }
@@ -838,9 +817,9 @@ class FakeAuthRepository implements AuthRepository {
   Future<Result<void>> forgetPassword({required String email}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (forgetPasswordShouldFail) {
-      return Result.fail(_TestFailure('Email not found'));
+      return Result.error(const UnknownFailure(message: 'Email not found'));
     }
-    return const Result.ok(null);
+    return Result.ok(null);
   }
 
   @override
@@ -850,7 +829,7 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (verifyOtpShouldFail) {
-      return Result.fail(_TestFailure('Invalid OTP'));
+      return Result.error(const UnknownFailure(message: 'Invalid OTP'));
     }
     return Result.ok(VerifyPasswordOtpEntity(resetToken: 'fake-reset-token'));
   }
@@ -864,15 +843,15 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (resetPasswordShouldFail) {
-      return Result.fail(_TestFailure('Password reset failed'));
+      return Result.error(const UnknownFailure(message: 'Password reset failed'));
     }
-    return const Result.ok(null);
+    return Result.ok(null);
   }
 
   @override
   Future<Result<void>> resendPasswordOtp({required String email}) async {
     await Future.delayed(const Duration(milliseconds: 100));
-    return const Result.ok(null);
+    return Result.ok(null);
   }
 
   @override
@@ -882,21 +861,21 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (verifyOtpShouldFail) {
-      return Result.fail(_TestFailure('Invalid OTP'));
+      return Result.error(const UnknownFailure(message: 'Invalid OTP'));
     }
-    return const Result.ok(null);
+    return Result.ok(null);
   }
 
   @override
   Future<Result<void>> resendEmailOtp({required String email}) async {
     await Future.delayed(const Duration(milliseconds: 100));
-    return const Result.ok(null);
+    return Result.ok(null);
   }
 
   @override
   Future<Result<void>> logout() async {
     await Future.delayed(const Duration(milliseconds: 100));
-    return const Result.ok(null);
+    return Result.ok(null);
   }
 
   @override
@@ -904,20 +883,4 @@ class FakeAuthRepository implements AuthRepository {
     await Future.delayed(const Duration(milliseconds: 100));
     return Result.ok(testUser);
   }
-}
-
-class _TestFailure {
-  _TestFailure(this.message);
-  final String message;
-}
-
-extension FailureExtension on Result<dynamic> {
-  bool get isFailure {
-    return this is _Failure;
-  }
-}
-
-class _Failure {
-  _Failure(this.message);
-  final String message;
 }

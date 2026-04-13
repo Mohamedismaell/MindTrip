@@ -11,7 +11,7 @@ import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.da
 import 'package:mindtrip/features/profile/presentation/widgets/profile/edit_profile_button.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/interest_chip.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/my_trip_card.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_flow_scaffold.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_identity.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/review_card.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/saved_trip_card.dart';

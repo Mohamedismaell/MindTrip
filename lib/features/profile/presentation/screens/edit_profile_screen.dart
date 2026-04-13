@@ -5,12 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_avatar.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_top_bar.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/info_card.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/profile_info_row.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_flow_scaffold.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
@@ -38,8 +39,8 @@ class EditProfileScreen extends StatelessWidget {
           SizedBox(height: 16.h),
           EditTopBar(
             onBackTap: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
+              if (context.canPop()) {
+                context.pop();
                 return;
               }
 
@@ -86,27 +87,13 @@ class EditProfileScreen extends StatelessWidget {
             child: SizedBox(
               width: 281.w,
               height: 55.h,
-              child: OutlinedButton(
+              child: CustomOtlinedButton(
                 key: const Key('edit-profile-save-button'),
                 onPressed: () => _showLocalOnlyMessage(
                   context,
                   'Changes stay local only in this phase.',
                 ),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: context.colorTheme.primary, width: 1),
-                  foregroundColor: context.colorTheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.r),
-                  ),
-                ),
-                child: Text(
-                  'Save Changes',
-                  style: context.textTheme.titleMedium?.copyWith(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: context.colorTheme.primary,
-                  ),
-                ),
+                text: 'Save Changes',
               ),
             ),
           ),
@@ -124,18 +111,8 @@ class EditProfileScreen extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: context.colorTheme.error, width: 1),
                   foregroundColor: context.colorTheme.error,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.r),
-                  ),
                 ),
-                child: Text(
-                  'Delete Account',
-                  style: context.textTheme.titleMedium?.copyWith(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: context.colorTheme.error,
-                  ),
-                ),
+                child: Text('Delete Account'),
               ),
             ),
           ),

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
-import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
-import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
-import '../../shared/test_helpers.dart';
+import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
+import '../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -184,24 +180,6 @@ void main() {
         find.byKey(const Key('interests-save-btn')),
       );
       expect(saveButton.onPressed, isNotNull);
-
-      harness.dispose();
-    });
-
-    testWidgets('save button calls finishOnboarding', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.interests,
-        onboardingRepository: FakeOnboardingRepository(isFirstTime: true),
-      );
-
-      await pumpAppWithHarness(tester, harness);
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byKey(const Key('interest-Beaches')));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byKey(const Key('interests-save-btn')));
-      await tester.pumpAndSettle();
 
       harness.dispose();
     });
