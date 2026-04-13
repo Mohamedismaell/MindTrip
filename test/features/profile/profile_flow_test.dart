@@ -9,7 +9,6 @@ import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart'
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
@@ -25,6 +24,8 @@ import 'package:mindtrip/features/authetication/domain/repositories/auth_reposit
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
+import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/profile_screen.dart';
@@ -51,71 +52,58 @@ void main() {
   });
 
   group('router', () {
-    testWidgets('authenticated user can navigate to profile routes', (
-      tester,
-    ) async {
-      final themeCubit = ThemeCubit();
-      final userCubit = _buildUserCubit(sampleUser);
-      final appGateCubit = _buildAppGateCubit(userCubit)..loginSuccess(sampleUser);
-      final router = AppRouter(appGateCubit: appGateCubit).appRouter;
-
-      await _pumpRouterApp(
-        tester,
-        router: router,
-        userCubit: userCubit,
-        themeCubit: themeCubit,
-        appGateCubit: appGateCubit,
+    testWidgets('authenticated user can navigate to profile routes', (tester) async {
+      final harness = _ProfileTestHarness(
+        user: sampleUser,
+        initialLocation: AppRoutes.home,
       );
+      harness.appGateCubit.loginSuccess(sampleUser);
 
-      router.go(AppRoutes.profile);
+      await _pumpApp(tester, harness);
+      await tester.pumpAndSettle();
+
+      harness.router.go(AppRoutes.profile);
       await tester.pumpAndSettle();
       expect(find.byType(ProfileScreen), findsOneWidget);
 
-      router.go(AppRoutes.editProfile);
+      harness.router.go(AppRoutes.editProfile);
       await tester.pumpAndSettle();
       expect(find.byType(EditProfileScreen), findsOneWidget);
 
-      router.go(AppRoutes.profileSettings);
+      harness.router.go(AppRoutes.profileSettings);
       await tester.pumpAndSettle();
       expect(find.byType(SettingsScreen), findsOneWidget);
+
+      harness.dispose();
     });
   });
 
   group('profile widgets', () {
-    testWidgets('profile screen renders user data from UserCubit', (
-      tester,
-    ) async {
-      final harness = _buildHarness(sampleUser, initialLocation: AppRoutes.profile);
-
-      await _pumpRouterApp(
-        tester,
-        router: harness.router,
-        userCubit: harness.userCubit,
-        themeCubit: harness.themeCubit,
-        appGateCubit: harness.appGateCubit,
+    testWidgets('profile screen renders user data from UserCubit', (tester) async {
+      final harness = _ProfileTestHarness(
+        user: sampleUser,
+        initialLocation: AppRoutes.profile,
       );
+
+      await _pumpApp(tester, harness);
+      await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('profile-avatar')), findsOneWidget);
       expect(find.text(sampleUser.displayName), findsOneWidget);
       expect(find.text(ProfileMockData.username), findsOneWidget);
       expect(find.text(ProfileMockData.location), findsOneWidget);
+
+      harness.dispose();
     });
 
-    testWidgets('edit profile screen renders initial user values', (
-      tester,
-    ) async {
-      final harness = _buildHarness(
-        sampleUser,
+    testWidgets('edit profile screen renders initial user values', (tester) async {
+      final harness = _ProfileTestHarness(
+        user: sampleUser,
         initialLocation: AppRoutes.editProfile,
       );
 
-      await _pumpRouterApp(
-        tester,
-        router: harness.router,
-        userCubit: harness.userCubit,
-        themeCubit: harness.themeCubit,
-        appGateCubit: harness.appGateCubit,
-      );
+      await _pumpApp(tester, harness);
+      await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('edit-profile-display-name-row')), findsOneWidget);
       expect(find.byKey(const Key('edit-profile-email-row')), findsOneWidget);
@@ -123,23 +111,18 @@ void main() {
       expect(find.text(sampleUser.email), findsOneWidget);
       expect(find.text(ProfileMockData.phoneNumber), findsOneWidget);
       expect(find.text(ProfileMockData.username), findsWidgets);
+
+      harness.dispose();
     });
 
-    testWidgets('settings dark mode switch updates ThemeCubit', (
-      tester,
-    ) async {
-      final harness = _buildHarness(
-        sampleUser,
+    testWidgets('settings dark mode switch updates ThemeCubit', (tester) async {
+      final harness = _ProfileTestHarness(
+        user: sampleUser,
         initialLocation: AppRoutes.profileSettings,
       );
 
-      await _pumpRouterApp(
-        tester,
-        router: harness.router,
-        userCubit: harness.userCubit,
-        themeCubit: harness.themeCubit,
-        appGateCubit: harness.appGateCubit,
-      );
+      await _pumpApp(tester, harness);
+      await tester.pumpAndSettle();
 
       expect(harness.themeCubit.state.themeMode, ThemeMode.system);
 
@@ -147,152 +130,154 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(harness.themeCubit.state.themeMode, ThemeMode.dark);
+
+      harness.dispose();
     });
 
     testWidgets('settings logout button triggers logout flow', (tester) async {
-      final harness = _buildHarness(
-        sampleUser,
+      final harness = _ProfileTestHarness(
+        user: sampleUser,
         initialLocation: AppRoutes.profileSettings,
       );
       harness.appGateCubit.loginSuccess(sampleUser);
 
-      await _pumpRouterApp(
-        tester,
-        router: harness.router,
-        userCubit: harness.userCubit,
-        themeCubit: harness.themeCubit,
-        appGateCubit: harness.appGateCubit,
-      );
+      await _pumpApp(tester, harness);
+      await tester.pumpAndSettle();
 
       await tester.tap(find.byKey(const Key('settings-logout-button')));
       await tester.pumpAndSettle();
 
       expect(harness.appGateCubit.state, isA<AppGateUnauthenticated>());
+
+      harness.dispose();
     });
 
-    testWidgets('bottom nav highlights profile on all profile routes', (
-      tester,
-    ) async {
+    testWidgets('bottom nav highlights profile on all profile routes', (tester) async {
       for (final route in [
         AppRoutes.profile,
         AppRoutes.editProfile,
         AppRoutes.profileSettings,
       ]) {
-        final harness = _buildHarness(sampleUser, initialLocation: route);
-
-        await _pumpRouterApp(
-          tester,
-          router: harness.router,
-          userCubit: harness.userCubit,
-          themeCubit: harness.themeCubit,
-          appGateCubit: harness.appGateCubit,
+        final harness = _ProfileTestHarness(
+          user: sampleUser,
+          initialLocation: route,
         );
+
+        await _pumpApp(tester, harness);
+        await tester.pumpAndSettle();
 
         expect(
           find.byKey(const Key('bottom-nav-profile-active')),
           findsOneWidget,
         );
 
-        await tester.pumpWidget(const SizedBox.shrink());
+        harness.dispose();
       }
     });
   });
 }
 
-class _Harness {
-  const _Harness({
-    required this.router,
-    required this.userCubit,
-    required this.themeCubit,
-    required this.appGateCubit,
-  });
+class _ProfileTestHarness {
+  _ProfileTestHarness({
+    UserEntity? user,
+    String initialLocation = AppRoutes.home,
+  })  : user = user ?? sampleUser,
+        themeCubit = ThemeCubit(),
+        userCubit = _buildUserCubit(user ?? sampleUser),
+        onboardingCubit = OnboardingCubit(
+          completeOnboarding: CompleteOnboardingUseCase(
+            _FakeOnboardingRepository(),
+          ),
+        ),
+        appGateCubit = _buildAppGateCubit(_buildUserCubit(user ?? sampleUser)),
+        router = _buildRouter(initialLocation);
 
-  final GoRouter router;
-  final UserCubit userCubit;
+  final UserEntity user;
   final ThemeCubit themeCubit;
+  final UserCubit userCubit;
+  final OnboardingCubit onboardingCubit;
   final AppGateCubit appGateCubit;
-}
+  final GoRouter router;
 
-_Harness _buildHarness(UserEntity user, {required String initialLocation}) {
-  final themeCubit = ThemeCubit();
-  final userCubit = _buildUserCubit(user);
-  final appGateCubit = _buildAppGateCubit(userCubit);
+  static UserCubit _buildUserCubit(UserEntity user) {
+    final fakeRepo = _FakeUserRepository(user);
+    final cubit = UserCubit(
+      getCurrentUser: GetCurrentUser(repository: fakeRepo),
+      updateUserInterests: UpdateUserInterestsUseCase(fakeRepo),
+    );
+    cubit.setUser(user);
+    return cubit;
+  }
 
-  return _Harness(
-    router: GoRouter(
+  static AppGateCubit _buildAppGateCubit(UserCubit userCubit) {
+    return AppGateCubit(
+      onboardingRepository: _FakeOnboardingRepository(),
+      logoutUseCase: LogoutUseCase(repository: _FakeAuthRepository()),
+      authLocal: AuthLocalDataSource(storage: _FakeSecureTokenStorage()),
+      googleAuthProvider: _FakeGoogleAuthProvider(),
+      facebookAuthProvider: _FakeFacebookAuthProvider(),
+      userCubit: userCubit,
+    );
+  }
+
+  static GoRouter _buildRouter(String initialLocation) {
+    return GoRouter(
       initialLocation: initialLocation,
       routes: [
         ...HomeRoutes.routes,
         ...ProfileRoutes.routes,
       ],
-    ),
-    userCubit: userCubit,
-    themeCubit: themeCubit,
-    appGateCubit: appGateCubit,
-  );
+    );
+  }
+
+  void dispose() {
+    themeCubit.close();
+    userCubit.close();
+    onboardingCubit.close();
+    appGateCubit.close();
+  }
 }
 
-UserCubit _buildUserCubit(UserEntity user) {
-  final fakeRepo = _FakeUserRepository(user);
-  final cubit = UserCubit(
-    getCurrentUser: GetCurrentUser(repository: fakeRepo),
-    updateUserInterests: UpdateUserInterestsUseCase(fakeRepo),
-  );
-  cubit.setUser(user);
-  return cubit;
-}
-
-AppGateCubit _buildAppGateCubit(UserCubit userCubit) {
-  return AppGateCubit(
-    onboardingRepository: _FakeOnboardingRepository(),
-    logoutUseCase: LogoutUseCase(repository: _FakeAuthRepository()),
-    authLocal: AuthLocalDataSource(storage: _FakeSecureTokenStorage()),
-    googleAuthProvider: _FakeGoogleAuthProvider(),
-    facebookAuthProvider: _FakeFacebookAuthProvider(),
-    userCubit: userCubit,
-  );
-}
-
-Future<void> _pumpRouterApp(
-  WidgetTester tester, {
-  required GoRouter router,
-  required UserCubit userCubit,
-  required ThemeCubit themeCubit,
-  required AppGateCubit appGateCubit,
-}) async {
-  tester.view.physicalSize = const Size(393, 852);
-  tester.view.devicePixelRatio = 1.0;
-  addTearDown(tester.view.resetPhysicalSize);
-  addTearDown(tester.view.resetDevicePixelRatio);
-
+Future<void> _pumpApp(WidgetTester tester, _ProfileTestHarness harness) async {
   await tester.pumpWidget(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<UserCubit>.value(value: userCubit),
-        BlocProvider<ThemeCubit>.value(value: themeCubit),
-        BlocProvider<AppGateCubit>.value(value: appGateCubit),
-      ],
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        bloc: themeCubit,
-        builder: (context, state) {
-          return ScreenUtilInit(
-            designSize: const Size(393, 852),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            builder: (context, child) => MaterialApp.router(
-              theme: getLightTheme(),
-              darkTheme: getDarkTheme(),
-              themeMode: state.themeMode,
-              routerConfig: router,
-            ),
-          );
-        },
-      ),
+    ScreenUtilInit(
+      designSize: const Size(393, 852),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<ThemeCubit>.value(value: harness.themeCubit),
+            BlocProvider<UserCubit>.value(value: harness.userCubit),
+            BlocProvider<AppGateCubit>.value(value: harness.appGateCubit),
+            BlocProvider<OnboardingCubit>.value(value: harness.onboardingCubit),
+          ],
+          child: BlocBuilder<ThemeCubit, ThemeState>(
+            bloc: harness.themeCubit,
+            builder: (context, state) {
+              return MaterialApp.router(
+                theme: getLightTheme(),
+                darkTheme: getDarkTheme(),
+                themeMode: state.themeMode,
+                routerConfig: harness.router,
+              );
+            },
+          ),
+        );
+      },
     ),
   );
 
   await tester.pumpAndSettle();
 }
+
+const sampleUser = UserEntity(
+  userId: 'default-user',
+  displayName: 'Default User',
+  email: 'default@example.com',
+  profilePhotoUrl: 'https://example.com/default.png',
+  languagePreference: 'English',
+);
 
 class _MemoryStorage implements Storage {
   final Map<String, dynamic> _store = <String, dynamic>{};
@@ -375,35 +360,33 @@ class _FakeUserRepository implements UserRepository {
 class _FakeAuthRepository implements AuthRepository {
   @override
   Future<Result<UserEntity>> facebookAuth({required String token}) {
-    throw UnimplementedError();
+    return Result.ok(sampleUser);
   }
 
   @override
-  Future<Result<void>> forgetPassword({required String email}) {
-    throw UnimplementedError();
+  Future<Result<void>> forgetPassword({required String email}) async {
+    return const Result.ok(null);
   }
 
   @override
   Future<Result<UserEntity>> googleAuth({required String token}) {
-    throw UnimplementedError();
+    return Result.ok(sampleUser);
   }
 
   @override
   Future<Result<void>> logout() async => const Result<void>.ok(null);
 
   @override
-  Future<Result<UserEntity>> refreshToken() {
-    throw UnimplementedError();
+  Future<Result<UserEntity>> refreshToken() async => Result.ok(sampleUser);
+
+  @override
+  Future<Result<void>> resendEmailOtp({required String email}) async {
+    return const Result.ok(null);
   }
 
   @override
-  Future<Result<void>> resendEmailOtp({required String email}) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Result<void>> resendPasswordOtp({required String email}) {
-    throw UnimplementedError();
+  Future<Result<void>> resendPasswordOtp({required String email}) async {
+    return const Result.ok(null);
   }
 
   @override
@@ -412,8 +395,8 @@ class _FakeAuthRepository implements AuthRepository {
     required String resetToken,
     required String newPassword,
     required String confirmNewPassword,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    return const Result.ok(null);
   }
 
   @override
@@ -421,8 +404,8 @@ class _FakeAuthRepository implements AuthRepository {
     required String email,
     required String password,
     required bool rememberMe,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    return Result.ok(sampleUser);
   }
 
   @override
@@ -431,23 +414,23 @@ class _FakeAuthRepository implements AuthRepository {
     required String email,
     required String password,
     required bool rememberMe,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    return const Result.ok(null);
   }
 
   @override
   Future<Result<void>> verifyEmail({
     required String email,
     required String otp,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    return const Result.ok(null);
   }
 
   @override
   Future<Result<VerifyPasswordOtpEntity>> verifyPasswordOtp({
     required String email,
     required String otp,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    return Result.ok(VerifyPasswordOtpEntity(resetToken: 'test-token'));
   }
 }

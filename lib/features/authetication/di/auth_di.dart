@@ -7,7 +7,6 @@ import 'package:mindtrip/features/authetication/data/repositories/auth_repositor
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/forget_password_use_case.dart';
-import 'package:mindtrip/features/authetication/domain/usecases/get_current_user_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/refresh_token_use_case.dart';
@@ -40,9 +39,6 @@ class AuthDi {
     );
     sl.registerLazySingleton(
       () => RefreshTokenUseCase(repository: sl<AuthRepository>()),
-    );
-    sl.registerLazySingleton(
-      () => GetCurrentUserUseCase(repository: sl<AuthRepository>()),
     );
     sl.registerLazySingleton(
       () => GoogleAuthUseCase(repository: sl<AuthRepository>()),

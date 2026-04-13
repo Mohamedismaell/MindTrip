@@ -7,7 +7,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
-import 'package:mindtrip/test/shared/test_helpers.dart';
+import '../../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

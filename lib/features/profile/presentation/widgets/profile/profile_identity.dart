@@ -5,7 +5,7 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile_user_avatar.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_user_avatar.dart';
 
 class ProfileIdentity extends StatelessWidget {
   const ProfileIdentity({

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 import 'package:mindtrip/features/explore/presentation/screens/explore_screen.dart';
-import 'package:mindtrip/test/shared/test_helpers.dart';
+import '../../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

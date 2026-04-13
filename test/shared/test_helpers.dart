@@ -648,36 +648,25 @@ Future<void> pumpApp(
   OnboardingCubit? onboardingCubit,
   AuthCubit? authCubit,
 }) async {
-  tester.view.physicalSize = const Size(393, 852);
-  tester.view.devicePixelRatio = 1.0;
-  addTearDown(tester.view.resetPhysicalSize);
-  addTearDown(tester.view.resetDevicePixelRatio);
-
-  final providers = [
-    BlocProvider<ThemeCubit>.value(value: themeCubit),
-    BlocProvider<UserCubit>.value(value: userCubit),
-    BlocProvider<AppGateCubit>.value(value: appGateCubit),
-  ];
-
-  if (onboardingCubit != null) {
-    providers.add(BlocProvider<OnboardingCubit>.value(value: onboardingCubit));
-  }
-
-  if (authCubit != null) {
-    providers.add(BlocProvider<AuthCubit>.value(value: authCubit));
-  }
-
   await tester.pumpWidget(
-    MultiBlocProvider(
-      providers: providers,
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        bloc: themeCubit,
-        builder: (context, state) {
-          return ScreenUtilInit(
-            designSize: const Size(393, 852),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            builder: (context, child) {
+    ScreenUtilInit(
+      designSize: const Size(393, 852),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<ThemeCubit>.value(value: themeCubit),
+            BlocProvider<UserCubit>.value(value: userCubit),
+            BlocProvider<AppGateCubit>.value(value: appGateCubit),
+            if (onboardingCubit != null)
+              BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
+            if (authCubit != null)
+              BlocProvider<AuthCubit>.value(value: authCubit),
+          ],
+          child: BlocBuilder<ThemeCubit, ThemeState>(
+            bloc: themeCubit,
+            builder: (context, state) {
               return MaterialApp.router(
                 theme: getLightTheme(),
                 darkTheme: getDarkTheme(),
@@ -685,9 +674,9 @@ Future<void> pumpApp(
                 routerConfig: router,
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     ),
   );
 

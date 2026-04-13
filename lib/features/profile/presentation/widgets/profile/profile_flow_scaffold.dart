@@ -5,6 +5,7 @@ import 'package:mindtrip/core/shared/presentation/widget/bottom_nav.dart';
 import 'package:mindtrip/core/shared/presentation/widget/bottom_nav_route_helper.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class ProfileFlowScaffold extends StatelessWidget {
@@ -57,6 +58,7 @@ class ProfileFlowScaffold extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
+                      //! there is no showBackButton or leading used for now
                       if (showBackButton || leading != null)
                         Align(
                           alignment: Alignment.centerLeft,
@@ -65,7 +67,7 @@ class ProfileFlowScaffold extends StatelessWidget {
                                 ? IconButton(
                                     key: Key('$title-back-button'),
                                     onPressed: () {
-                                      if (Navigator.of(context).canPop()) {
+                                      if (context.canPop()) {
                                         context.pop();
                                         return;
                                       }
@@ -86,18 +88,16 @@ class ProfileFlowScaffold extends StatelessWidget {
                           child: Text(
                             title!,
                             textAlign: TextAlign.center,
-                            style: context.textTheme.titleLarge?.copyWith(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w700,
+                            style: AppTextStyles.h8Bold.copyWith(
                               color: context.colorTheme.onSurface,
                             ),
                           ),
                         ),
-                      if (trailing != null)
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: _HeaderCircleButton(child: trailing!),
-                        ),
+                      // if (trailing != null)
+                      //   Align(
+                      //     alignment: Alignment.centerRight,
+                      //     child: _HeaderCircleButton(child: trailing!),
+                      //   ),
                     ],
                   ),
                 ),

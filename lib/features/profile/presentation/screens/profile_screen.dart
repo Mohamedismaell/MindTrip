@@ -8,16 +8,16 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/edit_profile_button.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/interest_chip.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/my_trip_card.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile_identity.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/review_card.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/saved_trip_card.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/section_heading.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/stats_card.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/top_actions_row.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/edit_profile_button.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/interest_chip.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/my_trip_card.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_flow_scaffold.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_identity.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/review_card.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/saved_trip_card.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/section_heading.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/stats_card.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/top_actions_row.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

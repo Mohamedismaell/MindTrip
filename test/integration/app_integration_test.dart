@@ -5,7 +5,7 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
-import 'package:mindtrip/test/shared/test_helpers.dart';
+import '../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

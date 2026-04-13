@@ -14,7 +14,7 @@ import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/verify_email_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/verify_password_otp_use_case.dart';
-import 'package:mindtrip/test/shared/test_helpers.dart';
+import '../../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

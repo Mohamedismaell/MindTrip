@@ -5,7 +5,7 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/favorite_bubble.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/favorite_bubble.dart';
 
 class MyTripCard extends StatelessWidget {
   const MyTripCard({super.key, required this.data});

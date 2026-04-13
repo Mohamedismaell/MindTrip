@@ -11,7 +11,7 @@ import 'package:mindtrip/features/profile/presentation/screens/profile_screen.da
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
-import 'package:mindtrip/test/shared/test_helpers.dart';
+import '../../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
