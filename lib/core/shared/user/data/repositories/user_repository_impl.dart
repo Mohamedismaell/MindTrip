@@ -19,4 +19,14 @@ class UserRepositoryImpl extends UserRepository {
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
+
+  @override
+  Future<Result<void>> updateInterests(List<String> interests) async {
+    try {
+      await _remoteDataSource.updateInterests(interests);
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
 }

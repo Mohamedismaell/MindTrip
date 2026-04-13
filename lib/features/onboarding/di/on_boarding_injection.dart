@@ -5,7 +5,6 @@ import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data
 import 'package:mindtrip/features/onboarding/data/sources/onboarding_local_data_source.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
-import 'package:mindtrip/features/onboarding/domain/usecases/save_selected_categories.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 
 class OnboardingDi {
@@ -34,15 +33,11 @@ class OnboardingDi {
     sl.registerLazySingleton<CompleteOnboardingUseCase>(
       () => CompleteOnboardingUseCase(sl<OnboardingRepository>()),
     );
-    sl.registerLazySingleton<SaveSelectedCategories>(
-      () => SaveSelectedCategories(sl<OnboardingRepository>()),
-    );
 
     //! Cubit — registerFactory so it resets on each navigation
     sl.registerFactory<OnboardingCubit>(
       () => OnboardingCubit(
         completeOnboarding: sl<CompleteOnboardingUseCase>(),
-        saveSelectedCategories: sl<SaveSelectedCategories>(),
       ),
     );
   }

@@ -25,6 +25,14 @@ abstract class ApiConsumer {
     CancelToken? cancelToken,
   });
 
+  Future<dynamic> put(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFormData = false,
+    CancelToken? cancelToken,
+  });
+
   Future<dynamic> delete(
     String path, {
     Object? data,

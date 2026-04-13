@@ -6,6 +6,7 @@ class UserEntity extends Equatable {
   final String email;
   final String? profilePhotoUrl;
   final String? languagePreference;
+  final List<String>? interests;
 
   const UserEntity({
     required this.userId,
@@ -13,6 +14,7 @@ class UserEntity extends Equatable {
     required this.email,
     this.profilePhotoUrl,
     this.languagePreference,
+    this.interests,
   });
 
   @override
@@ -22,5 +24,6 @@ class UserEntity extends Equatable {
     email,
     profilePhotoUrl,
     languagePreference,
+    interests,
   ];
 }

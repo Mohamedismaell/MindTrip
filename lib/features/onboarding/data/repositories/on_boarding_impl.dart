@@ -15,9 +15,4 @@ class OnboardingRepositoryImpl implements OnboardingRepository {
   Future<void> setNotFirstTime() async {
     await local.saveIsFirstTime(false);
   }
-
-  @override
-  Future<void> saveSelectedCategories(List<String> categories) async {
-    await local.saveSelectedCategories(categories);
-  }
 }

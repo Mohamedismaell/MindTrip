@@ -77,6 +77,10 @@ class AppRouter {
       return routeFlow == AppFlow.app ? null : AppRoutes.home;
     }
 
+    if (gateState is AppGateInterestsRequired) {
+      return location == AppRoutes.interests ? null : AppRoutes.interests;
+    }
+
     return null;
   }
 }

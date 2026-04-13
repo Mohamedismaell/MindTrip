@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
@@ -43,24 +42,18 @@ class OnboardingContent extends StatelessWidget {
               children: [
                 CustomGradientButton(
                   text: isLastpage ? AppStrings.getStarted : AppStrings.next,
-                  onTap: () {
-                    // context.read<OnboardingCubit>().updateIndex(
-                    //   pageController.page!.toInt(),
-                    // );
-                    // print('pageController.page ${pageController.page!.toInt()}');
-                    // print('state.isLastPage ${state.isLastPage}');
-                    // state.isLastPage
-                    //     ? context.read<AppGateCubit>().start()
-                    //     : pageController.nextPage(
-                    //         duration: const Duration(milliseconds: 400),
-                    //         curve: Curves.easeIn,
-                    //       );
-                    isLastpage
-                        ? context.push(AppRoutes.interests)
-                        : pageController.nextPage(
+                  onTap: () async {
+                    if (isLastpage) {
+                       await context.read<OnboardingCubit>().finishOnboarding();
+                       if (context.mounted) {
+                          context.read<AppGateCubit>().start();
+                       }
+                    } else {
+                        pageController.nextPage(
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInSine,
                           );
+                    }
                   },
                 ),
                 SizedBox(height: 20.h),
@@ -70,8 +63,11 @@ class OnboardingContent extends StatelessWidget {
                   maintainAnimation: true,
                   maintainState: true,
                   child: TextButton(
-                    onPressed: () {
-                      context.push(AppRoutes.interests);
+                    onPressed: () async {
+                       await context.read<OnboardingCubit>().finishOnboarding();
+                       if (context.mounted) {
+                          context.read<AppGateCubit>().start();
+                       }
                     },
                     child: Text(
                       AppStrings.skip,

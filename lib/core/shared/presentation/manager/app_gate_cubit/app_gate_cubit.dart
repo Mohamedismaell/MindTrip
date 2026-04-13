@@ -41,7 +41,11 @@ class AppGateCubit extends Cubit<AppGateState> {
       await userCubit.loadUser();
 
       if (userCubit.state.status == UserStatus.loaded) {
-        emit(AppGateAuthenticated());
+        if (userCubit.state.user?.interests == null || userCubit.state.user!.interests!.isEmpty) {
+          emit(AppGateInterestsRequired());
+        } else {
+          emit(AppGateAuthenticated());
+        }
         print('token == > $token');
       } else {
         // Token is invalid / expired and refresh also failed.
@@ -56,6 +60,14 @@ class AppGateCubit extends Cubit<AppGateState> {
   /// Called after a successful login — sets the user and navigates to home.
   void loginSuccess(UserEntity user) {
     userCubit.setUser(user);
+    if (user.interests == null || user.interests!.isEmpty) {
+      emit(AppGateInterestsRequired());
+    } else {
+      emit(AppGateAuthenticated());
+    }
+  }
+
+  void interestsComplete() {
     emit(AppGateAuthenticated());
   }
 

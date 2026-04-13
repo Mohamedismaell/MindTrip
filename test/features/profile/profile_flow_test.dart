@@ -13,6 +13,7 @@ import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
+import 'package:mindtrip/core/shared/user/domain/usecases/update_user_interests_use_case.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
@@ -232,8 +233,10 @@ _Harness _buildHarness(UserEntity user, {required String initialLocation}) {
 }
 
 UserCubit _buildUserCubit(UserEntity user) {
+  final fakeRepo = _FakeUserRepository(user);
   final cubit = UserCubit(
-    getCurrentUser: GetCurrentUser(repository: _FakeUserRepository(user)),
+    getCurrentUser: GetCurrentUser(repository: fakeRepo),
+    updateUserInterests: UpdateUserInterestsUseCase(fakeRepo),
   );
   cubit.setUser(user);
   return cubit;
@@ -315,9 +318,6 @@ class _FakeOnboardingRepository implements OnboardingRepository {
   Future<bool> isFirstTime() async => false;
 
   @override
-  Future<void> saveSelectedCategories(List<String> categories) async {}
-
-  @override
   Future<void> setNotFirstTime() async {}
 }
 
@@ -367,6 +367,9 @@ class _FakeUserRepository implements UserRepository {
 
   @override
   Future<Result<UserEntity>> getCurrentUser() async => Result.ok(user);
+
+  @override
+  Future<Result<void>> updateInterests(List<String> interests) async => const Result.ok(null);
 }
 
 class _FakeAuthRepository implements AuthRepository {

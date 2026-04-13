@@ -11,4 +11,11 @@ class UserRemoteDataSource {
     final response = await _api.get(EndPoints.getCurrentUser);
     return UserModel.fromJson(response as Map<String, dynamic>);
   }
+
+  Future<void> updateInterests(List<String> interests) async {
+    await _api.put(
+      EndPoints.insertInterests,
+      data: {'interests': interests},
+    );
+  }
 }

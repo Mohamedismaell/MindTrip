@@ -14,3 +14,5 @@ final class AppGateOnboarding extends AppGateState {}
 final class AppGateUnauthenticated extends AppGateState {}
 
 final class AppGateAuthenticated extends AppGateState {}
+
+final class AppGateInterestsRequired extends AppGateState {}

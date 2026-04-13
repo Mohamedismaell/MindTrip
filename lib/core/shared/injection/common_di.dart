@@ -19,6 +19,7 @@ import 'package:mindtrip/core/shared/user/data/datasources/user_remote_data_sour
 import 'package:mindtrip/core/shared/user/data/repositories/user_repository_impl.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
+import 'package:mindtrip/core/shared/user/domain/usecases/update_user_interests_use_case.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
@@ -99,7 +100,13 @@ class CommonDi {
       () => GetCurrentUser(repository: sl<UserRepository>()),
     );
     sl.registerLazySingleton(
-      () => UserCubit(getCurrentUser: sl<GetCurrentUser>()),
+      () => UpdateUserInterestsUseCase(sl<UserRepository>()),
+    );
+    sl.registerLazySingleton(
+      () => UserCubit(
+        getCurrentUser: sl<GetCurrentUser>(),
+        updateUserInterests: sl<UpdateUserInterestsUseCase>(),
+      ),
     );
 
     //  Local Storage

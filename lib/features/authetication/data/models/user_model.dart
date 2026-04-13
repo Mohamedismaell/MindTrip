@@ -59,6 +59,7 @@ class UserModel extends Equatable {
       email: email,
       profilePhotoUrl: profilePhotoUrl,
       languagePreference: languagePreference,
+      interests: interests,
     );
   }
 
@@ -69,6 +70,7 @@ class UserModel extends Equatable {
       email: entity.email,
       profilePhotoUrl: entity.profilePhotoUrl,
       languagePreference: entity.languagePreference,
+      interests: entity.interests,
     );
   }
 

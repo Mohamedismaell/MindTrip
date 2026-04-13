@@ -18,9 +18,4 @@ class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
   Future<void> saveIsFirstTime(bool value) async {
     await box.put(_key1, value);
   }
-
-  @override
-  Future<void> saveSelectedCategories(List<String> categories) async {
-    await box.put(_key2, categories);
-  }
 }

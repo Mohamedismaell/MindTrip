@@ -7,6 +7,7 @@ import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_board
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/features/onboarding/presentation/widgets/interest_buttons.dart';
 import 'package:mindtrip/features/onboarding/presentation/widgets/interest_header.dart';
+import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 
 class InterestsScreen extends StatefulWidget {
   const InterestsScreen({super.key});
@@ -32,11 +33,26 @@ class _InterestsScreenState extends State<InterestsScreen> {
               Center(
                 child: CustomGradientButton(
                   text: AppStrings.save,
-                  onTap: () {
-                    context.read<OnboardingCubit>().storeSelectedCategories();
-                    context.read<OnboardingCubit>().finishOnboarding();
-                    context.read<AppGateCubit>().start();
-                    // context.push(AppRoutes.welcomeAuth);
+                  onTap: () async {
+                    final cubit = context.read<OnboardingCubit>();
+                    final categories = cubit.state.selectedCategories ?? [];
+                    if (categories.isEmpty) return; // Might want to show a snackbar here
+
+                    // We are using the Authenticated flow
+                    final userCubit = context.read<UserCubit>();
+                    final result = await userCubit.updateUserInterests(categories);
+
+                    result.when(
+                      success: (_) {
+                        // Let AppGate know we finished setting interests
+                        context.read<AppGateCubit>().interestsComplete();
+                      },
+                      failure: (failure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(failure.message)),
+                        );
+                      },
+                    );
                   },
                 ),
               ),
