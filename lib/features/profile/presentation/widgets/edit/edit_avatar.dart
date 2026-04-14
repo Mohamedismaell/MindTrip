@@ -3,24 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class EditAvatar extends StatelessWidget {
   const EditAvatar({
     super.key,
-    required this.imageUrl,
+    this.imageUrl,
     required this.onCameraTap,
-    this.localPhotoPath,
-    this.photoUploadStatus = PhotoUploadStatus.idle,
-    this.onRetryTap,
+    this.pendingPhotoPath,
   });
 
-  final String imageUrl;
+  final String? imageUrl;
   final VoidCallback onCameraTap;
-  final String? localPhotoPath;
-  final PhotoUploadStatus photoUploadStatus;
-  final VoidCallback? onRetryTap;
+
+  final String? pendingPhotoPath;
 
   @override
   Widget build(BuildContext context) {
@@ -35,61 +31,6 @@ class EditAvatar extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           child: _buildImage(),
         ),
-
-        //! review
-        // Upload progress overlay
-        if (photoUploadStatus == PhotoUploadStatus.uploading)
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black.withValues(alpha: 0.4),
-              ),
-              child: Center(
-                child: SizedBox(
-                  width: 32.w,
-                  height: 32.w,
-                  child: const CircularProgressIndicator(
-                    strokeWidth: 3,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-        // Retry overlay on failure
-        if (photoUploadStatus == PhotoUploadStatus.failed)
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: onRetryTap,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.black.withValues(alpha: 0.5),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.refresh_rounded,
-                      color: Colors.white,
-                      size: 28.sp,
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      'Retry',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
 
         // Camera button
         Positioned(
@@ -117,16 +58,17 @@ class EditAvatar extends StatelessWidget {
     );
   }
 
-  /// Shows local file preview during upload, otherwise loads from network.
   Widget _buildImage() {
-    if (localPhotoPath != null) {
+    if (pendingPhotoPath != null) {
       return Image.file(
-        File(localPhotoPath!),
+        File(pendingPhotoPath!),
         width: 120.w,
         height: 120.w,
         fit: BoxFit.cover,
       );
     }
-    return AppCachedImage(imageUrl: imageUrl);
+    return imageUrl != null
+        ? AppCachedImage(imageUrl: imageUrl!)
+        : Image.asset('assets/images/profile/deafult_user_cover.png');
   }
 }

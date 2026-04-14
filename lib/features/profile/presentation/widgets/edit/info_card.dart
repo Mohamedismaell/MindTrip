@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/edit/profile_info_row.dart';
 
 class InfoCard extends StatelessWidget {
   const InfoCard({super.key, required this.rows});
 
-  final List<ProfileInfoRow> rows;
+  final List<Widget> rows;
 
   @override
   Widget build(BuildContext context) {
@@ -37,3 +36,4 @@ class InfoCard extends StatelessWidget {
     );
   }
 }
+

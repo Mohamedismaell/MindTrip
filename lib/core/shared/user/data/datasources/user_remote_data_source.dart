@@ -37,4 +37,16 @@ class UserRemoteDataSource {
     final parsed = UploadPhotoResponse.fromJson(response);
     return parsed.url;
   }
+  /// Updates profile fields via PATCH.
+  /// Only non-null fields are sent to the server.
+  Future<void> updateProfile({
+    String? displayName,
+    String? phoneNumber,
+  }) async {
+    final data = <String, dynamic>{};
+    if (displayName != null) data['displayName'] = displayName;
+    if (phoneNumber != null) data['phoneNumber'] = phoneNumber;
+
+    await _api.patch(EndPoints.updateProfile, data: data);
+  }
 }

@@ -21,6 +21,7 @@ import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.da
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/update_user_interests_use_case.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart';
+import 'package:mindtrip/core/shared/user/domain/usecases/update_profile_use_case.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
@@ -29,6 +30,7 @@ import 'package:mindtrip/features/authetication/data/datasources/auth_local_data
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 
 CacheHelper get cacheHelper => sl<CacheHelper>();
 
@@ -113,6 +115,17 @@ class CommonDi {
         getCurrentUser: sl<GetCurrentUser>(),
         updateUserInterests: sl<UpdateUserInterestsUseCase>(),
         uploadProfilePhoto: sl<UploadProfilePhotoUseCase>(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => UpdateProfileUseCase(repository: sl<UserRepository>()),
+    );
+    // Factory — a fresh instance per EditProfileScreen entry.
+    sl.registerFactory(
+      () => EditProfileCubit(
+        uploadProfilePhoto: sl<UploadProfilePhotoUseCase>(),
+        updateProfile: sl<UpdateProfileUseCase>(),
+        userCubit: sl<UserCubit>(),
       ),
     );
 

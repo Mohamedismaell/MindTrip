@@ -32,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final user = context.watch<UserCubit>().state.user;
     final displayName = user?.displayName ?? 'Traveler';
-    final photoUrl = user?.profilePhotoUrl ?? ProfileMockData.defaultAvatarUrl;
+    final photoUrl = user?.profilePhotoUrl;
     final language = user?.languagePreference ?? 'English';
 
     return ProfileFlowScaffold(
@@ -224,12 +224,12 @@ class _SettingsTopBar extends StatelessWidget {
 class _UserSummaryCard extends StatelessWidget {
   const _UserSummaryCard({
     required this.displayName,
-    required this.photoUrl,
+    this.photoUrl,
     required this.onTap,
   });
 
   final String displayName;
-  final String photoUrl;
+  final String? photoUrl;
   final VoidCallback onTap;
 
   @override
@@ -250,7 +250,11 @@ class _UserSummaryCard extends StatelessWidget {
               child: SizedBox(
                 width: 54.w,
                 height: 54.w,
-                child: AppCachedImage(imageUrl: photoUrl),
+                child: photoUrl != null
+                    ? AppCachedImage(imageUrl: photoUrl!)
+                    : Image.asset(
+                        'assets/images/profile/deafult_user_cover.png',
+                      ),
               ),
             ),
             SizedBox(width: 12.w),

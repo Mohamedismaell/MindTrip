@@ -40,8 +40,7 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, state) {
         final user = state.user;
         final displayName = user?.displayName ?? 'Traveler';
-        final photoUrl =
-            user?.profilePhotoUrl ?? ProfileMockData.defaultAvatarUrl;
+        final photoUrl = user?.profilePhotoUrl;
         final interests = user?.interests;
         return ProfileFlowScaffold(
           routeLocation: AppRoutes.profile,

@@ -5,4 +5,8 @@ abstract class UserRepository {
   Future<Result<UserEntity>> getCurrentUser();
   Future<Result<void>> updateInterests(List<String> interests);
   Future<Result<String>> uploadProfilePhoto(String filePath);
+  Future<Result<void>> updateProfile({
+    String? displayName,
+    String? phoneNumber,
+  });
 }

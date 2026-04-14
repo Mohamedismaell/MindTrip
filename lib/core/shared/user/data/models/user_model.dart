@@ -6,6 +6,7 @@ class UserModel extends Equatable {
   final String userId;
   final String displayName;
   final String email;
+  final String? phoneNumber;
   final String? profilePhotoUrl;
   final String? languagePreference;
   final String? homeGovernorate;
@@ -14,6 +15,7 @@ class UserModel extends Equatable {
     required this.userId,
     required this.displayName,
     required this.email,
+    this.phoneNumber,
     this.profilePhotoUrl,
     this.languagePreference,
     this.homeGovernorate,
@@ -26,6 +28,7 @@ class UserModel extends Equatable {
       userId: json['userId'] as String,
       displayName: json['displayName'] as String,
       email: json['email'] as String,
+      phoneNumber: json['phoneNumber'] as String?,
       profilePhotoUrl: json['profilePhotoUrl'] as String?,
       languagePreference: json['languagePreference'] as String?,
       homeGovernorate: json['homeGovernorate'] as String?,
@@ -40,6 +43,7 @@ class UserModel extends Equatable {
       'userId': userId,
       'displayName': displayName,
       'email': email,
+      'phoneNumber': phoneNumber,
       'profilePhotoUrl': profilePhotoUrl,
       'languagePreference': languagePreference,
       'homeGovernorate': homeGovernorate,
@@ -57,6 +61,7 @@ class UserModel extends Equatable {
       userId: userId,
       displayName: displayName,
       email: email,
+      phoneNumber: phoneNumber,
       profilePhotoUrl: profilePhotoUrl,
       languagePreference: languagePreference,
       interests: interests,
@@ -68,6 +73,7 @@ class UserModel extends Equatable {
       userId: entity.userId,
       displayName: entity.displayName,
       email: entity.email,
+      phoneNumber: entity.phoneNumber,
       profilePhotoUrl: entity.profilePhotoUrl,
       languagePreference: entity.languagePreference,
       interests: entity.interests,
@@ -78,6 +84,7 @@ class UserModel extends Equatable {
     String? userId,
     String? displayName,
     String? email,
+    String? phoneNumber,
     String? profilePhotoUrl,
     String? languagePreference,
     String? homeGovernorate,
@@ -87,6 +94,7 @@ class UserModel extends Equatable {
       userId: userId ?? this.userId,
       displayName: displayName ?? this.displayName,
       email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
       profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
       languagePreference: languagePreference ?? this.languagePreference,
       homeGovernorate: homeGovernorate ?? this.homeGovernorate,
@@ -99,6 +107,7 @@ class UserModel extends Equatable {
     userId,
     displayName,
     email,
+    phoneNumber,
     profilePhotoUrl,
     languagePreference,
     homeGovernorate,

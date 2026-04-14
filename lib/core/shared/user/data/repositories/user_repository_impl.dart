@@ -39,4 +39,19 @@ class UserRepositoryImpl extends UserRepository {
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
+  @override
+  Future<Result<void>> updateProfile({
+    String? displayName,
+    String? phoneNumber,
+  }) async {
+    try {
+      await _remoteDataSource.updateProfile(
+        displayName: displayName,
+        phoneNumber: phoneNumber,
+      );
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
 }

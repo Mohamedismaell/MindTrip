@@ -53,18 +53,13 @@ class UserCubit extends Cubit<UserState> {
     return result;
   }
 
-  /// Uploads a profile photo in the background.
-  ///
-  /// 1. Immediately shows the local file as an optimistic preview.
-  /// 2. Uploads in the background (UI is not blocked).
-  /// 3. On success: swaps local preview → CDN URL.
-  /// 4. On failure: keeps local preview + sets failed status for retry.
   Future<void> uploadProfilePhoto(String filePath) async {
-    // Optimistic: show local image immediately
-    emit(state.copyWith(
-      photoUploadStatus: PhotoUploadStatus.uploading,
-      localPhotoPath: filePath,
-    ));
+    emit(
+      state.copyWith(
+        photoUploadStatus: PhotoUploadStatus.uploading,
+        localPhotoPath: filePath,
+      ),
+    );
 
     final result = await _uploadProfilePhoto(filePath);
 
@@ -72,36 +67,40 @@ class UserCubit extends Cubit<UserState> {
       success: (url) {
         if (state.user != null) {
           final updated = state.user!.copyWith(profilePhotoUrl: url);
-          emit(state.copyWith(
-            user: updated,
-            photoUploadStatus: PhotoUploadStatus.success,
-            clearLocalPath: true,
-          ));
+          emit(
+            state.copyWith(
+              user: updated,
+              photoUploadStatus: PhotoUploadStatus.success,
+              clearLocalPath: true,
+            ),
+          );
         }
       },
       failure: (f) {
-        emit(state.copyWith(
-          photoUploadStatus: PhotoUploadStatus.failed,
-          message: f.message,
-        ));
+        emit(
+          state.copyWith(
+            photoUploadStatus: PhotoUploadStatus.failed,
+            message: f.message,
+          ),
+        );
       },
     );
   }
 
-  /// Retries the last failed photo upload using the saved local file path.
-  Future<void> retryPhotoUpload() async {
-    final path = state.localPhotoPath;
-    if (path == null) return;
-    await uploadProfilePhoto(path);
-  }
+  // Future<void> retryPhotoUpload() async {
+  //   final path = state.localPhotoPath;
+  //   if (path == null) return;
+  //   await uploadProfilePhoto(path);
+  // }
 
-  /// Dismisses the photo upload error and resets to idle.
-  void dismissPhotoUploadError() {
-    emit(state.copyWith(
-      photoUploadStatus: PhotoUploadStatus.idle,
-      clearLocalPath: true,
-    ));
-  }
+  // void dismissPhotoUploadError() {
+  //   emit(
+  //     state.copyWith(
+  //       photoUploadStatus: PhotoUploadStatus.idle,
+  //       clearLocalPath: true,
+  //     ),
+  //   );
+  // }
 
   void clear() {
     emit(const UserState());

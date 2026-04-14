@@ -14,21 +14,6 @@ class ProfileUserAvatar extends StatelessWidget {
   final String? imageUrl;
   final double radius;
 
-  // String get _initials {
-  //   final parts = displayName
-  //       .trim()
-  //       .split(RegExp(r'\s+'))
-  //       .where((part) => part.isNotEmpty)
-  //       .take(2)
-  //       .toList();
-
-  //   if (parts.isEmpty) {
-  //     return 'MT';
-  //   }
-
-  //   return parts.map((part) => part[0].toUpperCase()).join();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final size = radius * 2;
