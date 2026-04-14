@@ -20,7 +20,7 @@ class SignInStatusListener extends StatelessWidget {
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
         if (state.status == AuthStatus.success) {
-          context.read<AppGateCubit>().loginSuccess(state.user!);
+          context.read<AppGateCubit>().loginSuccess();
         } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
             context,
@@ -45,10 +45,7 @@ class OtpRequestStatusListener extends StatelessWidget {
       listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
         if (state.status == AuthStatus.otpSent) {
-          context.pushReplacement(
-            AppRoutes.otpVerification,
-            extra: state.otpFlow,
-          );
+          context.push(AppRoutes.otpVerification, extra: state.otpFlow);
         } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
             context,

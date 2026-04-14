@@ -43,7 +43,7 @@ abstract class AuthRepository {
 
   Future<Result<void>> resendEmailOtp({required String email});
 
-  Future<Result<void>> logout();
+  Future<Result<void>> logout({required String refreshToken});
 
   Future<Result<UserEntity>> refreshToken();
 

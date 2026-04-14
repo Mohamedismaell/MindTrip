@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
@@ -8,7 +9,6 @@ import 'package:mindtrip/features/authetication/data/models/resete_password_mode
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/entities/verify_password_otp_entity.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
-
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -66,6 +66,16 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return const Result.ok(null);
     } catch (e) {
+      // Account exists but email is not verified — resend OTP
+      // so the user can complete verification.
+      if (_isEmailExistsButUnverified(e)) {
+        try {
+          await _remoteDataSource.resendEmailOtp(email: email);
+          return const Result.ok(null);
+        } catch (_) {
+          // Resend failed — fall through to original error.
+        }
+      }
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
@@ -88,22 +98,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
   //  Logout
-
-  @override
-  Future<Result<void>> logout() async {
-    try {
-      // Attempt server-side invalidation (best-effort).
-      // final accessToken = _localDataSource.getAccessToken();
-      // await _remoteDataSource.logout(accessToken: accessToken);
-
-      await _localDataSource.clear();
-
-      return const Result.ok(null);
-    } catch (e) {
-      await _localDataSource.clear();
-      return const Result.ok(null);
-    }
-  }
 
   @override
   Future<Result<UserEntity>> facebookAuth({required String token}) async {
@@ -184,7 +178,7 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  //  Verify Email (after sign up)
+  //  Verify Email
 
   @override
   Future<Result<void>> verifyEmail({
@@ -237,59 +231,49 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Result.ok(response.user.toEntity());
     } catch (e) {
-      // Refresh token is expired or invalid — force the user to re-login.
       await _localDataSource.clear();
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
 
-  //  Get Current User
+  @override
+  Future<Result<void>> logout({required String refreshToken}) async {
+    try {
+      await _remoteDataSource.logout(refreshToken: refreshToken);
 
-  // @override
-  // Future<Result<UserEntity>> getCurrentUser() async {
-  //   try {
-  //     // Quick guard: if no token exists, there is no session.
-  //     if (!_localDataSource.hasTokens()) {
-  //       return const Result.error(
-  //         UnauthorizedFailure(message: 'No active session'),
-  //       );
-  //     }
+      await _localDataSource.clear();
 
-  //     final accessToken = _localDataSource.getAccessToken()!;
+      return const Result.ok(null);
+    } catch (e) {
+      await _localDataSource.clear();
+      return const Result.ok(null);
+    }
+  }
 
-  //     final userModel = await _remoteDataSource.getCurrentUser(
-  //       accessToken: accessToken,
-  //     );
+  // registered but not yet verified
+  bool _isEmailExistsButUnverified(Object e) {
+    if (e is! DioException) return false;
+    final response = e.response;
+    if (response == null) return false;
 
-  //     // Update the locally cached user.
-  //     await _localDataSource.saveCachedUser(userModel.toJsonString());
+    final statusCode = response.statusCode ?? 0;
 
-  //     return Result.ok(userModel.toEntity());
-  //   } catch (e) {
-  //     // If the access token is expired, try refreshing it first.
-  //     final refreshResult = await refreshToken();
+    // 409 Conflict is the canonical "already exists" status.
+    if (statusCode == 409) return true;
 
-  //     return refreshResult.when(
-  //       success: (_) async {
-  //         // Retry getting the user with the new token.
-  //         try {
-  //           final newAccessToken = _localDataSource.getAccessToken()!;
-  //           final userModel = await _remoteDataSource.getCurrentUser(
-  //             accessToken: newAccessToken,
-  //           );
-  //           await _localDataSource.saveCachedUser(userModel.toJsonString());
-  //           return Result.ok(userModel.toEntity());
-  //         } catch (retryError) {
-  //           return Result.error(
-  //             ServerFailure(
-  //               'Failed to fetch user after token refresh',
-  //               debugMessage: retryError.toString(),
-  //             ),
-  //           );
-  //         }
-  //       },
-  //       failure: (failure) => Result.error(failure),
-  //     );
-  //   }
-  // }
+    // Some APIs return 400/401/422 with a message about verification or already exists.
+    if (statusCode == 400 || statusCode == 401 || statusCode == 422) {
+      final data = response.data;
+      if (data is Map<String, dynamic>) {
+        final msg = (data['detail'] ?? data['message'] ?? data['title'] ?? '')
+            .toString()
+            .toLowerCase();
+        return msg.contains('verify') ||
+            msg.contains('verified') ||
+            msg.contains('already exists');
+      }
+    }
+
+    return false;
+  }
 }

@@ -7,7 +7,7 @@ class LogoutUseCase {
   const LogoutUseCase({required AuthRepository repository})
     : _repository = repository;
 
-  Future<Result<void>> call() {
-    return _repository.logout();
+  Future<Result<void>> call({required String refreshToken}) {
+    return _repository.logout(refreshToken: refreshToken);
   }
 }

@@ -77,9 +77,12 @@ class ProfileScreen extends StatelessWidget {
               Wrap(
                 spacing: 12.w,
                 runSpacing: 18.h,
-                children: interestes!
-                    .map((interest) => InterestChip(category: interest))
-                    .toList(),
+
+                children: interestes != null
+                    ? interestes
+                          .map((interest) => InterestChip(category: interest))
+                          .toList()
+                    : [],
               ),
               SizedBox(height: 26.h),
               const SectionHeading(title: 'Saved Trips', actionText: 'See all'),

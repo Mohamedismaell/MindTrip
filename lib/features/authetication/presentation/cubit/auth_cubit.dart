@@ -328,20 +328,4 @@ class AuthCubit extends Cubit<AuthState> {
       },
     );
   }
-
-  // Future<void> checkAutoLogin() async {
-  //   emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
-
-  //   final result = await _GoogleAuthProvider();
-
-  //   result.when(
-  //     success: (user) {
-  //       emit(state.copyWith(status: AuthStatus.success, user: user));
-  //     },
-  //     failure: (_) {
-  //       // No valid session — remain on the login screen.
-  //       emit(state.copyWith(status: AuthStatus.initial));
-  //     },
-  //   );
-  // }
 }

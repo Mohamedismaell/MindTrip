@@ -4,7 +4,6 @@ import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart'
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
-import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 part 'app_gate_state.dart';
@@ -37,18 +36,17 @@ class AppGateCubit extends Cubit<AppGateState> {
     final token = await authLocal.getAccessToken();
 
     if (token != null && token.isNotEmpty) {
-      // Token exists — fetch user data from API to validate session.
       await userCubit.loadUser();
 
       if (userCubit.state.status == UserStatus.loaded) {
-        if (userCubit.state.user?.interests == null || userCubit.state.user!.interests!.isEmpty) {
+        if (userCubit.state.user?.interests == null ||
+            userCubit.state.user!.interests!.isEmpty) {
           emit(AppGateInterestsRequired());
         } else {
           emit(AppGateAuthenticated());
         }
         print('token == > $token');
       } else {
-        // Token is invalid / expired and refresh also failed.
         await authLocal.clear();
         emit(AppGateUnauthenticated());
       }
@@ -57,10 +55,16 @@ class AppGateCubit extends Cubit<AppGateState> {
     }
   }
 
-  /// Called after a successful login — sets the user and navigates to home.
-  void loginSuccess(UserEntity user) {
-    userCubit.setUser(user);
-    if (user.interests == null || user.interests!.isEmpty) {
+  Future<void> loginSuccess() async {
+    await userCubit.loadUser();
+
+    if (userCubit.state.status != UserStatus.loaded) {
+      emit(AppGateUnauthenticated());
+      return;
+    }
+
+    final user = userCubit.state.user;
+    if (user == null || user.interests == null || user.interests!.isEmpty) {
       emit(AppGateInterestsRequired());
     } else {
       emit(AppGateAuthenticated());
@@ -73,7 +77,8 @@ class AppGateCubit extends Cubit<AppGateState> {
 
   Future<void> logout() async {
     emit(AppGateLoading());
-    final result = await logoutUseCase();
+    final refreshToken = await authLocal.getRefreshToken();
+    final result = await logoutUseCase(refreshToken: refreshToken!);
     await googleAuthProvider.signOut();
     await facebookAuthProvider.signOut();
     userCubit.clear();

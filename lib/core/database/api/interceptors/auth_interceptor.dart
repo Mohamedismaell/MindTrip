@@ -7,7 +7,6 @@ class AuthInterceptor extends Interceptor {
   final SecureTokenStorage storage;
   final TokenManager Function() getTokenManager;
   final Dio dio;
-  /// Called when the refresh token has expired and the user must re-login.
   final Future<void> Function()? onLogout;
 
   AuthInterceptor({
@@ -38,8 +37,12 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    // Ignore the refresh endpoint itself to avoid infinite loops.
-    if (err.requestOptions.path.contains(EndPoints.refreshToken)) {
+    final path = err.requestOptions.path;
+    if (path.contains(EndPoints.refreshToken) ||
+        path.contains(EndPoints.login) ||
+        path.contains(EndPoints.register) ||
+        path.contains(EndPoints.googleLogin) ||
+        path.contains(EndPoints.facebookLogin)) {
       handler.next(err);
       return;
     }
@@ -52,7 +55,7 @@ class AuthInterceptor extends Interceptor {
     final newTokens = await tokenManager.refreshIfNeeded();
 
     if (newTokens == null) {
-      // Refresh failed — session is fully expired, force logout.
+      // failed — session is expired ==> logout.
       await onLogout?.call();
       handler.reject(err);
       return;

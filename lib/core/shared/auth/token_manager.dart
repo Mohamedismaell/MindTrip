@@ -38,7 +38,7 @@ class TokenManager {
     return newTokens;
   }
 
-  //! catch may got error ?
+  //! catch may get error ?
   Future<AuthResponseModel?> _refresh({required String refreshToken}) async {
     try {
       final newTokens = await authRemoteDataSource.refreshToken(
