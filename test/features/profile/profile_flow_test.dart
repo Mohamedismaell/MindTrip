@@ -14,6 +14,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/update_user_interests_use_case.dart';
+import 'package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
@@ -205,6 +206,7 @@ class _ProfileTestHarness {
     final cubit = UserCubit(
       getCurrentUser: GetCurrentUser(repository: fakeRepo),
       updateUserInterests: UpdateUserInterestsUseCase(fakeRepo),
+      uploadProfilePhoto: UploadProfilePhotoUseCase(repository: fakeRepo),
     );
     cubit.setUser(user);
     return cubit;
@@ -356,6 +358,10 @@ class _FakeUserRepository implements UserRepository {
 
   @override
   Future<Result<void>> updateInterests(List<String> interests) async => const Result.ok(null);
+
+  @override
+  Future<Result<String>> uploadProfilePhoto(String filePath) async =>
+      const Result.ok('https://cdn.example.com/uploaded_photo.jpg');
 }
 
 class _FakeAuthRepository implements AuthRepository {

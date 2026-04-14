@@ -19,7 +19,7 @@ class EndPoints {
   static String getCurrentUser = 'api/v1/users/me';
   static String updateProfile = 'api/v1/users/me';
   static String insertInterests = 'api/v1/users/me/interests';
-
+  static String uploadPhoto = 'api/v1/users/me/photo';
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }

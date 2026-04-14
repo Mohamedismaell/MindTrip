@@ -16,7 +16,6 @@ dependencies:
   meta: ^1.16.0
   get_it: ^9.0.5
   cupertino_icons: ^1.0.8
-  cached_network_image: ^3.4.1
   lottie: ^3.3.2
   go_router: ^17.0.0
   device_preview: ^1.3.1
@@ -24,8 +23,6 @@ dependencies:
   flutter_svg: ^2.2.3
   animations: ^2.1.1
   equatable: ^2.0.8
-  image_picker: ^1.2.1
-  image_cropper: ^11.0.0
   glaze_nav_bar: ^1.2.1
   shimmer: ^3.0.0
   connectivity_plus: ^7.0.0
@@ -36,8 +33,14 @@ dependencies:
   path_provider: ^2.1.5
   smooth_page_indicator: ^2.0.1
   flutter_secure_storage: ^9.2.4
+  #social auth
   google_sign_in: ^7.2.0
   flutter_facebook_auth: ^7.1.5
+  #image
+  cached_network_image: ^3.4.1
+  image_picker: ^1.2.1
+  image_cropper: ^11.0.0
+  flutter_image_compress: ^2.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -81,5 +84,3 @@ flutter:
           weight: 600
         - asset: assets/fonts/SFProText/SF-Pro-Display-Bold.otf
           weight: 700
-
-

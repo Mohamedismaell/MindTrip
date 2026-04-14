@@ -19,6 +19,8 @@
 
 </queries>
     <application
+    
+
         android:label="mindtrip"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -74,6 +76,12 @@
 
         </activity>
 
+        <!-- UCrop activity -->
+        <activity
+        android:name="com.yalantis.ucrop.UCropActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

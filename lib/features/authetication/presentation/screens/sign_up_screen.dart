@@ -9,13 +9,6 @@ import 'package:mindtrip/features/authetication/presentation/widgets/auth_status
 import 'package:mindtrip/features/authetication/presentation/widgets/sign_up_form.dart';
 import 'package:mindtrip/features/authetication/presentation/widgets/authoptions_content.dart';
 
-/// ──────────────────────────────────────────────────────────────────────────────
-/// [PRESENTATION LAYER] — Screen
-///
-/// [SignUpScreen] is the registration page. Like [SignInScreen], it wraps
-/// everything in an [AuthStatusListener] for declarative side-effect handling.
-/// Navigation on success is handled by [AppGateCubit] + GoRouter redirect.
-/// ──────────────────────────────────────────────────────────────────────────────
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
@@ -31,8 +24,9 @@ class SignUpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomHeadLine(
-                    firstTitle: AppStrings.signTitle,
-                    secondTitle: AppStrings.upTitle),
+                  firstTitle: AppStrings.signTitle,
+                  secondTitle: AppStrings.upTitle,
+                ),
                 SizedBox(height: 40.h),
                 const SignUpForm(),
                 SizedBox(height: 24.h),

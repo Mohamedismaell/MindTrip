@@ -50,7 +50,7 @@ class OtpRequestStatusListener extends StatelessWidget {
           _showSnackBar(
             context,
             message: state.errorMessage ?? 'Something went wrong',
-            backgroundColor: Theme.of(context).colorScheme.error,
+            backgroundColor: context.colorTheme.error,
           );
         }
       },

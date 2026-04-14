@@ -29,4 +29,14 @@ class UserRepositoryImpl extends UserRepository {
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
+
+  @override
+  Future<Result<String>> uploadProfilePhoto(String filePath) async {
+    try {
+      final url = await _remoteDataSource.uploadProfilePhoto(filePath);
+      return Result.ok(url);
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
 }

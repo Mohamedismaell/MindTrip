@@ -20,7 +20,9 @@ import 'package:mindtrip/core/shared/user/data/repositories/user_repository_impl
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/update_user_interests_use_case.dart';
+import 'package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
@@ -103,9 +105,14 @@ class CommonDi {
       () => UpdateUserInterestsUseCase(sl<UserRepository>()),
     );
     sl.registerLazySingleton(
+      () => UploadProfilePhotoUseCase(repository: sl<UserRepository>()),
+    );
+    sl.registerLazySingleton(() => ImagePickCropService());
+    sl.registerLazySingleton(
       () => UserCubit(
         getCurrentUser: sl<GetCurrentUser>(),
         updateUserInterests: sl<UpdateUserInterestsUseCase>(),
+        uploadProfilePhoto: sl<UploadProfilePhotoUseCase>(),
       ),
     );
 

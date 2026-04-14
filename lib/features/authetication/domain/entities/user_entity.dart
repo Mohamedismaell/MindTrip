@@ -26,4 +26,23 @@ class UserEntity extends Equatable {
     languagePreference,
     interests,
   ];
+
+  UserEntity copyWith({
+    String? userId,
+    String? displayName,
+    String? email,
+    String? profilePhotoUrl,
+    String? languagePreference,
+    List<String>? interests,
+  }) {
+    return UserEntity(
+      userId: userId ?? this.userId,
+      displayName: displayName ?? this.displayName,
+      email: email ?? this.email,
+      profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
+      languagePreference: languagePreference ?? this.languagePreference,
+      interests: interests ?? this.interests,
+    );
+  }
 }
+

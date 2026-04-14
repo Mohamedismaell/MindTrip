@@ -42,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
         final displayName = user?.displayName ?? 'Traveler';
         final photoUrl =
             user?.profilePhotoUrl ?? ProfileMockData.defaultAvatarUrl;
-        final interestes = user?.interests;
+        final interests = user?.interests;
         return ProfileFlowScaffold(
           routeLocation: AppRoutes.profile,
           showHeader: false,
@@ -74,16 +74,15 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 24.h),
-              Wrap(
-                spacing: 12.w,
-                runSpacing: 18.h,
-
-                children: interestes != null
-                    ? interestes
-                          .map((interest) => InterestChip(category: interest))
-                          .toList()
-                    : [],
-              ),
+              if (interests != null && interests.isNotEmpty) ...[
+                Wrap(
+                  spacing: 12.w,
+                  runSpacing: 18.h,
+                  children: interests
+                      .map((interest) => InterestChip(category: interest))
+                      .toList(),
+                ),
+              ],
               SizedBox(height: 26.h),
               const SectionHeading(title: 'Saved Trips', actionText: 'See all'),
               SizedBox(height: 16.h),
