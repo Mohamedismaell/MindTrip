@@ -18,9 +18,8 @@ class UserRemoteDataSource {
     await _api.put(EndPoints.insertInterests, data: {'interests': interests});
   }
 
-  /// Uploads a profile photo as multipart form-data.
-  /// Returns the CDN URL from the backend response.
   Future<String> uploadProfilePhoto(String filePath) async {
+    print(' profile photo ******* ===>${filePath}}');
     final formDataMap = {
       'file': await MultipartFile.fromFile(
         filePath,
@@ -37,12 +36,8 @@ class UserRemoteDataSource {
     final parsed = UploadPhotoResponse.fromJson(response);
     return parsed.url;
   }
-  /// Updates profile fields via PATCH.
-  /// Only non-null fields are sent to the server.
-  Future<void> updateProfile({
-    String? displayName,
-    String? phoneNumber,
-  }) async {
+
+  Future<void> updateProfile({String? displayName, String? phoneNumber}) async {
     final data = <String, dynamic>{};
     if (displayName != null) data['displayName'] = displayName;
     if (phoneNumber != null) data['phoneNumber'] = phoneNumber;

@@ -40,7 +40,7 @@ class DioConsumer extends ApiConsumer {
   }) async {
     final response = await dio.delete(
       path,
-      data: isFormData ? FormData.fromMap(data) : data,
+      data: _handleData(data, isFormData),
       queryParameters: queryParameters,
     );
     return response.data;
@@ -52,12 +52,14 @@ class DioConsumer extends ApiConsumer {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool isFormData = false,
+    Options? options,
     CancelToken? cancelToken,
   }) async {
     final response = await dio.get(
       path,
-      data: isFormData ? FormData.fromMap(data) : data,
+      data: _handleData(data, isFormData),
       queryParameters: queryParameters,
+      options: options,
       cancelToken: cancelToken,
     );
 
@@ -70,12 +72,15 @@ class DioConsumer extends ApiConsumer {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool isFormData = false,
+    Options? options,
     CancelToken? cancelToken,
   }) async {
     final response = await dio.patch(
       path,
-      data: isFormData ? FormData.fromMap(data) : data,
+      data: _handleData(data, isFormData),
       queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
     );
     return response.data;
   }
@@ -86,12 +91,15 @@ class DioConsumer extends ApiConsumer {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool isFormData = false,
+    Options? options,
     CancelToken? cancelToken,
   }) async {
     final response = await dio.post(
       path,
-      data: isFormData ? FormData.fromMap(data) : data,
+      data: _handleData(data, isFormData),
       queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
     );
     return response.data;
   }
@@ -102,13 +110,23 @@ class DioConsumer extends ApiConsumer {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool isFormData = false,
+    Options? options,
     CancelToken? cancelToken,
   }) async {
     final response = await dio.put(
       path,
-      data: isFormData ? FormData.fromMap(data) : data,
+      data: _handleData(data, isFormData),
       queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
     );
     return response.data;
   }
+}
+
+dynamic _handleData(dynamic data, bool isFormData) {
+  if (data == null) return null;
+  if (data is FormData) return data;
+  if (isFormData) return FormData.fromMap(data);
+  return data;
 }
