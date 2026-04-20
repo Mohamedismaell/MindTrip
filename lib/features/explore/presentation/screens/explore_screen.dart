@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/bottom_nav.dart';
 import 'package:mindtrip/core/shared/presentation/widget/bottom_nav_route_helper.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_category_chips.dart';
@@ -13,7 +12,6 @@ import 'package:mindtrip/features/explore/presentation/widgets/explore_places_gr
 import 'package:mindtrip/features/explore/presentation/widgets/explore_results_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_search_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_section_header.dart';
-import 'package:mindtrip/features/explore/presentation/widgets/explore_show_more_button.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_tab_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_trending_list.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/float_map_button.dart';
