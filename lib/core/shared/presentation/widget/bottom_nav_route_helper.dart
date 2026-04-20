@@ -6,18 +6,18 @@ class BottomNavRouteHelper {
   const BottomNavRouteHelper._();
 
   static const int homeIndex = 0;
-  static const int explore = 2;
-  static const int profileIndex = 4;
+  static const int explore = 1;
+  static const int profileIndex = 2;
 
-  static int currentIndexForLocation(String location) {
-    if (location.startsWith(AppRoutes.profile)) {
-      return profileIndex;
-    }
-    if (location.startsWith(AppRoutes.explore)) {
-      return explore;
-    }
-    return homeIndex;
-  }
+  // static int currentIndexForLocation(String location) {
+  //   if (location.startsWith(AppRoutes.profile)) {
+  //     return profileIndex;
+  //   }
+  //   if (location.startsWith(AppRoutes.explore)) {
+  //     return explore;
+  //   }
+  //   return homeIndex;
+  // }
 
   static void onTap(BuildContext context, int index) {
     switch (index) {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/app_flow.dart';
+import 'package:mindtrip/core/navigaiton/tabs_shell.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/shell/app_shell.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
@@ -23,32 +25,26 @@ class AppRouter {
     routes: [
       ...OnBoardingRoutes.routes,
       ...AuthRoutes.routes,
-      ...HomeRoutes.routes,
-      ...ExploreRoutes.routes,
-      ...ProfileRoutes.routes,
-      // ShellRoute(
-      //   builder: (context, state, child) {
-      //     return AppShell(location: state.uri.toString(), child: child);
-      //   },
-      //   routes: [
-      //     StatefulShellRoute.indexedStack(
-      //       builder: (context, state, navigationShell) {
-      //         return TabsShell(navigationShell: navigationShell);
-      //       },
-      //       branches: [
-      //         StatefulShellBranch(routes: [HomeRoutes.homeRoute]),
-      //         StatefulShellBranch(routes: [ExploreRoutes.routes]),
-      //         StatefulShellBranch(routes: [LibraryRoutes.bookmarksRoute]),
-      //         StatefulShellBranch(routes: [ProfileRoutes.routes]),
-      //       ],
-      //     ),
-      //     ...BookRoutes.routes,
-      //     ExploreRoutes.extraRoute,
-      //     // ...CategoriesRoutes.extraRoutes,
-      //     // ...PostDetailsRoutes.routes,
-      //   ],
-      // ),
-      // ...GeneraleRoutes.routes,
+      ShellRoute(
+        builder: (context, state, child) {
+          return AppShell(location: state.uri.toString(), child: child);
+        },
+        routes: [
+          StatefulShellRoute.indexedStack(
+            builder: (context, state, navigationShell) {
+              return TabsShell(navigationShell: navigationShell);
+            },
+            branches: [
+              StatefulShellBranch(routes: [HomeRoutes.homeRoute]),
+              StatefulShellBranch(routes: [ExploreRoutes.exploreRoutes]),
+              StatefulShellBranch(routes: [ProfileRoutes.profileRoute]),
+            ],
+          ),
+          ...ProfileRoutes.routes,
+          // ...CategoriesRoutes.extraRoutes,
+          // ...PostDetailsRoutes.routes,
+        ],
+      ),
     ],
     errorBuilder: (context, state) => ErrorScreen(error: state.error),
   );

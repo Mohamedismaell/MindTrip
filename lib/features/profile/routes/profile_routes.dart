@@ -5,11 +5,11 @@ import 'package:mindtrip/features/profile/presentation/screens/profile_screen.da
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
 
 class ProfileRoutes {
+  static final profileRoute = GoRoute(
+    path: AppRoutes.profile,
+    builder: (context, state) => const ProfileScreen(),
+  );
   static List<RouteBase> routes = [
-    GoRoute(
-      path: AppRoutes.profile,
-      builder: (context, state) => const ProfileScreen(),
-    ),
     GoRoute(
       path: AppRoutes.editProfile,
       builder: (context, state) => const EditProfileScreen(),

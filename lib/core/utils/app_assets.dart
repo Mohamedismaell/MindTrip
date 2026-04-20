@@ -84,3 +84,21 @@ class ProfileAssets {
   static const String walletIcon = '$_iconPath/wallet.svg';
   static const String editIcon = '$_iconPath/boxicons_edit.svg';
 }
+
+class BottomNavAssets {
+  BottomNavAssets._();
+
+  static const String _iconPath = 'assets/icons/bottom_nav';
+
+  static const String homeOutlined = '$_iconPath/home_outlined.svg';
+  static const String homefilled = '$_iconPath/home_filled.svg';
+
+  static const String exploreFilled = '$_iconPath/explore_filled.svg';
+  static const String exploreOutlined = '$_iconPath/explore_outlined.svg';
+
+  static const String aiStarFilled = '$_iconPath/ai_star_filled.svg';
+  static const String aiStarOutlined = '$_iconPath/ai_star_outlined.svg';
+
+  static const String personFilled = '$_iconPath/person_filled.svg';
+  static const String personOutlined = '$_iconPath/person_outlined.svg';
+}

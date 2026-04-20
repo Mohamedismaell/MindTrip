@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/presentation/widget/bottom_nav.dart';
-import 'package:mindtrip/core/shared/presentation/widget/bottom_nav_route_helper.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
@@ -36,12 +34,12 @@ class ProfileFlowScaffold extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: context.colorTheme.surface,
-      bottomNavigationBar: BottomNav(
-        currentIndex: BottomNavRouteHelper.currentIndexForLocation(
-          routeLocation,
-        ),
-        onTap: (index) => BottomNavRouteHelper.onTap(context, index),
-      ),
+      // bottomNavigationBar: BottomNav(
+      //   currentIndex: BottomNavRouteHelper.currentIndexForLocation(
+      //     routeLocation,
+      //   ),
+      //   onTap: (index) => BottomNavRouteHelper.onTap(context, index),
+      // ),
       body: SafeArea(
         child: Column(
           children: [
