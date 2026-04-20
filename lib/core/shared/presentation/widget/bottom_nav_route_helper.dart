@@ -6,13 +6,16 @@ class BottomNavRouteHelper {
   const BottomNavRouteHelper._();
 
   static const int homeIndex = 0;
+  static const int explore = 2;
   static const int profileIndex = 4;
 
   static int currentIndexForLocation(String location) {
     if (location.startsWith(AppRoutes.profile)) {
       return profileIndex;
     }
-
+    if (location.startsWith(AppRoutes.explore)) {
+      return explore;
+    }
     return homeIndex;
   }
 
@@ -20,6 +23,9 @@ class BottomNavRouteHelper {
     switch (index) {
       case homeIndex:
         context.go(AppRoutes.home);
+        return;
+      case explore:
+        context.go(AppRoutes.explore);
         return;
       case profileIndex:
         context.go(AppRoutes.profile);

@@ -64,11 +64,8 @@ class ExploreAssets {
 
   static const String _iconPath = 'assets/icons/explore';
 
-  // Placeholder paths — replace with actual SVGs when available
-  static const String micIcon = '$_iconPath/mic.svg';
   static const String filterIcon = '$_iconPath/filter.svg';
   static const String sortIcon = '$_iconPath/sort.svg';
-  static const String mapIcon = '$_iconPath/map.svg';
 }
 
 class ProfileAssets {

@@ -79,4 +79,10 @@ class AppTextStyles {
   static final h9Medium = _headline(size: 16.sp, weight: FontWeight.w500);
   static final h9Regular = _headline(size: 16.sp, weight: FontWeight.w400);
   static final h9Light = _headline(size: 16.sp, weight: FontWeight.w300);
+  //! Headline 10
+  static final h10Bold = _headline(size: 14.sp, weight: FontWeight.bold);
+  static final h10SemiBold = _headline(size: 14.sp, weight: FontWeight.w600);
+  static final h10Medium = _headline(size: 14.sp, weight: FontWeight.w500);
+  static final h10Regular = _headline(size: 14.sp, weight: FontWeight.w400);
+  static final h10Light = _headline(size: 14.sp, weight: FontWeight.w300);
 }

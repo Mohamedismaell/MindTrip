@@ -43,9 +43,6 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     emit(state.copyWith(draftPhoneNumber: value));
   }
 
-  // 1. upload new photo **if picked** and get the cloud link or cdn
-  // 2. update profile if name or phone changed
-  // 3. updated [UserEntity] to global [UserCubit]
   Future<void> saveChanges() async {
     if (!state.hasChanges) return;
 
@@ -94,7 +91,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
           emit(
             state.copyWith(
               saveStatus: EditSaveStatus.failed,
-              errorMessage: f.message ?? 'Profile update failed',
+              errorMessage: f.message,
             ),
           );
           return true;

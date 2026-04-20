@@ -71,6 +71,7 @@ flutter:
     - assets/icons/
     - assets/icons/home/
     - assets/icons/profile/
+    - assets/icons/explore/
   fonts:
     - family: SFPro
       fonts:

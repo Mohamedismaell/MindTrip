@@ -15,4 +15,15 @@ class AppShadows {
     offset: Offset(0, 4),
     spreadRadius: 0,
   );
+  // static BoxShadow trendingCard = BoxShadow(
+  //   color: Colors.black.withValues(alpha: 0.08),
+  //   blurRadius: 4,
+  //   offset: Offset(0, 4),
+  //   spreadRadius: 0,
+  // );
+  static BoxShadow floatMapButton = BoxShadow(
+    blurRadius: 10,
+    offset: Offset(0, 5),
+    color: Colors.black.withValues(alpha: 0.25),
+  );
 }

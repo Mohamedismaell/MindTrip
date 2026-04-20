@@ -1,4 +1,3 @@
-/// Badge types for explore place cards.
 enum ExploreBadge { topRated, popular, trending, none }
 
 class ExploreCategory {
@@ -25,17 +24,15 @@ class ExploreTab {
 
   const ExploreTab({required this.label, this.isSelected = false});
 
-  ExploreTab copyWith({bool? isSelected}) => ExploreTab(
-    label: label,
-    isSelected: isSelected ?? this.isSelected,
-  );
+  ExploreTab copyWith({bool? isSelected}) =>
+      ExploreTab(label: label, isSelected: isSelected ?? this.isSelected);
 }
 
 class ExplorePlace {
   final String title;
   final String location;
   final String imageUrl;
-  final double rating;
+  final double? rating;
   final String price;
   final ExploreBadge badge;
   final bool isFavorite;
@@ -44,7 +41,7 @@ class ExplorePlace {
     required this.title,
     required this.location,
     required this.imageUrl,
-    required this.rating,
+    this.rating,
     required this.price,
     this.badge = ExploreBadge.none,
     this.isFavorite = false,

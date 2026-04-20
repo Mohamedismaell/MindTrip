@@ -17,6 +17,7 @@ class AppTextTheme {
 
       labelLarge: AppTextStyles.h9SemiBold.copyWith(color: c.onSurface),
       labelMedium: AppTextStyles.h7Bold.copyWith(color: c.onPrimary),
+      labelSmall: AppTextStyles.h10Regular.copyWith(color: c.outline),
     );
   }
 }

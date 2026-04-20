@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class ExploreSectionHeader extends StatelessWidget {
-  const ExploreSectionHeader({
-    super.key,
-    required this.title,
-    this.count,
-  });
+  const ExploreSectionHeader({super.key, required this.title, this.count});
 
   final String title;
   final int? count;
@@ -19,9 +16,7 @@ class ExploreSectionHeader extends StatelessWidget {
         children: [
           Text(
             title,
-            style: context.textTheme.titleMedium?.copyWith(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w700,
+            style: AppTextStyles.h8SemiBold.copyWith(
               color: context.colorTheme.onSurface,
             ),
           ),
@@ -29,8 +24,7 @@ class ExploreSectionHeader extends StatelessWidget {
             SizedBox(width: 6.w),
             Text(
               '($count)',
-              style: context.textTheme.bodyMedium?.copyWith(
-                fontSize: 14.sp,
+              style: AppTextStyles.h8SemiBold.copyWith(
                 color: context.colorTheme.outline,
               ),
             ),

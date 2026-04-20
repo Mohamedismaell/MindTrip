@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/presentation/widget/bottom_nav.dart';
+import 'package:mindtrip/core/shared/presentation/widget/bottom_nav_route_helper.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_category_chips.dart';
@@ -12,6 +16,7 @@ import 'package:mindtrip/features/explore/presentation/widgets/explore_section_h
 import 'package:mindtrip/features/explore/presentation/widgets/explore_show_more_button.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_tab_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_trending_list.dart';
+import 'package:mindtrip/features/explore/presentation/widgets/float_map_button.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({super.key});
@@ -19,31 +24,38 @@ class ExploreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatMapButton(),
       backgroundColor: context.colorTheme.surface,
+      bottomNavigationBar: BottomNav(
+        currentIndex: BottomNavRouteHelper.currentIndexForLocation(
+          AppRoutes.explore,
+        ),
+        onTap: (index) => BottomNavRouteHelper.onTap(context, index),
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           child: CustomScrollView(
             slivers: [
-              // ── Header ─────────────────────────────────
+              //  Header
               const ExploreHeader(),
               SliverToBoxAdapter(child: SizedBox(height: 24.h)),
-
-              // ── Search Bar ─────────────────────────────
+              //Todo: is there 2 search bars in the app home and explore screens ?
+              //! Dummy search
+              //  Search Bar
               const ExploreSearchBar(),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-
-              // ── Category Chips ─────────────────────────
-              ExploreCategoryChips(
-                categories: ExploreMockData.categories,
-              ),
+              //Todo: edit Ui later
+              //!No funcaitonality right now
+              //  Category Chips
+              ExploreCategoryChips(categories: ExploreMockData.categories),
               SliverToBoxAdapter(child: SizedBox(height: 18.h)),
 
-              // ── Tab Bar ────────────────────────────────
+              //  Tab Bar
               ExploreTabBar(tabs: ExploreMockData.tabs),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
-              // ── Results Bar ────────────────────────────
+              //  Results Bar
               ExploreResultsBar(
                 resultCount: 48,
                 onFilterTap: () => ExploreFilterSheet.show(context),
@@ -51,7 +63,7 @@ class ExploreScreen extends StatelessWidget {
               ),
               SliverToBoxAdapter(child: SizedBox(height: 20.h)),
 
-              // ── Trending Now ───────────────────────────
+              //  Trending Now
               ExploreSectionHeader(
                 title: 'Trending now',
                 count: ExploreMockData.trendingPlaces.length,
@@ -60,18 +72,15 @@ class ExploreScreen extends StatelessWidget {
               ExploreTrendingList(items: ExploreMockData.trendingPlaces),
               SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
-              // ── Other Places ───────────────────────────
-              ExploreSectionHeader(
-                title: 'Other Places',
-                count: 40,
-              ),
+              //  Other Places
+              ExploreSectionHeader(title: 'Other Places', count: 40),
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
               ExplorePlacesGrid(places: ExploreMockData.otherPlaces),
               SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
-              // ── Show More + Map ────────────────────────
-              const ExploreShowMoreButton(),
-              SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+              //  Show More + Map
+              // const ExploreShowMoreButton(),
+              SliverToBoxAdapter(child: SizedBox(height: 50.h)),
             ],
           ),
         ),

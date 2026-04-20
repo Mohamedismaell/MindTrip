@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class ExploreHeader extends StatelessWidget {
@@ -12,15 +13,29 @@ class ExploreHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Good morning, Laila',
+            style: AppTextStyles.h9Medium.copyWith(
+              color: context.colorTheme.outline,
+            ),
+          ),
+          SizedBox(height: 12.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //Todo replace with real user name
-              Text(
-                'Good morning, Laila',
-                style: context.textTheme.bodyMedium?.copyWith(
-                  fontSize: 14.sp,
-                  color: context.colorTheme.outline,
+              RichText(
+                text: TextSpan(
+                  style: context.textTheme.headlineMedium,
+                  children: [
+                    const TextSpan(text: 'Where do you\nwant to '),
+                    TextSpan(
+                      text: 'explore?',
+                      style: AppTextStyles.h5Bold.copyWith(
+                        color: context.colorTheme.primary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               GestureDetector(
@@ -32,23 +47,6 @@ class ExploreHeader extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          SizedBox(height: 12.h),
-          RichText(
-            text: TextSpan(
-              style: context.textTheme.headlineMedium?.copyWith(
-                fontSize: 26.sp,
-                fontWeight: FontWeight.w700,
-                color: context.colorTheme.onSurface,
-              ),
-              children: [
-                const TextSpan(text: 'Where do you\nwant to '),
-                TextSpan(
-                  text: 'explore?',
-                  style: TextStyle(color: AppColors.primaryBlue),
-                ),
-              ],
-            ),
           ),
         ],
       ),

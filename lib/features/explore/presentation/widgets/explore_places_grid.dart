@@ -14,8 +14,8 @@ class ExplorePlacesGrid extends StatelessWidget {
       itemCount: places.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 16.h,
-        crossAxisSpacing: 14.w,
+        mainAxisSpacing: 32.h,
+        crossAxisSpacing: 24.w,
         childAspectRatio: 0.72,
       ),
       itemBuilder: (context, index) {

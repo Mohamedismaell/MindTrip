@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 
 class ExploreResultsBar extends StatelessWidget {
   const ExploreResultsBar({
@@ -25,16 +26,14 @@ class ExploreResultsBar extends StatelessWidget {
             child: Text(
               '$resultCount results found',
               style: context.textTheme.bodyMedium?.copyWith(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-                color: context.colorTheme.onSurface,
+                color: context.colorTheme.onSurfaceVariant,
               ),
             ),
           ),
 
           // Filter button
           _ActionChip(
-            icon: Icons.tune_rounded,
+            svgIcon: SvgPicture.asset(ExploreAssets.filterIcon),
             label: 'Filter',
             onTap: onFilterTap,
           ),
@@ -42,7 +41,7 @@ class ExploreResultsBar extends StatelessWidget {
 
           // Sort button
           _ActionChip(
-            icon: Icons.swap_vert_rounded,
+            svgIcon: SvgPicture.asset(ExploreAssets.sortIcon),
             label: 'Sort',
             onTap: onSortTap,
           ),
@@ -54,14 +53,16 @@ class ExploreResultsBar extends StatelessWidget {
 
 class _ActionChip extends StatelessWidget {
   const _ActionChip({
-    required this.icon,
     required this.label,
     required this.onTap,
+    this.icon,
+    this.svgIcon,
   });
 
-  final IconData icon;
+  final IconData? icon;
   final String label;
   final VoidCallback onTap;
+  final Widget? svgIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -70,24 +71,27 @@ class _ActionChip extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(50.r),
           border: Border.all(
-            color: context.colorTheme.outline.withOpacity(0.4),
-            width: 0.8,
+            color: context.colorTheme.onSurfaceVariant,
+            width: 1.5,
           ),
-          color: context.colorTheme.surface,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 16.sp, color: AppColors.darkGray2),
+            svgIcon != null
+                ? svgIcon!
+                : Icon(
+                    icon,
+                    size: 24.sp,
+                    color: context.colorTheme.onSurfaceVariant,
+                  ),
             SizedBox(width: 6.w),
             Text(
               label,
-              style: context.textTheme.bodySmall?.copyWith(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColors.darkGray2,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.colorTheme.onSurfaceVariant,
               ),
             ),
           ],
