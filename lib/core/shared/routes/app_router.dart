@@ -9,6 +9,7 @@ import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
 import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
+import 'package:mindtrip/features/map/routes/map_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 import 'package:mindtrip/features/explore/routes/explore_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
@@ -41,6 +42,7 @@ class AppRouter {
             ],
           ),
           ...ProfileRoutes.routes,
+          MapRoutes.mapRoute,
           // ...CategoriesRoutes.extraRoutes,
           // ...PostDetailsRoutes.routes,
         ],

@@ -28,6 +28,7 @@ class RouteRegister {
     AppRouteConfig(path: AppRoutes.profile, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.editProfile, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.profileSettings, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.mapScreen, flow: AppFlow.app),
   ];
 
   static AppFlow? getFlow(String location) {

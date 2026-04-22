@@ -53,7 +53,8 @@
 				</array>
 			</dict>
 		</array>
-
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>We need access to your location to show you nearby places</string>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true />
 		<key>UIApplicationSupportsIndirectInputEvents</key>

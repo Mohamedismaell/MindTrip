@@ -24,12 +24,6 @@ class ExploreScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatMapButton(),
       backgroundColor: context.colorTheme.surface,
-      // bottomNavigationBar: BottomNav(
-      //   currentIndex: BottomNavRouteHelper.currentIndexForLocation(
-      //     AppRoutes.explore,
-      //   ),
-      //   onTap: (index) => BottomNavRouteHelper.onTap(context, index),
-      // ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),

@@ -17,6 +17,7 @@ class ExploreFilterSheet extends StatefulWidget {
       isDismissible: true,
       // barrierColor: Colors.black.withOpacity(0.4),
       builder: (_) => const ExploreFilterSheet(),
+      useRootNavigator: true,
     );
   }
 

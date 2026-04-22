@@ -25,14 +25,7 @@ Future<ImageSource?> showImageSourceSheet(BuildContext context) {
               ),
             ),
             SizedBox(height: 20.h),
-            Text(
-              'Choose Photo Source',
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-                color: context.colorTheme.onSurface,
-              ),
-            ),
+            Text('Choose Photo Source', style: context.textTheme.bodyMedium),
             SizedBox(height: 24.h),
             _SourceOption(
               key: const Key('image-source-camera'),
@@ -54,6 +47,7 @@ Future<ImageSource?> showImageSourceSheet(BuildContext context) {
         ),
       ),
     ),
+    useRootNavigator: true,
   );
 }
 

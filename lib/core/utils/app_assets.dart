@@ -6,6 +6,7 @@ class AppAssets {
   static const String _onboardingImagesPath = '$_imagesPath/onboarding';
   static const String _splashImagesPath = '$_imagesPath/splash';
   static const String _animationImagesPath = '$_imagesPath/animation';
+  static const String _mapImagesPath = '$_imagesPath/map';
   static const String _iconsPath = 'assets/icons';
 
   // Splash
@@ -20,7 +21,7 @@ class AppAssets {
       '$_onboardingImagesPath/Budget_Optimizer.png';
   static const String hiddenGemsImage =
       '$_onboardingImagesPath/Hidden_Gems.png';
-
+  static const String mapImage = '$_mapImagesPath/map_marker.png';
   // Auth Images & SVGs
   static const String emailCampaignSvg =
       '$_authImagesPath/Email campaign-cuate 1(1).svg';

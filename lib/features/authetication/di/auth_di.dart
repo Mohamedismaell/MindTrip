@@ -9,7 +9,6 @@ import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_us
 import 'package:mindtrip/features/authetication/domain/usecases/forget_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
-// import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/refresh_token_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/resete_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';

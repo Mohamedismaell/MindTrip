@@ -1,5 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,7 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +32,9 @@ Future<void> main() async {
   await initializeDependencies(onboardingBox: AppHive.onboardingBox);
   print('Step 4: Service Locator initialized');
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  const token = String.fromEnvironment("ACCESS_TOKEN");
+  mapbox.MapboxOptions.setAccessToken(token);
+
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
     AppBootstrap(),

@@ -42,6 +42,8 @@ dependencies:
   image_cropper: ^11.0.0
   flutter_image_compress: ^2.4.0
   curved_labeled_navigation_bar: ^2.0.6
+  mapbox_maps_flutter: ^2.22.0
+  permission_handler: ^12.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -69,6 +71,7 @@ flutter:
     - assets/images/authentication/
     - assets/images/animation/
     - assets/images/profile/
+    - assets/images/map/
     - assets/icons/
     - assets/icons/home/
     - assets/icons/profile/
