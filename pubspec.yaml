@@ -44,6 +44,7 @@ dependencies:
   curved_labeled_navigation_bar: ^2.0.6
   mapbox_maps_flutter: ^2.22.0
   permission_handler: ^12.0.1
+  geolocator: ^14.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
