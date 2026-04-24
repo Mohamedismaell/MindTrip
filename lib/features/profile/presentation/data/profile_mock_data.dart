@@ -1,3 +1,6 @@
+import 'package:mindtrip/core/shared/data/models/review_model.dart';
+import 'package:mindtrip/core/shared/data/models/trip_model.dart';
+
 class ProfileStatData {
   const ProfileStatData({required this.label, required this.value});
 
@@ -9,34 +12,6 @@ class ProfileInterestData {
   const ProfileInterestData({required this.category});
 
   final String category;
-}
-
-class ProfileTripData {
-  const ProfileTripData({
-    required this.title,
-    required this.subtitle,
-    required this.imageUrl,
-    this.isFavorite = true,
-  });
-
-  final String title;
-  final String subtitle;
-  final String imageUrl;
-  final bool isFavorite;
-}
-
-class ProfileReviewData {
-  const ProfileReviewData({
-    required this.title,
-    required this.location,
-    required this.body,
-    this.rating = 5,
-  });
-
-  final String title;
-  final String location;
-  final String body;
-  final int rating;
 }
 
 class ProfileMockData {
@@ -64,29 +39,36 @@ class ProfileMockData {
   //   ProfileInterestData(emoji: '🎭', label: 'Culture'),
   // ];
 
-  static const List<ProfileTripData> savedTrips = [
-    ProfileTripData(
+  static const List<TripModel> savedTrips = [
+    TripModel(
+      id: 'trip_saved_1',
       title: 'Dahab',
       subtitle: 'Saved destination',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/942ac9bb-0a22-4c80-8aaf-e5e8535a1ee0',
+      isFavorite: true,
     ),
-    ProfileTripData(
+    TripModel(
+      id: 'trip_saved_2',
       title: 'El-Alamein',
       subtitle: 'Saved destination',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/6f6a5481-09ca-4c7a-8b4d-6ccf3c4c7d85',
+      isFavorite: true,
     ),
   ];
 
-  static const List<ProfileTripData> myTrips = [
-    ProfileTripData(
+  static const List<TripModel> myTrips = [
+    TripModel(
+      id: 'trip_1',
       title: 'The Caves',
       subtitle: 'Dahab | Mar 2026',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/4f6f22df-9ba2-4d55-b473-58c8248bcbf8',
+      isFavorite: true,
     ),
-    ProfileTripData(
+    TripModel(
+      id: 'trip_2',
       title: 'Lighthouse Reef',
       subtitle: 'Dahab | Mar 2026',
       imageUrl:
@@ -95,21 +77,29 @@ class ProfileMockData {
     ),
   ];
 
-  static const List<ProfileReviewData> reviews = [
-    ProfileReviewData(
+  static const List<ReviewModel> reviews = [
+    ReviewModel(
+      id: 'rev_1',
+      userId: 'user_1',
+      placeId: 'place_1',
       title: 'The Blue Hole',
       location: 'Dahab, Sinai',
       body:
           'Absolutely breathtaking! A hidden gem that every diver must '
           'experience. The crystal clear water is beyond words.',
+      rating: 5,
     ),
-    ProfileReviewData(
+    ReviewModel(
+      id: 'rev_2',
+      userId: 'user_1',
+      placeId: 'place_2',
       title: 'Karnak Temple',
       location: 'Luxor,Egypt',
       body:
           'Walking through these ancient pillars feels like stepping back in '
           'time. A must-visit for history lovers! The scale is just '
           'unbelievable.',
+      rating: 5,
     ),
   ];
 

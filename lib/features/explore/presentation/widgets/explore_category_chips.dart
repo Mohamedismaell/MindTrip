@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/explore/presentation/models/explore_models.dart';
+import 'package:mindtrip/core/shared/data/models/category_model.dart';
 
 class ExploreCategoryChips extends StatefulWidget {
   const ExploreCategoryChips({super.key, required this.categories});
 
-  final List<ExploreCategory> categories;
+  final List<CategoryModel> categories;
 
   @override
   State<ExploreCategoryChips> createState() => _ExploreCategoryChipsState();
@@ -19,7 +19,7 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.categories.indexWhere((c) => c.isSelected);
+    _selectedIndex = widget.categories.indexWhere((c) => c.isSelected ?? false);
     if (_selectedIndex == -1) _selectedIndex = 0;
   }
 
@@ -40,10 +40,7 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
               onTap: () => setState(() => _selectedIndex = index),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 14.w,
-                  vertical: 8.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primaryBlue
@@ -61,17 +58,18 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
                   children: [
                     if (!isSelected) ...[
                       Text(
-                        category.emoji,
+                        category.emoji ?? '',
                         style: TextStyle(fontSize: 16.sp),
                       ),
                       SizedBox(width: 6.w),
                     ],
                     Text(
-                      category.label,
+                      category.name,
                       style: context.textTheme.bodyMedium?.copyWith(
                         fontSize: 13.sp,
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
                         color: isSelected
                             ? AppColors.pureWhite
                             : context.colorTheme.onSurface,

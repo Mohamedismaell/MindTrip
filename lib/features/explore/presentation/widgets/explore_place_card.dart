@@ -7,12 +7,13 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/features/explore/presentation/models/explore_models.dart';
+import 'package:mindtrip/core/enums/place_badge.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
 class ExplorePlaceCard extends StatefulWidget {
   const ExplorePlaceCard({super.key, required this.place});
 
-  final ExplorePlace place;
+  final PlaceModel place;
 
   @override
   State<ExplorePlaceCard> createState() => _ExplorePlaceCardState();
@@ -48,10 +49,11 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  AppCachedImage(imageUrl: widget.place.imageUrl),
+                  AppCachedImage(imageUrl: widget.place.thumbnailUrl),
 
                   // Badge
-                  if (widget.place.badge != ExploreBadge.none)
+                  if (widget.place.badge != null &&
+                      widget.place.badge != PlaceBadge.none)
                     Positioned(
                       top: 10.h,
                       right: 10.w,
@@ -73,7 +75,7 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
                     Row(
                       children: [
                         Text(
-                          widget.place.title,
+                          widget.place.name,
                           style: context.textTheme.labelLarge,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -130,7 +132,7 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
                         SizedBox(width: 4.w),
                         Expanded(
                           child: Text(
-                            widget.place.location,
+                            widget.place.location.address,
                             style: context.textTheme.bodyMedium,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -139,7 +141,9 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
 
                         //! May change color later
                         Text(
-                          widget.place.price,
+                          widget.place.price != null
+                              ? '\$${widget.place.price!.toStringAsFixed(0)}'
+                              : '',
                           style: context.textTheme.labelLarge?.copyWith(
                             color: AppColors.customgreeen,
                           ),
@@ -161,16 +165,17 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
 class _BadgeChip extends StatelessWidget {
   const _BadgeChip({required this.badge});
 
-  final ExploreBadge badge;
+  final PlaceBadge badge;
 
   @override
   Widget build(BuildContext context) {
     final (String label, Color color) = switch (badge) {
       //! change the colors later
-      ExploreBadge.topRated => ('Top Rated', AppColors.customgreeen),
-      ExploreBadge.popular => ('Popular', AppColors.customYellow),
-      ExploreBadge.trending => ('Trending', AppColors.primaryBlue),
-      ExploreBadge.none => ('', Colors.transparent),
+      PlaceBadge.topRated => ('Top Rated', AppColors.customgreeen),
+      PlaceBadge.popular => ('Popular', AppColors.customYellow),
+      PlaceBadge.trending => ('Trending', AppColors.primaryBlue),
+      PlaceBadge.aiCrafted => ('AI Crafted', AppColors.primaryLightBlue1),
+      PlaceBadge.none => ('', Colors.transparent),
     };
 
     return Container(

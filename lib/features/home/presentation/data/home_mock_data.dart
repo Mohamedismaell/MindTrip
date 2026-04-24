@@ -1,3 +1,8 @@
+import 'package:mindtrip/core/shared/data/models/category_model.dart';
+import 'package:mindtrip/core/shared/data/models/banner_model.dart';
+import 'package:mindtrip/core/shared/data/models/location_model.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/data/models/tour_package_model.dart';
 import 'package:mindtrip/features/home/presentation/models/home_models.dart';
 
 //!Dummy data for the home screen **Not working right now**
@@ -8,25 +13,33 @@ class HomeMockData {
       'https://www.figma.com/api/mcp/asset/349806fb-b571-4ea9-a856-5ee20e752ca5';
 
   static const categories = [
-    HomeCategory(emoji: '🏛️', label: 'Heritage', isSelected: true),
-    HomeCategory(emoji: '🏕️', label: 'Camping'),
-    HomeCategory(emoji: '🌊', label: 'Sea'),
-    HomeCategory(emoji: '🧘‍♀️', label: 'Wellness'),
-    HomeCategory(emoji: '🐠', label: 'Diving'),
+    CategoryModel(id: 'c1', emoji: '🏛️', name: 'Heritage', isSelected: true),
+    CategoryModel(id: 'c2', emoji: '🏕️', name: 'Camping', isSelected: false),
+    CategoryModel(id: 'c3', emoji: '🌊', name: 'Sea', isSelected: false),
+    CategoryModel(
+      id: 'c4',
+      emoji: '🧘‍♀️',
+      name: 'Wellness',
+      isSelected: false,
+    ),
+    CategoryModel(id: 'c5', emoji: '🐠', name: 'Diving', isSelected: false),
   ];
 
   static const banners = [
-    HomeBanner(
+    BannerModel(
+      id: 'b1',
       title: 'Escape the Noise',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/27a1b2d0-178d-43c6-a2cb-f6d785526666',
     ),
-    HomeBanner(
+    BannerModel(
+      id: 'b2',
       title: 'Seek Adventure',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/fb3d5dd3-5857-4e1c-b4d0-11c97a44acb7',
     ),
-    HomeBanner(
+    BannerModel(
+      id: 'b3',
       title: 'Travel Through Time',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/9b1d2d74-6b55-4029-8ce3-bec7ae130875',
@@ -34,124 +47,154 @@ class HomeMockData {
   ];
 
   static const popularDestinations = [
-    HomeSpotlight(
-      title: 'The Blue Hole',
-      location: 'Dahab',
-      imageUrl:
+    PlaceModel(
+      id: 'p1',
+      name: 'The Blue Hole',
+      location: LocationModel(address: 'Dahab', latitude: 20, longitude: 30),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/b9754e96-0dbc-4221-8692-a92c88ba8c1e',
-      previewImageUrls: [
+      imageUrls: [
         'https://www.figma.com/api/mcp/asset/36e89b13-c752-4451-9f03-ecc842328398',
         'https://www.figma.com/api/mcp/asset/e084fbc7-7d7f-4e9f-b765-09050f8d88a4',
       ],
-      extraPhotoCount: 6,
     ),
-    HomeSpotlight(
-      title: 'White Desert',
-      location: 'Farafra',
-      imageUrl:
+    PlaceModel(
+      id: 'p2',
+      name: 'White Desert',
+      location: LocationModel(address: 'Farafra', latitude: 20, longitude: 30),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/7757b795-65f2-4a3e-9fa8-78d17c1ad58c',
-      previewImageUrls: [
+      imageUrls: [
         'https://www.figma.com/api/mcp/asset/7757b795-65f2-4a3e-9fa8-78d17c1ad58c',
         'https://www.figma.com/api/mcp/asset/7ca7a24d-98e1-4160-b8a6-25ad588d9515',
       ],
-      extraPhotoCount: 4,
     ),
-    HomeSpotlight(
-      title: 'Siwa Salt Lakes',
-      location: 'Siwa',
-      imageUrl:
+    PlaceModel(
+      id: 'p3',
+      name: 'Siwa Salt Lakes',
+      location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/6d50a379-383d-4729-8571-6371ac253ff9',
-      previewImageUrls: [
+      imageUrls: [
         'https://www.figma.com/api/mcp/asset/6d50a379-383d-4729-8571-6371ac253ff9',
         'https://www.figma.com/api/mcp/asset/da6358cf-1d2d-48c6-a12f-8a35c6430944',
       ],
-      extraPhotoCount: 5,
     ),
   ];
 
   static const recommendedDestinations = [
-    HomeDestination(
-      title: 'Fjord Bay',
-      location: 'Taba',
-      imageUrl:
+    PlaceModel(
+      id: 'p4',
+      name: 'Fjord Bay',
+      location: LocationModel(address: 'Taba', latitude: 20, longitude: 30),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/22cd2d99-db30-4dad-b0ef-9d129132111a',
-      priceTag: '\$150',
+      price: 150,
     ),
-    HomeDestination(
-      title: 'Wadi El Rayan',
-      location: 'Fayoum',
-      imageUrl:
+    PlaceModel(
+      id: 'p5',
+      name: 'Wadi El Rayan',
+      location: LocationModel(address: 'Fayoum', latitude: 20, longitude: 30),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/1ee00423-bf80-46b1-97e4-2e8517d39bd3',
-      priceTag: '\$150',
+      price: 150,
     ),
-    HomeDestination(
-      title: 'Ras Mohamed',
-      location: 'Sharm El Sheikh',
-      imageUrl:
+    PlaceModel(
+      id: 'p6',
+      name: 'Ras Mohamed',
+      location: LocationModel(
+        address: 'Sharm El Sheikh',
+        latitude: 20,
+        longitude: 30,
+      ),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/f360b217-4b82-461b-8b48-32ef0035a771',
-      priceTag: '\$150',
+      price: 150,
     ),
-    HomeDestination(
-      title: 'Qaitbay Citadel',
-      location: 'Alexandria',
-      imageUrl:
+    PlaceModel(
+      id: 'p7',
+      name: 'Qaitbay Citadel',
+      location: LocationModel(
+        address: 'Alexandria',
+        latitude: 20,
+        longitude: 30,
+      ),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/52c3d736-a15a-4805-a18e-ce5a92d669cf',
-      priceTag: '\$150',
+      price: 150,
     ),
-    HomeDestination(
-      title: 'Mount Sinai',
-      location: 'St. Catherine',
-      imageUrl:
+    PlaceModel(
+      id: 'p8',
+      name: 'Mount Sinai',
+      location: LocationModel(
+        address: 'St. Catherine',
+        latitude: 20,
+        longitude: 30,
+      ),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/e52e4006-7d5b-4df6-9b6e-a476a7c1121f',
-      priceTag: '\$150',
+      price: 150,
     ),
-    HomeDestination(
-      title: 'Cleopatra\'s Pool',
-      location: 'Siwa',
-      imageUrl:
+    PlaceModel(
+      id: 'p9',
+      name: 'Cleopatra\'s Pool',
+      location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/da6358cf-1d2d-48c6-a12f-8a35c6430944',
-      priceTag: '\$150',
+      price: 150,
     ),
-    HomeDestination(
-      title: 'Khan el-Khalili',
-      location: 'Cairo',
-      imageUrl:
+    PlaceModel(
+      id: 'p10',
+      name: 'Khan el-Khalili',
+      location: LocationModel(address: 'Cairo', latitude: 20, longitude: 30),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/ad7063f3-8ee5-4a4f-9c0a-a2ae83cda1ac',
-      priceTag: '\$150',
+      price: 150,
     ),
-    HomeDestination(
-      title: 'Wadi El Gemal',
-      location: 'Marsa Alam',
-      imageUrl:
+    PlaceModel(
+      id: 'p11',
+      name: 'Wadi El Gemal',
+      location: LocationModel(
+        address: 'Marsa Alam',
+        latitude: 20,
+        longitude: 30,
+      ),
+      thumbnailUrl:
           'https://www.figma.com/api/mcp/asset/7b2197bc-327b-4101-8580-147dd65dddf8',
-      priceTag: '\$150',
+      price: 150,
     ),
   ];
 
   static const tourPackages = [
-    HomePackage(
+    TourPackageModel(
+      id: 'pkg1',
       title: 'Magic Lake Escape',
-      location: 'Fayoum',
+      location: LocationModel(address: 'Fayoum', latitude: 20, longitude: 30),
       imageUrl:
           'https://www.figma.com/api/mcp/asset/b57bb337-5ceb-4f23-b123-b5f5424d72e2',
-      price: '\$350',
+      price: 350,
       rating: 4.5,
+      durationDays: 3,
     ),
-    HomePackage(
+    TourPackageModel(
+      id: 'pkg2',
       title: 'White Desert',
-      location: 'Farafra',
+      location: LocationModel(address: 'Farafra', latitude: 20, longitude: 30),
       imageUrl:
           'https://www.figma.com/api/mcp/asset/7ca7a24d-98e1-4160-b8a6-25ad588d9515',
-      price: '\$350',
+      price: 350,
       rating: 4.7,
+      durationDays: 2,
     ),
-    HomePackage(
+    TourPackageModel(
+      id: 'pkg3',
       title: 'Aswan Getaway',
-      location: 'Aswan',
+      location: LocationModel(address: 'Aswan', latitude: 20, longitude: 30),
       imageUrl:
           'https://www.figma.com/api/mcp/asset/d79ef4b5-b669-4d5c-82d6-f7a4fed5c5e4',
-      price: '\$390',
+      price: 390,
       rating: 4.6,
+      durationDays: 4,
     ),
   ];
 

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/home/presentation/models/home_models.dart';
+import 'package:mindtrip/core/shared/data/models/category_model.dart';
 
 class HomeCategoryList extends StatelessWidget {
   const HomeCategoryList({super.key, required this.categories});
 
-  final List<HomeCategory> categories;
+  final List<CategoryModel> categories;
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +50,14 @@ class HomeCategoryList extends StatelessWidget {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      category.emoji,
+                      category.emoji ?? '',
                       style: TextStyle(fontSize: isSelected ? 20.sp : 22.sp),
                     ),
                   ),
                   if (isSelected) ...[
                     SizedBox(width: 10.w),
                     Text(
-                      category.label,
+                      category.name,
                       style: context.textTheme.bodyLarge?.copyWith(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,

@@ -6,12 +6,12 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/features/home/presentation/models/home_models.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
 class HomePopularDestinations extends StatelessWidget {
   const HomePopularDestinations({super.key, required this.destinations});
 
-  final List<HomeSpotlight> destinations;
+  final List<PlaceModel> destinations;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class HomePopularDestinations extends StatelessWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        AppCachedImage(imageUrl: destination.imageUrl),
+                        AppCachedImage(imageUrl: destination.thumbnailUrl),
 
                         DecoratedBox(
                           decoration: BoxDecoration(
@@ -68,13 +68,13 @@ class HomePopularDestinations extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    destination.title,
+                                    destination.name,
                                     style: context.textTheme.headlineSmall!
                                         .copyWith(color: AppColors.pureWhite),
                                   ),
                                   SizedBox(height: 6.h),
                                   Text(
-                                    destination.location,
+                                    destination.location.address,
                                     style: context.textTheme.bodyMedium!
                                         .copyWith(
                                           color: AppColors.primaryLightGray,
@@ -86,7 +86,7 @@ class HomePopularDestinations extends StatelessWidget {
                               Row(
                                 children: [
                                   for (final previewImageUrl
-                                      in destination.previewImageUrls.take(
+                                      in (destination.imageUrls ?? []).take(
                                         2,
                                       )) ...[
                                     _PreviewImageTile(
@@ -94,10 +94,12 @@ class HomePopularDestinations extends StatelessWidget {
                                     ),
                                     SizedBox(width: 8.w),
                                   ],
-                                  _ExtraPhotosTile(
-                                    extraPhotoCount:
-                                        destination.extraPhotoCount,
-                                  ),
+                                  if ((destination.imageUrls?.length ?? 0) > 2)
+                                    _ExtraPhotosTile(
+                                      extraPhotoCount:
+                                          (destination.imageUrls?.length ?? 0) -
+                                          2,
+                                    ),
                                 ],
                               ),
                             ],

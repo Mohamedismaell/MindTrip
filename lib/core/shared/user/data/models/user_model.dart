@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 
 class UserModel extends Equatable {
   final String userId;
@@ -55,30 +54,6 @@ class UserModel extends Equatable {
       UserModel.fromJson(json.decode(source) as Map<String, dynamic>);
 
   String toJsonString() => json.encode(toJson());
-
-  UserEntity toEntity() {
-    return UserEntity(
-      userId: userId,
-      displayName: displayName,
-      email: email,
-      phoneNumber: phoneNumber,
-      profilePhotoUrl: profilePhotoUrl,
-      languagePreference: languagePreference,
-      interests: interests,
-    );
-  }
-
-  factory UserModel.fromEntity(UserEntity entity) {
-    return UserModel(
-      userId: entity.userId,
-      displayName: entity.displayName,
-      email: entity.email,
-      phoneNumber: entity.phoneNumber,
-      profilePhotoUrl: entity.profilePhotoUrl,
-      languagePreference: entity.languagePreference,
-      interests: entity.interests,
-    );
-  }
 
   UserModel copyWith({
     String? userId,

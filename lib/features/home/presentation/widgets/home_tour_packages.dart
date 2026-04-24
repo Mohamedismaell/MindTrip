@@ -9,13 +9,13 @@ import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/features/home/presentation/models/home_models.dart';
+import 'package:mindtrip/core/shared/data/models/tour_package_model.dart';
 import 'package:mindtrip/features/home/presentation/widgets/custom_circle_icon.dart';
 
 class HomeTourPackages extends StatelessWidget {
   const HomeTourPackages({super.key, required this.packages});
 
-  final List<HomePackage> packages;
+  final List<TourPackageModel> packages;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,8 @@ class HomeTourPackages extends StatelessWidget {
                                       ),
                                       SizedBox(width: 8.w),
                                       Text(
-                                        package.rating.toStringAsFixed(1),
+                                        package.rating?.toStringAsFixed(1) ??
+                                            'N/A',
                                         style: context.textTheme.bodyMedium,
                                       ),
                                     ],
@@ -110,7 +111,7 @@ class HomeTourPackages extends StatelessWidget {
                               SvgPicture.asset(HomeAssets.locationIcon),
                               SizedBox(width: 8.w),
                               Text(
-                                package.location,
+                                package.location.address,
                                 style: context.textTheme.bodyMedium!.copyWith(
                                   color: context.colorTheme.outline,
                                 ),
@@ -125,7 +126,7 @@ class HomeTourPackages extends StatelessWidget {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: package.price,
+                                      text: package.price.toString(),
                                       style: AppTextStyles.h9Bold.copyWith(
                                         color: context.colorTheme.primary,
                                       ),

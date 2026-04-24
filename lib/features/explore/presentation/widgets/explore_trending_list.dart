@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/explore/presentation/models/explore_models.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
 class ExploreTrendingList extends StatelessWidget {
   const ExploreTrendingList({super.key, required this.items});
 
-  final List<ExploreTrending> items;
+  final List<PlaceModel> items;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class ExploreTrendingList extends StatelessWidget {
 class _TrendingCard extends StatelessWidget {
   const _TrendingCard({required this.item});
 
-  final ExploreTrending item;
+  final PlaceModel item;
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +58,13 @@ class _TrendingCard extends StatelessWidget {
             child: AppCachedImage(
               width: double.infinity,
               height: 70.h,
-              imageUrl: item.imageUrl,
+              imageUrl: item.thumbnailUrl,
             ),
           ),
           SizedBox(height: 7.h),
           // Title
           Text(
-            item.title,
+            item.name,
             style: context.textTheme.bodyMedium,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
+import 'package:mindtrip/core/shared/data/models/review_model.dart';
 
 class ReviewCard extends StatelessWidget {
   const ReviewCard({super.key, required this.data});
 
-  final ProfileReviewData data;
+  final ReviewModel data;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class ReviewCard extends StatelessWidget {
               ),
               Row(
                 children: List.generate(
-                  data.rating,
+                  data.rating.round(),
                   (_) => Padding(
                     padding: EdgeInsets.only(left: 2.w),
                     child: Icon(

@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/shared/user/data/models/user_model.dart';
-import 'package:mindtrip/features/authetication/domain/entities/auth_tokens.dart';
-
 class AuthResponseModel extends Equatable {
   final UserModel user;
   final String accessToken;
@@ -50,15 +48,6 @@ class AuthResponseModel extends Equatable {
       AuthResponseModel.fromJson(json.decode(source) as Map<String, dynamic>);
 
   String toJsonString() => json.encode(toJson());
-
-  AuthTokens toAuthTokens() {
-    return AuthTokens(
-      accessToken: accessToken,
-      tokenType: tokenType,
-      expiresIn: expiresIn,
-      refreshToken: refreshToken,
-    );
-  }
 
   @override
   List<Object?> get props => [

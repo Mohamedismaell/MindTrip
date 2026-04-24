@@ -2,6 +2,7 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/user/data/datasources/user_remote_data_source.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
+import 'package:mindtrip/core/shared/user/data/mapper/user_mapper.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 
 class UserRepositoryImpl extends UserRepository {

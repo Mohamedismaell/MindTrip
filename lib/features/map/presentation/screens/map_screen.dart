@@ -39,7 +39,7 @@ class _MapScreenState extends State<MapScreen> {
 
     final position = await locationService.getCurrentLocation();
 
-    if (position == null) return;
+    if (!mounted || position == null || this.mapboxMap == null) return;
 
     mapboxMap.flyTo(
       CameraOptions(

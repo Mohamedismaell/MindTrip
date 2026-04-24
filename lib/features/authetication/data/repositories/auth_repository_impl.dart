@@ -6,6 +6,8 @@ import 'package:mindtrip/features/authetication/data/datasources/auth_local_data
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
 import 'package:mindtrip/features/authetication/data/models/resete_password_model.dart';
+import 'package:mindtrip/core/shared/user/data/mapper/user_mapper.dart';
+import 'package:mindtrip/features/authetication/data/mapper/verify_password_otp_mapper.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/entities/verify_password_otp_entity.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';

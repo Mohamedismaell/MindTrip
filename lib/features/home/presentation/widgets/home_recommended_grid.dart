@@ -6,12 +6,12 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/features/home/presentation/models/home_models.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
 class HomeRecommendedGrid extends StatelessWidget {
   const HomeRecommendedGrid({super.key, required this.destinations});
 
-  final List<HomeDestination> destinations;
+  final List<PlaceModel> destinations;
 
   @override
   Widget build(BuildContext context) {
@@ -34,25 +34,26 @@ class HomeRecommendedGrid extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    AppCachedImage(imageUrl: destination.imageUrl),
-                    Positioned(
-                      top: 6.h,
-                      right: 10.w,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10.w,
-                          vertical: 4.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.pureWhite.withOpacity(0.92),
-                          borderRadius: BorderRadius.circular(20.r),
-                        ),
-                        child: Text(
-                          destination.priceTag,
-                          style: context.textTheme.labelLarge,
+                    AppCachedImage(imageUrl: destination.thumbnailUrl),
+                    if (destination.price != null)
+                      Positioned(
+                        top: 6.h,
+                        right: 10.w,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 4.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.pureWhite.withOpacity(0.92),
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          child: Text(
+                            destination.price.toString(),
+                            style: context.textTheme.labelLarge,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -61,7 +62,7 @@ class HomeRecommendedGrid extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 6.w),
               child: Text(
-                destination.title,
+                destination.name,
                 style: AppTextStyles.h9Bold.copyWith(
                   color: context.colorTheme.onSurface,
                 ),
@@ -78,7 +79,7 @@ class HomeRecommendedGrid extends StatelessWidget {
                   SizedBox(width: 6.w),
                   Expanded(
                     child: Text(
-                      destination.location,
+                      destination.location.address,
                       style: context.textTheme.bodyMedium?.copyWith(
                         color: context.colorTheme.outline,
                       ),
