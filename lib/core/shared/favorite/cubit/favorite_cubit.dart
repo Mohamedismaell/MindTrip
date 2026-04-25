@@ -27,8 +27,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     final updatedFavorites = Set<String>.from(state.favoriteIds);
     if (isFavorite) {
       updatedFavorites.add(placeId);
+      print('added $placeId');
     } else {
       updatedFavorites.remove(placeId);
+      print('removed $placeId');
     }
 
     emit(
@@ -54,9 +56,11 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   }
 
   Future<void> loadFavorites() async {
+    print('fovorites loaded ===>');
     final result = await _getFavoritesUseCase.call();
     result.when(
       success: (favoriteIds) {
+        print('fovorites loaded ===> $favoriteIds');
         emit(
           state.copyWith(
             favoriteIds: favoriteIds,

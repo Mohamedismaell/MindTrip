@@ -1,6 +1,9 @@
 import 'package:hive_ce_flutter/adapters.dart';
 
-import 'onboarding_local_data_source.dart';
+abstract class OnboardingLocalDataSource {
+  bool getIsFirstTime();
+  Future<void> saveIsFirstTime(bool value);
+}
 
 class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
   final Box box;

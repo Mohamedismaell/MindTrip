@@ -1,19 +1,35 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
 import 'location_model.dart';
 
+part 'place_model.g.dart';
+
+@HiveType(typeId: 1)
 class PlaceModel extends Equatable {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String? description;
+  @HiveField(3)
   final LocationModel location;
+  @HiveField(4)
   final List<String>? imageUrls;
+  @HiveField(5)
   final String thumbnailUrl;
+  @HiveField(6)
   final String? categoryId;
+  @HiveField(7)
   final double? rating;
+  @HiveField(8)
   final int? reviewCount;
+  @HiveField(9)
   final double? price;
+  @HiveField(10)
   final bool isFavorite;
+  @HiveField(11)
   final PlaceBadge badge;
 
   const PlaceModel({

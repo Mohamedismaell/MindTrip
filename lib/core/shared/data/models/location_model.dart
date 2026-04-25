@@ -1,8 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 
+part 'location_model.g.dart';
+
+@HiveType(typeId: 2)
 class LocationModel extends Equatable {
+  @HiveField(0)
   final String address;
+  @HiveField(1)
   final double latitude;
+  @HiveField(2)
   final double longitude;
 
   const LocationModel({

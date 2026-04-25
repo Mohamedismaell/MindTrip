@@ -2,17 +2,22 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_local_data_source.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart';
+import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 
 class FavoritesRepositoryImpl implements FavoritesRepository {
   final FavoritesLocalDataSource _local;
   final FavoritesRemoteDataSource _remote;
+  final PlacesLocalDataSource _placesLocal;
 
   FavoritesRepositoryImpl({
     required FavoritesLocalDataSource local,
     required FavoritesRemoteDataSource remote,
+    required PlacesLocalDataSource placesLocal,
   }) : _local = local,
-       _remote = remote;
+       _remote = remote,
+       _placesLocal = placesLocal;
 
   //Todo: Later Handle api call for remote
   @override
@@ -93,6 +98,29 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       await _remote.clearAll();
       return Result.ok(null);
     } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
+  Future<Result<List<PlaceModel>>> getFavoritePlaces({
+    required Set<String> placeIds,
+  }) async {
+    if (placeIds.isEmpty) return Result.ok([]);
+
+    try {
+      var result = await _remote.getFavoritePlaces(placeIds: placeIds);
+      if (result.isEmpty) {
+        result = await _placesLocal.getPlaces(placeIds.toList());
+      } else {
+        await _placesLocal.cachePlaces(result);
+      }
+      return Result.ok(result);
+    } catch (e) {
+      final localResult = await _placesLocal.getPlaces(placeIds.toList());
+      if (localResult.isNotEmpty) {
+        return Result.ok(localResult);
+      }
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }

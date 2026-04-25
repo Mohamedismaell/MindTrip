@@ -1,6 +1,5 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +20,9 @@ import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
 import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
+import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +35,18 @@ Future<void> main() async {
   await initializeDependencies(onboardingBox: AppHive.onboardingBox);
   print('Step 4: Service Locator initialized');
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+  //map
   const token = String.fromEnvironment("ACCESS_TOKEN");
   mapbox.MapboxOptions.setAccessToken(token);
+
+  //Todo: remove later
+  print('Step 5: Bootstrapping Mock Places Cache');
+  final placesCache = sl<PlacesLocalDataSource>();
+  await placesCache.cachePlaces(HomeMockData.popularDestinations);
+  await placesCache.cachePlaces(HomeMockData.recommendedDestinations);
+  await placesCache.cachePlaces(ExploreMockData.trendingPlaces);
+  await placesCache.cachePlaces(ExploreMockData.otherPlaces);
 
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),

@@ -1,4 +1,4 @@
-import 'package:mindtrip/features/onboarding/data/sources/onboarding_local_data_source.dart';
+import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data_source.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 
 class OnboardingRepositoryImpl implements OnboardingRepository {
