@@ -31,6 +31,16 @@ import 'package:mindtrip/features/authetication/data/datasources/auth_remote_dat
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
+import 'package:mindtrip/core/shared/data/datasources/favorites_local_data_source.dart';
+import 'package:mindtrip/core/shared/data/datasources/favorites_local_data_source_imp.dart';
+import 'package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart';
+import 'package:mindtrip/core/shared/data/repositories/favorites_repository_impl.dart';
+import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
+import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/database/cache/app_hive.dart';
 
 CacheHelper get cacheHelper => sl<CacheHelper>();
 
@@ -129,6 +139,33 @@ class CommonDi {
       ),
     );
 
+    // Favorites
+    sl.registerLazySingleton<FavoritesLocalDataSource>(
+      () => FavoritesLocalDataSourceImpl(
+        box: AppHive.favoritesBox,
+        syncQueueBox: AppHive.favoritesSyncQueueBox,
+      ),
+    );
+    sl.registerLazySingleton<FavoritesRemoteDataSource>(
+      () => FavoritesRemoteDataSource(api: sl<DioConsumer>()),
+    );
+    sl.registerLazySingleton<FavoritesRepository>(
+      () => FavoritesRepositoryImpl(
+        local: sl<FavoritesLocalDataSource>(),
+        remote: sl<FavoritesRemoteDataSource>(),
+      ),
+    );
+    sl.registerLazySingleton(() => GetFavoritesUseCase(repository: sl<FavoritesRepository>()));
+    sl.registerLazySingleton(() => ToggleFavoriteUseCase(repository: sl<FavoritesRepository>()));
+    sl.registerLazySingleton(() => SyncFavoritesUseCase(repository: sl<FavoritesRepository>()));
+    sl.registerLazySingleton(
+      () => FavoriteCubit(
+        getFavoritesUseCase: sl<GetFavoritesUseCase>(),
+        toggleFavoriteUseCase: sl<ToggleFavoriteUseCase>(),
+        syncFavoritesUseCase: sl<SyncFavoritesUseCase>(),
+      ),
+    );
+
     //  Local Storage
     final cacheHelper = CacheHelper();
     await cacheHelper.init();
@@ -150,6 +187,8 @@ class CommonDi {
         googleAuthProvider: sl<GoogleAuthProvider>(),
         facebookAuthProvider: sl<FacebookAuthProvider>(),
         userCubit: sl<UserCubit>(),
+        favoriteCubit: sl<FavoriteCubit>(),
+        favoritesRepository: sl<FavoritesRepository>(),
       ),
     );
 

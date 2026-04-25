@@ -24,6 +24,7 @@ class RouteRegister {
     ),
     // Main app flow
     AppRouteConfig(path: AppRoutes.home, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.favorites, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.explore, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.profile, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.editProfile, flow: AppFlow.app),

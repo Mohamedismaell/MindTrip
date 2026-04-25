@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -9,28 +10,16 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 
-class ExplorePlaceCard extends StatefulWidget {
+class ExplorePlaceCard extends StatelessWidget {
   const ExplorePlaceCard({super.key, required this.place});
 
   final PlaceModel place;
 
   @override
-  State<ExplorePlaceCard> createState() => _ExplorePlaceCardState();
-}
-
-class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
-  late bool _isFavorite;
-
-  @override
-  void initState() {
-    super.initState();
-    _isFavorite = widget.place.isFavorite;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    double rating = (widget.place.rating ?? 0).clamp(0, 5);
+    double rating = (place.rating ?? 0).clamp(0, 5);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.pureWhite,
@@ -49,15 +38,15 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  AppCachedImage(imageUrl: widget.place.thumbnailUrl),
+                  AppCachedImage(imageUrl: place.thumbnailUrl),
 
                   // Badge
-                  if (widget.place.badge != null &&
-                      widget.place.badge != PlaceBadge.none)
+                  if (place.badge != null &&
+                      place.badge != PlaceBadge.none)
                     Positioned(
                       top: 10.h,
                       right: 10.w,
-                      child: _BadgeChip(badge: widget.place.badge),
+                      child: _BadgeChip(badge: place.badge),
                     ),
                 ],
               ),
@@ -75,37 +64,45 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
                     Row(
                       children: [
                         Text(
-                          widget.place.name,
+                          place.name,
                           style: context.textTheme.labelLarge,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        //Todo add love icon or svg here
                         Spacer(),
                         // Heart
-                        GestureDetector(
-                          onTap: () =>
-                              setState(() => _isFavorite = !_isFavorite),
-                          child: Container(
-                            width: 30.w,
-                            height: 30.w,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.pureWhite.withValues(
-                                alpha: 0.85,
+                        BlocBuilder<FavoriteCubit, FavoriteState>(
+                          builder: (context, state) {
+                            final isFavorite = context.read<FavoriteCubit>().isFavorite(place.id);
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<FavoriteCubit>().toggleFavorite(
+                                      placeId: place.id,
+                                      isFavorite: !isFavorite,
+                                    );
+                              },
+                              child: Container(
+                                width: 30.w,
+                                height: 30.w,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.pureWhite.withValues(
+                                    alpha: 0.85,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  isFavorite
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_border_rounded,
+                                  size: 16.sp,
+                                  color: isFavorite
+                                      ? Colors.red
+                                      : context.colorTheme.onSurface,
+                                ),
                               ),
-                            ),
-                            alignment: Alignment.center,
-                            child: Icon(
-                              _isFavorite
-                                  ? Icons.favorite_rounded
-                                  : Icons.favorite_border_rounded,
-                              size: 16.sp,
-                              color: _isFavorite
-                                  ? Colors.red
-                                  : context.colorTheme.onSurface,
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -132,7 +129,7 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
                         SizedBox(width: 4.w),
                         Expanded(
                           child: Text(
-                            widget.place.location.address,
+                            place.location.address,
                             style: context.textTheme.bodyMedium,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -141,8 +138,8 @@ class _ExplorePlaceCardState extends State<ExplorePlaceCard> {
 
                         //! May change color later
                         Text(
-                          widget.place.price != null
-                              ? '\$${widget.place.price!.toStringAsFixed(0)}'
+                          place.price != null
+                              ? '\$${place.price!.toStringAsFixed(0)}'
                               : '',
                           style: context.textTheme.labelLarge?.copyWith(
                             color: AppColors.customgreeen,

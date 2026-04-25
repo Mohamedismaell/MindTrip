@@ -6,6 +6,8 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 part 'app_gate_state.dart';
 
 class AppGateCubit extends Cubit<AppGateState> {
@@ -15,6 +17,8 @@ class AppGateCubit extends Cubit<AppGateState> {
   final GoogleAuthProvider googleAuthProvider;
   final FacebookAuthProvider facebookAuthProvider;
   final UserCubit userCubit;
+  final FavoriteCubit favoriteCubit;
+  final FavoritesRepository favoritesRepository;
 
   AppGateCubit({
     required this.onboardingRepository,
@@ -23,6 +27,8 @@ class AppGateCubit extends Cubit<AppGateState> {
     required this.googleAuthProvider,
     required this.facebookAuthProvider,
     required this.userCubit,
+    required this.favoriteCubit,
+    required this.favoritesRepository,
   }) : super(AppGateLoading());
 
   Future<void> start() async {
@@ -83,6 +89,8 @@ class AppGateCubit extends Cubit<AppGateState> {
     await googleAuthProvider.signOut();
     await facebookAuthProvider.signOut();
     userCubit.clear();
+    favoriteCubit.clear();
+    await favoritesRepository.clearAll();
     result.when(
       success: (_) {
         emit(AppGateUnauthenticated());

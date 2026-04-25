@@ -20,6 +20,7 @@ import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.da
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
+import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +58,9 @@ class AppBootstrap extends StatelessWidget {
         BlocProvider<AppGateCubit>(create: (_) => sl<AppGateCubit>()),
         BlocProvider<UserCubit>(create: (_) => sl<UserCubit>()),
         BlocProvider<AuthCubit>(create: (_) => sl<AuthCubit>()),
+        BlocProvider<FavoriteCubit>(
+          create: (_) => sl<FavoriteCubit>()..loadFavorites(),
+        ),
       ],
       child: const MyApp(),
     );

@@ -1,33 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 
-//Todo Edit to be interactive with the sync data
 class FavoriteBubble extends StatelessWidget {
   const FavoriteBubble({
     super.key,
-    required this.isFavorite,
+    required this.placeId,
     this.small = false,
   });
 
-  final bool isFavorite;
+  final String placeId;
   final bool small;
 
   @override
   Widget build(BuildContext context) {
     final size = small ? 24.w : 31.w;
 
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.35),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        isFavorite ? Icons.favorite : Icons.favorite_border,
-        size: small ? 16.sp : 18.sp,
-        color: Colors.red,
-      ),
+    return BlocBuilder<FavoriteCubit, FavoriteState>(
+      builder: (context, state) {
+        final isFavorite = context.read<FavoriteCubit>().isFavorite(placeId);
+        
+        return GestureDetector(
+          onTap: () {
+            context.read<FavoriteCubit>().toggleFavorite(
+                  placeId: placeId,
+                  isFavorite: !isFavorite,
+                );
+          },
+          child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.35),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              size: small ? 16.sp : 18.sp,
+              color: Colors.red,
+            ),
+          ),
+        );
+      },
     );
   }
 }

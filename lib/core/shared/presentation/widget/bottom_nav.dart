@@ -15,11 +15,10 @@ class BottomNav extends StatelessWidget {
   final ValueChanged<int> onTap;
   @override
   Widget build(BuildContext context) {
-    final labels = ['Home', 'Explore', 'Profile'];
+    final labels = ['Home', 'Favorites', 'Explore', 'Profile'];
     final inActiveIcons = [
-      //! Edit home Icon
       BottomNavAssets.homeOutlined,
-      // HomeAssets.whiteHeartIcon,
+      HomeAssets.whiteHeartIcon,
       BottomNavAssets.exploreOutlined,
       // BottomNavAssets.aiStarOutlined,
       BottomNavAssets.personOutlined,
@@ -27,7 +26,7 @@ class BottomNav extends StatelessWidget {
     final activeIcons = [
       BottomNavAssets.homefilled,
       //Todo: Edit heart icon later
-      // HomeAssets.blackHeartIcon,
+      HomeAssets.blackHeartIcon,
       BottomNavAssets.exploreFilled,
       // BottomNavAssets.aiStarFilled,
       BottomNavAssets.personFilled,
@@ -41,7 +40,7 @@ class BottomNav extends StatelessWidget {
       color: AppColors.primaryLightGray,
       backgroundColor: Colors.transparent,
       animationDuration: const Duration(milliseconds: 400),
-      items: List.generate(3, (i) {
+      items: List.generate(4, (i) {
         return CurvedNavigationBarItem(
           child: SvgPicture.asset(
             i == currentIndex ? activeIcons[i] : inActiveIcons[i],

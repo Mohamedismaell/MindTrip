@@ -68,7 +68,7 @@ class MyTripCard extends StatelessWidget {
             Positioned(
               right: 12.w,
               top: 12.h,
-              child: FavoriteBubble(isFavorite: data.isFavorite),
+              child: FavoriteBubble(placeId: data.id),
             ),
           ],
         ),

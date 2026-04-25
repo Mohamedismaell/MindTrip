@@ -60,7 +60,7 @@ class SavedTripCard extends StatelessWidget {
             Positioned(
               right: 6.w,
               top: 4.h,
-              child: FavoriteBubble(isFavorite: data.isFavorite, small: true),
+              child: FavoriteBubble(placeId: data.id, small: true),
             ),
           ],
         ),

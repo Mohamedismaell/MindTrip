@@ -8,13 +8,13 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
 import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
+import 'package:mindtrip/features/favorite/routes/favorites_routes.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
 import 'package:mindtrip/features/map/routes/map_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 import 'package:mindtrip/features/explore/routes/explore_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
 
-//Todo Add onBorading Route
 class AppRouter {
   final AppGateCubit appGateCubit;
   AppRouter({required this.appGateCubit});
@@ -37,6 +37,7 @@ class AppRouter {
             },
             branches: [
               StatefulShellBranch(routes: [HomeRoutes.homeRoute]),
+              StatefulShellBranch(routes: [FavoritesRoutes.favoritesRoute]),
               StatefulShellBranch(routes: [ExploreRoutes.exploreRoutes]),
               StatefulShellBranch(routes: [ProfileRoutes.profileRoute]),
             ],

@@ -18,6 +18,9 @@ class AppRoutes {
   //! home
   static const String home = '/home';
 
+  //! favorites
+  static const String favorites = '/favorites';
+
   //! explore
   static const String explore = '/explore';
 
