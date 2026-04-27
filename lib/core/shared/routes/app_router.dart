@@ -7,6 +7,7 @@ import 'package:mindtrip/core/shared/presentation/shell/app_shell.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
+import 'package:mindtrip/features/ai_planner/routes/ai_planner_routes.dart';
 import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
 import 'package:mindtrip/features/favorite/routes/favorites_routes.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
@@ -39,11 +40,14 @@ class AppRouter {
               StatefulShellBranch(routes: [HomeRoutes.homeRoute]),
               StatefulShellBranch(routes: [FavoritesRoutes.favoritesRoute]),
               StatefulShellBranch(routes: [ExploreRoutes.exploreRoutes]),
+              StatefulShellBranch(routes: [AiPlannerRoutes.aiPlannerRoute]),
               StatefulShellBranch(routes: [ProfileRoutes.profileRoute]),
             ],
           ),
+          AiPlannerRoutes.aiPlannerFlow,
           ...ProfileRoutes.routes,
           MapRoutes.mapRoute,
+
           // ...CategoriesRoutes.extraRoutes,
           // ...PostDetailsRoutes.routes,
         ],

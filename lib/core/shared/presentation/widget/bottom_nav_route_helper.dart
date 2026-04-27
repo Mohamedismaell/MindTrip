@@ -8,7 +8,8 @@ class BottomNavRouteHelper {
   static const int homeIndex = 0;
   static const int favorites = 1;
   static const int explore = 2;
-  static const int profileIndex = 3;
+  static const int aiPlanner = 3;
+  static const int profileIndex = 4;
 
   // static int currentIndexForLocation(String location) {
   //   if (location.startsWith(AppRoutes.profile)) {
@@ -30,6 +31,9 @@ class BottomNavRouteHelper {
         return;
       case explore:
         context.go(AppRoutes.explore);
+        return;
+      case aiPlanner:
+        context.go(AppRoutes.aiPlannerIntro);
         return;
       case profileIndex:
         context.go(AppRoutes.profile);

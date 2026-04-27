@@ -23,12 +23,20 @@ class RouteRegister {
       flow: AppFlow.auth,
     ),
     // Main app flow
+    //! home
     AppRouteConfig(path: AppRoutes.home, flow: AppFlow.app),
+    //! favorites
     AppRouteConfig(path: AppRoutes.favorites, flow: AppFlow.app),
+    //! explore
     AppRouteConfig(path: AppRoutes.explore, flow: AppFlow.app),
+    //! ai planner
+    AppRouteConfig(path: AppRoutes.aiPlannerIntro, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.aiPlannerFlow, flow: AppFlow.app),
+    //! profile
     AppRouteConfig(path: AppRoutes.profile, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.editProfile, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.profileSettings, flow: AppFlow.app),
+    //! map
     AppRouteConfig(path: AppRoutes.mapScreen, flow: AppFlow.app),
   ];
 

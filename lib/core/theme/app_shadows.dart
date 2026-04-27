@@ -26,4 +26,9 @@ class AppShadows {
     offset: Offset(0, 5),
     color: Colors.black.withValues(alpha: 0.25),
   );
+  static BoxShadow aiplannerShadow = BoxShadow(
+    blurRadius: 4,
+    offset: Offset(0, 2),
+    color: Colors.black.withValues(alpha: 0.25),
+  );
 }

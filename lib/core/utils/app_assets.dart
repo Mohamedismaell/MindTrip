@@ -96,10 +96,19 @@ class BottomNavAssets {
 
   static const String exploreFilled = '$_iconPath/explore_filled.svg';
   static const String exploreOutlined = '$_iconPath/explore_outlined.svg';
-
+  //Todo: change the filled ai star icon.
   static const String aiStarFilled = '$_iconPath/ai_star_filled.svg';
   static const String aiStarOutlined = '$_iconPath/ai_star_outlined.svg';
 
   static const String personFilled = '$_iconPath/person_filled.svg';
   static const String personOutlined = '$_iconPath/person_outlined.svg';
+}
+
+class AiPlannerAssets {
+  AiPlannerAssets._();
+
+  static const String _iconPath = 'assets/icons/ai_planner';
+
+  static const String introIllustration = '$_iconPath/Chat bot-amico 1.svg';
+  static const String chatFaceIcon = '$_iconPath/ai_chat_face.svg';
 }

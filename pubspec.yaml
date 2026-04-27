@@ -73,11 +73,13 @@ flutter:
     - assets/images/animation/
     - assets/images/profile/
     - assets/images/map/
+    - assets/images/ai_planner/
     - assets/icons/
     - assets/icons/home/
     - assets/icons/profile/
     - assets/icons/explore/
     - assets/icons/bottom_nav/
+    - assets/icons/ai_planner/
   fonts:
     - family: SFPro
       fonts:

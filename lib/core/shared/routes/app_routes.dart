@@ -24,6 +24,10 @@ class AppRoutes {
   //! explore
   static const String explore = '/explore';
 
+  //! aiPlanner
+  static const aiPlannerIntro = '/ai-planner';
+  static const aiPlannerFlow = '/ai-planner/flow';
+
   //! profile
   static const String profile = '/profile';
   static const String editProfile = '/profile/edit';
