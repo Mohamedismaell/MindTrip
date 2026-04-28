@@ -15,6 +15,7 @@ import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
@@ -72,6 +73,9 @@ class AppBootstrap extends StatelessWidget {
         BlocProvider<AuthCubit>(create: (_) => sl<AuthCubit>()),
         BlocProvider<FavoriteCubit>(
           create: (_) => sl<FavoriteCubit>()..loadFavorites(),
+        ),
+        BlocProvider<LocationCubit>(
+          create: (_) => sl<LocationCubit>(),
         ),
       ],
       child: const MyApp(),

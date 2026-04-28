@@ -7,7 +7,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/widget/cusotm_dialog.dart';
-import 'package:mindtrip/features/map/Services/location_service/location_service.dart';
+import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FloatMapButton extends StatelessWidget {
@@ -15,45 +15,51 @@ class FloatMapButton extends StatelessWidget {
 
   Future<void> onTap(BuildContext context) async {
     final locationService = sl<LocationService>();
-    final errorColor = context.colorTheme.error;
-    final hasPermission = await locationService.requestPermission();
+    // final errorColor = context.colorTheme.error;
+    final status = await locationService.checkAccess();
+
     if (!context.mounted) return;
-    if (!hasPermission) {
-      await AppDialog.show(
-        context: context,
-        title: "Permission Required",
-        description: "Location permission is required to continue.",
-        primaryText: "Settings",
-        secondaryText: "Cancel",
-        icon: Icons.lock,
-        iconColor: errorColor,
 
-        onPrimary: () {
-          openAppSettings();
-        },
-      );
-      return;
+    switch (status) {
+      case LocationAccessStatus.denied:
+        await AppDialog.show(
+          context: context,
+          title: "Permission Required",
+          description: "Location permission is required.",
+          primaryText: "Retry",
+          onPrimary: () => onTap(context),
+        );
+        break;
+
+      case LocationAccessStatus.deniedForever:
+        await AppDialog.show(
+          context: context,
+          title: "Permission Required",
+          description: "Enable permission from settings.",
+          primaryText: "Settings",
+          onPrimary: openAppSettings,
+        );
+        break;
+
+      case LocationAccessStatus.serviceDisabled:
+        await AppDialog.show(
+          context: context,
+          title: "Enable Location",
+          description: "Turn on GPS.",
+          primaryText: "Open Settings",
+          onPrimary: Geolocator.openLocationSettings,
+        );
+        break;
+
+      case LocationAccessStatus.granted:
+        if (context.mounted) {
+          context.push(AppRoutes.mapScreen);
+        }
+        final location = await locationService.getCurrentLocationDetails();
+        // use it
+
+        break;
     }
-
-    final isEnabled = await locationService.isServiceEnabled();
-    if (!context.mounted) return;
-    if (!isEnabled) {
-      await AppDialog.show(
-        context: context,
-        title: "Enable Location Services",
-        description: "Please turn on location services (GPS) to continue.",
-        primaryText: "Open Settings",
-        secondaryText: "Cancel",
-        icon: Icons.gps_fixed,
-        onPrimary: () {
-          //! move this to another class or something
-          Geolocator.openLocationSettings();
-        },
-      );
-      return;
-    }
-
-    context.push(AppRoutes.mapScreen);
   }
 
   @override

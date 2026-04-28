@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
+import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -45,12 +47,19 @@ class HomeHeader extends StatelessWidget {
                         //* You may give it exact size idk
                         SvgPicture.asset(HomeAssets.locationIcon),
                         SizedBox(width: 6.w),
-                        Text(
-                          'Cairo, Egypt',
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            fontSize: 14.sp,
-                            color: context.colorTheme.outline,
-                          ),
+                        BlocSelector<LocationCubit, LocationState, String>(
+                          selector: (state) => state.hasLocation
+                              ? state.displayName
+                              : 'Locating...',
+                          builder: (context, locationText) {
+                            return Text(
+                              locationText,
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                fontSize: 14.sp,
+                                color: context.colorTheme.outline,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

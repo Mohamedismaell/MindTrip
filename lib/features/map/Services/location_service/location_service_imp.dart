@@ -1,26 +1,99 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mindtrip/features/map/Services/location_service/location_service.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:mindtrip/features/map/presentation/screens/models/location_result.dart';
+
+enum LocationAccessStatus { granted, denied, deniedForever, serviceDisabled }
+
+abstract class LocationService {
+  Future<LocationAccessStatus> checkAccess();
+  Future<Position?> getCurrentLocation();
+  Future<LocationResult?> getCurrentLocationDetails();
+}
 
 class LocationServiceImp implements LocationService {
   @override
-  Future<bool> requestPermission() async {
-    final status = await Permission.location.request();
-    return status.isGranted;
-  }
+  Future<LocationAccessStatus> checkAccess() async {
+    //GPS
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return LocationAccessStatus.serviceDisabled;
+    }
 
-  @override
-  Future<bool> isServiceEnabled() async {
-    return await Geolocator.isLocationServiceEnabled();
+    //Permission
+    var permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied) {
+      return LocationAccessStatus.denied;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return LocationAccessStatus.deniedForever;
+    }
+
+    return LocationAccessStatus.granted;
   }
 
   @override
   Future<Position?> getCurrentLocation() async {
     try {
-      return await Geolocator.getCurrentPosition();
-    } catch (e) {
-      print(e);
+      return await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 15),
+        ),
+      );
+    } catch (_) {
       return null;
     }
+  }
+
+  @override
+  Future<LocationResult?> getCurrentLocationDetails() async {
+    try {
+      final position = await getCurrentLocation();
+      if (position == null) return null;
+
+      final placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+      print('place: $placemarks');
+
+      if (placemarks.isEmpty) return null;
+
+      final place = placemarks.first;
+      print('place: $place');
+      print('country: ${place.country}');
+      print('city: ${place.locality}');
+      print('subAdministrativeArea: ${place.subAdministrativeArea}');
+      print('administrativeArea: ${place.administrativeArea}');
+      return LocationResult(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        country: place.country ?? '',
+        city: _resolveCity(place),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String _resolveCity(Placemark place) {
+    final raw =
+        place.administrativeArea ??
+        place.locality ??
+        place.subAdministrativeArea ??
+        '';
+    return _cleanCityName(raw);
+  }
+
+  String _cleanCityName(String name) {
+    if (name.isEmpty) return '';
+
+    return name.replaceAll('Governorate', '').replaceAll(' محافظة', '').trim();
   }
 }

@@ -1,8 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/features/map/Services/location_service/location_service.dart';
+import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/widgets/map_serach_bar.dart';
 import 'package:mindtrip/features/map/widgets/place_info_bottom_sheet.dart';
 

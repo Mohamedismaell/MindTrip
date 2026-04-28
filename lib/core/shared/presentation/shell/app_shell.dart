@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
-// import 'package:news_app/core/connection/connection_visibility.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
 
-class AppShell extends StatelessWidget {
+class AppShell extends StatefulWidget {
   final Widget child;
 
   const AppShell({super.key, required this.child});
+
+  @override
+  State<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<LocationCubit>().requestAndFetchLocation();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// Re-check location when user comes back from settings.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final cubit = context.read<LocationCubit>();
+      if (!cubit.state.hasLocation) {
+        cubit.retry();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,34 +47,8 @@ class AppShell extends StatelessWidget {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: child,
+        child: widget.child,
       ),
     );
-    // Scaffold(
-    //   // backgroundColor: Colors.transparent,
-    //   // extendBody: true,
-    //   body: BlocListener<AppConnectionCubit, AppConnectionState>(
-    //     listener: (context, state) {
-    //       if (state is Connected) {
-    //         context.read<FavoriteCubit>().syncPendingFavorites();
-    //       }
-    //     },
-    //     child: SafeArea(
-    //       bottom: false,
-    //       child: Stack(
-    //         children: [
-    //           child,
-    //           // if (showBanner)
-    //           const Positioned(
-    //             bottom: 10,
-    //             left: 0,
-    //             right: 0,
-    //             child: ConnectionBanner(),
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }
