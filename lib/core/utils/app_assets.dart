@@ -97,7 +97,7 @@ class BottomNavAssets {
   static const String exploreFilled = '$_iconPath/explore_filled.svg';
   static const String exploreOutlined = '$_iconPath/explore_outlined.svg';
   //Todo: change the filled ai star icon.
-  static const String aiStarFilled = '$_iconPath/ai_star_filled.svg';
+  static const String aiStarFilled = '$_iconPath/aiStar.svg';
   static const String aiStarOutlined = '$_iconPath/ai_star_outlined.svg';
 
   static const String personFilled = '$_iconPath/person_filled.svg';

@@ -22,7 +22,6 @@ class RangeCalendar extends StatelessWidget {
       (AiPlannerCubit cubit) => cubit.state.tripStart,
     );
     final end = context.select((AiPlannerCubit cubit) => cubit.state.tripEnd);
-
     final cubit = context.read<AiPlannerCubit>();
     final days = _buildDays(visibleMonth);
 
@@ -106,8 +105,8 @@ class RangeCalendar extends StatelessWidget {
                         bottom: 5.h,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: AppColors.primaryLightBlue1.withOpacity(
-                              0.45,
+                            color: AppColors.primaryLightBlue1.withValues(
+                              alpha: 0.45,
                             ),
                             borderRadius: BorderRadius.circular(7.r),
                           ),

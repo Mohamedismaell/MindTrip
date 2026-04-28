@@ -13,7 +13,7 @@ class AiPlannerState extends Equatable {
   final BudgetTierModel? selectedBudget;
   final String customBudget;
   final DateTime visibleMonth;
-
+  final List<String> selectedInterests;
   AiPlannerState({
     this.currentPage = 0,
     this.selectedDestination,
@@ -26,7 +26,9 @@ class AiPlannerState extends Equatable {
     this.selectedBudget,
     this.customBudget = '',
     DateTime? visibleMonth,
-  }) : visibleMonth = visibleMonth ?? DateTime(DateTime.now().year, DateTime.now().month);
+    this.selectedInterests = const [],
+  }) : visibleMonth =
+           visibleMonth ?? DateTime(DateTime.now().year, DateTime.now().month);
 
   AiPlannerState copyWith({
     int? currentPage,
@@ -44,6 +46,7 @@ class AiPlannerState extends Equatable {
     bool clearSelectedBudget = false,
     String? customBudget,
     DateTime? visibleMonth,
+    List<String>? selectedInterests,
   }) {
     return AiPlannerState(
       currentPage: currentPage ?? this.currentPage,
@@ -61,6 +64,7 @@ class AiPlannerState extends Equatable {
           : selectedBudget ?? this.selectedBudget,
       customBudget: customBudget ?? this.customBudget,
       visibleMonth: visibleMonth ?? this.visibleMonth,
+      selectedInterests: selectedInterests ?? this.selectedInterests,
     );
   }
 
@@ -73,7 +77,9 @@ class AiPlannerState extends Equatable {
       case 2:
         return adults + children + pets > 0;
       case 3:
-        return selectedBudget != null;
+        return selectedBudget != null || customBudget.isNotEmpty;
+      case 4:
+        return selectedInterests.isNotEmpty;
       default:
         return false;
     }
@@ -81,8 +87,18 @@ class AiPlannerState extends Equatable {
 
   String get monthLabel {
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     return '${monthNames[visibleMonth.month - 1]} ${visibleMonth.year}';
   }
@@ -100,5 +116,6 @@ class AiPlannerState extends Equatable {
     selectedBudget,
     customBudget,
     visibleMonth,
+    selectedInterests,
   ];
 }

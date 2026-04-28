@@ -24,21 +24,19 @@ class CustomHeadLine extends StatelessWidget {
           TextSpan(
             text: firstTitle,
             style:
-                firstStyle?.copyWith(color: context.colorTheme.primary) ??
+                firstStyle ??
                 context.textTheme.headlineLarge!.copyWith(
                   color: context.colorTheme.primary,
                 ),
           ),
           TextSpan(
             text: secondTitle,
-            style:
-                secondStyle?.copyWith(color: context.colorTheme.onSurface) ??
-                context.textTheme.headlineLarge,
+            style: secondStyle ?? context.textTheme.headlineLarge,
           ),
           TextSpan(
             text: thirdTitle,
             style:
-                firstStyle?.copyWith(color: context.colorTheme.primary) ??
+                firstStyle ??
                 context.textTheme.headlineLarge!.copyWith(
                   color: context.colorTheme.primary,
                 ),

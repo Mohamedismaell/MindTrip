@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
@@ -101,7 +103,9 @@ class HomeAiPlannerSection extends StatelessWidget {
                           vertical: 18,
                         ),
                         child: CustomOtlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push(AppRoutes.aiPlannerFlow);
+                          },
                           text: 'Create your own plan',
                         ),
                       ),

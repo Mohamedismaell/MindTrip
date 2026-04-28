@@ -8,13 +8,12 @@ import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_hint.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/flow_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/selection_tile.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/tsep_heading.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/step_heading.dart';
 
 class DestinationStep extends StatelessWidget {
   const DestinationStep({
     super.key,
     required this.controller,
-    // required this.onChanged,
     required this.onDestinationTap,
   });
 
@@ -24,10 +23,8 @@ class DestinationStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('DestinationStep built');
-    final canContinue = context.select(
-      (AiPlannerCubit bloc) => bloc.state.canContinue,
-    );
     final cubit = context.read<AiPlannerCubit>();
+
     return ListView(
       children: [
         StepHeading(
@@ -43,32 +40,24 @@ class DestinationStep extends StatelessWidget {
           onChanged: cubit.updateDestinationQuery,
         ),
         SizedBox(height: 37.h),
-        _DestinationsList(
-          onDestinationTap: onDestinationTap,
-          // selectedDestination: state.selectedDestination,
-        ),
+        _DestinationsList(onDestinationTap: onDestinationTap),
         SizedBox(height: 32.h),
-        FlowButton(
-          enabled: canContinue,
-          text: 'Continue',
-          onTap: cubit.nextPage,
-        ),
+        FlowButton(text: 'Continue'),
         SizedBox(height: 24.h),
-        AiHint(message: 'Tap the bot if you need some inspiration.'),
+        AiHint(
+          message: 'Tap the bot if you need some inspiration.',
+
+          actionMessage: ' Ask AI',
+        ),
       ],
     );
   }
 }
 
 class _DestinationsList extends StatefulWidget {
-  const _DestinationsList({
-    // String? selectedDestination,
-    required ValueChanged<String> onDestinationTap,
-  }) : // _selectedDestination = selectedDestination,
-       _onDestinationTap = onDestinationTap;
+  const _DestinationsList({required ValueChanged<String> onDestinationTap})
+    : _onDestinationTap = onDestinationTap;
 
-  // final List<String> _destinations;
-  // final String? _selectedDestination;
   final ValueChanged<String> _onDestinationTap;
   @override
   State<_DestinationsList> createState() => _DestinationsListState();
@@ -87,9 +76,15 @@ class _DestinationsListState extends State<_DestinationsList> {
   Widget build(BuildContext context) {
     print('_DestinationsList built');
     final cubit = context.read<AiPlannerCubit>();
+    final selectedDestination = context.select(
+      (AiPlannerCubit c) => c.state.selectedDestination,
+    );
+    final destinationQuery = context.select(
+      (AiPlannerCubit c) => c.state.destinationQuery,
+    );
     return SizedBox(
       height: 201.h,
-      child: cubit.getFilteredDestinations(cubit.state.destinationQuery).isEmpty
+      child: cubit.getFilteredDestinations(destinationQuery).isEmpty
           ? Center(
               child: Text(
                 'No destinations match your search yet.',
@@ -115,8 +110,11 @@ class _DestinationsListState extends State<_DestinationsList> {
                   )[index];
                   return SelectionTile(
                     label: destination,
-                    selected: cubit.state.selectedDestination == destination,
-                    onTap: () => widget._onDestinationTap(destination),
+                    selected: selectedDestination == destination,
+                    onTap: () {
+                      widget._onDestinationTap(destination);
+                      cubit.selectDestination(destination);
+                    },
                   );
                 },
                 separatorBuilder: (_, _) => SizedBox(height: 18.h),

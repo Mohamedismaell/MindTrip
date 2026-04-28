@@ -63,7 +63,9 @@ void main() {
   });
 
   group('Onboarding Screen Navigation', () {
-    testWidgets('navigates from onboarding to interests on last page', (tester) async {
+    testWidgets('navigates from onboarding to interests on last page', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.onBoarding);
 
       await pumpAppWithHarness(tester, harness);
@@ -95,7 +97,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('onboarding state updates when tapping next multiple times', (tester) async {
+    testWidgets('onboarding state updates when tapping next multiple times', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.onBoarding);
 
       await pumpAppWithHarness(tester, harness);
@@ -120,8 +124,12 @@ void main() {
   });
 
   group('Interests Screen', () {
-    testWidgets('renders interests screen with category buttons', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.interests);
+    testWidgets('renders interests screen with category buttons', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.onboardingInterests,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -136,8 +144,12 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('tapping interest buttons updates selected categories', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.interests);
+    testWidgets('tapping interest buttons updates selected categories', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.onboardingInterests,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -153,8 +165,12 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('save button is disabled when no interests selected', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.interests);
+    testWidgets('save button is disabled when no interests selected', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.onboardingInterests,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -167,8 +183,12 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('save button is enabled when at least one interest selected', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.interests);
+    testWidgets('save button is enabled when at least one interest selected', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.onboardingInterests,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -228,7 +248,9 @@ void main() {
   });
 
   group('Onboarding Flow Integration', () {
-    testWidgets('complete onboarding flow: onboarding -> interests', (tester) async {
+    testWidgets('complete onboarding flow: onboarding -> interests', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.onBoarding);
 
       await pumpAppWithHarness(tester, harness);
@@ -251,7 +273,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('onboarding flow: onboarding -> skip -> welcome -> signup', (tester) async {
+    testWidgets('onboarding flow: onboarding -> skip -> welcome -> signup', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.onBoarding);
 
       await pumpAppWithHarness(tester, harness);

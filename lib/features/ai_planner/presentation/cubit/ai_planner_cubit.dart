@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
+
 import 'ai_planner_state.dart';
 
 class AiPlannerCubit extends Cubit<AiPlannerState> {
@@ -11,7 +12,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
   }
 
   void nextPage() {
-    if (state.currentPage < 3) {
+    if (state.currentPage < 4) {
       emit(state.copyWith(currentPage: state.currentPage + 1));
     }
   }
@@ -101,6 +102,18 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     }
   }
 
+  // Interests
+  void toggleInterest(String interest) {
+    final currentInterests = List<String>.from(state.selectedInterests);
+
+    if (currentInterests.contains(interest)) {
+      currentInterests.remove(interest);
+    } else {
+      currentInterests.add(interest);
+    }
+
+    emit(state.copyWith(selectedInterests: currentInterests));
+  }
   // Helpers
 
   List<String> getFilteredDestinations(String query) {

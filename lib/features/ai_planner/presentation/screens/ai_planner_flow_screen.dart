@@ -7,8 +7,11 @@ import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_chat_bot_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/animated_progress_bar.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/budget_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/destination_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/duration_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/interests_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/travelers_step.dart';
 
 class AiPlannerFlowScreen extends StatelessWidget {
   const AiPlannerFlowScreen({super.key});
@@ -31,6 +34,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   final PageController _pageController = PageController();
   final TextEditingController _destinationController = TextEditingController();
   final TextEditingController _customBudgetController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -56,6 +60,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     _pageController.dispose();
     _destinationController.dispose();
     _customBudgetController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -70,11 +75,17 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AiPlannerCubit>();
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final currentPage = context.select(
+      (AiPlannerCubit cubit) => cubit.state.currentPage,
+    );
 
+    final showFab = !isKeyboardOpen && (currentPage != 4);
     return Scaffold(
       backgroundColor: context.colorTheme.surface,
-      floatingActionButton: const AiChatBotButton(),
+      floatingActionButton: showFab ? const AiChatBotButton() : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
@@ -125,12 +136,14 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                           controller: _destinationController,
                           onDestinationTap: (dest) {
                             _destinationController.text = dest;
-                            cubit.selectDestination(dest);
                           },
                         ),
                         const DurationStep(),
-                        // const TravelersStep(),
-                        // const BudgetStep(),
+                        const TravelersStep(),
+                        BudgetStep(
+                          customBudgetController: _customBudgetController,
+                        ),
+                        InterestsStep(scrollController: _scrollController),
                       ],
                     ),
                   ),
@@ -165,31 +178,3 @@ class _HeaderIconButton extends StatelessWidget {
     );
   }
 }
- // TravelersStep(
-                        //   title: 'Who is traveling?',
-                        //   subtitle: 'Tell us how many people are joining.',
-                        //   adults: state.adults,
-                        //   children: state.children,
-                        //   pets: state.pets,
-                        //   onDecreaseAdults: () => cubit.changeAdults(-1),
-                        //   onIncreaseAdults: () => cubit.changeAdults(1),
-                        //   onDecreaseChildren: () => cubit.changeChildren(-1),
-                        //   onIncreaseChildren: () => cubit.changeChildren(1),
-                        //   onDecreasePets: () => cubit.changePets(-1),
-                        //   onIncreasePets: () => cubit.changePets(1),
-                        //   canContinue: state.canContinue,
-                        //   onContinue: () => cubit.nextPage(),
-                        //   aiHint: 'Skip the clicks! Tell AI who is joining.',
-                        // ),
-                        // BudgetStep(
-                        //   title: 'What is your budget?',
-                        //   subtitle: 'This is your budget per person.',
-                        //   budgets: AiPlannerMockData.budgetTiers,
-                        //   selectedBudget: state.selectedBudget,
-                        //   customBudgetController: _customBudgetController,
-                        //   onBudgetTap: cubit.selectBudget,
-                        //   onCustomBudgetChanged: cubit.updateCustomBudget,
-                        //   canContinue: state.canContinue,
-                        //   onContinue: () => cubit.nextPage(),
-                        //   aiHint: 'Need help estimating your budget? Ask AI',
-                        // ),

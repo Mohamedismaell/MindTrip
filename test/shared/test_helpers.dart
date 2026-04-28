@@ -73,7 +73,9 @@ class TestHarness {
     final userEntity = user ?? testUser;
     final userRepo = userRepository ?? FakeUserRepository(userEntity);
     final authRepo = authRepository ?? FakeAuthRepository();
-    final onBoardingRepo = onboardingRepository ?? FakeOnboardingRepository(isFirstTime: isFirstTime);
+    final onBoardingRepo =
+        onboardingRepository ??
+        FakeOnboardingRepository(isFirstTime: isFirstTime);
 
     themeCubit = ThemeCubit();
     userCubit = UserCubit(
@@ -142,7 +144,7 @@ class TestHarness {
               builder: (context, state) => const _TestOnboardingScreen(),
             ),
             GoRoute(
-              path: AppRoutes.interests,
+              path: AppRoutes.onboardingInterests,
               builder: (context, state) => const _TestInterestsScreen(),
             ),
             GoRoute(
@@ -175,7 +177,8 @@ class TestHarness {
             ),
             GoRoute(
               path: AppRoutes.completeResetPasswordScreen,
-              builder: (context, state) => const _TestCompleteResetPasswordScreen(),
+              builder: (context, state) =>
+                  const _TestCompleteResetPasswordScreen(),
             ),
           ],
         ),
@@ -210,9 +213,11 @@ class _TestOnboardingScreen extends StatelessWidget {
                 key: const Key('onboarding-next-btn'),
                 onPressed: () {
                   if (state.isLastPage) {
-                    context.go(AppRoutes.interests);
+                    context.go(AppRoutes.onboardingInterests);
                   } else {
-                    context.read<OnboardingCubit>().updateIndex(state.currentIndex + 1);
+                    context.read<OnboardingCubit>().updateIndex(
+                      state.currentIndex + 1,
+                    );
                   }
                 },
                 child: const Text('Next'),
@@ -243,11 +248,14 @@ class _TestInterestsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('Select Interests'),
-              Text('Selected: ${state.selectedCategories?.join(", ") ?? "none"}'),
+              Text(
+                'Selected: ${state.selectedCategories?.join(", ") ?? "none"}',
+              ),
               ...['Beaches', 'Adventure', 'Culture', 'History', 'Food'].map(
                 (cat) => ElevatedButton(
                   key: Key('interest-$cat'),
-                  onPressed: () => context.read<OnboardingCubit>().editSelectedCategory(cat),
+                  onPressed: () =>
+                      context.read<OnboardingCubit>().editSelectedCategory(cat),
                   child: Text(cat),
                 ),
               ),
@@ -323,7 +331,9 @@ class _TestSignInScreen extends StatelessWidget {
                     Checkbox(
                       key: const Key('signin-remember-me'),
                       value: state.rememberMe,
-                      onChanged: (v) => context.read<AuthCubit>().toggleRememberMe(v ?? false),
+                      onChanged: (v) => context
+                          .read<AuthCubit>()
+                          .toggleRememberMe(v ?? false),
                     ),
                     const Text('Remember me'),
                   ],
@@ -339,11 +349,15 @@ class _TestSignInScreen extends StatelessWidget {
                   onPressed: state.status == AuthStatus.loading
                       ? null
                       : () => context.read<AuthCubit>().signIn(
-                            email: 'test@example.com',
-                            password: 'password123',
-                            rememberMe: state.rememberMe,
-                          ),
-                  child: Text(state.status == AuthStatus.loading ? 'Loading...' : 'Sign In'),
+                          email: 'test@example.com',
+                          password: 'password123',
+                          rememberMe: state.rememberMe,
+                        ),
+                  child: Text(
+                    state.status == AuthStatus.loading
+                        ? 'Loading...'
+                        : 'Sign In',
+                  ),
                 ),
                 ElevatedButton(
                   key: const Key('signin-forgot-password-btn'),
@@ -399,7 +413,9 @@ class _TestSignUpScreen extends StatelessWidget {
                 ),
                 TextField(
                   key: const Key('signup-confirm-field'),
-                  decoration: const InputDecoration(labelText: 'Confirm Password'),
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm Password',
+                  ),
                   obscureText: state.obscureConfirm,
                 ),
                 if (state.errorMessage != null)
@@ -413,12 +429,16 @@ class _TestSignUpScreen extends StatelessWidget {
                   onPressed: state.status == AuthStatus.loading
                       ? null
                       : () => context.read<AuthCubit>().signUp(
-                            name: 'Test User',
-                            email: 'test@example.com',
-                            password: 'password123',
-                            rememberMe: state.rememberMe,
-                          ),
-                  child: Text(state.status == AuthStatus.loading ? 'Loading...' : 'Sign Up'),
+                          name: 'Test User',
+                          email: 'test@example.com',
+                          password: 'password123',
+                          rememberMe: state.rememberMe,
+                        ),
+                  child: Text(
+                    state.status == AuthStatus.loading
+                        ? 'Loading...'
+                        : 'Sign Up',
+                  ),
                 ),
                 ElevatedButton(
                   key: const Key('signup-login-link'),
@@ -463,8 +483,12 @@ class _TestForgetPasswordScreen extends StatelessWidget {
                   key: const Key('forget-submit-btn'),
                   onPressed: state.status == AuthStatus.loading
                       ? null
-                      : () => context.read<AuthCubit>().forgetPassword(email: 'test@example.com'),
-                  child: Text(state.status == AuthStatus.loading ? 'Loading...' : 'Send'),
+                      : () => context.read<AuthCubit>().forgetPassword(
+                          email: 'test@example.com',
+                        ),
+                  child: Text(
+                    state.status == AuthStatus.loading ? 'Loading...' : 'Send',
+                  ),
                 ),
               ],
             );
@@ -505,9 +529,9 @@ class _TestOtpScreen extends StatelessWidget {
                 ElevatedButton(
                   key: const Key('otp-verify-btn'),
                   onPressed: () => context.read<AuthCubit>().verifyPasswordOtp(
-                        email: state.email ?? '',
-                        otp: '123456',
-                      ),
+                    email: state.email ?? '',
+                    otp: '123456',
+                  ),
                   child: const Text('Verify'),
                 ),
                 ElevatedButton(
@@ -546,7 +570,9 @@ class _TestResetPasswordScreen extends StatelessWidget {
                 ),
                 TextField(
                   key: const Key('reset-confirm-password-field'),
-                  decoration: const InputDecoration(labelText: 'Confirm Password'),
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm Password',
+                  ),
                   obscureText: state.obscureConfirm,
                 ),
                 if (state.errorMessage != null)
@@ -558,11 +584,11 @@ class _TestResetPasswordScreen extends StatelessWidget {
                 ElevatedButton(
                   key: const Key('reset-submit-btn'),
                   onPressed: () => context.read<AuthCubit>().resetPassword(
-                        email: state.email ?? '',
-                        resetToken: state.resetToken ?? '',
-                        newPassword: 'newPassword123',
-                        confirmNewPassword: 'newPassword123',
-                      ),
+                    email: state.email ?? '',
+                    resetToken: state.resetToken ?? '',
+                    newPassword: 'newPassword123',
+                    confirmNewPassword: 'newPassword123',
+                  ),
                   child: const Text('Reset'),
                 ),
               ],
@@ -587,7 +613,7 @@ class _TestCompleteSignUpScreen extends StatelessWidget {
           const Text('Sign Up Complete'),
           ElevatedButton(
             key: const Key('complete-signup-continue-btn'),
-            onPressed: () => context.go(AppRoutes.interests),
+            onPressed: () => context.go(AppRoutes.onboardingInterests),
             child: const Text('Continue'),
           ),
         ],
@@ -662,7 +688,10 @@ Future<void> pumpApp(
   await tester.pumpAndSettle();
 }
 
-Future<void> pumpAppWithHarness(WidgetTester tester, TestHarness harness) async {
+Future<void> pumpAppWithHarness(
+  WidgetTester tester,
+  TestHarness harness,
+) async {
   await pumpApp(
     tester,
     router: harness.router,
@@ -715,7 +744,8 @@ class FakeSecureTokenStorage extends SecureTokenStorage {
   Future<void> clearTokens() async => _tokens.clear();
 
   @override
-  Future<String?> getAccessToken() async => accessToken ?? _tokens['access_token'];
+  Future<String?> getAccessToken() async =>
+      accessToken ?? _tokens['access_token'];
 
   @override
   Future<String?> getRefreshToken() async => _tokens['refresh_token'];
@@ -756,7 +786,8 @@ class FakeUserRepository implements UserRepository {
   Future<Result<UserEntity>> getCurrentUser() async => Result.ok(user);
 
   @override
-  Future<Result<void>> updateInterests(List<String> interests) async => Result.ok(null);
+  Future<Result<void>> updateInterests(List<String> interests) async =>
+      Result.ok(null);
 }
 
 class FakeAuthRepository implements AuthRepository {
@@ -790,7 +821,9 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signUpShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Email already exists'));
+      return Result.error(
+        const UnknownFailure(message: 'Email already exists'),
+      );
     }
     return Result.ok(null);
   }
@@ -808,7 +841,9 @@ class FakeAuthRepository implements AuthRepository {
   Future<Result<UserEntity>> facebookAuth({required String token}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signInShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Facebook auth failed'));
+      return Result.error(
+        const UnknownFailure(message: 'Facebook auth failed'),
+      );
     }
     return Result.ok(testUser);
   }
@@ -843,7 +878,9 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (resetPasswordShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Password reset failed'));
+      return Result.error(
+        const UnknownFailure(message: 'Password reset failed'),
+      );
     }
     return Result.ok(null);
   }

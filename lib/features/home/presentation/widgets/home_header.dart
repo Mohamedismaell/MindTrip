@@ -10,9 +10,7 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key, required this.profileImageUrl});
-
-  final String profileImageUrl;
+  const HomeHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

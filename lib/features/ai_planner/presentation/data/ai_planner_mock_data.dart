@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 
 class AiPlannerMockData {
@@ -30,21 +29,9 @@ class AiPlannerMockData {
     'December',
   ];
   static final List<BudgetTierModel> budgetTiers = const [
-    BudgetTierModel(title: 'Basic', amount: 300, icon: Icons.savings_outlined),
-    BudgetTierModel(
-      title: 'Standard',
-      amount: 500,
-      icon: Icons.sentiment_satisfied_alt_outlined,
-    ),
-    BudgetTierModel(
-      title: 'Comfort',
-      amount: 1000,
-      icon: Icons.auto_awesome_outlined,
-    ),
-    BudgetTierModel(
-      title: 'Premium',
-      amount: 2000,
-      icon: Icons.workspace_premium_outlined,
-    ),
+    BudgetTierModel(title: '🙂 Basic', amount: 300),
+    BudgetTierModel(title: '💸 Standard', amount: 500),
+    BudgetTierModel(title: '✨ Comfort', amount: 1000),
+    BudgetTierModel(title: '👑 Premium', amount: 2000),
   ];
 }

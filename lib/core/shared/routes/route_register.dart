@@ -8,7 +8,10 @@ class RouteRegister {
 
     // Onboarding flow
     AppRouteConfig(path: AppRoutes.onBoarding, flow: AppFlow.onboarding),
-    AppRouteConfig(path: AppRoutes.interests, flow: AppFlow.onboarding),
+    AppRouteConfig(
+      path: AppRoutes.onboardingInterests,
+      flow: AppFlow.onboarding,
+    ),
 
     // Auth flow
     AppRouteConfig(path: AppRoutes.welcomeAuth, flow: AppFlow.auth),

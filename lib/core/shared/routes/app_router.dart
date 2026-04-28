@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/app_flow.dart';
-import 'package:mindtrip/core/navigaiton/tabs_shell.dart';
+import 'package:mindtrip/core/shared/presentation/shell/tabs_shell.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/shell/app_shell.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
@@ -29,7 +29,7 @@ class AppRouter {
       ...AuthRoutes.routes,
       ShellRoute(
         builder: (context, state, child) {
-          return AppShell(location: state.uri.toString(), child: child);
+          return AppShell(child: child);
         },
         routes: [
           StatefulShellRoute.indexedStack(
@@ -81,7 +81,9 @@ class AppRouter {
     }
 
     if (gateState is AppGateInterestsRequired) {
-      return location == AppRoutes.interests ? null : AppRoutes.interests;
+      return location == AppRoutes.onboardingInterests
+          ? null
+          : AppRoutes.onboardingInterests;
     }
 
     return null;

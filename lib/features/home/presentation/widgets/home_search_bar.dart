@@ -4,9 +4,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 
-class HomeSearchBar extends StatelessWidget {
+class HomeSearchBar extends StatefulWidget {
   const HomeSearchBar({super.key});
 
+  @override
+  State<HomeSearchBar> createState() => _HomeSearchBarState();
+}
+
+class _HomeSearchBarState extends State<HomeSearchBar> {
+  final TextEditingController _searchTextEditController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -32,11 +39,13 @@ class HomeSearchBar extends StatelessWidget {
                     color: context.colorTheme.outline,
                   ),
                   SizedBox(width: 8.w),
-                  Text(
-                    'Search here..',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      fontSize: 14.sp,
-                      color: context.colorTheme.outline,
+                  Expanded(
+                    child: TextField(
+                      controller: _searchTextEditController,
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        fontSize: 14.sp,
+                        color: context.colorTheme.outline,
+                      ),
                     ),
                   ),
                 ],

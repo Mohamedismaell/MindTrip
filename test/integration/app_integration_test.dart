@@ -16,10 +16,7 @@ void main() {
     late TestHarness harness;
 
     setUp(() {
-      harness = TestHarness(
-        user: testUser,
-        accessToken: 'valid-token',
-      );
+      harness = TestHarness(user: testUser, accessToken: 'valid-token');
     });
 
     tearDown(() {
@@ -31,10 +28,13 @@ void main() {
       expect(harness.appGateCubit.state, isA<AppGateAuthenticated>());
     });
 
-    test('loginSuccess sets user and emits authenticated when interests exist', () {
-      harness.appGateCubit.loginSuccess(testUser);
-      expect(harness.userCubit.state.user, testUser);
-    });
+    test(
+      'loginSuccess sets user and emits authenticated when interests exist',
+      () {
+        harness.appGateCubit.loginSuccess(testUser);
+        expect(harness.userCubit.state.user, testUser);
+      },
+    );
 
     test('loginSuccess emits interests required when no interests', () {
       const userWithoutInterests = UserEntity(
@@ -234,7 +234,9 @@ void main() {
     });
 
     testWidgets('interests screen renders with test harness', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.interests);
+      final harness = TestHarness(
+        initialLocation: AppRoutes.onboardingInterests,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -316,8 +318,12 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('empty interests selection disables save button', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.interests);
+    testWidgets('empty interests selection disables save button', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.onboardingInterests,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -331,7 +337,9 @@ void main() {
     });
 
     testWidgets('selecting interest enables save button', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.interests);
+      final harness = TestHarness(
+        initialLocation: AppRoutes.onboardingInterests,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
