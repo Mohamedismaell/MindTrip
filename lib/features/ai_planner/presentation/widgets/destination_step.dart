@@ -22,10 +22,9 @@ class DestinationStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('DestinationStep built');
     final cubit = context.read<AiPlannerCubit>();
 
-    return ListView(
+    return Column(
       children: [
         StepHeading(
           title: 'Where do you want to go?',
@@ -40,15 +39,15 @@ class DestinationStep extends StatelessWidget {
           onChanged: cubit.updateDestinationQuery,
         ),
         SizedBox(height: 37.h),
-        _DestinationsList(onDestinationTap: onDestinationTap),
-        SizedBox(height: 32.h),
+        Expanded(child: _DestinationsList(onDestinationTap: onDestinationTap)),
+        SizedBox(height: 12.h),
         FlowButton(text: 'Continue'),
         SizedBox(height: 24.h),
         AiHint(
           message: 'Tap the bot if you need some inspiration.',
-
           actionMessage: ' Ask AI',
         ),
+        // SizedBox(height: 80.h),
       ],
     );
   }
@@ -74,7 +73,6 @@ class _DestinationsListState extends State<_DestinationsList> {
 
   @override
   Widget build(BuildContext context) {
-    print('_DestinationsList built');
     final cubit = context.read<AiPlannerCubit>();
     final selectedDestination = context.select(
       (AiPlannerCubit c) => c.state.selectedDestination,
@@ -82,45 +80,42 @@ class _DestinationsListState extends State<_DestinationsList> {
     final destinationQuery = context.select(
       (AiPlannerCubit c) => c.state.destinationQuery,
     );
-    return SizedBox(
-      height: 201.h,
-      child: cubit.getFilteredDestinations(destinationQuery).isEmpty
-          ? Center(
-              child: Text(
-                'No destinations match your search yet.',
-                style: AppTextStyles.h9Regular.copyWith(
-                  color: context.colorTheme.outline,
-                ),
-              ),
-            )
-          : Scrollbar(
-              controller: _scrollController,
-              thumbVisibility: true,
-              trackVisibility: true,
-              thickness: 2.w,
-              child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                controller: _scrollController,
-                itemCount: cubit
-                    .getFilteredDestinations(cubit.state.destinationQuery)
-                    .length,
-                itemBuilder: (context, index) {
-                  final destination = cubit.getFilteredDestinations(
-                    cubit.state.destinationQuery,
-                  )[index];
-                  return SelectionTile(
-                    label: destination,
-                    selected: selectedDestination == destination,
-                    onTap: () {
-                      widget._onDestinationTap(destination);
-                      cubit.selectDestination(destination);
-                    },
-                  );
-                },
-                separatorBuilder: (_, _) => SizedBox(height: 18.h),
+    return cubit.getFilteredDestinations(destinationQuery).isEmpty
+        ? Center(
+            child: Text(
+              'No destinations match your search yet.',
+              style: AppTextStyles.h9Regular.copyWith(
+                color: context.colorTheme.outline,
               ),
             ),
-    );
+          )
+        : Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            trackVisibility: true,
+            thickness: 2.w,
+            child: ListView.separated(
+              padding: EdgeInsets.only(right: 10.w, bottom: 20),
+              controller: _scrollController,
+              itemCount: cubit
+                  .getFilteredDestinations(cubit.state.destinationQuery)
+                  .length,
+              itemBuilder: (context, index) {
+                final destination = cubit.getFilteredDestinations(
+                  cubit.state.destinationQuery,
+                )[index];
+                return SelectionTile(
+                  label: destination,
+                  selected: selectedDestination == destination,
+                  onTap: () {
+                    widget._onDestinationTap(destination);
+                    cubit.selectDestination(destination);
+                  },
+                );
+              },
+              separatorBuilder: (_, _) => SizedBox(height: 18.h),
+            ),
+          );
   }
 }
 

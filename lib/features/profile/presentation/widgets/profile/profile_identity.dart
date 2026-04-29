@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
+import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
@@ -78,11 +81,17 @@ class ProfileIdentity extends StatelessWidget {
               ),
 
               SizedBox(width: 8.w),
-              Text(
-                ProfileMockData.location,
-                style: context.textTheme.labelLarge?.copyWith(
-                  color: context.colorTheme.onSurfaceVariant,
-                ),
+              BlocSelector<LocationCubit, LocationState, String>(
+                selector: (state) =>
+                    state.hasLocation ? state.displayName : 'Locating...',
+                builder: (context, stateText) {
+                  return Text(
+                    stateText,
+                    style: context.textTheme.labelLarge?.copyWith(
+                      color: context.colorTheme.onSurfaceVariant,
+                    ),
+                  );
+                },
               ),
             ],
           ),

@@ -74,9 +74,7 @@ class AppBootstrap extends StatelessWidget {
         BlocProvider<FavoriteCubit>(
           create: (_) => sl<FavoriteCubit>()..loadFavorites(),
         ),
-        BlocProvider<LocationCubit>(
-          create: (_) => sl<LocationCubit>(),
-        ),
+        BlocProvider<LocationCubit>(create: (_) => sl<LocationCubit>()),
       ],
       child: const MyApp(),
     );
@@ -104,7 +102,7 @@ class MyApp extends StatelessWidget {
             // builder: DevicePreview.appBuilder,
             debugShowCheckedModeBanner: false,
             theme: getLightTheme(),
-            darkTheme: getDarkTheme(),
+            darkTheme: getLightTheme(),
             themeMode: mode.themeMode,
             routerConfig: sl<AppRouter>().appRouter,
             builder: DevicePreview.appBuilder,
