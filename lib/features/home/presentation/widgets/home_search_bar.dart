@@ -27,7 +27,7 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
                 color: context.colorTheme.surface,
                 borderRadius: BorderRadius.circular(30.r),
                 border: Border.all(
-                  color: context.colorTheme.outline.withOpacity(0.55),
+                  color: context.colorTheme.outline.withValues(alpha: 0.55),
                   width: 0.8,
                 ),
               ),
@@ -60,7 +60,7 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
               // color: AppColors.primaryLightGray,
               shape: BoxShape.circle,
               border: Border.all(
-                color: context.colorTheme.outline.withOpacity(0.45),
+                color: context.colorTheme.outline.withValues(alpha: 0.45),
                 width: 0.8,
               ),
             ),

@@ -58,17 +58,22 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icons/brand_logo.png"
+  # for iOS + fallback
+  image_path: "assets/images/splash/Frame 3.png"
+
+  # for Android adaptive icon
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/splash/Frame 3.png"
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/onboarding/Pattern.jpg
+  image: assets/images/splash/High-Quality-Logo.png
   android: true
   ios: true
 
   android_12:
     color: "#ff ffff"
-    image: assets/images/onboarding/Pattern.jpg
+    image: assets/images/splash/High-Quality-Logo.png
 
 flutter:
   uses-material-design: true

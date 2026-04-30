@@ -10,12 +10,11 @@ class AppBackground extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: AppGradients.backgroundGradient,
-            ),
-          ),
-
+          // Container(
+          //   decoration: BoxDecoration(
+          //     gradient: AppGradients.backgroundGradient,
+          //   ),
+          // ),
           SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),

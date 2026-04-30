@@ -177,7 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 50.h),
         ],
       ),
     );

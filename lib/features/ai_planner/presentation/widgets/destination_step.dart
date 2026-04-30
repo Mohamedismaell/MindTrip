@@ -24,7 +24,7 @@ class DestinationStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<AiPlannerCubit>();
 
-    return Column(
+    return ListView(
       children: [
         StepHeading(
           title: 'Where do you want to go?',
@@ -33,13 +33,12 @@ class DestinationStep extends StatelessWidget {
           icon: Icons.location_on_rounded,
         ),
         SizedBox(height: 24.h),
-
         _SearchBar(
           controller: controller,
           onChanged: cubit.updateDestinationQuery,
         ),
         SizedBox(height: 37.h),
-        Expanded(child: _DestinationsList(onDestinationTap: onDestinationTap)),
+        _DestinationsList(onDestinationTap: onDestinationTap),
         SizedBox(height: 12.h),
         FlowButton(text: 'Continue'),
         SizedBox(height: 24.h),
@@ -89,31 +88,34 @@ class _DestinationsListState extends State<_DestinationsList> {
               ),
             ),
           )
-        : Scrollbar(
-            controller: _scrollController,
-            thumbVisibility: true,
-            trackVisibility: true,
-            thickness: 2.w,
-            child: ListView.separated(
-              padding: EdgeInsets.only(right: 10.w, bottom: 20),
+        : SizedBox(
+            height: 230.h,
+            child: Scrollbar(
               controller: _scrollController,
-              itemCount: cubit
-                  .getFilteredDestinations(cubit.state.destinationQuery)
-                  .length,
-              itemBuilder: (context, index) {
-                final destination = cubit.getFilteredDestinations(
-                  cubit.state.destinationQuery,
-                )[index];
-                return SelectionTile(
-                  label: destination,
-                  selected: selectedDestination == destination,
-                  onTap: () {
-                    widget._onDestinationTap(destination);
-                    cubit.selectDestination(destination);
-                  },
-                );
-              },
-              separatorBuilder: (_, _) => SizedBox(height: 18.h),
+              thumbVisibility: true,
+              trackVisibility: true,
+              thickness: 2.w,
+              child: ListView.separated(
+                padding: EdgeInsets.only(right: 10.w, bottom: 20),
+                controller: _scrollController,
+                itemCount: cubit
+                    .getFilteredDestinations(cubit.state.destinationQuery)
+                    .length,
+                itemBuilder: (context, index) {
+                  final destination = cubit.getFilteredDestinations(
+                    cubit.state.destinationQuery,
+                  )[index];
+                  return SelectionTile(
+                    label: destination,
+                    selected: selectedDestination == destination,
+                    onTap: () {
+                      widget._onDestinationTap(destination);
+                      cubit.selectDestination(destination);
+                    },
+                  );
+                },
+                separatorBuilder: (_, _) => SizedBox(height: 18.h),
+              ),
             ),
           );
   }
