@@ -67,13 +67,13 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/splash/High-Quality-Logo.png
+  image: assets/images/splash/logo_no_ground.png
   android: true
   ios: true
 
   android_12:
     color: "#ff ffff"
-    image: assets/images/splash/High-Quality-Logo.png
+    image: assets/images/splash/logo_no_ground.png
 
 flutter:
   uses-material-design: true
