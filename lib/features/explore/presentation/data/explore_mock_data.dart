@@ -1,4 +1,3 @@
-import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/shared/data/models/category_model.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';

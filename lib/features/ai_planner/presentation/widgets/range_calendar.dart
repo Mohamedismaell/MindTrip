@@ -150,8 +150,7 @@ class RangeCalendar extends StatelessWidget {
       visibleMonth.month,
     );
 
-    final total =
-        ((((offset + daysInMonth) / 7).ceil() * 7).clamp(35, 42)) as int;
+    final total = ((((offset + daysInMonth) / 7).ceil() * 7).clamp(35, 42));
 
     return List.generate(total, (i) {
       final date = startDay.add(Duration(days: i));

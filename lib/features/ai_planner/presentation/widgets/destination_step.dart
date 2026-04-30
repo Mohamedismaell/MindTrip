@@ -24,7 +24,7 @@ class DestinationStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<AiPlannerCubit>();
 
-    return ListView(
+    return Column(
       children: [
         StepHeading(
           title: 'Where do you want to go?',
@@ -39,14 +39,17 @@ class DestinationStep extends StatelessWidget {
         ),
         SizedBox(height: 37.h),
         _DestinationsList(onDestinationTap: onDestinationTap),
-        SizedBox(height: 12.h),
-        FlowButton(text: 'Continue'),
-        SizedBox(height: 24.h),
+        // SizedBox(height: 12.h),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 32.h),
+          child: FlowButton(text: 'Continue'),
+        ),
+        // SizedBox(height: 24.h),
         AiHint(
           message: 'Tap the bot if you need some inspiration.',
           actionMessage: ' Ask AI',
         ),
-        // SizedBox(height: 80.h),
+        SizedBox(height: 80.h),
       ],
     );
   }
@@ -88,8 +91,7 @@ class _DestinationsListState extends State<_DestinationsList> {
               ),
             ),
           )
-        : SizedBox(
-            height: 230.h,
+        : Expanded(
             child: Scrollbar(
               controller: _scrollController,
               thumbVisibility: true,

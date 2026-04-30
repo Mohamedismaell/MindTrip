@@ -41,8 +41,7 @@ class ExplorePlaceCard extends StatelessWidget {
                   AppCachedImage(imageUrl: place.thumbnailUrl),
 
                   // Badge
-                  if (place.badge != null &&
-                      place.badge != PlaceBadge.none)
+                  if (place.badge != PlaceBadge.none)
                     Positioned(
                       top: 10.h,
                       right: 10.w,
@@ -73,13 +72,15 @@ class ExplorePlaceCard extends StatelessWidget {
                         // Heart
                         BlocBuilder<FavoriteCubit, FavoriteState>(
                           builder: (context, state) {
-                            final isFavorite = context.read<FavoriteCubit>().isFavorite(place.id);
+                            final isFavorite = context
+                                .read<FavoriteCubit>()
+                                .isFavorite(place.id);
                             return GestureDetector(
                               onTap: () {
                                 context.read<FavoriteCubit>().toggleFavorite(
-                                      placeId: place.id,
-                                      isFavorite: !isFavorite,
-                                    );
+                                  placeId: place.id,
+                                  isFavorite: !isFavorite,
+                                );
                               },
                               child: Container(
                                 width: 30.w,

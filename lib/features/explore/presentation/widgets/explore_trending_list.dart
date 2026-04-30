@@ -18,7 +18,7 @@ class ExploreTrendingList extends StatelessWidget {
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           itemCount: items.length,
-          separatorBuilder: (_, __) => SizedBox(width: 17.w),
+          separatorBuilder: (_, _) => SizedBox(width: 17.w),
           itemBuilder: (context, index) {
             final item = items[index];
             return _TrendingCard(item: item);

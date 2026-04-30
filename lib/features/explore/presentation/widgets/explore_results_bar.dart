@@ -80,13 +80,12 @@ class _ActionChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            svgIcon != null
-                ? svgIcon!
-                : Icon(
-                    icon,
-                    size: 24.sp,
-                    color: context.colorTheme.onSurfaceVariant,
-                  ),
+            svgIcon ??
+                Icon(
+                  icon,
+                  size: 24.sp,
+                  color: context.colorTheme.onSurfaceVariant,
+                ),
             SizedBox(width: 6.w),
             Text(
               label,

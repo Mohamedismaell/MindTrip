@@ -26,8 +26,11 @@ class InterestsStep extends StatelessWidget {
         SizedBox(height: 24.h),
         Interestes(scrollController: _scrollController),
         // Spacer(),
-        FlowButton(text: 'Generate your plan'),
-        SizedBox(height: 51.h),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 32.h),
+          child: FlowButton(text: 'Generate your plan'),
+        ),
+        // SizedBox(height: 51.h),
       ],
     );
   }

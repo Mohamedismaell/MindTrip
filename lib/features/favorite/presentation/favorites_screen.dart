@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
-import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_place_card.dart';
@@ -27,24 +26,20 @@ class _FavoritesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Favorites',
-          style: context.textTheme.titleLarge,
-        ),
+        title: Text('Favorites', style: context.textTheme.titleLarge),
         centerTitle: true,
       ),
       body: BlocBuilder<FavoritesScreenCubit, FavoritesScreenState>(
         builder: (context, state) {
           return switch (state.placesStatus) {
             FavoritesTabStatus.initial ||
-            FavoritesTabStatus.loading =>
-              const _LoadingView(),
+            FavoritesTabStatus.loading => const _LoadingView(),
             FavoritesTabStatus.empty => const _EmptyView(),
             FavoritesTabStatus.error => _ErrorView(
-                message: state.errorMessage,
-                onRetry: () =>
-                    context.read<FavoritesScreenCubit>().loadFavoritePlaces(),
-              ),
+              message: state.errorMessage,
+              onRetry: () =>
+                  context.read<FavoritesScreenCubit>().loadFavoritePlaces(),
+            ),
             FavoritesTabStatus.loaded => _PlacesGrid(places: state.places),
           };
         },
@@ -94,10 +89,7 @@ class _EmptyView extends StatelessWidget {
               color: context.colorTheme.onSurface.withValues(alpha: 0.3),
             ),
             SizedBox(height: 16.h),
-            Text(
-              'No favorites yet',
-              style: context.textTheme.titleMedium,
-            ),
+            Text('No favorites yet', style: context.textTheme.titleMedium),
             SizedBox(height: 8.h),
             Text(
               'Start exploring and tap the heart icon\nto save places you love.',
@@ -118,9 +110,7 @@ class _LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const Center(child: CircularProgressIndicator());
   }
 }
 
@@ -150,10 +140,7 @@ class _ErrorView extends StatelessWidget {
               style: context.textTheme.bodyLarge,
             ),
             SizedBox(height: 16.h),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: const Text('Retry'),
-            ),
+            ElevatedButton(onPressed: onRetry, child: const Text('Retry')),
           ],
         ),
       ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/data/models/category_model.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/core/shared/data/models/category_model.dart';
 
 class ExploreCategoryChips extends StatefulWidget {
   const ExploreCategoryChips({super.key, required this.categories});
@@ -19,7 +19,7 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.categories.indexWhere((c) => c.isSelected ?? false);
+    _selectedIndex = widget.categories.indexWhere((c) => c.isSelected);
     if (_selectedIndex == -1) _selectedIndex = 0;
   }
 
@@ -49,7 +49,9 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
                   border: isSelected
                       ? null
                       : Border.all(
-                          color: context.colorTheme.outline.withOpacity(0.4),
+                          color: context.colorTheme.outline.withValues(
+                            alpha: 0.4,
+                          ),
                           width: 0.8,
                         ),
                 ),
