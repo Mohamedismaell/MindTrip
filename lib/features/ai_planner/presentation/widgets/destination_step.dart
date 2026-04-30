@@ -41,15 +41,15 @@ class DestinationStep extends StatelessWidget {
         _DestinationsList(onDestinationTap: onDestinationTap),
         // SizedBox(height: 12.h),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 32.h),
+          padding: EdgeInsets.only(top: 32.h, bottom: 24),
           child: FlowButton(text: 'Continue'),
         ),
-        // SizedBox(height: 24.h),
+
         AiHint(
           message: 'Tap the bot if you need some inspiration.',
           actionMessage: ' Ask AI',
         ),
-        SizedBox(height: 80.h),
+        SizedBox(height: 90.h),
       ],
     );
   }
