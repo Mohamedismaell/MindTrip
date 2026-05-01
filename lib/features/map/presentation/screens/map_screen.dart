@@ -5,7 +5,6 @@ import 'package:mindtrip/features/map/Services/location_service/location_service
 import 'package:mindtrip/features/map/widgets/map_serach_bar.dart';
 import 'package:mindtrip/features/map/widgets/place_info_bottom_sheet.dart';
 
-//Todo locate yourself
 //Todo bottom sheet for the place info
 //Todo start navigation into the specif place
 class MapScreen extends StatefulWidget {
@@ -18,8 +17,8 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   MapboxMap? mapboxMap;
   CircleAnnotationManager? circleManager;
-  final double cairoLng = 31.2357;
-  final double cairoLat = 30.0444;
+  // final double cairoLng = 31.2357;
+  // final double cairoLat = 30.0444;
   @override
   void initState() {
     // requestLocation();
@@ -33,11 +32,9 @@ class _MapScreenState extends State<MapScreen> {
     mapboxMap.logo.updateSettings(LogoSettings(enabled: false));
     mapboxMap.attribution.updateSettings(AttributionSettings(enabled: false));
     mapboxMap.compass.updateSettings(CompassSettings(enabled: false));
-    // circleManager = await mapboxMap.annotations.createCircleAnnotationManager();
     final locationService = sl<LocationService>();
 
     final position = await locationService.getCurrentLocation();
-
     if (!mounted || position == null || this.mapboxMap == null) return;
 
     mapboxMap.flyTo(
@@ -46,8 +43,6 @@ class _MapScreenState extends State<MapScreen> {
           coordinates: Position(position.longitude, position.latitude),
         ),
         zoom: 15,
-        // bearing: 0,
-        // pitch: 30,
       ),
       MapAnimationOptions(duration: 1500),
     );
@@ -58,72 +53,12 @@ class _MapScreenState extends State<MapScreen> {
         pulsingMaxRadius: 40,
         showAccuracyRing: true,
         accuracyRingColor: 0xFFC4E0F9,
-        // accuracyRingBorderColor: 0xFFC4E0F9,
       ),
     );
-    // await PlaceInfoBottomSheet.show(
-    //   context,
-    //   // placeName: placeName ?? "Selected Location",
-    // );
 
     mapboxMap.gestures.updateSettings(GesturesSettings());
   }
 
-  // Future<void> _onMapTap(double lng, double lat, BuildContext context) async {
-  //   // 1. Move camera immediately for responsiveness
-  //   mapboxMap?.flyTo(
-  //     CameraOptions(center: Point(coordinates: Position(lng, lat)), zoom: 15),
-  //     MapAnimationOptions(duration: 1000),
-  //   );
-
-  //   // 2. Call reverse geocoding with error handling
-  //   String? placeName;
-  //   try {
-  //     placeName = await _reverseGeocode(lng, lat);
-  //   } catch (e) {
-  //     debugPrint("Geocoding error: $e");
-  //   }
-
-  //   // 3. Show bottom sheet (don't return early if place is null, show "Selected Location" instead)
-  //   if (!mounted) return;
-  //   await PlaceInfoBottomSheet.show(context, placeName: placeName ?? "Selected Location");
-  // }
-
-  // Future<String?> _reverseGeocode(double lng, double lat) async {
-  //   final token = const String.fromEnvironment("ACCESS_TOKEN");
-  //   if (token.isEmpty) {
-  //     debugPrint("Mapbox access token is missing. Please provide it via --dart-define=ACCESS_TOKEN=your_token");
-  //     return null;
-  //   }
-
-  //   // Broaden types to include address and place, not just poi
-  //   final url =
-  //       "https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?types=poi,address,place&access_token=$token";
-
-  //   final response = await Dio().get(url);
-
-  //   if (response.statusCode == 200) {
-  //     final features = response.data["features"];
-  //     if (features != null && features.isNotEmpty) {
-  //       return features[0]["place_name"];
-  //     }
-  //   }
-
-  //   return null;
-  // }
-
-  // Future<void> _addMarker(double lng, double lat) async {
-  //   if (pointAnnotationManager == null) {
-  //     pointAnnotationManager =
-  //         await mapboxMap!.annotations.createPointAnnotationManager();
-  //   }
-  //   await pointAnnotationManager!.deleteAll();
-  //   await pointAnnotationManager!.create(
-  //     PointAnnotationOptions(
-  //       geometry: Point(coordinates: Position(lng, lat)),
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
