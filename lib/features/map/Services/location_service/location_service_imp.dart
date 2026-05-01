@@ -1,6 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mindtrip/features/map/presentation/screens/models/location_result.dart';
+import 'package:mindtrip/features/map/presentation/models/location_result.dart';
 
 enum LocationAccessStatus { granted, denied, deniedForever, serviceDisabled }
 

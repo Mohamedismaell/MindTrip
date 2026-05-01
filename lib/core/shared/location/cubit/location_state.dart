@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/features/map/presentation/screens/models/location_result.dart';
+import 'package:mindtrip/features/map/presentation/models/location_result.dart';
 
 enum LocationStatus {
   initial,

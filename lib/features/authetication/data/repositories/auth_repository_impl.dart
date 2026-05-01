@@ -99,7 +99,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
-  //  Logout
 
   @override
   Future<Result<UserEntity>> facebookAuth({required String token}) async {

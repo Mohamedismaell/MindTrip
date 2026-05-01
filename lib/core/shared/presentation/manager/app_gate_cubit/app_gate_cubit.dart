@@ -84,13 +84,19 @@ class AppGateCubit extends Cubit<AppGateState> {
   Future<void> logout() async {
     emit(AppGateLoading());
     final refreshToken = await authLocal.getRefreshToken();
-    //! maybe error for null
-    final result = await logoutUseCase(refreshToken: refreshToken!);
+
     await googleAuthProvider.signOut();
     await facebookAuthProvider.signOut();
     userCubit.clear();
     favoriteCubit.clear();
     await favoritesRepository.clearAll();
+    if (refreshToken == null || refreshToken.isEmpty) {
+      emit(AppGateUnauthenticated());
+      return;
+    }
+
+    final result = await logoutUseCase(refreshToken: refreshToken);
+
     result.when(
       success: (_) {
         emit(AppGateUnauthenticated());

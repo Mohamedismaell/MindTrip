@@ -46,7 +46,7 @@ class AppRouter {
           ),
           AiPlannerRoutes.aiPlannerFlow,
           ...ProfileRoutes.routes,
-          MapRoutes.mapRoute,
+          ...MapRoutes.routes,
 
           // ...CategoriesRoutes.extraRoutes,
           // ...PostDetailsRoutes.routes,

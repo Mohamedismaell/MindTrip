@@ -35,7 +35,7 @@ Future<void> main() async {
   await initializeDependencies(onboardingBox: AppHive.onboardingBox);
   print('Step 4: Service Locator initialized');
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
+  //! do we need it ?
   //map
   const token = String.fromEnvironment("ACCESS_TOKEN");
   mapbox.MapboxOptions.setAccessToken(token);

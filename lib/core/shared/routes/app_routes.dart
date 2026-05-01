@@ -34,5 +34,6 @@ class AppRoutes {
   static const String profileSettings = '/profile/settings';
 
   //! map
-  static const String mapScreen = '/mapScreen';
+  static const String map = '/map';
+  static const String mapSearch = '/map/search';
 }

@@ -46,6 +46,7 @@ dependencies:
   permission_handler: ^12.0.1
   geolocator: ^14.0.2
   geocoding: ^4.0.0
+  mapbox_search: ^4.4.0
   flutter_launcher_icons: ^0.14.4
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,8 @@ dev_dependencies:
   flutter_native_splash: ^2.4.7
   build_runner: ^2.11.0
   hive_ce_generator: ^1.11.1
+  mocktail: ^1.0.3
+  # bloc_test: ^3.3.0
 
 flutter_launcher_icons:
   android: true
@@ -93,6 +96,7 @@ flutter:
     - assets/icons/explore/
     - assets/icons/bottom_nav/
     - assets/icons/ai_planner/
+    - assets/icons/map/
   fonts:
     - family: SFPro
       fonts:

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+//Todo Change later to enum that connect to the real data
 class CategoryModel extends Equatable {
   final String id;
   final String name;

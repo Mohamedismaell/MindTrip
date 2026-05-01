@@ -40,7 +40,8 @@ class RouteRegister {
     AppRouteConfig(path: AppRoutes.editProfile, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.profileSettings, flow: AppFlow.app),
     //! map
-    AppRouteConfig(path: AppRoutes.mapScreen, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.map, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.mapSearch, flow: AppFlow.app),
   ];
 
   static AppFlow? getFlow(String location) {
