@@ -27,7 +27,6 @@ class MapSearchRepositoryImpl implements MapSearchRepository {
       final result = await _remote.retrieve(mapboxId);
       return Result.ok(result);
     } catch (e) {
-      print('e===============$e');
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }

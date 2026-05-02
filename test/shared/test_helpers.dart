@@ -15,6 +15,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/update_user_interests_use_case.dart';
+import 'package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
@@ -81,6 +82,7 @@ class TestHarness {
     userCubit = UserCubit(
       getCurrentUser: GetCurrentUser(repository: userRepo),
       updateUserInterests: UpdateUserInterestsUseCase(userRepo),
+      uploadProfilePhoto: UploadProfilePhotoUseCase(repository: userRepo),
     );
     userCubit.setUser(userEntity);
 
@@ -787,6 +789,17 @@ class FakeUserRepository implements UserRepository {
 
   @override
   Future<Result<void>> updateInterests(List<String> interests) async =>
+      Result.ok(null);
+
+  @override
+  Future<Result<String>> uploadProfilePhoto(String filePath) async =>
+      const Result.ok('https://example.com/uploaded.jpg');
+
+  @override
+  Future<Result<void>> updateProfile({
+    String? displayName,
+    String? phoneNumber,
+  }) async =>
       Result.ok(null);
 }
 

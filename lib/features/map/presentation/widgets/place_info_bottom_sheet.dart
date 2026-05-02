@@ -21,6 +21,7 @@ class PlaceInfoBottomSheet extends StatefulWidget {
 class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
   @override
   Widget build(BuildContext context) {
+    print("sheet built");
     return BlocBuilder<MapCubit, MapState>(
       buildWhen: (previous, current) {
         return previous.selectedPlace != current.selectedPlace ||
@@ -100,7 +101,7 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16.r),
                   child: CachedNetworkImage(
-                    imageUrl: place.thumbnailUrl ?? '',
+                    imageUrl: place.thumbnailUrl,
                     height: 180.h,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -140,7 +141,7 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                         style: context.textTheme.labelMedium,
                       ),
                       backgroundColor: context.colorTheme.primaryContainer
-                          .withOpacity(0.2),
+                          .withValues(alpha: 0.2),
                       side: BorderSide.none,
                     ),
                     const Spacer(),
@@ -170,7 +171,7 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                     SizedBox(width: 8.w),
                     Expanded(
                       child: Text(
-                        place.location.address ?? 'Address not available',
+                        place.location.address,
                         style: context.textTheme.bodySmall,
                       ),
                     ),

@@ -15,7 +15,7 @@ void main() {
     setUp(() {
       repository = FakeOnboardingRepository(isFirstTime: true);
       cubit = OnboardingCubit(
-        completeOnboarding: CompleteOnboardingUseCase(repository),
+        CompleteOnboardingUseCase(repository),
       );
     });
 

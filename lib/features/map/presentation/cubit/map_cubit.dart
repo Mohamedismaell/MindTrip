@@ -38,12 +38,7 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void dismissBottomSheet() {
-    emit(
-      state.copyWith(
-        isBottomSheetVisible: false,
-        // We don't necessarily clear selectedPlace here so the sheet can animate down with content
-      ),
-    );
+    emit(state.copyWith(isBottomSheetVisible: false));
   }
 
   void search(String query) {
@@ -96,7 +91,9 @@ class MapCubit extends Cubit<MapState> {
     result.when(
       success: (data) {
         searchResult = data;
-        emit(state.copyWith(isSearchLoading: false));
+        emit(
+          state.copyWith(isSearchLoading: false, resolvedSearchResult: data),
+        );
         clearSearch();
       },
       failure: (error) {
@@ -106,6 +103,10 @@ class MapCubit extends Cubit<MapState> {
       },
     );
     return searchResult;
+  }
+
+  void clearResolvedSearchResult() {
+    emit(state.copyWith(clearResolvedSearchResult: true));
   }
 
   Future<void> navigateToPlace(PlaceModel place, Position userPosition) async {

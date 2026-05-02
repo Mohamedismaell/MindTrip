@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-/// Encapsulates the Pick → Crop → Compress pipeline so cubits stay clean.
 class ImagePickCropService {
   final ImagePicker _picker;
   final ImageCropper _cropper;
@@ -14,10 +12,8 @@ class ImagePickCropService {
     : _picker = picker ?? ImagePicker(),
       _cropper = cropper ?? ImageCropper();
 
-  /// Full pipeline: pick → crop (circular, 1:1) → compress.
-  /// Returns the processed [File] or `null` if the user cancelled at any step.
+  /// Returns the processed [File] or null
   Future<File?> pickAndCropImage(ImageSource source) async {
-    // 1. Pick
     final XFile? picked = await _picker.pickImage(
       source: source,
       maxWidth: 1200,
@@ -25,7 +21,7 @@ class ImagePickCropService {
     );
     if (picked == null) return null;
 
-    // 2. Crop — circular, locked 1:1 ratio
+    // Crop
     final CroppedFile? cropped = await _cropper.cropImage(
       sourcePath: picked.path,
       aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),

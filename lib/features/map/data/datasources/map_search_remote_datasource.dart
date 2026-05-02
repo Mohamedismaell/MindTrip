@@ -6,7 +6,7 @@ class MapSearchRemoteDatasource {
   final SearchBoxAPI _searchBoxAPI;
 
   MapSearchRemoteDatasource() : _searchBoxAPI = SearchBoxAPI();
-  //! I think we need to take mroe values from the SearchSuggestion mdoel sdk
+  //! I think we need to take more values from the SearchSuggestion model sdk
   Future<List<domain.SearchSuggestion>> suggest(String query) async {
     final response = await _searchBoxAPI.getSuggestions(query);
 
@@ -30,14 +30,22 @@ class MapSearchRemoteDatasource {
         throw Exception('No features returned for mapboxId: $mapboxId');
       }
       final feature = success.features.first;
+      final props = feature.properties;
       // geometry.coordinates is the canonical lat/lng for a place
       final coords = feature.geometry.coordinates;
       return MapSearchResult(
-        name: feature.properties.name,
+        mapboxId: props.mapboxId,
+        name: props.name,
         latitude: coords.lat,
         longitude: coords.long,
-        address:
-            feature.properties.fullAddress ?? feature.properties.placeFormatted,
+        address: props.address,
+        fullAddress: props.fullAddress,
+        placeFormatted: props.placeFormatted,
+        featureType: props.featureType,
+        maki: props.maki,
+        poiCategory: props.poiCategory,
+        countryName: props.context.country?.name,
+        regionName: props.context.region?.name,
       );
     }, (failure) => throw Exception(failure.message));
   }

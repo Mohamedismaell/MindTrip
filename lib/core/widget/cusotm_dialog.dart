@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 
 enum AppDialogType { info, success, error, permission, confirm }
 

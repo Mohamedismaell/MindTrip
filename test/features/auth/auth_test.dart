@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import '../shared/test_helpers.dart';
+import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
+
+import '../../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -200,10 +202,7 @@ void main() {
 
     group('verifyPasswordOtp', () {
       test('emits loading then otpVerified on valid otp', () async {
-        await cubit.verifyPasswordOtp(
-          email: 'test@example.com',
-          otp: '123456',
-        );
+        await cubit.verifyPasswordOtp(email: 'test@example.com', otp: '123456');
 
         expect(cubit.state.status, AuthStatus.otpVerified);
         expect(cubit.state.resetToken, 'fake-reset-token');
@@ -212,10 +211,7 @@ void main() {
       test('emits failure on invalid otp', () async {
         repository.verifyOtpShouldFail = true;
 
-        await cubit.verifyPasswordOtp(
-          email: 'test@example.com',
-          otp: '000000',
-        );
+        await cubit.verifyPasswordOtp(email: 'test@example.com', otp: '000000');
 
         expect(cubit.state.status, AuthStatus.failure);
       });
@@ -251,10 +247,7 @@ void main() {
 
     group('verifyEmail', () {
       test('emits loading then otpVerified on valid email otp', () async {
-        await cubit.verifyEmail(
-          email: 'test@example.com',
-          otp: '123456',
-        );
+        await cubit.verifyEmail(email: 'test@example.com', otp: '123456');
 
         expect(cubit.state.status, AuthStatus.otpVerified);
       });
@@ -262,10 +255,7 @@ void main() {
       test('emits failure on invalid email otp', () async {
         repository.verifyOtpShouldFail = true;
 
-        await cubit.verifyEmail(
-          email: 'test@example.com',
-          otp: '000000',
-        );
+        await cubit.verifyEmail(email: 'test@example.com', otp: '000000');
 
         expect(cubit.state.status, AuthStatus.failure);
       });
@@ -301,14 +291,19 @@ void main() {
       expect(find.byKey(const Key('signin-password-field')), findsOneWidget);
       expect(find.byKey(const Key('signin-remember-me')), findsOneWidget);
       expect(find.byKey(const Key('signin-submit-btn')), findsOneWidget);
-      expect(find.byKey(const Key('signin-forgot-password-btn')), findsOneWidget);
+      expect(
+        find.byKey(const Key('signin-forgot-password-btn')),
+        findsOneWidget,
+      );
       expect(find.byKey(const Key('signin-google-btn')), findsOneWidget);
       expect(find.byKey(const Key('signin-signup-link')), findsOneWidget);
 
       harness.dispose();
     });
 
-    testWidgets('toggling remember me checkbox updates cubit state', (tester) async {
+    testWidgets('toggling remember me checkbox updates cubit state', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.login);
 
       await pumpAppWithHarness(tester, harness);
@@ -338,7 +333,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('tapping forgot password navigates to forgot password screen', (tester) async {
+    testWidgets('tapping forgot password navigates to forgot password screen', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.login);
 
       await pumpAppWithHarness(tester, harness);
@@ -352,7 +349,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('tapping signup link navigates to signup screen', (tester) async {
+    testWidgets('tapping signup link navigates to signup screen', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.login);
 
       await pumpAppWithHarness(tester, harness);
@@ -450,7 +449,9 @@ void main() {
   });
 
   group('Forget Password Screen', () {
-    testWidgets('renders forget password screen with all elements', (tester) async {
+    testWidgets('renders forget password screen with all elements', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.forgetPassword);
 
       await pumpAppWithHarness(tester, harness);
@@ -516,7 +517,9 @@ void main() {
 
     testWidgets('displays email when set in state', (tester) async {
       final harness = TestHarness(initialLocation: AppRoutes.otpVerification);
-      harness.authCubit.emit(harness.authCubit.state.copyWith(email: 'test@example.com'));
+      harness.authCubit.emit(
+        harness.authCubit.state.copyWith(email: 'test@example.com'),
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -532,7 +535,9 @@ void main() {
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      harness.authCubit.emit(harness.authCubit.state.copyWith(email: 'test@example.com'));
+      harness.authCubit.emit(
+        harness.authCubit.state.copyWith(email: 'test@example.com'),
+      );
 
       await tester.tap(find.byKey(const Key('otp-verify-btn')));
       await tester.pumpAndSettle();
@@ -548,7 +553,9 @@ void main() {
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      harness.authCubit.emit(harness.authCubit.state.copyWith(email: 'test@example.com'));
+      harness.authCubit.emit(
+        harness.authCubit.state.copyWith(email: 'test@example.com'),
+      );
 
       await tester.tap(find.byKey(const Key('otp-resend-btn')));
       await tester.pumpAndSettle();
@@ -560,7 +567,9 @@ void main() {
   });
 
   group('Reset Password Screen', () {
-    testWidgets('renders reset password screen with all elements', (tester) async {
+    testWidgets('renders reset password screen with all elements', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.resetPassword);
 
       await pumpAppWithHarness(tester, harness);
@@ -569,7 +578,10 @@ void main() {
       expect(find.byKey(const Key('reset-password-screen')), findsOneWidget);
       expect(find.text('Reset Password'), findsOneWidget);
       expect(find.byKey(const Key('reset-new-password-field')), findsOneWidget);
-      expect(find.byKey(const Key('reset-confirm-password-field')), findsOneWidget);
+      expect(
+        find.byKey(const Key('reset-confirm-password-field')),
+        findsOneWidget,
+      );
       expect(find.byKey(const Key('reset-submit-btn')), findsOneWidget);
 
       harness.dispose();
@@ -581,10 +593,12 @@ void main() {
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      harness.authCubit.emit(harness.authCubit.state.copyWith(
-        email: 'test@example.com',
-        resetToken: 'test-token',
-      ));
+      harness.authCubit.emit(
+        harness.authCubit.state.copyWith(
+          email: 'test@example.com',
+          resetToken: 'test-token',
+        ),
+      );
 
       await tester.tap(find.byKey(const Key('reset-submit-btn')));
       await tester.pumpAndSettle();
@@ -597,14 +611,19 @@ void main() {
 
   group('Complete Screens', () {
     testWidgets('complete signup screen renders and navigates', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.completeSignUpScreen);
+      final harness = TestHarness(
+        initialLocation: AppRoutes.completeSignUpScreen,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('complete-signup-screen')), findsOneWidget);
       expect(find.text('Sign Up Complete'), findsOneWidget);
-      expect(find.byKey(const Key('complete-signup-continue-btn')), findsOneWidget);
+      expect(
+        find.byKey(const Key('complete-signup-continue-btn')),
+        findsOneWidget,
+      );
 
       await tester.tap(find.byKey(const Key('complete-signup-continue-btn')));
       await tester.pumpAndSettle();
@@ -614,13 +633,20 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('complete reset password screen renders and navigates', (tester) async {
-      final harness = TestHarness(initialLocation: AppRoutes.completeResetPasswordScreen);
+    testWidgets('complete reset password screen renders and navigates', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.completeResetPasswordScreen,
+      );
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('complete-reset-password-screen')), findsOneWidget);
+      expect(
+        find.byKey(const Key('complete-reset-password-screen')),
+        findsOneWidget,
+      );
       expect(find.text('Password Reset Complete'), findsOneWidget);
       expect(find.byKey(const Key('complete-reset-login-btn')), findsOneWidget);
 
@@ -652,7 +678,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('multiple rapid taps do not trigger multiple sign ins', (tester) async {
+    testWidgets('multiple rapid taps do not trigger multiple sign ins', (
+      tester,
+    ) async {
       final harness = TestHarness(initialLocation: AppRoutes.login);
 
       await pumpAppWithHarness(tester, harness);

@@ -9,7 +9,6 @@ import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart'
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_state.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart';
@@ -362,6 +361,12 @@ class _FakeUserRepository implements UserRepository {
   @override
   Future<Result<String>> uploadProfilePhoto(String filePath) async =>
       const Result.ok('https://cdn.example.com/uploaded_photo.jpg');
+
+  @override
+  Future<Result<void>> updateProfile({
+    String? displayName,
+    String? phoneNumber,
+  }) async => const Result.ok(null);
 }
 
 class _FakeAuthRepository implements AuthRepository {
@@ -381,7 +386,7 @@ class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<void>> logout() async => const Result<void>.ok(null);
+  Future<Result<void>> logout() async => const Result.ok(null);
 
   @override
   Future<Result<UserEntity>> refreshToken() async => Result.ok(sampleUser);

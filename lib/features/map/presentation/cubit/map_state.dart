@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import '../../../../core/shared/data/models/place_model.dart';
 import '../../domain/entities/map_annotation_entry.dart';
+import '../../domain/entities/map_search_result.dart';
 import '../../domain/entities/search_suggestion.dart';
 import '../../domain/entities/map_route.dart';
 
@@ -8,16 +9,20 @@ class MapState extends Equatable {
   final List<MapAnnotationEntry> annotations;
   final PlaceModel? selectedPlace;
   final bool isBottomSheetVisible;
-  
+
   final List<SearchSuggestion> searchSuggestions;
   final bool isSearchLoading;
   final String? searchError;
-  
+
   final MapRoute? activeRoute;
   final bool isRouteLoading;
   final String? routeError;
-  
+
   final bool isLocationGranted;
+
+  /// Set when a search suggestion is resolved via retrieve.
+  /// The map screen listens for this to fly the camera and drop a marker.
+  final MapSearchResult? resolvedSearchResult;
 
   const MapState({
     required this.annotations,
@@ -30,6 +35,7 @@ class MapState extends Equatable {
     required this.isRouteLoading,
     this.routeError,
     required this.isLocationGranted,
+    this.resolvedSearchResult,
   });
 
   factory MapState.initial() => const MapState(
@@ -43,6 +49,7 @@ class MapState extends Equatable {
     isRouteLoading: false,
     routeError: null,
     isLocationGranted: false,
+    resolvedSearchResult: null,
   );
 
   MapState copyWith({
@@ -59,6 +66,8 @@ class MapState extends Equatable {
     bool clearRouteError = false,
     bool clearActiveRoute = false,
     bool? isLocationGranted,
+    MapSearchResult? resolvedSearchResult,
+    bool clearResolvedSearchResult = false,
   }) {
     return MapState(
       annotations: annotations ?? this.annotations,
@@ -71,6 +80,9 @@ class MapState extends Equatable {
       isRouteLoading: isRouteLoading ?? this.isRouteLoading,
       routeError: clearRouteError ? null : (routeError ?? this.routeError),
       isLocationGranted: isLocationGranted ?? this.isLocationGranted,
+      resolvedSearchResult: clearResolvedSearchResult
+          ? null
+          : (resolvedSearchResult ?? this.resolvedSearchResult),
     );
   }
 
@@ -86,5 +98,6 @@ class MapState extends Equatable {
     isRouteLoading,
     routeError,
     isLocationGranted,
+    resolvedSearchResult,
   ];
 }
