@@ -9,19 +9,13 @@ class MapState extends Equatable {
   final List<MapAnnotationEntry> annotations;
   final PlaceModel? selectedPlace;
   final bool isBottomSheetVisible;
-
   final List<SearchSuggestion> searchSuggestions;
   final bool isSearchLoading;
   final String? searchError;
-
   final MapRoute? activeRoute;
   final bool isRouteLoading;
   final String? routeError;
-
   final bool isLocationGranted;
-
-  /// Set when a search suggestion is resolved via retrieve.
-  /// The map screen listens for this to fly the camera and drop a marker.
   final MapSearchResult? resolvedSearchResult;
 
   const MapState({

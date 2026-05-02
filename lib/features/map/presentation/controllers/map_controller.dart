@@ -13,7 +13,10 @@ class MapController {
   final Map<String, String> _annotationIdToPlaceId = {};
   final Map<String, Uint8List> _imageCache = {};
 
-  Future<void> init(MapboxMap mapboxMap, Position userPosition) async {
+  /// Coordinates of all currently placed annotations (for fitToAnnotations).
+  final List<Position> _annotationCoordinates = [];
+
+  Future<void> init(MapboxMap mapboxMap) async {
     _mapboxMap = mapboxMap;
 
     _mapboxMap!.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
@@ -37,8 +40,6 @@ class MapController {
         .createPointAnnotationManager();
     _polylineAnnotationManager = await _mapboxMap!.annotations
         .createPolylineAnnotationManager();
-
-    await flyTo(userPosition.lat.toDouble(), userPosition.lng.toDouble());
   }
 
   Future<void> flyTo(double lat, double lng, {double zoom = 15}) async {
@@ -85,26 +86,41 @@ class MapController {
 
   Future<void> addPlaceAnnotations(List<MapAnnotationEntry> entries) async {
     if (_pointAnnotationManager == null) return;
+    //! chekc
+    _annotationCoordinates.clear();
 
     for (final entry in entries) {
       final category = PlaceCategory.fromCategoryId(entry.place.categoryId);
       final img = await _loadImage(category.annotationAssetPath);
+      final coord = Position(
+        entry.place.location.longitude,
+        entry.place.location.latitude,
+      );
 
       final annotation = await _pointAnnotationManager!.create(
         PointAnnotationOptions(
-          geometry: Point(
-            coordinates: Position(
-              entry.place.location.longitude,
-              entry.place.location.latitude,
-            ),
-          ),
+          geometry: Point(coordinates: coord),
           image: img,
-          iconSize: 1.0,
+          iconSize: 3,
         ),
       );
 
+      _annotationCoordinates.add(coord);
       _annotationIdToPlaceId[annotation.id] = entry.place.id;
     }
+  }
+
+  /// Fits the camera to show all place annotations.
+  Future<void> fitToAnnotations() async {
+    if (_annotationCoordinates.isEmpty) return;
+
+    if (_annotationCoordinates.length == 1) {
+      final c = _annotationCoordinates.first;
+      await flyTo(c.lat.toDouble(), c.lng.toDouble(), zoom: 14);
+      return;
+    }
+
+    await fitBounds(_annotationCoordinates);
   }
 
   Future<void> addSearchResultMarker(double lat, double lng) async {

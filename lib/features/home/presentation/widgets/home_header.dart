@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
@@ -23,11 +25,16 @@ class HomeHeader extends StatelessWidget {
         return SliverToBoxAdapter(
           child: Row(
             children: [
-              ClipOval(
-                child: AppCachedImage(
-                  imageUrl: imageprofile!,
-                  width: 47.w,
-                  height: 47.w,
+              GestureDetector(
+                onTap: () {
+                  context.go(AppRoutes.profile);
+                },
+                child: ClipOval(
+                  child: AppCachedImage(
+                    imageUrl: imageprofile!,
+                    width: 47.w,
+                    height: 47.w,
+                  ),
                 ),
               ),
               SizedBox(width: 13.w),
@@ -91,7 +98,8 @@ class _HeaderAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      // borderRadius: BorderRadius.circular(24.r),
+      // borderRadius: BorderRadius.circular(24.r)
+      customBorder: const CircleBorder(),
       child: Container(
         width: 47.w,
         height: 47.h,

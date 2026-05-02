@@ -20,7 +20,6 @@ class HomeScreen extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       child: CustomScrollView(
         slivers: [
-          //Todo replace with real user info
           HomeHeader(),
           SliverToBoxAdapter(child: SizedBox(height: 40.h)),
           // //! Not working right now
