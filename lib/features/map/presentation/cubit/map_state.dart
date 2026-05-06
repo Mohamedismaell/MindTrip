@@ -64,6 +64,7 @@ class MapState extends Equatable {
   MapState copyWith({
     List<MapAnnotationEntry>? annotations,
     PlaceModel? selectedPlace,
+    bool clearSelectedPlace = false,
     GooglePlaceEntity? selectedGooglePlace,
     bool clearSelectedGooglePlace = false,
     List<String>? selectedPlacePhotoUrls,
@@ -87,7 +88,9 @@ class MapState extends Equatable {
   }) {
     return MapState(
       annotations: annotations ?? this.annotations,
-      selectedPlace: selectedPlace ?? this.selectedPlace,
+      selectedPlace: clearSelectedPlace
+          ? null
+          : (selectedPlace ?? this.selectedPlace),
       selectedGooglePlace: clearSelectedGooglePlace
           ? null
           : (selectedGooglePlace ?? this.selectedGooglePlace),

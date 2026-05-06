@@ -3,6 +3,7 @@ import 'package:hive_ce_flutter/adapters.dart';
 
 part 'location_model.g.dart';
 
+//Todo edit later to accept null
 @HiveType(typeId: 2)
 class LocationModel extends Equatable {
   @HiveField(0)

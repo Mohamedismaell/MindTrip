@@ -21,7 +21,8 @@ class HomeHeader extends StatelessWidget {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         final user = state.user;
-        final imageprofile = user!.profilePhotoUrl;
+        final imageprofile = user?.profilePhotoUrl;
+        final displayName = user?.displayName;
         return SliverToBoxAdapter(
           child: Row(
             children: [
@@ -30,11 +31,15 @@ class HomeHeader extends StatelessWidget {
                   context.go(AppRoutes.profile);
                 },
                 child: ClipOval(
-                  child: AppCachedImage(
-                    imageUrl: imageprofile!,
-                    width: 47.w,
-                    height: 47.w,
-                  ),
+                  child: imageprofile != null
+                      ? AppCachedImage(
+                          imageUrl: imageprofile,
+                          width: 47.w,
+                          height: 47.w,
+                        )
+                      : Image.asset(
+                          'assets/images/profile/deafult_user_cover.png',
+                        ),
                 ),
               ),
               SizedBox(width: 13.w),
@@ -43,7 +48,7 @@ class HomeHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'HI, ${user.displayName}',
+                      'HI, $displayName',
                       style: AppTextStyles.h9Medium.copyWith(
                         color: context.colorTheme.onSurface,
                       ),

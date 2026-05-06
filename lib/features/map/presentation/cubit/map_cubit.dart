@@ -32,7 +32,12 @@ class MapCubit extends Cubit<MapState> {
         .firstOrNull;
     if (entry != null) {
       emit(
-        state.copyWith(selectedPlace: entry.place, isBottomSheetVisible: true),
+        state.copyWith(
+          selectedPlace: entry.place,
+          isBottomSheetVisible: true,
+          clearSelectedGooglePlace: true,
+          selectedPlacePhotoUrls: [],
+        ),
       );
     }
   }
@@ -41,6 +46,7 @@ class MapCubit extends Cubit<MapState> {
     emit(
       state.copyWith(
         selectedGooglePlace: place,
+        clearSelectedPlace: true,
         isBottomSheetVisible: true,
         selectedPlacePhotoUrls: [],
       ),
@@ -149,40 +155,6 @@ class MapCubit extends Cubit<MapState> {
     emit(state.copyWith(clearFlyToLocation: true));
   }
 
-  Future<void> lookupPOI(
-    String name,
-    String? category,
-    double lat,
-    double lng,
-  ) async {
-    emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
-
-    final result = await searchRepo.findAutocompletePredictions(
-      name,
-      lat: lat,
-      lng: lng,
-    );
-
-    result.when(
-      success: (predictions) async {
-        if (predictions.isNotEmpty) {
-          await resolveAutocompleteResult(predictions.first.placeId);
-        } else {
-          emit(
-            state.copyWith(
-              isSearchLoading: false,
-              searchError: 'Details not found',
-            ),
-          );
-        }
-      },
-      failure: (error) {
-        emit(
-          state.copyWith(isSearchLoading: false, searchError: error.message),
-        );
-      },
-    );
-  }
 
   Future<void> discoverNearby(double lat, double lng) async {
     emit(state.copyWith(isSearchLoading: true, clearSearchError: true));

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/features/map/domain/entities/map_annotation_entry.dart';
@@ -16,17 +15,8 @@ class MapController {
   final Map<String, GooglePlaceEntity> _annotationIdToGooglePlace = {};
   final Map<String, Uint8List> _imageCache = {};
   final List<Position> _annotationCoordinates = [];
-
-  /// Stores the GooglePlaceEntity associated with the current search result marker,
-  /// so it can be re-tapped to show details again.
   GooglePlaceEntity? _searchResultGooglePlace;
-
-  /// Cancelable handle for the unified annotation tap listener.
   Cancelable? _tapEventsCancelable;
-
-  /// Timestamp of the last tap handled by a specific interaction (POI or annotation).
-  /// Used to prevent the general map tap from double-firing.
-  DateTime _lastHandledTapTime = DateTime(0);
 
   Future<void> init(MapboxMap mapboxMap) async {
     _mapboxMap = mapboxMap;
@@ -54,48 +44,6 @@ class MapController {
         .createPolylineAnnotationManager();
   }
 
-  void _markTapHandled() {
-    _lastHandledTapTime = DateTime.now();
-  }
-
-  bool _wasTapRecentlyHandled() {
-    return DateTime.now().difference(_lastHandledTapTime).inMilliseconds < 500;
-  }
-
-  void setupPOITapInteraction(
-    void Function(String name, String? category, double lat, double lng) onTap,
-  ) {
-    if (_mapboxMap == null) return;
-
-    _mapboxMap!.addInteraction(
-      TapInteraction(StandardPOIs(), (feature, context) {
-        _markTapHandled();
-
-        final geom = feature.geometry;
-        double lat = 0.0;
-        double lng = 0.0;
-
-        // geometry is a raw GeoJSON Map, not a typed Point object
-        final coords = geom['coordinates'];
-        if (coords is List && coords.length >= 2) {
-          lng = (coords[0] as num).toDouble();
-          lat = (coords[1] as num).toDouble();
-        }
-
-        onTap(
-          feature.name ?? 'Unknown',
-          feature.properties['class'] as String?,
-          lat,
-          lng,
-        );
-      }, radius: 12),
-      interactionID: "tap_poi",
-    );
-  }
-
-  /// Sets up a unified tap handler for ALL point annotations
-  /// (place annotations, google place annotations, and search result marker).
-  /// Call this once after [init] completes.
   void setupAnnotationTapHandler({
     required void Function(String placeId) onPlaceTap,
     required void Function(GooglePlaceEntity place) onGooglePlaceTap,
@@ -103,23 +51,18 @@ class MapController {
     _tapEventsCancelable?.cancel();
     _tapEventsCancelable = _pointAnnotationManager?.tapEvents(
       onTap: (annotation) {
-        _markTapHandled();
-
-        // Check place annotations (mock / passed-in places)
         final placeId = _annotationIdToPlaceId[annotation.id];
         if (placeId != null) {
           onPlaceTap(placeId);
           return;
         }
 
-        // Check google place annotations (nearby search results)
         final googlePlace = _annotationIdToGooglePlace[annotation.id];
         if (googlePlace != null) {
           onGooglePlaceTap(googlePlace);
           return;
         }
 
-        // Check search result marker
         if (_searchResultAnnotation != null &&
             annotation.id == _searchResultAnnotation!.id &&
             _searchResultGooglePlace != null) {
@@ -128,18 +71,6 @@ class MapController {
         }
       },
     );
-  }
-
-  /// Sets up a general map tap listener for tapping on empty areas.
-  /// Suppressed if a POI or annotation tap was just handled.
-  void setupMapTapListener(
-    void Function(double lat, double lng) onTap,
-  ) {
-    _mapboxMap?.setOnMapTapListener((context) {
-      if (_wasTapRecentlyHandled()) return;
-      final coordinates = context.point.coordinates;
-      onTap(coordinates.lat.toDouble(), coordinates.lng.toDouble());
-    });
   }
 
   Future<void> flyTo(double lat, double lng, {double zoom = 15}) async {
@@ -208,9 +139,7 @@ class MapController {
     }
   }
 
-  Future<void> addGooglePlaceAnnotations(
-    List<GooglePlaceEntity> places,
-  ) async {
+  Future<void> addGooglePlaceAnnotations(List<GooglePlaceEntity> places) async {
     if (_pointAnnotationManager == null) return;
 
     for (final place in places) {
@@ -231,7 +160,7 @@ class MapController {
     }
   }
 
-  /// Fits the camera to show all place annotations.
+  // show all place annotations.
   Future<void> fitToAnnotations() async {
     if (_annotationCoordinates.isEmpty) return;
 

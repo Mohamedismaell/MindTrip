@@ -52,11 +52,14 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     await _mapController.init(mapboxMap);
 
-    _mapController.setupPOITapInteraction((name, category, lat, lng) {
-      if (mounted) {
-        context.read<MapCubit>().lookupPOI(name, category, lat, lng);
-      }
-    });
+    _mapController.setupAnnotationTapHandler(
+      onPlaceTap: (placeId) {
+        if (mounted) context.read<MapCubit>().selectPlace(placeId);
+      },
+      onGooglePlaceTap: (place) {
+        if (mounted) context.read<MapCubit>().showGooglePlaceDetails(place);
+      },
+    );
 
     if (mounted) {
       final entries = context.read<MapCubit>().state.annotations;
@@ -93,6 +96,7 @@ class _MapScreenState extends State<MapScreen> {
                 await _mapController.addSearchResultMarker(
                   result.latitude!,
                   result.longitude!,
+                  place: result,
                 );
                 await _mapController.flyTo(result.latitude!, result.longitude!);
               }
@@ -120,9 +124,6 @@ class _MapScreenState extends State<MapScreen> {
               if (state.nearbyPlaces.isNotEmpty) {
                 await _mapController.addGooglePlaceAnnotations(
                   state.nearbyPlaces,
-                  onTap: (place) {
-                    context.read<MapCubit>().showGooglePlaceDetails(place);
-                  },
                 );
               }
             },
