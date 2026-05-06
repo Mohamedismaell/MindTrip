@@ -9,18 +9,6 @@ import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
 class MapSearchOverlay extends StatefulWidget {
   const MapSearchOverlay({super.key});
 
-  // static Route<void> route() {
-  //   return PageRouteBuilder(
-  //     pageBuilder: (context, animation, secondaryAnimation) =>
-  //         const MapSearchOverlay(),
-  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-  //       return FadeTransition(opacity: animation, child: child);
-  //     },
-  //     opaque: false,
-  //     barrierColor: Colors.black54,
-  //   );
-  // }
-
   @override
   State<MapSearchOverlay> createState() => _MapSearchOverlayState();
 }
@@ -115,12 +103,13 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
             Expanded(
               child: BlocBuilder<MapCubit, MapState>(
                 buildWhen: (previous, current) =>
-                    previous.searchSuggestions != current.searchSuggestions ||
+                    previous.autocompletePredictions !=
+                        current.autocompletePredictions ||
                     previous.isSearchLoading != current.isSearchLoading ||
                     previous.searchError != current.searchError,
                 builder: (context, state) {
                   if (state.isSearchLoading &&
-                      state.searchSuggestions.isEmpty) {
+                      state.autocompletePredictions.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
@@ -139,7 +128,7 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                     );
                   }
 
-                  if (state.searchSuggestions.isEmpty &&
+                  if (state.autocompletePredictions.isEmpty &&
                       _searchController.text.isNotEmpty &&
                       !state.isSearchLoading) {
                     return Center(
@@ -154,9 +143,9 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
 
                   return ListView.builder(
                     padding: EdgeInsets.zero,
-                    itemCount: state.searchSuggestions.length,
+                    itemCount: state.autocompletePredictions.length,
                     itemBuilder: (context, index) {
-                      final suggestion = state.searchSuggestions[index];
+                      final suggestion = state.autocompletePredictions[index];
                       return ListTile(
                         leading: Container(
                           padding: EdgeInsets.all(8.w),
@@ -171,29 +160,30 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                           ),
                         ),
                         title: Text(
-                          suggestion.name,
+                          suggestion.primaryText,
                           style: context.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        // subtitle: suggestion.fullAddress != null
-                        //     ? Text(
-                        //         suggestion.fullAddress!,
-                        //         style: context.textTheme.bodySmall?.copyWith(color: context.colorTheme.outline),
-                        //         maxLines: 1,
-                        //         overflow: TextOverflow.ellipsis,
-                        //       )
-                        //     : null,
+                        subtitle: suggestion.secondaryText.isNotEmpty
+                            ? Text(
+                                suggestion.secondaryText,
+                                style: context.textTheme.bodySmall?.copyWith(
+                                  color: context.colorTheme.outline,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : null,
                         onTap: () async {
                           final cubit = context.read<MapCubit>();
-                          final place = await cubit.resolveSearchResult(
-                            suggestion.mapboxId,
+                          final place = await cubit.resolveAutocompleteResult(
+                            suggestion.placeId,
                           );
-                          //Todo edit Failed to retrieve place details
+
                           if (place != null && context.mounted) {
-                            // cubit.selectPlace(place.id);
                             context.pop(); // close overlay
-                          } else {
+                          } else if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(

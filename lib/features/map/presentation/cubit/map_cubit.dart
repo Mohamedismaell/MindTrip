@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import '../../../../core/shared/data/models/place_model.dart';
 import '../../domain/entities/map_annotation_entry.dart';
-import '../../domain/entities/map_search_result.dart';
-import '../../domain/repositories/map_search_repository.dart';
+import '../../domain/entities/google_place.dart';
+import '../../domain/repositories/google_places_repository.dart';
 import '../../domain/repositories/map_route_repository.dart';
 import 'map_state.dart';
 
 class MapCubit extends Cubit<MapState> {
-  final MapSearchRepository searchRepo;
+  final GooglePlacesRepository searchRepo;
   final MapRouteRepository routeRepo;
 
   Timer? _searchDebounce;
@@ -37,8 +37,40 @@ class MapCubit extends Cubit<MapState> {
     }
   }
 
+  Future<void> showGooglePlaceDetails(GooglePlaceEntity place) async {
+    emit(
+      state.copyWith(
+        selectedGooglePlace: place,
+        isBottomSheetVisible: true,
+        selectedPlacePhotoUrls: [],
+      ),
+    );
+
+    if (place.photos != null && place.photos!.isNotEmpty) {
+      await fetchPlacePhotoUrls(place.photos!);
+    }
+  }
+
+  Future<void> fetchPlacePhotoUrls(List<dynamic> photos) async {
+    final result = await searchRepo.fetchPlacePhotoUrls(photos);
+    result.when(
+      success: (urls) {
+        if (urls.isNotEmpty) {
+          emit(state.copyWith(selectedPlacePhotoUrls: urls));
+        }
+      },
+      failure: (_) => null,
+    );
+  }
+
   void dismissBottomSheet() {
-    emit(state.copyWith(isBottomSheetVisible: false));
+    emit(
+      state.copyWith(
+        isBottomSheetVisible: false,
+        clearSelectedGooglePlace: true,
+        selectedPlacePhotoUrls: [],
+      ),
+    );
   }
 
   void search(String query) {
@@ -52,19 +84,18 @@ class MapCubit extends Cubit<MapState> {
     _searchDebounce = Timer(const Duration(milliseconds: 300), () async {
       emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
 
-      final result = await searchRepo.suggest(query);
+      final result = await searchRepo.findAutocompletePredictions(query);
 
       result.when(
-        success: (suggestions) {
+        success: (predictions) {
           emit(
             state.copyWith(
               isSearchLoading: false,
-              searchSuggestions: suggestions,
+              autocompletePredictions: predictions,
             ),
           );
         },
         failure: (error) {
-          //no place info found
           emit(
             state.copyWith(isSearchLoading: false, searchError: error.message),
           );
@@ -76,25 +107,26 @@ class MapCubit extends Cubit<MapState> {
   void clearSearch() {
     emit(
       state.copyWith(
-        searchSuggestions: const [],
+        autocompletePredictions: const [],
         isSearchLoading: false,
         clearSearchError: true,
       ),
     );
   }
 
-  Future<MapSearchResult?> resolveSearchResult(String mapboxId) async {
+  Future<GooglePlaceEntity?> resolveAutocompleteResult(String placeId) async {
     emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
-    final result = await searchRepo.retrieve(mapboxId);
+    final result = await searchRepo.fetchPlaceDetails(placeId);
 
-    MapSearchResult? searchResult;
+    GooglePlaceEntity? resolvedPlace;
     result.when(
-      success: (data) {
-        searchResult = data;
+      success: (place) {
+        resolvedPlace = place;
         emit(
-          state.copyWith(isSearchLoading: false, resolvedSearchResult: data),
+          state.copyWith(isSearchLoading: false, resolvedSearchPlace: place),
         );
         clearSearch();
+        showGooglePlaceDetails(place);
       },
       failure: (error) {
         emit(
@@ -102,11 +134,67 @@ class MapCubit extends Cubit<MapState> {
         );
       },
     );
-    return searchResult;
+    return resolvedPlace;
   }
 
   void clearResolvedSearchResult() {
-    emit(state.copyWith(clearResolvedSearchResult: true));
+    emit(state.copyWith(clearResolvedSearchPlace: true));
+  }
+
+  void triggerFlyTo(double lat, double lng) {
+    emit(state.copyWith(flyToLat: lat, flyToLng: lng));
+  }
+
+  void clearFlyToLocation() {
+    emit(state.copyWith(clearFlyToLocation: true));
+  }
+
+  Future<void> lookupPOI(
+    String name,
+    String? category,
+    double lat,
+    double lng,
+  ) async {
+    emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
+
+    final result = await searchRepo.findAutocompletePredictions(
+      name,
+      lat: lat,
+      lng: lng,
+    );
+
+    result.when(
+      success: (predictions) async {
+        if (predictions.isNotEmpty) {
+          await resolveAutocompleteResult(predictions.first.placeId);
+        } else {
+          emit(
+            state.copyWith(
+              isSearchLoading: false,
+              searchError: 'Details not found',
+            ),
+          );
+        }
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(isSearchLoading: false, searchError: error.message),
+        );
+      },
+    );
+  }
+
+  Future<void> discoverNearby(double lat, double lng) async {
+    emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
+    final result = await searchRepo.nearbySearch(lat, lng, 1500);
+
+    result.when(
+      success: (places) =>
+          emit(state.copyWith(nearbyPlaces: places, isSearchLoading: false)),
+      failure: (error) => emit(
+        state.copyWith(isSearchLoading: false, searchError: error.message),
+      ),
+    );
   }
 
   Future<void> navigateToPlace(PlaceModel place, Position userPosition) async {

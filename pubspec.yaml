@@ -46,8 +46,8 @@ dependencies:
   permission_handler: ^12.0.1
   geolocator: ^14.0.2
   geocoding: ^4.0.0
-  mapbox_search: ^4.4.0
   flutter_launcher_icons: ^0.14.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -89,7 +89,7 @@ flutter:
     - assets/images/animation/
     - assets/images/profile/
     - assets/images/map/
-    - assets/images/ai_planner/
+    # - assets/images/ai_planner/
     - assets/icons/
     - assets/icons/home/
     - assets/icons/profile/

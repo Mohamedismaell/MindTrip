@@ -46,23 +46,23 @@ enum PlaceCategory {
   String get annotationAssetPath {
     switch (this) {
       case PlaceCategory.restaurant:
-        return 'assets/images/map/food.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.hotel:
-        return 'assets/images/map/hotels.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.beach:
-        return 'assets/images/map/beach.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.park:
-        return 'assets/images/map/park.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.museum:
-        return 'assets/images/map/museum.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.shopping:
-        return 'assets/images/map/shopping.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.entertainment:
-        return 'assets/images/map/entertainment.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.hospital:
-        return 'assets/images/map/hospital.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.education:
-        return 'assets/images/map/educaiton.png';
+        return 'assets/images/map/location-pin.png';
       case PlaceCategory.other:
         return 'assets/images/map/location-pin.png';
     }
