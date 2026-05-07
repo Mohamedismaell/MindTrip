@@ -22,6 +22,7 @@ class CustomGradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(50.r),
       onTap: onTap,
       child: Container(
         width: width ?? 200.w,

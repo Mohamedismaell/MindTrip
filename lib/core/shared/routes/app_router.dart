@@ -12,6 +12,7 @@ import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
 import 'package:mindtrip/features/favorite/routes/favorites_routes.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
 import 'package:mindtrip/features/map/routes/map_routes.dart';
+import 'package:mindtrip/features/interests/routes/interests_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 import 'package:mindtrip/features/explore/routes/explore_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
@@ -27,6 +28,7 @@ class AppRouter {
     routes: [
       ...OnBoardingRoutes.routes,
       ...AuthRoutes.routes,
+      ...InterestsRoutes.routes,
       ShellRoute(
         builder: (context, state, child) {
           return AppShell(child: child);
@@ -81,7 +83,7 @@ class AppRouter {
     }
 
     if (gateState is AppGateInterestsRequired) {
-      return location == AppRoutes.onboardingInterests
+      return routeFlow == AppFlow.interests
           ? null
           : AppRoutes.onboardingInterests;
     }

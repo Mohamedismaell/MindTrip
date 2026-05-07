@@ -6,7 +6,7 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/flow_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/step_heading.dart';
-import 'package:mindtrip/features/onboarding/presentation/models/interest_categories.dart';
+import 'package:mindtrip/core/shared/models/interest_categories.dart';
 
 class InterestsStep extends StatelessWidget {
   final ScrollController _scrollController;

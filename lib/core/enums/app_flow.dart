@@ -1,1 +1,1 @@
-enum AppFlow { splash, onboarding, auth, app }
+enum AppFlow { splash, onboarding, auth, interests, app }

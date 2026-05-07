@@ -4,7 +4,6 @@ import 'package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart'
 import 'package:mindtrip/core/shared/user/domain/usecases/update_user_interests_use_case.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
-import 'package:mindtrip/core/connections/result.dart';
 
 part 'user_state.dart';
 
@@ -39,18 +38,32 @@ class UserCubit extends Cubit<UserState> {
     emit(state.copyWith(user: user, status: UserStatus.loaded));
   }
 
-  Future<Result<void>> updateUserInterests(List<String> interests) async {
-    final result = await _updateUserInterests(interests);
+  void editSelectedCategory(String category) {
+    final currentSelected = List<String>.from(state.interests ?? []);
+
+    if (currentSelected.contains(category)) {
+      currentSelected.remove(category);
+    } else {
+      currentSelected.add(category);
+    }
+    emit(state.copyWith(interests: currentSelected));
+  }
+
+  Future<void> updateUserInterests() async {
+    emit(state.copyWith(status: UserStatus.loading));
+
+    final result = await _updateUserInterests(state.interests!);
     result.when(
       success: (_) {
         if (state.user != null) {
-          final updatedUser = state.user!.copyWith(interests: interests);
-          emit(state.copyWith(user: updatedUser));
+          final updatedUser = state.user!.copyWith(interests: state.interests);
+          emit(state.copyWith(user: updatedUser, status: UserStatus.loaded));
         }
       },
-      failure: (_) {},
+      failure: (f) {
+        emit(state.copyWith(status: UserStatus.error, message: f.message));
+      },
     );
-    return result;
   }
 
   Future<void> uploadProfilePhoto(String filePath) async {
