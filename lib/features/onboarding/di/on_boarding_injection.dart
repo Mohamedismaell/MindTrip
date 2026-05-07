@@ -1,4 +1,4 @@
-import 'package:hive_ce_flutter/adapters.dart';
+import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/onboarding/data/repositories/on_boarding_impl.dart';
 import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data_source.dart';
@@ -9,18 +9,10 @@ import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_board
 class OnboardingDi {
   OnboardingDi._();
 
-  static void init({required Box onboardingBox}) {
-    //! Named Box to avoid conflicts with other Hive boxes
-    sl.registerLazySingleton<Box>(
-      () => onboardingBox,
-      instanceName: 'onboardingBox',
-    );
-
+  static void init() {
     //! Data Sources
     sl.registerLazySingleton<OnboardingLocalDataSource>(
-      () => OnboardingLocalDataSourceImpl(
-        box: sl<Box>(instanceName: 'onboardingBox'),
-      ),
+      () => OnboardingLocalDataSourceImpl(box: AppHive.onboardingBox),
     );
 
     //! Repositories

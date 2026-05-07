@@ -3,6 +3,7 @@ import 'package:hive_ce_flutter/adapters.dart';
 abstract class OnboardingLocalDataSource {
   bool getIsFirstTime();
   Future<void> saveIsFirstTime(bool value);
+  Future<void> clearOnboardingBox();
 }
 
 class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
@@ -14,6 +15,11 @@ class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
   @override
   bool getIsFirstTime() {
     return box.get(_key1, defaultValue: true);
+  }
+
+  @override
+  Future<void> clearOnboardingBox() async {
+    await box.clear();
   }
 
   @override

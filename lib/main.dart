@@ -21,6 +21,7 @@ import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
+import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data_source.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 
@@ -32,14 +33,13 @@ Future<void> main() async {
   HydratedBloc.storage = await buildHydratedStorage();
   print('Step 3: HydratedStorage built');
   await AppHive.init();
-  await initializeDependencies(onboardingBox: AppHive.onboardingBox);
+  await initializeDependencies();
   print('Step 4: Service Locator initialized');
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   //! do we need it ?
   //map
   const token = String.fromEnvironment("ACCESS_TOKEN");
   mapbox.MapboxOptions.setAccessToken(token);
-
   //Todo: remove later
   print('Step 5: Bootstrapping Mock Places Cache');
   final placesCache = sl<PlacesLocalDataSource>();

@@ -13,9 +13,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  //  // TODO: remove this after testing
+  // late OnboardingLocalDataSourceImpl onboardingLocalDataSourceImpl =
+  // OnboardingLocalDataSourceImpl(box: AppHive.onboardingBox);
   @override
   void initState() {
     super.initState();
+    // // TODO: remove this after testing
+    // onboardingLocalDataSourceImpl.clearOnboardingBox();
+
     Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
       context.read<AppGateCubit>().start();
@@ -30,10 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Opacity(
             opacity: 0.12,
-            child: Image.asset(
-              AppAssets.splashPattern,
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(AppAssets.splashPattern, fit: BoxFit.cover),
           ),
           Center(
             child: Column(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
@@ -25,11 +27,17 @@ class WelcomeAuthScreen extends StatelessWidget {
               CustomGradientButton(
                 width: double.infinity,
                 text: AppStrings.createAccount,
-                onTap: () => context.push(AppRoutes.signup),
+                onTap: () {
+                  context.read<AppGateCubit>().start();
+                  context.go(AppRoutes.signup);
+                },
               ),
               SizedBox(height: 33.h),
               CustomOtlinedButton(
-                onPressed: () => context.push(AppRoutes.login),
+                onPressed: () {
+                  context.read<AppGateCubit>().start();
+                  context.go(AppRoutes.login);
+                },
                 text: AppStrings.login,
               ),
             ],
