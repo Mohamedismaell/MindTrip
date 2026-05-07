@@ -6,8 +6,8 @@ class AppStrings {
   static const String egypt = 'Egypt';
   static const String discoverQuote =
       'Start your greatest exploration where legends began.';
-  static const String ai = 'AI';
-  static const String planner = 'Planner ';
+  static const String ai = 'AI ';
+  static const String planner = 'Planner';
   static const String aiQuote = 'Let AI create your dream trip across Egypt';
   static const String budget = 'Budget ';
   static const String optimizer = 'Optimizer';

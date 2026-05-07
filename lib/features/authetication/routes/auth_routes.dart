@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/authetication/presentation/screens/complete_reset_password.dart';
 import 'package:mindtrip/features/authetication/presentation/screens/complete_signup_screen.dart';
 import 'package:mindtrip/features/authetication/presentation/screens/forget_password_screen.dart';
@@ -10,34 +11,33 @@ import 'package:mindtrip/features/authetication/presentation/screens/sign_up_scr
 
 class AuthRoutes {
   static List<RouteBase> routes = [
-    GoRoute(
+    AppTransitionRoute.fadeSlide(
       path: AppRoutes.login,
-      builder: (context, state) => const SignInScreen(),
+      page: const SignInScreen(),
     ),
-
-    GoRoute(
+    AppTransitionRoute.fadeSlide(
       path: AppRoutes.signup,
-      builder: (context, state) => const SignUpScreen(),
+      page: const SignUpScreen(),
     ),
-    GoRoute(
+    AppTransitionRoute.fadeSlide(
       path: AppRoutes.forgetPassword,
-      builder: (context, state) => const ForgetPasswordScreen(),
+      page: const ForgetPasswordScreen(),
     ),
-    GoRoute(
+    AppTransitionRoute.fadeSlide(
       path: AppRoutes.otpVerification,
-      builder: (context, state) => const OtpScreen(),
+      page: const OtpScreen(),
     ),
-    GoRoute(
+    AppTransitionRoute.fadeSlide(
       path: AppRoutes.resetPassword,
-      builder: (context, state) => const ResetPasswordScreen(),
+      page: const ResetPasswordScreen(),
     ),
-    GoRoute(
+    AppTransitionRoute.fadeSlide(
       path: AppRoutes.completeSignUpScreen,
-      builder: (context, state) => const CompleteSignUpScreen(),
+      page: const CompleteSignUpScreen(),
     ),
-    GoRoute(
+    AppTransitionRoute.fadeSlide(
       path: AppRoutes.completeResetPasswordScreen,
-      builder: (context, state) => const CompleteResetPassword(),
+      page: const CompleteResetPassword(),
     ),
   ];
 }

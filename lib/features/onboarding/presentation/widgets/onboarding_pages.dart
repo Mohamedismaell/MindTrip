@@ -5,6 +5,7 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/onboarding/presentation/models/onboarding_model.dart';
+import 'package:mindtrip/features/onboarding/presentation/widgets/wavy_clipper.dart';
 
 class OnboardingPages extends StatelessWidget {
   const OnboardingPages({super.key, required this.pageController});
@@ -29,10 +30,13 @@ class OnboardingPages extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: Image.asset(
-                      item.imagePath,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                    child: ClipPath(
+                      clipper: WavyClipper(),
+                      child: Image.asset(
+                        item.imagePath,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
 

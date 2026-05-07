@@ -44,15 +44,15 @@ class OnboardingContent extends StatelessWidget {
                   text: isLastpage ? AppStrings.getStarted : AppStrings.next,
                   onTap: () async {
                     if (isLastpage) {
-                       await context.read<OnboardingCubit>().finishOnboarding();
-                       if (context.mounted) {
-                          context.read<AppGateCubit>().start();
-                       }
+                      await context.read<OnboardingCubit>().finishOnboarding();
+                      if (context.mounted) {
+                        context.read<AppGateCubit>().start();
+                      }
                     } else {
-                        pageController.nextPage(
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeInSine,
-                          );
+                      pageController.nextPage(
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeInOutCubic,
+                      );
                     }
                   },
                 ),
@@ -64,10 +64,10 @@ class OnboardingContent extends StatelessWidget {
                   maintainState: true,
                   child: TextButton(
                     onPressed: () async {
-                       await context.read<OnboardingCubit>().finishOnboarding();
-                       if (context.mounted) {
-                          context.read<AppGateCubit>().start();
-                       }
+                      await context.read<OnboardingCubit>().finishOnboarding();
+                      if (context.mounted) {
+                        context.read<AppGateCubit>().start();
+                      }
                     },
                     child: Text(
                       AppStrings.skip,
