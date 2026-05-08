@@ -16,9 +16,14 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
   @override
   Future<MapRoute> getRoute(List<Position> waypoints, String profile) async {
     final coords = waypoints.map((p) => '${p.lng},${p.lat}').join(';');
-    
+
     final response = await dio.get(
       'https://api.mapbox.com/directions/v5/mapbox/$profile/$coords',
+      options: Options(
+        extra: {
+          'logResponseData': false, // Prevents dumping thousands of coordinates
+        },
+      ),
       queryParameters: {
         'geometries': 'geojson',
         'overview': 'full',
@@ -30,7 +35,7 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
     final geometry = route['geometry'];
     final distance = (route['distance'] as num).toDouble();
     final duration = (route['duration'] as num).toDouble();
-    
+
     return MapRoute(
       waypoints: waypoints,
       geoJsonGeometry: jsonEncode(geometry),

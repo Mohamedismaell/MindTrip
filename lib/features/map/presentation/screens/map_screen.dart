@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
@@ -7,8 +8,14 @@ import 'package:mindtrip/features/map/Services/location_service/location_service
 import 'package:mindtrip/features/map/presentation/controllers/map_controller.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/data/places_mock_data.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_mark_relcoaiton_button.dart';
+import 'package:mindtrip/features/map/presentation/widgets/map_navigate_all_button.dart';
+import 'package:mindtrip/features/map/presentation/widgets/map_navigation_bar.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_info_bottom_sheet.dart';
@@ -49,6 +56,21 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  Future<void> _navigateAll() async {
+    final position = await sl<LocationService>().getCurrentLocation();
+    if (mounted && position != null) {
+      final userPosition = Position(position.longitude, position.latitude);
+      final annotations = context.read<MapCubit>().state.annotations;
+      final waypoints = [userPosition];
+      for (final entry in annotations) {
+        waypoints.add(
+          Position(entry.place.location.longitude, entry.place.location.latitude),
+        );
+      }
+      context.read<MapNavigationCubit>().navigateAll(waypoints);
+    }
+  }
+
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     await _mapController.init(mapboxMap);
 
@@ -70,11 +92,13 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final topSpace = MediaQuery.of(context).padding.top + 10.h;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: MultiBlocListener(
         listeners: [
-          BlocListener<MapCubit, MapState>(
+          BlocListener<MapNavigationCubit, MapNavigationState>(
             listenWhen: (prev, curr) => prev.activeRoute != curr.activeRoute,
             listener: (context, state) async {
               if (state.activeRoute != null) {
@@ -86,7 +110,7 @@ class _MapScreenState extends State<MapScreen> {
               }
             },
           ),
-          BlocListener<MapCubit, MapState>(
+          BlocListener<MapSearchCubit, MapSearchState>(
             listenWhen: (prev, curr) =>
                 prev.resolvedSearchPlace != curr.resolvedSearchPlace &&
                 curr.resolvedSearchPlace != null,
@@ -102,7 +126,8 @@ class _MapScreenState extends State<MapScreen> {
               }
 
               if (context.mounted) {
-                context.read<MapCubit>().clearResolvedSearchResult();
+                context.read<MapCubit>().showGooglePlaceDetails(result);
+                context.read<MapSearchCubit>().clearResolvedSearchResult();
               }
             },
           ),
@@ -118,7 +143,7 @@ class _MapScreenState extends State<MapScreen> {
               }
             },
           ),
-          BlocListener<MapCubit, MapState>(
+          BlocListener<MapSearchCubit, MapSearchState>(
             listenWhen: (prev, curr) => prev.nearbyPlaces != curr.nearbyPlaces,
             listener: (context, state) async {
               if (state.nearbyPlaces.isNotEmpty) {
@@ -137,9 +162,12 @@ class _MapScreenState extends State<MapScreen> {
               onMapCreated: _onMapCreated,
               styleUri: "mapbox://styles/mapbox/outdoors-v12",
             ),
+            Positioned(top: topSpace, child: const MapSearchBar()),
             Positioned(
-              top: MediaQuery.of(context).padding.top + 10,
-              child: const MapSearchBar(),
+              top: topSpace,
+              left: 20.w,
+              right: 20.w,
+              child: const MapNavigationBar(),
             ),
             Positioned(
               bottom: 120,
@@ -147,6 +175,8 @@ class _MapScreenState extends State<MapScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  MapNavigateAllButton(onPressed: _navigateAll),
+                  const SizedBox(height: 16),
                   MapMarkRelcoaitonButton(
                     onTap: () => _mapController.fitToAnnotations(),
                   ),

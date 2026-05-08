@@ -10,6 +10,8 @@ import '../data/repositories/google_places_repository_impl.dart';
 import '../domain/repositories/map_route_repository.dart';
 import '../domain/repositories/google_places_repository.dart';
 import '../presentation/cubit/map_cubit.dart';
+import '../presentation/cubit/map_search_cubit.dart';
+import '../presentation/cubit/map_navigation_cubit.dart';
 
 class MapDi {
   MapDi._();
@@ -40,10 +42,13 @@ class MapDi {
 
     // Cubits
     sl.registerFactory<MapCubit>(
-      () => MapCubit(
-        searchRepo: sl<GooglePlacesRepository>(),
-        routeRepo: sl<MapRouteRepository>(),
-      ),
+      () => MapCubit(searchRepo: sl<GooglePlacesRepository>()),
+    );
+    sl.registerFactory<MapSearchCubit>(
+      () => MapSearchCubit(searchRepo: sl<GooglePlacesRepository>()),
+    );
+    sl.registerFactory<MapNavigationCubit>(
+      () => MapNavigationCubit(routeRepo: sl<MapRouteRepository>()),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
 
 class MapSearchOverlay extends StatefulWidget {
   const MapSearchOverlay({super.key});
@@ -24,7 +24,7 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
   }
 
   void _onSearchChanged() {
-    context.read<MapCubit>().search(_searchController.text);
+    context.read<MapSearchCubit>().search(_searchController.text);
   }
 
   @override
@@ -53,7 +53,7 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                       color: context.colorTheme.onSurface,
                     ),
                     onTap: () {
-                      context.read<MapCubit>().clearSearch();
+                      context.read<MapSearchCubit>().clearSearch();
                       context.pop();
                     },
                   ),
@@ -87,7 +87,7 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                                 ),
                                 onPressed: () {
                                   _searchController.clear();
-                                  context.read<MapCubit>().clearSearch();
+                                  context.read<MapSearchCubit>().clearSearch();
                                 },
                               )
                             : null,
@@ -101,7 +101,7 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
 
             // Search Results
             Expanded(
-              child: BlocBuilder<MapCubit, MapState>(
+              child: BlocBuilder<MapSearchCubit, MapSearchState>(
                 buildWhen: (previous, current) =>
                     previous.autocompletePredictions !=
                         current.autocompletePredictions ||
@@ -176,7 +176,7 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                               )
                             : null,
                         onTap: () async {
-                          final cubit = context.read<MapCubit>();
+                          final cubit = context.read<MapSearchCubit>();
                           final place = await cubit.resolveAutocompleteResult(
                             suggestion.placeId,
                           );

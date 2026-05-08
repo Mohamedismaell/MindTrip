@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 
 class PlaceActions extends StatelessWidget {
   const PlaceActions({
@@ -34,6 +36,11 @@ class PlaceActions extends StatelessWidget {
 
                 if (position != null && context.mounted) {
                   context.read<MapCubit>().dismissBottomSheet();
+                  context.read<MapNavigationCubit>().navigateToPosition(
+                        Position(position.longitude, position.latitude),
+                        latitude!,
+                        longitude!,
+                      );
                 }
               },
               icon: const Icon(Icons.directions),

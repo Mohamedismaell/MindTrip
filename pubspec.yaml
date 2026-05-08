@@ -28,7 +28,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   hive_ce_flutter: ^2.3.4
   internet_connection_checker_plus: ^2.9.1+2
-  skeletonizer: ^2.1.2
+  skeletonizer: ^2.1.3
   hydrated_bloc: ^10.1.1
   path_provider: ^2.1.5
   smooth_page_indicator: ^2.0.1

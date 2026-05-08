@@ -36,11 +36,13 @@ $yellow└───────────────────────�
         ? DateTime.now().difference(start).inMilliseconds
         : 0;
 
+    final logData = response.requestOptions.extra['logResponseData'] ?? true;
+
     debugPrint('''
         $green┌────── ✅ RESPONSE (${response.statusCode}) [$duration ms] ───$reset
          $cyan│ ${response.requestOptions.uri}$reset
               │ Data:
-              ${_pretty(response.data)}
+              ${logData ? _pretty(response.data) : '[Data Truncated for Performance]'}
         $green└────────────────────────────────────────────$reset
 ''');
 
