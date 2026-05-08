@@ -79,13 +79,13 @@ class AppRouter {
     }
 
     if (gateState is AppGateAuthenticated) {
-      return routeFlow == AppFlow.app ? null : AppRoutes.home;
+      return routeFlow == AppFlow.app || routeFlow == AppFlow.interests
+          ? null
+          : AppRoutes.home;
     }
 
     if (gateState is AppGateInterestsRequired) {
-      return routeFlow == AppFlow.interests
-          ? null
-          : AppRoutes.onboardingInterests;
+      return routeFlow == AppFlow.interests ? null : AppRoutes.interests;
     }
 
     return null;

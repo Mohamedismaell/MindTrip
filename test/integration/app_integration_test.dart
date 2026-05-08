@@ -235,9 +235,7 @@ void main() {
     });
 
     testWidgets('interests screen renders with test harness', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onboardingInterests,
-      );
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -322,9 +320,7 @@ void main() {
     testWidgets('empty interests selection disables save button', (
       tester,
     ) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onboardingInterests,
-      );
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -338,9 +334,7 @@ void main() {
     });
 
     testWidgets('selecting interest enables save button', (tester) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onboardingInterests,
-      );
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();

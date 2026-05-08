@@ -6,7 +6,7 @@ import 'package:mindtrip/features/interests/presentation/screens/interests_scree
 class InterestsRoutes {
   static List<RouteBase> routes = [
     AppTransitionRoute.fadeSlide(
-      path: AppRoutes.onboardingInterests,
+      path: AppRoutes.interests,
       page: const InterestsScreen(),
     ),
   ];

@@ -81,6 +81,10 @@ class AppGateCubit extends Cubit<AppGateState> {
     emit(AppGateAuthenticated());
   }
 
+  void proceedToAuth() {
+    emit(AppGateUnauthenticated());
+  }
+
   Future<void> logout() async {
     emit(AppGateLoading());
     final refreshToken = await authLocal.getRefreshToken();

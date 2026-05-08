@@ -14,9 +14,7 @@ void main() {
 
     setUp(() {
       repository = FakeOnboardingRepository(isFirstTime: true);
-      cubit = OnboardingCubit(
-        CompleteOnboardingUseCase(repository),
-      );
+      cubit = OnboardingCubit(CompleteOnboardingUseCase(repository));
     });
 
     tearDown(() {
@@ -127,9 +125,7 @@ void main() {
     testWidgets('renders interests screen with category buttons', (
       tester,
     ) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onboardingInterests,
-      );
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -147,9 +143,7 @@ void main() {
     testWidgets('tapping interest buttons updates selected categories', (
       tester,
     ) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onboardingInterests,
-      );
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -168,9 +162,7 @@ void main() {
     testWidgets('save button is disabled when no interests selected', (
       tester,
     ) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onboardingInterests,
-      );
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
@@ -186,9 +178,7 @@ void main() {
     testWidgets('save button is enabled when at least one interest selected', (
       tester,
     ) async {
-      final harness = TestHarness(
-        initialLocation: AppRoutes.onboardingInterests,
-      );
+      final harness = TestHarness(initialLocation: AppRoutes.interests);
 
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();

@@ -2,7 +2,6 @@ class AppRoutes {
   //! Splash & Onboarding routes
   static const String splash = '/splash';
   static const String onBoarding = '/onboarding';
-  static const String onboardingInterests = '/interests';
   static const String welcomeAuth = '/welcomeauth';
 
   //! Authentication routes
@@ -32,6 +31,9 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String editProfile = '/profile/edit';
   static const String profileSettings = '/profile/settings';
+
+  //! interests
+  static const String interests = '/interests';
 
   //! map
   static const String map = '/map';

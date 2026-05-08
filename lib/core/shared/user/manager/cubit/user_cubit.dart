@@ -27,8 +27,13 @@ class UserCubit extends Cubit<UserState> {
     final result = await _getCurrentUser.call();
 
     result.when(
-      success: (user) =>
-          emit(state.copyWith(user: user, status: UserStatus.loaded)),
+      success: (user) => emit(
+        state.copyWith(
+          user: user,
+          interests: user.interests,
+          status: UserStatus.loaded,
+        ),
+      ),
       failure: (f) =>
           emit(state.copyWith(status: UserStatus.error, message: f.message)),
     );

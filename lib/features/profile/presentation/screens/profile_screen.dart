@@ -63,11 +63,16 @@ class ProfileScreen extends StatelessWidget {
                 title: 'My interests',
                 trailing: SizedBox(
                   width: 20.w,
-                  child: SvgPicture.asset(
-                    ProfileAssets.editIcon,
-                    colorFilter: ColorFilter.mode(
-                      context.colorTheme.onSurface,
-                      BlendMode.srcIn,
+                  child: InkWell(
+                    onTap: () {
+                      context.push(AppRoutes.interests);
+                    },
+                    child: SvgPicture.asset(
+                      ProfileAssets.editIcon,
+                      colorFilter: ColorFilter.mode(
+                        context.colorTheme.onSurface,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),

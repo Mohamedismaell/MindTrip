@@ -146,7 +146,7 @@ class TestHarness {
               builder: (context, state) => const _TestOnboardingScreen(),
             ),
             GoRoute(
-              path: AppRoutes.onboardingInterests,
+              path: AppRoutes.interests,
               builder: (context, state) => const _TestInterestsScreen(),
             ),
             GoRoute(
@@ -215,7 +215,7 @@ class _TestOnboardingScreen extends StatelessWidget {
                 key: const Key('onboarding-next-btn'),
                 onPressed: () {
                   if (state.isLastPage) {
-                    context.go(AppRoutes.onboardingInterests);
+                    context.go(AppRoutes.interests);
                   } else {
                     context.read<OnboardingCubit>().updateIndex(
                       state.currentIndex + 1,
@@ -615,7 +615,7 @@ class _TestCompleteSignUpScreen extends StatelessWidget {
           const Text('Sign Up Complete'),
           ElevatedButton(
             key: const Key('complete-signup-continue-btn'),
-            onPressed: () => context.go(AppRoutes.onboardingInterests),
+            onPressed: () => context.go(AppRoutes.interests),
             child: const Text('Continue'),
           ),
         ],
@@ -799,8 +799,7 @@ class FakeUserRepository implements UserRepository {
   Future<Result<void>> updateProfile({
     String? displayName,
     String? phoneNumber,
-  }) async =>
-      Result.ok(null);
+  }) async => Result.ok(null);
 }
 
 class FakeAuthRepository implements AuthRepository {
