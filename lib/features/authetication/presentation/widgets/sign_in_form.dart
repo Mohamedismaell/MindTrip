@@ -119,6 +119,9 @@ class _SignInFormState extends State<SignInForm> {
                 width: double.infinity,
                 text: isLoading ? AppStrings.signingIn : AppStrings.signIn,
                 onTap: isLoading ? null : () => _submit(),
+                child: isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : null,
               ),
             ],
           ),
