@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/features/map/data/models/place_prediction.dart';
@@ -17,12 +18,14 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
     String query, {
     double? lat,
     double? lng,
+    CancelToken? cancelToken,
   }) async {
     try {
       final result = await _datasource.findAutocompletePredictions(
         query,
         lat: lat,
         lng: lng,
+        cancelToken: cancelToken,
       );
       return Result.ok(result);
     } catch (e) {
@@ -31,9 +34,15 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
   }
 
   @override
-  Future<Result<GooglePlaceEntity>> fetchPlaceDetails(String placeId) async {
+  Future<Result<GooglePlaceEntity>> fetchPlaceDetails(
+    String placeId, {
+    CancelToken? cancelToken,
+  }) async {
     try {
-      final result = await _datasource.fetchPlaceDetails(placeId);
+      final result = await _datasource.fetchPlaceDetails(
+        placeId,
+        cancelToken: cancelToken,
+      );
       return Result.ok(result.toEntity());
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -44,6 +53,7 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
   Future<Result<List<String>>> fetchPlacePhotoUrls(
     List<dynamic> photos, {
     int maxWidth = 800,
+    CancelToken? cancelToken,
   }) async {
     try {
       final urls = photos.map((photo) {
@@ -62,6 +72,7 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
     double lng,
     double radiusMeters, {
     List<String>? includedTypes,
+    CancelToken? cancelToken,
   }) async {
     try {
       final result = await _datasource.nearbySearch(
@@ -69,6 +80,7 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
         lng,
         radiusMeters,
         includedTypes: includedTypes,
+        cancelToken: cancelToken,
       );
       return Result.ok(result.map((m) => m.toEntity()).toList());
     } catch (e) {

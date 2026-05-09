@@ -14,6 +14,7 @@ class GooglePlacesRemoteDatasource {
     String query, {
     double? lat,
     double? lng,
+    CancelToken? cancelToken,
   }) async {
     final params = <String, dynamic>{'input': query, 'key': _apiKey};
 
@@ -25,15 +26,20 @@ class GooglePlacesRemoteDatasource {
     final response = await _dio.get(
       'https://maps.googleapis.com/maps/api/place/autocomplete/json',
       queryParameters: params,
+      cancelToken: cancelToken,
     );
 
     final predictions = response.data['predictions'] as List<dynamic>? ?? [];
     return predictions.map((json) => PlacePrediction.fromJson(json)).toList();
   }
 
-  Future<GooglePlaceModel> fetchPlaceDetails(String placeId) async {
+  Future<GooglePlaceModel> fetchPlaceDetails(
+    String placeId, {
+    CancelToken? cancelToken,
+  }) async {
     final response = await _dio.get(
       'https://maps.googleapis.com/maps/api/place/details/json',
+      cancelToken: cancelToken,
       queryParameters: {
         'place_id': placeId,
         'fields':
@@ -62,6 +68,7 @@ class GooglePlacesRemoteDatasource {
     double lng,
     double radiusMeters, {
     List<String>? includedTypes,
+    CancelToken? cancelToken,
   }) async {
     final body = <String, dynamic>{
       'maxResultCount': 20,
@@ -80,6 +87,7 @@ class GooglePlacesRemoteDatasource {
     final response = await _dio.post(
       'https://places.googleapis.com/v1/places:searchNearby',
       data: body,
+      cancelToken: cancelToken,
       options: Options(
         headers: {
           'X-Goog-Api-Key': _apiKey,

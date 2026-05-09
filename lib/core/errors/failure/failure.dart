@@ -22,6 +22,11 @@ class CacheFailure extends Failure {
   const CacheFailure(super.message);
 }
 
+class CancelledFailure extends Failure {
+  const CancelledFailure({String? message, String? debugMessage})
+    : super(message ?? 'Request cancelled', debugMessage: debugMessage);
+}
+
 class UnknownFailure extends Failure {
   const UnknownFailure({String? debugMessage})
     : super('Something went wrong', debugMessage: debugMessage);

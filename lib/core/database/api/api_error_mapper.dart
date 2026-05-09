@@ -10,6 +10,9 @@ class ApiErrorMapper {
       print("ERROR TYPE: ${e.runtimeType}");
       print("ERROR OBJECT: $e");
     }
+    if (e is DioException && CancelToken.isCancel(e)) {
+      return const CancelledFailure();
+    }
     if (e is DioException) {
       return fromDioException(e);
     }
@@ -60,6 +63,7 @@ class ApiErrorMapper {
       case DioExceptionType.badResponse:
         return _mapBadResponse(e);
       case DioExceptionType.cancel:
+        return const CancelledFailure();
       case DioExceptionType.unknown:
         return const UnknownFailure();
     }

@@ -1,15 +1,27 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import '../../../../core/shared/data/models/place_model.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 import '../../domain/entities/google_place.dart';
-import '../../domain/repositories/google_places_repository.dart';
 import 'map_state.dart';
 
 class MapCubit extends Cubit<MapState> {
-  final GooglePlacesRepository searchRepo;
+  final FetchPlacePhotoUrlsUseCase _fetchPlacePhotoUrlsUseCase;
 
-  MapCubit({required this.searchRepo}) : super(MapState.initial());
+  CancelToken? _photosCancelToken;
+
+  MapCubit({required FetchPlacePhotoUrlsUseCase fetchPlacePhotoUrlsUseCase})
+    : _fetchPlacePhotoUrlsUseCase = fetchPlacePhotoUrlsUseCase,
+      super(MapState.initial());
+
+  CancelToken _getNewPhotosToken() {
+    _photosCancelToken?.cancel();
+    _photosCancelToken = CancelToken();
+    return _photosCancelToken!;
+  }
 
   void loadPlaces(List<PlaceModel> places) {
     final annotations = List<MapAnnotationEntry>.generate(
@@ -52,14 +64,23 @@ class MapCubit extends Cubit<MapState> {
   }
 
   Future<void> fetchPlacePhotoUrls(List<dynamic> photos) async {
-    final result = await searchRepo.fetchPlacePhotoUrls(photos);
+    final token = _getNewPhotosToken();
+
+    final result = await _fetchPlacePhotoUrlsUseCase.call(
+      photos,
+      cancelToken: token,
+    );
+
     result.when(
       success: (urls) {
-        if (urls.isNotEmpty) {
+        // Guard against emitting on a closed cubit (race condition)
+        if (!isClosed && urls.isNotEmpty) {
           emit(state.copyWith(selectedPlacePhotoUrls: urls));
         }
       },
-      failure: (_) => null,
+      failure: (failure) {
+        if (failure is CancelledFailure) return;
+      },
     );
   }
 
@@ -83,5 +104,11 @@ class MapCubit extends Cubit<MapState> {
 
   void setLocationGranted(bool granted) {
     emit(state.copyWith(isLocationGranted: granted));
+  }
+
+  @override
+  Future<void> close() {
+    _photosCancelToken?.cancel();
+    return super.close();
   }
 }

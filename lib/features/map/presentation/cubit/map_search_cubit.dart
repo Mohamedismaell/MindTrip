@@ -1,16 +1,53 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/features/map/domain/use_cases/fetch_place_details_use_case.dart';
+import 'package:mindtrip/features/map/domain/use_cases/find_autocomplete_predictions_use_case.dart';
+import 'package:mindtrip/features/map/domain/use_cases/nearby_search_use_case.dart';
 import '../../domain/entities/google_place.dart';
-import '../../domain/repositories/google_places_repository.dart';
 import 'map_search_state.dart';
 
 class MapSearchCubit extends Cubit<MapSearchState> {
-  final GooglePlacesRepository searchRepo;
-  Timer? _searchDebounce;
+  final FindAutocompletePredictionsUseCase _findAutocompletePredictionsUseCase;
+  final FetchPlaceDetailsUseCase _fetchPlaceDetailsUseCase;
+  final NearbySearchUseCase _nearbySearchUseCase;
 
-  MapSearchCubit({required this.searchRepo}) : super(MapSearchState.initial());
+  Timer? _searchDebounce;
+  CancelToken? _autocompleteCancelToken;
+  CancelToken? _resolveCancelToken;
+  CancelToken? _nearbyCancelToken;
+
+  MapSearchCubit({
+    required FindAutocompletePredictionsUseCase
+    findAutocompletePredictionsUseCase,
+    required FetchPlaceDetailsUseCase fetchPlaceDetailsUseCase,
+    required NearbySearchUseCase nearbySearchUseCase,
+  }) : _findAutocompletePredictionsUseCase = findAutocompletePredictionsUseCase,
+       _fetchPlaceDetailsUseCase = fetchPlaceDetailsUseCase,
+       _nearbySearchUseCase = nearbySearchUseCase,
+       super(MapSearchState.initial());
+
+  CancelToken _getAutocompleteToken() {
+    _autocompleteCancelToken?.cancel();
+    _autocompleteCancelToken = CancelToken();
+    return _autocompleteCancelToken!;
+  }
+
+  CancelToken _resolveToken() {
+    _resolveCancelToken?.cancel();
+    _resolveCancelToken = CancelToken();
+    return _resolveCancelToken!;
+  }
+
+  CancelToken _nearbyToken() {
+    _nearbyCancelToken?.cancel();
+    _nearbyCancelToken = CancelToken();
+    return _nearbyCancelToken!;
+  }
 
   void search(String query) {
+    final token = _getAutocompleteToken();
     if (_searchDebounce?.isActive ?? false) _searchDebounce!.cancel();
 
     if (query.isEmpty) {
@@ -21,21 +58,31 @@ class MapSearchCubit extends Cubit<MapSearchState> {
     _searchDebounce = Timer(const Duration(milliseconds: 300), () async {
       emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
 
-      final result = await searchRepo.findAutocompletePredictions(query);
+      final result = await _findAutocompletePredictionsUseCase.call(
+        query,
+        cancelToken: token,
+      );
 
       result.when(
         success: (predictions) {
-          emit(
-            state.copyWith(
-              isSearchLoading: false,
-              autocompletePredictions: predictions,
-            ),
-          );
+          if (!isClosed) {
+            emit(
+              state.copyWith(
+                isSearchLoading: false,
+                autocompletePredictions: predictions,
+              ),
+            );
+          }
         },
-        failure: (error) {
-          emit(
-            state.copyWith(isSearchLoading: false, searchError: error.message),
-          );
+        failure: (failure) {
+          if (!isClosed && failure is! CancelledFailure) {
+            emit(
+              state.copyWith(
+                isSearchLoading: false,
+                searchError: failure.message,
+              ),
+            );
+          }
         },
       );
     });
@@ -53,21 +100,32 @@ class MapSearchCubit extends Cubit<MapSearchState> {
 
   Future<GooglePlaceEntity?> resolveAutocompleteResult(String placeId) async {
     emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
-    final result = await searchRepo.fetchPlaceDetails(placeId);
+    final token = _resolveToken();
+    final result = await _fetchPlaceDetailsUseCase.call(
+      placeId,
+      cancelToken: token,
+    );
 
     GooglePlaceEntity? resolvedPlace;
     result.when(
       success: (place) {
         resolvedPlace = place;
-        emit(
-          state.copyWith(isSearchLoading: false, resolvedSearchPlace: place),
-        );
-        clearSearch();
+        if (!isClosed) {
+          emit(
+            state.copyWith(isSearchLoading: false, resolvedSearchPlace: place),
+          );
+          clearSearch();
+        }
       },
-      failure: (error) {
-        emit(
-          state.copyWith(isSearchLoading: false, searchError: error.message),
-        );
+      failure: (failure) {
+        if (!isClosed && failure is! CancelledFailure) {
+          emit(
+            state.copyWith(
+              isSearchLoading: false,
+              searchError: failure.message,
+            ),
+          );
+        }
       },
     );
     return resolvedPlace;
@@ -78,21 +136,40 @@ class MapSearchCubit extends Cubit<MapSearchState> {
   }
 
   Future<void> discoverNearby(double lat, double lng) async {
+    final token = _nearbyToken();
     emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
-    final result = await searchRepo.nearbySearch(lat, lng, 1500);
+    final result = await _nearbySearchUseCase.call(
+      lat,
+      lng,
+      1500,
+      cancelToken: token,
+    );
 
     result.when(
-      success: (places) =>
-          emit(state.copyWith(nearbyPlaces: places, isSearchLoading: false)),
-      failure: (error) => emit(
-        state.copyWith(isSearchLoading: false, searchError: error.message),
-      ),
+      success: (places) {
+        if (!isClosed) {
+          emit(state.copyWith(nearbyPlaces: places, isSearchLoading: false));
+        }
+      },
+      failure: (failure) {
+        if (!isClosed && failure is! CancelledFailure) {
+          emit(
+            state.copyWith(
+              isSearchLoading: false,
+              searchError: failure.message,
+            ),
+          );
+        }
+      },
     );
   }
 
   @override
   Future<void> close() {
     _searchDebounce?.cancel();
+    _autocompleteCancelToken?.cancel();
+    _resolveCancelToken?.cancel();
+    _nearbyCancelToken?.cancel();
     return super.close();
   }
 }

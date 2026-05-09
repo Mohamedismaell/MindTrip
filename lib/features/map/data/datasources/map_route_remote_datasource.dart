@@ -9,8 +9,9 @@ import '../../domain/entities/route_step.dart';
 abstract class MapRouteRemoteDatasource {
   Future<MapRoute> getRoute(
     List<Position> waypoints,
-    NavigationProfile profile,
-  );
+    NavigationProfile profile, {
+    CancelToken? cancelToken,
+  });
 }
 
 class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
@@ -22,8 +23,9 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
   @override
   Future<MapRoute> getRoute(
     List<Position> waypoints,
-    NavigationProfile profile,
-  ) async {
+    NavigationProfile profile, {
+    CancelToken? cancelToken,
+  }) async {
     final coords = waypoints.map((p) => '${p.lng},${p.lat}').join(';');
 
     final queryParams = <String, dynamic>{
@@ -44,6 +46,7 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
 
     final response = await dio.get(
       'https://api.mapbox.com/directions/v5/mapbox/${profile.apiValue}/$coords',
+      cancelToken: cancelToken,
       options: Options(
         extra: {
           'logResponseData': false, // Prevents dumping thousands of coordinates

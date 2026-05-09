@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import '../../../../core/shared/data/models/place_model.dart';
 import '../../data/models/place_prediction.dart';
 import '../../domain/entities/google_place.dart';
 
@@ -19,12 +18,12 @@ class MapSearchState extends Equatable {
   });
 
   factory MapSearchState.initial() => const MapSearchState(
-        autocompletePredictions: [],
-        isSearchLoading: false,
-        searchError: null,
-        resolvedSearchPlace: null,
-        nearbyPlaces: [],
-      );
+    autocompletePredictions: [],
+    isSearchLoading: false,
+    searchError: null,
+    resolvedSearchPlace: null,
+    nearbyPlaces: [],
+  );
 
   MapSearchState copyWith({
     List<PlacePrediction>? autocompletePredictions,
@@ -49,10 +48,10 @@ class MapSearchState extends Equatable {
 
   @override
   List<Object?> get props => [
-        autocompletePredictions,
-        isSearchLoading,
-        searchError,
-        resolvedSearchPlace,
-        nearbyPlaces,
-      ];
+    autocompletePredictions,
+    isSearchLoading,
+    searchError,
+    resolvedSearchPlace,
+    nearbyPlaces,
+  ];
 }

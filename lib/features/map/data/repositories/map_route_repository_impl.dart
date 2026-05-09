@@ -16,9 +16,14 @@ class MapRouteRepositoryImpl implements MapRouteRepository {
   Future<Result<MapRoute>> getRoute(
     List<Position> waypoints, {
     NavigationProfile profile = NavigationProfile.driving,
+    CancelToken? cancelToken,
   }) async {
     try {
-      final route = await datasource.getRoute(waypoints, profile);
+      final route = await datasource.getRoute(
+        waypoints,
+        profile,
+        cancelToken: cancelToken,
+      );
       return Result.ok(route);
     } on DioException catch (e) {
       return Result.error(NetworkFailure(

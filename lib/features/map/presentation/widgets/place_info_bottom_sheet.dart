@@ -4,15 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
-import 'package:mindtrip/features/map/domain/entities/navigation_profile.dart';
-import 'package:mindtrip/features/map/domain/entities/route_step.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
+import 'package:mindtrip/features/map/presentation/widgets/drive_tab.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_actions.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_images.dart';
 
@@ -79,7 +79,7 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
             controller: _dragController,
             initialChildSize: isVisible ? 0.45 : 0.1,
             minChildSize: 0.1,
-            maxChildSize: 0.45,
+            maxChildSize: 0.7,
             snap: true,
             builder: (context, scrollController) {
               return Container(
@@ -89,13 +89,7 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                     topLeft: Radius.circular(24.r),
                     topRight: Radius.circular(24.r),
                   ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    ),
-                  ],
+                  boxShadow: [AppShadows.mainElevationButton],
                 ),
                 child: Column(
                   children: [
@@ -118,12 +112,12 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                       child: _currentTab == 0
                           ? _buildPlaceTab(
                               context,
-                              scrollController,
+                              _scrollController,
                               place,
                               googlePlace,
                               photoUrls,
                             )
-                          : _buildDriveTab(context, scrollController),
+                          : DriveTab(scrollController: _scrollController),
                     ),
                   ],
                 ),
@@ -368,316 +362,4 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
   }
 
   //  Drive Tab
-
-  Widget _buildDriveTab(
-    BuildContext context,
-    ScrollController scrollController,
-  ) {
-    return BlocBuilder<MapNavigationCubit, MapNavigationState>(
-      builder: (context, state) {
-        if (state.isRouteLoading) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(strokeWidth: 2),
-                SizedBox(height: 16.h),
-                Text(
-                  'Calculating route...',
-                  style: context.textTheme.bodyLarge,
-                ),
-              ],
-            ),
-          );
-        }
-
-        if (state.routeError != null) {
-          return _buildDriveError(context, state.routeError!);
-        }
-
-        final route = state.activeRoute;
-        if (route == null) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.all(32.r),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.directions_outlined,
-                    size: 48.sp,
-                    color: Colors.grey.shade400,
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    'Select a place and tap\n"Navigate Here" to get directions',
-                    textAlign: TextAlign.center,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        final distanceKm = (route.distance / 1000).toStringAsFixed(1);
-        final durationMin = (route.duration / 60).ceil();
-        final allSteps = route.allSteps;
-
-        return ListView(
-          controller: scrollController,
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-          children: [
-            // Profile selector – 4 chips in a row
-            _buildProfileChips(context, state.selectedProfile),
-            SizedBox(height: 20.h),
-
-            // Route summary card
-            Container(
-              padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(
-                color: context.colorTheme.primaryContainer,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    state.selectedProfile.icon,
-                    color: context.colorTheme.onPrimaryContainer,
-                    size: 32.sp,
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '$durationMin min',
-                          style: context.textTheme.titleLarge?.copyWith(
-                            color: context.colorTheme.onPrimaryContainer,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '$distanceKm km · ${state.selectedProfile.label}',
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            color: context.colorTheme.onPrimaryContainer
-                                .withValues(alpha: 0.8),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16.h),
-
-            // Step-by-step instructions
-            if (allSteps.isNotEmpty) ...[
-              Text(
-                'Directions',
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              ...allSteps.asMap().entries.map(
-                (entry) => _buildStepItem(context, entry.value, entry.key),
-              ),
-            ],
-            SizedBox(height: 16.h),
-
-            // Stop navigation button
-            SizedBox(
-              width: double.infinity,
-              height: 48.h,
-              child: OutlinedButton.icon(
-                onPressed: () =>
-                    context.read<MapNavigationCubit>().stopNavigation(),
-                icon: const Icon(Icons.close),
-                label: const Text('Stop Navigation'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: context.colorTheme.error,
-                  side: BorderSide(color: context.colorTheme.error),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20.h),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildDriveError(BuildContext context, String error) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(32.r),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.error_outline, size: 48.sp, color: Colors.red),
-            SizedBox(height: 12.h),
-            Text(
-              error,
-              textAlign: TextAlign.center,
-              style: context.textTheme.bodyMedium,
-            ),
-            SizedBox(height: 16.h),
-            TextButton(
-              onPressed: () =>
-                  context.read<MapNavigationCubit>().stopNavigation(),
-              child: const Text('Dismiss'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ─── Profile Chips (always-visible row of 4) ─────────────────────
-
-  Widget _buildProfileChips(BuildContext context, NavigationProfile selected) {
-    return Row(
-      children: NavigationProfile.values.map((profile) {
-        final isSelected = selected == profile;
-        return Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            child: GestureDetector(
-              onTap: () =>
-                  context.read<MapNavigationCubit>().setProfile(profile),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? context.colorTheme.primary
-                      : context.colorTheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      profile.icon,
-                      size: 20.sp,
-                      color: isSelected
-                          ? context.colorTheme.onPrimary
-                          : context.colorTheme.onSurface.withValues(alpha: 0.6),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      profile.label,
-                      style: context.textTheme.labelSmall?.copyWith(
-                        color: isSelected
-                            ? context.colorTheme.onPrimary
-                            : context.colorTheme.onSurface.withValues(
-                                alpha: 0.6,
-                              ),
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  //  Step Item
-
-  Widget _buildStepItem(BuildContext context, RouteStep step, int index) {
-    final distanceText = step.distance >= 1000
-        ? '${(step.distance / 1000).toStringAsFixed(1)} km'
-        : '${step.distance.toInt()} m';
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: 4.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Step number circle
-          Container(
-            width: 28.w,
-            height: 28.w,
-            decoration: BoxDecoration(
-              color: context.colorTheme.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Icon(
-                _getManeuverIcon(step.bannerType, step.bannerModifier),
-                size: 16.sp,
-                color: context.colorTheme.primary,
-              ),
-            ),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  step.bannerText ?? step.instruction,
-                  style: context.textTheme.bodyMedium,
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                  distanceText,
-                  style: context.textTheme.bodySmall?.copyWith(
-                    color: Colors.grey,
-                  ),
-                ),
-                Divider(height: 16.h, color: Colors.grey.shade200),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  IconData _getManeuverIcon(String? type, String? modifier) {
-    if (type == null) return Icons.straight;
-    switch (type) {
-      case 'turn':
-        if (modifier == 'left' ||
-            modifier == 'slight left' ||
-            modifier == 'sharp left') {
-          return Icons.turn_left;
-        }
-        if (modifier == 'right' ||
-            modifier == 'slight right' ||
-            modifier == 'sharp right') {
-          return Icons.turn_right;
-        }
-        return Icons.straight;
-      case 'roundabout':
-        return Icons.roundabout_left;
-      case 'arrive':
-        return Icons.flag;
-      case 'depart':
-        return Icons.trip_origin;
-      case 'merge':
-        return Icons.merge;
-      case 'fork':
-        return modifier?.contains('left') == true
-            ? Icons.fork_left
-            : Icons.fork_right;
-      default:
-        return Icons.straight;
-    }
-  }
 }
