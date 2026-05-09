@@ -6,7 +6,6 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 
 class CompleteSignUpScreen extends StatelessWidget {
   const CompleteSignUpScreen({
@@ -41,9 +40,9 @@ class CompleteSignUpScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 45.h),
-              CustomOtlinedButton(
+              OutlinedButton(
                 onPressed: () => context.go(AppRoutes.login),
-                text: AppStrings.backToLogin,
+                child: Text(AppStrings.backToLogin),
               ),
             ],
           ),

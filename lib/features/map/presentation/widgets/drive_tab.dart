@@ -2,156 +2,131 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/map/domain/entities/navigation_profile.dart';
 import 'package:mindtrip/features/map/domain/entities/route_step.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 
 class DriveTab extends StatelessWidget {
-  const DriveTab({super.key, required this.scrollController});
-  final ScrollController scrollController;
+  const DriveTab({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MapNavigationCubit, MapNavigationState>(
+      buildWhen: (previous, current) {
+        return previous.activeRoute != current.activeRoute ||
+            previous.selectedProfile != current.selectedProfile ||
+            previous.isRouteLoading != current.isRouteLoading;
+        // previous.currentStepIndex != current.currentStepIndex;
+      },
       builder: (context, state) {
-        if (state.routeError != null) {
-          return _buildDriveError(context, state.routeError!);
+        // Empty state
+        if (state.activeRoute == null && !state.isRouteLoading) {
+          return _buildEmptyRoute(context);
         }
 
-        final route = state.activeRoute;
-        if (route == null) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.all(32.r),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.directions_outlined,
-                    size: 48.sp,
-                    color: Colors.grey.shade400,
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    'Select a place and tap\n"Navigate Here" to get directions',
-                    textAlign: TextAlign.center,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        final distanceKm = (route.distance / 1000).toStringAsFixed(1);
-        final durationMin = (route.duration / 60).ceil();
-        final allSteps = route.allSteps;
-
-        return ListView(
-          controller: scrollController,
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-          children: [
-            // Profile selector
-            _buildProfileChips(context, state.selectedProfile),
-            SizedBox(height: 20.h),
-
-            if (state.isRouteLoading)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 40.h),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
+          child: Column(
+            children: [
+              _buildProfileChips(context, state.selectedProfile),
+              SizedBox(height: 14.h),
+              // Error state
+              if (state.routeError != null)
+                _buildDriveError(context, state.routeError!)
+              // Loading state
+              else if (state.isRouteLoading)
+                _buildLoadingUi(context)
+              else
+                () {
+                  final route = state.activeRoute!;
+                  final distanceKm = (route.distance / 1000).toStringAsFixed(1);
+                  final durationMin = (route.duration / 60).ceil();
+                  // final allSteps = route.allSteps;
+                  return Column(
                     children: [
-                      const CircularProgressIndicator(strokeWidth: 2),
-                      SizedBox(height: 16.h),
-                      Text(
-                        'Calculating route...',
-                        style: context.textTheme.bodyLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            else ...[
-              // Route summary card
-              Container(
-                padding: EdgeInsets.all(16.r),
-                decoration: BoxDecoration(
-                  color: context.colorTheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      state.selectedProfile.icon,
-                      color: context.colorTheme.onPrimaryContainer,
-                      size: 32.sp,
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '$durationMin min',
-                            style: context.textTheme.titleLarge?.copyWith(
+                      SizedBox(height: 14.h),
+                      Container(
+                        padding: EdgeInsets.all(16.r),
+                        decoration: BoxDecoration(
+                          color: context.colorTheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              state.selectedProfile.icon,
                               color: context.colorTheme.onPrimaryContainer,
-                              fontWeight: FontWeight.bold,
+                              size: 32.sp,
                             ),
-                          ),
-                          Text(
-                            '$distanceKm km · ${state.selectedProfile.label}',
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colorTheme.onPrimaryContainer
-                                  .withValues(alpha: 0.8),
+                            SizedBox(width: 12.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '$durationMin min',
+                                    style: context.textTheme.titleLarge
+                                        ?.copyWith(
+                                          color: context
+                                              .colorTheme
+                                              .onPrimaryContainer,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  Text(
+                                    '$distanceKm km · ${state.selectedProfile.label}',
+                                    style: context.textTheme.bodyMedium
+                                        ?.copyWith(
+                                          color: context
+                                              .colorTheme
+                                              .onPrimaryContainer
+                                              .withValues(alpha: 0.8),
+                                        ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.h),
+                      SizedBox(height: 16.h),
 
-              // Step-by-step instructions
-              if (allSteps.isNotEmpty) ...[
-                Text(
-                  'Directions',
-                  style: context.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                ...allSteps.asMap().entries.map(
-                  (entry) => _buildStepItem(context, entry.value, entry.key),
-                ),
-              ],
-              SizedBox(height: 16.h),
+                      // Step-by-step instructions
+                      // if (allSteps.isNotEmpty) ...[
+                      //   Text(
+                      //     'Directions',
+                      //     style: context.textTheme.titleMedium?.copyWith(
+                      //       fontWeight: FontWeight.bold,
+                      //     ),
+                      //   ),
+                      //   SizedBox(height: 8.h),
+                      //   ...allSteps.asMap().entries.map(
+                      //     (entry) =>
+                      //         _buildStepItem(context, entry.value, entry.key),
+                      //   ),
+                      // ],
+                      // SizedBox(height: 16.h),
 
-              // Stop navigation button
-              SizedBox(
-                width: double.infinity,
-                height: 48.h,
-                child: OutlinedButton.icon(
-                  onPressed: () =>
-                      context.read<MapNavigationCubit>().stopNavigation(),
-                  icon: const Icon(Icons.close),
-                  label: const Text('Stop Navigation'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: context.colorTheme.error,
-                    side: BorderSide(color: context.colorTheme.error),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
+                      // Stop navigation button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48.h,
+                        child: CustomOtlinedButton(
+                          onPressed: () => context
+                              .read<MapNavigationCubit>()
+                              .stopNavigation(),
+                          icon: Icons.close,
+                          text: 'Stop Navigation',
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                    ],
+                  );
+                }(),
             ],
-          ],
+          ),
         );
       },
     );
@@ -319,4 +294,46 @@ IconData _getManeuverIcon(String? type, String? modifier) {
     default:
       return Icons.straight;
   }
+}
+
+//  Empty Route
+
+Widget _buildEmptyRoute(BuildContext context) {
+  return Center(
+    child: Padding(
+      padding: EdgeInsets.all(32.r),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.directions_outlined,
+            size: 48.sp,
+            color: Colors.grey.shade400,
+          ),
+          SizedBox(height: 12.h),
+          Text(
+            'Select a place and tap\n"Navigate Here" to get directions',
+            textAlign: TextAlign.center,
+            style: context.textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildLoadingUi(BuildContext context) {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 40.h),
+    child: Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const CircularProgressIndicator(strokeWidth: 2),
+          SizedBox(height: 16.h),
+          Text('Calculating route...', style: context.textTheme.bodyLarge),
+        ],
+      ),
+    ),
+  );
 }

@@ -21,61 +21,65 @@ class PlaceActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: 50.h,
-            child: FilledButton.icon(
-              onPressed: () async {
-                if (latitude == null || longitude == null) return;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 40),
+      child: Row(
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 50.h,
+              child: FilledButton.icon(
+                onPressed: () async {
+                  if (latitude == null || longitude == null) return;
 
-                final locationService = sl<LocationService>();
-                final position = await locationService.getCurrentLocation();
+                  if (dragController.isAttached) {
+                    await dragController.animateTo(
+                      0.1,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
 
-                if (position != null && context.mounted) {
-                  // Don't dismiss — the bottom sheet auto-switches to Drive tab
-                  context.read<MapNavigationCubit>().navigateToPosition(
-                    Position(position.longitude, position.latitude),
-                    latitude!,
-                    longitude!,
-                  );
-                }
-              },
-              icon: const Icon(Icons.directions),
-              label: const Text('Navigate Here'),
+                  if (context.mounted) {
+                    context.read<MapCubit>().triggerFlyTo(
+                      latitude!,
+                      longitude!,
+                    );
+                  }
+                },
+                icon: const Icon(Icons.map),
+                label: const Text('View on Map'),
+              ),
             ),
           ),
-        ),
-        SizedBox(width: 20.w),
-        Expanded(
-          child: SizedBox(
-            height: 50.h,
-            child: FilledButton.icon(
-              onPressed: () async {
-                if (latitude == null || longitude == null) return;
+          SizedBox(width: 20.w),
 
-                if (dragController.isAttached) {
-                  await dragController.animateTo(
-                    0.1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
+          Expanded(
+            child: SizedBox(
+              height: 50.h,
+              child: FilledButton.icon(
+                onPressed: () async {
+                  if (latitude == null || longitude == null) return;
 
-                if (context.mounted) {
-                  context.read<MapCubit>().triggerFlyTo(
-                    latitude!,
-                    longitude!,
-                  );
-                }
-              },
-              icon: const Icon(Icons.map),
-              label: const Text('View on Map'),
+                  final locationService = sl<LocationService>();
+                  final position = await locationService.getCurrentLocation();
+
+                  if (position != null && context.mounted) {
+                    // Don't dismiss — the bottom sheet auto-switches to Drive tab
+                    context.read<MapNavigationCubit>().navigateToPosition(
+                      Position(position.longitude, position.latitude),
+                      latitude!,
+                      longitude!,
+                    );
+                  }
+                },
+                icon: const Icon(Icons.directions),
+                label: const Text('Navigate Here'),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

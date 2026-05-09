@@ -41,9 +41,9 @@ class CompleteResetPassword extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 45.h),
-              CustomOtlinedButton(
+              OutlinedButton(
                 onPressed: () => context.go(AppRoutes.login),
-                text: AppStrings.backToLogin,
+                child: Text(AppStrings.backToLogin),
               ),
             ],
           ),

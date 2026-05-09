@@ -9,6 +9,7 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 
@@ -155,25 +156,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: SizedBox(
               width: 259.w,
               height: 55.h,
-              child: OutlinedButton.icon(
-                key: const Key('settings-logout-button'),
+              child: CustomOtlinedButton(
                 onPressed: () => context.read<AppGateCubit>().logout(),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: context.colorTheme.error, width: 1),
-                  foregroundColor: context.colorTheme.error,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.r),
-                  ),
-                ),
-                icon: Icon(Icons.logout_rounded, size: 24.sp),
-                label: Text(
-                  'Log Out',
-                  style: context.textTheme.titleMedium?.copyWith(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: context.colorTheme.error,
-                  ),
-                ),
+                icon: Icons.logout_rounded,
+                text: 'Log Out',
               ),
             ),
           ),

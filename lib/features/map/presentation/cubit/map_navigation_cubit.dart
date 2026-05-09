@@ -11,22 +11,28 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
 
   /// Stores the last requested waypoints so we can re-fetch on profile change
   List<Position>? _lastWaypoints;
-  CancelToken? _getRoutecancelToken;
+  CancelToken? _getRouteCancelToken;
+
+  /// Monotonically increasing counter. Each call to [_fetchRoute] increments
+  /// this so that when a result arrives we can tell whether a newer request
+  /// has been issued in the meantime. Stale results are silently discarded
+  /// instead of cancelling the HTTP request, which avoids the "no route" flash
+  /// when the user switches profiles quickly.
+  int _routeGeneration = 0;
 
   MapNavigationCubit({required GetRouteUseCase getRouteUseCase})
     : _getRouteUseCase = getRouteUseCase,
       super(MapNavigationState.initial());
 
   CancelToken _getRouteToken() {
-    _getRoutecancelToken?.cancel();
-    _getRoutecancelToken = CancelToken();
-    return _getRoutecancelToken!;
+    _getRouteCancelToken?.cancel();
+    _getRouteCancelToken = CancelToken();
+    return _getRouteCancelToken!;
   }
 
   void setProfile(NavigationProfile profile) {
     emit(state.copyWith(selectedProfile: profile, currentStepIndex: 0));
 
-    // Re-fetch route with new profile if a route is active
     if (_lastWaypoints != null && _lastWaypoints!.isNotEmpty) {
       _fetchRoute(_lastWaypoints!);
     }
@@ -48,6 +54,8 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   Future<void> _fetchRoute(List<Position> waypoints) async {
     final token = _getRouteToken();
     _lastWaypoints = waypoints;
+    final generation = ++_routeGeneration;
+
     emit(
       state.copyWith(
         isRouteLoading: true,
@@ -61,6 +69,9 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
       profile: state.selectedProfile,
       cancelToken: token,
     );
+
+    // A newer request was fired while this one was in flight → ignore result
+    if (generation != _routeGeneration) return;
 
     result.when(
       success: (route) {
@@ -80,7 +91,8 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
 
   void stopNavigation() {
     _lastWaypoints = null;
-    _getRoutecancelToken?.cancel();
+    _routeGeneration++; // Invalidate any in-flight request
+    _getRouteCancelToken?.cancel();
     emit(
       state.copyWith(
         clearActiveRoute: true,
@@ -93,7 +105,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
 
   @override
   Future<void> close() {
-    _getRoutecancelToken?.cancel();
+    _getRouteCancelToken?.cancel();
     return super.close();
   }
 }

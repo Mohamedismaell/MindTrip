@@ -154,14 +154,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     height: 55.h,
                     child: isSaving
                         ? const Center(child: CircularProgressIndicator())
-                        : CustomOtlinedButton(
-                            key: const Key('edit-profile-save-button'),
+                        : OutlinedButton(
                             onPressed: state.hasChanges
                                 ? () => context
                                       .read<EditProfileCubit>()
                                       .saveChanges()
                                 : () {},
-                            text: 'Save Changes',
+                            child: Text('Save Changes'),
                           ),
                   ),
                 ),

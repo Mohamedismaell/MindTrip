@@ -15,6 +15,7 @@ import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
 import 'package:mindtrip/features/map/presentation/widgets/drive_tab.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_actions.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_images.dart';
+import 'package:mindtrip/features/map/presentation/widgets/place_tab.dart';
 
 class PlaceInfoBottomSheet extends StatefulWidget {
   const PlaceInfoBottomSheet({super.key});
@@ -24,19 +25,25 @@ class PlaceInfoBottomSheet extends StatefulWidget {
 }
 
 class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
-  final ScrollController _scrollController = ScrollController();
-  final DraggableScrollableController _dragController =
-      DraggableScrollableController();
+  late final ScrollController _imagesScrollController;
+  late final DraggableScrollableController _dragController;
   int _currentTab = 0;
+
+  @override
+  void initState() {
+    _imagesScrollController = ScrollController();
+    _dragController = DraggableScrollableController();
+    super.initState();
+  }
 
   @override
   void dispose() {
     _dragController.dispose();
-    _scrollController.dispose();
+    _imagesScrollController.dispose();
     super.dispose();
   }
 
-  void _switchToTab(int tab) {
+  Future<void> _switchToTab(int tab) async {
     if (_currentTab != tab) {
       setState(() => _currentTab = tab);
     }
@@ -46,13 +53,11 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        // Auto-switch to Drive tab when navigation starts loading
         BlocListener<MapNavigationCubit, MapNavigationState>(
           listenWhen: (prev, curr) =>
               !prev.isRouteLoading && curr.isRouteLoading,
           listener: (context, state) => _switchToTab(1),
         ),
-        // Auto-switch back to Place tab when navigation stops
         BlocListener<MapNavigationCubit, MapNavigationState>(
           listenWhen: (prev, curr) =>
               prev.activeRoute != null &&
@@ -79,7 +84,7 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
             controller: _dragController,
             initialChildSize: isVisible ? 0.45 : 0.1,
             minChildSize: 0.1,
-            maxChildSize: 0.7,
+            maxChildSize: 0.45,
             snap: true,
             builder: (context, scrollController) {
               return Container(
@@ -91,33 +96,51 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                   ),
                   boxShadow: [AppShadows.mainElevationButton],
                 ),
-                child: Column(
-                  children: [
-                    // Drag handle
-                    Padding(
-                      padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
-                      child: Container(
-                        width: 50.w,
-                        height: 5.h,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(2.5.r),
-                        ),
+                child: CustomScrollView(
+                  controller: scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildHandle(),
+                          _buildTabBar(context),
+                          Divider(height: 1.h, color: Colors.grey.shade200),
+                        ],
                       ),
                     ),
-                    // Tab bar
-                    _buildTabBar(context),
-                    // Content
-                    Expanded(
-                      child: _currentTab == 0
-                          ? _buildPlaceTab(
-                              context,
-                              _scrollController,
-                              place,
-                              googlePlace,
-                              photoUrls,
-                            )
-                          : DriveTab(scrollController: _scrollController),
+                    //Todo Chek the slid up in the animaiton
+                    SliverToBoxAdapter(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeInOut,
+                            ),
+                            child: child,
+                          );
+                        },
+                        layoutBuilder: (currentChild, previousChildren) {
+                          return Stack(
+                            alignment: Alignment.topCenter,
+                            children: [...previousChildren, ?currentChild],
+                          );
+                        },
+
+                        child: _currentTab == 0
+                            ? PlaceTab(
+                                key: ValueKey(0),
+                                place: place,
+                                googlePlace: googlePlace,
+                                photoUrls: photoUrls,
+                                imagesScrollController: _imagesScrollController,
+                                dragController: _dragController,
+                              )
+                            : const DriveTab(key: ValueKey(1)),
+                      ),
                     ),
                   ],
                 ),
@@ -125,6 +148,22 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
             },
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildHandle() {
+    return Padding(
+      padding: EdgeInsets.only(top: 16.h, bottom: 8.h),
+      child: Center(
+        child: Container(
+          width: 50.w,
+          height: 5.h,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(2.5.r),
+          ),
+        ),
       ),
     );
   }
@@ -192,174 +231,4 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
       ),
     );
   }
-
-  //  Place Tab
-
-  Widget _buildPlaceTab(
-    BuildContext context,
-    ScrollController scrollController,
-    PlaceModel? place,
-    GooglePlaceEntity? googlePlace,
-    List<String>? photoUrls,
-  ) {
-    if (googlePlace != null) {
-      return _buildGooglePlaceContent(
-        context,
-        scrollController,
-        googlePlace,
-        photoUrls,
-      );
-    } else if (place != null) {
-      return _buildContent(context, scrollController, place);
-    }
-    return Center(
-      child: Text(
-        'Tap a place on the map to see details',
-        style: context.textTheme.bodyMedium?.copyWith(
-          color: context.colorTheme.outline,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGooglePlaceContent(
-    BuildContext context,
-    ScrollController scrollController,
-    GooglePlaceEntity place,
-    List<String>? photoUrls,
-  ) {
-    return ListView(
-      controller: scrollController,
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-      children: [
-        if (photoUrls != null && photoUrls.isNotEmpty)
-          PlaceImages(
-            photoUrls: photoUrls,
-            scrollController: _scrollController,
-          ),
-        // Name & Category & Rating
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    place.displayName,
-                    style: context.textTheme.headlineSmall,
-                  ),
-                  SizedBox(height: 8.h),
-                  if (place.rating != null) ...[
-                    Row(
-                      children: [
-                        RatingStars(rating: place.rating!, size: 22.sp),
-                        SizedBox(width: 4.h),
-                        Text(
-                          place.rating.toString(),
-                          style: context.textTheme.labelLarge,
-                        ),
-                      ],
-                    ),
-                  ],
-                  SizedBox(height: 8.h),
-                  if (place.userRatingCount != null &&
-                      place.userRatingCount! > 0)
-                    Text(
-                      '${place.userRatingCount} Reviews ',
-                      style: AppTextStyles.h8SemiBold,
-                    ),
-                ],
-              ),
-            ),
-            if (place.primaryType != null)
-              Chip(
-                label: Text(
-                  place.primaryType!.replaceAll('_', ' '),
-                  style: context.textTheme.labelLarge,
-                ),
-                backgroundColor: context.colorTheme.primary.withValues(
-                  alpha: 0.2,
-                ),
-                side: BorderSide.none,
-              ),
-          ],
-        ),
-        SizedBox(height: 16.h),
-        // Description
-        if (place.editorialSummary != null)
-          Text(place.editorialSummary!, style: context.textTheme.bodyMedium),
-        // Opening Hours
-        if (place.openingHours != null)
-          Text(
-            place.openingHours!.openNow == true ? 'Open Now' : 'Closed',
-            style: AppTextStyles.h8SemiBold.copyWith(
-              color: place.openingHours!.openNow == true
-                  ? Colors.green
-                  : Colors.red,
-            ),
-          ),
-        SizedBox(height: 24.h),
-        PlaceActions(
-          latitude: place.latitude,
-          longitude: place.longitude,
-          dragController: _dragController,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildContent(
-    BuildContext context,
-    ScrollController scrollController,
-    PlaceModel place,
-  ) {
-    final photoUrls = place.imageUrls;
-    return ListView(
-      controller: scrollController,
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-      children: [
-        if (photoUrls != null)
-          PlaceImages(
-            photoUrls: photoUrls,
-            scrollController: _scrollController,
-          ),
-        // Name & Rating
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(place.name, style: context.textTheme.headlineSmall),
-                SizedBox(height: 8.h),
-                if (place.rating != null) ...[
-                  Row(
-                    children: [
-                      RatingStars(rating: place.rating!, size: 22.sp),
-                      SizedBox(width: 4.h),
-                      Text(
-                        place.rating.toString(),
-                        style: context.textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
-                ],
-                SizedBox(height: 8.h),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(height: 16.h),
-        SizedBox(height: 24.h),
-        PlaceActions(
-          latitude: place.location.latitude,
-          longitude: place.location.longitude,
-          dragController: _dragController,
-        ),
-      ],
-    );
-  }
-
-  //  Drive Tab
 }

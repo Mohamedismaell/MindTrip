@@ -6,7 +6,6 @@ import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gat
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/onboarding/presentation/widgets/welcome_image.dart';
 
 class WelcomeAuthScreen extends StatelessWidget {
@@ -33,12 +32,15 @@ class WelcomeAuthScreen extends StatelessWidget {
                 },
               ),
               SizedBox(height: 33.h),
-              CustomOtlinedButton(
-                onPressed: () {
-                  context.read<AppGateCubit>().proceedToAuth();
-                  context.go(AppRoutes.login);
-                },
-                text: AppStrings.login,
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () {
+                    context.read<AppGateCubit>().proceedToAuth();
+                    context.go(AppRoutes.login);
+                  },
+                  child: Text(AppStrings.login),
+                ),
               ),
             ],
           ),

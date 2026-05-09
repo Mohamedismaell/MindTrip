@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 
 class ExploreFilterSheet extends StatefulWidget {
   const ExploreFilterSheet({super.key});
@@ -382,9 +381,9 @@ class _ExploreFilterSheetState extends State<ExploreFilterSheet> {
                     child: GestureDetector(
                       //Todo add funcitonality
                       onTap: () => context.pop(),
-                      child: CustomOtlinedButton(
+                      child: OutlinedButton(
                         onPressed: () {},
-                        text: 'Show Results',
+                        child: Text('Show Results'),
                       ),
                     ),
                   ),

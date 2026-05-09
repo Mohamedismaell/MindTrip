@@ -7,7 +7,6 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/core/widget/planner_timeline.dart';
 import 'package:mindtrip/features/home/presentation/models/home_models.dart';
 
@@ -102,11 +101,11 @@ class HomeAiPlannerSection extends StatelessWidget {
                           horizontal: 12.w,
                           vertical: 18,
                         ),
-                        child: CustomOtlinedButton(
+                        child: OutlinedButton(
                           onPressed: () {
                             context.push(AppRoutes.aiPlannerFlow);
                           },
-                          text: 'Create your own plan',
+                          child: Text('Create your own plan'),
                         ),
                       ),
                     ],
