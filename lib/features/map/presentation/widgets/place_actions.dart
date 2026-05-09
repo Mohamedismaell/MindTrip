@@ -31,16 +31,15 @@ class PlaceActions extends StatelessWidget {
                 if (latitude == null || longitude == null) return;
 
                 final locationService = sl<LocationService>();
-
                 final position = await locationService.getCurrentLocation();
 
                 if (position != null && context.mounted) {
-                  context.read<MapCubit>().dismissBottomSheet();
+                  // Don't dismiss — the bottom sheet auto-switches to Drive tab
                   context.read<MapNavigationCubit>().navigateToPosition(
-                        Position(position.longitude, position.latitude),
-                        latitude!,
-                        longitude!,
-                      );
+                    Position(position.longitude, position.latitude),
+                    latitude!,
+                    longitude!,
+                  );
                 }
               },
               icon: const Icon(Icons.directions),
@@ -48,9 +47,7 @@ class PlaceActions extends StatelessWidget {
             ),
           ),
         ),
-
         SizedBox(width: 20.w),
-
         Expanded(
           child: SizedBox(
             height: 50.h,
@@ -67,7 +64,10 @@ class PlaceActions extends StatelessWidget {
                 }
 
                 if (context.mounted) {
-                  context.read<MapCubit>().triggerFlyTo(latitude!, longitude!);
+                  context.read<MapCubit>().triggerFlyTo(
+                    latitude!,
+                    longitude!,
+                  );
                 }
               },
               icon: const Icon(Icons.map),

@@ -51,7 +51,8 @@ try {
         Write-Warning "[specify] Git repository already initialized; skipping"
         exit 0
     }
-} catch { }
+}
+catch { }
 
 # Initialize
 try {
@@ -61,9 +62,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "git add failed: $out" }
     $out = git commit --allow-empty -q -m $commitMsg 2>&1 | Out-String
     if ($LASTEXITCODE -ne 0) { throw "git commit failed: $out" }
-} catch {
+}
+catch {
     Write-Warning "[specify] Error: $_"
     exit 1
 }
 
-Write-Host "✓ Git repository initialized"
+Write-Host "[Success] Git repository initialized"

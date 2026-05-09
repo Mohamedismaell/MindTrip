@@ -8,7 +8,6 @@ class PlaceEntity extends Equatable {
   final String? description;
   final LocationEntity location;
   final List<String>? imageUrls;
-  final String thumbnailUrl;
   final String? categoryId;
   final double? rating;
   final int? reviewCount;
@@ -21,7 +20,6 @@ class PlaceEntity extends Equatable {
     required this.id,
     required this.name,
     required this.location,
-    required this.thumbnailUrl,
     this.imageUrls,
     this.description,
     this.categoryId,
@@ -38,7 +36,6 @@ class PlaceEntity extends Equatable {
     String? description,
     LocationEntity? location,
     List<String>? imageUrls,
-    String? thumbnailUrl,
     String? categoryId,
     double? rating,
     int? reviewCount,
@@ -52,7 +49,6 @@ class PlaceEntity extends Equatable {
       description: description ?? this.description,
       location: location ?? this.location,
       imageUrls: imageUrls ?? this.imageUrls,
-      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       categoryId: categoryId ?? this.categoryId,
       rating: rating ?? this.rating,
       reviewCount: reviewCount ?? this.reviewCount,
@@ -69,7 +65,6 @@ class PlaceEntity extends Equatable {
     description,
     location,
     imageUrls,
-    thumbnailUrl,
     categoryId,
     rating,
     reviewCount,

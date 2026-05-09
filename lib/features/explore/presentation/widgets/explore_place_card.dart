@@ -38,7 +38,8 @@ class ExplorePlaceCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  AppCachedImage(imageUrl: place.thumbnailUrl),
+                  //! Handle no image later
+                  AppCachedImage(imageUrl: place.imageUrls?.first ?? ''),
 
                   // Badge
                   if (place.badge != PlaceBadge.none)

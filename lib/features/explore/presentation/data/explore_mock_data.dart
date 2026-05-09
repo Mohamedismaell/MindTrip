@@ -42,9 +42,9 @@ class ExploreMockData {
       description: 'A beautiful cafe on the Nile.',
       rating: 4.5,
       price: null,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
+      ],
     ),
     PlaceModel(
       id: 't2',
@@ -57,9 +57,9 @@ class ExploreMockData {
       description: 'Relaxing beach resort.',
       rating: 4.2,
       price: null,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
+      ],
     ),
     PlaceModel(
       id: 't3',
@@ -72,9 +72,9 @@ class ExploreMockData {
       description: 'Historical oasis in the desert.',
       rating: 4.8,
       price: null,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1596627116790-af6f46dddbfb?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1596627116790-af6f46dddbfb?w=400',
+      ],
     ),
     PlaceModel(
       id: 't4',
@@ -88,9 +88,9 @@ class ExploreMockData {
       rating: 4.9,
       price: null,
 
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
+      ],
     ),
     PlaceModel(
       id: 't5',
@@ -104,9 +104,9 @@ class ExploreMockData {
       rating: 4.7,
       price: null,
 
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
+      ],
     ),
     PlaceModel(
       id: 't6',
@@ -120,9 +120,9 @@ class ExploreMockData {
       rating: 4.4,
       price: null,
 
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
+      ],
     ),
     PlaceModel(
       id: 't7',
@@ -136,9 +136,9 @@ class ExploreMockData {
       rating: 4.9,
       price: null,
 
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
+      ],
     ),
     PlaceModel(
       id: 't8',
@@ -151,9 +151,9 @@ class ExploreMockData {
       description: 'Pristine beaches and coral reefs.',
       rating: 4.6,
       price: null,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400',
+      ],
     ),
   ];
 
@@ -170,9 +170,9 @@ class ExploreMockData {
       description: 'The Great Pyramids of Giza.',
       rating: 4.5,
       price: 180.0,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=400',
+      ],
       // badge: PlaceBadge.topRated,
     ),
     PlaceModel(
@@ -186,9 +186,9 @@ class ExploreMockData {
       description: 'Ancient Egyptian temple complex.',
       rating: 4.6,
       price: 180.0,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
+      ],
       // badge: PlaceBadge.popular,
     ),
     PlaceModel(
@@ -202,9 +202,9 @@ class ExploreMockData {
       description: 'Famous submarine sinkhole.',
       rating: 4.5,
       price: 180.0,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
+      ],
       // // badge: PlaceBadge.trending,
     ),
     PlaceModel(
@@ -218,9 +218,9 @@ class ExploreMockData {
       description: 'Historic district of Cairo.',
       rating: 4.5,
       price: 180.0,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
+      ],
       // // badge: PlaceBadge.topRated,
     ),
     PlaceModel(
@@ -234,9 +234,9 @@ class ExploreMockData {
       description: 'Cruise down the Nile river.',
       rating: 4.5,
       price: 180.0,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
+      ],
       // // badge: PlaceBadge.popular,
     ),
     PlaceModel(
@@ -250,9 +250,9 @@ class ExploreMockData {
       description: 'Vast mix of decayed temples.',
       rating: 4.5,
       price: 180.0,
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
-      imageUrls: [],
+      imageUrls: [
+        'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
+      ],
       // badge: PlaceBadge.trending,
     ),
   ];

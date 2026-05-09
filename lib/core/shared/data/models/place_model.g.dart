@@ -20,22 +20,21 @@ class PlaceModelAdapter extends TypeAdapter<PlaceModel> {
       id: fields[0] as String,
       name: fields[1] as String,
       location: fields[3] as LocationModel,
-      thumbnailUrl: fields[5] as String,
       imageUrls: (fields[4] as List?)?.cast<String>(),
       description: fields[2] as String?,
-      categoryId: fields[6] as String?,
-      rating: (fields[7] as num?)?.toDouble(),
-      reviewCount: (fields[8] as num?)?.toInt(),
-      price: (fields[9] as num?)?.toDouble(),
-      isFavorite: fields[10] == null ? false : fields[10] as bool,
-      badge: fields[11] == null ? PlaceBadge.none : fields[11] as PlaceBadge,
+      categoryId: fields[5] as String?,
+      rating: (fields[6] as num?)?.toDouble(),
+      reviewCount: (fields[7] as num?)?.toInt(),
+      price: (fields[8] as num?)?.toDouble(),
+      isFavorite: fields[9] == null ? false : fields[9] as bool,
+      badge: fields[10] == null ? PlaceBadge.none : fields[10] as PlaceBadge,
     );
   }
 
   @override
   void write(BinaryWriter writer, PlaceModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,18 +46,16 @@ class PlaceModelAdapter extends TypeAdapter<PlaceModel> {
       ..writeByte(4)
       ..write(obj.imageUrls)
       ..writeByte(5)
-      ..write(obj.thumbnailUrl)
-      ..writeByte(6)
       ..write(obj.categoryId)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.rating)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.reviewCount)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.price)
-      ..writeByte(10)
+      ..writeByte(9)
       ..write(obj.isFavorite)
-      ..writeByte(11)
+      ..writeByte(10)
       ..write(obj.badge);
   }
 

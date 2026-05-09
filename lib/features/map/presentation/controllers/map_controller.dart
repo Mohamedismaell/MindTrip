@@ -202,7 +202,10 @@ class MapController {
     }
   }
 
-  Future<void> drawRoute(String geoJsonGeometry) async {
+  Future<void> drawRoute(
+    String geoJsonGeometry, {
+    List<String>? congestionLevels,
+  }) async {
     if (_polylineAnnotationManager == null) return;
 
     await clearRoute();
@@ -215,16 +218,76 @@ class MapController {
         )
         .toList();
 
-    await _polylineAnnotationManager!.create(
-      PolylineAnnotationOptions(
-        geometry: LineString(coordinates: coordinates),
-        lineColor: 0xFF2196F3,
-        lineWidth: 5.0,
-        lineOpacity: 0.8,
-      ),
-    );
+    if (congestionLevels != null && congestionLevels.isNotEmpty) {
+      // Draw congestion-colored segments
+      await _drawCongestionRoute(coordinates, congestionLevels);
+    } else {
+      // Draw single blue polyline (walking, cycling, driving)
+      await _polylineAnnotationManager!.create(
+        PolylineAnnotationOptions(
+          geometry: LineString(coordinates: coordinates),
+          lineColor: 0xFF2196F3,
+          lineWidth: 5.0,
+          lineOpacity: 0.8,
+        ),
+      );
+    }
 
     await fitBounds(coordinates);
+  }
+
+  //Todo: Check again
+  Future<void> _drawCongestionRoute(
+    List<Position> coordinates,
+    List<String> congestionLevels,
+  ) async {
+    if (_polylineAnnotationManager == null) return;
+
+    // congestionLevels has one entry per coordinate pair (n-1 entries for n coordinates)
+    // We batch consecutive segments of the same congestion level for efficiency
+    int segStart = 0;
+    for (int i = 0; i < congestionLevels.length; i++) {
+      final isLast = i == congestionLevels.length - 1;
+      final nextDiffers =
+          !isLast && congestionLevels[i] != congestionLevels[i + 1];
+
+      if (isLast || nextDiffers) {
+        // Draw segment from segStart to i+1 (inclusive end coordinate)
+        final endIdx = (i + 1 < coordinates.length)
+            ? i + 1
+            : coordinates.length - 1;
+        final segCoords = coordinates.sublist(segStart, endIdx + 1);
+
+        if (segCoords.length >= 2) {
+          await _polylineAnnotationManager!.create(
+            PolylineAnnotationOptions(
+              geometry: LineString(coordinates: segCoords),
+              lineColor: _congestionColor(congestionLevels[i]),
+              lineWidth: 5.0,
+              lineOpacity: 0.85,
+            ),
+          );
+        }
+
+        segStart = i + 1;
+      }
+    }
+  }
+
+  int _congestionColor(String level) {
+    switch (level) {
+      case 'low':
+        return 0xFF4CAF50; // Green
+      case 'moderate':
+        return 0xFFFFC107; // Yellow
+      case 'heavy':
+        return 0xFFFF9800; // Orange
+      case 'severe':
+        return 0xFFF44336; // Red
+      case 'unknown':
+      default:
+        return 0xFF2196F3; // Blue
+    }
   }
 
   Future<void> clearRoute() async {

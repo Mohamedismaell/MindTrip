@@ -18,25 +18,22 @@ class PlaceModel extends Equatable {
   @HiveField(4)
   final List<String>? imageUrls;
   @HiveField(5)
-  final String thumbnailUrl;
-  @HiveField(6)
   final String? categoryId;
-  @HiveField(7)
+  @HiveField(6)
   final double? rating;
-  @HiveField(8)
+  @HiveField(7)
   final int? reviewCount;
-  @HiveField(9)
+  @HiveField(8)
   final double? price;
-  @HiveField(10)
+  @HiveField(9)
   final bool isFavorite;
-  @HiveField(11)
+  @HiveField(10)
   final PlaceBadge badge;
 
   const PlaceModel({
     required this.id,
     required this.name,
     required this.location,
-    required this.thumbnailUrl,
     this.imageUrls,
     this.description,
     this.categoryId,
@@ -56,7 +53,6 @@ class PlaceModel extends Equatable {
       imageUrls: (json['imageUrls'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      thumbnailUrl: json['thumbnailUrl'] ?? '',
       categoryId: json['categoryId'],
       rating: (json['rating'] as num?)?.toDouble(),
       reviewCount: json['reviewCount'] as int?,
@@ -73,7 +69,6 @@ class PlaceModel extends Equatable {
       'description': description,
       'location': location.toJson(),
       'imageUrls': imageUrls,
-      'thumbnailUrl': thumbnailUrl,
       'categoryId': categoryId,
       'rating': rating,
       'reviewCount': reviewCount,
@@ -90,7 +85,6 @@ class PlaceModel extends Equatable {
     description,
     location,
     imageUrls,
-    thumbnailUrl,
     categoryId,
     rating,
     reviewCount,

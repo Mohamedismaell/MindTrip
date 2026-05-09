@@ -14,6 +14,7 @@ class PlaceImages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('photoUrls $photoUrls');
     return Column(
       children: [
         if (photoUrls.isNotEmpty)

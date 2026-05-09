@@ -33,7 +33,10 @@ class HomePopularDestinations extends StatelessWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        AppCachedImage(imageUrl: destination.thumbnailUrl),
+                        //! Handle no image later
+                        AppCachedImage(
+                          imageUrl: destination.imageUrls?.first ?? '',
+                        ),
 
                         DecoratedBox(
                           decoration: BoxDecoration(

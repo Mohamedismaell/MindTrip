@@ -16,7 +16,7 @@ class WelcomeAuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 14.w),
+        padding: EdgeInsets.symmetric(horizontal: 28.w),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,

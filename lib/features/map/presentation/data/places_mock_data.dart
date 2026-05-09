@@ -11,8 +11,10 @@ class PlacesMockData {
         latitude: 31.2710191,
         longitude: 32.269965,
       ),
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
+      imageUrls: [
+        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
+      ],
+
       categoryId: 'restaurant',
     ),
     PlaceModel(
@@ -23,8 +25,9 @@ class PlacesMockData {
         latitude: 30.0454,
         longitude: 31.2367,
       ),
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1566073771259-6a8506099945',
+      imageUrls: [
+        'https://images.unsplash.com/photo-1566073771259-6a8506099945',
+      ],
       categoryId: 'hotel',
     ),
     PlaceModel(
@@ -35,8 +38,9 @@ class PlacesMockData {
         latitude: 30.0464,
         longitude: 31.2377,
       ),
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
+      imageUrls: [
+        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
+      ],
       categoryId: 'beach',
     ),
     PlaceModel(
@@ -47,8 +51,9 @@ class PlacesMockData {
         latitude: 30.0474,
         longitude: 31.2387,
       ),
-      thumbnailUrl:
-          'https://images.unsplash.com/photo-1505761671935-60b3a7427bad',
+      imageUrls: [
+        'https://images.unsplash.com/photo-1505761671935-60b3a7427bad',
+      ],
       categoryId: 'museum',
     ),
   ];

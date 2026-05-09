@@ -51,9 +51,8 @@ class HomeMockData {
       id: 'p1',
       name: 'The Blue Hole',
       location: LocationModel(address: 'Dahab', latitude: 20, longitude: 30),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/b9754e96-0dbc-4221-8692-a92c88ba8c1e',
       imageUrls: [
+        'https://www.figma.com/api/mcp/asset/b9754e96-0dbc-4221-8692-a92c88ba8c1e',
         'https://www.figma.com/api/mcp/asset/36e89b13-c752-4451-9f03-ecc842328398',
         'https://www.figma.com/api/mcp/asset/e084fbc7-7d7f-4e9f-b765-09050f8d88a4',
       ],
@@ -62,8 +61,6 @@ class HomeMockData {
       id: 'p2',
       name: 'White Desert',
       location: LocationModel(address: 'Farafra', latitude: 20, longitude: 30),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/7757b795-65f2-4a3e-9fa8-78d17c1ad58c',
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/7757b795-65f2-4a3e-9fa8-78d17c1ad58c',
         'https://www.figma.com/api/mcp/asset/7ca7a24d-98e1-4160-b8a6-25ad588d9515',
@@ -73,8 +70,6 @@ class HomeMockData {
       id: 'p3',
       name: 'Siwa Salt Lakes',
       location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/6d50a379-383d-4729-8571-6371ac253ff9',
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/6d50a379-383d-4729-8571-6371ac253ff9',
         'https://www.figma.com/api/mcp/asset/da6358cf-1d2d-48c6-a12f-8a35c6430944',
@@ -87,16 +82,12 @@ class HomeMockData {
       id: 'p4',
       name: 'Fjord Bay',
       location: LocationModel(address: 'Taba', latitude: 20, longitude: 30),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/22cd2d99-db30-4dad-b0ef-9d129132111a',
       price: 150,
     ),
     PlaceModel(
       id: 'p5',
       name: 'Wadi El Rayan',
       location: LocationModel(address: 'Fayoum', latitude: 20, longitude: 30),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/1ee00423-bf80-46b1-97e4-2e8517d39bd3',
       price: 150,
     ),
     PlaceModel(
@@ -107,8 +98,6 @@ class HomeMockData {
         latitude: 20,
         longitude: 30,
       ),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/f360b217-4b82-461b-8b48-32ef0035a771',
       price: 150,
     ),
     PlaceModel(
@@ -119,8 +108,6 @@ class HomeMockData {
         latitude: 20,
         longitude: 30,
       ),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/52c3d736-a15a-4805-a18e-ce5a92d669cf',
       price: 150,
     ),
     PlaceModel(
@@ -131,24 +118,18 @@ class HomeMockData {
         latitude: 20,
         longitude: 30,
       ),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/e52e4006-7d5b-4df6-9b6e-a476a7c1121f',
       price: 150,
     ),
     PlaceModel(
       id: 'p9',
       name: 'Cleopatra\'s Pool',
       location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/da6358cf-1d2d-48c6-a12f-8a35c6430944',
       price: 150,
     ),
     PlaceModel(
       id: 'p10',
       name: 'Khan el-Khalili',
       location: LocationModel(address: 'Cairo', latitude: 20, longitude: 30),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/ad7063f3-8ee5-4a4f-9c0a-a2ae83cda1ac',
       price: 150,
     ),
     PlaceModel(
@@ -159,8 +140,6 @@ class HomeMockData {
         latitude: 20,
         longitude: 30,
       ),
-      thumbnailUrl:
-          'https://www.figma.com/api/mcp/asset/7b2197bc-327b-4101-8580-147dd65dddf8',
       price: 150,
     ),
   ];

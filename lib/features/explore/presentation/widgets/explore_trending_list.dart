@@ -55,10 +55,11 @@ class _TrendingCard extends StatelessWidget {
               topLeft: Radius.circular(10.r),
               topRight: Radius.circular(10.r),
             ),
+            //! Handle no image later
             child: AppCachedImage(
               width: double.infinity,
               height: 70.h,
-              imageUrl: item.thumbnailUrl,
+              imageUrl: item.imageUrls?.first ?? '',
             ),
           ),
           SizedBox(height: 7.h),

@@ -15,7 +15,6 @@ import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.da
 import 'package:mindtrip/features/map/presentation/data/places_mock_data.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_mark_relcoaiton_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_navigate_all_button.dart';
-import 'package:mindtrip/features/map/presentation/widgets/map_navigation_bar.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_info_bottom_sheet.dart';
@@ -64,7 +63,10 @@ class _MapScreenState extends State<MapScreen> {
       final waypoints = [userPosition];
       for (final entry in annotations) {
         waypoints.add(
-          Position(entry.place.location.longitude, entry.place.location.latitude),
+          Position(
+            entry.place.location.longitude,
+            entry.place.location.latitude,
+          ),
         );
       }
       context.read<MapNavigationCubit>().navigateAll(waypoints);
@@ -104,6 +106,7 @@ class _MapScreenState extends State<MapScreen> {
               if (state.activeRoute != null) {
                 await _mapController.drawRoute(
                   state.activeRoute!.geoJsonGeometry,
+                  congestionLevels: state.activeRoute!.congestionLevels,
                 );
               } else {
                 await _mapController.clearRoute();
@@ -164,23 +167,18 @@ class _MapScreenState extends State<MapScreen> {
             ),
             Positioned(top: topSpace, child: const MapSearchBar()),
             Positioned(
-              top: topSpace,
-              left: 20.w,
-              right: 20.w,
-              child: const MapNavigationBar(),
-            ),
-            Positioned(
               bottom: 120,
               right: 16,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   MapNavigateAllButton(onPressed: _navigateAll),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   MapMarkRelcoaitonButton(
                     onTap: () => _mapController.fitToAnnotations(),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   MapRelocateButton(onPressed: _relocateUser),
                 ],
               ),
