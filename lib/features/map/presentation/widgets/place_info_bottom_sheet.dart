@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
-import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
 import 'package:mindtrip/features/map/presentation/widgets/drive_tab.dart';
-import 'package:mindtrip/features/map/presentation/widgets/place_actions.dart';
-import 'package:mindtrip/features/map/presentation/widgets/place_images.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_tab.dart';
 
 class PlaceInfoBottomSheet extends StatefulWidget {
@@ -110,7 +105,6 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                         ],
                       ),
                     ),
-                    //Todo Chek the slid up in the animaiton
                     SliverToBoxAdapter(
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
@@ -123,6 +117,7 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
                             child: child,
                           );
                         },
+                        //* this fix the slide up animaiton bug.
                         layoutBuilder: (currentChild, previousChildren) {
                           return Stack(
                             alignment: Alignment.topCenter,

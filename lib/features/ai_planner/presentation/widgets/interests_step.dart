@@ -19,9 +19,9 @@ class InterestsStep extends StatelessWidget {
     return Column(
       children: [
         const StepHeading(
-          title: 'How long is your trip?',
-          subtitle: 'Choose how many days you are planning to travel.',
-          icon: Icons.calendar_today_rounded,
+          title: 'What are you into?',
+          subtitle: 'Select what you’d love to do on this trip.',
+          icon: Icons.interests_rounded,
         ),
         SizedBox(height: 24.h),
         Interestes(scrollController: _scrollController),

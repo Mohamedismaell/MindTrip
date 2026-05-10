@@ -53,7 +53,9 @@ void main() {
   });
 
   group('router', () {
-    testWidgets('authenticated user can navigate to profile routes', (tester) async {
+    testWidgets('authenticated user can navigate to profile routes', (
+      tester,
+    ) async {
       final harness = _ProfileTestHarness(
         user: sampleUser,
         initialLocation: AppRoutes.home,
@@ -80,7 +82,9 @@ void main() {
   });
 
   group('profile widgets', () {
-    testWidgets('profile screen renders user data from UserCubit', (tester) async {
+    testWidgets('profile screen renders user data from UserCubit', (
+      tester,
+    ) async {
       final harness = _ProfileTestHarness(
         user: sampleUser,
         initialLocation: AppRoutes.profile,
@@ -97,7 +101,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('edit profile screen renders initial user values', (tester) async {
+    testWidgets('edit profile screen renders initial user values', (
+      tester,
+    ) async {
       final harness = _ProfileTestHarness(
         user: sampleUser,
         initialLocation: AppRoutes.editProfile,
@@ -106,7 +112,10 @@ void main() {
       await _pumpApp(tester, harness);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('edit-profile-display-name-row')), findsOneWidget);
+      expect(
+        find.byKey(const Key('edit-profile-display-name-row')),
+        findsOneWidget,
+      );
       expect(find.byKey(const Key('edit-profile-email-row')), findsOneWidget);
       expect(find.text(sampleUser.displayName), findsOneWidget);
       expect(find.text(sampleUser.email), findsOneWidget);
@@ -153,7 +162,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('bottom nav highlights profile on all profile routes', (tester) async {
+    testWidgets('bottom nav highlights profile on all profile routes', (
+      tester,
+    ) async {
       for (final route in [
         AppRoutes.profile,
         AppRoutes.editProfile,
@@ -182,16 +193,16 @@ class _ProfileTestHarness {
   _ProfileTestHarness({
     UserEntity? user,
     String initialLocation = AppRoutes.home,
-  })  : user = user ?? sampleUser,
-        themeCubit = ThemeCubit(),
-        userCubit = _buildUserCubit(user ?? sampleUser),
-        onboardingCubit = OnboardingCubit(
-          completeOnboarding: CompleteOnboardingUseCase(
-            _FakeOnboardingRepository(),
-          ),
-        ),
-        appGateCubit = _buildAppGateCubit(_buildUserCubit(user ?? sampleUser)),
-        router = _buildRouter(initialLocation);
+  }) : user = user ?? sampleUser,
+       themeCubit = ThemeCubit(),
+       userCubit = _buildUserCubit(user ?? sampleUser),
+       onboardingCubit = OnboardingCubit(
+         completeOnboarding: CompleteOnboardingUseCase(
+           _FakeOnboardingRepository(),
+         ),
+       ),
+       appGateCubit = _buildAppGateCubit(_buildUserCubit(user ?? sampleUser)),
+       router = _buildRouter(initialLocation);
 
   final UserEntity user;
   final ThemeCubit themeCubit;
@@ -225,10 +236,7 @@ class _ProfileTestHarness {
   static GoRouter _buildRouter(String initialLocation) {
     return GoRouter(
       initialLocation: initialLocation,
-      routes: [
-        ...HomeRoutes.routes,
-        ...ProfileRoutes.routes,
-      ],
+      routes: [...HomeRoutes.routes, ...ProfileRoutes.routes],
     );
   }
 
@@ -302,7 +310,7 @@ class _MemoryStorage implements Storage {
 
 class _FakeOnboardingRepository implements OnboardingRepository {
   @override
-  Future<bool> isFirstTime() async => false;
+  Future<bool> hasCompletedOnboarding() async => false;
 
   @override
   Future<void> setNotFirstTime() async {}
@@ -356,7 +364,8 @@ class _FakeUserRepository implements UserRepository {
   Future<Result<UserEntity>> getCurrentUser() async => Result.ok(user);
 
   @override
-  Future<Result<void>> updateInterests(List<String> interests) async => const Result.ok(null);
+  Future<Result<void>> updateInterests(List<String> interests) async =>
+      const Result.ok(null);
 
   @override
   Future<Result<String>> uploadProfilePhoto(String filePath) async =>

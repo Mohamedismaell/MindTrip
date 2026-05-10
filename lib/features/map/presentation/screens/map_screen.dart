@@ -75,7 +75,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     await _mapController.init(mapboxMap);
-
+    // await mapboxMap.loadStyleJson(myStyle);
     _mapController.setupAnnotationTapHandler(
       onPlaceTap: (placeId) {
         if (mounted) context.read<MapCubit>().selectPlace(placeId);
@@ -163,7 +163,7 @@ class _MapScreenState extends State<MapScreen> {
             MapWidget(
               key: const ValueKey("mapWidget"),
               onMapCreated: _onMapCreated,
-              styleUri: "mapbox://styles/mapbox/outdoors-v12",
+              styleUri: MapboxStyles.OUTDOORS,
             ),
             Positioned(top: topSpace, child: const MapSearchBar()),
             Positioned(
@@ -173,8 +173,6 @@ class _MapScreenState extends State<MapScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  MapNavigateAllButton(onPressed: _navigateAll),
-                  SizedBox(height: 16.h),
                   MapMarkRelcoaitonButton(
                     onTap: () => _mapController.fitToAnnotations(),
                   ),

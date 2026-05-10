@@ -7,7 +7,6 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_avatar.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_top_bar.dart';

@@ -4,7 +4,7 @@ import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
 class AppHive {
-  static late Box<bool> onboardingBox;
+  static late Box onboardingBox;
   static late Box<String> favoritesBox;
   static late Box<String> favoritesSyncQueueBox;
   static late Box<PlaceModel> placesCacheBox;

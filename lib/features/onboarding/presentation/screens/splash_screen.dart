@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // // TODO: remove this after testing
     // onboardingLocalDataSourceImpl.clearOnboardingBox();
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       context.read<AppGateCubit>().start();
     });

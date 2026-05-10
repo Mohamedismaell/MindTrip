@@ -46,27 +46,27 @@ enum PlaceCategory {
   String get annotationAssetPath {
     switch (this) {
       case PlaceCategory.restaurant:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.hotel:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.beach:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.park:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.museum:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.shopping:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.entertainment:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.hospital:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.education:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
       case PlaceCategory.other:
-        return 'assets/images/map/location-pin.png';
+        return 'assets/images/map/Component 23.png';
     }
   }
 
-  static String get searchPinAssetPath => 'assets/images/map/location-pin.png';
+  static String get searchPinAssetPath => 'assets/images/map/Component 23.png';
 }

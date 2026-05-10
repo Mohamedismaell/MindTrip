@@ -76,7 +76,7 @@ class TestHarness {
     final authRepo = authRepository ?? FakeAuthRepository();
     final onBoardingRepo =
         onboardingRepository ??
-        FakeOnboardingRepository(isFirstTime: isFirstTime);
+        FakeOnboardingRepository(hasCompletedOnboarding: isFirstTime);
 
     themeCubit = ThemeCubit();
     userCubit = UserCubit(
@@ -725,12 +725,12 @@ class MemoryStorage implements Storage {
 }
 
 class FakeOnboardingRepository implements OnboardingRepository {
-  FakeOnboardingRepository({this.isFirstTime = false});
+  FakeOnboardingRepository({this.hasCompletedOnboarding = false});
 
-  final bool isFirstTime;
+  final bool hasCompletedOnboarding;
 
   @override
-  Future<bool> isFirstTime() async => isFirstTime;
+  Future<bool> hasCompletedOnboarding() async => hasCompletedOnboarding;
 
   @override
   Future<void> setNotFirstTime() async {}

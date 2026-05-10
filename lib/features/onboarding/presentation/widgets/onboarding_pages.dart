@@ -17,9 +17,7 @@ class OnboardingPages extends StatelessWidget {
         child: PageView.builder(
           physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (value) {
-            context.read<OnboardingCubit>().updateIndex(
-              pageController.page!.toInt(),
-            );
+            context.read<OnboardingCubit>().updateIndex(value);
           },
           controller: pageController,
           itemCount: OnboardingModel.onboardingList.length,

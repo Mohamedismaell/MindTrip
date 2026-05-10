@@ -1,4 +1,3 @@
-import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/onboarding/data/repositories/on_boarding_impl.dart';
 import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data_source.dart';
@@ -12,7 +11,7 @@ class OnboardingDi {
   static void init() {
     //! Data Sources
     sl.registerLazySingleton<OnboardingLocalDataSource>(
-      () => OnboardingLocalDataSourceImpl(box: AppHive.onboardingBox),
+      () => OnboardingLocalDataSourceImpl(),
     );
 
     //! Repositories
