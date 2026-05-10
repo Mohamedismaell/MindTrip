@@ -15,6 +15,8 @@ class MapController {
   final Map<String, GooglePlaceEntity> _annotationIdToGooglePlace = {};
   final Map<String, Uint8List> _imageCache = {};
   final List<Position> _annotationCoordinates = [];
+  final Map<String, double> _defaultIconSizes = {};
+  String? _selectedAnnotationId;
   GooglePlaceEntity? _searchResultGooglePlace;
   Cancelable? _tapEventsCancelable;
 
@@ -51,6 +53,8 @@ class MapController {
     _tapEventsCancelable?.cancel();
     _tapEventsCancelable = _pointAnnotationManager?.tapEvents(
       onTap: (annotation) {
+        _animateSelectedAnnotation(annotation.id);
+
         final placeId = _annotationIdToPlaceId[annotation.id];
         if (placeId != null) {
           onPlaceTap(placeId);
@@ -116,7 +120,7 @@ class MapController {
 
   Future<void> addPlaceAnnotations(List<MapAnnotationEntry> entries) async {
     if (_pointAnnotationManager == null) return;
-    //! chekc
+    //! check
     _annotationCoordinates.clear();
     for (final entry in entries) {
       final category = PlaceCategory.fromCategoryId(entry.place.categoryId);
@@ -136,6 +140,7 @@ class MapController {
 
       _annotationCoordinates.add(coord);
       _annotationIdToPlaceId[annotation.id] = entry.place.id;
+      _defaultIconSizes[annotation.id] = 0.2;
     }
   }
 
@@ -157,10 +162,10 @@ class MapController {
       );
 
       _annotationIdToGooglePlace[annotation.id] = place;
+      _defaultIconSizes[annotation.id] = 0.25;
     }
   }
 
-  // show all place annotations.
   Future<void> fitToAnnotations() async {
     if (_annotationCoordinates.isEmpty) return;
 
@@ -192,6 +197,7 @@ class MapController {
       ),
     );
     _searchResultGooglePlace = place;
+    _defaultIconSizes[_searchResultAnnotation!.id] = 0.25;
   }
 
   Future<void> removeSearchResultMarker() async {
@@ -219,10 +225,8 @@ class MapController {
         .toList();
 
     if (congestionLevels != null && congestionLevels.isNotEmpty) {
-      // Draw congestion-colored segments
       await _drawCongestionRoute(coordinates, congestionLevels);
     } else {
-      // Draw single blue polyline (walking, cycling, driving)
       await _polylineAnnotationManager!.create(
         PolylineAnnotationOptions(
           geometry: LineString(coordinates: coordinates),
@@ -243,8 +247,6 @@ class MapController {
   ) async {
     if (_polylineAnnotationManager == null) return;
 
-    // congestionLevels has one entry per coordinate pair (n-1 entries for n coordinates)
-    // We batch consecutive segments of the same congestion level for efficiency
     int segStart = 0;
     for (int i = 0; i < congestionLevels.length; i++) {
       final isLast = i == congestionLevels.length - 1;
@@ -277,16 +279,16 @@ class MapController {
   int _congestionColor(String level) {
     switch (level) {
       case 'low':
-        return 0xFF4CAF50; // Green
+        return 0xFF4CAF50;
       case 'moderate':
-        return 0xFFFFC107; // Yellow
+        return 0xFFFFC107;
       case 'heavy':
-        return 0xFFFF9800; // Orange
+        return 0xFFFF9800;
       case 'severe':
-        return 0xFFF44336; // Red
+        return 0xFFF44336;
       case 'unknown':
       default:
-        return 0xFF2196F3; // Blue
+        return 0xFF2196F3;
     }
   }
 
@@ -310,6 +312,62 @@ class MapController {
     _imageCache.clear();
     _annotationIdToPlaceId.clear();
     _annotationIdToGooglePlace.clear();
+    _defaultIconSizes.clear();
+    _selectedAnnotationId = null;
     _searchResultGooglePlace = null;
+  }
+
+  Future<void> _updateAnnotationSize(String annotationId, double size) async {
+    if (_pointAnnotationManager == null) return;
+    final annotations = await _pointAnnotationManager!.getAnnotations();
+    for (final a in annotations) {
+      if (a.id == annotationId) {
+        a.iconSize = size;
+        await _pointAnnotationManager!.update(a);
+        break;
+      }
+    }
+  }
+
+  Future<void> _animateSelectedAnnotation(String annotationId) async {
+    if (_pointAnnotationManager == null) return;
+
+    await _resetSelectedAnnotation();
+
+    _selectedAnnotationId = annotationId;
+
+    final defaultSize = _defaultIconSizes[annotationId] ?? 0.2;
+
+    await _popAnnotation(annotationId, defaultSize);
+  }
+
+  Future<void> _popAnnotation(String annotationId, double baseSize) async {
+    final frames = [baseSize * 1.45, baseSize * 1.2, baseSize * 1.3];
+
+    final durations = [
+      const Duration(milliseconds: 120),
+      const Duration(milliseconds: 90),
+      const Duration(milliseconds: 70),
+    ];
+
+    for (int i = 0; i < frames.length; i++) {
+      await _updateAnnotationSize(annotationId, frames[i]);
+
+      await Future.delayed(durations[i]);
+    }
+  }
+
+  Future<void> _resetSelectedAnnotation() async {
+    if (_selectedAnnotationId == null || _pointAnnotationManager == null) {
+      return;
+    }
+
+    final defaultSize = _defaultIconSizes[_selectedAnnotationId!];
+
+    if (defaultSize != null) {
+      await _updateAnnotationSize(_selectedAnnotationId!, defaultSize);
+    }
+
+    _selectedAnnotationId = null;
   }
 }

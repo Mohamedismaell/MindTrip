@@ -50,6 +50,7 @@ class PlaceTab extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (photoUrls != null && photoUrls.isNotEmpty)
             PlaceImages(
@@ -81,16 +82,10 @@ class PlaceTab extends StatelessWidget {
                         ],
                       ),
                     ],
-                    SizedBox(height: 8.h),
-                    if (place.userRatingCount != null &&
-                        place.userRatingCount! > 0)
-                      Text(
-                        '${place.userRatingCount} Reviews ',
-                        style: AppTextStyles.h8SemiBold,
-                      ),
                   ],
                 ),
               ),
+
               if (place.primaryType != null)
                 Chip(
                   label: Text(
@@ -104,20 +99,34 @@ class PlaceTab extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (place.userRatingCount != null && place.userRatingCount! > 0)
+                Text(
+                  '${place.userRatingCount} Reviews ',
+                  style: AppTextStyles.h8SemiBold,
+                ),
+
+              // Opening Hours
+              if (place.openingHours != null)
+                Text(
+                  place.openingHours!.openNow == true
+                      ? 'Open Now'
+                      : 'Closed Now',
+                  style: AppTextStyles.h8SemiBold.copyWith(
+                    color: place.openingHours!.openNow == true
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                ),
+            ],
+          ),
           // Description
           if (place.editorialSummary != null)
             Text(place.editorialSummary!, style: context.textTheme.bodyMedium),
-          // Opening Hours
-          if (place.openingHours != null)
-            Text(
-              place.openingHours!.openNow == true ? 'Open Now' : 'Closed',
-              style: AppTextStyles.h8SemiBold.copyWith(
-                color: place.openingHours!.openNow == true
-                    ? Colors.green
-                    : Colors.red,
-              ),
-            ),
+
           SizedBox(height: 24.h),
           PlaceActions(
             latitude: place.latitude,

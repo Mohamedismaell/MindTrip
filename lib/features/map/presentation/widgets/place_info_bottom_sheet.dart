@@ -60,6 +60,26 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
               !curr.isRouteLoading,
           listener: (context, state) => _switchToTab(0),
         ),
+        BlocListener<MapCubit, MapState>(
+          listenWhen: (prev, curr) {
+            final visibilityChanged =
+                !prev.isBottomSheetVisible && curr.isBottomSheetVisible;
+            final placeChanged =
+                prev.selectedPlace != curr.selectedPlace &&
+                curr.selectedPlace != null;
+            final googlePlaceChanged =
+                prev.selectedGooglePlace != curr.selectedGooglePlace &&
+                curr.selectedGooglePlace != null;
+            return visibilityChanged || placeChanged || googlePlaceChanged;
+          },
+          listener: (context, state) {
+            _dragController.animateTo(
+              0.6,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          },
+        ),
       ],
       child: BlocBuilder<MapCubit, MapState>(
         buildWhen: (previous, current) {
@@ -75,77 +95,153 @@ class _PlaceInfoBottomSheetState extends State<PlaceInfoBottomSheet> {
           final googlePlace = state.selectedGooglePlace;
           final photoUrls = state.selectedPlacePhotoUrls;
 
-          return DraggableScrollableSheet(
-            controller: _dragController,
-            initialChildSize: isVisible ? 0.45 : 0.1,
-            minChildSize: 0.1,
-            maxChildSize: 0.45,
-            snap: true,
-            builder: (context, scrollController) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLightGray,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24.r),
-                    topRight: Radius.circular(24.r),
+          return NotificationListener<DraggableScrollableNotification>(
+            onNotification: (notification) {
+              if (notification.extent <= 0.01 && state.isBottomSheetVisible) {
+                // Sync cubit state when sheet is dragged all the way down
+                Future.microtask(() {
+                  if (context.mounted) {
+                    context.read<MapCubit>().dismissBottomSheet();
+                  }
+                });
+              }
+              return false;
+            },
+            child: DraggableScrollableSheet(
+              controller: _dragController,
+              initialChildSize: isVisible ? 0.6 : 0.0,
+              minChildSize: 0.0,
+              maxChildSize: 0.6,
+              snap: false,
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLightGray,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24.r),
+                      topRight: Radius.circular(24.r),
+                    ),
+                    boxShadow: [AppShadows.mainElevationButton],
                   ),
-                  boxShadow: [AppShadows.mainElevationButton],
-                ),
-                child: CustomScrollView(
-                  controller: scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: [
-                    SliverToBoxAdapter(
+
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24.r),
+                      topRight: Radius.circular(24.r),
+                    ),
+                    child: OverflowBox(
+                      alignment: Alignment.topCenter,
+                      maxHeight: MediaQuery.sizeOf(context).height * 0.6,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildHandle(),
-                          _buildTabBar(context),
-                          Divider(height: 1.h, color: Colors.grey.shade200),
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onVerticalDragUpdate: (details) {
+                              final newSize =
+                                  _dragController.size -
+                                  (details.primaryDelta! /
+                                      MediaQuery.sizeOf(context).height);
+                              _dragController.jumpTo(newSize.clamp(0.0, 0.6));
+                            },
+                            onVerticalDragEnd: (details) {
+                              final velocity = details.primaryVelocity ?? 0;
+                              final currentSize = _dragController.size;
+
+                              double target;
+
+                              if (velocity > 700) {
+                                target = 0.0;
+                              } else if (velocity < -700) {
+                                target = 0.6;
+                              } else {
+                                if (currentSize < 0.15) {
+                                  target = 0.0;
+                                } else if (currentSize < 0.45) {
+                                  target = 0.3;
+                                } else {
+                                  target = 0.6;
+                                }
+                              }
+
+                              _dragController.animateTo(
+                                target,
+                                duration: const Duration(milliseconds: 250),
+                                curve: Curves.easeOutCubic,
+                              );
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildHandle(),
+                                _buildTabBar(context),
+                                Divider(
+                                  height: 1.h,
+                                  color: Colors.grey.shade200,
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Expanded(
+                            child: CustomScrollView(
+                              controller: scrollController,
+                              physics: const ClampingScrollPhysics(),
+                              slivers: [
+                                SliverToBoxAdapter(
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    transitionBuilder: (child, animation) {
+                                      return FadeTransition(
+                                        opacity: CurvedAnimation(
+                                          parent: animation,
+                                          curve: Curves.easeInOut,
+                                        ),
+                                        child: child,
+                                      );
+                                    },
+                                    layoutBuilder:
+                                        (currentChild, previousChildren) {
+                                          return Stack(
+                                            alignment: Alignment.topCenter,
+                                            children: [
+                                              ...previousChildren,
+                                              ?currentChild,
+                                            ],
+                                          );
+                                        },
+                                    child: _currentTab == 0
+                                        ? PlaceTab(
+                                            key: const ValueKey(0),
+                                            place: place,
+                                            googlePlace: googlePlace,
+                                            photoUrls: photoUrls,
+                                            imagesScrollController:
+                                                _imagesScrollController,
+                                            dragController: _dragController,
+                                          )
+                                        : const DriveTab(key: ValueKey(1)),
+                                  ),
+                                ),
+                                SliverToBoxAdapter(
+                                  child: SizedBox(height: 40.h),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    SliverToBoxAdapter(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        transitionBuilder: (child, animation) {
-                          return FadeTransition(
-                            opacity: CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeInOut,
-                            ),
-                            child: child,
-                          );
-                        },
-                        //* this fix the slide up animaiton bug.
-                        layoutBuilder: (currentChild, previousChildren) {
-                          return Stack(
-                            alignment: Alignment.topCenter,
-                            children: [...previousChildren, ?currentChild],
-                          );
-                        },
-
-                        child: _currentTab == 0
-                            ? PlaceTab(
-                                key: ValueKey(0),
-                                place: place,
-                                googlePlace: googlePlace,
-                                photoUrls: photoUrls,
-                                imagesScrollController: _imagesScrollController,
-                                dragController: _dragController,
-                              )
-                            : const DriveTab(key: ValueKey(1)),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
     );
   }
+
+  //  Handle
 
   Widget _buildHandle() {
     return Padding(

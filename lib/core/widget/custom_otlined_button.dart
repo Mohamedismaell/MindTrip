@@ -5,13 +5,13 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 class CustomOtlinedButton extends StatelessWidget {
   const CustomOtlinedButton({
     super.key,
-    required this.onPressed,
+    this.onPressed,
     required this.text,
     required this.icon,
   });
   final String text;
   final IconData icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,9 @@ class CustomOtlinedButton extends StatelessWidget {
         label: Text(
           text,
           style: context.textTheme.labelLarge?.copyWith(
-            color: context.colorTheme.error,
+            color: onPressed == null
+                ? context.colorTheme.outline
+                : context.colorTheme.error,
           ),
         ),
       ),

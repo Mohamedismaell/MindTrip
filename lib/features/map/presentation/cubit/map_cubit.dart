@@ -36,16 +36,27 @@ class MapCubit extends Cubit<MapState> {
     final entry = state.annotations
         .where((e) => e.place.id == placeId)
         .firstOrNull;
-    if (entry != null) {
-      emit(
-        state.copyWith(
-          selectedPlace: entry.place,
-          isBottomSheetVisible: true,
-          clearSelectedGooglePlace: true,
-          selectedPlacePhotoUrls: [],
-        ),
-      );
+    if (entry == null) return;
+
+    // If the same place is already selected, toggle the sheet to re-trigger listeners
+    if (state.selectedPlace?.id == placeId && state.isBottomSheetVisible) {
+      return; // Already showing this place — no action needed
     }
+
+    // If sheet is collapsed but same place, just re-open
+    if (state.selectedPlace?.id == placeId && !state.isBottomSheetVisible) {
+      emit(state.copyWith(isBottomSheetVisible: true));
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        selectedPlace: entry.place,
+        isBottomSheetVisible: true,
+        clearSelectedGooglePlace: true,
+        selectedPlacePhotoUrls: [],
+      ),
+    );
   }
 
   Future<void> showGooglePlaceDetails(GooglePlaceEntity place) async {

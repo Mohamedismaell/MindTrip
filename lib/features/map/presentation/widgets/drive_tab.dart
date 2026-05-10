@@ -7,6 +7,7 @@ import 'package:mindtrip/features/map/domain/entities/navigation_profile.dart';
 import 'package:mindtrip/features/map/domain/entities/route_step.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DriveTab extends StatelessWidget {
   const DriveTab({super.key});
@@ -21,110 +22,133 @@ class DriveTab extends StatelessWidget {
         // previous.currentStepIndex != current.currentStepIndex;
       },
       builder: (context, state) {
-        // Empty state
         if (state.activeRoute == null && !state.isRouteLoading) {
           return _buildEmptyRoute(context);
         }
+
+        // Error state
+        if (state.routeError != null) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
+            child: Column(
+              children: [
+                Skeleton.keep(
+                  child: _buildProfileChips(context, state.selectedProfile),
+                ),
+                SizedBox(height: 14.h),
+                _buildDriveError(context, state.routeError!),
+              ],
+            ),
+          );
+        }
+
+        // Loading or loaded — SAME widget tree, skeleton toggles on/off
+        final isLoading = state.isRouteLoading;
+        final route = state.activeRoute;
+
+        // Use real data when available, placeholder data when loading
+        final durationMin = route != null ? (route.duration / 60).ceil() : 15;
+        final distanceKm = route != null
+            ? (route.distance / 1000).toStringAsFixed(1)
+            : '5.0';
 
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
           child: Column(
             children: [
-              _buildProfileChips(context, state.selectedProfile),
+              Skeleton.keep(
+                child: _buildProfileChips(context, state.selectedProfile),
+              ),
               SizedBox(height: 14.h),
-              // Error state
-              if (state.routeError != null)
-                _buildDriveError(context, state.routeError!)
-              // Loading state
-              else if (state.isRouteLoading)
-                _buildLoadingUi(context)
-              else
-                () {
-                  final route = state.activeRoute!;
-                  final distanceKm = (route.distance / 1000).toStringAsFixed(1);
-                  final durationMin = (route.duration / 60).ceil();
-                  // final allSteps = route.allSteps;
-                  return Column(
-                    children: [
-                      SizedBox(height: 14.h),
-                      Container(
-                        padding: EdgeInsets.all(16.r),
-                        decoration: BoxDecoration(
-                          color: context.colorTheme.primaryContainer,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              state.selectedProfile.icon,
-                              color: context.colorTheme.onPrimaryContainer,
-                              size: 32.sp,
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '$durationMin min',
-                                    style: context.textTheme.titleLarge
-                                        ?.copyWith(
-                                          color: context
-                                              .colorTheme
-                                              .onPrimaryContainer,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  Text(
-                                    '$distanceKm km · ${state.selectedProfile.label}',
-                                    style: context.textTheme.bodyMedium
-                                        ?.copyWith(
-                                          color: context
-                                              .colorTheme
-                                              .onPrimaryContainer
-                                              .withValues(alpha: 0.8),
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+
+              Skeletonizer(
+                enabled: isLoading,
+                justifyMultiLineText: true,
+                enableSwitchAnimation: true,
+                ignorePointers: true,
+                // textBoneBorderRadius: const TextBoneBorderRadius(
+                //   BorderRadius.all(Radius.circular(20)),
+                // ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 14.h),
+                    Container(
+                      padding: EdgeInsets.all(16.r),
+                      decoration: BoxDecoration(
+                        color: context.colorTheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(16.r),
                       ),
-                      SizedBox(height: 16.h),
+                      child: Row(
+                        children: [
+                          Icon(
+                            state.selectedProfile.icon,
+                            color: context.colorTheme.onPrimaryContainer,
+                            size: 32.sp,
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '$durationMin min',
+                                  style: context.textTheme.titleLarge?.copyWith(
+                                    color:
+                                        context.colorTheme.onPrimaryContainer,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  '$distanceKm km · ${state.selectedProfile.label}',
+                                  style: context.textTheme.bodyMedium?.copyWith(
+                                    color: context.colorTheme.onPrimaryContainer
+                                        .withValues(alpha: 0.8),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
 
-                      // Step-by-step instructions
-                      // if (allSteps.isNotEmpty) ...[
-                      //   Text(
-                      //     'Directions',
-                      //     style: context.textTheme.titleMedium?.copyWith(
-                      //       fontWeight: FontWeight.bold,
-                      //     ),
-                      //   ),
-                      //   SizedBox(height: 8.h),
-                      //   ...allSteps.asMap().entries.map(
-                      //     (entry) =>
-                      //         _buildStepItem(context, entry.value, entry.key),
-                      //   ),
-                      // ],
-                      // SizedBox(height: 16.h),
+                    // Step-by-step instructions
+                    // if (allSteps.isNotEmpty) ...[
+                    //   Text(
+                    //     'Directions',
+                    //     style: context.textTheme.titleMedium?.copyWith(
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //   ),
+                    //   SizedBox(height: 8.h),
+                    //   ...allSteps.asMap().entries.map(
+                    //     (entry) =>
+                    //         _buildStepItem(context, entry.value, entry.key),
+                    //   ),
+                    // ],
+                    // SizedBox(height: 16.h),
 
-                      // Stop navigation button
-                      SizedBox(
+                    // Stop navigation button
+                    Skeleton.keep(
+                      child: SizedBox(
                         width: double.infinity,
                         height: 48.h,
                         child: CustomOtlinedButton(
-                          onPressed: () => context
-                              .read<MapNavigationCubit>()
-                              .stopNavigation(),
+                          onPressed: isLoading
+                              ? null
+                              : () => context
+                                    .read<MapNavigationCubit>()
+                                    .stopNavigation(),
                           icon: Icons.close,
                           text: 'Stop Navigation',
                         ),
                       ),
-                      SizedBox(height: 20.h),
-                    ],
-                  );
-                }(),
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
+                ),
+              ),
             ],
           ),
         );
@@ -316,22 +340,6 @@ Widget _buildEmptyRoute(BuildContext context) {
             textAlign: TextAlign.center,
             style: context.textTheme.bodyMedium?.copyWith(color: Colors.grey),
           ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _buildLoadingUi(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: 40.h),
-    child: Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircularProgressIndicator(strokeWidth: 2),
-          SizedBox(height: 16.h),
-          Text('Calculating route...', style: context.textTheme.bodyLarge),
         ],
       ),
     ),
