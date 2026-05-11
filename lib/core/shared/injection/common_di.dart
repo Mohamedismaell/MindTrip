@@ -132,14 +132,6 @@ class CommonDi {
     sl.registerLazySingleton(
       () => UpdateProfileUseCase(repository: sl<UserRepository>()),
     );
-    // Factory — a fresh instance per EditProfileScreen entry.
-    sl.registerFactory(
-      () => EditProfileCubit(
-        uploadProfilePhoto: sl<UploadProfilePhotoUseCase>(),
-        updateProfile: sl<UpdateProfileUseCase>(),
-        userCubit: sl<UserCubit>(),
-      ),
-    );
 
     // Favorites
     sl.registerLazySingleton<FavoritesLocalDataSource>(

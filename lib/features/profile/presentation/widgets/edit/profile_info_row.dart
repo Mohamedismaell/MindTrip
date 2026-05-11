@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
@@ -12,19 +13,17 @@ class ProfileInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Text(
-            label,
-            style: AppTextStyles.h9Bold.copyWith(
-              color: context.colorTheme.onSurface,
-            ),
+        Text(
+          label,
+          style: AppTextStyles.h9Bold.copyWith(
+            color: context.colorTheme.onSurface,
           ),
         ),
+        SizedBox(width: 8.w),
         Text(
           value,
-          textAlign: TextAlign.right,
           style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorTheme.onSurfaceVariant,
+            // color: context.colorTheme.onSurfaceVariant,
           ),
         ),
       ],

@@ -14,7 +14,6 @@ import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.da
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/data/places_mock_data.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_mark_relcoaiton_button.dart';
-import 'package:mindtrip/features/map/presentation/widgets/map_navigate_all_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_info_bottom_sheet.dart';

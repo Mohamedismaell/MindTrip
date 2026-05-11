@@ -106,13 +106,13 @@ void main() {
 
     test('initial state has user set', () {
       expect(harness.userCubit.state.user, testUser);
-      expect(harness.userCubit.state.status, UserStatus.loaded);
+      expect(harness.userCubit.state.userStatus, UserStatus.loaded);
     });
 
     test('setUser updates user and status', () {
       harness.userCubit.setUser(testUser2);
       expect(harness.userCubit.state.user, testUser2);
-      expect(harness.userCubit.state.status, UserStatus.loaded);
+      expect(harness.userCubit.state.userStatus, UserStatus.loaded);
     });
 
     test('clear removes user', () {
@@ -122,10 +122,10 @@ void main() {
 
     test('loadUser loads user from repository', () async {
       harness.userCubit.clear();
-      expect(harness.userCubit.state.status, UserStatus.initial);
+      expect(harness.userCubit.state.userStatus, UserStatus.initial);
 
       await harness.userCubit.loadUser();
-      expect(harness.userCubit.state.status, UserStatus.loaded);
+      expect(harness.userCubit.state.userStatus, UserStatus.loaded);
       expect(harness.userCubit.state.user, isNotNull);
     });
   });

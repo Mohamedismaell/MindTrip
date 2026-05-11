@@ -43,8 +43,6 @@ class ProfileScreen extends StatelessWidget {
         final photoUrl = user?.profilePhotoUrl;
         final interests = user?.interests;
         return ProfileFlowScaffold(
-          routeLocation: AppRoutes.profile,
-          showHeader: false,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -83,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                   spacing: 12.w,
                   runSpacing: 18.h,
                   children: interests
-                      .map((interest) => InterestChip(category: interest))
+                      .map((interest) => InterestChip(interest: interest))
                       .toList(),
                 ),
               ],

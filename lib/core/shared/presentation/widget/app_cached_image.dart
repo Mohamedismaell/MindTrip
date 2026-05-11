@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AppCachedImage extends StatelessWidget {
@@ -29,11 +30,19 @@ class AppCachedImage extends StatelessWidget {
       height: height,
       fit: fit,
       placeholder: (_, _) => Skeletonizer(
+        enabled: true,
         effect: ShimmerEffect(
           baseColor: Colors.grey.shade300,
           highlightColor: Colors.grey.shade100,
         ),
-        child: SizedBox(width: width, height: height),
+        child: Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+        ),
       ),
       errorWidget: (_, _, _) => Container(
         width: width,

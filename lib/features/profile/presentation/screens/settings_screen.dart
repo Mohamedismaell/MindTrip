@@ -37,9 +37,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final language = user?.languagePreference ?? 'English';
 
     return ProfileFlowScaffold(
-      routeLocation: AppRoutes.profileSettings,
-      showHeader: false,
-      horizontalPadding: 16.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

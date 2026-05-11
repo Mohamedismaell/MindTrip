@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/update_profile_use_case.dart';
 import 'package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
+import 'package:mindtrip/features/profile/domain/use_cases/delete_account.dart';
 
 part 'edit_profile_state.dart';
 
@@ -11,43 +13,69 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   final UploadProfilePhotoUseCase _uploadProfilePhoto;
   final UpdateProfileUseCase _updateProfile;
   final UserCubit _userCubit;
-
+  final DeleteAccountUseCase _deleteAccountUseCase;
   EditProfileCubit({
     required UploadProfilePhotoUseCase uploadProfilePhoto,
     required UpdateProfileUseCase updateProfile,
     required UserCubit userCubit,
+    required DeleteAccountUseCase deleteAccountUseCase,
   }) : _uploadProfilePhoto = uploadProfilePhoto,
        _updateProfile = updateProfile,
        _userCubit = userCubit,
+       _deleteAccountUseCase = deleteAccountUseCase,
        super(const EditProfileState());
 
+  CancelToken? _editCancelToken;
+  CancelToken _getEditToken() {
+    _editCancelToken?.cancel();
+    _editCancelToken = CancelToken();
+    return _editCancelToken!;
+  }
+
+  CancelToken? _deleteCancelToken;
+
+  CancelToken _getDeleteToken() {
+    _deleteCancelToken?.cancel();
+    _deleteCancelToken = CancelToken();
+    return _deleteCancelToken!;
+  }
+
   void init(UserEntity user) {
-    emit(
-      state.copyWith(
-        originalUser: user,
-        draftDisplayName: user.displayName,
-        draftPhoneNumber: user.phoneNumber ?? '',
-      ),
-    );
+    if (!isClosed) {
+      emit(
+        state.copyWith(
+          originalUser: user,
+          draftDisplayName: user.displayName,
+          draftPhoneNumber: user.phoneNumber ?? '',
+        ),
+      );
+    }
   }
 
   void pickPhoto(String filePath) {
-    emit(state.copyWith(pendingPhotoPath: filePath));
+    if (!isClosed) {
+      emit(state.copyWith(pendingPhotoPath: filePath));
+    }
   }
 
   void updateDisplayName(String value) {
-    emit(state.copyWith(draftDisplayName: value));
+    if (!isClosed) {
+      emit(state.copyWith(draftDisplayName: value));
+    }
   }
 
   void updatePhoneNumber(String value) {
-    emit(state.copyWith(draftPhoneNumber: value));
+    if (!isClosed) {
+      emit(state.copyWith(draftPhoneNumber: value));
+    }
   }
 
   Future<void> saveChanges() async {
     if (!state.hasChanges) return;
-
-    emit(state.copyWith(saveStatus: EditSaveStatus.saving));
-
+    _getEditToken();
+    if (!isClosed) {
+      emit(state.copyWith(saveStatus: EditSaveStatus.saving));
+    }
     String? newPhotoUrl;
 
     // Step 1
@@ -60,12 +88,15 @@ class EditProfileCubit extends Cubit<EditProfileState> {
           return false;
         },
         failure: (f) {
-          emit(
-            state.copyWith(
-              saveStatus: EditSaveStatus.failed,
-              errorMessage: f.message,
-            ),
-          );
+          if (!isClosed) {
+            emit(
+              state.copyWith(
+                saveStatus: EditSaveStatus.failed,
+                editErrorMessage: f.message,
+              ),
+            );
+          }
+
           return true;
         },
       );
@@ -88,12 +119,14 @@ class EditProfileCubit extends Cubit<EditProfileState> {
       final failed = profileResult.when(
         success: (_) => false,
         failure: (f) {
-          emit(
-            state.copyWith(
-              saveStatus: EditSaveStatus.failed,
-              errorMessage: f.message,
-            ),
-          );
+          if (!isClosed) {
+            emit(
+              state.copyWith(
+                saveStatus: EditSaveStatus.failed,
+                editErrorMessage: f.message,
+              ),
+            );
+          }
           return true;
         },
       );
@@ -110,17 +143,56 @@ class EditProfileCubit extends Cubit<EditProfileState> {
       );
       _userCubit.setUser(updated);
     }
-
-    emit(
-      state.copyWith(
-        saveStatus: EditSaveStatus.success,
-        clearPendingPhoto: true,
-      ),
-    );
+    if (!isClosed) {
+      emit(
+        state.copyWith(
+          saveStatus: EditSaveStatus.success,
+          // clearPendingPhoto: true,
+        ),
+      );
+    }
   }
 
   // reset and clean
   void dismissError() {
-    emit(state.copyWith(saveStatus: EditSaveStatus.idle, clearError: true));
+    if (!isClosed) {
+      emit(
+        state.copyWith(
+          saveStatus: EditSaveStatus.idle,
+          deleteStatus: DeleteAccountStatus.idle,
+        ),
+      );
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    _getDeleteToken();
+    emit(state.copyWith(deleteStatus: DeleteAccountStatus.deleting));
+
+    final result = await _deleteAccountUseCase.call();
+    result.when(
+      success: (_) {
+        if (!isClosed) {
+          emit(state.copyWith(deleteStatus: DeleteAccountStatus.deleted));
+        }
+      },
+      failure: (f) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(
+              deleteStatus: DeleteAccountStatus.failed,
+              deleteErrorMessage: f.message,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _editCancelToken?.cancel();
+    _deleteCancelToken?.cancel();
+    return super.close();
   }
 }

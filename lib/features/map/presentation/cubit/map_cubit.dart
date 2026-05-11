@@ -84,7 +84,6 @@ class MapCubit extends Cubit<MapState> {
 
     result.when(
       success: (urls) {
-        // Guard against emitting on a closed cubit (race condition)
         if (!isClosed && urls.isNotEmpty) {
           emit(state.copyWith(selectedPlacePhotoUrls: urls));
         }

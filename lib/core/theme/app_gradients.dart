@@ -21,4 +21,9 @@ class AppGradients {
       AppColors.pureWhite,
     ],
   );
+  static LinearGradient disabledGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.center,
+    colors: [],
+  );
 }

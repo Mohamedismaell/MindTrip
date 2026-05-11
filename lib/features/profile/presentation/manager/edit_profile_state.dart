@@ -2,21 +2,26 @@ part of 'edit_profile_cubit.dart';
 
 enum EditSaveStatus { idle, saving, success, failed }
 
+enum DeleteAccountStatus { idle, deleting, deleted, failed }
+
 class EditProfileState extends Equatable {
   final UserEntity? originalUser;
   final String? pendingPhotoPath;
   final String draftDisplayName;
   final String draftPhoneNumber;
   final EditSaveStatus saveStatus;
-  final String? errorMessage;
-
+  final String? editErrorMessage;
+  final DeleteAccountStatus deleteStatus;
+  final String? deleteErrorMessage;
   const EditProfileState({
     this.originalUser,
     this.pendingPhotoPath,
     this.draftDisplayName = '',
     this.draftPhoneNumber = '',
     this.saveStatus = EditSaveStatus.idle,
-    this.errorMessage,
+    this.editErrorMessage,
+    this.deleteStatus = DeleteAccountStatus.idle,
+    this.deleteErrorMessage,
   });
 
   //* if changed return true
@@ -34,19 +39,16 @@ class EditProfileState extends Equatable {
     String? draftDisplayName,
     String? draftPhoneNumber,
     EditSaveStatus? saveStatus,
-    String? errorMessage,
-    bool clearPendingPhoto = false,
-    bool clearError = false,
+    String? editErrorMessage,
+    DeleteAccountStatus? deleteStatus,
+    String? deleteErrorMessage,
   }) {
     return EditProfileState(
       originalUser: originalUser ?? this.originalUser,
-      pendingPhotoPath: clearPendingPhoto
-          ? null
-          : (pendingPhotoPath ?? this.pendingPhotoPath),
       draftDisplayName: draftDisplayName ?? this.draftDisplayName,
       draftPhoneNumber: draftPhoneNumber ?? this.draftPhoneNumber,
       saveStatus: saveStatus ?? this.saveStatus,
-      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      deleteStatus: deleteStatus ?? this.deleteStatus,
     );
   }
 
@@ -57,6 +59,8 @@ class EditProfileState extends Equatable {
     draftDisplayName,
     draftPhoneNumber,
     saveStatus,
-    errorMessage,
+    editErrorMessage,
+    deleteStatus,
+    deleteErrorMessage,
   ];
 }

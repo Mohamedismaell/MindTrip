@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class InterestChip extends StatelessWidget {
-  const InterestChip({super.key, required this.category});
+  const InterestChip({super.key, required this.interest});
 
-  final String category;
+  final String interest;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class InterestChip extends StatelessWidget {
         border: Border.all(color: context.colorTheme.outline),
       ),
       child: Text(
-        '$category ',
+        '$interest ',
         style: context.textTheme.bodyLarge?.copyWith(
           color: context.colorTheme.outline,
         ),

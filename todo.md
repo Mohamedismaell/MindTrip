@@ -4,7 +4,17 @@
 
 <!-- # time between pressing login and move into home screen need to be soplved with some good (UX) -->
 
-## Tmr
+## prio
+
+# loading on interest screen on boarding and try to edit the ui alittle
+
+# cancel token in edit and appear are you sure on nav back
+
+# fix deleteing accouint emits should load unil it deletes then logout
+
+# terms,fq,policies
+
+# fix animation navigateion.
 
 # add loading skeltonizer effect into imges loading and data
 

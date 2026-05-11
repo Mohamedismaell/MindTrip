@@ -4,6 +4,7 @@ import 'package:mindtrip/features/ai_planner/di/ai_planner_injection.dart';
 import 'package:mindtrip/features/authetication/di/auth_di.dart';
 import 'package:mindtrip/features/map/di/map_di.dart';
 import 'package:mindtrip/features/onboarding/di/on_boarding_injection.dart';
+import 'package:mindtrip/features/profile/di/profile_di.dart';
 
 final sl = GetIt.instance;
 
@@ -14,4 +15,5 @@ Future<void> initializeDependencies() async {
   OnboardingDi.init();
   AiPlannerDi.init();
   MapDi.init();
+  ProfileDi.init();
 }

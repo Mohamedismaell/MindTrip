@@ -7,6 +7,7 @@ import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart
 
 part 'user_state.dart';
 
+//Todo: Check if it need Cancel Token.
 class UserCubit extends Cubit<UserState> {
   final GetCurrentUser _getCurrentUser;
   final UpdateUserInterestsUseCase _updateUserInterests;
@@ -22,7 +23,7 @@ class UserCubit extends Cubit<UserState> {
        super(const UserState());
 
   Future<void> loadUser() async {
-    emit(state.copyWith(status: UserStatus.loading));
+    emit(state.copyWith(userStatus: UserStatus.loading));
 
     final result = await _getCurrentUser.call();
 
@@ -31,16 +32,20 @@ class UserCubit extends Cubit<UserState> {
         state.copyWith(
           user: user,
           interests: user.interests,
-          status: UserStatus.loaded,
+          userStatus: UserStatus.loaded,
         ),
       ),
-      failure: (f) =>
-          emit(state.copyWith(status: UserStatus.error, message: f.message)),
+      failure: (f) => emit(
+        state.copyWith(
+          userStatus: UserStatus.error,
+          userErrorMessage: f.message,
+        ),
+      ),
     );
   }
 
   void setUser(UserEntity user) {
-    emit(state.copyWith(user: user, status: UserStatus.loaded));
+    emit(state.copyWith(user: user, userStatus: UserStatus.loaded));
   }
 
   void editSelectedCategory(String category) {
@@ -55,18 +60,28 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> updateUserInterests() async {
-    emit(state.copyWith(status: UserStatus.loading));
+    emit(state.copyWith(interestStatus: InterestStatus.saving));
 
     final result = await _updateUserInterests(state.interests!);
     result.when(
       success: (_) {
         if (state.user != null) {
           final updatedUser = state.user!.copyWith(interests: state.interests);
-          emit(state.copyWith(user: updatedUser, status: UserStatus.loaded));
+          emit(
+            state.copyWith(
+              user: updatedUser,
+              interestStatus: InterestStatus.saved,
+            ),
+          );
         }
       },
       failure: (f) {
-        emit(state.copyWith(status: UserStatus.error, message: f.message));
+        emit(
+          state.copyWith(
+            interestStatus: InterestStatus.failed,
+            interestErrorMessage: f.message,
+          ),
+        );
       },
     );
   }
@@ -98,7 +113,7 @@ class UserCubit extends Cubit<UserState> {
         emit(
           state.copyWith(
             photoUploadStatus: PhotoUploadStatus.failed,
-            message: f.message,
+            photoUploadErrorMessage: f.message,
           ),
         );
       },
@@ -119,6 +134,11 @@ class UserCubit extends Cubit<UserState> {
   //     ),
   //   );
   // }
+  void dismissInterestError() {
+    if (!isClosed) {
+      emit(state.copyWith(interestStatus: InterestStatus.idle));
+    }
+  }
 
   void clear() {
     emit(const UserState());

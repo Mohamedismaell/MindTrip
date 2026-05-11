@@ -7,7 +7,7 @@ class InterestsRoutes {
   static List<RouteBase> routes = [
     AppTransitionRoute.fadeSlide(
       path: AppRoutes.interests,
-      page: const InterestsScreen(),
+      page: const InterestsScreen(isEdit: true),
     ),
   ];
 }

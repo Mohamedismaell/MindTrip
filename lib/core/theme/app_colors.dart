@@ -32,4 +32,13 @@ class AppColors {
     begin: Alignment(0.50, -0.00),
     end: Alignment(0.50, 1.00),
   );
+
+  //! addional
+  //! Snackbar Colors
+  static const Color successGreen = Color(0xFF4CAF50);
+  static const Color successDarkGreen = Color(0xFF2D502D);
+  static const Color successLight = Color(0xFFE8F5E9);
+  static const Color errorRed = Color(0xFFE53935);
+  static const Color errorDarkRed = Color(0xFF5C1F1F);
+  static const Color errorLight = Color(0xFFFFEBEE);
 }

@@ -44,7 +44,7 @@ class AppGateCubit extends Cubit<AppGateState> {
     if (token != null && token.isNotEmpty) {
       await userCubit.loadUser();
 
-      if (userCubit.state.status == UserStatus.loaded) {
+      if (userCubit.state.userStatus == UserStatus.loaded) {
         if (userCubit.state.user?.interests == null ||
             userCubit.state.user!.interests!.isEmpty) {
           emit(AppGateInterestsRequired());
@@ -64,7 +64,7 @@ class AppGateCubit extends Cubit<AppGateState> {
   Future<void> loginSuccess() async {
     await userCubit.loadUser();
 
-    if (userCubit.state.status != UserStatus.loaded) {
+    if (userCubit.state.userStatus != UserStatus.loaded) {
       emit(AppGateUnauthenticated());
       return;
     }
@@ -110,5 +110,16 @@ class AppGateCubit extends Cubit<AppGateState> {
         emit(AppGateUnauthenticated());
       },
     );
+  }
+
+  Future<void> accountDeleted() async {
+    emit(AppGateLoading());
+    await googleAuthProvider.signOut();
+    await facebookAuthProvider.signOut();
+    userCubit.clear();
+    favoriteCubit.clear();
+    await favoritesRepository.clearAll();
+    await authLocal.clear();
+    emit(AppGateUnauthenticated());
   }
 }

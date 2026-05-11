@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
-class EditableInfoRow extends StatelessWidget {
-  const EditableInfoRow({
+class EditableInfo extends StatelessWidget {
+  const EditableInfo({
     super.key,
     required this.label,
     required this.controller,
@@ -21,13 +21,10 @@ class EditableInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 110.w,
-          child: Text(
-            label,
-            style: AppTextStyles.h9Bold.copyWith(
-              color: context.colorTheme.onSurface,
-            ),
+        Text(
+          label,
+          style: AppTextStyles.h9Bold.copyWith(
+            color: context.colorTheme.onSurface,
           ),
         ),
         SizedBox(width: 8.w),
@@ -35,15 +32,16 @@ class EditableInfoRow extends StatelessWidget {
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
-            textAlign: TextAlign.right,
-            style: context.textTheme.bodyMedium?.copyWith(
+            textAlign: TextAlign.left,
+            style: AppTextStyles.h9Medium.copyWith(
               color: context.colorTheme.onSurfaceVariant,
             ),
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorTheme.onSurfaceVariant.withOpacity(0.5),
+              hintStyle: AppTextStyles.h9Medium.copyWith(
+                color: context.colorTheme.onSurfaceVariant,
               ),
+
               //* Default Border
               border: InputBorder.none,
               //* Enabled

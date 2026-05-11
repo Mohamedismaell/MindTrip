@@ -14,6 +14,7 @@ class EndPoints {
   static String resendPasswordOtp = 'api/v1/auth/password/resend-otp';
   static String verifyEmail = 'api/v1/auth/email/verify';
   static String resendEmailOtp = 'api/v1/auth/email/resend-otp';
+  static String deleteAccount = 'api/v1/users/me';
 
   //User
   static String getCurrentUser = 'api/v1/users/me';

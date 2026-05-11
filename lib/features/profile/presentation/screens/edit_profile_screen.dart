@@ -5,12 +5,16 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
+import 'package:mindtrip/core/widget/cusotm_dialog.dart';
+import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_avatar.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_profile_listeners.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_top_bar.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/edit/editable_info_row.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/edit/editable_info.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/image_source_bottom_sheet.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/info_card.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/profile_info_row.dart';
@@ -65,7 +69,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _nameController.text = user.displayName;
           _phoneController.text = user.phoneNumber ?? '';
         }
-        // Sync text field changes → cubit drafts
+        // Sync changes
         _nameController.addListener(
           () => cubit.updateDisplayName(_nameController.text),
         );
@@ -74,127 +78,120 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
         return cubit;
       },
-      child: BlocConsumer<EditProfileCubit, EditProfileState>(
-        listenWhen: (prev, curr) => prev.saveStatus != curr.saveStatus,
-        listener: (context, state) {
-          if (state.saveStatus == EditSaveStatus.success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Profile updated!'),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go(AppRoutes.profile);
-            }
-          } else if (state.saveStatus == EditSaveStatus.failed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage ?? 'Save failed. Try again.'),
-                behavior: SnackBarBehavior.floating,
-                action: SnackBarAction(
-                  label: 'Retry',
-                  onPressed: () =>
-                      context.read<EditProfileCubit>().saveChanges(),
-                ),
-              ),
-            );
-            context.read<EditProfileCubit>().dismissError();
-          }
-        },
-        builder: (context, state) {
-          final photoUrl = user?.profilePhotoUrl;
-          final email = user?.email ?? 'traveler@mindtrip.app';
-          final isSaving = state.saveStatus == EditSaveStatus.saving;
-
-          return ProfileFlowScaffold(
-            routeLocation: AppRoutes.editProfile,
-            showHeader: false,
-            horizontalPadding: 16.w,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16.h),
-                EditTopBar(
-                  onBackTap: () {
-                    if (context.canPop()) {
-                      context.pop();
-                      return;
-                    }
-                    context.go(AppRoutes.profile);
-                  },
-                ),
-                SizedBox(height: 38.h),
-
-                // Avatar
-                Center(
-                  child: EditAvatar(
-                    imageUrl: photoUrl,
-                    pendingPhotoPath: state.pendingPhotoPath,
-                    onCameraTap: () => _handleCameraTap(context),
+      child: EditProfileListeners(
+        child: BlocBuilder<EditProfileCubit, EditProfileState>(
+          builder: (context, state) {
+            final photoUrl = user?.profilePhotoUrl;
+            final email = user?.email ?? 'traveler@mindtrip.app';
+            final isSaving = state.saveStatus == EditSaveStatus.saving;
+            final isDeleting =
+                state.deleteStatus == DeleteAccountStatus.deleting;
+            return ProfileFlowScaffold(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 16.h),
+                  EditTopBar(
+                    onBackTap: () async {
+                      if (context.canPop()) {
+                        if (state.hasChanges && !isSaving) {
+                          await AppDialog.show(
+                            context: context,
+                            title: "Unsaved Changes",
+                            description:
+                                "You have unsaved changes. Do you want to save them?",
+                            primaryText: "Save",
+                            onPrimary: () {
+                              context.read<EditProfileCubit>().saveChanges();
+                            },
+                            secondaryText: "Cancel",
+                            iconColor: AppColors.errorRed.withValues(
+                              alpha: 0.9,
+                            ),
+                          );
+                        }
+                        if (context.mounted && !state.hasChanges) {
+                          context.pop();
+                        }
+                        return;
+                      } else {
+                        context.go(AppRoutes.profile);
+                      }
+                    },
                   ),
-                ),
-                SizedBox(height: 38.h),
+                  SizedBox(height: 38.h),
 
-                // Editable Fields Card
-                _EditableInfoCard(
-                  nameController: _nameController,
-                  phoneController: _phoneController,
-                  email: email,
-                ),
-                SizedBox(height: 38.h),
-
-                // Save Button
-                Center(
-                  child: SizedBox(
-                    width: 281.w,
-                    height: 55.h,
-                    child: isSaving
-                        ? const Center(child: CircularProgressIndicator())
-                        : OutlinedButton(
-                            onPressed: state.hasChanges
-                                ? () => context
-                                      .read<EditProfileCubit>()
-                                      .saveChanges()
-                                : () {},
-                            child: Text('Save Changes'),
-                          ),
-                  ),
-                ),
-                SizedBox(height: 32.h),
-
-                // Delete Account
-                Center(
-                  child: SizedBox(
-                    width: 281.w,
-                    height: 55.h,
-                    child: OutlinedButton(
-                      key: const Key('edit-profile-delete-account-button'),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Delete account is coming soon.'),
-                          ),
-                        );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: context.colorTheme.error,
-                          width: 1,
-                        ),
-                        foregroundColor: context.colorTheme.error,
-                      ),
-                      child: const Text('Delete Account'),
+                  // Avatar
+                  Center(
+                    child: EditAvatar(
+                      imageUrl: photoUrl,
+                      pendingPhotoPath: state.pendingPhotoPath,
+                      onCameraTap: () => _handleCameraTap(context),
                     ),
                   ),
-                ),
-                SizedBox(height: 24.h),
-              ],
-            ),
-          );
-        },
+                  SizedBox(height: 38.h),
+
+                  // Editable Fields
+                  _EditableInfoCard(
+                    nameController: _nameController,
+                    phoneController: _phoneController,
+                    email: email,
+                  ),
+                  SizedBox(height: 38.h),
+
+                  // Save Button
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
+                    child: CustomOtlinedButton(
+                      onPressed: (isSaving || !state.hasChanges)
+                          ? null
+                          : () =>
+                                context.read<EditProfileCubit>().saveChanges(),
+                      text: "Save Changes",
+                      color: context.colorTheme.primary,
+                      isLoading: isSaving,
+                    ),
+                  ),
+
+                  SizedBox(height: 32.h),
+
+                  // Delete Account
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
+                    child: CustomOtlinedButton(
+                      text: "Delete Account",
+                      isLoading: isDeleting,
+                      onPressed: isDeleting
+                          ? null
+                          : () async {
+                              await AppDialog.show(
+                                context: context,
+                                title: "Permanently Delete Account",
+                                description:
+                                    "This action is permanent and cannot be undone.",
+                                primaryText: "Cancel",
+                                onPrimary: () {
+                                  context.pop();
+                                },
+                                secondaryText: "Delete",
+                                onSecondary: () async {
+                                  await context
+                                      .read<EditProfileCubit>()
+                                      .deleteAccount();
+                                },
+                                iconColor: AppColors.errorRed.withValues(
+                                  alpha: 0.9,
+                                ),
+                              );
+                            },
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -215,25 +212,34 @@ class _EditableInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InfoCard(
       rows: [
-        EditableInfoRow(
+        EditableInfo(
           key: const Key('edit-profile-display-name-row'),
-          label: 'Full name',
+          label: 'Full name: ',
           controller: nameController,
           hintText: 'Enter your name',
         ),
-        EditableInfoRow(
+        EditableInfo(
           key: const Key('edit-profile-phone-row'),
-          label: 'Phone Number',
+          label: 'Phone Number: ',
           controller: phoneController,
           keyboardType: TextInputType.phone,
           hintText: 'Enter phone number',
         ),
+
         ProfileInfoRow(
           key: const Key('edit-profile-email-row'),
-          label: 'Email',
+          label: 'Email: ',
           value: email,
         ),
       ],
     );
   }
 }
+// class DeleteAccountDialog extends StatelessWidget {
+//   const DeleteAccountDialog({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(children: [],);
+//   }
+// }

@@ -13,27 +13,23 @@ class EditProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: InkWell(
+      child: CustomGradientButton(
         onTap: () => context.push(AppRoutes.editProfile),
-        borderRadius: BorderRadius.circular(30.r),
-
-        child: CustomGradientButton(
-          width: 170.w,
-          text: "Edit Profile",
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 20.w,
-                child: SvgPicture.asset(ProfileAssets.editIcon),
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                'Edit Profile',
-                style: AppTextStyles.h8Bold.copyWith(color: Colors.white),
-              ),
-            ],
-          ),
+        width: 170.w,
+        text: "Edit Profile",
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 20.w,
+              child: SvgPicture.asset(ProfileAssets.editIcon),
+            ),
+            SizedBox(width: 10.w),
+            Text(
+              'Edit Profile',
+              style: AppTextStyles.h8Bold.copyWith(color: Colors.white),
+            ),
+          ],
         ),
       ),
     );

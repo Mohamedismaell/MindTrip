@@ -8,31 +8,39 @@ class InterestsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        InkWell(
-          onTap: () => context.pop(),
-          child: Icon(Icons.arrow_back, size: 24.sp),
+        context.canPop()
+            ? InkWell(
+                onTap: () => context.pop(),
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 32.sp,
+                  color: context.colorTheme.onSurfaceVariant,
+                ),
+              )
+            : const SizedBox.shrink(),
+        SizedBox(height: 20.h),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          child: Text(
+            'What are your interests?',
+            style: context.textTheme.headlineMedium,
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'What are your interests?',
-              style: context.textTheme.headlineMedium,
+        SizedBox(height: 8.h),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'You can select multiple choices',
+            style: context.textTheme.bodyLarge!.copyWith(
+              color: context.colorTheme.onSurfaceVariant,
             ),
-            SizedBox(height: 8.h),
-            Text(
-              'You can select multiple choices',
-              style: context.textTheme.bodyLarge!.copyWith(
-                color: context.colorTheme.onSurfaceVariant,
-              ),
-            ),
-            SizedBox(height: 34.h),
-          ],
+          ),
         ),
+        SizedBox(height: 34.h),
       ],
     );
   }

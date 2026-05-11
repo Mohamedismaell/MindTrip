@@ -7,25 +7,35 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/interests/presentation/widgets/interests_buttons.dart';
 import 'package:mindtrip/features/interests/presentation/widgets/interests_header.dart';
 
 class InterestsScreen extends StatelessWidget {
-  const InterestsScreen({super.key});
-
+  const InterestsScreen({super.key, required this.isEdit});
+  final bool isEdit;
   @override
   Widget build(BuildContext context) {
     return BlocListener<UserCubit, UserState>(
-      listenWhen: (prev, curr) => prev.status != curr.status,
+      listenWhen: (prev, curr) => prev.interestStatus != curr.interestStatus,
       listener: (context, state) {
-        if (state.status == UserStatus.loaded) {
+        if (isEdit && state.interestStatus == InterestStatus.saved) {
           context.read<AppGateCubit>().interestsComplete();
-        }
-
-        if (state.status == UserStatus.error) {
-          ScaffoldMessenger.of(
+          AppSnackBar.showSuccess(
             context,
-          ).showSnackBar(SnackBar(content: Text(state.message ?? 'Error')));
+            message: 'Interests updated successfully',
+          );
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(AppRoutes.profile);
+          }
+        } else if (state.interestStatus == InterestStatus.failed) {
+          AppSnackBar.showError(
+            context,
+            message: 'Failed to save interests. Please try again.',
+          );
+          context.read<UserCubit>().dismissInterestError();
         }
       },
       child: Scaffold(
@@ -39,19 +49,26 @@ class InterestsScreen extends StatelessWidget {
                 const InterestsHeader(),
                 const Expanded(child: InterestsButtons()),
                 SizedBox(height: 34.h),
-                Center(
-                  child: CustomGradientButton(
-                    text: AppStrings.save,
-                    onTap: () {
-                      context.read<UserCubit>().updateUserInterests();
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go(AppRoutes.home);
-                      }
-                    },
-                  ),
+                BlocBuilder<UserCubit, UserState>(
+                  builder: (context, state) {
+                    final isLoading =
+                        state.interestStatus == InterestStatus.saving;
+                    return Center(
+                      child: CustomGradientButton(
+                        text: isEdit ? AppStrings.save : 'Get Start',
+                        isLoading: isLoading,
+                        onTap: (isLoading || !state.hasChanges)
+                            ? null
+                            : () async {
+                                await context
+                                    .read<UserCubit>()
+                                    .updateUserInterests();
+                              },
+                      ),
+                    );
+                  },
                 ),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.08),
               ],
             ),
           ),
