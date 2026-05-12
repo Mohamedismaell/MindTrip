@@ -75,39 +75,116 @@ class AppDialog {
                   SizedBox(height: 20.h),
 
                   // Action Buttons
-                  Row(
-                    children: [
-                      if (secondaryText != null) ...[
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(dialogContext, false);
-                              onSecondary?.call();
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: context.colorTheme.error,
-                                width: 1.5,
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isSmall = constraints.maxWidth < 320;
+
+                      if (isSmall) {
+                        return Column(
+                          children: [
+                            //! PRIMARY BUTTON
+                            SizedBox(
+                              width: double.infinity,
+                              child: CustomGradientButton(
+                                onTap: () {
+                                  Navigator.pop(dialogContext, true);
+
+                                  onPrimary();
+                                },
+
+                                text: primaryText,
                               ),
                             ),
-                            child: Text(
-                              secondaryText,
-                              style: TextStyle(color: context.colorTheme.error),
+
+                            //! SECONDARY BUTTON
+                            if (secondaryText != null) ...[
+                              SizedBox(height: 12.h),
+
+                              SizedBox(
+                                width: double.infinity,
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext, false);
+
+                                    onSecondary?.call();
+                                  },
+
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: context.colorTheme.error,
+                                      width: 1.5,
+                                    ),
+
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 14.h,
+                                    ),
+                                  ),
+
+                                  child: Text(
+                                    secondaryText,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: context.colorTheme.error,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        );
+                      }
+
+                      return Row(
+                        children: [
+                          if (secondaryText != null) ...[
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pop(dialogContext, false);
+
+                                  onSecondary?.call();
+                                },
+
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: context.colorTheme.error,
+                                    width: 1.5,
+                                  ),
+
+                                  padding: EdgeInsets.symmetric(vertical: 14.h),
+                                ),
+
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    secondaryText,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: context.colorTheme.error,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(width: 12.w),
+                          ],
+
+                          Expanded(
+                            child: CustomGradientButton(
+                              onTap: () {
+                                Navigator.pop(dialogContext, true);
+
+                                onPrimary();
+                              },
+
+                              text: primaryText,
                             ),
                           ),
-                        ),
-                        SizedBox(width: 12.w),
-                      ],
-                      Expanded(
-                        child: CustomGradientButton(
-                          onTap: () {
-                            Navigator.pop(dialogContext, true);
-                            onPrimary();
-                          },
-                          text: primaryText,
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

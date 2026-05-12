@@ -7,6 +7,12 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
+import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
+import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
@@ -29,6 +35,7 @@ import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:mindtrip/features/profile/presentation/screens/user_policy_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
@@ -60,7 +67,7 @@ void main() {
         user: sampleUser,
         initialLocation: AppRoutes.home,
       );
-      harness.appGateCubit.loginSuccess(sampleUser);
+      await harness.appGateCubit.loginSuccess();
 
       await _pumpApp(tester, harness);
       await tester.pumpAndSettle();
@@ -76,6 +83,18 @@ void main() {
       harness.router.go(AppRoutes.profileSettings);
       await tester.pumpAndSettle();
       expect(find.byType(SettingsScreen), findsOneWidget);
+
+      harness.router.go(AppRoutes.profileTerms);
+      await tester.pumpAndSettle();
+      expect(find.byType(TermsOfServiceScreen), findsOneWidget);
+
+      harness.router.go(AppRoutes.profilePolicy);
+      await tester.pumpAndSettle();
+      expect(find.byType(UserPolicyScreen), findsOneWidget);
+
+      harness.router.go(AppRoutes.profileFaq);
+      await tester.pumpAndSettle();
+      expect(find.byType(FaqScreen), findsOneWidget);
 
       harness.dispose();
     });
@@ -149,7 +168,7 @@ void main() {
         user: sampleUser,
         initialLocation: AppRoutes.profileSettings,
       );
-      harness.appGateCubit.loginSuccess(sampleUser);
+      await harness.appGateCubit.loginSuccess();
 
       await _pumpApp(tester, harness);
       await tester.pumpAndSettle();
@@ -223,6 +242,7 @@ class _ProfileTestHarness {
   }
 
   static AppGateCubit _buildAppGateCubit(UserCubit userCubit) {
+    final favoritesRepository = _FakeFavoritesRepository();
     return AppGateCubit(
       onboardingRepository: _FakeOnboardingRepository(),
       logoutUseCase: LogoutUseCase(repository: _FakeAuthRepository()),
@@ -230,13 +250,29 @@ class _ProfileTestHarness {
       googleAuthProvider: _FakeGoogleAuthProvider(),
       facebookAuthProvider: _FakeFacebookAuthProvider(),
       userCubit: userCubit,
+      favoriteCubit: FavoriteCubit(
+        toggleFavoriteUseCase: ToggleFavoriteUseCase(
+          repository: favoritesRepository,
+        ),
+        getFavoritesUseCase: GetFavoritesUseCase(
+          repository: favoritesRepository,
+        ),
+        syncFavoritesUseCase: SyncFavoritesUseCase(
+          repository: favoritesRepository,
+        ),
+      ),
+      favoritesRepository: favoritesRepository,
     );
   }
 
   static GoRouter _buildRouter(String initialLocation) {
     return GoRouter(
       initialLocation: initialLocation,
-      routes: [...HomeRoutes.routes, ...ProfileRoutes.routes],
+      routes: [
+        HomeRoutes.homeRoute,
+        ProfileRoutes.profileRoute,
+        ...ProfileRoutes.routes,
+      ],
     );
   }
 
@@ -310,10 +346,46 @@ class _MemoryStorage implements Storage {
 
 class _FakeOnboardingRepository implements OnboardingRepository {
   @override
-  Future<bool> hasCompletedOnboarding() async => false;
+  Future<bool> isFirstTime() async => false;
 
   @override
   Future<void> setNotFirstTime() async {}
+}
+
+class _FakeFavoritesRepository implements FavoritesRepository {
+  final Set<String> _favoriteIds = <String>{};
+
+  @override
+  Future<Result<void>> clearAll() async {
+    _favoriteIds.clear();
+    return const Result.ok(null);
+  }
+
+  @override
+  Future<Result<Set<String>>> getFavoriteIds() async => Result.ok(_favoriteIds);
+
+  @override
+  Future<Result<List<PlaceModel>>> getFavoritePlaces({
+    required Set<String> placeIds,
+  }) async {
+    return const Result.ok([]);
+  }
+
+  @override
+  Future<Result<void>> syncPendingFavorites() async => const Result.ok(null);
+
+  @override
+  Future<Result<void>> toggleFavorite({
+    required String placeId,
+    required bool isFavorite,
+  }) async {
+    if (isFavorite) {
+      _favoriteIds.add(placeId);
+    } else {
+      _favoriteIds.remove(placeId);
+    }
+    return const Result.ok(null);
+  }
 }
 
 class _FakeSecureTokenStorage extends SecureTokenStorage {
@@ -380,7 +452,7 @@ class _FakeUserRepository implements UserRepository {
 
 class _FakeAuthRepository implements AuthRepository {
   @override
-  Future<Result<UserEntity>> facebookAuth({required String token}) {
+  Future<Result<UserEntity>> facebookAuth({required String token}) async {
     return Result.ok(sampleUser);
   }
 
@@ -390,12 +462,13 @@ class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<UserEntity>> googleAuth({required String token}) {
+  Future<Result<UserEntity>> googleAuth({required String token}) async {
     return Result.ok(sampleUser);
   }
 
   @override
-  Future<Result<void>> logout() async => const Result.ok(null);
+  Future<Result<void>> logout({required String refreshToken}) async =>
+      const Result.ok(null);
 
   @override
   Future<Result<UserEntity>> refreshToken() async => Result.ok(sampleUser);

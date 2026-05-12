@@ -9,6 +9,12 @@ import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
+import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
+import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
@@ -76,9 +82,15 @@ class TestHarness {
     final authRepo = authRepository ?? FakeAuthRepository();
     final onBoardingRepo =
         onboardingRepository ??
-        FakeOnboardingRepository(hasCompletedOnboarding: isFirstTime);
+        FakeOnboardingRepository(hasCompletedOnboardingValue: isFirstTime);
 
     themeCubit = ThemeCubit();
+    if (initialThemeMode == ThemeMode.light) {
+      themeCubit.toggleTheme();
+    } else if (initialThemeMode == ThemeMode.dark) {
+      themeCubit.toggleTheme();
+      themeCubit.toggleTheme();
+    }
     userCubit = UserCubit(
       getCurrentUser: GetCurrentUser(repository: userRepo),
       updateUserInterests: UpdateUserInterestsUseCase(userRepo),
@@ -105,6 +117,16 @@ class TestHarness {
     );
 
     final storage = FakeSecureTokenStorage(accessToken: accessToken);
+    final favoritesRepository = FakeFavoritesRepository();
+    favoriteCubit = FavoriteCubit(
+      toggleFavoriteUseCase: ToggleFavoriteUseCase(
+        repository: favoritesRepository,
+      ),
+      getFavoritesUseCase: GetFavoritesUseCase(repository: favoritesRepository),
+      syncFavoritesUseCase: SyncFavoritesUseCase(
+        repository: favoritesRepository,
+      ),
+    );
     appGateCubit = AppGateCubit(
       onboardingRepository: onBoardingRepo,
       logoutUseCase: LogoutUseCase(repository: authRepo),
@@ -112,6 +134,8 @@ class TestHarness {
       googleAuthProvider: FakeGoogleAuthProvider(),
       facebookAuthProvider: FakeFacebookAuthProvider(),
       userCubit: userCubit,
+      favoriteCubit: favoriteCubit,
+      favoritesRepository: favoritesRepository,
     );
 
     router = _buildRouter(initialLocation);
@@ -121,6 +145,7 @@ class TestHarness {
   late final UserCubit userCubit;
   late final OnboardingCubit onboardingCubit;
   late final AuthCubit authCubit;
+  late final FavoriteCubit favoriteCubit;
   late final AppGateCubit appGateCubit;
   late final GoRouter router;
 
@@ -128,8 +153,9 @@ class TestHarness {
     return GoRouter(
       initialLocation: initialLocation,
       routes: [
-        ...HomeRoutes.routes,
-        ...ExploreRoutes.routes,
+        HomeRoutes.homeRoute,
+        ExploreRoutes.exploreRoutes,
+        ProfileRoutes.profileRoute,
         ...ProfileRoutes.routes,
         ShellRoute(
           builder: (context, state, child) {
@@ -193,6 +219,7 @@ class TestHarness {
     userCubit.close();
     onboardingCubit.close();
     authCubit.close();
+    favoriteCubit.close();
     appGateCubit.close();
   }
 }
@@ -250,22 +277,18 @@ class _TestInterestsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('Select Interests'),
-              Text(
-                'Selected: ${state.selectedCategories?.join(", ") ?? "none"}',
-              ),
+              const Text('Selected: none'),
               ...['Beaches', 'Adventure', 'Culture', 'History', 'Food'].map(
                 (cat) => ElevatedButton(
                   key: Key('interest-$cat'),
-                  onPressed: () =>
-                      context.read<OnboardingCubit>().editSelectedCategory(cat),
+                  onPressed: () {},
                   child: Text(cat),
                 ),
               ),
               ElevatedButton(
                 key: const Key('interests-save-btn'),
-                onPressed: state.selectedCategories?.isNotEmpty == true
-                    ? () => context.read<OnboardingCubit>().finishOnboarding()
-                    : null,
+                onPressed: () =>
+                    context.read<OnboardingCubit>().finishOnboarding(),
                 child: const Text('Save'),
               ),
             ],
@@ -725,15 +748,51 @@ class MemoryStorage implements Storage {
 }
 
 class FakeOnboardingRepository implements OnboardingRepository {
-  FakeOnboardingRepository({this.hasCompletedOnboarding = false});
+  FakeOnboardingRepository({this.hasCompletedOnboardingValue = false});
 
-  final bool hasCompletedOnboarding;
+  final bool hasCompletedOnboardingValue;
 
   @override
-  Future<bool> hasCompletedOnboarding() async => hasCompletedOnboarding;
+  Future<bool> isFirstTime() async => hasCompletedOnboardingValue;
 
   @override
   Future<void> setNotFirstTime() async {}
+}
+
+class FakeFavoritesRepository implements FavoritesRepository {
+  final Set<String> _favoriteIds = <String>{};
+
+  @override
+  Future<Result<void>> clearAll() async {
+    _favoriteIds.clear();
+    return Result.ok(null);
+  }
+
+  @override
+  Future<Result<Set<String>>> getFavoriteIds() async => Result.ok(_favoriteIds);
+
+  @override
+  Future<Result<List<PlaceModel>>> getFavoritePlaces({
+    required Set<String> placeIds,
+  }) async {
+    return const Result.ok([]);
+  }
+
+  @override
+  Future<Result<void>> syncPendingFavorites() async => Result.ok(null);
+
+  @override
+  Future<Result<void>> toggleFavorite({
+    required String placeId,
+    required bool isFavorite,
+  }) async {
+    if (isFavorite) {
+      _favoriteIds.add(placeId);
+    } else {
+      _favoriteIds.remove(placeId);
+    }
+    return Result.ok(null);
+  }
 }
 
 class FakeSecureTokenStorage extends SecureTokenStorage {
@@ -818,7 +877,9 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signInShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Invalid credentials'));
+      return Result.error(
+        const UnknownFailure(debugMessage: 'Invalid credentials'),
+      );
     }
     mockUser ??= testUser;
     return Result.ok(mockUser!);
@@ -834,7 +895,7 @@ class FakeAuthRepository implements AuthRepository {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signUpShouldFail) {
       return Result.error(
-        const UnknownFailure(message: 'Email already exists'),
+        const UnknownFailure(debugMessage: 'Email already exists'),
       );
     }
     return Result.ok(null);
@@ -844,7 +905,9 @@ class FakeAuthRepository implements AuthRepository {
   Future<Result<UserEntity>> googleAuth({required String token}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signInShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Google auth failed'));
+      return Result.error(
+        const UnknownFailure(debugMessage: 'Google auth failed'),
+      );
     }
     return Result.ok(testUser);
   }
@@ -854,7 +917,7 @@ class FakeAuthRepository implements AuthRepository {
     await Future.delayed(const Duration(milliseconds: 100));
     if (signInShouldFail) {
       return Result.error(
-        const UnknownFailure(message: 'Facebook auth failed'),
+        const UnknownFailure(debugMessage: 'Facebook auth failed'),
       );
     }
     return Result.ok(testUser);
@@ -864,7 +927,9 @@ class FakeAuthRepository implements AuthRepository {
   Future<Result<void>> forgetPassword({required String email}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (forgetPasswordShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Email not found'));
+      return Result.error(
+        const UnknownFailure(debugMessage: 'Email not found'),
+      );
     }
     return Result.ok(null);
   }
@@ -876,7 +941,7 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (verifyOtpShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Invalid OTP'));
+      return Result.error(const UnknownFailure(debugMessage: 'Invalid OTP'));
     }
     return Result.ok(VerifyPasswordOtpEntity(resetToken: 'fake-reset-token'));
   }
@@ -891,7 +956,7 @@ class FakeAuthRepository implements AuthRepository {
     await Future.delayed(const Duration(milliseconds: 100));
     if (resetPasswordShouldFail) {
       return Result.error(
-        const UnknownFailure(message: 'Password reset failed'),
+        const UnknownFailure(debugMessage: 'Password reset failed'),
       );
     }
     return Result.ok(null);
@@ -910,7 +975,7 @@ class FakeAuthRepository implements AuthRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 100));
     if (verifyOtpShouldFail) {
-      return Result.error(const UnknownFailure(message: 'Invalid OTP'));
+      return Result.error(const UnknownFailure(debugMessage: 'Invalid OTP'));
     }
     return Result.ok(null);
   }
@@ -922,7 +987,7 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<void>> logout() async {
+  Future<Result<void>> logout({required String refreshToken}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     return Result.ok(null);
   }

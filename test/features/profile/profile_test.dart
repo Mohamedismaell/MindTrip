@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:mindtrip/features/profile/presentation/screens/user_policy_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
@@ -17,6 +18,14 @@ import '../../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() {
+    HydratedBloc.storage = MemoryStorage();
+  });
+
+  setUp(() async {
+    await HydratedBloc.storage.clear();
+  });
 
   group('ProfileScreen', () {
     testWidgets('renders profile screen', (tester) async {
@@ -75,7 +84,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('navigates to edit profile when edit button tapped', (tester) async {
+    testWidgets('navigates to edit profile when edit button tapped', (
+      tester,
+    ) async {
       final harness = TestHarness(
         initialLocation: AppRoutes.profile,
         user: testUser,
@@ -149,7 +160,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('navigates to settings when settings icon tapped', (tester) async {
+    testWidgets('navigates to settings when settings icon tapped', (
+      tester,
+    ) async {
       final harness = TestHarness(
         initialLocation: AppRoutes.profile,
         user: testUser,
@@ -175,7 +188,10 @@ void main() {
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('bottom-nav-profile-active')), findsOneWidget);
+      expect(
+        find.byKey(const Key('bottom-nav-profile-active')),
+        findsOneWidget,
+      );
 
       harness.dispose();
     });
@@ -219,7 +235,10 @@ void main() {
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('edit-profile-display-name-row')), findsOneWidget);
+      expect(
+        find.byKey(const Key('edit-profile-display-name-row')),
+        findsOneWidget,
+      );
       expect(find.text(testUser.displayName), findsOneWidget);
 
       harness.dispose();
@@ -264,13 +283,18 @@ void main() {
       await pumpAppWithHarness(tester, harness);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('edit-profile-delete-account-button')), findsOneWidget);
+      expect(
+        find.byKey(const Key('edit-profile-delete-account-button')),
+        findsOneWidget,
+      );
       expect(find.text('Delete Account'), findsOneWidget);
 
       harness.dispose();
     });
 
-    testWidgets('save changes button shows snackbar when tapped', (tester) async {
+    testWidgets('save changes button shows snackbar when tapped', (
+      tester,
+    ) async {
       final harness = TestHarness(
         initialLocation: AppRoutes.editProfile,
         user: testUser,
@@ -282,7 +306,10 @@ void main() {
       await tester.tap(find.byKey(const Key('edit-profile-save-button')));
       await tester.pumpAndSettle();
 
-      expect(find.text('Changes stay local only in this phase.'), findsOneWidget);
+      expect(
+        find.text('Changes stay local only in this phase.'),
+        findsOneWidget,
+      );
 
       harness.dispose();
     });
@@ -372,7 +399,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Dark Mode'), findsOneWidget);
-      expect(find.byKey(const Key('settings-dark-mode-switch')), findsOneWidget);
+      expect(
+        find.byKey(const Key('settings-dark-mode-switch')),
+        findsOneWidget,
+      );
 
       harness.dispose();
     });
@@ -474,6 +504,134 @@ void main() {
       harness.dispose();
     });
 
+    testWidgets('settings legal rows navigate to detail screens', (
+      tester,
+    ) async {
+      final routeCases = [
+        (label: 'FAQ', type: FaqScreen),
+        (label: 'Terms of service', type: TermsOfServiceScreen),
+        (label: 'User Policy', type: UserPolicyScreen),
+      ];
+
+      for (final routeCase in routeCases) {
+        final harness = TestHarness(
+          initialLocation: AppRoutes.profileSettings,
+          user: testUser,
+        );
+
+        await pumpAppWithHarness(tester, harness);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text(routeCase.label));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(routeCase.type), findsOneWidget);
+
+        harness.dispose();
+      }
+    });
+
+    testWidgets('terms screen renders figma content', (tester) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.profileTerms,
+        user: testUser,
+      );
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TermsOfServiceScreen), findsOneWidget);
+      expect(find.text('Terms of service'), findsOneWidget);
+      expect(find.text('Hello 👋'), findsOneWidget);
+      expect(find.text('1. Use of the App'), findsOneWidget);
+
+      harness.dispose();
+    });
+
+    testWidgets('user policy screen renders update date and sections', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.profilePolicy,
+        user: testUser,
+      );
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(UserPolicyScreen), findsOneWidget);
+      expect(find.text('User Policy'), findsOneWidget);
+      expect(find.text('Last update : 17 April 2026'), findsOneWidget);
+      expect(find.text('1. Information We Collect'), findsOneWidget);
+
+      harness.dispose();
+    });
+
+    testWidgets('faq search filters questions locally', (tester) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.profileFaq,
+        user: testUser,
+      );
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FaqScreen), findsOneWidget);
+      expect(find.text('What is MindTrip?'), findsOneWidget);
+
+      await tester.enterText(find.byKey(const Key('faq-search-field')), 'data');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Is my data safe in MindTrip?'), findsOneWidget);
+      expect(find.text('What is MindTrip?'), findsNothing);
+
+      harness.dispose();
+    });
+
+    testWidgets('faq accordion expands and collapses answers', (tester) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.profileFaq,
+        user: testUser,
+      );
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      final answer = find.textContaining('travel planning app');
+      expect(answer, findsNothing);
+
+      await tester.tap(find.text('What is MindTrip?'));
+      await tester.pumpAndSettle();
+
+      expect(answer, findsOneWidget);
+
+      await tester.tap(find.text('What is MindTrip?'));
+      await tester.pumpAndSettle();
+
+      expect(answer, findsNothing);
+
+      harness.dispose();
+    });
+
+    testWidgets('legal screen back button returns to settings fallback', (
+      tester,
+    ) async {
+      final harness = TestHarness(
+        initialLocation: AppRoutes.profileTerms,
+        user: testUser,
+      );
+
+      await pumpAppWithHarness(tester, harness);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('terms-of-service-back')));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SettingsScreen), findsOneWidget);
+
+      harness.dispose();
+    });
+
     testWidgets('renders terms of service row', (tester) async {
       final harness = TestHarness(
         initialLocation: AppRoutes.profileSettings,
@@ -569,7 +727,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('bottom nav highlights profile on all profile routes', (tester) async {
+    testWidgets('bottom nav highlights profile on all profile routes', (
+      tester,
+    ) async {
       final routes = [
         AppRoutes.profile,
         AppRoutes.editProfile,
@@ -577,10 +737,7 @@ void main() {
       ];
 
       for (final route in routes) {
-        final harness = TestHarness(
-          initialLocation: route,
-          user: testUser,
-        );
+        final harness = TestHarness(initialLocation: route, user: testUser);
 
         await pumpAppWithHarness(tester, harness);
         await tester.pumpAndSettle();
@@ -596,7 +753,9 @@ void main() {
   });
 
   group('Profile Theme', () {
-    testWidgets('respects theme mode from ThemeCubit on profile', (tester) async {
+    testWidgets('respects theme mode from ThemeCubit on profile', (
+      tester,
+    ) async {
       final harness = TestHarness(
         initialLocation: AppRoutes.profile,
         user: testUser,
@@ -611,7 +770,9 @@ void main() {
       harness.dispose();
     });
 
-    testWidgets('respects theme mode from ThemeCubit on settings', (tester) async {
+    testWidgets('respects theme mode from ThemeCubit on settings', (
+      tester,
+    ) async {
       final harness = TestHarness(
         initialLocation: AppRoutes.profileSettings,
         user: testUser,

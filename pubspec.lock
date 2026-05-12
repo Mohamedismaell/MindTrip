@@ -233,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  country_code_picker:
+    dependency: "direct main"
+    description:
+      name: country_code_picker
+      sha256: f0411f4833b6f98e8b7215f4fa3813bcc88e50f13925f70a170dbd36e3e447f5
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.1"
   cross_file:
     dependency: transitive
     description:
@@ -313,6 +321,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  diacritic:
+    dependency: transitive
+    description:
+      name: diacritic
+      sha256: "12981945ec38931748836cd76f2b38773118d0baef3c68404bdfde9566147876"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.6"
   dio:
     dependency: "direct main"
     description:
@@ -329,6 +345,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  dlibphonenumber:
+    dependency: transitive
+    description:
+      name: dlibphonenumber
+      sha256: "5b38e3dcff241ddfb53fda35a4e6df360b8bde10b8a8482e08cfcc1ffc4d2c5f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.63"
   equatable:
     dependency: "direct main"
     description:
@@ -733,14 +757,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.2.1"
-  glaze_nav_bar:
-    dependency: "direct main"
-    description:
-      name: glaze_nav_bar
-      sha256: "8d819dd57ed2d93d7de1c93658c5ed311eafbefaac0b5205d92906ddf3a61918"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.1"
   glob:
     dependency: transitive
     description:
@@ -1005,6 +1021,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.20.2"
+  intl_phone_number_input:
+    dependency: "direct main"
+    description:
+      name: intl_phone_number_input
+      sha256: "9d4d7f174cfc3a85b238e0b465ec0e7232fc0815a779e5a58fbf118dee26dfa0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.5"
   io:
     dependency: transitive
     description:
@@ -1365,6 +1389,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.5.0"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "75ec242d22e950bdcc79ee38dd520ce4ee0bc491d7fadc4ea47694604d22bf06"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
   provider:
     dependency: transitive
     description:

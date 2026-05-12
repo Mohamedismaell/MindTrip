@@ -31,6 +31,9 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String editProfile = '/profile/edit';
   static const String profileSettings = '/profile/settings';
+  static const String profileTerms = '/profile/settings/terms';
+  static const String profilePolicy = '/profile/settings/policy';
+  static const String profileFaq = '/profile/settings/faq';
 
   //! interests
   static const String interests = '/interests';

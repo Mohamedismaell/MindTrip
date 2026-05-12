@@ -130,21 +130,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 icon: Icons.help_outline_rounded,
                 title: 'FAQ',
                 trailing: const _ChevronArrow(),
-                onTap: () => _showPlaceholder('FAQ'),
+                onTap: () => context.go(AppRoutes.profileFaq),
               ),
               _SettingsDivider(),
               _SettingsRow(
                 icon: Icons.info_outline_rounded,
                 title: 'Terms of service',
                 trailing: const _ChevronArrow(),
-                onTap: () => _showPlaceholder('Terms of service'),
+                onTap: () => context.go(AppRoutes.profileTerms),
               ),
               _SettingsDivider(),
               _SettingsRow(
                 icon: Icons.policy_outlined,
                 title: 'User Policy',
                 trailing: const _ChevronArrow(),
-                onTap: () => _showPlaceholder('User Policy'),
+                onTap: () => context.go(AppRoutes.profilePolicy),
               ),
             ],
           ),
@@ -154,6 +154,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: 259.w,
               height: 55.h,
               child: CustomOtlinedButton(
+                key: const Key('settings-logout-button'),
                 onPressed: () => context.read<AppGateCubit>().logout(),
                 icon: Icons.logout_rounded,
                 text: 'Log Out',
@@ -340,7 +341,7 @@ class _SettingsDivider extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 11.h),
       height: 0.5,
-      color: AppColors.mediumLightGray.withOpacity(0.35),
+      color: AppColors.mediumLightGray.withValues(alpha: 0.35),
     );
   }
 }

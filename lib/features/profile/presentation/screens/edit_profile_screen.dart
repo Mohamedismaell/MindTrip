@@ -97,17 +97,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         if (state.hasChanges && !isSaving) {
                           await AppDialog.show(
                             context: context,
-                            title: "Unsaved Changes",
+                            title: "Save",
                             description:
                                 "You have unsaved changes. Do you want to save them?",
-                            primaryText: "Save",
+                            primaryText: "Save Changes",
                             onPrimary: () {
                               context.read<EditProfileCubit>().saveChanges();
                             },
-                            secondaryText: "Cancel",
+                            secondaryText: "Discard changes",
                             iconColor: AppColors.errorRed.withValues(
                               alpha: 0.9,
                             ),
+                            onSecondary: () {
+                              // if (context.mounted) {
+                              context.pop();
+                              // }
+                            },
                           );
                         }
                         if (context.mounted && !state.hasChanges) {
@@ -222,8 +227,9 @@ class _EditableInfoCard extends StatelessWidget {
           key: const Key('edit-profile-phone-row'),
           label: 'Phone Number: ',
           controller: phoneController,
-          keyboardType: TextInputType.phone,
+          keyboardType: TextInputType.number,
           hintText: 'Enter phone number',
+          isPhone: true,
         ),
 
         ProfileInfoRow(

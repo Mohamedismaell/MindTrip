@@ -46,6 +46,8 @@ dependencies:
   geolocator: ^14.0.2
   geocoding: ^4.0.0
   flutter_launcher_icons: ^0.14.4
+  country_code_picker: ^3.4.1
+  intl_phone_number_input: ^0.7.5
 
 dev_dependencies:
   flutter_test:

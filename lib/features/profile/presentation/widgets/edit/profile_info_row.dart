@@ -11,19 +11,34 @@ class ProfileInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        //! Label
         Text(
           label,
-          style: AppTextStyles.h9Bold.copyWith(
+          style: AppTextStyles.h10SemiBold.copyWith(
             color: context.colorTheme.onSurface,
           ),
         ),
-        SizedBox(width: 8.w),
-        Text(
-          value,
-          style: context.textTheme.bodyMedium?.copyWith(
-            // color: context.colorTheme.onSurfaceVariant,
+        SizedBox(height: 8.h),
+
+        //! Value container (read-only, matching editable style)
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          decoration: BoxDecoration(
+            color: context.colorTheme.surface,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color: context.colorTheme.outline.withValues(alpha: 0.25),
+            ),
+          ),
+          child: Text(
+            value,
+            style: AppTextStyles.h9Medium.copyWith(
+              color: context.colorTheme.onSurfaceVariant,
+            ),
           ),
         ),
       ],

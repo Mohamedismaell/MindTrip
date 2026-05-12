@@ -35,30 +35,43 @@ class CustomGradientButton extends StatelessWidget {
     final disabledTextColor = isDisabled
         ? context.colorTheme.onSurface.withValues(alpha: 0.38)
         : buttonColor;
-    return InkWell(
-      borderRadius: BorderRadius.circular(50.r),
-      onTap: onTap,
-      child: Container(
-        width: width ?? 200.w,
-        padding: EdgeInsets.symmetric(vertical: 12.h),
-        decoration: BoxDecoration(
-          color: isDisabled ? disabledBackground : null,
-          gradient: isDisabled ? null : AppGradients.mainBlueGradient,
-          boxShadow: isDisabled ? [] : [AppShadows.mainElevationButton],
+    return Container(
+      width: width ?? 200.w,
+      decoration: BoxDecoration(
+        color: isDisabled ? disabledBackground : null,
+        gradient: isDisabled ? null : AppGradients.mainBlueGradient,
+        boxShadow: isDisabled ? [] : [AppShadows.mainElevationButton],
+        borderRadius: BorderRadius.circular(50.r),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(50.r),
+        child: InkWell(
           borderRadius: BorderRadius.circular(50.r),
-        ),
-        child: Center(
-          child: isLoading == true
-              ? CircularProgressIndicator(color: context.colorTheme.onPrimary)
-              : child ??
-                    Text(
-                      text,
-                      style:
-                          style?.copyWith(color: disabledTextColor) ??
-                          context.textTheme.labelMedium?.copyWith(
-                            color: disabledTextColor,
-                          ),
-                    ),
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.h),
+            child: Center(
+              child: isLoading == true
+                  ? SizedBox(
+                      width: 24.w,
+                      height: 24.w,
+                      child: CircularProgressIndicator(
+                        color: context.colorTheme.onPrimary,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : child ??
+                        Text(
+                          text,
+                          style:
+                              style?.copyWith(color: disabledTextColor) ??
+                              context.textTheme.labelMedium?.copyWith(
+                                color: disabledTextColor,
+                              ),
+                        ),
+            ),
+          ),
         ),
       ),
     );
