@@ -69,9 +69,7 @@ class AppBootstrap extends StatelessWidget {
         BlocProvider<AppGateCubit>(create: (_) => sl<AppGateCubit>()),
         BlocProvider<UserCubit>(create: (_) => sl<UserCubit>()),
         BlocProvider<AuthCubit>(create: (_) => sl<AuthCubit>()),
-        BlocProvider<FavoriteCubit>(
-          create: (_) => sl<FavoriteCubit>()..loadFavorites(),
-        ),
+        BlocProvider<FavoriteCubit>(create: (_) => sl<FavoriteCubit>()),
         BlocProvider<LocationCubit>(create: (_) => sl<LocationCubit>()),
       ],
       child: const MyApp(),

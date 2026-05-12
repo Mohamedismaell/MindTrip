@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
@@ -8,21 +10,21 @@ class ExploreHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Good morning, Laila',
-            style: AppTextStyles.h9Medium.copyWith(
-              color: context.colorTheme.outline,
-            ),
-          ),
-          SizedBox(height: 12.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, state) {
+        final user = state.user;
+        final displayName = user?.displayName;
+        return SliverToBoxAdapter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                'Good morning, $displayName',
+                style: AppTextStyles.h9Medium.copyWith(
+                  color: context.colorTheme.outline,
+                ),
+              ),
+              SizedBox(height: 12.h),
               RichText(
                 text: TextSpan(
                   style: context.textTheme.headlineMedium,
@@ -37,18 +39,10 @@ class ExploreHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.menu_rounded,
-                  size: 26.sp,
-                  color: context.colorTheme.onSurface,
-                ),
-              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

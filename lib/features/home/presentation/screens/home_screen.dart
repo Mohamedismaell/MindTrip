@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_ai_planner_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_banner_carousel.dart';
-import 'package:mindtrip/features/home/presentation/widgets/home_category_list.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_header.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_popular_destinations.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_recommended_grid.dart';
@@ -25,9 +24,6 @@ class HomeScreen extends StatelessWidget {
           // //! Not working right now
           const HomeSearchBar(),
           SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-          // //! there is no functionallity for this right now + need ui edits still
-          HomeCategoryList(categories: HomeMockData.categories),
-          SliverToBoxAdapter(child: SizedBox(height: 22.h)),
           // //! there is no functionallity for this right now
           HomeBannerCarousel(banners: HomeMockData.banners),
           SliverToBoxAdapter(child: SizedBox(height: 28.h)),

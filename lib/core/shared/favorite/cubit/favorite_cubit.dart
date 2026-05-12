@@ -18,7 +18,9 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   }) : _toggleFavoriteUseCase = toggleFavoriteUseCase,
        _getFavoritesUseCase = getFavoritesUseCase,
        _syncFavoritesUseCase = syncFavoritesUseCase,
-       super(const FavoriteState());
+       super(const FavoriteState()) {
+    loadFavorites();
+  }
 
   Future<void> toggleFavorite({
     required String placeId,

@@ -186,7 +186,7 @@ class ExploreMockData {
       ),
       description: 'Relaxing beach resort.',
       rating: 4.2,
-      price: 1400,
+      price: 1402220,
       category: PlaceCategory.hotel,
       imageUrls: [
         'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
