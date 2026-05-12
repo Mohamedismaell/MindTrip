@@ -16,6 +16,11 @@ class AppShadows {
     offset: Offset(0, 4.h),
     spreadRadius: 0,
   );
+  static BoxShadow favoritePlaceButtonShadow = BoxShadow(
+    color: Colors.black.withValues(alpha: 0.25),
+    blurRadius: 4.r,
+    offset: Offset(4.w, 4.h),
+  );
   // static BoxShadow trendingCard = BoxShadow(
   //   color: Colors.black.withValues(alpha: 0.08),
   //   blurRadius: 4,

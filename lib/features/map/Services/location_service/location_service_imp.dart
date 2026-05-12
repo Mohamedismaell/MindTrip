@@ -8,6 +8,12 @@ abstract class LocationService {
   Future<LocationAccessStatus> checkAccess();
   Future<Position?> getCurrentLocation();
   Future<LocationResult?> getCurrentLocationDetails();
+  double? getDistanceBetween({
+    required double userLat,
+    required double userLng,
+    required double placeLat,
+    required double placeLng,
+  });
 }
 
 class LocationServiceImp implements LocationService {
@@ -95,5 +101,25 @@ class LocationServiceImp implements LocationService {
     if (name.isEmpty) return '';
 
     return name.replaceAll('Governorate', '').replaceAll(' محافظة', '').trim();
+  }
+
+  @override
+  double? getDistanceBetween({
+    required double userLat,
+    required double userLng,
+    required double placeLat,
+    required double placeLng,
+  }) {
+    try {
+      final result = Geolocator.distanceBetween(
+        userLat,
+        userLng,
+        placeLat,
+        placeLng,
+      );
+      return result;
+    } catch (_) {
+      return null;
+    }
   }
 }

@@ -37,6 +37,8 @@ enum PlaceCategory {
   @HiveField(15)
   wellness,
   @HiveField(16)
+  cafe,
+  @HiveField(17)
   other;
 
   String get displayName => switch (this) {
@@ -56,6 +58,7 @@ enum PlaceCategory {
     PlaceCategory.heritage => 'Heritage',
     PlaceCategory.camping => 'Camping',
     PlaceCategory.wellness => 'Wellness',
+    PlaceCategory.cafe => 'Cafe',
     PlaceCategory.other => 'Other',
   };
 
@@ -76,6 +79,7 @@ enum PlaceCategory {
     PlaceCategory.heritage => '🏛️',
     PlaceCategory.camping => '🏕️',
     PlaceCategory.wellness => '🧘',
+    PlaceCategory.cafe => '☕',
     PlaceCategory.other => '📍',
   };
 

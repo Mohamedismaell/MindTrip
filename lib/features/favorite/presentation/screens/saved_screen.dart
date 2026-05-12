@@ -4,14 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_place_card.dart';
 import 'package:mindtrip/features/favorite/cubit/saved_places_cubit.dart';
 import 'package:mindtrip/features/favorite/presentation/widgets/saved_category_filter_bar.dart';
 
-class FavoritesScreen extends StatelessWidget {
-  const FavoritesScreen({super.key});
+//Todo handle skelton effect while loading and the fail widget (All listner need check )
+class SavedScreen extends StatelessWidget {
+  const SavedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,6 @@ class FavoritesScreen extends StatelessWidget {
   }
 }
 
-//  Categories shown in the filter bar
 const _savedCategories = [
   PlaceCategory.all,
   PlaceCategory.hotel,
@@ -36,90 +37,79 @@ const _savedCategories = [
 
 class _FavoritesView extends StatelessWidget {
   const _FavoritesView();
-  // CustomHeadLine
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: BlocBuilder<SavedPlacesCubit, FavoritesScreenState>(
           builder: (context, state) {
-            return Column(
-              children: [
-                // Header
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 6.h),
-                  child: Column(
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 33.h),
+              child: Column(
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Header
+                  Column(
                     children: [
                       // Title
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Saved ',
-                              style: context.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.primaryBlue,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Places',
-                              style: context.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: context.colorTheme.onSurface,
-                              ),
-                            ),
-                          ],
+                      CustomHeadLine(
+                        firstTitle: 'Saved ',
+                        secondTitle: 'Places',
+                        firstStyle: AppTextStyles.h5Bold.copyWith(
+                          color: context.colorTheme.primary,
+                        ),
+                        secondStyle: AppTextStyles.h5Bold.copyWith(
+                          color: context.colorTheme.onSurface,
                         ),
                       ),
-                      SizedBox(height: 6.h),
+
+                      SizedBox(height: 12.h),
                       // Subtitle
                       Text(
                         'All the places you saved in one spot\norganized and easy to access',
                         textAlign: TextAlign.center,
-                        style: context.textTheme.bodySmall?.copyWith(
-                          color: context.colorTheme.onSurface.withValues(
-                            alpha: 0.55,
-                          ),
-                          height: 1.4,
+                        style: AppTextStyles.h7Regular.copyWith(
+                          color: context.colorTheme.onSurfaceVariant,
                         ),
                       ),
                     ],
                   ),
-                ),
+                  SizedBox(height: 46.h),
 
-                SizedBox(height: 14.h),
+                  //  Category Filter Bar
+                  SavedCategoryFilterBar(
+                    categories: _savedCategories,
+                    selectedCategory: state.selectedCategory,
+                    onCategorySelected: (category) {
+                      context.read<SavedPlacesCubit>().selectCategory(category);
+                    },
+                  ),
 
-                //  Category Filter Bar
-                SavedCategoryFilterBar(
-                  categories: _savedCategories,
-                  selectedCategory: state.selectedCategory,
-                  onCategorySelected: (category) {
-                    context.read<SavedPlacesCubit>().selectCategory(category);
-                  },
-                ),
+                  SizedBox(height: 8.h),
 
-                SizedBox(height: 8.h),
-
-                //  Body
-                Expanded(
-                  child: switch (state.placesStatus) {
-                    FavoritesTabStatus.initial ||
-                    FavoritesTabStatus.loading => const _LoadingView(),
-                    FavoritesTabStatus.empty => const _EmptyView(),
-                    FavoritesTabStatus.error => _ErrorView(
-                      message: state.errorMessage,
-                      onRetry: () =>
-                          context.read<SavedPlacesCubit>().loadFavoritePlaces(),
-                    ),
-                    FavoritesTabStatus.loaded =>
-                      state.filteredPlaces.isEmpty
-                          ? _EmptyCategoryView(
-                              categoryName: state.selectedCategory.displayName,
-                            )
-                          : _PlacesGrid(places: state.filteredPlaces),
-                  },
-                ),
-              ],
+                  //  Body
+                  Expanded(
+                    child: switch (state.placesStatus) {
+                      FavoritesTabStatus.initial ||
+                      FavoritesTabStatus.loading => const _LoadingView(),
+                      FavoritesTabStatus.empty => const _EmptyView(),
+                      FavoritesTabStatus.error => _ErrorView(
+                        message: state.errorMessage,
+                        onRetry: () => context
+                            .read<SavedPlacesCubit>()
+                            .loadFavoritePlaces(),
+                      ),
+                      FavoritesTabStatus.loaded =>
+                        state.filteredPlaces.isEmpty
+                            ? _EmptyCategoryView(
+                                categoryName:
+                                    state.selectedCategory.displayName,
+                              )
+                            : _PlacesGrid(places: state.filteredPlaces),
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -139,14 +129,14 @@ class _PlacesGrid extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 16.h,
-        crossAxisSpacing: 12.w,
+        mainAxisSpacing: 30.h,
+        crossAxisSpacing: 21.w,
         childAspectRatio: 0.65,
       ),
       itemCount: places.length,
       itemBuilder: (context, index) {
         final place = places[index];
-        return ExplorePlaceCard(place: place);
+        return ExplorePlaceCard(place: place, hasBadge: false);
       },
     );
   }
@@ -169,13 +159,13 @@ class _EmptyView extends StatelessWidget {
               color: context.colorTheme.onSurface.withValues(alpha: 0.3),
             ),
             SizedBox(height: 16.h),
-            Text('No favorites yet', style: context.textTheme.titleMedium),
+            Text('No favorites yet', style: context.textTheme.titleLarge),
             SizedBox(height: 8.h),
             Text(
               'Start exploring and tap the heart icon\nto save places you love.',
               textAlign: TextAlign.center,
               style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorTheme.onSurface.withValues(alpha: 0.6),
+                color: context.colorTheme.outline,
               ),
             ),
           ],
@@ -205,16 +195,13 @@ class _EmptyCategoryView extends StatelessWidget {
               color: context.colorTheme.onSurface.withValues(alpha: 0.3),
             ),
             SizedBox(height: 16.h),
-            Text(
-              'No saved $categoryName',
-              style: context.textTheme.titleMedium,
-            ),
+            Text('No saved $categoryName', style: context.textTheme.titleLarge),
             SizedBox(height: 8.h),
             Text(
               'Try saving some places in this category\nor select a different filter.',
               textAlign: TextAlign.center,
               style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorTheme.onSurface.withValues(alpha: 0.6),
+                color: context.colorTheme.outline,
               ),
             ),
           ],

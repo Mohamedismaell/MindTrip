@@ -19,7 +19,7 @@ class ExplorePlacesGrid extends StatelessWidget {
         childAspectRatio: 0.72,
       ),
       itemBuilder: (context, index) {
-        return ExplorePlaceCard(place: places[index]);
+        return ExplorePlaceCard(place: places[index], hasBadge: true);
       },
     );
   }

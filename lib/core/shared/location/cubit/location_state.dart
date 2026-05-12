@@ -35,6 +35,21 @@ class LocationState extends Equatable {
     return parts.join(', ');
   }
 
+  String formatDistance(double? meters) {
+    if (meters == null) return '';
+    if (meters < 1000) {
+      return '${meters.round()} m';
+    }
+
+    final km = meters / 1000;
+
+    if (km < 10) {
+      return '${km.toStringAsFixed(1)} km';
+    }
+
+    return '${km.round()} km';
+  }
+
   @override
   List<Object?> get props => [status, location];
 }

@@ -7,7 +7,14 @@ class RatingStars extends StatelessWidget {
   final double? rating;
   final double? size;
   final bool? showText;
-  const RatingStars({super.key, this.rating, this.size, this.showText});
+  final TextStyle? style;
+  const RatingStars({
+    super.key,
+    this.rating,
+    this.size,
+    this.showText,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +47,7 @@ class RatingStars extends StatelessWidget {
         showText == true
             ? Text(
                 value.toStringAsFixed(1),
-                style: context.textTheme.labelSmall,
+                style: style ?? context.textTheme.labelSmall,
               )
             : SizedBox.shrink(),
       ],

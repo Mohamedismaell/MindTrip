@@ -46,6 +46,8 @@ class PlaceCategoryAdapter extends TypeAdapter<PlaceCategory> {
       case 15:
         return PlaceCategory.wellness;
       case 16:
+        return PlaceCategory.cafe;
+      case 17:
         return PlaceCategory.other;
       default:
         return PlaceCategory.all;
@@ -87,8 +89,10 @@ class PlaceCategoryAdapter extends TypeAdapter<PlaceCategory> {
         writer.writeByte(14);
       case PlaceCategory.wellness:
         writer.writeByte(15);
-      case PlaceCategory.other:
+      case PlaceCategory.cafe:
         writer.writeByte(16);
+      case PlaceCategory.other:
+        writer.writeByte(17);
     }
   }
 

@@ -22,7 +22,7 @@ class SavedCategoryFilterBar extends StatelessWidget {
       height: 40.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        // padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         itemCount: categories.length,
         separatorBuilder: (_, _) => SizedBox(width: 24.w),
         itemBuilder: (context, index) {
@@ -36,29 +36,35 @@ class SavedCategoryFilterBar extends StatelessWidget {
           );
           return GestureDetector(
             onTap: () => onCategorySelected(category),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Label
-                AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 200),
-                  style: isSelected ? selectedTextStyle : unSeletectedTextStyle,
-                  child: Text(category.displayName),
-                ),
-
-                SizedBox(height: 6.h),
-
-                // Underline indicator
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: 2.5.h,
-                  width: isSelected ? 32.w : 0,
-                  decoration: BoxDecoration(
-                    color: context.colorTheme.primary,
-                    borderRadius: BorderRadius.circular(2.r),
+            child: IntrinsicWidth(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Label
+                  AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 200),
+                    style: isSelected
+                        ? selectedTextStyle
+                        : unSeletectedTextStyle,
+                    child: Text(category.displayName),
                   ),
-                ),
-              ],
+
+                  SizedBox(height: 6.h),
+
+                  AnimatedScale(
+                    duration: const Duration(milliseconds: 200),
+                    scale: isSelected ? 1.0 : 0.0,
+                    child: Container(
+                      height: 2.5.h,
+                      decoration: BoxDecoration(
+                        color: context.colorTheme.primary,
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

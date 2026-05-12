@@ -44,4 +44,19 @@ class LocationCubit extends Cubit<LocationState> {
       emit(state.copyWith(status: LocationStatus.error));
     }
   }
+
+  double? getDistanceBetween({
+    required double placeLat,
+    required double placeLng,
+  }) {
+    if (state.location == null) {
+      return null;
+    }
+    return _locationService.getDistanceBetween(
+      userLat: state.location!.latitude,
+      userLng: state.location!.longitude,
+      placeLat: placeLat,
+      placeLng: placeLng,
+    );
+  }
 }
