@@ -9,15 +9,8 @@ import 'map_navigation_state.dart';
 class MapNavigationCubit extends Cubit<MapNavigationState> {
   final GetRouteUseCase _getRouteUseCase;
 
-  /// Stores the last requested waypoints so we can re-fetch on profile change
   List<Position>? _lastWaypoints;
   CancelToken? _getRouteCancelToken;
-
-  /// Monotonically increasing counter. Each call to [_fetchRoute] increments
-  /// this so that when a result arrives we can tell whether a newer request
-  /// has been issued in the meantime. Stale results are silently discarded
-  /// instead of cancelling the HTTP request, which avoids the "no route" flash
-  /// when the user switches profiles quickly.
   int _routeGeneration = 0;
 
   MapNavigationCubit({required GetRouteUseCase getRouteUseCase})
@@ -56,13 +49,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     _lastWaypoints = waypoints;
     final generation = ++_routeGeneration;
 
-    emit(
-      state.copyWith(
-        isRouteLoading: true,
-        clearRouteError: true,
-        currentStepIndex: 0,
-      ),
-    );
+    emit(state.copyWith(isRouteLoading: true, currentStepIndex: 0));
 
     final result = await _getRouteUseCase.call(
       waypoints,
@@ -93,14 +80,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     _lastWaypoints = null;
     _routeGeneration++; // Invalidate any in-flight request
     _getRouteCancelToken?.cancel();
-    emit(
-      state.copyWith(
-        clearActiveRoute: true,
-        clearRouteError: true,
-        isRouteLoading: false,
-        currentStepIndex: 0,
-      ),
-    );
+    emit(state.copyWith(isRouteLoading: false, currentStepIndex: 0));
   }
 
   @override

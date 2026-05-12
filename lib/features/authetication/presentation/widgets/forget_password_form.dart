@@ -5,10 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/validators/auth_validator.dart';
 import 'package:mindtrip/core/widget/app_text_field.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
+import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 
 class ForgetPasswordForm extends StatefulWidget {
   const ForgetPasswordForm({super.key});

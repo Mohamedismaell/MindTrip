@@ -2,18 +2,19 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_use_case.dart';
 import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 
-part 'favorites_screen_state.dart';
+part 'saved_places_state.dart';
 
-class FavoritesScreenCubit extends Cubit<FavoritesScreenState> {
+class SavedPlacesCubit extends Cubit<FavoritesScreenState> {
   final GetFavoritePlacesUseCase _getFavoritePlacesUseCase;
   final FavoriteCubit _favoriteCubit;
   StreamSubscription<FavoriteState>? _favoriteSubscription;
 
-  FavoritesScreenCubit({
+  SavedPlacesCubit({
     required GetFavoritePlacesUseCase getFavoritePlacesUseCase,
     required FavoriteCubit favoriteCubit,
   }) : _getFavoritePlacesUseCase = getFavoritePlacesUseCase,
@@ -56,6 +57,11 @@ class FavoritesScreenCubit extends Cubit<FavoritesScreenState> {
         );
       },
     );
+  }
+
+  // Update the selected category filter.
+  void selectCategory(PlaceCategory category) {
+    emit(state.copyWith(selectedCategory: category));
   }
 
   void _listenToFavoriteChanges() {

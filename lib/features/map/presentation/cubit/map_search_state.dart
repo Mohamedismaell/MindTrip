@@ -1,57 +1,26 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../data/models/place_prediction.dart';
 import '../../domain/entities/google_place.dart';
 
-class MapSearchState extends Equatable {
-  final List<PlacePrediction> autocompletePredictions;
-  final bool isSearchLoading;
-  final String? searchError;
-  final GooglePlaceEntity? resolvedSearchPlace;
-  final List<GooglePlaceEntity> nearbyPlaces;
+part 'map_search_state.freezed.dart';
 
-  const MapSearchState({
-    required this.autocompletePredictions,
-    required this.isSearchLoading,
-    this.searchError,
-    this.resolvedSearchPlace,
-    this.nearbyPlaces = const [],
-  });
+@freezed
+sealed class MapSearchState with _$MapSearchState {
+  const MapSearchState._();
 
-  factory MapSearchState.initial() => const MapSearchState(
-    autocompletePredictions: [],
-    isSearchLoading: false,
-    searchError: null,
-    resolvedSearchPlace: null,
-    nearbyPlaces: [],
-  );
+  const factory MapSearchState({
+    @Default([]) List<PlacePrediction> autocompletePredictions,
 
-  MapSearchState copyWith({
-    List<PlacePrediction>? autocompletePredictions,
-    bool? isSearchLoading,
+    @Default(false) bool isSearchLoading,
+
     String? searchError,
-    bool clearSearchError = false,
-    GooglePlaceEntity? resolvedSearchPlace,
-    bool clearResolvedSearchPlace = false,
-    List<GooglePlaceEntity>? nearbyPlaces,
-  }) {
-    return MapSearchState(
-      autocompletePredictions:
-          autocompletePredictions ?? this.autocompletePredictions,
-      isSearchLoading: isSearchLoading ?? this.isSearchLoading,
-      searchError: clearSearchError ? null : (searchError ?? this.searchError),
-      resolvedSearchPlace: clearResolvedSearchPlace
-          ? null
-          : (resolvedSearchPlace ?? this.resolvedSearchPlace),
-      nearbyPlaces: nearbyPlaces ?? this.nearbyPlaces,
-    );
-  }
 
-  @override
-  List<Object?> get props => [
-    autocompletePredictions,
-    isSearchLoading,
-    searchError,
-    resolvedSearchPlace,
-    nearbyPlaces,
-  ];
+    GooglePlaceEntity? resolvedSearchPlace,
+    @Default(false) bool clearResolvedSearchPlace,
+    @Default(false) bool clearSearchError,
+    @Default([]) List<GooglePlaceEntity> nearbyPlaces,
+  }) = _MapSearchState;
+
+  factory MapSearchState.initial() => const MapSearchState();
 }

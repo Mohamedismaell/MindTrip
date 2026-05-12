@@ -1,60 +1,60 @@
-import 'dart:convert';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/shared/user/data/models/user_model.dart';
-class AuthResponseModel extends Equatable {
-  final UserModel user;
-  final String accessToken;
-  final String refreshToken;
-  final String tokenType;
-  final int expiresIn;
-  final bool isEmailVerified;
-  final bool twoFactorEnabled;
 
-  const AuthResponseModel({
-    required this.user,
-    required this.accessToken,
-    required this.refreshToken,
-    required this.tokenType,
-    required this.expiresIn,
-    required this.isEmailVerified,
-    required this.twoFactorEnabled,
-  });
+part 'auth_response_model.freezed.dart';
+
+@freezed
+sealed class AuthResponseModel with _$AuthResponseModel {
+  const AuthResponseModel._();
+
+  const factory AuthResponseModel({
+    required UserModel user,
+
+    required String accessToken,
+
+    required String refreshToken,
+
+    @Default('Bearer') String tokenType,
+
+    @Default(0) int expiresIn,
+
+    @Default(false) bool isEmailVerified,
+
+    @Default(false) bool twoFactorEnabled,
+  }) = _AuthResponseModel;
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
     return AuthResponseModel(
       user: UserModel.fromJson(json),
+
       accessToken: json['accessToken'] as String,
+
       refreshToken: json['refreshToken'] as String,
+
       tokenType: json['tokenType'] as String? ?? 'Bearer',
+
       expiresIn: json['expiresIn'] as int? ?? 0,
+
       isEmailVerified: json['isEmailVerified'] as bool? ?? false,
+
       twoFactorEnabled: json['twoFactorEnabled'] as bool? ?? false,
     );
   }
-
   Map<String, dynamic> toJson() {
     return {
       ...user.toJson(),
+
       'accessToken': accessToken,
-      'tokenType': tokenType,
-      'expiresIn': expiresIn,
+
       'refreshToken': refreshToken,
+
+      'tokenType': tokenType,
+
+      'expiresIn': expiresIn,
+
       'isEmailVerified': isEmailVerified,
+
       'twoFactorEnabled': twoFactorEnabled,
     };
   }
-
-  factory AuthResponseModel.fromJsonString(String source) =>
-      AuthResponseModel.fromJson(json.decode(source) as Map<String, dynamic>);
-
-  String toJsonString() => json.encode(toJson());
-
-  @override
-  List<Object?> get props => [
-    user,
-    accessToken,
-    tokenType,
-    expiresIn,
-    refreshToken,
-  ];
 }

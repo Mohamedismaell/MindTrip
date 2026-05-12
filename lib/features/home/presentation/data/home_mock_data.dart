@@ -1,4 +1,4 @@
-import 'package:mindtrip/core/shared/data/models/category_model.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/banner_model.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
@@ -13,16 +13,11 @@ class HomeMockData {
       'https://www.figma.com/api/mcp/asset/349806fb-b571-4ea9-a856-5ee20e752ca5';
 
   static const categories = [
-    CategoryModel(id: 'c1', emoji: '🏛️', name: 'Heritage', isSelected: true),
-    CategoryModel(id: 'c2', emoji: '🏕️', name: 'Camping', isSelected: false),
-    CategoryModel(id: 'c3', emoji: '🌊', name: 'Sea', isSelected: false),
-    CategoryModel(
-      id: 'c4',
-      emoji: '🧘‍♀️',
-      name: 'Wellness',
-      isSelected: false,
-    ),
-    CategoryModel(id: 'c5', emoji: '🐠', name: 'Diving', isSelected: false),
+    PlaceCategory.heritage,
+    PlaceCategory.camping,
+    PlaceCategory.beach,
+    PlaceCategory.wellness,
+    PlaceCategory.diving,
   ];
 
   static const banners = [
@@ -51,6 +46,7 @@ class HomeMockData {
       id: 'p1',
       name: 'The Blue Hole',
       location: LocationModel(address: 'Dahab', latitude: 20, longitude: 30),
+      category: PlaceCategory.diving,
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/b9754e96-0dbc-4221-8692-a92c88ba8c1e',
         'https://www.figma.com/api/mcp/asset/36e89b13-c752-4451-9f03-ecc842328398',
@@ -61,6 +57,7 @@ class HomeMockData {
       id: 'p2',
       name: 'White Desert',
       location: LocationModel(address: 'Farafra', latitude: 20, longitude: 30),
+      category: PlaceCategory.desert,
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/7757b795-65f2-4a3e-9fa8-78d17c1ad58c',
         'https://www.figma.com/api/mcp/asset/7ca7a24d-98e1-4160-b8a6-25ad588d9515',
@@ -70,6 +67,7 @@ class HomeMockData {
       id: 'p3',
       name: 'Siwa Salt Lakes',
       location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
+      category: PlaceCategory.wellness,
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/6d50a379-383d-4729-8571-6371ac253ff9',
         'https://www.figma.com/api/mcp/asset/da6358cf-1d2d-48c6-a12f-8a35c6430944',
@@ -83,12 +81,14 @@ class HomeMockData {
       name: 'Fjord Bay',
       location: LocationModel(address: 'Taba', latitude: 20, longitude: 30),
       price: 150,
+      category: PlaceCategory.beach,
     ),
     PlaceModel(
       id: 'p5',
       name: 'Wadi El Rayan',
       location: LocationModel(address: 'Fayoum', latitude: 20, longitude: 30),
       price: 150,
+      category: PlaceCategory.park,
     ),
     PlaceModel(
       id: 'p6',
@@ -99,6 +99,7 @@ class HomeMockData {
         longitude: 30,
       ),
       price: 150,
+      category: PlaceCategory.diving,
     ),
     PlaceModel(
       id: 'p7',
@@ -109,6 +110,7 @@ class HomeMockData {
         longitude: 30,
       ),
       price: 150,
+      category: PlaceCategory.heritage,
     ),
     PlaceModel(
       id: 'p8',
@@ -119,18 +121,21 @@ class HomeMockData {
         longitude: 30,
       ),
       price: 150,
+      category: PlaceCategory.mountain,
     ),
     PlaceModel(
       id: 'p9',
       name: 'Cleopatra\'s Pool',
       location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
       price: 150,
+      category: PlaceCategory.wellness,
     ),
     PlaceModel(
       id: 'p10',
       name: 'Khan el-Khalili',
       location: LocationModel(address: 'Cairo', latitude: 20, longitude: 30),
       price: 150,
+      category: PlaceCategory.shopping,
     ),
     PlaceModel(
       id: 'p11',
@@ -141,6 +146,7 @@ class HomeMockData {
         longitude: 30,
       ),
       price: 150,
+      category: PlaceCategory.beach,
     ),
   ];
 

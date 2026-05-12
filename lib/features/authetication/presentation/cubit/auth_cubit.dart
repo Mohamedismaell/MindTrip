@@ -1,20 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/enums/otp_flow.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
-import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/forget_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/resend_email_otp_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/resete_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_in_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/sign_up_use_case.dart';
-import 'package:mindtrip/features/authetication/domain/usecases/verify_password_otp_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/verify_email_use_case.dart';
-import 'package:mindtrip/features/authetication/domain/usecases/resend_email_otp_use_case.dart';
-part 'auth_state.dart';
+import 'package:mindtrip/features/authetication/domain/usecases/verify_password_otp_use_case.dart';
+import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final SignInUseCase _signInUseCase;

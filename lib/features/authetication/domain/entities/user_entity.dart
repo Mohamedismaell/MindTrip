@@ -1,53 +1,18 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class UserEntity extends Equatable {
-  final String userId;
-  final String displayName;
-  final String email;
-  final String? phoneNumber;
-  final String? profilePhotoUrl;
-  final String? languagePreference;
-  final List<String>? interests;
+part 'user_entity.freezed.dart';
 
-  const UserEntity({
-    required this.userId,
-    required this.displayName,
-    required this.email,
-    this.phoneNumber,
-    this.profilePhotoUrl,
-    this.languagePreference,
-    this.interests,
-  });
+@freezed
+sealed class UserEntity with _$UserEntity {
+  const factory UserEntity({
+    required String userId,
+    required String displayName,
+    required String email,
 
-  @override
-  List<Object?> get props => [
-    userId,
-    displayName,
-    email,
-    phoneNumber,
-    profilePhotoUrl,
-    languagePreference,
-    interests,
-  ];
-
-  UserEntity copyWith({
-    String? userId,
-    String? displayName,
-    String? email,
     String? phoneNumber,
     String? profilePhotoUrl,
     String? languagePreference,
-    List<String>? interests,
-  }) {
-    return UserEntity(
-      userId: userId ?? this.userId,
-      displayName: displayName ?? this.displayName,
-      email: email ?? this.email,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
-      languagePreference: languagePreference ?? this.languagePreference,
-      interests: interests ?? this.interests,
-    );
-  }
-}
 
+    List<String>? interests,
+  }) = _UserEntity;
+}

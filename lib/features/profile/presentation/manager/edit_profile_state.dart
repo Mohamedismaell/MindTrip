@@ -1,66 +1,41 @@
-part of 'edit_profile_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
+
+part 'edit_profile_state.freezed.dart';
 
 enum EditSaveStatus { idle, saving, success, failed }
 
 enum DeleteAccountStatus { idle, deleting, deleted, failed }
 
-class EditProfileState extends Equatable {
-  final UserEntity? originalUser;
-  final String? pendingPhotoPath;
-  final String draftDisplayName;
-  final String draftPhoneNumber;
-  final EditSaveStatus saveStatus;
-  final String? editErrorMessage;
-  final DeleteAccountStatus deleteStatus;
-  final String? deleteErrorMessage;
-  const EditProfileState({
-    this.originalUser,
-    this.pendingPhotoPath,
-    this.draftDisplayName = '',
-    this.draftPhoneNumber = '',
-    this.saveStatus = EditSaveStatus.idle,
-    this.editErrorMessage,
-    this.deleteStatus = DeleteAccountStatus.idle,
-    this.deleteErrorMessage,
-  });
+@freezed
+abstract class EditProfileState with _$EditProfileState {
+  const EditProfileState._();
 
-  //* if changed return true
+  const factory EditProfileState({
+    UserEntity? originalUser,
+    String? pendingPhotoPath,
+
+    @Default('') String draftDisplayName,
+    @Default('') String draftPhoneNumber,
+
+    @Default(EditSaveStatus.idle)
+    EditSaveStatus saveStatus,
+
+    String? editErrorMessage,
+
+    @Default(DeleteAccountStatus.idle)
+    DeleteAccountStatus deleteStatus,
+
+    String? deleteErrorMessage,
+  }) = _EditProfileState;
+
   bool get hasChanges {
     if (originalUser == null) return false;
     if (pendingPhotoPath != null) return true;
     if (draftDisplayName != originalUser!.displayName) return true;
-    if (draftPhoneNumber != (originalUser!.phoneNumber ?? '')) return true;
+    if (draftPhoneNumber != (originalUser!.phoneNumber ?? '')) {
+      return true;
+    }
     return false;
   }
-
-  EditProfileState copyWith({
-    UserEntity? originalUser,
-    String? pendingPhotoPath,
-    String? draftDisplayName,
-    String? draftPhoneNumber,
-    EditSaveStatus? saveStatus,
-    String? editErrorMessage,
-    DeleteAccountStatus? deleteStatus,
-    String? deleteErrorMessage,
-  }) {
-    return EditProfileState(
-      originalUser: originalUser ?? this.originalUser,
-      draftDisplayName: draftDisplayName ?? this.draftDisplayName,
-      draftPhoneNumber: draftPhoneNumber ?? this.draftPhoneNumber,
-      saveStatus: saveStatus ?? this.saveStatus,
-      deleteStatus: deleteStatus ?? this.deleteStatus,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-    originalUser,
-    pendingPhotoPath,
-    draftDisplayName,
-    draftPhoneNumber,
-    saveStatus,
-    editErrorMessage,
-    deleteStatus,
-    deleteErrorMessage,
-  ];
 }

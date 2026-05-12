@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/data/models/category_model.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 
 class ExploreCategoryChips extends StatefulWidget {
   const ExploreCategoryChips({super.key, required this.categories});
 
-  final List<CategoryModel> categories;
+  final List<PlaceCategory> categories;
 
   @override
   State<ExploreCategoryChips> createState() => _ExploreCategoryChipsState();
 }
 
 class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
-  late int _selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.categories.indexWhere((c) => c.isSelected);
-    if (_selectedIndex == -1) _selectedIndex = 0;
-  }
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +24,7 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           itemCount: widget.categories.length,
-          separatorBuilder: (_, __) => SizedBox(width: 10.w),
+          separatorBuilder: (_, _) => SizedBox(width: 10.w),
           itemBuilder: (context, index) {
             final category = widget.categories[index];
             final isSelected = index == _selectedIndex;
@@ -60,13 +53,13 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
                   children: [
                     if (!isSelected) ...[
                       Text(
-                        category.emoji ?? '',
+                        category.emoji,
                         style: TextStyle(fontSize: 16.sp),
                       ),
                       SizedBox(width: 6.w),
                     ],
                     Text(
-                      category.name,
+                      category.displayName,
                       style: context.textTheme.bodyMedium?.copyWith(
                         fontSize: 13.sp,
                         fontWeight: isSelected

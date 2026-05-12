@@ -1,3 +1,4 @@
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
@@ -15,7 +16,7 @@ class PlacesMockData {
         'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
       ],
 
-      categoryId: 'restaurant',
+      category: PlaceCategory.restaurant,
     ),
     PlaceModel(
       id: '2',
@@ -28,7 +29,7 @@ class PlacesMockData {
       imageUrls: [
         'https://images.unsplash.com/photo-1566073771259-6a8506099945',
       ],
-      categoryId: 'hotel',
+      category: PlaceCategory.hotel,
     ),
     PlaceModel(
       id: '3',
@@ -41,7 +42,7 @@ class PlacesMockData {
       imageUrls: [
         'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
       ],
-      categoryId: 'beach',
+      category: PlaceCategory.beach,
     ),
     PlaceModel(
       id: '4',
@@ -54,7 +55,7 @@ class PlacesMockData {
       imageUrls: [
         'https://images.unsplash.com/photo-1505761671935-60b3a7427bad',
       ],
-      categoryId: 'museum',
+      category: PlaceCategory.museum,
     ),
   ];
 }

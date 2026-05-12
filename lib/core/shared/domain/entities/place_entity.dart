@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 
 class PlaceEntity extends Equatable {
@@ -8,7 +9,7 @@ class PlaceEntity extends Equatable {
   final String? description;
   final LocationEntity location;
   final List<String>? imageUrls;
-  final String? categoryId;
+  final PlaceCategory category;
   final double? rating;
   final int? reviewCount;
   final double? price;
@@ -22,7 +23,7 @@ class PlaceEntity extends Equatable {
     required this.location,
     this.imageUrls,
     this.description,
-    this.categoryId,
+    this.category = PlaceCategory.other,
     this.rating = 0.0,
     this.reviewCount = 0,
     this.price,
@@ -36,7 +37,7 @@ class PlaceEntity extends Equatable {
     String? description,
     LocationEntity? location,
     List<String>? imageUrls,
-    String? categoryId,
+    PlaceCategory? category,
     double? rating,
     int? reviewCount,
     double? price,
@@ -49,7 +50,7 @@ class PlaceEntity extends Equatable {
       description: description ?? this.description,
       location: location ?? this.location,
       imageUrls: imageUrls ?? this.imageUrls,
-      categoryId: categoryId ?? this.categoryId,
+      category: category ?? this.category,
       rating: rating ?? this.rating,
       reviewCount: reviewCount ?? this.reviewCount,
       price: price ?? this.price,
@@ -60,16 +61,16 @@ class PlaceEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
-    name,
-    description,
-    location,
-    imageUrls,
-    categoryId,
-    rating,
-    reviewCount,
-    price,
-    badge,
-    isFavorite,
-  ];
+        id,
+        name,
+        description,
+        location,
+        imageUrls,
+        category,
+        rating,
+        reviewCount,
+        price,
+        badge,
+        isFavorite,
+      ];
 }

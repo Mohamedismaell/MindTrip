@@ -40,7 +40,7 @@ import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
-import 'package:mindtrip/features/favorite/cubit/favorites_screen_cubit.dart';
+import 'package:mindtrip/features/favorite/cubit/saved_places_cubit.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 
@@ -174,7 +174,7 @@ class CommonDi {
     );
     // Factory — a fresh instance per FavoritesScreen entry.
     sl.registerFactory(
-      () => FavoritesScreenCubit(
+      () => SavedPlacesCubit(
         getFavoritePlacesUseCase: sl<GetFavoritePlacesUseCase>(),
         favoriteCubit: sl<FavoriteCubit>(),
       ),

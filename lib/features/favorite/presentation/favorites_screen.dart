@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_place_card.dart';
-import 'package:mindtrip/features/favorite/cubit/favorites_screen_cubit.dart';
+import 'package:mindtrip/features/favorite/cubit/saved_places_cubit.dart';
+import 'package:mindtrip/features/favorite/presentation/widgets/saved_category_filter_bar.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -13,36 +16,113 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<FavoritesScreenCubit>()..loadFavoritePlaces(),
+      create: (_) => sl<SavedPlacesCubit>()..loadFavoritePlaces(),
       child: const _FavoritesView(),
     );
   }
 }
 
+//  Categories shown in the filter bar
+const _savedCategories = [
+  PlaceCategory.all,
+  PlaceCategory.hotel,
+  PlaceCategory.trip,
+  PlaceCategory.activity,
+  PlaceCategory.restaurant,
+  PlaceCategory.beach,
+  PlaceCategory.diving,
+  PlaceCategory.heritage,
+];
+
 class _FavoritesView extends StatelessWidget {
   const _FavoritesView();
-
+  // CustomHeadLine
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Favorites', style: context.textTheme.titleLarge),
-        centerTitle: true,
-      ),
-      body: BlocBuilder<FavoritesScreenCubit, FavoritesScreenState>(
-        builder: (context, state) {
-          return switch (state.placesStatus) {
-            FavoritesTabStatus.initial ||
-            FavoritesTabStatus.loading => const _LoadingView(),
-            FavoritesTabStatus.empty => const _EmptyView(),
-            FavoritesTabStatus.error => _ErrorView(
-              message: state.errorMessage,
-              onRetry: () =>
-                  context.read<FavoritesScreenCubit>().loadFavoritePlaces(),
-            ),
-            FavoritesTabStatus.loaded => _PlacesGrid(places: state.places),
-          };
-        },
+      body: SafeArea(
+        child: BlocBuilder<SavedPlacesCubit, FavoritesScreenState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                // Header
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 6.h),
+                  child: Column(
+                    children: [
+                      // Title
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Saved ',
+                              style: context.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primaryBlue,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Places',
+                              style: context.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: context.colorTheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      // Subtitle
+                      Text(
+                        'All the places you saved in one spot\norganized and easy to access',
+                        textAlign: TextAlign.center,
+                        style: context.textTheme.bodySmall?.copyWith(
+                          color: context.colorTheme.onSurface.withValues(
+                            alpha: 0.55,
+                          ),
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 14.h),
+
+                //  Category Filter Bar
+                SavedCategoryFilterBar(
+                  categories: _savedCategories,
+                  selectedCategory: state.selectedCategory,
+                  onCategorySelected: (category) {
+                    context.read<SavedPlacesCubit>().selectCategory(category);
+                  },
+                ),
+
+                SizedBox(height: 8.h),
+
+                //  Body
+                Expanded(
+                  child: switch (state.placesStatus) {
+                    FavoritesTabStatus.initial ||
+                    FavoritesTabStatus.loading => const _LoadingView(),
+                    FavoritesTabStatus.empty => const _EmptyView(),
+                    FavoritesTabStatus.error => _ErrorView(
+                      message: state.errorMessage,
+                      onRetry: () =>
+                          context.read<SavedPlacesCubit>().loadFavoritePlaces(),
+                    ),
+                    FavoritesTabStatus.loaded =>
+                      state.filteredPlaces.isEmpty
+                          ? _EmptyCategoryView(
+                              categoryName: state.selectedCategory.displayName,
+                            )
+                          : _PlacesGrid(places: state.filteredPlaces),
+                  },
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -93,6 +173,45 @@ class _EmptyView extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               'Start exploring and tap the heart icon\nto save places you love.',
+              textAlign: TextAlign.center,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.colorTheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Shown when a specific category filter has no matching places.
+class _EmptyCategoryView extends StatelessWidget {
+  const _EmptyCategoryView({required this.categoryName});
+
+  final String categoryName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(32.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.filter_list_rounded,
+              size: 64.sp,
+              color: context.colorTheme.onSurface.withValues(alpha: 0.3),
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              'No saved $categoryName',
+              style: context.textTheme.titleMedium,
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              'Try saving some places in this category\nor select a different filter.',
               textAlign: TextAlign.center,
               style: context.textTheme.bodyMedium?.copyWith(
                 color: context.colorTheme.onSurface.withValues(alpha: 0.6),

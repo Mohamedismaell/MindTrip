@@ -5,9 +5,10 @@ import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/enums/otp_flow.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
+import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 
 class SignInStatusListener extends StatelessWidget {
   final Widget child;
@@ -25,7 +26,6 @@ class SignInStatusListener extends StatelessWidget {
           _showSnackBar(
             context,
             message: state.errorMessage ?? 'Something went wrong',
-            backgroundColor: context.colorTheme.error,
           );
         }
       },
@@ -50,7 +50,6 @@ class OtpRequestStatusListener extends StatelessWidget {
           _showSnackBar(
             context,
             message: state.errorMessage ?? 'Something went wrong',
-            backgroundColor: context.colorTheme.error,
           );
         }
       },
@@ -76,16 +75,11 @@ class OtpVerificationStatusListener extends StatelessWidget {
             context.pushReplacement(AppRoutes.completeSignUpScreen);
           }
         } else if (state.status == AuthStatus.otpSent) {
-          _showSnackBar(
-            context,
-            message: AppStrings.verificationCodeResent,
-            backgroundColor: context.colorTheme.primary,
-          );
+          _showSnackBar(context, message: AppStrings.verificationCodeResent);
         } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
             context,
             message: state.errorMessage ?? 'Something went wrong',
-            backgroundColor: context.colorTheme.error,
           );
         }
       },
@@ -110,7 +104,6 @@ class ResetPasswordStatusListener extends StatelessWidget {
           _showSnackBar(
             context,
             message: state.errorMessage ?? 'Something went wrong',
-            backgroundColor: context.colorTheme.error,
           );
         }
       },
@@ -119,18 +112,6 @@ class ResetPasswordStatusListener extends StatelessWidget {
   }
 }
 
-void _showSnackBar(
-  BuildContext context, {
-  required String message,
-  required Color backgroundColor,
-}) {
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: backgroundColor,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+void _showSnackBar(BuildContext context, {required String message}) {
+  AppSnackBar.showError(context, message: message);
 }

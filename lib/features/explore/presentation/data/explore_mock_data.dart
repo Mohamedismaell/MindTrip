@@ -1,3 +1,4 @@
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/category_model.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
@@ -7,18 +8,15 @@ import 'package:mindtrip/features/explore/presentation/models/explore_models.dar
 class ExploreMockData {
   const ExploreMockData._();
 
-  //  Categories ─
+  //  Categories
   static const categories = [
-    CategoryModel(
-      id: 'c1',
-      emoji: '✨',
-      name: 'All Categories',
-      isSelected: true,
-    ),
-    CategoryModel(id: 'c2', emoji: '🏖️', name: 'Beach', isSelected: false),
-    CategoryModel(id: 'c3', emoji: '⛰️', name: 'Mountain', isSelected: false),
-    CategoryModel(id: 'c4', emoji: '🏜️', name: 'Desert', isSelected: false),
-    CategoryModel(id: 'c5', emoji: '🤿', name: 'Diving', isSelected: false),
+    PlaceCategory.all,
+    PlaceCategory.beach,
+    PlaceCategory.mountain,
+    PlaceCategory.desert,
+    PlaceCategory.diving,
+    PlaceCategory.restaurant,
+    PlaceCategory.hotel,
   ];
 
   //  Tabs
@@ -42,6 +40,7 @@ class ExploreMockData {
       description: 'A beautiful cafe on the Nile.',
       rating: 4.5,
       price: null,
+      category: PlaceCategory.restaurant,
       imageUrls: [
         'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
       ],
@@ -57,6 +56,7 @@ class ExploreMockData {
       description: 'Relaxing beach resort.',
       rating: 4.2,
       price: null,
+      category: PlaceCategory.beach,
       imageUrls: [
         'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
       ],
@@ -72,6 +72,7 @@ class ExploreMockData {
       description: 'Historical oasis in the desert.',
       rating: 4.8,
       price: null,
+      category: PlaceCategory.desert,
       imageUrls: [
         'https://images.unsplash.com/photo-1596627116790-af6f46dddbfb?w=400',
       ],
@@ -87,7 +88,7 @@ class ExploreMockData {
       description: 'World famous diving spot.',
       rating: 4.9,
       price: null,
-
+      category: PlaceCategory.diving,
       imageUrls: [
         'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
       ],
@@ -103,7 +104,7 @@ class ExploreMockData {
       description: 'Sail the Nile in a felucca.',
       rating: 4.7,
       price: null,
-
+      category: PlaceCategory.activity,
       imageUrls: [
         'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
       ],
@@ -119,7 +120,7 @@ class ExploreMockData {
       description: 'Scenic lake and waterfalls.',
       rating: 4.4,
       price: null,
-
+      category: PlaceCategory.park,
       imageUrls: [
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
       ],
@@ -135,7 +136,7 @@ class ExploreMockData {
       description: 'Watch the sunset over the ancient temples.',
       rating: 4.9,
       price: null,
-
+      category: PlaceCategory.heritage,
       imageUrls: [
         'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
       ],
@@ -151,6 +152,7 @@ class ExploreMockData {
       description: 'Pristine beaches and coral reefs.',
       rating: 4.6,
       price: null,
+      category: PlaceCategory.beach,
       imageUrls: [
         'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400',
       ],
@@ -170,6 +172,7 @@ class ExploreMockData {
       description: 'The Great Pyramids of Giza.',
       rating: 4.5,
       price: 180.0,
+      category: PlaceCategory.heritage,
       imageUrls: [
         'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=400',
       ],
@@ -186,6 +189,7 @@ class ExploreMockData {
       description: 'Ancient Egyptian temple complex.',
       rating: 4.6,
       price: 180.0,
+      category: PlaceCategory.heritage,
       imageUrls: [
         'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
       ],
@@ -202,6 +206,7 @@ class ExploreMockData {
       description: 'Famous submarine sinkhole.',
       rating: 4.5,
       price: 180.0,
+      category: PlaceCategory.diving,
       imageUrls: [
         'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
       ],
@@ -218,6 +223,7 @@ class ExploreMockData {
       description: 'Historic district of Cairo.',
       rating: 4.5,
       price: 180.0,
+      category: PlaceCategory.heritage,
       imageUrls: [
         'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
       ],
@@ -234,6 +240,7 @@ class ExploreMockData {
       description: 'Cruise down the Nile river.',
       rating: 4.5,
       price: 180.0,
+      category: PlaceCategory.trip,
       imageUrls: [
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
       ],
@@ -250,6 +257,7 @@ class ExploreMockData {
       description: 'Vast mix of decayed temples.',
       rating: 4.5,
       price: 180.0,
+      category: PlaceCategory.heritage,
       imageUrls: [
         'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
       ],

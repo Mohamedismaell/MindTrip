@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'location_model.dart';
 
 part 'place_model.g.dart';
@@ -18,7 +19,7 @@ class PlaceModel extends Equatable {
   @HiveField(4)
   final List<String>? imageUrls;
   @HiveField(5)
-  final String? categoryId;
+  final PlaceCategory category;
   @HiveField(6)
   final double? rating;
   @HiveField(7)
@@ -36,7 +37,7 @@ class PlaceModel extends Equatable {
     required this.location,
     this.imageUrls,
     this.description,
-    this.categoryId,
+    this.category = PlaceCategory.other,
     this.rating,
     this.reviewCount,
     this.price,
@@ -53,7 +54,9 @@ class PlaceModel extends Equatable {
       imageUrls: (json['imageUrls'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      categoryId: json['categoryId'],
+      category: PlaceCategory.fromCategory(
+        json['category'] ?? json['categoryId'],
+      ),
       rating: (json['rating'] as num?)?.toDouble(),
       reviewCount: json['reviewCount'] as int?,
       price: (json['price'] as num?)?.toDouble(),
@@ -69,7 +72,7 @@ class PlaceModel extends Equatable {
       'description': description,
       'location': location.toJson(),
       'imageUrls': imageUrls,
-      'categoryId': categoryId,
+      'category': category.name,
       'rating': rating,
       'reviewCount': reviewCount,
       'price': price,
@@ -85,7 +88,7 @@ class PlaceModel extends Equatable {
     description,
     location,
     imageUrls,
-    categoryId,
+    category,
     rating,
     reviewCount,
     price,

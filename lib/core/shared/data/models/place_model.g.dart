@@ -22,7 +22,9 @@ class PlaceModelAdapter extends TypeAdapter<PlaceModel> {
       location: fields[3] as LocationModel,
       imageUrls: (fields[4] as List?)?.cast<String>(),
       description: fields[2] as String?,
-      categoryId: fields[5] as String?,
+      category: fields[5] == null
+          ? PlaceCategory.other
+          : fields[5] as PlaceCategory,
       rating: (fields[6] as num?)?.toDouble(),
       reviewCount: (fields[7] as num?)?.toInt(),
       price: (fields[8] as num?)?.toDouble(),
@@ -46,7 +48,7 @@ class PlaceModelAdapter extends TypeAdapter<PlaceModel> {
       ..writeByte(4)
       ..write(obj.imageUrls)
       ..writeByte(5)
-      ..write(obj.categoryId)
+      ..write(obj.category)
       ..writeByte(6)
       ..write(obj.rating)
       ..writeByte(7)

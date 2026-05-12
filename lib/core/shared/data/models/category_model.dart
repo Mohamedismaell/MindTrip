@@ -1,42 +1,42 @@
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 
-//Todo Change later to enum that connect to the real data
 class CategoryModel extends Equatable {
-  final String id;
   final String name;
-  final String? emoji;
-  final String? imageUrl;
   //* Helpful for UI state
   final bool isSelected;
 
+  final PlaceCategory type;
+
   const CategoryModel({
-    required this.id,
     required this.name,
-    this.emoji,
-    this.imageUrl,
     required this.isSelected,
+    this.type = PlaceCategory.other,
   });
+
+  factory CategoryModel.fromEnum(
+    PlaceCategory category, {
+    bool isSelected = false,
+  }) {
+    return CategoryModel(
+      name: category.displayName,
+      isSelected: isSelected,
+      type: category,
+    );
+  }
+
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      id: json['id'] ?? '',
       name: json['name'] ?? '',
-      emoji: json['emoji'] ?? '',
-      //! Take Care Eith Empty Urls
-      imageUrl: json['imageUrl'] ?? '',
       isSelected: json['isSelected'] ?? false,
+      type: PlaceCategory.fromCategory(json['type'] ?? json['id']),
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'emoji': emoji,
-      'imageUrl': imageUrl,
-      'isSelected': isSelected,
-    };
+    return {'name': name, 'isSelected': isSelected, 'type': type.name};
   }
 
   @override
-  List<Object?> get props => [id, name, emoji, imageUrl, isSelected];
+  List<Object?> get props => [name, isSelected, type];
 }

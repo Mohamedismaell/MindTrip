@@ -1,5 +1,6 @@
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
@@ -24,6 +25,9 @@ class AppHive {
     }
     if (!Hive.isAdapterRegistered(PlaceModelAdapter().typeId)) {
       Hive.registerAdapter(PlaceModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(PlaceCategoryAdapter().typeId)) {
+      Hive.registerAdapter(PlaceCategoryAdapter());
     }
   }
 

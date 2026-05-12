@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/features/map/domain/entities/map_annotation_entry.dart';
-import 'package:mindtrip/features/map/domain/entities/place_category.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 
 class MapController {
@@ -123,7 +123,7 @@ class MapController {
     //! check
     _annotationCoordinates.clear();
     for (final entry in entries) {
-      final category = PlaceCategory.fromCategoryId(entry.place.categoryId);
+      final category = entry.place.category;
       final img = await _loadImage(category.annotationAssetPath);
       final coord = Position(
         entry.place.location.longitude,

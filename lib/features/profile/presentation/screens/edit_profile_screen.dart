@@ -11,6 +11,7 @@ import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
 import 'package:mindtrip/core/widget/cusotm_dialog.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
+import 'package:mindtrip/features/profile/presentation/manager/edit_profile_state.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_avatar.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_profile_listeners.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_top_bar.dart';
