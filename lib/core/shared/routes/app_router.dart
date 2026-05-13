@@ -46,7 +46,7 @@ class AppRouter {
               StatefulShellBranch(routes: [ProfileRoutes.profileRoute]),
             ],
           ),
-          AiPlannerRoutes.aiPlannerFlow,
+          ...AiPlannerRoutes.aiPlannerFlowRoutes,
           ...ProfileRoutes.routes,
           ...MapRoutes.routes,
 

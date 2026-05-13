@@ -35,12 +35,14 @@ class FavoriteButton extends StatelessWidget {
               child: TweenAnimationBuilder<Color?>(
                 tween: ColorTween(
                   begin: context.colorTheme.onSurface,
-                  end: isFavorite ? Colors.red : context.colorTheme.outline,
+                  end: isFavorite
+                      ? context.colorTheme.error
+                      : context.colorTheme.outline,
                 ),
                 duration: const Duration(milliseconds: 250),
                 builder: (context, color, _) {
                   return TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 1, end: isFavorite ? 1.25 : 1),
+                    tween: Tween(begin: 1, end: isFavorite ? 1.2 : 0.8),
                     duration: const Duration(milliseconds: 250),
                     curve: Curves.easeOutBack,
                     builder: (context, scale, child) {

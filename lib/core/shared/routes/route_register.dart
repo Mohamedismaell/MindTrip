@@ -32,6 +32,7 @@ class RouteRegister {
     //! ai planner
     AppRouteConfig(path: AppRoutes.aiPlannerIntro, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.aiPlannerFlow, flow: AppFlow.app),
+    AppRouteConfig(path: AppRoutes.aiPlannerChat, flow: AppFlow.app),
     //! profile
     AppRouteConfig(path: AppRoutes.profile, flow: AppFlow.app),
     AppRouteConfig(path: AppRoutes.editProfile, flow: AppFlow.app),

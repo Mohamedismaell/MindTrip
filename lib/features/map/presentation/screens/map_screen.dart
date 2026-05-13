@@ -7,12 +7,9 @@ import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/presentation/controllers/map_controller.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/data/places_mock_data.dart';
+import 'package:mindtrip/features/map/presentation/widgets/map_listener.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_mark_relcoaiton_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
@@ -97,65 +94,8 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<MapNavigationCubit, MapNavigationState>(
-            listenWhen: (prev, curr) => prev.activeRoute != curr.activeRoute,
-            listener: (context, state) async {
-              if (state.activeRoute != null) {
-                await _mapController.drawRoute(
-                  state.activeRoute!.geoJsonGeometry,
-                  congestionLevels: state.activeRoute!.congestionLevels,
-                );
-              } else {
-                await _mapController.clearRoute();
-              }
-            },
-          ),
-          BlocListener<MapSearchCubit, MapSearchState>(
-            listenWhen: (prev, curr) =>
-                prev.resolvedSearchPlace != curr.resolvedSearchPlace &&
-                curr.resolvedSearchPlace != null,
-            listener: (context, state) async {
-              final result = state.resolvedSearchPlace!;
-              if (result.latitude != null && result.longitude != null) {
-                await _mapController.addSearchResultMarker(
-                  result.latitude!,
-                  result.longitude!,
-                  place: result,
-                );
-                await _mapController.flyTo(result.latitude!, result.longitude!);
-              }
-
-              if (context.mounted) {
-                context.read<MapCubit>().showGooglePlaceDetails(result);
-                context.read<MapSearchCubit>().clearResolvedSearchResult();
-              }
-            },
-          ),
-          BlocListener<MapCubit, MapState>(
-            listenWhen: (prev, curr) =>
-                prev.flyToLat != curr.flyToLat &&
-                curr.flyToLat != null &&
-                curr.flyToLng != null,
-            listener: (context, state) async {
-              await _mapController.flyTo(state.flyToLat!, state.flyToLng!);
-              if (context.mounted) {
-                context.read<MapCubit>().clearFlyToLocation();
-              }
-            },
-          ),
-          BlocListener<MapSearchCubit, MapSearchState>(
-            listenWhen: (prev, curr) => prev.nearbyPlaces != curr.nearbyPlaces,
-            listener: (context, state) async {
-              if (state.nearbyPlaces.isNotEmpty) {
-                await _mapController.addGooglePlaceAnnotations(
-                  state.nearbyPlaces,
-                );
-              }
-            },
-          ),
-        ],
+      body: MapListener(
+        mapController: _mapController,
         child: Stack(
           alignment: Alignment.center,
           children: [
