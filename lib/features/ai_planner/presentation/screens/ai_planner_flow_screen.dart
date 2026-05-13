@@ -5,13 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_chat_bot_button.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/animated_progress_bar.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/budget_step.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/destination_step.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/duration_step.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/interests_step.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/travelers_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/ai_chat_bot_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/animated_progress_bar.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/budget_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/destination_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/duration_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/interests_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/travelers_step.dart';
 
 class AiPlannerFlowScreen extends StatelessWidget {
   const AiPlannerFlowScreen({super.key});

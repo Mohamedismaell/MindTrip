@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_hint.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/flow_button.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/range_calendar.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/step_heading.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_hint.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flow_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/range_calendar.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class DurationStep extends StatelessWidget {
   const DurationStep({super.key});

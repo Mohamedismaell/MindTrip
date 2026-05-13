@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot_image.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_bot_image.dart';
 
 class AiChatBotButton extends StatelessWidget {
   const AiChatBotButton({super.key});

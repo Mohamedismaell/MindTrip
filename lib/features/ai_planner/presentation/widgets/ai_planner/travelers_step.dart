@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_hint.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/counter_row.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/flow_button.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/step_heading.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_hint.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/counter_row.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flow_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class TravelersStep extends StatelessWidget {
   const TravelersStep({super.key});

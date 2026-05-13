@@ -7,11 +7,14 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_input_bar.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_message_bubble.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_suggestion_chips.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_typing_indicator.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_input_bar.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_message_bubble.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_suggestion_chips.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_typing_indicator.dart';
 
+//Todo save chat until plan is completed or add new button to start the chat from first idk
+//todo add functionality to the menu
+//todo: start with Place place place details
 class AiPlannerChatScreen extends StatefulWidget {
   const AiPlannerChatScreen({super.key});
 

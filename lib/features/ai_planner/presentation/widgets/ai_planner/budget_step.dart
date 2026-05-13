@@ -8,9 +8,9 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_hint.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/flow_button.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/step_heading.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_hint.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flow_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class BudgetStep extends StatelessWidget {
   const BudgetStep({super.key, required this.customBudgetController});

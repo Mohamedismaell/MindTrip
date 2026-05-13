@@ -4,7 +4,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot_image.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_bot_image.dart';
 
 String _formatTime(DateTime time) {
   final hour = time.hour > 12
