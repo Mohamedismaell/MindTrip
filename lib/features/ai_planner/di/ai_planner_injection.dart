@@ -26,8 +26,8 @@ class AiPlannerDi {
       () => SendMessageUseCase(repository: sl<ChatRepository>()),
     );
 
-    //! Chat — Cubit (factory: new instance per chat screen)
-    sl.registerFactory<ChatCubit>(
+    //! Chat — Cubit (lazy singleton: same hydrated instance survives navigation)
+    sl.registerLazySingleton<ChatCubit>(
       () => ChatCubit(
         sendMessageUseCase: sl<SendMessageUseCase>(),
         chatRepository: sl<ChatRepository>(),

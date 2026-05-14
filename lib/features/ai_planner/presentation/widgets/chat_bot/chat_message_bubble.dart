@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -46,14 +47,13 @@ class _AiBubble extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ChatBotImage(width: 42, height: 42, isButton: false),
+          const ChatBotImage(width: 42, height: 42, isButton: false),
           SizedBox(width: 10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
                     Text(
                       timeStr,
@@ -87,11 +87,24 @@ class _AiBubble extends StatelessWidget {
                       width: 1.3.w,
                     ),
                   ),
-                  child: Text(
-                    message.content,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: Colors.black,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (message.hasAttachments)
+                        ...message.attachments!.map(
+                          (a) => Padding(
+                            padding: EdgeInsets.only(bottom: 8.h),
+                            child: _AttachmentPreview(attachment: a),
+                          ),
+                        ),
+                      if (message.content.isNotEmpty)
+                        Text(
+                          message.content,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: Colors.black,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -136,11 +149,24 @@ class _UserBubble extends StatelessWidget {
                       bottomLeft: Radius.circular(20.r),
                     ),
                   ),
-                  child: Text(
-                    message.content,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: AppColors.pureWhite,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      if (message.hasAttachments)
+                        ...message.attachments!.map(
+                          (a) => Padding(
+                            padding: EdgeInsets.only(bottom: 8.h),
+                            child: _AttachmentPreview(attachment: a),
+                          ),
+                        ),
+                      if (message.content.isNotEmpty)
+                        Text(
+                          message.content,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.pureWhite,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -156,5 +182,79 @@ class _UserBubble extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _AttachmentPreview extends StatelessWidget {
+  const _AttachmentPreview({required this.attachment});
+  final ChatAttachment attachment;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (attachment.type) {
+      case AttachmentType.image:
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(12.r),
+          child: attachment.path.startsWith('http')
+              ? Image.network(attachment.path, width: 200.w, fit: BoxFit.cover)
+              : Image.file(
+                  File(attachment.path),
+                  width: 200.w,
+                  fit: BoxFit.cover,
+                ),
+        );
+      case AttachmentType.video:
+        return Container(
+          width: 200.w,
+          height: 120.h,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(Icons.play_circle_fill, size: 50.sp, color: Colors.white70),
+              Positioned(
+                bottom: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.black54,
+                  child: Text(
+                    'Video',
+                    style: TextStyle(color: Colors.white, fontSize: 10.sp),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      case AttachmentType.file:
+        final fileName = attachment.path.split('/').last;
+        return Container(
+          padding: EdgeInsets.all(12.r),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(color: Colors.white24),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.insert_drive_file, color: Colors.white),
+              SizedBox(width: 8.w),
+              Flexible(
+                child: Text(
+                  fileName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+    }
   }
 }

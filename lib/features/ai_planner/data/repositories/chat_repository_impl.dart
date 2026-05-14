@@ -13,8 +13,6 @@ class ChatRepositoryImpl implements ChatRepository {
     return model.toEntity();
   }
 
-
-
   @override
   ChatMessage generateTripSummary({
     required String destination,
@@ -26,8 +24,7 @@ class ChatRepositoryImpl implements ChatRepository {
     required String budget,
     required List<String> interests,
   }) {
-    String formatDate(DateTime d) =>
-        '${d.day}/${d.month}/${d.year}';
+    String formatDate(DateTime d) => '${d.day}/${d.month}/${d.year}';
 
     return dataSource
         .getTripSummary(
@@ -41,10 +38,5 @@ class ChatRepositoryImpl implements ChatRepository {
           interests: interests,
         )
         .toEntity();
-  }
-
-  @override
-  ChatMessage getRetryMessage() {
-    return dataSource.getRetryMessage().toEntity();
   }
 }

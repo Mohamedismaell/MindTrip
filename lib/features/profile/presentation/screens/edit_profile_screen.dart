@@ -49,8 +49,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _handleCameraTap(BuildContext context) async {
     final source = await showImageSourceSheet(context);
     if (source == null) return;
-
-    final file = await sl<ImagePickCropService>().pickAndCropImage(source);
+    if (!context.mounted) return;
+    final file = await sl<ImagePickCropService>().pickAndCropImage(
+      context,
+      source,
+    );
     if (file == null) return;
     print('file path ${file.path}');
     if (context.mounted) {

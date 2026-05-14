@@ -1,10 +1,14 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:math';
+
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mindtrip/features/ai_planner/data/datasources/chat_mock_responses.dart';
+import 'package:mindtrip/features/ai_planner/data/models/chat_message_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/send_message_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
 
-class ChatCubit extends Cubit<ChatState> {
+class ChatCubit extends HydratedCubit<ChatState> {
   ChatCubit({
     required SendMessageUseCase sendMessageUseCase,
     required ChatRepository chatRepository,
@@ -12,11 +16,32 @@ class ChatCubit extends Cubit<ChatState> {
        _chatRepository = chatRepository,
        super(const ChatState());
 
-  //Todo Add Cancel Token
   final SendMessageUseCase _sendMessageUseCase;
   final ChatRepository _chatRepository;
 
+  //  HydratedCubit overrides
+
+  @override
+  ChatState? fromJson(Map<String, dynamic> json) {
+    try {
+      return ChatState.fromJson(json);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic>? toJson(ChatState state) {
+    try {
+      return state.toJson();
+    } catch (_) {
+      return null;
+    }
+  }
+
   void initialize(String userName) {
+    if (state.messages.isNotEmpty) return;
+
     final greeting = ChatMessage(
       id: 'greeting_${DateTime.now().millisecondsSinceEpoch}',
       content:
@@ -34,16 +59,37 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(messages: [greeting], status: ChatStatus.loaded));
   }
 
-  /// Sends a user message and waits for the AI response.
-  Future<void> sendMessage(String text) async {
-    if (text.trim().isEmpty) return;
+  void startNewConversation(String userName) {
+    clear();
+    emit(const ChatState());
+    initialize(userName);
+  }
 
-    // 1. Add user message
+  void addAttachments(List<ChatAttachment> newAttachments) {
+    final updated = List<ChatAttachment>.from(state.attachments)
+      ..addAll(newAttachments);
+    emit(state.copyWith(attachments: updated));
+  }
+
+  void removeAttachment(int index) {
+    final updated = List<ChatAttachment>.from(state.attachments)
+      ..removeAt(index);
+    emit(state.copyWith(attachments: updated));
+  }
+
+  Future<void> sendMessage(String text) async {
+    final cleanText = text.trim();
+    final currentAttachments = state.attachments;
+
+    if (cleanText.isEmpty && currentAttachments.isEmpty) return;
+
+    // Add user message
     final userMessage = ChatMessage(
       id: 'user_${DateTime.now().millisecondsSinceEpoch}',
-      content: text.trim(),
+      content: cleanText,
       sender: MessageSender.user,
       timestamp: DateTime.now(),
+      attachments: currentAttachments.isNotEmpty ? currentAttachments : null,
     );
 
     emit(
@@ -51,10 +97,11 @@ class ChatCubit extends Cubit<ChatState> {
         messages: [...state.messages, userMessage],
         isAiTyping: true,
         clearError: true,
+        attachments: const [],
       ),
     );
 
-    // 2. Get AI response
+    // Get AI response
     try {
       final aiResponse = await _sendMessageUseCase(text);
       if (isClosed) return;
@@ -77,10 +124,26 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  /// Sends a suggestion chip as a user message.
+  void sendMediaMessages(List<ChatAttachment> attachments) {
+    if (attachments.isEmpty) return;
+
+    final newMessages = attachments
+        .map(
+          (a) => ChatMessage(
+            id: 'media_${DateTime.now().millisecondsSinceEpoch}_${a.path.hashCode}',
+            content: '',
+            sender: MessageSender.user,
+            timestamp: DateTime.now(),
+            attachments: [a],
+          ),
+        )
+        .toList();
+
+    emit(state.copyWith(messages: [...state.messages, ...newMessages]));
+  }
+
   Future<void> sendSuggestion(String suggestion) => sendMessage(suggestion);
 
-  /// Generates a trip summary from the completed planner flow.
   void generateTripSummary({
     required String destination,
     required DateTime startDate,
@@ -105,14 +168,20 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(messages: [...state.messages, summary]));
   }
 
-  /// Shows a retry message when plan generation fails.
   void showRetryMessage() {
-    final retryMsg = _chatRepository.getRetryMessage();
+    final random = Random();
+    final retryMsg = ChatMessage(
+      id: 'msg_${DateTime.now().millisecondsSinceEpoch}_${random.nextInt(9999)}',
+      content: ChatMockResponses.retryMessage,
+      sender: MessageSender.ai,
+      timestamp: DateTime.now(),
+      suggestions: ChatMockResponses.retrySuggestions,
+    );
     emit(state.copyWith(messages: [...state.messages, retryMsg]));
   }
 
-  /// Clears all messages (when plan is completed).
   void clearChat() {
+    clear();
     emit(const ChatState());
   }
 }

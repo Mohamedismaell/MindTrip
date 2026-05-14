@@ -20,7 +20,6 @@ abstract class ChatDataSource {
     required String budget,
     required List<String> interests,
   });
-  ChatMessageModel getRetryMessage();
 }
 
 /// Mock implementation that simulates AI responses with delays.
@@ -72,17 +71,6 @@ class MockChatDataSource implements ChatDataSource {
       ),
       sender: MessageSender.ai,
       timestamp: DateTime.now(),
-    );
-  }
-
-  @override
-  ChatMessageModel getRetryMessage() {
-    return ChatMessageModel(
-      id: _generateId(),
-      content: ChatMockResponses.retryMessage,
-      sender: MessageSender.ai,
-      timestamp: DateTime.now(),
-      suggestions: ChatMockResponses.retrySuggestions,
     );
   }
 

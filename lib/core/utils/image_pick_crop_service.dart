@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
+import 'package:mindtrip/core/widget/cusotm_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ImagePickCropService {
   final ImagePicker _picker;
@@ -13,7 +16,16 @@ class ImagePickCropService {
       _cropper = cropper ?? ImageCropper();
 
   /// Returns the processed [File] or null
-  Future<File?> pickAndCropImage(ImageSource source) async {
+  Future<File?> pickAndCropImage(BuildContext context, ImageSource source) async {
+    final granted = await _requestPermission(
+      context,
+      source == ImageSource.camera ? Permission.camera : Permission.photos,
+      denied: source == ImageSource.camera
+          ? 'Camera permission is required to take photos.'
+          : 'Gallery permission is required to pick photos.',
+    );
+    if (!granted) return null;
+
     final XFile? picked = await _picker.pickImage(
       source: source,
       maxWidth: 1200,
@@ -68,5 +80,32 @@ class ImagePickCropService {
 
     if (result == null) return file;
     return File(result.path);
+  }
+
+  Future<bool> _requestPermission(
+    BuildContext context,
+    Permission permission, {
+    required String denied,
+  }) async {
+    final status = await permission.request();
+    if (status.isGranted) return true;
+
+    if (status.isPermanentlyDenied && context.mounted) {
+      AppDialog.show(
+        context: context,
+        title: 'Permission Required',
+        description: denied,
+        primaryText: 'Open Settings',
+        onPrimary: () async {
+          await openAppSettings();
+        },
+        secondaryText: 'Cancel',
+      );
+    }
+
+    if (context.mounted) {
+      AppSnackBar.showError(context, message: denied);
+    }
+    return false;
   }
 }

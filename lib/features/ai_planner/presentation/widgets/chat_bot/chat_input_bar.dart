@@ -1,116 +1,262 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/widget/voice_input_button.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_attachment_button.dart';
 
-/// Bottom chat input bar with text field and animated send button.
-///
-/// Extracted from the user's existing UI work on the chat screen.
 class ChatInputBar extends StatelessWidget {
   const ChatInputBar({
     super.key,
     required this.controller,
     required this.onSend,
-    this.onAttachTap,
+    required this.onPhotosPicked,
+    required this.onVideoPicked,
+    required this.onFilesPicked,
+    required this.attachments,
+    required this.onRemoveAttachment,
+    this.profilePhotoUrl,
   });
 
   final TextEditingController controller;
+
   final VoidCallback onSend;
-  final VoidCallback? onAttachTap;
+
+  final void Function(List<XFile>) onPhotosPicked;
+  final void Function(XFile) onVideoPicked;
+  final void Function(List<PlatformFile>) onFilesPicked;
+
+  final List<ChatAttachment> attachments;
+  final void Function(int index) onRemoveAttachment;
+
+  final String? profilePhotoUrl;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 8.h, bottom: 4.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // Attachment button
+          // Plus button
           Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: context.colorTheme.outline, width: 1.5),
             ),
-            child: ChatAttachmentButton(),
+            child: ChatAttachmentButton(
+              onPhotos: onPhotosPicked,
+              onVideo: onVideoPicked,
+              onFiles: onFilesPicked,
+            ),
           ),
-          SizedBox(width: 20.w),
 
-          // Text field
+          SizedBox(width: 16.w),
+
+          // Main input container
           Expanded(
-            child: TextField(
-              controller: controller,
-              textInputAction: TextInputAction.send,
-              onSubmitted: (_) => _handleSend(),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  // vertical: 12.h,
-                  horizontal: 17.w,
-                ),
-                hintText: 'Type a message',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.r),
-                  borderSide: BorderSide(color: context.colorTheme.outline),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.r),
-                  borderSide: BorderSide(color: context.colorTheme.outline),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.r),
-                  borderSide: BorderSide(
-                    color: context.colorTheme.outline,
-                    width: 1.5,
-                  ),
-                ),
-                hintStyle: AppTextStyles.h9Medium.copyWith(
-                  color: context.colorTheme.onSurfaceVariant,
-                ),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: ValueListenableBuilder(
-                    valueListenable: controller,
-                    builder: (context, value, _) {
-                      final hasText = value.text.trim().isNotEmpty;
+            child: ValueListenableBuilder(
+              valueListenable: controller,
+              builder: (context, value, _) {
+                final text = value.text.trim();
 
-                      return AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 100),
-                        transitionBuilder: (child, animation) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                        child: GestureDetector(
-                          key: ValueKey(hasText),
-                          onTap: hasText ? _handleSend : null,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 6.r,
-                              horizontal: 6.w,
-                            ),
-                            key: ValueKey(hasText),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: hasText
-                                  ? context.colorTheme.primary
-                                  : Colors.transparent,
-                            ),
-                            child: Icon(
-                              hasText
-                                  ? Icons.arrow_upward_rounded
-                                  : Icons.graphic_eq,
-                              size: 24.sp,
-                              color: hasText
-                                  ? AppColors.pureWhite
-                                  : context.colorTheme.onSurfaceVariant,
-                            ),
+                final hasText = text.isNotEmpty;
+
+                final length = value.text.length;
+
+                final isOverLimit = length >= 200;
+
+                return Container(
+                  padding: EdgeInsets.all(12.r),
+
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24.r),
+
+                    border: Border.all(
+                      color: isOverLimit
+                          ? AppColors.errorRed
+                          : context.colorTheme.outline,
+                      width: 1.5,
+                    ),
+                  ),
+
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Attachment preview
+                      if (attachments.isNotEmpty) ...[
+                        SizedBox(
+                          height: 80.h,
+
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+
+                            itemCount: attachments.length,
+
+                            separatorBuilder: (_, _) => SizedBox(width: 10.w),
+
+                            itemBuilder: (context, index) {
+                              final item = attachments[index];
+
+                              return Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(14.r),
+                                    child: _buildAttachmentPreview(
+                                      item,
+                                      context,
+                                    ),
+                                  ),
+
+                                  Positioned(
+                                    top: 4,
+                                    right: 4,
+
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        onRemoveAttachment(index);
+                                      },
+
+                                      child: Container(
+                                        padding: EdgeInsets.all(4.r),
+
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.black54,
+                                        ),
+
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 16.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ),
-                      );
-                    },
+
+                        SizedBox(height: 12.h),
+                      ],
+
+                      // Input row
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: controller,
+
+                              textInputAction: TextInputAction.send,
+
+                              onSubmitted: (_) => _handleSend(),
+
+                              minLines: 1,
+                              maxLines: 4,
+
+                              maxLength: 200,
+
+                              maxLengthEnforcement: MaxLengthEnforcement.none,
+
+                              buildCounter:
+                                  (
+                                    context, {
+                                    required currentLength,
+                                    required isFocused,
+                                    maxLength,
+                                  }) {
+                                    return null;
+                                  },
+
+                              decoration: InputDecoration(
+                                isCollapsed: true,
+
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+
+                                hintText: 'Type a message',
+
+                                hintStyle: AppTextStyles.h9Medium.copyWith(
+                                  color: context.colorTheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(width: 8.w),
+
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 120),
+
+                            transitionBuilder: (child, animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: ScaleTransition(
+                                  scale: animation,
+                                  child: child,
+                                ),
+                              );
+                            },
+
+                            child: hasText || attachments.isNotEmpty
+                                ? GestureDetector(
+                                    key: const ValueKey('send_button'),
+
+                                    onTap: isOverLimit ? null : _handleSend,
+
+                                    child: Container(
+                                      padding: EdgeInsets.all(8.r),
+
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+
+                                        color: isOverLimit
+                                            ? context
+                                                  .colorTheme
+                                                  .onSurfaceVariant
+                                                  .withValues(alpha: 0.5)
+                                            : context.colorTheme.primary,
+                                      ),
+
+                                      child: Icon(
+                                        Icons.arrow_upward_rounded,
+
+                                        size: 24.sp,
+
+                                        color: AppColors.pureWhite,
+                                      ),
+                                    ),
+                                  )
+                                : VoiceInputButton(
+                                    key: const ValueKey('voice_button'),
+
+                                    onResult: (result) {
+                                      controller.text = result;
+
+                                      _handleSend();
+                                    },
+
+                                    activeColor: context.colorTheme.primary,
+                                  ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ],
@@ -119,136 +265,51 @@ class ChatInputBar extends StatelessWidget {
   }
 
   void _handleSend() {
-    if (controller.text.trim().isNotEmpty) {
+    final text = controller.text;
+
+    if ((text.trim().isNotEmpty || attachments.isNotEmpty) &&
+        text.length <= 200) {
       onSend();
     }
   }
-}
 
-class ChatAttachmentButton extends StatefulWidget {
-  const ChatAttachmentButton({super.key});
-
-  @override
-  State<ChatAttachmentButton> createState() => _ChatAttachmentButtonState();
-}
-
-class _ChatAttachmentButtonState extends State<ChatAttachmentButton> {
-  final OverlayPortalController _controller = OverlayPortalController();
-
-  @override
-  Widget build(BuildContext context) {
-    return OverlayPortal(
-      controller: _controller,
-
-      overlayChildBuilder: (context) {
-        return Positioned(
-          bottom: 90.h,
-          left: 28.w,
-          child: TweenAnimationBuilder(
-            duration: const Duration(milliseconds: 220),
-            tween: Tween<double>(begin: 0.8, end: 1),
-            curve: Curves.easeOutCubic,
-
-            builder: (context, scale, child) {
-              return Opacity(
-                opacity: scale,
-
-                child: Transform.scale(
-                  scale: scale,
-                  alignment: Alignment.bottomLeft,
-                  child: child,
-                ),
-              );
-            },
-            child: Container(
-              width: 180.w,
-              padding: EdgeInsets.only(
-                left: 4.w,
-                right: 12.w,
-                top: 12.h,
-                bottom: 12.h,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.r),
-                border: Border.all(
-                  color: context.colorTheme.onSurfaceVariant.withValues(
-                    alpha: 0.6,
-                  ),
-                  width: 1.5.r,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 20,
-                    color: Colors.black.withValues(alpha: 0.1),
-                  ),
-                ],
-              ),
-
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _item(Icons.camera_alt_outlined, 'Camera'),
-                  SizedBox(height: 12.h),
-                  _item(Icons.photo_library_outlined, 'Photo'),
-                  SizedBox(height: 12.h),
-                  _item(Icons.attach_file_rounded, 'File'),
-                  SizedBox(height: 12.h),
-                  _item(Icons.videocam_outlined, 'Video'),
-                ],
-              ),
-            ),
-          ),
+  Widget _buildAttachmentPreview(ChatAttachment item, BuildContext context) {
+    switch (item.type) {
+      case AttachmentType.image:
+        return Image.file(
+          File(item.path),
+          width: 80.w,
+          height: 80.w,
+          fit: BoxFit.cover,
         );
-      },
-
-      child: IconButton(
-        onPressed: () {
-          if (_controller.isShowing) {
-            _controller.hide();
-          } else {
-            _controller.show();
-          }
-        },
-        icon: Icon(
-          Icons.add,
-          fontWeight: FontWeight.bold,
-          color: context.colorTheme.onSurfaceVariant,
-          size: 22.sp,
-        ),
-      ),
-    );
-  }
-
-  Widget _item(IconData icon, String text) {
-    return Material(
-      color: Colors.transparent,
-
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12.r),
-
-        onTap: () {},
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+      case AttachmentType.video:
+        return Container(
+          width: 80.w,
+          height: 80.w,
+          color: Colors.grey[300],
+          child: Icon(Icons.play_circle_fill, color: Colors.white, size: 32.sp),
+        );
+      case AttachmentType.file:
+        return Container(
+          width: 80.w,
+          height: 80.w,
+          color: context.colorTheme.primary.withValues(alpha: 0.1),
+          padding: EdgeInsets.all(8.r),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                backgroundColor: AppColors.primaryLightGray,
-                child: Icon(icon, size: 24.sp, color: Colors.black),
-              ),
-
-              const SizedBox(width: 12),
-
+              Icon(Icons.insert_drive_file, color: context.colorTheme.primary),
+              SizedBox(height: 4.h),
               Text(
-                text,
-                style: AppTextStyles.h9Medium.copyWith(color: Colors.black),
+                item.path.split('/').last,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.h10Medium,
+                textAlign: TextAlign.center,
               ),
             ],
           ),
-        ),
-      ),
-    );
+        );
+    }
   }
 }
