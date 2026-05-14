@@ -3,12 +3,14 @@ import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/features/ai_planner/data/models/trip_model.dart';
 
 class AppHive {
   static late Box onboardingBox;
   static late Box<String> favoritesBox;
   static late Box<String> favoritesSyncQueueBox;
   static late Box<PlaceModel> placesCacheBox;
+  static late Box<TripModel> tripsBox;
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -29,6 +31,9 @@ class AppHive {
     if (!Hive.isAdapterRegistered(PlaceCategoryAdapter().typeId)) {
       Hive.registerAdapter(PlaceCategoryAdapter());
     }
+    if (!Hive.isAdapterRegistered(TripModelAdapter().typeId)) {
+      Hive.registerAdapter(TripModelAdapter());
+    }
   }
 
   static Future<void> openBoxes() async {
@@ -36,5 +41,6 @@ class AppHive {
     favoritesBox = await Hive.openBox('favoritesBox');
     favoritesSyncQueueBox = await Hive.openBox('favoritesSyncQueueBox');
     placesCacheBox = await Hive.openBox('placesCacheBox');
+    tripsBox = await Hive.openBox('tripsBox');
   }
 }

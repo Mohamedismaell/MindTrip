@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 
 class AiPlannerState extends Equatable {
+  final String? tripId;
   final int currentPage;
   final String? selectedDestination;
   final String destinationQuery;
@@ -15,6 +16,7 @@ class AiPlannerState extends Equatable {
   final DateTime visibleMonth;
   final List<String> selectedInterests;
   AiPlannerState({
+    this.tripId,
     this.currentPage = 0,
     this.selectedDestination,
     this.destinationQuery = '',
@@ -31,6 +33,7 @@ class AiPlannerState extends Equatable {
            visibleMonth ?? DateTime(DateTime.now().year, DateTime.now().month);
 
   AiPlannerState copyWith({
+    String? tripId,
     int? currentPage,
     String? selectedDestination,
     bool clearDestination = false,
@@ -49,6 +52,7 @@ class AiPlannerState extends Equatable {
     List<String>? selectedInterests,
   }) {
     return AiPlannerState(
+      tripId: tripId ?? this.tripId,
       currentPage: currentPage ?? this.currentPage,
       selectedDestination: clearDestination
           ? null
@@ -105,6 +109,7 @@ class AiPlannerState extends Equatable {
 
   @override
   List<Object?> get props => [
+    tripId,
     currentPage,
     selectedDestination,
     destinationQuery,

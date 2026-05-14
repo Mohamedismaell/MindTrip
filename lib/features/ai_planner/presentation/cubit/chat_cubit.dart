@@ -2,13 +2,12 @@ import 'dart:math';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mindtrip/features/ai_planner/data/datasources/chat_mock_responses.dart';
-import 'package:mindtrip/features/ai_planner/data/models/chat_message_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/send_message_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
 
-class ChatCubit extends HydratedCubit<ChatState> {
+class ChatCubit extends Cubit<ChatState> {
   ChatCubit({
     required SendMessageUseCase sendMessageUseCase,
     required ChatRepository chatRepository,
@@ -19,24 +18,9 @@ class ChatCubit extends HydratedCubit<ChatState> {
   final SendMessageUseCase _sendMessageUseCase;
   final ChatRepository _chatRepository;
 
-  //  HydratedCubit overrides
-
-  @override
-  ChatState? fromJson(Map<String, dynamic> json) {
-    try {
-      return ChatState.fromJson(json);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  @override
-  Map<String, dynamic>? toJson(ChatState state) {
-    try {
-      return state.toJson();
-    } catch (_) {
-      return null;
-    }
+  void loadMessages(List<ChatMessage> messages) {
+    if (messages.isEmpty) return;
+    emit(state.copyWith(messages: messages, status: ChatStatus.loaded));
   }
 
   void initialize(String userName) {
@@ -60,7 +44,6 @@ class ChatCubit extends HydratedCubit<ChatState> {
   }
 
   void startNewConversation(String userName) {
-    clear();
     emit(const ChatState());
     initialize(userName);
   }
@@ -181,7 +164,6 @@ class ChatCubit extends HydratedCubit<ChatState> {
   }
 
   void clearChat() {
-    clear();
     emit(const ChatState());
   }
 }

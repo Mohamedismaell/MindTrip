@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
 
@@ -6,6 +8,53 @@ import 'ai_planner_state.dart';
 
 class AiPlannerCubit extends Cubit<AiPlannerState> {
   AiPlannerCubit() : super(AiPlannerState());
+
+  void loadFromTrip(Trip trip) {
+    BudgetTierModel? matchingBudget;
+    if (trip.budgetTier != null) {
+      try {
+        matchingBudget = AiPlannerMockData.budgetTiers.firstWhere(
+          (b) => b.title == trip.budgetTier,
+        );
+      } catch (_) {}
+    }
+
+    emit(state.copyWith(
+      tripId: trip.id,
+      currentPage: trip.currentPage,
+      selectedDestination: trip.destination,
+      destinationQuery: trip.destination,
+      tripStart: trip.tripStart,
+      tripEnd: trip.tripEnd,
+      adults: trip.adults,
+      children: trip.children,
+      pets: trip.pets,
+      selectedBudget: matchingBudget,
+      customBudget: trip.customBudget,
+      selectedInterests: trip.interests,
+    ));
+  }
+
+  Trip toTripSnapshot(List<ChatMessage> chatMessages, {required String tripId}) {
+    return Trip(
+      id: tripId,
+      title: 'Trip to ${state.selectedDestination ?? 'Unknown'}',
+      status: TripStatus.draft,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      destination: state.selectedDestination ?? '',
+      tripStart: state.tripStart,
+      tripEnd: state.tripEnd,
+      adults: state.adults,
+      children: state.children,
+      pets: state.pets,
+      budgetTier: state.selectedBudget?.title,
+      customBudget: state.customBudget,
+      interests: state.selectedInterests,
+      currentPage: state.currentPage,
+      chatMessages: chatMessages,
+    );
+  }
 
   void setPage(int page) {
     emit(state.copyWith(currentPage: page));

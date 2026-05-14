@@ -34,24 +34,7 @@ class ChatState extends Equatable {
     );
   }
 
-  factory ChatState.fromJson(Map<String, dynamic> json) {
-    return ChatState(
-      messages: (json['messages'] as List<dynamic>? ?? [])
-          .map((e) => ChatMessage.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      status: ChatStatus.values.firstWhere(
-        (e) => e.name == json['status'],
-        orElse: () => ChatStatus.initial,
-      ),
-      isAiTyping: false,
-      errorMessage: null,
-    );
-  }
 
-  Map<String, dynamic> toJson() => {
-    'messages': messages.map((m) => m.toJson()).toList(),
-    'status': status.name,
-  };
 
   @override
   List<Object?> get props => [
