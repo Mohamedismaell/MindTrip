@@ -9,11 +9,13 @@ class SectionHeading extends StatelessWidget {
     required this.title,
     this.actionText,
     this.trailing,
+    this.onActionTap,
   });
 
   final String title;
   final String? actionText;
   final Widget? trailing;
+  final VoidCallback? onActionTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +30,13 @@ class SectionHeading extends StatelessWidget {
         if (trailing != null) ...[SizedBox(width: 8.w), trailing!],
         const Spacer(),
         if (actionText != null)
-          Text(
-            actionText!,
-            style: context.textTheme.labelLarge!.copyWith(
-              color: context.colorTheme.outline,
+          InkWell(
+            onTap: onActionTap,
+            child: Text(
+              actionText!,
+              style: context.textTheme.labelLarge!.copyWith(
+                color: context.colorTheme.primary,
+              ),
             ),
           ),
       ],

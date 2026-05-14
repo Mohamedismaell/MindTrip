@@ -19,23 +19,28 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
       } catch (_) {}
     }
 
-    emit(state.copyWith(
-      tripId: trip.id,
-      currentPage: trip.currentPage,
-      selectedDestination: trip.destination,
-      destinationQuery: trip.destination,
-      tripStart: trip.tripStart,
-      tripEnd: trip.tripEnd,
-      adults: trip.adults,
-      children: trip.children,
-      pets: trip.pets,
-      selectedBudget: matchingBudget,
-      customBudget: trip.customBudget,
-      selectedInterests: trip.interests,
-    ));
+    emit(
+      state.copyWith(
+        tripId: trip.id,
+        currentPage: trip.currentPage,
+        selectedDestination: trip.destination,
+        destinationQuery: trip.destination,
+        tripStart: trip.tripStart,
+        tripEnd: trip.tripEnd,
+        adults: trip.adults,
+        children: trip.children,
+        pets: trip.pets,
+        selectedBudget: trip.budgetTier != null ? matchingBudget : null,
+        customBudget: trip.customBudget,
+        selectedInterests: trip.interests,
+      ),
+    );
   }
 
-  Trip toTripSnapshot(List<ChatMessage> chatMessages, {required String tripId}) {
+  Trip toTripSnapshot(
+    List<ChatMessage> chatMessages, {
+    required String tripId,
+  }) {
     return Trip(
       id: tripId,
       title: 'Trip to ${state.selectedDestination ?? 'Unknown'}',

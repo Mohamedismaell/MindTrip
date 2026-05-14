@@ -25,7 +25,6 @@ class TripsCubit extends Cubit<TripsState> {
     }
   }
 
-  /// Returns the UUID of the newly created draft
   Future<String> createDraft(String destination) async {
     final now = DateTime.now();
     final newTrip = Trip(
@@ -62,15 +61,13 @@ class TripsCubit extends Cubit<TripsState> {
 
   Future<void> saveTripDraft(Trip trip) async {
     try {
-      final updatedTrip = trip.copyWith(updatedAt: DateTime.now());
-      await _tripRepository.saveTrip(updatedTrip);
-
-      final index = state.trips.indexWhere((t) => t.id == updatedTrip.id);
+      await _tripRepository.saveTrip(trip);
+      final index = state.trips.indexWhere((t) => t.id == trip.id);
       final updatedTrips = List<Trip>.from(state.trips);
       if (index != -1) {
-        updatedTrips[index] = updatedTrip;
+        updatedTrips[index] = trip;
       } else {
-        updatedTrips.add(updatedTrip);
+        updatedTrips.add(trip);
       }
 
       emit(state.copyWith(trips: updatedTrips));

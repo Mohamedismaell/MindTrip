@@ -8,9 +8,10 @@ import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 
 class FlowButton extends StatelessWidget {
-  const FlowButton({super.key, required this.text});
+  const FlowButton({super.key, required this.text, this.onTap});
 
   final String text;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class FlowButton extends StatelessWidget {
       child: SizedBox(
         width: 283.w,
         child: InkWell(
-          onTap: canContinue ? cubit.nextPage : null,
+          onTap: canContinue ? (onTap ?? cubit.nextPage) : null,
           borderRadius: BorderRadius.circular(50.r),
           child: Container(
             height: 52.h,

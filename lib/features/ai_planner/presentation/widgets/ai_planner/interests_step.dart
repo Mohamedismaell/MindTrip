@@ -9,10 +9,14 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ste
 import 'package:mindtrip/core/shared/models/interest_categories.dart';
 
 class InterestsStep extends StatelessWidget {
-  final ScrollController _scrollController;
+  const InterestsStep({
+    super.key,
+    required ScrollController scrollController,
+    required this.onContinue,
+  }) : _scrollController = scrollController;
 
-  const InterestsStep({super.key, required ScrollController scrollController})
-    : _scrollController = scrollController;
+  final ScrollController _scrollController;
+  final VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class InterestsStep extends StatelessWidget {
         // Spacer(),
         Padding(
           padding: EdgeInsets.only(top: 32.h, bottom: 24),
-          child: FlowButton(text: 'Generate your plan'),
+          child: FlowButton(text: 'Generate your plan', onTap: onContinue),
         ),
       ],
     );

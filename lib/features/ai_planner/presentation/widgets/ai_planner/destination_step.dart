@@ -15,10 +15,12 @@ class DestinationStep extends StatelessWidget {
     super.key,
     required this.controller,
     required this.onDestinationTap,
+    required this.onContinue,
   });
 
   final TextEditingController controller;
   final ValueChanged<String> onDestinationTap;
+  final VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class DestinationStep extends StatelessWidget {
         // SizedBox(height: 12.h),
         Padding(
           padding: EdgeInsets.only(top: 32.h, bottom: 24),
-          child: FlowButton(text: 'Continue'),
+          child: FlowButton(text: 'Continue', onTap: onContinue),
         ),
 
         AiHint(

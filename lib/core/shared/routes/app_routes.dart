@@ -27,6 +27,8 @@ class AppRoutes {
   static const String aiPlannerIntro = '/ai-planner';
   static const String aiPlannerFlow = '/ai-planner/flow';
   static const String aiPlannerChat = '/ai-planner/flow/chat';
+  static const String myTrips = '/ai-planner/my-trips';
+  static const String tripCalendar = '/ai-planner/trip-calendar';
 
   //! profile
   static const String profile = '/profile';

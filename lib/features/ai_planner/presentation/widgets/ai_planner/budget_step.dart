@@ -13,9 +13,14 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flo
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class BudgetStep extends StatelessWidget {
-  const BudgetStep({super.key, required this.customBudgetController});
+  const BudgetStep({
+    super.key,
+    required this.customBudgetController,
+    required this.onContinue,
+  });
 
   final TextEditingController customBudgetController;
+  final VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +90,7 @@ class BudgetStep extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.h),
-        FlowButton(text: 'Continue'),
+        FlowButton(text: 'Continue', onTap: onContinue),
         SizedBox(height: 24.h),
         Center(
           child: AiHint(

@@ -8,7 +8,9 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flo
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class TravelersStep extends StatelessWidget {
-  const TravelersStep({super.key});
+  const TravelersStep({super.key, required this.onContinue});
+
+  final VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class TravelersStep extends StatelessWidget {
           onIncrease: () => cubit.changePets(1),
         ),
         SizedBox(height: 34.h),
-        FlowButton(text: 'Continue'),
+        FlowButton(text: 'Continue', onTap: onContinue),
         SizedBox(height: 24.h),
         Center(
           child: AiHint(

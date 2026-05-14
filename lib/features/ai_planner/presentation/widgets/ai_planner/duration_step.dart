@@ -6,7 +6,9 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ran
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class DurationStep extends StatelessWidget {
-  const DurationStep({super.key});
+  const DurationStep({super.key, required this.onContinue});
+
+  final VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class DurationStep extends StatelessWidget {
         SizedBox(height: 24.h),
         const RangeCalendar(),
         SizedBox(height: 24.h),
-        FlowButton(text: 'Continue'),
+        FlowButton(text: 'Continue', onTap: onContinue),
         SizedBox(height: 22.h),
         Center(
           child: const AiHint(

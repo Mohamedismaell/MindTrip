@@ -41,4 +41,8 @@ class AppColors {
   static const Color errorRed = Color(0xFFE53935);
   static const Color errorDarkRed = Color(0xFF5C1F1F);
   static const Color errorLight = Color(0xFFFFEBEE);
+
+  // Semantic aliases
+  static const Color success = Color(0xFF4CAF50);
+  static const Color warning = Color(0xFFF59E0B);
 }
