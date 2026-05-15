@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 
 class MapNavigateAllButton extends StatelessWidget {
   final VoidCallback onPressed;

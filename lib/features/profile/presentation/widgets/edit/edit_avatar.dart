@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 
 class EditAvatar extends StatelessWidget {
   const EditAvatar({

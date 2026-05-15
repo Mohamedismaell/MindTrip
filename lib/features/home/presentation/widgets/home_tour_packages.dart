@@ -8,7 +8,7 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/features/home/presentation/widgets/custom_circle_icon.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_hint.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flow_button.dart';

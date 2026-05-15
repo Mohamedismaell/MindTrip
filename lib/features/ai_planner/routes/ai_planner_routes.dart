@@ -24,7 +24,7 @@ class AiPlannerRoutes {
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => sl<AiPlannerCubit>()),
-            BlocProvider(create: (_) => sl<TripsCubit>()..loadTrips()),
+            BlocProvider.value(value: sl<TripsCubit>()..loadTrips()),
             BlocProvider(create: (_) => sl<ChatCubit>()),
           ],
           child: child,

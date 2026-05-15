@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_bot_image.dart';
 

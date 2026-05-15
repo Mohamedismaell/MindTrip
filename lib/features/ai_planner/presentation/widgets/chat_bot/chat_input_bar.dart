@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/voice_input_button.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_attachment_button.dart';
@@ -74,7 +74,7 @@ class ChatInputBar extends StatelessWidget {
                 final isOverLimit = length >= 200;
 
                 return Container(
-                  padding: EdgeInsets.all(12.r),
+                  padding: EdgeInsets.symmetric(horizontal: 12.r),
 
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24.r),
@@ -83,66 +83,68 @@ class ChatInputBar extends StatelessWidget {
                       color: isOverLimit
                           ? AppColors.errorRed
                           : context.colorTheme.outline,
-                      width: 1.5,
+                      width: 1.2,
                     ),
                   ),
 
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Attachment preview
                       if (attachments.isNotEmpty) ...[
-                        SizedBox(
-                          height: 80.h,
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.0.h),
+                          child: SizedBox(
+                            height: 80.h,
 
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
 
-                            itemCount: attachments.length,
+                              itemCount: attachments.length,
 
-                            separatorBuilder: (_, _) => SizedBox(width: 10.w),
+                              separatorBuilder: (_, _) => SizedBox(width: 10.w),
 
-                            itemBuilder: (context, index) {
-                              final item = attachments[index];
+                              itemBuilder: (context, index) {
+                                final item = attachments[index];
 
-                              return Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(14.r),
-                                    child: _buildAttachmentPreview(
-                                      item,
-                                      context,
+                                return Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(14.r),
+                                      child: _buildAttachmentPreview(
+                                        item,
+                                        context,
+                                      ),
                                     ),
-                                  ),
 
-                                  Positioned(
-                                    top: 4,
-                                    right: 4,
+                                    Positioned(
+                                      top: 4,
+                                      right: 4,
 
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        onRemoveAttachment(index);
-                                      },
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          onRemoveAttachment(index);
+                                        },
 
-                                      child: Container(
-                                        padding: EdgeInsets.all(4.r),
+                                        child: Container(
+                                          padding: EdgeInsets.all(4.r),
 
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.black54,
-                                        ),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.black54,
+                                          ),
 
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 16.sp,
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 16.sp,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
+                                  ],
+                                );
+                              },
+                            ),
                           ),
                         ),
 
@@ -151,7 +153,7 @@ class ChatInputBar extends StatelessWidget {
 
                       // Input row
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                             child: TextField(
@@ -188,9 +190,11 @@ class ChatInputBar extends StatelessWidget {
 
                                 hintText: 'Type a message',
 
-                                hintStyle: AppTextStyles.h9Medium.copyWith(
-                                  color: context.colorTheme.onSurfaceVariant,
-                                ),
+                                hintStyle: context.textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color:
+                                          context.colorTheme.onSurfaceVariant,
+                                    ),
                               ),
                             ),
                           ),

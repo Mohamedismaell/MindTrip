@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 
 Future<void> showRenameTripDialog(
@@ -20,10 +20,7 @@ Future<void> showRenameTripDialog(
 }
 
 class _RenameTripDialog extends StatefulWidget {
-  const _RenameTripDialog({
-    required this.tripId,
-    required this.currentTitle,
-  });
+  const _RenameTripDialog({required this.tripId, required this.currentTitle});
 
   final String tripId;
   final String currentTitle;
@@ -61,7 +58,9 @@ class _RenameTripDialogState extends State<_RenameTripDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       title: Text(
         'Rename Trip',
-        style: AppTextStyles.h7Bold.copyWith(color: context.colorTheme.onSurface),
+        style: AppTextStyles.h7Bold.copyWith(
+          color: context.colorTheme.onSurface,
+        ),
       ),
       content: TextField(
         controller: _controller,
@@ -75,14 +74,18 @@ class _RenameTripDialogState extends State<_RenameTripDialog> {
           hintStyle: AppTextStyles.h9Regular.copyWith(
             color: context.colorTheme.outline,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
-            borderSide: BorderSide(color: context.colorTheme.primary, width: 1.5),
+            borderSide: BorderSide(
+              color: context.colorTheme.primary,
+              width: 1.5,
+            ),
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 14.w,
+            vertical: 12.h,
+          ),
         ),
         onSubmitted: (_) => _confirm(),
       ),

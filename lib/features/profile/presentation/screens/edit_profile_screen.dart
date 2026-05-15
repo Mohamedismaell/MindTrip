@@ -6,7 +6,7 @@ import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
 import 'package:mindtrip/core/widget/cusotm_dialog.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';

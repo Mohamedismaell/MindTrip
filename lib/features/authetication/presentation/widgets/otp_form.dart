@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/enums/otp_flow.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';

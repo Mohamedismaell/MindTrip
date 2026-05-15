@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -119,7 +119,7 @@ class _VoiceInputButtonState extends State<VoiceInputButton>
 
   void _stopListening() async {
     if (!_isListening) return;
-    
+
     await _speech.stop();
     if (mounted) {
       setState(() => _isListening = false);

@@ -1,13 +1,82 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 
-class MyTripCard extends StatelessWidget {
-  const MyTripCard({super.key, required this.trip, this.onTap});
+class MyTripsSection extends StatefulWidget {
+  const MyTripsSection({super.key});
+
+  @override
+  State<MyTripsSection> createState() => _MyTripsSectionState();
+}
+
+class _MyTripsSectionState extends State<MyTripsSection> {
+  @override
+  void initState() {
+    super.initState();
+    sl<TripsCubit>().loadTrips();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: sl<TripsCubit>(),
+      child: BlocBuilder<TripsCubit, TripsState>(
+        builder: (context, tripsState) {
+          final trips = tripsState.trips;
+          if (trips.isEmpty) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: Center(
+                child: Text(
+                  'No trips generated yet.',
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: context.colorTheme.outline,
+                  ),
+                ),
+              ),
+            );
+          }
+          return SizedBox(
+            height: 233.h,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
+              itemCount: trips.length,
+              separatorBuilder: (_, _) => SizedBox(width: 32.w),
+              itemBuilder: (context, index) {
+                return _MyTripCard(
+                  trip: trips[index],
+                  onTap: () {
+                    //Todo: Handle the navigaiton into the card
+                    if (trips[index].status == TripStatus.draft) {
+                      context.push(
+                        '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _MyTripCard extends StatelessWidget {
+  const _MyTripCard({required this.trip, this.onTap});
 
   final Trip trip;
   final VoidCallback? onTap;

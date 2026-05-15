@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../cubit/theme_cubit.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
+import '../theme/cubit/theme_cubit.dart';
 
 extension ThemeContextX on BuildContext {
   ThemeState get themeState => watch<ThemeCubit>().state;
@@ -14,4 +14,19 @@ extension ShortTheme on BuildContext {
   // ThemeData get themeContext => Theme.of(this);
   ColorScheme get colorTheme => Theme.of(this).colorScheme;
   TextTheme get textTheme => Theme.of(this).textTheme;
+}
+
+extension TripFilterTabLabel on TripFilterTab {
+  String get label {
+    switch (this) {
+      case TripFilterTab.all:
+        return 'All';
+      case TripFilterTab.completed:
+        return 'Completed';
+      case TripFilterTab.recentlyEdited:
+        return 'Recent';
+      case TripFilterTab.drafts:
+        return 'Drafts';
+    }
+  }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_actions.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_images.dart';

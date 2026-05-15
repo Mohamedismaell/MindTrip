@@ -10,12 +10,25 @@ class TripsCubit extends Cubit<TripsState> {
 
   TripsCubit(this._tripRepository) : super(const TripsState());
 
+  Future<void> updateSearchQuary(String? searchQuary) async {
+    if (isClosed) return;
+    emit(state.copyWith(searchQuery: searchQuary));
+  }
+
+  Future<void> updateSelectedTab(TripFilterTab? selectedTap) async {
+    if (isClosed) return;
+    emit(state.copyWith(selectedTab: selectedTap));
+  }
+
   Future<void> loadTrips() async {
+    if (isClosed) return;
     emit(state.copyWith(status: TripsStatus.loading));
     try {
       final trips = await _tripRepository.getAllTrips();
+      if (isClosed) return;
       emit(state.copyWith(status: TripsStatus.loaded, trips: trips));
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: TripsStatus.error,
@@ -45,10 +58,12 @@ class TripsCubit extends Cubit<TripsState> {
 
     try {
       await _tripRepository.saveTrip(newTrip);
+      if (isClosed) return newTrip.id;
       final updatedTrips = List<Trip>.from(state.trips)..add(newTrip);
       emit(state.copyWith(trips: updatedTrips));
       return newTrip.id;
     } catch (e) {
+      if (isClosed) rethrow;
       emit(
         state.copyWith(
           status: TripsStatus.error,
@@ -62,6 +77,7 @@ class TripsCubit extends Cubit<TripsState> {
   Future<void> saveTripDraft(Trip trip) async {
     try {
       await _tripRepository.saveTrip(trip);
+      if (isClosed) return;
       final index = state.trips.indexWhere((t) => t.id == trip.id);
       final updatedTrips = List<Trip>.from(state.trips);
       if (index != -1) {
@@ -72,6 +88,7 @@ class TripsCubit extends Cubit<TripsState> {
 
       emit(state.copyWith(trips: updatedTrips));
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: TripsStatus.error,
@@ -92,12 +109,14 @@ class TripsCubit extends Cubit<TripsState> {
       );
 
       await _tripRepository.saveTrip(trip);
+      if (isClosed) return;
 
       final updatedTrips = List<Trip>.from(state.trips);
       updatedTrips[index] = trip;
 
       emit(state.copyWith(trips: updatedTrips));
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: TripsStatus.error,
@@ -110,10 +129,12 @@ class TripsCubit extends Cubit<TripsState> {
   Future<void> deleteTrip(String tripId) async {
     try {
       await _tripRepository.deleteTrip(tripId);
+      if (isClosed) return;
 
       final updatedTrips = state.trips.where((t) => t.id != tripId).toList();
       emit(state.copyWith(trips: updatedTrips));
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: TripsStatus.error,
@@ -134,12 +155,14 @@ class TripsCubit extends Cubit<TripsState> {
       );
       //! Same as save jsut for scalling
       await _tripRepository.updateTrip(trip);
+      if (isClosed) return;
 
       final updatedTrips = List<Trip>.from(state.trips);
       updatedTrips[index] = trip;
 
       emit(state.copyWith(trips: updatedTrips));
     } catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(
           status: TripsStatus.error,

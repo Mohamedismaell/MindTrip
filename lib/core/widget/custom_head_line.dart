@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 
 class CustomHeadLine extends StatelessWidget {
   const CustomHeadLine({

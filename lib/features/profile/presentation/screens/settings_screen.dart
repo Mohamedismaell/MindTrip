@@ -8,7 +8,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/validators/auth_validator.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/app_text_field.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';

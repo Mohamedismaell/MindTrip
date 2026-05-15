@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/widgets/navigation_profile_selector.dart';

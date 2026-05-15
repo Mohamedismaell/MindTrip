@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/cusotm_dialog.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:permission_handler/permission_handler.dart';

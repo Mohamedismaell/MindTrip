@@ -1,24 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_gradients.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
-
-enum TripFilterTab { all, completed, recentlyEdited, drafts }
-
-extension TripFilterTabLabel on TripFilterTab {
-  String get label {
-    switch (this) {
-      case TripFilterTab.all:
-        return 'All';
-      case TripFilterTab.completed:
-        return 'Completed';
-      case TripFilterTab.recentlyEdited:
-        return 'Recent';
-      case TripFilterTab.drafts:
-        return 'Drafts';
-    }
-  }
-}
+import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 
 class TripFilterTabs extends StatelessWidget {
   const TripFilterTabs({
@@ -42,29 +28,38 @@ class TripFilterTabs extends StatelessWidget {
             child: GestureDetector(
               onTap: () => onSelect(tab),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
+                key: ValueKey(tab),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
                 padding: EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                  vertical: 8.h,
+                  horizontal: 10.w,
+                  vertical: 6.5.h,
                 ),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? context.colorTheme.primary
-                      : context.colorTheme.surface,
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(15.r),
                   border: Border.all(
                     color: isSelected
-                        ? context.colorTheme.primary
+                        ? Colors.transparent
                         : context.colorTheme.outline.withValues(alpha: 0.4),
                   ),
+                  gradient: isSelected
+                      ? AppGradients.mainBlueGradient
+                      : LinearGradient(
+                          colors: [
+                            context.colorTheme.surface,
+                            context.colorTheme.surface,
+                          ],
+                        ),
                 ),
                 child: Text(
                   tab.label,
-                  style: AppTextStyles.h10Medium.copyWith(
-                    color: isSelected
-                        ? Colors.white
-                        : context.colorTheme.onSurfaceVariant,
-                  ),
+                  style: isSelected
+                      ? AppTextStyles.h8SemiBold.copyWith(
+                          color: AppColors.pureWhite,
+                        )
+                      : context.textTheme.bodyLarge?.copyWith(
+                          color: context.colorTheme.onSurfaceVariant,
+                        ),
                 ),
               ),
             ),

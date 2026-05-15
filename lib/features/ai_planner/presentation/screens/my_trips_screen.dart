@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/widget/custom_search_bar.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
@@ -20,16 +23,20 @@ class MyTripsScreen extends StatefulWidget {
 }
 
 class _MyTripsScreenState extends State<MyTripsScreen> {
-  TripFilterTab _selectedTab = TripFilterTab.all;
   final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
+  // String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     context.read<TripsCubit>().loadTrips();
     _searchController.addListener(() {
-      setState(() => _searchQuery = _searchController.text.trim().toLowerCase());
+      // setState(
+      //   () => _searchQuery = _searchController.text.trim().toLowerCase(),
+      // );
+      context.read<TripsCubit>().updateSearchQuary(
+        _searchController.text.trim().toLowerCase(),
+      );
     });
   }
 
@@ -37,33 +44,6 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
-  }
-
-  List<Trip> _filteredTrips(TripsState state) {
-    List<Trip> list;
-    switch (_selectedTab) {
-      case TripFilterTab.all:
-        list = state.trips;
-        break;
-      case TripFilterTab.completed:
-        list = state.completed;
-        break;
-      case TripFilterTab.recentlyEdited:
-        list = state.recentlyEdited;
-        break;
-      case TripFilterTab.drafts:
-        list = state.drafts;
-        break;
-    }
-
-    if (_searchQuery.isEmpty) return list;
-    return list
-        .where(
-          (t) =>
-              t.title.toLowerCase().contains(_searchQuery) ||
-              t.destination.toLowerCase().contains(_searchQuery),
-        )
-        .toList();
   }
 
   @override
@@ -79,100 +59,46 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
               SizedBox(height: 24.h),
 
               // Header
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => context.pop(),
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      size: 26.sp,
-                      color: context.colorTheme.onSurface,
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'My ',
-                            style: AppTextStyles.h5Bold.copyWith(
-                              color: context.colorTheme.onSurface,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Trips',
-                            style: AppTextStyles.h5Bold.copyWith(
-                              color: context.colorTheme.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => context.push(AppRoutes.tripCalendar),
-                    child: Container(
-                      padding: EdgeInsets.all(8.r),
-                      decoration: BoxDecoration(
-                        color: context.colorTheme.surface,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: context.colorTheme.outline.withValues(alpha: 0.2),
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.calendar_month_rounded,
-                        size: 22.sp,
-                        color: context.colorTheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 4.h),
-              Padding(
-                padding: EdgeInsets.only(left: 38.w),
-                child: Text(
-                  'Your saved travel plans',
-                  style: AppTextStyles.h10Regular.copyWith(
-                    color: context.colorTheme.outline,
-                  ),
-                ),
-              ),
+              _CustomHeader(),
 
               SizedBox(height: 20.h),
 
               // Search bar
-              _SearchBar(controller: _searchController),
+              CustomSearchBar(controller: _searchController, handleSend: () {}),
 
-              SizedBox(height: 16.h),
+              SizedBox(height: 33.h),
 
               // Filter tabs
               BlocBuilder<TripsCubit, TripsState>(
                 builder: (context, state) {
                   return TripFilterTabs(
-                    selected: _selectedTab,
-                    onSelect: (tab) => setState(() => _selectedTab = tab),
+                    selected: state.selectedTab,
+                    onSelect: (tab) {
+                      context.read<TripsCubit>().updateSelectedTab(tab);
+                    },
                   );
                 },
               ),
 
-              SizedBox(height: 20.h),
+              SizedBox(height: 28.h),
 
               // Trip list
               Expanded(
                 child: BlocBuilder<TripsCubit, TripsState>(
+                  buildWhen: (previous, current) =>
+                      previous.trips != current.trips ||
+                      previous.searchQuery != current.searchQuery ||
+                      previous.status != current.status ||
+                      previous.selectedTab != current.selectedTab,
                   builder: (context, state) {
                     if (state.status == TripsStatus.loading) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    final trips = _filteredTrips(state);
+                    final trips = state.filterTrips;
 
                     if (trips.isEmpty) {
-                      return _EmptyState(tab: _selectedTab);
+                      return _EmptyState(tab: state.selectedTab);
                     }
 
                     return ListView.builder(
@@ -203,62 +129,66 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
   }
 
   void _resumeTrip(BuildContext context, Trip trip) {
-    context.push(
-      '${AppRoutes.aiPlannerFlow}?tripId=${trip.id}',
-    );
+    context.push('${AppRoutes.aiPlannerFlow}?tripId=${trip.id}');
   }
 }
 
-class _SearchBar extends StatelessWidget {
-  const _SearchBar({required this.controller});
-  final TextEditingController controller;
+class _CustomHeader extends StatelessWidget {
+  const _CustomHeader();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 48.h,
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      decoration: BoxDecoration(
-        color: context.colorTheme.surface,
-        borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(
-          color: context.colorTheme.outline.withValues(alpha: 0.25),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.search_rounded,
-            size: 20.sp,
-            color: context.colorTheme.outline,
-          ),
-          SizedBox(width: 10.w),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              style: AppTextStyles.h10Regular.copyWith(
-                color: context.colorTheme.onSurface,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Search trips...',
-                hintStyle: AppTextStyles.h10Regular.copyWith(
-                  color: context.colorTheme.outline,
-                ),
-                border: InputBorder.none,
-                isCollapsed: true,
-                contentPadding: EdgeInsets.zero,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () => context.pop(),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                size: 30.sp,
+                color: context.colorTheme.onSurfaceVariant,
               ),
             ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: CustomHeadLine(
+                firstTitle: 'My ',
+                secondTitle: 'Trips',
+                firstStyle: AppTextStyles.h5Bold.copyWith(
+                  color: context.colorTheme.onSurface,
+                ),
+                secondStyle: AppTextStyles.h5Bold.copyWith(
+                  color: context.colorTheme.primary,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.tripCalendar),
+              child: Container(
+                padding: EdgeInsets.all(8.r),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLightGray,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.calendar_month_rounded,
+                  size: 28.sp,
+                  color: context.colorTheme.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 17.h),
+        Text(
+          'Your saved travel plans',
+          style: AppTextStyles.h7Regular.copyWith(
+            color: context.colorTheme.onSurfaceVariant,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -290,7 +220,11 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 60.sp, color: context.colorTheme.outline.withValues(alpha: 0.4)),
+          Icon(
+            icon,
+            size: 60.sp,
+            color: context.colorTheme.outline.withValues(alpha: 0.4),
+          ),
           SizedBox(height: 16.h),
           Text(
             message,

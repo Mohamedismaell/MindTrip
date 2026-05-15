@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
@@ -41,6 +41,10 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   final TextEditingController _customBudgetController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+  late final AiPlannerCubit _plannerCubit;
+  late final ChatCubit _chatCubit;
+  late final TripsCubit _tripsCubit;
+
   /// The active trip ID – set when auto-saving or when resuming.
   String? _activeTripId;
 
@@ -48,16 +52,20 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   void initState() {
     super.initState();
 
+    _plannerCubit = context.read<AiPlannerCubit>();
+    _chatCubit = context.read<ChatCubit>();
+    _tripsCubit = context.read<TripsCubit>();
+
     _destinationController.addListener(() {
-      context.read<AiPlannerCubit>().updateDestinationQuery(
-        _destinationController.text,
-      );
+      if (!_plannerCubit.isClosed) {
+        _plannerCubit.updateDestinationQuery(_destinationController.text);
+      }
     });
 
     _customBudgetController.addListener(() {
-      context.read<AiPlannerCubit>().updateCustomBudget(
-        _customBudgetController.text,
-      );
+      if (!_plannerCubit.isClosed) {
+        _plannerCubit.updateCustomBudget(_customBudgetController.text);
+      }
     });
 
     if (widget.tripId != null) {
@@ -69,18 +77,20 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   }
 
   Future<void> _resumeFromTripId(String tripId) async {
-    final tripsCubit = context.read<TripsCubit>();
+    if (_tripsCubit.isClosed) return;
     // Load if not Loaded yet
-    if (tripsCubit.state.trips.isEmpty) {
-      await tripsCubit.loadTrips();
+    if (_tripsCubit.state.trips.isEmpty) {
+      await _tripsCubit.loadTrips();
     }
-    final trip = tripsCubit.state.trips
+    if (_tripsCubit.isClosed) return;
+
+    final trip = _tripsCubit.state.trips
         .where((t) => t.id == tripId)
         .firstOrNull;
     if (trip == null || !mounted) return;
 
-    context.read<AiPlannerCubit>().loadFromTrip(trip);
-    context.read<ChatCubit>().loadMessages(trip.chatMessages);
+    if (!_plannerCubit.isClosed) _plannerCubit.loadFromTrip(trip);
+    if (!_chatCubit.isClosed) _chatCubit.loadMessages(trip.chatMessages);
 
     _destinationController.text = trip.destination;
     _customBudgetController.text = trip.customBudget;
@@ -102,49 +112,52 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   }
 
   Future<void> _autoSave() async {
-    final plannerState = context.read<AiPlannerCubit>().state;
+    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed)
+      return;
+
+    final plannerState = _plannerCubit.state;
     if (plannerState.selectedDestination == null ||
         plannerState.selectedDestination!.isEmpty) {
       return;
     }
 
-    final chatMessages = context.read<ChatCubit>().state.messages;
-    final tripsCubit = context.read<TripsCubit>();
+    final chatMessages = _chatCubit.state.messages;
 
     if (_activeTripId != null) {
-      final snapshot = context.read<AiPlannerCubit>().toTripSnapshot(
+      final snapshot = _plannerCubit.toTripSnapshot(
         chatMessages,
         tripId: _activeTripId!,
       );
-      await tripsCubit.saveTripDraft(snapshot);
+      await _tripsCubit.saveTripDraft(snapshot);
     } else {
-      final newId = await tripsCubit.createDraft(
+      final newId = await _tripsCubit.createDraft(
         plannerState.selectedDestination!,
       );
+      if (_tripsCubit.isClosed) return;
       _activeTripId = newId;
       // Now save the full state into it
-      final snapshot = context.read<AiPlannerCubit>().toTripSnapshot(
+      final snapshot = _plannerCubit.toTripSnapshot(
         chatMessages,
         tripId: newId,
       );
-      await tripsCubit.saveTripDraft(snapshot);
+      await _tripsCubit.saveTripDraft(snapshot);
     }
   }
 
   Future<void> _handleBack() async {
-    final cubit = context.read<AiPlannerCubit>();
-    if (cubit.state.currentPage == 0) {
+    if (_plannerCubit.isClosed) return;
+    if (_plannerCubit.state.currentPage == 0) {
       await _autoSave();
       if (mounted) context.pop();
       return;
     }
-    cubit.previousPage();
+    _plannerCubit.previousPage();
   }
 
   void _onStepCompleted() {
-    final cubit = context.read<AiPlannerCubit>();
-    if (cubit.state.currentPage < 4) {
-      cubit.nextPage();
+    if (_plannerCubit.isClosed) return;
+    if (_plannerCubit.state.currentPage < 4) {
+      _plannerCubit.nextPage();
     } else {
       // Last step – mark as complete
       _finishPlanning();
@@ -152,23 +165,27 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   }
 
   Future<void> _finishPlanning() async {
-    final chatMessages = context.read<ChatCubit>().state.messages;
-    final tripsCubit = context.read<TripsCubit>();
-    final plannerState = context.read<AiPlannerCubit>().state;
+    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed)
+      return;
+
+    final chatMessages = _chatCubit.state.messages;
+    final plannerState = _plannerCubit.state;
 
     if (_activeTripId == null && plannerState.selectedDestination != null) {
-      _activeTripId = await tripsCubit.createDraft(
+      _activeTripId = await _tripsCubit.createDraft(
         plannerState.selectedDestination!,
       );
+      if (_tripsCubit.isClosed) return;
     }
 
     if (_activeTripId != null) {
-      final snapshot = context.read<AiPlannerCubit>().toTripSnapshot(
+      final snapshot = _plannerCubit.toTripSnapshot(
         chatMessages,
         tripId: _activeTripId!,
       );
-      await tripsCubit.saveTripDraft(snapshot);
-      await tripsCubit.completeTrip(_activeTripId!);
+      await _tripsCubit.saveTripDraft(snapshot);
+      if (_tripsCubit.isClosed) return;
+      await _tripsCubit.completeTrip(_activeTripId!);
     }
 
     if (mounted) context.pop();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 
 class ExploreCategoryChips extends StatefulWidget {
   const ExploreCategoryChips({super.key, required this.categories});
@@ -52,10 +52,7 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (!isSelected) ...[
-                      Text(
-                        category.emoji,
-                        style: TextStyle(fontSize: 16.sp),
-                      ),
+                      Text(category.emoji, style: TextStyle(fontSize: 16.sp)),
                       SizedBox(width: 6.w),
                     ],
                     Text(

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/theme/extensions/theme_extension.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
@@ -46,8 +46,9 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
       // If trip overlaps with the current month
       final monthStart = DateTime(month.year, month.month, 1);
       final monthEnd = DateTime(month.year, month.month + 1, 0, 23, 59, 59);
-      
-      return trip.tripStart!.isBefore(monthEnd) && trip.tripEnd!.isAfter(monthStart);
+
+      return trip.tripStart!.isBefore(monthEnd) &&
+          trip.tripEnd!.isAfter(monthStart);
     }).toList();
   }
 
@@ -59,7 +60,7 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
         child: Column(
           children: [
             SizedBox(height: 16.h),
-            
+
             // Header
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -97,7 +98,7 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                 ],
               ),
             ),
-            
+
             SizedBox(height: 4.h),
             Padding(
               padding: EdgeInsets.only(left: 58.w, right: 20.w),
@@ -111,14 +112,17 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                 ),
               ),
             ),
-            
+
             SizedBox(height: 32.h),
-            
+
             Expanded(
               child: BlocBuilder<TripsCubit, TripsState>(
                 builder: (context, state) {
-                  final tripsInMonth = _getTripsInMonth(state.trips, _currentMonth);
-                  
+                  final tripsInMonth = _getTripsInMonth(
+                    state.trips,
+                    _currentMonth,
+                  );
+
                   return CustomScrollView(
                     slivers: [
                       // Month Navigation
@@ -129,7 +133,10 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.chevron_left_rounded, color: context.colorTheme.onSurface),
+                                icon: Icon(
+                                  Icons.chevron_left_rounded,
+                                  color: context.colorTheme.onSurface,
+                                ),
                                 onPressed: _previousMonth,
                               ),
                               Text(
@@ -139,23 +146,28 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                                 ),
                               ),
                               IconButton(
-                                icon: Icon(Icons.chevron_right_rounded, color: context.colorTheme.onSurface),
+                                icon: Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: context.colorTheme.onSurface,
+                                ),
                                 onPressed: _nextMonth,
                               ),
                             ],
                           ),
                         ),
                       ),
-                      
+
                       SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-                      
+
                       // Days of week header
                       SliverToBoxAdapter(
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day) {
+                            children: ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((
+                              day,
+                            ) {
                               return SizedBox(
                                 width: 32.w,
                                 child: Center(
@@ -171,9 +183,9 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                           ),
                         ),
                       ),
-                      
+
                       SliverToBoxAdapter(child: SizedBox(height: 8.h)),
-                      
+
                       // Calendar Grid
                       SliverToBoxAdapter(
                         child: Padding(
@@ -184,9 +196,9 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                           ),
                         ),
                       ),
-                      
+
                       SliverToBoxAdapter(child: SizedBox(height: 32.h)),
-                      
+
                       // My Schedule Title
                       SliverToBoxAdapter(
                         child: Padding(
@@ -199,14 +211,17 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                           ),
                         ),
                       ),
-                      
+
                       SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-                      
+
                       // Schedule List
                       if (tripsInMonth.isEmpty)
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20.w,
+                              vertical: 32.h,
+                            ),
                             child: Center(
                               child: Text(
                                 'No trips scheduled for this month.',
@@ -222,12 +237,13 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate(
-                              (context, index) => ScheduleTripTile(trip: tripsInMonth[index]),
+                              (context, index) =>
+                                  ScheduleTripTile(trip: tripsInMonth[index]),
                               childCount: tripsInMonth.length,
                             ),
                           ),
                         ),
-                        
+
                       SliverToBoxAdapter(child: SizedBox(height: 40.h)),
                     ],
                   );
@@ -243,20 +259,28 @@ class _TripCalendarScreenState extends State<TripCalendarScreen> {
 
 class _CalendarGrid extends StatelessWidget {
   const _CalendarGrid({required this.currentMonth, required this.trips});
-  
+
   final DateTime currentMonth;
   final List<Trip> trips;
 
   @override
   Widget build(BuildContext context) {
-    final daysInMonth = DateTime(currentMonth.year, currentMonth.month + 1, 0).day;
-    final firstDayWeekday = DateTime(currentMonth.year, currentMonth.month, 1).weekday;
+    final daysInMonth = DateTime(
+      currentMonth.year,
+      currentMonth.month + 1,
+      0,
+    ).day;
+    final firstDayWeekday = DateTime(
+      currentMonth.year,
+      currentMonth.month,
+      1,
+    ).weekday;
     // Dart weekday: 1=Mon, 7=Sun. We want 0=Sun.
     final emptyPrefixCells = firstDayWeekday == 7 ? 0 : firstDayWeekday;
-    
+
     final totalCells = emptyPrefixCells + daysInMonth;
     final rowCount = (totalCells / 7).ceil();
-    
+
     final now = DateTime.now();
 
     return Column(
@@ -266,16 +290,19 @@ class _CalendarGrid extends StatelessWidget {
           children: List.generate(7, (colIndex) {
             final cellIndex = rowIndex * 7 + colIndex;
             final day = cellIndex - emptyPrefixCells + 1;
-            
+
             if (day < 1 || day > daysInMonth) {
               return SizedBox(width: 32.w, height: 40.h);
             }
-            
+
             final date = DateTime(currentMonth.year, currentMonth.month, day);
-            final isToday = date.year == now.year && date.month == now.month && date.day == now.day;
-            
+            final isToday =
+                date.year == now.year &&
+                date.month == now.month &&
+                date.day == now.day;
+
             final state = _getDayState(date, isToday);
-            
+
             return SizedBox(
               width: 32.w,
               height: 40.h,
@@ -286,21 +313,29 @@ class _CalendarGrid extends StatelessWidget {
       }),
     );
   }
-  
+
   DayCellState _getDayState(DateTime date, bool isToday) {
     for (final trip in trips) {
       if (trip.tripStart == null || trip.tripEnd == null) continue;
-      
-      final s = DateTime(trip.tripStart!.year, trip.tripStart!.month, trip.tripStart!.day);
-      final e = DateTime(trip.tripEnd!.year, trip.tripEnd!.month, trip.tripEnd!.day);
+
+      final s = DateTime(
+        trip.tripStart!.year,
+        trip.tripStart!.month,
+        trip.tripStart!.day,
+      );
+      final e = DateTime(
+        trip.tripEnd!.year,
+        trip.tripEnd!.month,
+        trip.tripEnd!.day,
+      );
       final d = DateTime(date.year, date.month, date.day);
-      
+
       if (d == s && d == e) return DayCellState.start; // Single day trip
       if (d == s) return DayCellState.start;
       if (d == e) return DayCellState.end;
       if (d.isAfter(s) && d.isBefore(e)) return DayCellState.middle;
     }
-    
+
     if (isToday) return DayCellState.today;
     return DayCellState.normal;
   }
