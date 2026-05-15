@@ -18,7 +18,6 @@ class AiPlannerRoutes {
   );
 
   static final aiPlannerFlowRoutes = [
-    // TripsCubit lives at shell level so it's available across all sub-routes
     ShellRoute(
       builder: (context, state, child) {
         return MultiBlocProvider(
@@ -31,13 +30,11 @@ class AiPlannerRoutes {
         );
       },
       routes: [
-        // My Trips screen
         GoRoute(
           path: AppRoutes.myTrips,
           builder: (context, state) => const MyTripsScreen(),
         ),
 
-        // Planner flow — accepts optional ?tripId= query param for resume
         GoRoute(
           path: AppRoutes.aiPlannerFlow,
           builder: (context, state) {
@@ -52,7 +49,6 @@ class AiPlannerRoutes {
           ],
         ),
 
-        // Trip Calendar
         GoRoute(
           path: AppRoutes.tripCalendar,
           builder: (context, state) => const TripCalendarScreen(),

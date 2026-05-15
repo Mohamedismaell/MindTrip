@@ -8,7 +8,8 @@ class TripsCubit extends Cubit<TripsState> {
   final TripRepository _tripRepository;
   final _uuid = const Uuid();
 
-  TripsCubit(this._tripRepository) : super(const TripsState());
+  TripsCubit(this._tripRepository)
+    : super(TripsState(focusedDay: DateTime.now()));
 
   Future<void> updateSearchQuary(String? searchQuary) async {
     if (isClosed) return;
@@ -170,5 +171,29 @@ class TripsCubit extends Cubit<TripsState> {
         ),
       );
     }
+  }
+
+  void nextMonth(DateTime focusedDay) {
+    emit(
+      state.copyWith(
+        focusedDay: DateTime(focusedDay.year, focusedDay.month + 1),
+      ),
+    );
+  }
+
+  void previouseMonth(DateTime focusedDay) {
+    emit(
+      state.copyWith(
+        focusedDay: DateTime(focusedDay.year, focusedDay.month - 1),
+      ),
+    );
+  }
+
+  void changeMonth(DateTime focusedDay) {
+    emit(state.copyWith(focusedDay: focusedDay));
+  }
+
+  void selectDay(DateTime selected, DateTime focused) {
+    emit(state.copyWith(selectedDay: selected, focusedDay: focused));
   }
 }

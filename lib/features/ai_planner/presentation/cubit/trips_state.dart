@@ -11,12 +11,16 @@ class TripsState extends Equatable {
   final String? errorMessage;
   final String searchQuery;
   final TripFilterTab selectedTab;
+  final DateTime focusedDay;
+  final DateTime? selectedDay;
   const TripsState({
     this.trips = const [],
     this.status = TripsStatus.initial,
     this.errorMessage,
     this.searchQuery = "",
     this.selectedTab = TripFilterTab.all,
+    required this.focusedDay,
+    this.selectedDay,
   });
 
   TripsState copyWith({
@@ -25,6 +29,8 @@ class TripsState extends Equatable {
     String? errorMessage,
     String? searchQuery,
     TripFilterTab? selectedTab,
+    DateTime? focusedDay,
+    DateTime? selectedDay,
   }) {
     return TripsState(
       trips: trips ?? this.trips,
@@ -32,6 +38,8 @@ class TripsState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       searchQuery: searchQuery ?? this.searchQuery,
       selectedTab: selectedTab ?? this.selectedTab,
+      focusedDay: focusedDay ?? this.focusedDay,
+      selectedDay: selectedDay ?? this.selectedDay,
     );
   }
 
@@ -81,5 +89,7 @@ class TripsState extends Equatable {
     errorMessage,
     searchQuery,
     selectedTab,
+    focusedDay,
+    selectedDay,
   ];
 }

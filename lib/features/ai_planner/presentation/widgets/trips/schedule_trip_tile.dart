@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
+import 'package:mindtrip/features/ai_planner/presentation/utils/trip_color_palette.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleTripTile extends StatelessWidget {
@@ -21,131 +26,168 @@ class ScheduleTripTile extends StatelessWidget {
 
     final isLocal = !trip.coverAsset.startsWith('http');
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: context.colorTheme.surface,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          // margin: EdgeInsets.only(bottom: 12.h),
+          padding: EdgeInsets.only(
+            left: 12.w,
+            right: 38.w,
+            top: 17.h,
+            bottom: 17.h,
           ),
-        ],
-        border: Border.all(
-          color: context.colorTheme.outline.withValues(alpha: 0.15),
-        ),
-      ),
-      child: Row(
-        children: [
-          // Cover Thumbnail
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: SizedBox(
-              width: 56.w,
-              height: 56.w,
-              child: isLocal
-                  ? Image.asset(
-                      trip.coverAsset,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _FallbackCover(),
-                    )
-                  : Image.network(
-                      trip.coverAsset,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _FallbackCover(),
-                    ),
+          decoration: BoxDecoration(
+            color: context.colorTheme.surface,
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [AppShadows.tourPackagesCard],
+            border: Border.all(
+              color: context.colorTheme.outline.withValues(alpha: 0.6),
             ),
           ),
-          SizedBox(width: 14.w),
+          child: Row(
+            children: [
+              // Cover Thumbnail
+              _CoverImage(isLocal: isLocal, imageCover: trip.coverAsset),
+              SizedBox(width: 13.w),
 
-          // Trip Info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // Trip Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        trip.title,
-                        style: AppTextStyles.h9Bold.copyWith(
-                          color: context.colorTheme.onSurface,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          trip.title,
+                          style: context.textTheme.headlineSmall?.copyWith(
+                            color: AppColors.pureBlack,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                        // if (trip.status == TripStatus.draft)
+                        //   Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //       horizontal: 6.w,
+                        //       vertical: 2.h,
+                        //     ),
+                        //     decoration: BoxDecoration(
+                        //       color: AppColors.warning.withValues(alpha: 0.1),
+                        //       borderRadius: BorderRadius.circular(6.r),
+                        //     ),
+                        //     child: Text(
+                        //       'Draft',
+                        //       style: AppTextStyles.h10Medium.copyWith(
+                        //         color: AppColors.warning,
+                        //       ),
+                        //     ),
+                        //   ),
+                      ],
                     ),
-                    if (trip.status == TripStatus.draft)
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6.w,
-                          vertical: 2.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.warning.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6.r),
-                        ),
-                        child: Text(
-                          'Draft',
-                          style: AppTextStyles.h10Medium.copyWith(
-                            color: AppColors.warning,
+                    SizedBox(height: 12.h),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 15.w,
+                          height: 15.h,
+                          child: SvgPicture.asset(
+                            HomeAssets.locationIcon,
+                            colorFilter: ColorFilter.mode(
+                              context.colorTheme.onSurfaceVariant,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_rounded,
-                      size: 12.sp,
-                      color: context.colorTheme.primary,
-                    ),
-                    SizedBox(width: 4.w),
-                    Expanded(
-                      child: Text(
-                        trip.destination,
-                        style: AppTextStyles.h10Regular.copyWith(
-                          color: context.colorTheme.onSurfaceVariant,
+                        SizedBox(width: 7.5.w),
+                        Expanded(
+                          child: Text(
+                            '${trip.destination} / Egypt',
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colorTheme.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      ],
                     ),
+                    SizedBox(height: 10.h),
+                    if (trip.tripStart != null)
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            color: context.colorTheme.onSurfaceVariant,
+                            size: 16.sp,
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            // '${trip.tripStart} Days',
+                            '${DateFormat('dd MMMM').format(trip.tripStart!)} - ${DateFormat('dd MMMM').format(trip.tripStart!)} ',
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colorTheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  dateRangeStr,
-                  style: AppTextStyles.h10Medium.copyWith(
-                    color: context.colorTheme.outline,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          top: -4.h,
+          right: 24.w,
+          child: Icon(
+            Icons.bookmark,
+            size: 32.sp,
+            color: TripColorPalette.getColorForId(
+              trip.id,
+            ).withValues(alpha: 0.5),
+          ),
+        ),
+      ],
     );
   }
 }
 
-class _FallbackCover extends StatelessWidget {
+// class _FallbackCover extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       color: context.colorTheme.primary.withValues(alpha: 0.15),
+//       child: Center(
+//         child: Icon(
+//           Icons.travel_explore_rounded,
+//           size: 24.sp,
+//           color: context.colorTheme.primary.withValues(alpha: 0.5),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class _CoverImage extends StatelessWidget {
+  const _CoverImage({required this.isLocal, required this.imageCover});
+  final bool isLocal;
+  final String imageCover;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: context.colorTheme.primary.withValues(alpha: 0.15),
-      child: Center(
-        child: Icon(
-          Icons.travel_explore_rounded,
-          size: 24.sp,
-          color: context.colorTheme.primary.withValues(alpha: 0.5),
-        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20.r),
+      child: SizedBox(
+        width: 122.w,
+        height: 106,
+        child: isLocal
+            ? Image.asset(
+                imageCover,
+                fit: BoxFit.cover,
+                // errorBuilder: (_, _, _) => _FallbackCover(),
+              )
+            : AppCachedImage(imageUrl: imageCover, fit: BoxFit.cover),
       ),
     );
   }

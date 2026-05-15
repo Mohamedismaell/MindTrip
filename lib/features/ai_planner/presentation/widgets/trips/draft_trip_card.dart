@@ -244,6 +244,8 @@ class _DraftMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rename = 'reame';
+    final delete = 'delete';
     return PopupMenuButton<String>(
       icon: Icon(
         Icons.more_vert_rounded,
@@ -253,19 +255,19 @@ class _DraftMenuButton extends StatelessWidget {
 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       onSelected: (value) {
-        if (value == 'rename') {
+        if (value == rename) {
           showRenameTripDialog(
             context,
             tripId: trip.id,
             currentTitle: trip.title,
           );
-        } else if (value == 'delete') {
+        } else if (value == delete) {
           context.read<TripsCubit>().deleteTrip(trip.id);
         }
       },
       itemBuilder: (_) => [
         PopupMenuItem(
-          value: 'rename',
+          value: rename,
           child: Row(
             children: [
               Icon(Icons.edit_outlined, size: 22.sp),
@@ -276,7 +278,7 @@ class _DraftMenuButton extends StatelessWidget {
         ),
 
         PopupMenuItem(
-          value: 'delete',
+          value: delete,
           child: Row(
             children: [
               Icon(

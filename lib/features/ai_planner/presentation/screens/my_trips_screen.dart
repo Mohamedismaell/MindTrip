@@ -25,16 +25,12 @@ class MyTripsScreen extends StatefulWidget {
 
 class _MyTripsScreenState extends State<MyTripsScreen> {
   final TextEditingController _searchController = TextEditingController();
-  // String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     context.read<TripsCubit>().loadTrips();
     _searchController.addListener(() {
-      // setState(
-      //   () => _searchQuery = _searchController.text.trim().toLowerCase(),
-      // );
       context.read<TripsCubit>().updateSearchQuary(
         _searchController.text.trim().toLowerCase(),
       );
@@ -59,8 +55,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 24.h),
-
+              SizedBox(height: 16.h),
               // Header
               _CustomHeader(),
 
@@ -144,6 +139,7 @@ class _CustomHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
           children: [

@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-
 part 'trip_model.g.dart';
 
 @HiveType(typeId: 5)
@@ -91,7 +90,9 @@ class TripModel extends HiveObject {
       customBudget: trip.customBudget,
       interests: trip.interests,
       currentPage: trip.currentPage,
-      chatMessagesJson: jsonEncode(trip.chatMessages.map((e) => e.toJson()).toList()),
+      chatMessagesJson: jsonEncode(
+        trip.chatMessages.map((e) => e.toJson()).toList(),
+      ),
     );
   }
 
@@ -100,7 +101,9 @@ class TripModel extends HiveObject {
     if (chatMessagesJson.isNotEmpty) {
       try {
         final List<dynamic> decoded = jsonDecode(chatMessagesJson);
-        parsedMessages = decoded.map((e) => ChatMessage.fromJson(e as Map<String, dynamic>)).toList();
+        parsedMessages = decoded
+            .map((e) => ChatMessage.fromJson(e as Map<String, dynamic>))
+            .toList();
       } catch (e) {
         // Fallback for empty or corrupt chat history
       }

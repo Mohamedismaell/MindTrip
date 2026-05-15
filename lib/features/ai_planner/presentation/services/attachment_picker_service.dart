@@ -7,13 +7,6 @@ import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// Centralises all media-picking logic and limit enforcement.
-///
-/// Every method:
-/// 1. Requests the required platform permission.
-/// 2. Opens the appropriate picker.
-/// 3. Filters results against size limits.
-/// 4. Shows [AppSnackBar.showError] for any dropped items.
 class AttachmentPickerService {
   AttachmentPickerService._();
 
@@ -26,8 +19,7 @@ class AttachmentPickerService {
 
   static final _picker = ImagePicker();
 
-  //  Photos (camera or gallery)
-
+  //  camera or gallery
   static Future<List<XFile>> pickPhotos(
     BuildContext context, {
     required ImageSource source,
