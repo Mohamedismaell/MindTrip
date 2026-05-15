@@ -12,6 +12,7 @@ import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/draft_trip_card.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/start_planning_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/trip_card.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/trip_filter_tabs.dart';
 
@@ -50,6 +51,8 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorTheme.surface,
+      floatingActionButton: StartPlanningButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -94,15 +97,16 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                     if (state.status == TripsStatus.loading) {
                       return const Center(child: CircularProgressIndicator());
                     }
-
                     final trips = state.filterTrips;
 
                     if (trips.isEmpty) {
                       return _EmptyState(tab: state.selectedTab);
                     }
 
-                    return ListView.builder(
-                      padding: EdgeInsets.only(bottom: 24.h),
+                    return ListView.separated(
+                      padding: EdgeInsets.only(bottom: 80.h),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 31.h),
                       itemCount: trips.length,
                       itemBuilder: (context, index) {
                         final trip = trips[index];

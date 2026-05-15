@@ -83,7 +83,9 @@ class Trip extends Equatable {
     );
   }
 
-  double get planningProgress => (currentPage + 1) / 5;
+  double get planningProgress => currentPage / 5;
+
+  int get remainingStep => (5 - currentPage);
 
   int get durationDays {
     if (tripStart == null || tripEnd == null) return 0;
@@ -94,21 +96,21 @@ class Trip extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        status,
-        createdAt,
-        updatedAt,
-        destination,
-        tripStart,
-        tripEnd,
-        adults,
-        children,
-        pets,
-        budgetTier,
-        customBudget,
-        interests,
-        currentPage,
-        chatMessages,
-      ];
+    id,
+    title,
+    status,
+    createdAt,
+    updatedAt,
+    destination,
+    tripStart,
+    tripEnd,
+    adults,
+    children,
+    pets,
+    budgetTier,
+    customBudget,
+    interests,
+    currentPage,
+    chatMessages,
+  ];
 }

@@ -4,7 +4,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mindtrip/core/widget/app_snackbar.dart';
-import 'package:mindtrip/core/widget/cusotm_dialog.dart';
+import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ImagePickCropService {
@@ -16,7 +16,10 @@ class ImagePickCropService {
       _cropper = cropper ?? ImageCropper();
 
   /// Returns the processed [File] or null
-  Future<File?> pickAndCropImage(BuildContext context, ImageSource source) async {
+  Future<File?> pickAndCropImage(
+    BuildContext context,
+    ImageSource source,
+  ) async {
     final granted = await _requestPermission(
       context,
       source == ImageSource.camera ? Permission.camera : Permission.photos,

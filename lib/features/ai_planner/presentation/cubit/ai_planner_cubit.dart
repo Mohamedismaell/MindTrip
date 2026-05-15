@@ -9,6 +9,10 @@ import 'ai_planner_state.dart';
 class AiPlannerCubit extends Cubit<AiPlannerState> {
   AiPlannerCubit() : super(AiPlannerState());
 
+  void reset() {
+    emit(AiPlannerState());
+  }
+
   void loadFromTrip(Trip trip) {
     BudgetTierModel? matchingBudget;
     if (trip.budgetTier != null) {
@@ -22,7 +26,8 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     emit(
       state.copyWith(
         tripId: trip.id,
-        currentPage: trip.currentPage,
+        currentPage: trip.currentPage > 4 ? 4 : trip.currentPage,
+        maxReachedPage: trip.currentPage,
         selectedDestination: trip.destination,
         destinationQuery: trip.destination,
         tripStart: trip.tripStart,
@@ -35,6 +40,10 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
         selectedInterests: trip.interests,
       ),
     );
+  }
+
+  void markReadyToGenerate() {
+    emit(state.copyWith(maxReachedPage: 5));
   }
 
   Trip toTripSnapshot(
@@ -56,18 +65,33 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
       budgetTier: state.selectedBudget?.title,
       customBudget: state.customBudget,
       interests: state.selectedInterests,
-      currentPage: state.currentPage,
+      currentPage: state.maxReachedPage,
       chatMessages: chatMessages,
     );
   }
 
   void setPage(int page) {
-    emit(state.copyWith(currentPage: page));
+    emit(
+      state.copyWith(
+        currentPage: page,
+        maxReachedPage: page > state.maxReachedPage
+            ? page
+            : state.maxReachedPage,
+      ),
+    );
   }
 
   void nextPage() {
     if (state.currentPage < 4) {
-      emit(state.copyWith(currentPage: state.currentPage + 1));
+      final next = state.currentPage + 1;
+      emit(
+        state.copyWith(
+          currentPage: next,
+          maxReachedPage: next > state.maxReachedPage
+              ? next
+              : state.maxReachedPage,
+        ),
+      );
     }
   }
 

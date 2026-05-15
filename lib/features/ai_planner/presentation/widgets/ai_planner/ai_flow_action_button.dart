@@ -7,8 +7,8 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 
-class FlowButton extends StatelessWidget {
-  const FlowButton({super.key, required this.text, this.onTap});
+class AiFlowActionButton extends StatelessWidget {
+  const AiFlowActionButton({super.key, required this.text, this.onTap});
 
   final String text;
   final VoidCallback? onTap;

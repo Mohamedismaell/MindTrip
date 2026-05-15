@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flow_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_flow_action_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 import 'package:mindtrip/core/shared/models/interest_categories.dart';
 
@@ -32,7 +32,10 @@ class InterestsStep extends StatelessWidget {
         // Spacer(),
         Padding(
           padding: EdgeInsets.only(top: 32.h, bottom: 24),
-          child: FlowButton(text: 'Generate your plan', onTap: onContinue),
+          child: AiFlowActionButton(
+            text: 'Generate your plan',
+            onTap: onContinue,
+          ),
         ),
       ],
     );

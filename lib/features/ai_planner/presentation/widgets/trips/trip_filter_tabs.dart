@@ -24,7 +24,7 @@ class TripFilterTabs extends StatelessWidget {
         children: TripFilterTab.values.map((tab) {
           final isSelected = tab == selected;
           return Padding(
-            padding: EdgeInsets.only(right: 8.w),
+            padding: EdgeInsets.only(right: 14.w),
             child: GestureDetector(
               onTap: () => onSelect(tab),
               child: AnimatedContainer(

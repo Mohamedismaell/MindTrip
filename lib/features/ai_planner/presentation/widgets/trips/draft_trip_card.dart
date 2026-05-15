@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/rename_trip_dialog.dart';
-import 'package:intl/intl.dart';
 
 class DraftTripCard extends StatelessWidget {
   const DraftTripCard({
@@ -23,140 +25,195 @@ class DraftTripCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16.h),
-      padding: EdgeInsets.all(16.r),
+      height: 453.h,
       decoration: BoxDecoration(
+        color: AppColors.pureWhite,
         borderRadius: BorderRadius.circular(20.r),
-        color: context.colorTheme.surface,
-        border: Border.all(
-          color: context.colorTheme.outline.withValues(alpha: 0.2),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        border: Border.all(color: context.colorTheme.outline, width: 1),
+        boxShadow: [AppShadows.tourPackagesCard],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header row
-          Row(
-            children: [
-              // Cover thumbnail
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.r),
-                child: SizedBox(
-                  width: 64.w,
-                  height: 64.w,
-                  child: _DraftCoverImage(coverAsset: trip.coverAsset),
-                ),
+          // Image
+          Expanded(
+            flex: 2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(19.r),
+                topRight: Radius.circular(19.r),
               ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8.w,
-                            vertical: 3.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.warning.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Text(
-                            'Draft',
-                            style: AppTextStyles.h10Medium.copyWith(
-                              color: AppColors.warning,
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        _DraftMenu(trip: trip),
-                      ],
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      trip.title,
-                      style: AppTextStyles.h9Bold.copyWith(
-                        color: context.colorTheme.onSurface,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'Last edited ${_formatDate(trip.updatedAt)}',
-                      style: AppTextStyles.h10Regular.copyWith(
-                        color: context.colorTheme.outline,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          SizedBox(height: 14.h),
-
-          // Progress bar
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
+                alignment: Alignment.topLeft,
                 children: [
-                  Text(
-                    'Planning progress',
-                    style: AppTextStyles.h10Regular.copyWith(
-                      color: context.colorTheme.onSurfaceVariant,
-                    ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: _DraftCoverImage(coverAsset: trip.coverAsset),
                   ),
-                  Text(
-                    '${(trip.planningProgress * 100).toInt()}%',
-                    style: AppTextStyles.h10Medium.copyWith(
-                      color: context.colorTheme.primary,
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 17.h,
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 30.w,
+                        vertical: 5.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLightGray,
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      child: Text('Draft', style: context.textTheme.bodyMedium),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 6.h),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4.r),
-                child: LinearProgressIndicator(
-                  value: trip.planningProgress,
-                  backgroundColor: context.colorTheme.primary.withValues(
-                    alpha: 0.1,
-                  ),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    context.colorTheme.primary,
-                  ),
-                  minHeight: 6,
-                ),
-              ),
-            ],
+            ),
           ),
 
-          SizedBox(height: 14.h),
+          // Content Section
+          Expanded(
+            flex: 4,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Last Update
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              trip.title,
+                              style: AppTextStyles.h6Bold.copyWith(
+                                color: context.colorTheme.onSurface,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          _DraftMenuButton(trip: trip),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 18.w,
+                                height: 18.h,
+                                child: SvgPicture.asset(
+                                  HomeAssets.locationIcon,
+                                  colorFilter: ColorFilter.mode(
+                                    context.colorTheme.onSurfaceVariant,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ),
 
-          // Continue button
-          CustomGradientButton(
-            text: 'Continue Planning',
-            onTap: onContinue,
-            width: double.infinity,
+                              SizedBox(width: 8.w),
+
+                              Text(
+                                '${trip.destination} / Egypt',
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  color: context.colorTheme.onSurfaceVariant,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 9.w),
+                          if (trip.tripStart != null)
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today_outlined,
+                                  color: context.colorTheme.onSurfaceVariant,
+                                  size: 16.sp,
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  '${trip.durationDays} Days',
+                                  style: context.textTheme.bodyMedium?.copyWith(
+                                    color: context.colorTheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'Last edited: ${_formatTimeAgo(trip.updatedAt)}',
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          color: context.colorTheme.outline,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Steps
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Just ${trip.remainingStep} steps left to create your magic trip!',
+                        style: AppTextStyles.h8Medium.copyWith(
+                          color: context.colorTheme.onSurface,
+                        ),
+                      ),
+                      SizedBox(height: 14.h),
+                      Row(
+                        children: [
+                          Text(
+                            'Planning Progress',
+                            style: AppTextStyles.h8Medium.copyWith(
+                              color: context.colorTheme.onSurface,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            '${(trip.planningProgress * 100).toInt()}%',
+                            style: AppTextStyles.h8Medium.copyWith(
+                              color: context.colorTheme.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.h),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20.r),
+                        child: LinearProgressIndicator(
+                          value: trip.planningProgress,
+                          backgroundColor: AppColors.primaryLightGray,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            context.colorTheme.primary,
+                          ),
+                          minHeight: 9.h,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Button
+                  CustomGradientButton(
+                    text: 'Continue Planning',
+                    onTap: onContinue,
+                    width: double.infinity,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    return DateFormat('MMM d').format(date);
   }
 }
 
@@ -169,7 +226,7 @@ class _DraftCoverImage extends StatelessWidget {
     return Image.asset(
       coverAsset,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => Container(
+      errorBuilder: (_, _, _) => Container(
         color: context.colorTheme.primary.withValues(alpha: 0.12),
         child: Icon(
           Icons.travel_explore_rounded,
@@ -181,8 +238,8 @@ class _DraftCoverImage extends StatelessWidget {
   }
 }
 
-class _DraftMenu extends StatelessWidget {
-  const _DraftMenu({required this.trip});
+class _DraftMenuButton extends StatelessWidget {
+  const _DraftMenuButton({required this.trip});
   final Trip trip;
 
   @override
@@ -191,9 +248,9 @@ class _DraftMenu extends StatelessWidget {
       icon: Icon(
         Icons.more_vert_rounded,
         size: 20.sp,
-        color: context.colorTheme.onSurfaceVariant,
+        color: context.colorTheme.onSurface,
       ),
-      color: context.colorTheme.surface,
+
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       onSelected: (value) {
         if (value == 'rename') {
@@ -211,25 +268,26 @@ class _DraftMenu extends StatelessWidget {
           value: 'rename',
           child: Row(
             children: [
-              Icon(Icons.edit_outlined, size: 18.sp),
+              Icon(Icons.edit_outlined, size: 22.sp),
               SizedBox(width: 10.w),
-              Text('Rename', style: AppTextStyles.h9Regular),
+              Text('Rename', style: context.textTheme.bodyLarge),
             ],
           ),
         ),
+
         PopupMenuItem(
           value: 'delete',
           child: Row(
             children: [
               Icon(
                 Icons.delete_outline_rounded,
-                size: 18.sp,
+                size: 22.sp,
                 color: Colors.red,
               ),
               SizedBox(width: 10.w),
               Text(
                 'Delete Draft',
-                style: AppTextStyles.h9Regular.copyWith(color: Colors.red),
+                style: context.textTheme.bodyLarge?.copyWith(color: Colors.red),
               ),
             ],
           ),
@@ -237,4 +295,32 @@ class _DraftMenu extends StatelessWidget {
       ],
     );
   }
+}
+
+String _formatTimeAgo(DateTime dateTime) {
+  final difference = DateTime.now().difference(dateTime);
+
+  if (difference.inSeconds < 60) {
+    return '${difference.inSeconds}s ago';
+  }
+
+  if (difference.inMinutes < 60) {
+    return '${difference.inMinutes}m ago';
+  }
+
+  if (difference.inHours < 24) {
+    return '${difference.inHours}h ago';
+  }
+
+  if (difference.inDays < 30) {
+    return '${difference.inDays}d ago';
+  }
+
+  if (difference.inDays < 365) {
+    final months = (difference.inDays / 30).floor();
+    return '${months}mo ago';
+  }
+
+  final years = (difference.inDays / 365).floor();
+  return '${years}y ago';
 }

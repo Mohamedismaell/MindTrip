@@ -101,11 +101,14 @@ class HomeAiPlannerSection extends StatelessWidget {
                           horizontal: 12.w,
                           vertical: 18,
                         ),
-                        child: OutlinedButton(
-                          onPressed: () {
-                            context.push(AppRoutes.aiPlannerFlow);
-                          },
-                          child: Text('Create your own plan'),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              context.push(AppRoutes.aiPlannerFlow);
+                            },
+                            child: Text('Create your own plan'),
+                          ),
                         ),
                       ),
                     ],

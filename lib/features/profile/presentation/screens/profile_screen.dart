@@ -5,23 +5,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
-import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
-import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/edit_profile_button.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/interest_chip.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/mytrips_section.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_identity.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/review_card.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/saved_trip_card.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/section_heading.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/stats_card.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/top_actions_row.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

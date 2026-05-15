@@ -112,8 +112,9 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   }
 
   Future<void> _autoSave() async {
-    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed)
+    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed) {
       return;
+    }
 
     final plannerState = _plannerCubit.state;
     if (plannerState.selectedDestination == null ||
@@ -135,7 +136,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
       );
       if (_tripsCubit.isClosed) return;
       _activeTripId = newId;
-      // Now save the full state into it
+
       final snapshot = _plannerCubit.toTripSnapshot(
         chatMessages,
         tripId: newId,
@@ -152,21 +153,25 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
       return;
     }
     _plannerCubit.previousPage();
+    _autoSave();
   }
 
   void _onStepCompleted() {
     if (_plannerCubit.isClosed) return;
     if (_plannerCubit.state.currentPage < 4) {
       _plannerCubit.nextPage();
+      _autoSave();
     } else {
-      // Last step – mark as complete
       _finishPlanning();
     }
   }
 
   Future<void> _finishPlanning() async {
-    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed)
+    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed) {
       return;
+    }
+
+    _plannerCubit.markReadyToGenerate();
 
     final chatMessages = _chatCubit.state.messages;
     final plannerState = _plannerCubit.state;
@@ -184,8 +189,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
         tripId: _activeTripId!,
       );
       await _tripsCubit.saveTripDraft(snapshot);
-      if (_tripsCubit.isClosed) return;
-      await _tripsCubit.completeTrip(_activeTripId!);
+      // Wait for actual generation before calling completeTrip
     }
 
     if (mounted) context.pop();

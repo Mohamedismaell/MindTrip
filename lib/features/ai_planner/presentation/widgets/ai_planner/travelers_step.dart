@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_hint.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/counter_row.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flow_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_flow_action_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class TravelersStep extends StatelessWidget {
@@ -48,7 +48,7 @@ class TravelersStep extends StatelessWidget {
           onIncrease: () => cubit.changePets(1),
         ),
         SizedBox(height: 34.h),
-        FlowButton(text: 'Continue', onTap: onContinue),
+        AiFlowActionButton(text: 'Continue', onTap: onContinue),
         SizedBox(height: 24.h),
         Center(
           child: AiHint(

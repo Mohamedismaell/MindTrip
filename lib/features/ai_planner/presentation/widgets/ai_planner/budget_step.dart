@@ -9,7 +9,7 @@ import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart'
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_hint.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/flow_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_flow_action_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
 
 class BudgetStep extends StatelessWidget {
@@ -90,7 +90,7 @@ class BudgetStep extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.h),
-        FlowButton(text: 'Continue', onTap: onContinue),
+        AiFlowActionButton(text: 'Continue', onTap: onContinue),
         SizedBox(height: 24.h),
         Center(
           child: AiHint(

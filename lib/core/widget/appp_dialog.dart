@@ -10,13 +10,15 @@ class AppDialog {
   static Future<bool?> show({
     required BuildContext context,
     required String title,
-    required String description,
+    String? description,
     required String primaryText,
     String? secondaryText,
     required VoidCallback onPrimary,
     VoidCallback? onSecondary,
     IconData icon = Icons.info,
     Color? iconColor,
+    Widget? child,
+    Widget Function(BuildContext, Widget)? providerBuilder,
   }) {
     return showGeneralDialog<bool>(
       context: context,
@@ -24,6 +26,7 @@ class AppDialog {
       barrierLabel: "Dialog",
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 250),
+
       pageBuilder: (dialogContext, _, _) {
         return Center(
           child: Material(
@@ -52,7 +55,6 @@ class AppDialog {
                       size: 32.sp,
                     ),
                   ),
-
                   SizedBox(height: 16.h),
                   // Title
                   Text(
@@ -60,25 +62,24 @@ class AppDialog {
                     textAlign: TextAlign.center,
                     style: context.textTheme.headlineSmall,
                   ),
-
                   SizedBox(height: 8.h),
 
                   // Description
-                  Text(
-                    description,
-                    textAlign: TextAlign.center,
-                    style: context.textTheme.bodyLarge?.copyWith(
-                      color: context.colorTheme.outline,
-                    ),
-                  ),
-
+                  description == null
+                      ? child!
+                      : Text(
+                          description,
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.bodyLarge?.copyWith(
+                            color: context.colorTheme.outline,
+                          ),
+                        ),
                   SizedBox(height: 20.h),
 
                   // Action Buttons
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final isSmall = constraints.maxWidth < 320;
-
                       if (isSmall) {
                         return Column(
                           children: [
@@ -88,10 +89,8 @@ class AppDialog {
                               child: CustomGradientButton(
                                 onTap: () {
                                   Navigator.pop(dialogContext, true);
-
                                   onPrimary();
                                 },
-
                                 text: primaryText,
                               ),
                             ),
@@ -105,10 +104,8 @@ class AppDialog {
                                 child: OutlinedButton(
                                   onPressed: () {
                                     Navigator.pop(dialogContext, false);
-
                                     onSecondary?.call();
                                   },
-
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(
                                       color: context.colorTheme.error,
@@ -119,7 +116,6 @@ class AppDialog {
                                       vertical: 14.h,
                                     ),
                                   ),
-
                                   child: Text(
                                     secondaryText,
                                     textAlign: TextAlign.center,
@@ -133,7 +129,6 @@ class AppDialog {
                           ],
                         );
                       }
-
                       return Row(
                         children: [
                           if (secondaryText != null) ...[
@@ -170,7 +165,6 @@ class AppDialog {
 
                             SizedBox(width: 12.w),
                           ],
-
                           Expanded(
                             child: CustomGradientButton(
                               onTap: () {
