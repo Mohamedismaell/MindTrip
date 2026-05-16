@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,186 +46,248 @@ class TripCalendarScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: ListView(
-            children: [
-              SizedBox(height: 16.h),
 
-              // Header
-              const _CustomHeader(),
-              SizedBox(height: 28.h),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.pureWhite,
-                  borderRadius: BorderRadius.circular(48.r),
-                  border: Border.all(
-                    color: context.colorTheme.outline.withValues(alpha: 0.6),
-                    width: 1.w,
-                  ),
+          child: CustomScrollView(
+            slivers: [
+              // HEADER
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: 16.h),
+
+                    const _CustomHeader(),
+
+                    SizedBox(height: 28.h),
+                  ],
                 ),
-                child: BlocBuilder<TripsCubit, TripsState>(
-                  builder: (context, state) {
-                    final focusedDay = state.focusedDay;
-                    final selectedDay = state.selectedDay;
-                    final cubit = context.read<TripsCubit>();
-                    return Padding(
-                      padding: EdgeInsets.all(23.r),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              BlocSelector<TripsCubit, TripsState, DateTime>(
-                                selector: (state) {
-                                  return state.focusedDay;
-                                },
-                                builder: (context, focusedDay) {
-                                  return Expanded(
+              ),
+
+              // CALENDAR
+              SliverToBoxAdapter(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.pureWhite,
+                    borderRadius: BorderRadius.circular(48.r),
+
+                    border: Border.all(
+                      color: context.colorTheme.outline.withValues(alpha: 0.6),
+                      width: 1.w,
+                    ),
+                  ),
+
+                  child: BlocBuilder<TripsCubit, TripsState>(
+                    builder: (context, state) {
+                      final focusedDay = state.focusedDay;
+                      final selectedDay = state.selectedDay;
+
+                      final cubit = context.read<TripsCubit>();
+
+                      return Padding(
+                        padding: EdgeInsets.all(23.r),
+
+                        child: Column(
+                          children: [
+                            // MONTH HEADER
+                            Row(
+                              children: [
+                                BlocSelector<TripsCubit, TripsState, DateTime>(
+                                  selector: (state) {
+                                    return state.focusedDay;
+                                  },
+
+                                  builder: (context, focusedDay) {
+                                    return Expanded(
+                                      child: Text(
+                                        DateFormat(
+                                          'MMMM yyyy',
+                                        ).format(focusedDay),
+
+                                        style: AppTextStyles.h9Medium.copyWith(
+                                          color: context.colorTheme.onSurface,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+
+                                _ArrrowIcon(
+                                  onTap: () {
+                                    context.read<TripsCubit>().previouseMonth(
+                                      focusedDay,
+                                    );
+                                  },
+
+                                  icon: Icons.chevron_left_rounded,
+                                ),
+
+                                SizedBox(width: 12.w),
+
+                                _ArrrowIcon(
+                                  onTap: () {
+                                    cubit.nextMonth(focusedDay);
+                                  },
+
+                                  icon: Icons.chevron_right_rounded,
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 20.h),
+
+                            // CALENDAR
+                            TableCalendar<Trip>(
+                              firstDay: DateTime.utc(2020, 1, 1),
+
+                              lastDay: DateTime.utc(2030, 12, 31),
+
+                              focusedDay: focusedDay,
+
+                              headerVisible: false,
+
+                              daysOfWeekHeight: 40.h,
+                              rowHeight: 50.h,
+
+                              calendarStyle: const CalendarStyle(
+                                cellMargin: EdgeInsets.zero,
+                                cellPadding: EdgeInsets.zero,
+                              ),
+
+                              eventLoader: (day) =>
+                                  _getTripsForDay(day, state.trips),
+
+                              selectedDayPredicate: (day) {
+                                return isSameDay(selectedDay, day);
+                              },
+
+                              onPageChanged: (focusedDay) {
+                                cubit.changeMonth(
+                                  DateTime(
+                                    focusedDay.year,
+                                    focusedDay.month,
+                                    1,
+                                  ),
+                                );
+                              },
+
+                              calendarBuilders: CalendarBuilders<Trip>(
+                                dowBuilder: (context, day) {
+                                  final days = [
+                                    'S',
+                                    'M',
+                                    'T',
+                                    'W',
+                                    'T',
+                                    'F',
+                                    'S',
+                                  ];
+
+                                  return Center(
                                     child: Text(
-                                      DateFormat(
-                                        'MMMM yyyy',
-                                      ).format(focusedDay),
+                                      days[day.weekday % 7],
+
                                       style: AppTextStyles.h9Medium.copyWith(
-                                        color: context.colorTheme.onSurface,
+                                        color:
+                                            context.colorTheme.onSurfaceVariant,
                                       ),
                                     ),
                                   );
                                 },
-                              ),
-                              _ArrrowIcon(
-                                onTap: () {
-                                  context.read<TripsCubit>().previouseMonth(
-                                    focusedDay,
+
+                                defaultBuilder: (context, day, focusedDay) {
+                                  return _buildDayCell(
+                                    context,
+                                    day,
+                                    state.trips,
                                   );
                                 },
-                                icon: Icons.chevron_left_rounded,
-                              ),
-                              SizedBox(width: 12.w),
-                              _ArrrowIcon(
-                                onTap: () {
-                                  cubit.nextMonth(focusedDay);
+
+                                outsideBuilder: (context, day, focusedDay) {
+                                  return _buildDayCell(
+                                    context,
+                                    day,
+                                    state.trips,
+                                    isOutside: true,
+                                  );
                                 },
-                                icon: Icons.chevron_right_rounded,
+
+                                todayBuilder: (context, day, focusedDay) {
+                                  return _buildDayCell(
+                                    context,
+                                    day,
+                                    state.trips,
+                                    isToday: true,
+                                  );
+                                },
+
+                                selectedBuilder: (context, day, focusedDay) {
+                                  return _buildDayCell(
+                                    context,
+                                    day,
+                                    state.trips,
+                                    isSelected: true,
+                                  );
+                                },
+
+                                markerBuilder: (context, day, events) =>
+                                    const SizedBox.shrink(),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 20.h),
-                          TableCalendar<Trip>(
-                            firstDay: DateTime.utc(2020, 1, 1),
-                            lastDay: DateTime.utc(2030, 12, 31),
-                            focusedDay: focusedDay,
-                            headerVisible: false,
-                            daysOfWeekHeight: 40.h,
-                            rowHeight: 50.h,
-
-                            calendarStyle: const CalendarStyle(
-                              cellMargin: EdgeInsets.zero,
-                              cellPadding: EdgeInsets.zero,
                             ),
-
-                            eventLoader: (day) =>
-                                _getTripsForDay(day, state.trips),
-
-                            selectedDayPredicate: (day) {
-                              return isSameDay(selectedDay, day);
-                            },
-
-                            onPageChanged: (focusedDay) {
-                              cubit.changeMonth(
-                                DateTime(focusedDay.year, focusedDay.month, 1),
-                              );
-                            },
-
-                            calendarBuilders: CalendarBuilders<Trip>(
-                              dowBuilder: (context, day) {
-                                final days = [
-                                  'S',
-                                  'M',
-                                  'T',
-                                  'W',
-                                  'T',
-                                  'F',
-                                  'S',
-                                ];
-
-                                return Center(
-                                  child: Text(
-                                    days[day.weekday % 7],
-                                    style: AppTextStyles.h9Medium.copyWith(
-                                      color:
-                                          context.colorTheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                                );
-                              },
-                              // Normal day
-                              defaultBuilder: (context, day, focusedDay) {
-                                return _buildDayCell(context, day, state.trips);
-                              },
-                              outsideBuilder: (context, day, focusedDay) {
-                                return _buildDayCell(
-                                  context,
-                                  day,
-                                  state.trips,
-                                  isOutside: true,
-                                );
-                              },
-                              // Today
-                              todayBuilder: (context, day, focusedDay) {
-                                return _buildDayCell(
-                                  context,
-                                  day,
-                                  state.trips,
-                                  isToday: true,
-                                );
-                              },
-                              // Selected day
-                              selectedBuilder: (context, day, focusedDay) {
-                                return _buildDayCell(
-                                  context,
-                                  day,
-                                  state.trips,
-                                  isSelected: true,
-                                );
-                              },
-                              markerBuilder: (context, day, events) =>
-                                  const SizedBox.shrink(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 28.h),
-              // My Schedule Title
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'My Schedule',
-                  style: AppTextStyles.h7Bold.copyWith(
-                    color: context.colorTheme.onSurface,
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
-              SizedBox(height: 16.h),
-              // Schedule List
+
+              // TITLE
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: 28.h),
+
+                    Align(
+                      alignment: Alignment.centerLeft,
+
+                      child: Text(
+                        'My Schedule',
+
+                        style: AppTextStyles.h7Bold.copyWith(
+                          color: context.colorTheme.onSurface,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 16.h),
+                  ],
+                ),
+              ),
+
+              // SCHEDULE LIST
               BlocBuilder<TripsCubit, TripsState>(
                 builder: (context, state) {
                   final focusedMonth = state.focusedDay;
+
                   final currentMonthTrips = state.trips.where((t) {
-                    if (t.tripStart == null) return false;
+                    if (t.tripStart == null) {
+                      return false;
+                    }
+
                     final start = t.tripStart!;
                     final end = t.tripEnd ?? start;
+
                     final startOfMonth = DateTime(
                       focusedMonth.year,
                       focusedMonth.month,
                       1,
                     );
+
                     final endOfMonth = DateTime(
                       focusedMonth.year,
                       focusedMonth.month + 1,
                       0,
                     );
+
                     return start.isBefore(
                           endOfMonth.add(const Duration(days: 1)),
                         ) &&
@@ -233,25 +297,63 @@ class TripCalendarScreen extends StatelessWidget {
                   }).toList();
 
                   if (currentMonthTrips.isEmpty) {
-                    return Center(
-                      child: Text(
-                        'No trips scheduled for this month.',
-                        style: AppTextStyles.h10Regular.copyWith(
-                          color: context.colorTheme.outline,
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: Text(
+                          'No trips scheduled for this month.',
+
+                          style: AppTextStyles.h10Regular.copyWith(
+                            color: context.colorTheme.outline,
+                          ),
                         ),
                       ),
                     );
                   }
-                  return Column(
-                    children: currentMonthTrips.map((trip) {
+
+                  return SliverList.builder(
+                    itemCount: currentMonthTrips.length,
+
+                    itemBuilder: (context, index) {
+                      final trip = currentMonthTrips[index];
+
                       return Padding(
                         padding: EdgeInsets.only(bottom: 16.h),
-                        child: ScheduleTripTile(trip: trip),
+
+                        child: TweenAnimationBuilder<double>(
+                          duration: Duration(milliseconds: 350 + (index * 60)),
+
+                          tween: Tween(begin: 0, end: 1),
+
+                          curve: Curves.easeOutCubic,
+
+                          builder: (context, value, child) {
+                            return Opacity(
+                              opacity: value,
+
+                              child: Transform.translate(
+                                offset: Offset(0, 20 * (1 - value)),
+
+                                child: Transform.scale(
+                                  scale: 0.98 + (0.02 * value),
+
+                                  child: child,
+                                ),
+                              ),
+                            );
+                          },
+
+                          child: ScheduleTripTile(
+                            key: ValueKey(trip.id),
+                            trip: trip,
+                          ),
+                        ),
                       );
-                    }).toList(),
+                    },
                   );
                 },
               ),
+
+              SliverToBoxAdapter(child: SizedBox(height: 100.h)),
             ],
           ),
         ),

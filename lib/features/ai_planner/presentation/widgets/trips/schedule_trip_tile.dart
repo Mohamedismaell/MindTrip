@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
-import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/utils/trip_color_palette.dart';
-import 'package:intl/intl.dart';
 
 class ScheduleTripTile extends StatelessWidget {
   const ScheduleTripTile({super.key, required this.trip});
@@ -18,12 +17,6 @@ class ScheduleTripTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final start = trip.tripStart;
-    final end = trip.tripEnd;
-    final dateRangeStr = start != null && end != null
-        ? '${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d, yyyy').format(end)}'
-        : 'Dates not set';
-
     final isLocal = !trip.coverAsset.startsWith('http');
 
     return Stack(
@@ -51,7 +44,7 @@ class ScheduleTripTile extends StatelessWidget {
               _CoverImage(isLocal: isLocal, imageCover: trip.coverAsset),
               SizedBox(width: 13.w),
 
-              // Trip Info
+              // Trip info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +60,6 @@ class ScheduleTripTile extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        // if (trip.status == TripStatus.draft)
                         //   Container(
                         //     padding: EdgeInsets.symmetric(
                         //       horizontal: 6.w,
@@ -124,7 +116,6 @@ class ScheduleTripTile extends StatelessWidget {
                           ),
                           SizedBox(width: 8.w),
                           Text(
-                            // '${trip.tripStart} Days',
                             '${DateFormat('dd MMMM').format(trip.tripStart!)} - ${DateFormat('dd MMMM').format(trip.tripStart!)} ',
                             style: context.textTheme.bodyMedium?.copyWith(
                               color: context.colorTheme.onSurfaceVariant,
