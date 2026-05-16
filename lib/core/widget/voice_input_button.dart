@@ -61,7 +61,7 @@ class _VoiceInputButtonState extends State<VoiceInputButton>
     if (!status.isGranted) {
       if (mounted) {
         AppSnackBar.showError(
-          context,
+          context: context,
           message: 'Microphone permission is required to use voice input.',
         );
       }
@@ -73,7 +73,7 @@ class _VoiceInputButtonState extends State<VoiceInputButton>
         onError: (error) {
           if (mounted) {
             AppSnackBar.showError(
-              context,
+              context: context,
               message: 'Speech recognition error: \${error.errorMsg}',
             );
             _stopListening();
@@ -91,7 +91,7 @@ class _VoiceInputButtonState extends State<VoiceInputButton>
     } catch (e) {
       if (mounted) {
         AppSnackBar.showError(
-          context,
+          context: context,
           message: 'Failed to initialize speech recognition.',
         );
       }

@@ -113,5 +113,5 @@ class ResetPasswordStatusListener extends StatelessWidget {
 }
 
 void _showSnackBar(BuildContext context, {required String message}) {
-  AppSnackBar.showError(context, message: message);
+  AppSnackBar.showError(context: context, message: message);
 }

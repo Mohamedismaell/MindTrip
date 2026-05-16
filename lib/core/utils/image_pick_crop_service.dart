@@ -107,7 +107,7 @@ class ImagePickCropService {
     }
 
     if (context.mounted) {
-      AppSnackBar.showError(context, message: denied);
+      AppSnackBar.showError(context: context, message: denied);
     }
     return false;
   }

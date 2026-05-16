@@ -4,16 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/ai_chat_bot_button.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_planner_flow_listnener.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/animated_progress_bar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/budget_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/destination_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/duration_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/interests_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/travelers_step.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/ai_chat_bot_button.dart';
 
 class AiPlannerFlowScreen extends StatelessWidget {
   const AiPlannerFlowScreen({super.key, this.tripId});
@@ -174,25 +174,23 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     _plannerCubit.markReadyToGenerate();
 
     final chatMessages = _chatCubit.state.messages;
-    final plannerState = _plannerCubit.state;
 
-    if (_activeTripId == null && plannerState.selectedDestination != null) {
-      _activeTripId = await _tripsCubit.createDraft(
-        plannerState.selectedDestination!,
-      );
-      if (_tripsCubit.isClosed) return;
+    if (_activeTripId == null) {
+      if (mounted) context.pop();
+      return;
     }
 
-    if (_activeTripId != null) {
-      final snapshot = _plannerCubit.toTripSnapshot(
-        chatMessages,
-        tripId: _activeTripId!,
-      );
-      await _tripsCubit.saveTripDraft(snapshot);
-      // Wait for actual generation before calling completeTrip
-    }
+    // Save final snapshot with all user inputs
+    final snapshot = _plannerCubit.toTripSnapshot(
+      chatMessages,
+      tripId: _activeTripId!,
+    );
+    await _tripsCubit.saveTripDraft(snapshot);
 
-    if (mounted) context.pop();
+    if (!mounted) return;
+
+    // Trigger generation flow in the background (state handles UI)
+    _tripsCubit.generateTrip(_activeTripId!);
   }
 
   @override
@@ -215,16 +213,8 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-            child: BlocListener<AiPlannerCubit, AiPlannerState>(
-              listenWhen: (previous, current) =>
-                  previous.currentPage != current.currentPage,
-              listener: (context, state) {
-                _pageController.animateToPage(
-                  state.currentPage,
-                  duration: const Duration(milliseconds: 350),
-                  curve: Curves.easeIn,
-                );
-              },
+            child: AiPlannerFlowListnener(
+              pageController: _pageController,
               child: Column(
                 children: [
                   SizedBox(height: 20.h),

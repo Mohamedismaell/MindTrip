@@ -18,7 +18,10 @@ class EditProfileListeners extends StatelessWidget {
           listenWhen: (prev, curr) => prev.saveStatus != curr.saveStatus,
           listener: (context, state) {
             if (state.saveStatus == EditSaveStatus.success) {
-              AppSnackBar.showSuccess(context, message: 'Profile updated!');
+              AppSnackBar.showSuccess(
+                context: context,
+                message: 'Profile updated!',
+              );
               if (context.canPop()) {
                 context.pop();
               } else {
@@ -26,7 +29,7 @@ class EditProfileListeners extends StatelessWidget {
               }
             } else if (state.saveStatus == EditSaveStatus.failed) {
               AppSnackBar.showError(
-                context,
+                context: context,
                 message: 'Failed to save changes. Please try again.',
               );
               context.read<EditProfileCubit>().dismissError();
@@ -43,7 +46,7 @@ class EditProfileListeners extends StatelessWidget {
             } else if (state.deleteStatus == DeleteAccountStatus.failed &&
                 context.mounted) {
               AppSnackBar.showError(
-                context,
+                context: context,
                 message: 'Failed to delete account, please try again.',
               );
               context.read<EditProfileCubit>().dismissError();

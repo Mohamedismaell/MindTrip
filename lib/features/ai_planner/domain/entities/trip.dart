@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:mindtrip/features/ai_planner/data/datasources/trip_cover_assets.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 
-enum TripStatus { draft, completed }
+enum TripStatus { draft, inProgress, completed }
 
 class Trip extends Equatable {
   final String id;

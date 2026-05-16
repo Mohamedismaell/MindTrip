@@ -23,8 +23,8 @@ extension TripFilterTabLabel on TripFilterTab {
         return 'All';
       case TripFilterTab.completed:
         return 'Completed';
-      case TripFilterTab.recentlyEdited:
-        return 'Recent';
+      case TripFilterTab.inProgress:
+        return 'In Progress';
       case TripFilterTab.drafts:
         return 'Drafts';
     }

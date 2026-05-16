@@ -34,6 +34,7 @@ class ChatMessage extends Equatable {
     required this.timestamp,
     this.suggestions,
     this.attachments,
+    this.isReadyToGenerate = false,
   });
 
   final String id;
@@ -43,6 +44,7 @@ class ChatMessage extends Equatable {
   final List<String>? suggestions;
 
   final List<ChatAttachment>? attachments;
+  final bool isReadyToGenerate;
 
   bool get isUser => sender == MessageSender.user;
   bool get isAi => sender == MessageSender.ai;
@@ -64,6 +66,7 @@ class ChatMessage extends Equatable {
       attachments: (json['attachments'] as List<dynamic>?)
           ?.map((e) => ChatAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isReadyToGenerate: json['is_ready_to_generate'] as bool? ?? false,
     );
   }
 
@@ -75,6 +78,7 @@ class ChatMessage extends Equatable {
     if (suggestions != null) 'suggestions': suggestions,
     if (attachments != null)
       'attachments': attachments!.map((a) => a.toJson()).toList(),
+    'is_ready_to_generate': isReadyToGenerate,
   };
 
   @override
@@ -85,5 +89,6 @@ class ChatMessage extends Equatable {
     timestamp,
     suggestions,
     attachments,
+    isReadyToGenerate,
   ];
 }

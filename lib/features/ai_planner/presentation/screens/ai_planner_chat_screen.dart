@@ -7,13 +7,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_input_bar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_message_bubble.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_suggestion_chips.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_typing_indicator.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 
 class AiPlannerChatScreen extends StatefulWidget {
   const AiPlannerChatScreen({super.key});
@@ -164,6 +170,44 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
     );
   }
 
+  //Todo: When real API is ready, replace this with a proper API call using metadata
+  Future<void> _onGeneratePlan() async {
+    final chatCubit = context.read<ChatCubit>();
+    final messages = chatCubit.state.messages;
+    if (messages.isEmpty) return;
+
+    final tripsCubit = context.read<TripsCubit>();
+
+    //Todo: either we extract the reponse of the back end  json or we get a flag so we don't extract any thing
+    // Extract trip info from AI-extracted metadata (populated during chat)
+    final metadata = chatCubit.state.tripMetadata;
+    final destination = metadata?['destination'] as String? ?? 'My Trip';
+    final title = 'Trip to $destination';
+
+    final newTripId = DateTime.now().millisecondsSinceEpoch.toString();
+    final snapshot = Trip(
+      id: newTripId,
+      title: title,
+      status: TripStatus.draft,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      destination: destination,
+      adults: int.tryParse(metadata?['adults']?.toString() ?? '1') ?? 1,
+      children: int.tryParse(metadata?['children']?.toString() ?? '0') ?? 0,
+      pets: 0,
+      customBudget: metadata?['budget'] as String? ?? '',
+      interests: (metadata?['interests'] as List?)?.cast<String>() ?? const [],
+      currentPage: 5,
+      chatMessages: messages,
+    );
+
+    await tripsCubit.saveTripDraft(snapshot);
+
+    if (!mounted) return;
+    // Trigger generation flow in the background (state handles UI)
+    tripsCubit.generateTrip(newTripId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(
@@ -172,79 +216,196 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
 
         return Scaffold(
           body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
-              child: Center(
-                child: Column(
-                  children: [
-                    //  Header
-                    _ChatHeader(
-                      displayName: displayName,
-                      onNewChat: _confirmNewConversation,
-                    ),
-                    SizedBox(height: 20.h),
+            child: BlocListener<TripsCubit, TripsState>(
+              listenWhen: (previous, current) =>
+                  previous.isGenerating != current.isGenerating ||
+                  current.generatedTripId != null,
+              listener: (context, state) {
+                if (state.isGenerating) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) => const GeneratingDialog(),
+                  );
+                } else if (state.generatedTripId != null) {
+                  context.pop();
+                  //Todo: check navigation
+                  context.pushReplacement(
+                    '${AppRoutes.tripDetails}?tripId=${state.generatedTripId}',
+                  );
+                } else if (state.tripsStatus == TripsStatus.error) {
+                  context.pop();
+                  AppSnackBar.showError(
+                    context: context,
+                    message: state.errorMessage ?? 'Generation failed',
+                  );
+                }
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
+                child: Center(
+                  child: Column(
+                    children: [
+                      //  Header
+                      _ChatHeader(
+                        displayName: displayName,
+                        onNewChat: _confirmNewConversation,
+                      ),
+                      SizedBox(height: 20.h),
 
-                    //  Message List
-                    Expanded(
-                      child: BlocConsumer<ChatCubit, ChatState>(
-                        listener: (context, state) {
-                          _scrollToBottom();
-                        },
-                        builder: (context, state) {
-                          final messages = state.messages;
-                          return ListView.builder(
-                            controller: _scrollController,
-                            padding: EdgeInsets.only(bottom: 8.h),
-                            itemCount:
-                                messages.length + (state.isAiTyping ? 1 : 0),
-                            itemBuilder: (context, index) {
-                              // Show indicator as the last item
-                              if (index == messages.length &&
-                                  state.isAiTyping) {
-                                return const ChatTypingIndicator();
-                              }
+                      //  Message List
+                      Expanded(
+                        child: BlocConsumer<ChatCubit, ChatState>(
+                          listener: (context, state) {
+                            _scrollToBottom();
+                          },
+                          builder: (context, state) {
+                            final messages = state.messages;
+                            return ListView.builder(
+                              controller: _scrollController,
+                              padding: EdgeInsets.only(bottom: 8.h),
+                              itemCount:
+                                  messages.length + (state.isAiTyping ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                // Show indicator as the last item
+                                if (index == messages.length &&
+                                    state.isAiTyping) {
+                                  return const ChatTypingIndicator();
+                                }
 
-                              final message = messages[index];
+                                final message = messages[index];
 
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ChatMessageBubble(message: message),
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ChatMessageBubble(message: message),
 
-                                  //Todo: Edit with suit ui
-                                  if (message.hasSuggestions &&
-                                      message == messages.last)
-                                    ChatSuggestionChips(
-                                      suggestions: message.suggestions!,
-                                      onTap: _onSuggestionTap,
-                                    ),
-                                ],
-                              );
+                                    //Todo: Edit with suit ui
+                                    if (message.hasSuggestions &&
+                                        message == messages.last)
+                                      ChatSuggestionChips(
+                                        suggestions: message.suggestions!,
+                                        onTap: _onSuggestionTap,
+                                      ),
+
+                                    // Special Generate Plan Card inside the chat
+                                    if (message.isReadyToGenerate &&
+                                        message == messages.last)
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          top: 16.h,
+                                          bottom: 8.h,
+                                        ),
+                                        child: Center(
+                                          child: Container(
+                                            padding: EdgeInsets.all(16.r),
+                                            decoration: BoxDecoration(
+                                              color: context.colorTheme.primary
+                                                  .withValues(alpha: 0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(16.r),
+                                              border: Border.all(
+                                                color: context
+                                                    .colorTheme
+                                                    .primary
+                                                    .withValues(alpha: 0.3),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.auto_awesome,
+                                                  color: context
+                                                      .colorTheme
+                                                      .primary,
+                                                  size: 32.sp,
+                                                ),
+                                                SizedBox(height: 8.h),
+                                                Text(
+                                                  'Ready to build your trip!',
+                                                  style: AppTextStyles
+                                                      .h8SemiBold
+                                                      .copyWith(
+                                                        color: context
+                                                            .colorTheme
+                                                            .primary,
+                                                      ),
+                                                ),
+                                                SizedBox(height: 4.h),
+                                                Text(
+                                                  'I have enough information to create a personalized itinerary for you.',
+                                                  textAlign: TextAlign.center,
+                                                  style: AppTextStyles.h9Regular
+                                                      .copyWith(
+                                                        color: context
+                                                            .colorTheme
+                                                            .onSurfaceVariant,
+                                                      ),
+                                                ),
+                                                SizedBox(height: 16.h),
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  child: ElevatedButton(
+                                                    onPressed: _onGeneratePlan,
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: context
+                                                          .colorTheme
+                                                          .primary,
+                                                      foregroundColor: context
+                                                          .colorTheme
+                                                          .onPrimary,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            vertical: 12.h,
+                                                          ),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              12.r,
+                                                            ),
+                                                      ),
+                                                      elevation: 0,
+                                                    ),
+                                                    child: Text(
+                                                      'Generate Trip Plan',
+                                                      style: AppTextStyles
+                                                          .h8SemiBold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+
+                      //  Input Bar
+                      BlocSelector<ChatCubit, ChatState, List<ChatAttachment>>(
+                        selector: (state) => state.attachments,
+                        builder: (context, attachments) {
+                          return ChatInputBar(
+                            controller: _textController,
+                            onSend: _onSendMessage,
+                            onPhotosPicked: _onPhotosPicked,
+                            onVideoPicked: _onVideoPicked,
+                            onFilesPicked: _onFilesPicked,
+                            attachments: attachments,
+                            onRemoveAttachment: (int index) {
+                              context.read<ChatCubit>().removeAttachment(index);
                             },
+                            // profilePhotoUrl: userState.user?.photoURL,
                           );
                         },
                       ),
-                    ),
-
-                    //  Input Bar
-                    BlocSelector<ChatCubit, ChatState, List<ChatAttachment>>(
-                      selector: (state) => state.attachments,
-                      builder: (context, attachments) {
-                        return ChatInputBar(
-                          controller: _textController,
-                          onSend: _onSendMessage,
-                          onPhotosPicked: _onPhotosPicked,
-                          onVideoPicked: _onVideoPicked,
-                          onFilesPicked: _onFilesPicked,
-                          attachments: attachments,
-                          onRemoveAttachment: (int index) {
-                            context.read<ChatCubit>().removeAttachment(index);
-                          },
-                          // profilePhotoUrl: userState.user?.photoURL,
-                        );
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -290,15 +451,20 @@ class _ChatHeader extends StatelessWidget {
               style: AppTextStyles.h6SemiBold.copyWith(color: Colors.black),
             ),
             Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: onNewChat,
-                icon: Icon(
-                  Icons.add_comment_outlined,
-                  color: context.colorTheme.outline,
-                  size: 24.sp,
-                ),
-                tooltip: 'New conversation',
+              alignment: Alignment.topRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: onNewChat,
+                    icon: Icon(
+                      Icons.add_comment_outlined,
+                      color: context.colorTheme.outline,
+                      size: 24.sp,
+                    ),
+                    tooltip: 'New conversation',
+                  ),
+                ],
               ),
             ),
           ],

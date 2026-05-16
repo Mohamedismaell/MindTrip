@@ -22,7 +22,7 @@ class InterestsScreen extends StatelessWidget {
         if (isEdit && state.interestStatus == InterestStatus.saved) {
           context.read<AppGateCubit>().interestsComplete();
           AppSnackBar.showSuccess(
-            context,
+            context: context,
             message: 'Interests updated successfully',
           );
           if (context.canPop()) {
@@ -32,7 +32,7 @@ class InterestsScreen extends StatelessWidget {
           }
         } else if (state.interestStatus == InterestStatus.failed) {
           AppSnackBar.showError(
-            context,
+            context: context,
             message: 'Failed to save interests. Please try again.',
           );
           context.read<UserCubit>().dismissInterestError();

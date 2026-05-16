@@ -186,15 +186,32 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCompleted = status == TripStatus.completed;
+    Color bgColor;
+    String text;
+
+    switch (status) {
+      case TripStatus.completed:
+        bgColor = AppColors.success;
+        text = 'Completed';
+        break;
+      case TripStatus.inProgress:
+        bgColor = Theme.of(context).colorScheme.primary;
+        text = 'In Progress';
+        break;
+      case TripStatus.draft:
+        bgColor = AppColors.warning;
+        text = 'Draft';
+        break;
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: isCompleted ? AppColors.success : AppColors.warning,
+        color: bgColor,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Text(
-        isCompleted ? 'Completed' : 'Draft',
+        text,
         style: AppTextStyles.h10Medium.copyWith(color: Colors.white),
       ),
     );

@@ -3,43 +3,54 @@ import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 
 enum TripsStatus { initial, loading, loaded, error }
 
-enum TripFilterTab { all, completed, recentlyEdited, drafts }
+enum TripFilterTab { all, inProgress, completed, drafts }
 
 class TripsState extends Equatable {
   final List<Trip> trips;
-  final TripsStatus status;
+  final TripsStatus tripsStatus;
   final String? errorMessage;
   final String searchQuery;
   final TripFilterTab selectedTab;
   final DateTime focusedDay;
   final DateTime? selectedDay;
+  final String? generatedTripId;
+  final bool isGenerating;
   const TripsState({
     this.trips = const [],
-    this.status = TripsStatus.initial,
+    this.tripsStatus = TripsStatus.initial,
     this.errorMessage,
     this.searchQuery = "",
     this.selectedTab = TripFilterTab.all,
     required this.focusedDay,
     this.selectedDay,
+    this.generatedTripId,
+    this.isGenerating = false,
   });
 
   TripsState copyWith({
     List<Trip>? trips,
-    TripsStatus? status,
+    TripsStatus? tripsStatus,
     String? errorMessage,
     String? searchQuery,
     TripFilterTab? selectedTab,
     DateTime? focusedDay,
     DateTime? selectedDay,
+    String? generatedTripId,
+    bool clearGeneratedTripId = false,
+    bool? isGenerating,
   }) {
     return TripsState(
       trips: trips ?? this.trips,
-      status: status ?? this.status,
+      tripsStatus: tripsStatus ?? this.tripsStatus,
       errorMessage: errorMessage ?? this.errorMessage,
       searchQuery: searchQuery ?? this.searchQuery,
       selectedTab: selectedTab ?? this.selectedTab,
       focusedDay: focusedDay ?? this.focusedDay,
       selectedDay: selectedDay ?? this.selectedDay,
+      generatedTripId: clearGeneratedTripId
+          ? null
+          : generatedTripId ?? this.generatedTripId,
+      isGenerating: isGenerating ?? this.isGenerating,
     );
   }
 
@@ -48,6 +59,9 @@ class TripsState extends Equatable {
 
   List<Trip> get completed =>
       trips.where((t) => t.status == TripStatus.completed).toList();
+
+  List<Trip> get inProgress =>
+      trips.where((t) => t.status == TripStatus.inProgress).toList();
 
   List<Trip> get recentlyEdited {
     final list = List<Trip>.from(trips);
@@ -61,11 +75,11 @@ class TripsState extends Equatable {
       case TripFilterTab.all:
         list = trips;
         break;
+      case TripFilterTab.inProgress:
+        list = inProgress;
+        break;
       case TripFilterTab.completed:
         list = completed;
-        break;
-      case TripFilterTab.recentlyEdited:
-        list = recentlyEdited;
         break;
       case TripFilterTab.drafts:
         list = drafts;
@@ -85,11 +99,13 @@ class TripsState extends Equatable {
   @override
   List<Object?> get props => [
     trips,
-    status,
+    tripsStatus,
     errorMessage,
     searchQuery,
     selectedTab,
     focusedDay,
     selectedDay,
+    generatedTripId,
+    isGenerating,
   ];
 }

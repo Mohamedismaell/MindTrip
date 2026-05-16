@@ -23,16 +23,16 @@ class TripsCubit extends Cubit<TripsState> {
 
   Future<void> loadTrips() async {
     if (isClosed) return;
-    emit(state.copyWith(status: TripsStatus.loading));
+    emit(state.copyWith(tripsStatus: TripsStatus.loading));
     try {
       final trips = await _tripRepository.getAllTrips();
       if (isClosed) return;
-      emit(state.copyWith(status: TripsStatus.loaded, trips: trips));
+      emit(state.copyWith(tripsStatus: TripsStatus.loaded, trips: trips));
     } catch (e) {
       if (isClosed) return;
       emit(
         state.copyWith(
-          status: TripsStatus.error,
+          tripsStatus: TripsStatus.error,
           errorMessage: 'Failed to load trips: $e',
         ),
       );
@@ -67,7 +67,7 @@ class TripsCubit extends Cubit<TripsState> {
       if (isClosed) rethrow;
       emit(
         state.copyWith(
-          status: TripsStatus.error,
+          tripsStatus: TripsStatus.error,
           errorMessage: 'Failed to create draft: $e',
         ),
       );
@@ -92,7 +92,7 @@ class TripsCubit extends Cubit<TripsState> {
       if (isClosed) return;
       emit(
         state.copyWith(
-          status: TripsStatus.error,
+          tripsStatus: TripsStatus.error,
           errorMessage: 'Failed to save draft: $e',
         ),
       );
@@ -120,10 +120,75 @@ class TripsCubit extends Cubit<TripsState> {
       if (isClosed) return;
       emit(
         state.copyWith(
-          status: TripsStatus.error,
+          tripsStatus: TripsStatus.error,
           errorMessage: 'Failed to complete trip: $e',
         ),
       );
+    }
+  }
+
+  /// Sends trip data to the backend (mocked), awaits the itinerary response,
+  /// then saves both and marks the trip as [TripStatus.inProgress].
+  Future<void> generateTrip(String tripId) async {
+    final index = state.trips.indexWhere((t) => t.id == tripId);
+    if (index == -1) return;
+
+    // Emit generating state so UI can show dialog reactively
+    emit(
+      state.copyWith(isGenerating: true, clearGeneratedTripId: true),
+    );
+
+    try {
+      final trip = state.trips[index];
+
+      // Call backend / mock — this returns the full itinerary
+      final itinerary = await _tripRepository.generateItinerary(trip);
+
+      // Save itinerary locally
+      await _tripRepository.saveItinerary(itinerary);
+
+      // Mark trip as inProgress (itinerary ready, user is doing the trip)
+      final updatedTrip = trip.copyWith(
+        status: TripStatus.inProgress,
+        updatedAt: DateTime.now(),
+      );
+      await _tripRepository.saveTrip(updatedTrip);
+      if (isClosed) return;
+
+      final updatedTrips = List<Trip>.from(state.trips);
+      updatedTrips[index] = updatedTrip;
+
+      // Emit success state with generatedTripId
+      emit(
+        state.copyWith(
+          trips: updatedTrips,
+          isGenerating: false,
+          generatedTripId: tripId,
+        ),
+      );
+    } catch (e) {
+      if (isClosed) return;
+      // Revert to draft if generation fails
+      final currentIndex = state.trips.indexWhere((t) => t.id == tripId);
+      if (currentIndex != -1) {
+        final revertedTrip = state.trips[currentIndex].copyWith(
+          status: TripStatus.draft,
+          updatedAt: DateTime.now(),
+        );
+        await _tripRepository.saveTrip(revertedTrip);
+        final updatedTrips = List<Trip>.from(state.trips);
+        updatedTrips[currentIndex] = revertedTrip;
+        if (!isClosed) {
+          emit(
+            state.copyWith(
+              trips: updatedTrips,
+              tripsStatus: TripsStatus.error,
+              isGenerating: false,
+              errorMessage: 'Failed to generate itinerary: $e',
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -138,7 +203,7 @@ class TripsCubit extends Cubit<TripsState> {
       if (isClosed) return;
       emit(
         state.copyWith(
-          status: TripsStatus.error,
+          tripsStatus: TripsStatus.error,
           errorMessage: 'Failed to delete trip: $e',
         ),
       );
@@ -166,7 +231,7 @@ class TripsCubit extends Cubit<TripsState> {
       if (isClosed) return;
       emit(
         state.copyWith(
-          status: TripsStatus.error,
+          tripsStatus: TripsStatus.error,
           errorMessage: 'Failed to update title: $e',
         ),
       );

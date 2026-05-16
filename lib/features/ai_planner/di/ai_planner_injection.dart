@@ -7,9 +7,13 @@ import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/features/ai_planner/data/datasources/trip_local_datasource.dart';
+import 'package:mindtrip/features/ai_planner/data/datasources/mock_itinerary_datasource.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/generate_itinerary_use_case.dart';
 import 'package:mindtrip/features/ai_planner/data/repositories/trip_repository_impl.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
+
 class AiPlannerDi {
   AiPlannerDi._();
 
@@ -21,11 +25,23 @@ class AiPlannerDi {
     sl.registerLazySingleton<TripLocalDataSource>(
       () => TripLocalDataSource(AppHive.tripsBox),
     );
+    sl.registerLazySingleton<ItineraryDataSource>(
+      () => MockItineraryDataSource(),
+    );
     sl.registerLazySingleton<TripRepository>(
-      () => TripRepositoryImpl(sl<TripLocalDataSource>()),
+      () => TripRepositoryImpl(
+        sl<TripLocalDataSource>(),
+        sl<ItineraryDataSource>(),
+      ),
+    );
+    sl.registerLazySingleton<GenerateItineraryUseCase>(
+      () => GenerateItineraryUseCase(sl<TripRepository>()),
     );
     sl.registerLazySingleton<TripsCubit>(
       () => TripsCubit(sl<TripRepository>()),
+    );
+    sl.registerFactory<TripDetailsCubit>(
+      () => TripDetailsCubit(sl<TripRepository>()),
     );
 
     //! Chat — Data sources

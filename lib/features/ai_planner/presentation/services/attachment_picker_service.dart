@@ -69,7 +69,7 @@ class AttachmentPickerService {
     if (bytes > maxVideoBytes) {
       if (context.mounted) {
         AppSnackBar.showError(
-          context,
+          context: context,
           message: 'Video exceeds 100 MB limit and was not sent.',
         );
       }
@@ -90,7 +90,7 @@ class AttachmentPickerService {
     final capped = result.files.take(maxFiles).toList();
     if (result.files.length > maxFiles && context.mounted) {
       AppSnackBar.showError(
-        context,
+        context: context,
         message:
             'Maximum $maxFiles files allowed. Only the first $maxFiles were selected.',
       );
@@ -102,7 +102,7 @@ class AttachmentPickerService {
       if (size > maxFileBytes) {
         if (context.mounted) {
           AppSnackBar.showError(
-            context,
+            context: context,
             message: '"${f.name}" exceeds 25 MB and was not attached.',
           );
         }
@@ -129,7 +129,7 @@ class AttachmentPickerService {
       capped = files.take(maxCount).toList();
       if (context.mounted) {
         AppSnackBar.showError(
-          context,
+          context: context,
           message:
               'Maximum $maxCount ${typeName}s allowed. Extras were removed.',
         );
@@ -143,7 +143,7 @@ class AttachmentPickerService {
       if (bytes > maxBytes) {
         if (context.mounted) {
           AppSnackBar.showError(
-            context,
+            context: context,
             message:
                 '"${f.name}" exceeds $sizeLimitLabel and was not attached.',
           );
@@ -175,7 +175,7 @@ class AttachmentPickerService {
       );
     }
     if (context.mounted) {
-      AppSnackBar.showError(context, message: denied);
+      AppSnackBar.showError(context: context, message: denied);
     }
     return false;
   }

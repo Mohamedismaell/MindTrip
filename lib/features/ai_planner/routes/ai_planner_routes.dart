@@ -10,6 +10,8 @@ import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_flo
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_intro_screen.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/my_trips_screen.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/trip_calendar_screen.dart';
+import 'package:mindtrip/features/ai_planner/presentation/screens/trip_details_screen.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
 
 class AiPlannerRoutes {
   static final aiPlannerRoute = GoRoute(
@@ -25,10 +27,12 @@ class AiPlannerRoutes {
             BlocProvider(create: (_) => sl<AiPlannerCubit>()),
             BlocProvider.value(value: sl<TripsCubit>()..loadTrips()),
             BlocProvider(create: (_) => sl<ChatCubit>()),
+            BlocProvider(create: (_) => sl<TripDetailsCubit>()),
           ],
           child: child,
         );
       },
+
       routes: [
         GoRoute(
           path: AppRoutes.myTrips,
@@ -52,6 +56,14 @@ class AiPlannerRoutes {
         GoRoute(
           path: AppRoutes.tripCalendar,
           builder: (context, state) => const TripCalendarScreen(),
+        ),
+        //Todo should it be sub of my trips ?
+        GoRoute(
+          path: AppRoutes.tripDetails,
+          builder: (context, state) {
+            final tripId = state.uri.queryParameters['tripId'] ?? '';
+            return TripDetailsScreen(tripId: tripId);
+          },
         ),
       ],
     ),

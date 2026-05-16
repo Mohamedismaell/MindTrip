@@ -10,6 +10,8 @@ class ChatState extends Equatable {
     this.isAiTyping = false,
     this.errorMessage,
     this.attachments = const [],
+    this.isReadyToGenerate = false,
+    this.tripMetadata,
   });
 
   final List<ChatMessage> messages;
@@ -17,6 +19,9 @@ class ChatState extends Equatable {
   final bool isAiTyping;
   final String? errorMessage;
   final List<ChatAttachment> attachments;
+
+  final bool isReadyToGenerate;
+  final Map<String, dynamic>? tripMetadata;
   ChatState copyWith({
     List<ChatMessage>? messages,
     ChatStatus? status,
@@ -24,6 +29,8 @@ class ChatState extends Equatable {
     String? errorMessage,
     bool clearError = false,
     List<ChatAttachment>? attachments,
+    bool? isReadyToGenerate,
+    Map<String, dynamic>? tripMetadata,
   }) {
     return ChatState(
       messages: messages ?? this.messages,
@@ -31,10 +38,10 @@ class ChatState extends Equatable {
       isAiTyping: isAiTyping ?? this.isAiTyping,
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
       attachments: attachments ?? this.attachments,
+      isReadyToGenerate: isReadyToGenerate ?? this.isReadyToGenerate,
+      tripMetadata: tripMetadata ?? this.tripMetadata,
     );
   }
-
-
 
   @override
   List<Object?> get props => [
@@ -43,5 +50,7 @@ class ChatState extends Equatable {
     isAiTyping,
     errorMessage,
     attachments,
+    isReadyToGenerate,
+    tripMetadata,
   ];
 }

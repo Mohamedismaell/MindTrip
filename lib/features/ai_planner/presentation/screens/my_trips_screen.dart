@@ -86,10 +86,10 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                   buildWhen: (previous, current) =>
                       previous.trips != current.trips ||
                       previous.searchQuery != current.searchQuery ||
-                      previous.status != current.status ||
+                      previous.tripsStatus != current.tripsStatus ||
                       previous.selectedTab != current.selectedTab,
                   builder: (context, state) {
-                    if (state.status == TripsStatus.loading) {
+                    if (state.tripsStatus == TripsStatus.loading) {
                       return const Center(child: CircularProgressIndicator());
                     }
                     final trips = state.filterTrips;
@@ -128,7 +128,11 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
   }
 
   void _resumeTrip(BuildContext context, Trip trip) {
-    context.push('${AppRoutes.aiPlannerFlow}?tripId=${trip.id}');
+    if (trip.status == TripStatus.completed) {
+      context.push('${AppRoutes.tripDetails}?tripId=${trip.id}');
+    } else {
+      context.push('${AppRoutes.aiPlannerFlow}?tripId=${trip.id}');
+    }
   }
 }
 

@@ -7,8 +7,8 @@ import 'package:mindtrip/core/utils/extension.dart';
 enum AppSnackBarType { success, error }
 
 class AppSnackBar {
-  static void show(
-    BuildContext context, {
+  static void show({
+    required BuildContext context,
     required String message,
     required AppSnackBarType type,
   }) {
@@ -56,11 +56,17 @@ class AppSnackBar {
     );
   }
 
-  static void showSuccess(BuildContext context, {required String message}) {
-    show(context, message: message, type: AppSnackBarType.success);
+  static void showSuccess({
+    required BuildContext context,
+    required String message,
+  }) {
+    show(context: context, message: message, type: AppSnackBarType.success);
   }
 
-  static void showError(BuildContext context, {required String message}) {
-    show(context, message: message, type: AppSnackBarType.error);
+  static void showError({
+    required BuildContext context,
+    required String message,
+  }) {
+    show(context: context, message: message, type: AppSnackBarType.error);
   }
 }

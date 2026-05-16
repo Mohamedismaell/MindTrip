@@ -11,6 +11,7 @@ class AppHive {
   static late Box<String> favoritesSyncQueueBox;
   static late Box<PlaceModel> placesCacheBox;
   static late Box<TripModel> tripsBox;
+  static late Box<String> itinerariesBox;
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -42,5 +43,6 @@ class AppHive {
     favoritesSyncQueueBox = await Hive.openBox('favoritesSyncQueueBox');
     placesCacheBox = await Hive.openBox('placesCacheBox');
     tripsBox = await Hive.openBox('tripsBox');
+    itinerariesBox = await Hive.openBox<String>('itinerariesBox');
   }
 }

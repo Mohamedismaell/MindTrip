@@ -93,6 +93,7 @@ class ChatCubit extends Cubit<ChatState> {
         state.copyWith(
           messages: [...state.messages, aiResponse],
           isAiTyping: false,
+          isReadyToGenerate: aiResponse.isReadyToGenerate,
         ),
       );
     } catch (e) {

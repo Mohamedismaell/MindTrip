@@ -43,6 +43,7 @@ class MockChatDataSource implements ChatDataSource {
       sender: MessageSender.ai,
       timestamp: DateTime.now(),
       suggestions: null,
+      isReadyToGenerate: response.isReadyToGenerate,
     );
   }
 
@@ -71,6 +72,7 @@ class MockChatDataSource implements ChatDataSource {
       ),
       sender: MessageSender.ai,
       timestamp: DateTime.now(),
+      isReadyToGenerate: true,
     );
   }
 
@@ -85,7 +87,14 @@ class MockChatDataSource implements ChatDataSource {
           final categoryResponses = ChatMockResponses.responses[category]!;
           final response =
               categoryResponses[_random.nextInt(categoryResponses.length)];
-          return _MatchedResponse(content: response);
+          
+          // Signal ready if destination is set
+          final isReady = category == 'destination';
+          
+          return _MatchedResponse(
+            content: response,
+            isReadyToGenerate: isReady,
+          );
         }
       }
     }
@@ -99,6 +108,10 @@ class MockChatDataSource implements ChatDataSource {
 }
 
 class _MatchedResponse {
-  const _MatchedResponse({required this.content});
+  const _MatchedResponse({
+    required this.content,
+    this.isReadyToGenerate = false,
+  });
   final String content;
+  final bool isReadyToGenerate;
 }

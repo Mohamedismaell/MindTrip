@@ -7,6 +7,7 @@ class ChatMessageModel {
     required this.sender,
     required this.timestamp,
     this.suggestions,
+    this.isReadyToGenerate = false,
   });
 
   final String id;
@@ -14,6 +15,7 @@ class ChatMessageModel {
   final MessageSender sender;
   final DateTime timestamp;
   final List<String>? suggestions;
+  final bool isReadyToGenerate;
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
@@ -24,6 +26,7 @@ class ChatMessageModel {
       suggestions: (json['suggestions'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      isReadyToGenerate: json['is_ready_to_generate'] as bool? ?? false,
     );
   }
 
@@ -34,6 +37,7 @@ class ChatMessageModel {
       'is_user': sender == MessageSender.user,
       'timestamp': timestamp.toIso8601String(),
       'suggestions': suggestions,
+      'is_ready_to_generate': isReadyToGenerate,
     };
   }
 
@@ -44,6 +48,7 @@ class ChatMessageModel {
       sender: sender,
       timestamp: timestamp,
       suggestions: suggestions,
+      isReadyToGenerate: isReadyToGenerate,
     );
   }
 
@@ -54,6 +59,7 @@ class ChatMessageModel {
       sender: entity.sender,
       timestamp: entity.timestamp,
       suggestions: entity.suggestions,
+      isReadyToGenerate: entity.isReadyToGenerate,
     );
   }
 }
