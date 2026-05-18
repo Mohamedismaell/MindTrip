@@ -9,8 +9,8 @@ import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/rename_trip_dialog.dart';
 
-class TripCard extends StatelessWidget {
-  const TripCard({super.key, required this.trip, this.onTap});
+class CompeletedTripCard extends StatelessWidget {
+  const CompeletedTripCard({super.key, required this.trip, this.onTap});
 
   final Trip trip;
   final VoidCallback? onTap;

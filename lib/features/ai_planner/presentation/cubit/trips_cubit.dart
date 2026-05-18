@@ -57,22 +57,10 @@ class TripsCubit extends Cubit<TripsState> {
       chatMessages: const [],
     );
 
-    try {
-      await _tripRepository.saveTrip(newTrip);
-      if (isClosed) return newTrip.id;
-      final updatedTrips = List<Trip>.from(state.trips)..add(newTrip);
-      emit(state.copyWith(trips: updatedTrips));
-      return newTrip.id;
-    } catch (e) {
-      if (isClosed) rethrow;
-      emit(
-        state.copyWith(
-          tripsStatus: TripsStatus.error,
-          errorMessage: 'Failed to create draft: $e',
-        ),
-      );
-      rethrow;
-    }
+    if (isClosed) return newTrip.id;
+    final updatedTrips = List<Trip>.from(state.trips)..add(newTrip);
+    emit(state.copyWith(trips: updatedTrips));
+    return newTrip.id;
   }
 
   Future<void> saveTripDraft(Trip trip) async {
@@ -101,7 +89,7 @@ class TripsCubit extends Cubit<TripsState> {
 
   Future<void> completeTrip(String tripId) async {
     try {
-      final index = state.trips.indexWhere((t) => t.id == tripId);
+      final index = state.getTripIndex(tripId);
       if (index == -1) return;
 
       final trip = state.trips[index].copyWith(
@@ -127,16 +115,13 @@ class TripsCubit extends Cubit<TripsState> {
     }
   }
 
-  /// Sends trip data to the backend (mocked), awaits the itinerary response,
-  /// then saves both and marks the trip as [TripStatus.inProgress].
+  //Todo: edit with real api
   Future<void> generateTrip(String tripId) async {
-    final index = state.trips.indexWhere((t) => t.id == tripId);
+    final index = state.getTripIndex(tripId);
     if (index == -1) return;
 
     // Emit generating state so UI can show dialog reactively
-    emit(
-      state.copyWith(isGenerating: true, clearGeneratedTripId: true),
-    );
+    emit(state.copyWith(isGenerating: true, clearGeneratedTripId: true));
 
     try {
       final trip = state.trips[index];
@@ -147,10 +132,30 @@ class TripsCubit extends Cubit<TripsState> {
       // Save itinerary locally
       await _tripRepository.saveItinerary(itinerary);
 
-      // Mark trip as inProgress (itinerary ready, user is doing the trip)
+      // Extract lightweight preview data from the itinerary
+      final allPlaces = itinerary.days
+          .expand((day) => day.timeSlots.expand((slot) => slot.places))
+          .toList();
+
+      String? coverUrl;
+      final previews = <Map<String, String>>[];
+      for (final place in allPlaces) {
+        final imgUrl = place.imageUrls?.firstOrNull ?? '';
+        if (coverUrl == null && imgUrl.isNotEmpty) {
+          coverUrl = imgUrl;
+        }
+        previews.add({
+          'name': place.name,
+          'imageUrl': imgUrl,
+        });
+      }
+
+      // Mark trip as inProgress with baked-in preview data
       final updatedTrip = trip.copyWith(
         status: TripStatus.inProgress,
         updatedAt: DateTime.now(),
+        itineraryCoverUrl: coverUrl,
+        placePreviews: previews,
       );
       await _tripRepository.saveTrip(updatedTrip);
       if (isClosed) return;
@@ -168,27 +173,14 @@ class TripsCubit extends Cubit<TripsState> {
       );
     } catch (e) {
       if (isClosed) return;
-      // Revert to draft if generation fails
-      final currentIndex = state.trips.indexWhere((t) => t.id == tripId);
-      if (currentIndex != -1) {
-        final revertedTrip = state.trips[currentIndex].copyWith(
-          status: TripStatus.draft,
-          updatedAt: DateTime.now(),
-        );
-        await _tripRepository.saveTrip(revertedTrip);
-        final updatedTrips = List<Trip>.from(state.trips);
-        updatedTrips[currentIndex] = revertedTrip;
-        if (!isClosed) {
-          emit(
-            state.copyWith(
-              trips: updatedTrips,
-              tripsStatus: TripsStatus.error,
-              isGenerating: false,
-              errorMessage: 'Failed to generate itinerary: $e',
-            ),
-          );
-        }
-      }
+
+      emit(
+        state.copyWith(
+          tripsStatus: TripsStatus.error,
+          isGenerating: false,
+          errorMessage: 'Failed to generate itinerary: $e',
+        ),
+      );
     }
   }
 
@@ -212,7 +204,7 @@ class TripsCubit extends Cubit<TripsState> {
 
   Future<void> updateTripTitle(String tripId, String newTitle) async {
     try {
-      final index = state.trips.indexWhere((t) => t.id == tripId);
+      final index = state.getTripIndex(tripId);
       if (index == -1) return;
 
       final trip = state.trips[index].copyWith(

@@ -11,7 +11,7 @@ import 'package:mindtrip/core/widget/custom_search_bar.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/draft_trip_card.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/inprogress_trip_Card.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/start_planning_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/trip_card.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/trip_filter_tabs.dart';
@@ -105,13 +105,14 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                       itemCount: trips.length,
                       itemBuilder: (context, index) {
                         final trip = trips[index];
-                        if (trip.status == TripStatus.draft) {
-                          return DraftTripCard(
+                        if (trip.status == TripStatus.draft ||
+                            trip.status == TripStatus.inProgress) {
+                          return InprogressTripCard(
                             trip: trip,
                             onContinue: () => _resumeTrip(context, trip),
                           );
                         }
-                        return TripCard(
+                        return CompeletedTripCard(
                           trip: trip,
                           onTap: () => _resumeTrip(context, trip),
                         );
@@ -128,7 +129,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
   }
 
   void _resumeTrip(BuildContext context, Trip trip) {
-    if (trip.status == TripStatus.completed) {
+    if (trip.status == TripStatus.inProgress) {
       context.push('${AppRoutes.tripDetails}?tripId=${trip.id}');
     } else {
       context.push('${AppRoutes.aiPlannerFlow}?tripId=${trip.id}');
@@ -148,7 +149,13 @@ class _CustomHeader extends StatelessWidget {
         Row(
           children: [
             GestureDetector(
-              onTap: () => context.pop(),
+              onTap: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go(AppRoutes.profile);
+                }
+              },
               child: Icon(
                 Icons.arrow_back_rounded,
                 size: 30.sp,

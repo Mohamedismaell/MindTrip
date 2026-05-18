@@ -70,17 +70,24 @@ class TimePeriodSection extends StatelessWidget {
   }
 }
 
-class _PlaceActivityTile extends StatelessWidget {
+class _PlaceActivityTile extends StatefulWidget {
   final PlaceModel place;
 
   const _PlaceActivityTile({required this.place});
 
   @override
+  State<_PlaceActivityTile> createState() => _PlaceActivityTileState();
+}
+
+class _PlaceActivityTileState extends State<_PlaceActivityTile> {
+  bool _isCompleted = false;
+
+  @override
   Widget build(BuildContext context) {
-    final imageUrl = place.imageUrls?.firstOrNull;
+    final imageUrl = widget.place.imageUrls?.firstOrNull;
 
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
+      margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
         color: context.colorTheme.surfaceContainerLow,
@@ -89,6 +96,31 @@ class _PlaceActivityTile extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Completion Checkbox
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isCompleted = !_isCompleted;
+              });
+            },
+            child: Container(
+              width: 24.w,
+              height: 24.w,
+              margin: EdgeInsets.only(right: 12.w),
+              decoration: BoxDecoration(
+                color: _isCompleted ? Colors.green : Colors.transparent,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: _isCompleted ? Colors.green : context.colorTheme.outline.withValues(alpha: 0.3),
+                  width: 2,
+                ),
+              ),
+              child: _isCompleted
+                  ? Icon(Icons.check, size: 16.sp, color: Colors.white)
+                  : null,
+            ),
+          ),
+
           // Thumbnail
           if (imageUrl != null)
             ClipRRect(
@@ -112,8 +144,11 @@ class _PlaceActivityTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  place.name,
-                  style: AppTextStyles.h9SemiBold,
+                  widget.place.name,
+                  style: AppTextStyles.h9SemiBold.copyWith(
+                    decoration: _isCompleted ? TextDecoration.lineThrough : null,
+                    color: _isCompleted ? context.colorTheme.onSurfaceVariant : context.colorTheme.onSurface,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -128,7 +163,7 @@ class _PlaceActivityTile extends StatelessWidget {
                     SizedBox(width: 4.w),
                     Expanded(
                       child: Text(
-                        place.location.address,
+                        widget.place.location.address,
                         style: AppTextStyles.h10Regular.copyWith(
                           color: context.colorTheme.onSurfaceVariant,
                         ),

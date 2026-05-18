@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
@@ -38,7 +35,7 @@ class AiPlannerFlowListnener extends StatelessWidget {
         BlocListener<TripsCubit, TripsState>(
           listenWhen: (previous, current) =>
               previous.isGenerating != current.isGenerating ||
-              current.generatedTripId != null,
+              previous.generatedTripId != current.generatedTripId,
           listener: (context, state) {
             if (state.isGenerating) {
               showDialog(
@@ -49,10 +46,9 @@ class AiPlannerFlowListnener extends StatelessWidget {
             } else if (state.generatedTripId != null) {
               context.pop();
               //Todo: check navigation
-              context.pushReplacement(
+              context.go(
                 '${AppRoutes.tripDetails}?tripId=${state.generatedTripId}',
               );
-              context.pop();
             } else if (state.tripsStatus == TripsStatus.error) {
               AppSnackBar.showError(
                 context: context,

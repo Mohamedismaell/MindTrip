@@ -33,13 +33,15 @@ class TripModelAdapter extends TypeAdapter<TripModel> {
       interests: (fields[13] as List).cast<String>(),
       currentPage: (fields[14] as num).toInt(),
       chatMessagesJson: fields[15] as String,
+      itineraryCoverUrl: fields[16] as String?,
+      placePreviewsJson: fields[17] == null ? '[]' : fields[17] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, TripModel obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -71,7 +73,11 @@ class TripModelAdapter extends TypeAdapter<TripModel> {
       ..writeByte(14)
       ..write(obj.currentPage)
       ..writeByte(15)
-      ..write(obj.chatMessagesJson);
+      ..write(obj.chatMessagesJson)
+      ..writeByte(16)
+      ..write(obj.itineraryCoverUrl)
+      ..writeByte(17)
+      ..write(obj.placePreviewsJson);
   }
 
   @override

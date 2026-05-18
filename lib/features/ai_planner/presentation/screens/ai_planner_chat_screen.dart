@@ -228,13 +228,11 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
                     builder: (_) => const GeneratingDialog(),
                   );
                 } else if (state.generatedTripId != null) {
-                  context.pop();
                   //Todo: check navigation
-                  context.pushReplacement(
+                  context.go(
                     '${AppRoutes.tripDetails}?tripId=${state.generatedTripId}',
                   );
                 } else if (state.tripsStatus == TripsStatus.error) {
-                  context.pop();
                   AppSnackBar.showError(
                     context: context,
                     message: state.errorMessage ?? 'Generation failed',

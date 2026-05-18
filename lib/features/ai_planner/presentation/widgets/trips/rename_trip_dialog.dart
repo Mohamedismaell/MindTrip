@@ -19,8 +19,6 @@ Future<void> showRenameTripDialog(
     if (newTitle.isEmpty) return;
 
     context.read<TripsCubit>().updateTripTitle(tripId, newTitle);
-
-    Navigator.pop(context);
   }
 
   return AppDialog.show(
@@ -41,9 +39,6 @@ Future<void> showRenameTripDialog(
 
     onPrimary: confirm,
     icon: Icons.edit,
-    onSecondary: () {
-      Navigator.pop(context);
-    },
 
     child: _RenameTripDialog(controller: controller, onSubmitted: confirm),
   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
 //Todo Edit UI later
@@ -12,40 +13,41 @@ class GeneratingDialog extends StatelessWidget {
       canPop: false,
       child: Dialog(
         backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 2,
         child: Container(
-          padding: EdgeInsets.all(32.r),
           decoration: BoxDecoration(
             color: context.colorTheme.surface,
-            borderRadius: BorderRadius.circular(24.r),
+            borderRadius: BorderRadius.circular(40.r),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 60.w,
-                height: 60.h,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: context.colorTheme.primary,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 46.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 60.w,
+                  height: 60.h,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 5.w,
+                    color: context.colorTheme.primary,
+                  ),
                 ),
-              ),
-              SizedBox(height: 24.h),
-              Text(
-                '✨ Building your trip...',
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'Mindy is crafting the perfect itinerary just for you.',
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: context.colorTheme.onSurfaceVariant,
+                SizedBox(height: 10.h),
+                Text(
+                  'Generating Itinerary ...',
+                  style: AppTextStyles.h6Bold.copyWith(color: Colors.black),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                SizedBox(height: 10.h),
+                Text(
+                  textAlign: TextAlign.center,
+                  'Please wait while our AI works its magic to create the perfect trip plan tailored to your preferences.',
+                  style: AppTextStyles.h7Regular.copyWith(
+                    color: context.colorTheme.outline,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

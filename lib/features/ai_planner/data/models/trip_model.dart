@@ -54,6 +54,12 @@ class TripModel extends HiveObject {
   @HiveField(15)
   final String chatMessagesJson;
 
+  @HiveField(16)
+  final String? itineraryCoverUrl;
+
+  @HiveField(17)
+  final String placePreviewsJson;
+
   TripModel({
     required this.id,
     required this.title,
@@ -71,6 +77,8 @@ class TripModel extends HiveObject {
     required this.interests,
     required this.currentPage,
     required this.chatMessagesJson,
+    this.itineraryCoverUrl,
+    this.placePreviewsJson = '[]',
   });
 
   factory TripModel.fromEntity(Trip trip) {
@@ -93,6 +101,8 @@ class TripModel extends HiveObject {
       chatMessagesJson: jsonEncode(
         trip.chatMessages.map((e) => e.toJson()).toList(),
       ),
+      itineraryCoverUrl: trip.itineraryCoverUrl,
+      placePreviewsJson: jsonEncode(trip.placePreviews),
     );
   }
 
@@ -129,6 +139,17 @@ class TripModel extends HiveObject {
       interests: interests,
       currentPage: currentPage,
       chatMessages: parsedMessages,
+      itineraryCoverUrl: itineraryCoverUrl,
+      placePreviews: _parsePlacePreviews(),
     );
+  }
+
+  List<Map<String, String>> _parsePlacePreviews() {
+    try {
+      final List<dynamic> decoded = jsonDecode(placePreviewsJson);
+      return decoded.map((e) => Map<String, String>.from(e as Map)).toList();
+    } catch (_) {
+      return [];
+    }
   }
 }

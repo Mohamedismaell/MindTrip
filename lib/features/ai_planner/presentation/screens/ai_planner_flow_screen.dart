@@ -40,12 +40,9 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   final TextEditingController _destinationController = TextEditingController();
   final TextEditingController _customBudgetController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-
   late final AiPlannerCubit _plannerCubit;
   late final ChatCubit _chatCubit;
   late final TripsCubit _tripsCubit;
-
-  /// The active trip ID – set when auto-saving or when resuming.
   String? _activeTripId;
 
   @override
@@ -78,15 +75,13 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
 
   Future<void> _resumeFromTripId(String tripId) async {
     if (_tripsCubit.isClosed) return;
-    // Load if not Loaded yet
+    // Load if not Loaded yet Safety Check
     if (_tripsCubit.state.trips.isEmpty) {
       await _tripsCubit.loadTrips();
     }
     if (_tripsCubit.isClosed) return;
 
-    final trip = _tripsCubit.state.trips
-        .where((t) => t.id == tripId)
-        .firstOrNull;
+    final trip = _tripsCubit.state.getTripById(tripId);
     if (trip == null || !mounted) return;
 
     if (!_plannerCubit.isClosed) _plannerCubit.loadFromTrip(trip);
@@ -94,7 +89,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
 
     _destinationController.text = trip.destination;
     _customBudgetController.text = trip.customBudget;
-    // move page
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
         _pageController.jumpToPage(trip.currentPage);
@@ -109,40 +104,6 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     _customBudgetController.dispose();
     _scrollController.dispose();
     super.dispose();
-  }
-
-  Future<void> _autoSave() async {
-    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed) {
-      return;
-    }
-
-    final plannerState = _plannerCubit.state;
-    if (plannerState.selectedDestination == null ||
-        plannerState.selectedDestination!.isEmpty) {
-      return;
-    }
-
-    final chatMessages = _chatCubit.state.messages;
-
-    if (_activeTripId != null) {
-      final snapshot = _plannerCubit.toTripSnapshot(
-        chatMessages,
-        tripId: _activeTripId!,
-      );
-      await _tripsCubit.saveTripDraft(snapshot);
-    } else {
-      final newId = await _tripsCubit.createDraft(
-        plannerState.selectedDestination!,
-      );
-      if (_tripsCubit.isClosed) return;
-      _activeTripId = newId;
-
-      final snapshot = _plannerCubit.toTripSnapshot(
-        chatMessages,
-        tripId: newId,
-      );
-      await _tripsCubit.saveTripDraft(snapshot);
-    }
   }
 
   Future<void> _handleBack() async {
@@ -166,30 +127,48 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     }
   }
 
-  Future<void> _finishPlanning() async {
+  Future<void> _autoSave() async {
     if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed) {
       return;
     }
 
-    _plannerCubit.markReadyToGenerate();
+    final plannerState = _plannerCubit.state;
+    if (plannerState.selectedDestination == null ||
+        plannerState.selectedDestination!.isEmpty) {
+      return;
+    }
 
     final chatMessages = _chatCubit.state.messages;
 
     if (_activeTripId == null) {
-      if (mounted) context.pop();
-      return;
+      //* First time need to create a draft
+      final newId = await _tripsCubit.createDraft(
+        plannerState.selectedDestination!,
+      );
+      if (_tripsCubit.isClosed) return;
+      _activeTripId = newId;
     }
 
-    // Save final snapshot with all user inputs
     final snapshot = _plannerCubit.toTripSnapshot(
       chatMessages,
       tripId: _activeTripId!,
     );
     await _tripsCubit.saveTripDraft(snapshot);
+  }
 
+  Future<void> _finishPlanning() async {
+    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed) {
+      return;
+    }
+    _plannerCubit.markReadyToGenerate();
+    await _autoSave();
+
+    if (_activeTripId == null) {
+      if (mounted) context.pop();
+      return;
+    }
     if (!mounted) return;
-
-    // Trigger generation flow in the background (state handles UI)
+    //! last check
     _tripsCubit.generateTrip(_activeTripId!);
   }
 

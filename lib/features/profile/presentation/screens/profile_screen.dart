@@ -28,8 +28,6 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  //! there is no User Name
-  //! there is no locaiotn
   //! there is no trips - reviews - saved
   //! there is no saved Trips
   //! there is no my Trips

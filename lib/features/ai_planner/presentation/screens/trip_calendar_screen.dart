@@ -34,6 +34,7 @@ List<Trip> _getTripsForDay(DateTime day, List<Trip> trips) {
   }).toList();
 }
 
+//Todo: impelement same style of the cale in the ai planner flow
 class TripCalendarScreen extends StatelessWidget {
   const TripCalendarScreen({super.key});
 

@@ -23,8 +23,10 @@ class Trip extends Equatable {
   final List<String> interests;
   final int currentPage; // 0-4
 
-  // Chat history
   final List<ChatMessage> chatMessages;
+
+  final String? itineraryCoverUrl;
+  final List<Map<String, String>> placePreviews; // [{name, imageUrl}]
 
   const Trip({
     required this.id,
@@ -43,6 +45,8 @@ class Trip extends Equatable {
     required this.interests,
     required this.currentPage,
     required this.chatMessages,
+    this.itineraryCoverUrl,
+    this.placePreviews = const [],
   });
 
   Trip copyWith({
@@ -62,6 +66,8 @@ class Trip extends Equatable {
     List<String>? interests,
     int? currentPage,
     List<ChatMessage>? chatMessages,
+    String? itineraryCoverUrl,
+    List<Map<String, String>>? placePreviews,
   }) {
     return Trip(
       id: id ?? this.id,
@@ -80,10 +86,26 @@ class Trip extends Equatable {
       interests: interests ?? this.interests,
       currentPage: currentPage ?? this.currentPage,
       chatMessages: chatMessages ?? this.chatMessages,
+      itineraryCoverUrl: itineraryCoverUrl ?? this.itineraryCoverUrl,
+      placePreviews: placePreviews ?? this.placePreviews,
     );
   }
 
   double get planningProgress => currentPage / 5;
+  //Todo how dow e know the porogress of the trip ??!!??
+  double get tripProgress {
+    if (tripStart == null || tripEnd == null) return 0.0;
+    final totalDays = tripEnd!.difference(tripStart!).inDays + 1;
+    if (totalDays <= 0) return 0.0;
+    final elapsed = DateTime.now().difference(tripStart!).inDays + 1;
+    return (elapsed / totalDays).clamp(0.0, 1.0);
+  }
+
+  int get daysRemaining {
+    if (tripEnd == null) return 0;
+    final remaining = tripEnd!.difference(DateTime.now()).inDays;
+    return remaining < 0 ? 0 : remaining;
+  }
 
   int get remainingStep => (5 - currentPage);
 
@@ -112,5 +134,7 @@ class Trip extends Equatable {
     interests,
     currentPage,
     chatMessages,
+    itineraryCoverUrl,
+    placePreviews,
   ];
 }

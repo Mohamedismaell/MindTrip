@@ -30,14 +30,8 @@ class TripDetailsCubit extends Cubit<TripDetailsState> {
     }
   }
 
-  void toggleDayExpanded(int dayNumber) {
+  void setActiveDay(int dayNumber) {
     if (isClosed) return;
-    final expandedDays = Set<int>.from(state.expandedDays);
-    if (expandedDays.contains(dayNumber)) {
-      expandedDays.remove(dayNumber);
-    } else {
-      expandedDays.add(dayNumber);
-    }
-    emit(state.copyWith(expandedDays: expandedDays));
+    emit(state.copyWith(activeDay: dayNumber));
   }
 }

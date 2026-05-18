@@ -8,14 +8,14 @@ class TripDetailsState extends Equatable {
   final Trip? trip;
   final TripItinerary? itinerary;
   final TripDetailsStatus status;
-  final Set<int> expandedDays;
+  final int activeDay;
   final String? errorMessage;
 
   const TripDetailsState({
     this.trip,
     this.itinerary,
     this.status = TripDetailsStatus.loading,
-    this.expandedDays = const {},
+    this.activeDay = 1,
     this.errorMessage,
   });
 
@@ -23,18 +23,18 @@ class TripDetailsState extends Equatable {
     Trip? trip,
     TripItinerary? itinerary,
     TripDetailsStatus? status,
-    Set<int>? expandedDays,
+    int? activeDay,
     String? errorMessage,
   }) {
     return TripDetailsState(
       trip: trip ?? this.trip,
       itinerary: itinerary ?? this.itinerary,
       status: status ?? this.status,
-      expandedDays: expandedDays ?? this.expandedDays,
+      activeDay: activeDay ?? this.activeDay,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [trip, itinerary, status, expandedDays, errorMessage];
+  List<Object?> get props => [trip, itinerary, status, activeDay, errorMessage];
 }

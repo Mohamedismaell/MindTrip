@@ -19,11 +19,6 @@ class TopActionsRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _CircleActionButton(icon: Icons.settings, onTap: onSettingsTap),
-        _CircleActionButton(
-          icon: Icons.menu_rounded,
-          iconSize: 26.sp,
-          onTap: onMenuTap,
-        ),
       ],
     );
   }
