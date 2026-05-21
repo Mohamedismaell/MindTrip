@@ -92,8 +92,9 @@ class TripsCubit extends Cubit<TripsState> {
       final index = state.getTripIndex(tripId);
       if (index == -1) return;
 
+      // 'Save Trip' transitions draft → inProgress (the user is committing to go)
       final trip = state.trips[index].copyWith(
-        status: TripStatus.completed,
+        status: TripStatus.inProgress,
         updatedAt: DateTime.now(),
       );
 
@@ -150,9 +151,9 @@ class TripsCubit extends Cubit<TripsState> {
         });
       }
 
-      // Mark trip as inProgress with baked-in preview data
+      // Keep trip as draft — status only changes when user taps 'Save Trip'
       final updatedTrip = trip.copyWith(
-        status: TripStatus.inProgress,
+        status: TripStatus.draft,
         updatedAt: DateTime.now(),
         itineraryCoverUrl: coverUrl,
         placePreviews: previews,

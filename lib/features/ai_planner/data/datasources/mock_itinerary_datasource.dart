@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:hive_ce/hive.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
@@ -19,8 +21,11 @@ abstract class ItineraryDataSource {
 /// Replace this class with an HTTP datasource when the real API is ready.
 /// The response structure matches [TripItineraryModel.fromJson].
 class MockItineraryDataSource implements ItineraryDataSource {
-  // Simulates a local DB / cache
-  final Map<String, TripItineraryModel> _storage = {};
+  /// Persists itineraries as JSON strings keyed by tripId.
+  /// Injected from [AppHive.itinerariesBox] so data survives app restarts.
+  final Box<String> _box;
+
+  MockItineraryDataSource(this._box);
 
   @override
   Future<TripItineraryModel> generate(Trip trip) async {
@@ -42,12 +47,20 @@ class MockItineraryDataSource implements ItineraryDataSource {
 
   @override
   Future<TripItineraryModel?> getByTripId(String tripId) async {
-    return _storage[tripId];
+    final json = _box.get(tripId);
+    if (json == null) return null;
+    try {
+      return TripItineraryModel.fromJson(
+        jsonDecode(json) as Map<String, dynamic>,
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
   Future<void> save(TripItineraryModel itinerary) async {
-    _storage[itinerary.tripId] = itinerary;
+    await _box.put(itinerary.tripId, jsonEncode(itinerary.toJson()));
   }
 
   // ──────────────────────────────────────────────────────────────

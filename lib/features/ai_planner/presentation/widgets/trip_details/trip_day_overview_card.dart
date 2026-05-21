@@ -10,7 +10,7 @@ import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/outlined_action_button.dart';
 
-class TripDayOverviewCard extends StatelessWidget {
+class TripDayOverviewCard extends StatefulWidget {
   const TripDayOverviewCard({
     super.key,
     required this.day,
@@ -27,10 +27,33 @@ class TripDayOverviewCard extends StatelessWidget {
   final VoidCallback onRefine;
 
   @override
+  State<TripDayOverviewCard> createState() => _TripDayOverviewCardState();
+}
+
+class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
+  @override
+  void didUpdateWidget(TripDayOverviewCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.isExpanded && widget.isExpanded) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          Scrollable.ensureVisible(
+            context,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            alignment: 0.1,
+          );
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
+      alignment: Alignment.topCenter,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 10.h),
         decoration: BoxDecoration(
@@ -38,7 +61,9 @@ class TripDayOverviewCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(color: context.colorTheme.outline, width: 1.2),
         ),
-        child: isExpanded ? _buildExpanded(context) : _buildCollapsed(context),
+        child: widget.isExpanded
+            ? _buildExpanded(context)
+            : _buildCollapsed(context),
       ),
     );
   }
@@ -60,10 +85,10 @@ class TripDayOverviewCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Day ${day.dayNumber}', style: AppTextStyles.h8Bold),
+              Text('Day ${widget.day.dayNumber}', style: AppTextStyles.h8Bold),
               SizedBox(height: 12.h),
               Text(
-                day.title,
+                widget.day.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.h9Bold.copyWith(
@@ -71,16 +96,16 @@ class TripDayOverviewCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 12.h),
-              _DayMetaRow(day: day),
+              _DayMetaRow(day: widget.day),
               SizedBox(height: 12.h),
               //Todo: the tags should be the catgory of the places
-              _TagWrap(tags: day.tags.take(3).toList()),
+              _TagWrap(tags: widget.day.tags.take(3).toList()),
               SizedBox(height: 12.h),
               OutlinedActionButton(
-                key: Key('trip-day-${day.dayNumber}-view-button'),
+                key: Key('trip-day-${widget.day.dayNumber}-view-button'),
                 label: 'View',
                 icon: Icons.chevron_right,
-                onPressed: onToggle,
+                onPressed: widget.onToggle,
               ),
             ],
           ),
@@ -109,10 +134,15 @@ class TripDayOverviewCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 16.w, right: 10.w),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   children: [
-                    Text('Day ${day.dayNumber}', style: AppTextStyles.h6Bold),
+                    Text(
+                      'Day ${widget.day.dayNumber}',
+                      style: AppTextStyles.h6Bold,
+                    ),
                     Spacer(),
                     Row(
                       children: [
@@ -138,15 +168,17 @@ class TripDayOverviewCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 18.h),
-                _DayTimeline(day: day),
+                _DayTimeline(day: widget.day),
                 SizedBox(height: 24.h),
                 Center(
                   child: SizedBox(
                     width: 218.w,
                     child: OutlinedActionButton(
-                      key: Key('trip-day-${day.dayNumber}-view-less-button'),
+                      key: Key(
+                        'trip-day-${widget.day.dayNumber}-view-less-button',
+                      ),
                       label: 'View less',
-                      onPressed: onToggle,
+                      onPressed: widget.onToggle,
                       fontSize: 20.sp,
                       height: 44.h,
                     ),
@@ -161,8 +193,8 @@ class TripDayOverviewCard extends StatelessWidget {
   }
 
   String? get _cardImageUrl {
-    if (day.coverImageUrl.isNotEmpty) return day.coverImageUrl;
-    for (final slot in day.timeSlots) {
+    if (widget.day.coverImageUrl.isNotEmpty) return widget.day.coverImageUrl;
+    for (final slot in widget.day.timeSlots) {
       for (final place in slot.places) {
         final url = place.imageUrls?.firstOrNull;
         if (url != null && url.isNotEmpty) return url;
@@ -290,6 +322,7 @@ class _DayTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (var i = 0; i < day.timeSlots.length; i++)
           _TimelineSlot(
@@ -318,60 +351,54 @@ class _TimelineSlot extends StatelessWidget {
     final lineColor = context.colorTheme.outline;
     final dotColor = isFirst ? context.colorTheme.primary : lineColor;
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 18.w,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        CustomPaint(
+          painter: _TimelinePainter(
+            color: lineColor,
+            isLast: isLast,
+            dotSize: 16.w,
+            strokeWidth: 2.5.w,
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(left: 28.w, bottom: isLast ? 0 : 18.h),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 16.w,
-                  height: 16.w,
-                  decoration: BoxDecoration(
-                    color: dotColor,
-                    shape: BoxShape.circle,
-                  ),
+                Text(
+                  '${_periodLabel(slot.period)} - ${slot.title}',
+                  style: AppTextStyles.h9Bold,
                 ),
-                if (!isLast)
-                  Expanded(
-                    child: Container(width: 2.5.w, color: lineColor),
-                  ),
+                SizedBox(height: 12.h),
+                ...List.generate(slot.places.length, (index) {
+                  final place = slot.places[index];
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 6.h, left: 10.w),
+                    child: Text(
+                      '- ${place.name}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.h9Regular.copyWith(
+                        color: context.colorTheme.onSurfaceVariant,
+                      ),
+                    ),
+                  );
+                }),
               ],
             ),
           ),
-          SizedBox(width: 10.w),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${_periodLabel(slot.period)} - ${slot.title}',
-                    style: AppTextStyles.h9Bold,
-                  ),
-                  SizedBox(height: 12.h),
-                  ...slot.places.map(
-                    (place) => Padding(
-                      padding: EdgeInsets.only(bottom: 6.h, left: 10.w),
-                      child: Text(
-                        '-  ${place.name}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.h9Regular.copyWith(
-                          color: context.colorTheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+        ),
+        Positioned(
+          left: 1.w,
+          top: 0,
+          child: Container(
+            width: 16.w,
+            height: 16.w,
+            decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -385,4 +412,41 @@ class _TimelineSlot extends StatelessWidget {
         return 'Evening';
     }
   }
+}
+
+class _TimelinePainter extends CustomPainter {
+  final Color color;
+  final bool isLast;
+  final double dotSize;
+  final double strokeWidth;
+
+  _TimelinePainter({
+    required this.color,
+    required this.isLast,
+    required this.dotSize,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (isLast) return;
+
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth;
+
+    final centerX = (dotSize / 2);
+    canvas.drawLine(
+      Offset(centerX, dotSize / 2),
+      Offset(centerX, size.height + (dotSize / 2)),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _TimelinePainter oldDelegate) =>
+      oldDelegate.color != color ||
+      oldDelegate.isLast != isLast ||
+      oldDelegate.dotSize != dotSize ||
+      oldDelegate.strokeWidth != strokeWidth;
 }

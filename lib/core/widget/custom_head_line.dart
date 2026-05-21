@@ -9,16 +9,18 @@ class CustomHeadLine extends StatelessWidget {
     this.firstStyle,
     this.secondStyle,
     this.thirdTitle,
+    this.textAlign,
   });
   final String firstTitle;
   final String secondTitle;
   final String? thirdTitle;
   final TextStyle? firstStyle;
   final TextStyle? secondStyle;
+  final TextAlign? textAlign;
   @override
   Widget build(BuildContext context) {
     return RichText(
-      textAlign: TextAlign.center,
+      textAlign: textAlign ?? TextAlign.center,
       text: TextSpan(
         children: [
           TextSpan(

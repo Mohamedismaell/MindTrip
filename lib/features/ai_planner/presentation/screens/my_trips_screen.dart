@@ -122,7 +122,13 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
   }
 
   void _resumeTrip(BuildContext context, Trip trip) {
-    if (trip.status == TripStatus.inProgress) {
+    // Navigate to trip details if itinerary was generated (has place previews),
+    // regardless of whether the user has clicked "Save Trip" yet.
+    final hasItinerary =
+        trip.placePreviews.isNotEmpty || trip.status == TripStatus.inProgress;
+    // trip.status == TripStatus.completed;
+
+    if (hasItinerary) {
       context.push('${AppRoutes.tripDetails}?tripId=${trip.id}');
     } else {
       context.push('${AppRoutes.aiPlannerFlow}?tripId=${trip.id}');

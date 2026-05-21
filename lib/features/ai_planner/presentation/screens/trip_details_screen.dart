@@ -5,6 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
+import 'package:mindtrip/core/widget/appp_dialog.dart';
+import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
@@ -71,7 +76,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
               AiRefinementSheet.show(context, trip.id, trip.chatMessages),
         ),
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 14.w),
+          padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 55.h),
           sliver: SliverList.separated(
             itemCount: itinerary.days.length + 3,
             separatorBuilder: (_, index) {
@@ -114,10 +119,14 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                 );
               }
 
-              return _SaveTripButton(
-                trip: trip,
-                onSave: () => _completeTrip(context, trip),
-              );
+              return trip.status == TripStatus.completed
+                  ? const SizedBox.shrink()
+                  : _SaveTripButton(
+                      trip: trip,
+                      onSave: () {
+                        _saveTrip(context, trip);
+                      },
+                    );
             },
           ),
         ),
@@ -132,31 +141,24 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
         .toList();
   }
 
-  Future<void> _completeTrip(BuildContext context, Trip trip) async {
-    if (trip.status != TripStatus.inProgress) return;
-
-    final confirmed = await showDialog<bool>(
+  Future<void> _saveTrip(BuildContext context, Trip trip) async {
+    AppDialog.show(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Save trip?'),
-        content: const Text('This will mark your trip as completed.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Save'),
-          ),
-        ],
-      ),
+      title: 'Save Trip',
+      description: 'You can access this itinerary anytime from My Trips.',
+      primaryText: 'Save',
+      secondaryText: 'Cancel',
+      icon: Icons.check_circle,
+      onPrimary: () async {
+        await context.read<TripsCubit>().completeTrip(trip.id);
+        if (!context.mounted) return;
+        AppSnackBar.showSuccess(
+          context: context,
+          message: 'Trip saved successfully',
+        );
+        context.go(AppRoutes.myTrips);
+      },
     );
-
-    if (confirmed != true || !context.mounted) return;
-    await context.read<TripsCubit>().completeTrip(trip.id);
-    if (!context.mounted) return;
-    await context.read<TripDetailsCubit>().loadTripDetails(trip.id);
   }
 }
 
@@ -167,27 +169,16 @@ class _EstimateNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
+    return CustomHeadLine(
       key: const Key('trip-estimate-note'),
-      text: TextSpan(
-        style: AppTextStyles.h9Medium.copyWith(
-          color: Colors.black,
-          height: 1.4,
-        ),
-        children: [
-          const TextSpan(
-            text: 'Note: ',
-            style: TextStyle(color: Color(0xFF374151)),
-          ),
-          TextSpan(
-            text:
-                'This is an approximate estimate and may vary depending on your food choices, activity upgrades, seasonal prices, and any custom changes to your itinerary.',
-          ),
-          TextSpan(
-            text: ' Estimated total: ${estimatedTotalCost.round()} EGP.',
-          ),
-        ],
+      textAlign: TextAlign.left,
+      firstTitle: 'Note: ',
+      firstStyle: AppTextStyles.h9Medium.copyWith(
+        color: context.colorTheme.onSurface,
       ),
+      secondStyle: AppTextStyles.h9Medium.copyWith(color: Colors.black),
+      secondTitle:
+          'This is an approximate estimate and may vary depending on your food choices, activity upgrades, seasonal prices, and any custom changes to your itinerary',
     );
   }
 }
@@ -200,49 +191,14 @@ class _SaveTripButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCompleted = trip.status == TripStatus.completed;
-    final isDraft = trip.status == TripStatus.draft;
+    final isAlreadySaved = trip.status == TripStatus.inProgress;
+    final canSave = !isAlreadySaved && trip.placePreviews.isNotEmpty;
 
-    return Center(
-      child: SizedBox(
-        width: 323.w,
-        height: 52.h,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25.r),
-            gradient: isDraft
-                ? null
-                : const LinearGradient(
-                    colors: [Color(0xFF5596FE), Color(0xFF97CEFF)],
-                  ),
-            color: isDraft ? const Color(0xFFE5E7EB) : null,
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x33000000),
-                blurRadius: 5,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: ElevatedButton(
-            key: const Key('save-trip-button'),
-            onPressed: isDraft || isCompleted ? null : onSave,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              disabledBackgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.r),
-              ),
-            ),
-            child: Text(
-              isCompleted ? 'Trip Saved' : 'Save Trip',
-              style: AppTextStyles.h7Bold.copyWith(
-                color: isDraft ? const Color(0xFF727272) : Colors.white,
-              ),
-            ),
-          ),
-        ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: CustomGradientButton(
+        onTap: canSave ? onSave : null,
+        text: isAlreadySaved ? 'Trip Saved ' : 'Save Trip',
       ),
     );
   }

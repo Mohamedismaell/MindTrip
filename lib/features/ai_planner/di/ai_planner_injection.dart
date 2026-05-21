@@ -26,7 +26,7 @@ class AiPlannerDi {
       () => TripLocalDataSource(AppHive.tripsBox),
     );
     sl.registerLazySingleton<ItineraryDataSource>(
-      () => MockItineraryDataSource(),
+      () => MockItineraryDataSource(AppHive.itinerariesBox),
     );
     sl.registerLazySingleton<TripRepository>(
       () => TripRepositoryImpl(
