@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
@@ -75,7 +76,6 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
 
   Future<void> _resumeFromTripId(String tripId) async {
     if (_tripsCubit.isClosed) return;
-    // Load if not Loaded yet Safety Check
     if (_tripsCubit.state.trips.isEmpty) {
       await _tripsCubit.loadTrips();
     }
@@ -106,9 +106,9 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     super.dispose();
   }
 
-  Future<void> _handleBack() async {
+  Future<void> _handleBack(bool isLeaving) async {
     if (_plannerCubit.isClosed) return;
-    if (_plannerCubit.state.currentPage == 0) {
+    if (_plannerCubit.state.currentPage == 0 || isLeaving) {
       await _autoSave();
       if (mounted) context.pop();
       return;
@@ -168,7 +168,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
       return;
     }
     if (!mounted) return;
-    //! last check
+
     _tripsCubit.generateTrip(_activeTripId!);
   }
 
@@ -189,6 +189,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
         backgroundColor: context.colorTheme.surface,
         floatingActionButton: showFab ? const AiChatBotButton() : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
@@ -198,12 +199,13 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                 children: [
                   SizedBox(height: 20.h),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _HeaderIconButton(
                         icon: Icons.arrow_back_rounded,
-                        onTap: _handleBack,
+                        onTap: () => _handleBack(false),
                       ),
-                      SizedBox(width: 28.w),
+
                       Builder(
                         builder: (context) {
                           final page = context.select(
@@ -216,6 +218,17 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                             child: AnimatedProgressBar(progress: progressValue),
                           );
                         },
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryLightGray,
+                          shape: BoxShape.circle,
+                        ),
+                        //Todo change the icon into X Icon
+                        child: IconButton(
+                          onPressed: () => _handleBack(true),
+                          icon: Icon(Icons.close, size: 30.sp),
+                        ),
                       ),
                     ],
                   ),

@@ -268,11 +268,29 @@ class MockItineraryDataSource implements ItineraryDataSource {
               places: [
                 _place(
                   id: 'dahab-m-$dayNum',
-                  name: [
-                    'Eel Garden Beach',
-                    'Blue Hole',
-                    'Wadi Gnai Desert',
-                  ][i % 3],
+                  name: 'Eel Garden Beach',
+                  description: 'Start the day with Dahab\'s natural wonders.',
+                  lat: 28.5065,
+                  lng: 34.5204,
+                  category: PlaceCategory.park,
+                  rating: 4.7,
+                  imageUrl:
+                      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
+                ),
+                _place(
+                  id: 'dahab-m-$dayNum',
+                  name: 'Blue Hole',
+                  description: 'Start the day with Dahab\'s natural wonders.',
+                  lat: 28.5065,
+                  lng: 34.5204,
+                  category: PlaceCategory.park,
+                  rating: 4.7,
+                  imageUrl:
+                      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
+                ),
+                _place(
+                  id: 'dahab-m-$dayNum',
+                  name: 'Wadi Gnai Desert',
                   description: 'Start the day with Dahab\'s natural wonders.',
                   lat: 28.5065,
                   lng: 34.5204,

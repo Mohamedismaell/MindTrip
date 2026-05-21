@@ -59,7 +59,11 @@ class _MyTripsSectionState extends State<MyTripsSection> {
                   trip: trips[index],
                   onTap: () {
                     //Todo: Handle the navigaiton into the card
-                    if (trips[index].status == TripStatus.draft) {
+                    if (trips[index].status == TripStatus.inProgress) {
+                      context.push(
+                        '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
+                      );
+                    } else if (trips[index].status == TripStatus.draft) {
                       context.push(
                         '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
                       );
@@ -106,7 +110,7 @@ class _MyTripCard extends StatelessWidget {
                   child: Stack(
                     children: [
                       BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                        filter: ImageFilter.blur(sigmaX: 0, sigmaY: 4),
                         child: Container(
                           height: 72.h,
                           padding: EdgeInsets.all(10.w),
@@ -117,26 +121,30 @@ class _MyTripCard extends StatelessWidget {
                         height: 72.h,
                         padding: EdgeInsets.symmetric(horizontal: 15.w),
                         alignment: Alignment.centerLeft,
-                        color: Colors.black.withValues(alpha: 0.2),
+                        // color: Colors.black.withValues(alpha: 0.2),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              trip.title,
-                              style: AppTextStyles.h8Bold.copyWith(
-                                color: Colors.white,
+                            Expanded(
+                              child: Text(
+                                trip.title,
+                                style: AppTextStyles.h8Bold.copyWith(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             SizedBox(height: 8.h),
-                            Text(
-                              trip.destination,
-                              style: AppTextStyles.h9Bold.copyWith(
-                                fontSize: 14.sp,
-                                color: AppColors.primaryLightGray,
+                            Expanded(
+                              child: Text(
+                                trip.destination,
+                                style: AppTextStyles.h9Bold.copyWith(
+                                  fontSize: 14.sp,
+                                  color: AppColors.primaryLightGray,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),

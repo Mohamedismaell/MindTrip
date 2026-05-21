@@ -11,7 +11,6 @@ import 'package:mindtrip/core/widget/custom_search_bar.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/inprogress_trip_Card.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/start_planning_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/trip_card.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trips/trip_filter_tabs.dart';
@@ -105,16 +104,10 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                       itemCount: trips.length,
                       itemBuilder: (context, index) {
                         final trip = trips[index];
-                        if (trip.status == TripStatus.draft ||
-                            trip.status == TripStatus.inProgress) {
-                          return InprogressTripCard(
-                            trip: trip,
-                            onContinue: () => _resumeTrip(context, trip),
-                          );
-                        }
-                        return CompeletedTripCard(
+                        return TripCard(
                           trip: trip,
-                          onTap: () => _resumeTrip(context, trip),
+                          tripStatus: trip.status,
+                          onContinue: () => _resumeTrip(context, trip),
                         );
                       },
                     );

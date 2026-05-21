@@ -6,6 +6,7 @@ class TripDay extends Equatable {
     required this.dayNumber,
     required this.title,
     required this.coverImageUrl,
+    //Todo: the tags should be the catgory of the places
     required this.tags,
     required this.stopCount,
     required this.estimatedCost,

@@ -10,12 +10,16 @@ class CustomOtlinedButton extends StatelessWidget {
     this.icon,
     this.color,
     this.isLoading,
+    this.textStyle,
+    this.actionIcon,
   });
   final String text;
   final IconData? icon;
+  final IconData? actionIcon;
   final VoidCallback? onPressed;
   final Color? color;
   final bool? isLoading;
+  final TextStyle? textStyle;
   @override
   Widget build(BuildContext context) {
     final buttonColor = color ?? context.colorTheme.error;
@@ -59,11 +63,19 @@ class CustomOtlinedButton extends StatelessWidget {
                           Icon(icon, size: 20.sp),
                           SizedBox(width: 8.w),
                         ],
-                        Text(
-                          text,
-                          style: context.textTheme.labelLarge?.copyWith(
-                            color: isDisabled,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              text,
+                              style:
+                                  textStyle ??
+                                  context.textTheme.labelLarge?.copyWith(
+                                    color: isDisabled,
+                                  ),
+                            ),
+                            if (actionIcon != null)
+                              Icon(actionIcon, weight: 20.sp, color: color),
+                          ],
                         ),
                       ],
                     ),

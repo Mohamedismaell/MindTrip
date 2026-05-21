@@ -21,6 +21,7 @@ import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 
+//Todo Bug with float button wrong nav route
 class AiPlannerChatScreen extends StatefulWidget {
   const AiPlannerChatScreen({super.key});
 
@@ -179,7 +180,6 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
     final tripsCubit = context.read<TripsCubit>();
 
     //Todo: either we extract the reponse of the back end  json or we get a flag so we don't extract any thing
-    // Extract trip info from AI-extracted metadata (populated during chat)
     final metadata = chatCubit.state.tripMetadata;
     final destination = metadata?['destination'] as String? ?? 'My Trip';
     final title = 'Trip to $destination';
@@ -219,7 +219,7 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
             child: BlocListener<TripsCubit, TripsState>(
               listenWhen: (previous, current) =>
                   previous.isGenerating != current.isGenerating ||
-                  current.generatedTripId != null,
+                  previous.generatedTripId != current.generatedTripId,
               listener: (context, state) {
                 if (state.isGenerating) {
                   showDialog(
@@ -228,7 +228,6 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
                     builder: (_) => const GeneratingDialog(),
                   );
                 } else if (state.generatedTripId != null) {
-                  //Todo: check navigation
                   context.go(
                     '${AppRoutes.tripDetails}?tripId=${state.generatedTripId}',
                   );

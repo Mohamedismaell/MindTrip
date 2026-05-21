@@ -1,16 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DayPeriod;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/ai_refinement_sheet.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/time_period_section.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/ai_refinement_sheet.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_day_overview_card.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_details_bar.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_map_preview_card.dart';
 
 class TripDetailsScreen extends StatefulWidget {
   final String tripId;
@@ -21,9 +24,9 @@ class TripDetailsScreen extends StatefulWidget {
   State<TripDetailsScreen> createState() => _TripDetailsScreenState();
 }
 
-
-
 class _TripDetailsScreenState extends State<TripDetailsScreen> {
+  int? _expandedDay;
+
   @override
   void initState() {
     super.initState();
@@ -35,11 +38,8 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
     return BlocBuilder<TripDetailsCubit, TripDetailsState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: context.colorTheme.surface,
-          body: _buildBody(context, state),
-          floatingActionButton: _buildFab(context, state),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          backgroundColor: Colors.white,
+          body: SafeArea(child: _buildBody(context, state)),
         );
       },
     );
@@ -51,283 +51,219 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
     }
 
     if (state.status == TripDetailsStatus.error) {
-      return Center(child: Text(state.errorMessage ?? 'Error loading trip'));
+      return _MessageState(message: state.errorMessage ?? 'Error loading trip');
     }
 
-    if (state.trip == null || state.itinerary == null) {
-      return const Center(child: Text('Trip not found'));
+    final trip = state.trip;
+    final itinerary = state.itinerary;
+    if (trip == null || itinerary == null || itinerary.days.isEmpty) {
+      return const _MessageState(message: 'Trip not found');
     }
 
-    final trip = state.trip!;
-    final itinerary = state.itinerary!;
-    final activeDayModel = itinerary.days.firstWhere(
-      (d) => d.dayNumber == state.activeDay,
-      orElse: () => itinerary.days.first,
-    );
+    final allPlaces = _allPlaces(itinerary);
+    final expandedDay = _expandedDay;
 
     return CustomScrollView(
       slivers: [
-        // Header
-        SliverAppBar(
-          expandedHeight: 340.h,
-          pinned: true,
-          backgroundColor: context.colorTheme.surface,
-          elevation: 0,
-          leading: Padding(
-            padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 8.h),
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => context.go(AppRoutes.myTrips),
-              ),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 16.w),
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: IconButton(
-                  icon: const Icon(Icons.auto_awesome, color: Colors.black),
-                  onPressed: () => AiRefinementSheet.show(
+        TripDetailsTopBar(
+          onBack: () => context.go(AppRoutes.myTrips),
+          onRefine: () =>
+              AiRefinementSheet.show(context, trip.id, trip.chatMessages),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: 14.w),
+          sliver: SliverList.separated(
+            itemCount: itinerary.days.length + 3,
+            separatorBuilder: (_, index) {
+              return SizedBox(height: 42.h);
+            },
+            itemBuilder: (context, index) {
+              if (index < itinerary.days.length) {
+                final day = itinerary.days[index];
+                return TripDayOverviewCard(
+                  day: day,
+                  tripCoverAsset: trip.coverAsset,
+                  isExpanded: day.dayNumber == expandedDay,
+                  onToggle: () {
+                    setState(() {
+                      _expandedDay = day.dayNumber == expandedDay
+                          ? null
+                          : day.dayNumber;
+                    });
+                  },
+                  onRefine: () => AiRefinementSheet.show(
                     context,
                     trip.id,
                     trip.chatMessages,
                   ),
-                ),
-              ),
-            ),
-          ],
-          flexibleSpace: FlexibleSpaceBar(
-            background: Stack(
-              fit: StackFit.expand,
-              children: [
-                trip.coverAsset.startsWith('http')
-                    ? Image.network(trip.coverAsset, fit: BoxFit.cover)
-                    : Image.asset(trip.coverAsset, fit: BoxFit.cover),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.3),
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.8),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 50.h,
-                  left: 20.w,
-                  right: 20.w,
-                  child: Text(
-                    trip.title,
-                    style: AppTextStyles.h4Bold.copyWith(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(24.h),
-            child: Container(
-              height: 24.h,
-              decoration: BoxDecoration(
-                color: context.colorTheme.surface,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-              ),
-            ),
-          ),
-        ),
+                );
+              }
 
-        // Info and Days Tabs
-        SliverToBoxAdapter(
-          child: Container(
-            color: context.colorTheme.surface,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Info badges
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF7E6),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Text(
-                        '👑 ${trip.budgetTier ?? 'Flexible'}',
-                        style: AppTextStyles.h10Bold.copyWith(color: const Color(0xFFFF9800)),
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                      decoration: BoxDecoration(
-                        color: context.colorTheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.calendar_today, size: 12.sp, color: context.colorTheme.onSurfaceVariant),
-                          SizedBox(width: 4.w),
-                          Text(
-                            '${trip.durationDays} Days',
-                            style: AppTextStyles.h10SemiBold.copyWith(color: context.colorTheme.onSurfaceVariant),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24.h),
-                
-                // Horizontal Days List
-                SizedBox(
-                  height: 38.h,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: itinerary.days.length,
-                    separatorBuilder: (_, __) => SizedBox(width: 12.w),
-                    itemBuilder: (context, index) {
-                      final day = itinerary.days[index];
-                      final isActive = day.dayNumber == state.activeDay;
+              if (index == itinerary.days.length) {
+                return TripMapPreviewCard(
+                  days: itinerary.days,
+                  onViewMap: allPlaces.isEmpty
+                      ? null
+                      : () => context.push(AppRoutes.map, extra: allPlaces),
+                );
+              }
 
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<TripDetailsCubit>().setActiveDay(day.dayNumber);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          decoration: BoxDecoration(
-                            color: isActive ? context.colorTheme.primary : context.colorTheme.surfaceContainerLow,
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: isActive ? null : Border.all(color: context.colorTheme.outline.withValues(alpha: 0.1)),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Day ${day.dayNumber}',
-                            style: AppTextStyles.h9SemiBold.copyWith(
-                              color: isActive ? Colors.white : context.colorTheme.onSurface,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 24.h),
-              ],
-            ),
-          ),
-        ),
+              if (index == itinerary.days.length + 1) {
+                return _EstimateNote(
+                  estimatedTotalCost: itinerary.estimatedTotalCost,
+                );
+              }
 
-        // Timeline for the selected day
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Vertical Timeline Line
-                    Container(
-                      width: 24.w,
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        width: 2.w,
-                        color: context.colorTheme.outline.withValues(alpha: 0.15),
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    // The time slot
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 24.h),
-                        child: TimePeriodSection(slot: activeDayModel.timeSlots[index]),
-                      ),
-                    ),
-                  ],
-                ),
+              return _SaveTripButton(
+                trip: trip,
+                onSave: () => _completeTrip(context, trip),
               );
-            }, childCount: activeDayModel.timeSlots.length),
+            },
           ),
         ),
-
-        // Bottom spacing
-        SliverToBoxAdapter(child: SizedBox(height: 100.h)),
       ],
     );
   }
 
-  Widget? _buildFab(BuildContext context, TripDetailsState state) {
-    if (state.itinerary == null) return null;
-    final trip = state.trip;
-    final isInProgress = trip?.status == TripStatus.inProgress;
+  List<PlaceModel> _allPlaces(TripItinerary itinerary) {
+    return itinerary.days
+        .expand((day) => day.timeSlots)
+        .expand((slot) => slot.places)
+        .toList();
+  }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (isInProgress) ...[
-          FloatingActionButton.extended(
-            heroTag: 'complete_fab',
-            onPressed: () async {
-              final confirmed = await showDialog<bool>(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: const Text('Mark trip as completed?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, false),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, true),
-                      child: const Text('Complete'),
-                    ),
-                  ],
-                ),
-              );
-              if (confirmed == true && context.mounted) {
-                await context.read<TripsCubit>().completeTrip(trip!.id);
-                if (context.mounted) context.pop();
-              }
-            },
-            backgroundColor: Colors.green,
-            label: Text(
-              'Mark as Completed',
-              style: AppTextStyles.h9SemiBold.copyWith(color: Colors.white),
-            ),
-            icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+  Future<void> _completeTrip(BuildContext context, Trip trip) async {
+    if (trip.status != TripStatus.inProgress) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Save trip?'),
+        content: const Text('This will mark your trip as completed.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
           ),
-          SizedBox(height: 12.h),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Save'),
+          ),
         ],
-        FloatingActionButton.extended(
-          heroTag: 'map_fab',
-          onPressed: () {
-            final activeDayModel = state.itinerary!.days.firstWhere(
-              (d) => d.dayNumber == state.activeDay,
-              orElse: () => state.itinerary!.days.first,
-            );
-            final activeDayPlaces = activeDayModel.timeSlots
-                .expand((slot) => slot.places)
-                .toList();
-            context.push(AppRoutes.map, extra: activeDayPlaces);
-          },
-          backgroundColor: context.colorTheme.primary,
-          label: Text(
-            'View on Map',
-            style: AppTextStyles.h9SemiBold.copyWith(color: Colors.white),
-          ),
-          icon: const Icon(Icons.map_outlined, color: Colors.white),
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+    await context.read<TripsCubit>().completeTrip(trip.id);
+    if (!context.mounted) return;
+    await context.read<TripDetailsCubit>().loadTripDetails(trip.id);
+  }
+}
+
+class _EstimateNote extends StatelessWidget {
+  const _EstimateNote({required this.estimatedTotalCost});
+
+  final double estimatedTotalCost;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      key: const Key('trip-estimate-note'),
+      text: TextSpan(
+        style: AppTextStyles.h9Medium.copyWith(
+          color: Colors.black,
+          height: 1.4,
         ),
-      ],
+        children: [
+          const TextSpan(
+            text: 'Note: ',
+            style: TextStyle(color: Color(0xFF374151)),
+          ),
+          TextSpan(
+            text:
+                'This is an approximate estimate and may vary depending on your food choices, activity upgrades, seasonal prices, and any custom changes to your itinerary.',
+          ),
+          TextSpan(
+            text: ' Estimated total: ${estimatedTotalCost.round()} EGP.',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SaveTripButton extends StatelessWidget {
+  const _SaveTripButton({required this.trip, required this.onSave});
+
+  final Trip trip;
+  final VoidCallback onSave;
+
+  @override
+  Widget build(BuildContext context) {
+    final isCompleted = trip.status == TripStatus.completed;
+    final isDraft = trip.status == TripStatus.draft;
+
+    return Center(
+      child: SizedBox(
+        width: 323.w,
+        height: 52.h,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.r),
+            gradient: isDraft
+                ? null
+                : const LinearGradient(
+                    colors: [Color(0xFF5596FE), Color(0xFF97CEFF)],
+                  ),
+            color: isDraft ? const Color(0xFFE5E7EB) : null,
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x33000000),
+                blurRadius: 5,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: ElevatedButton(
+            key: const Key('save-trip-button'),
+            onPressed: isDraft || isCompleted ? null : onSave,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              disabledBackgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.r),
+              ),
+            ),
+            child: Text(
+              isCompleted ? 'Trip Saved' : 'Save Trip',
+              style: AppTextStyles.h7Bold.copyWith(
+                color: isDraft ? const Color(0xFF727272) : Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MessageState extends StatelessWidget {
+  const _MessageState({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(24.r),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.h9Medium,
+        ),
+      ),
     );
   }
 }

@@ -1,0 +1,388 @@
+import 'package:flutter/material.dart' hide DayPeriod;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
+import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/outlined_action_button.dart';
+
+class TripDayOverviewCard extends StatelessWidget {
+  const TripDayOverviewCard({
+    super.key,
+    required this.day,
+    required this.tripCoverAsset,
+    required this.isExpanded,
+    required this.onToggle,
+    required this.onRefine,
+  });
+
+  final TripDay day;
+  final String tripCoverAsset;
+  final bool isExpanded;
+  final VoidCallback onToggle;
+  final VoidCallback onRefine;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 10.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(color: context.colorTheme.outline, width: 1.2),
+        ),
+        child: isExpanded ? _buildExpanded(context) : _buildCollapsed(context),
+      ),
+    );
+  }
+
+  Widget _buildCollapsed(BuildContext context) {
+    return Row(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10.r),
+          child: SizedBox(
+            width: 106.w,
+            height: 200.h,
+            // height: double.infinity,
+            child: AppCachedImage(imageUrl: _cardImageUrl),
+          ),
+        ),
+        SizedBox(width: 10.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Day ${day.dayNumber}', style: AppTextStyles.h8Bold),
+              SizedBox(height: 12.h),
+              Text(
+                day.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.h9Bold.copyWith(
+                  color: context.colorTheme.onSurface,
+                ),
+              ),
+              SizedBox(height: 12.h),
+              _DayMetaRow(day: day),
+              SizedBox(height: 12.h),
+              //Todo: the tags should be the catgory of the places
+              _TagWrap(tags: day.tags.take(3).toList()),
+              SizedBox(height: 12.h),
+              OutlinedActionButton(
+                key: Key('trip-day-${day.dayNumber}-view-button'),
+                label: 'View',
+                icon: Icons.chevron_right,
+                onPressed: onToggle,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpanded(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.r),
+            child: SizedBox(
+              width: double.infinity,
+              height: 202.h,
+
+              child: AppCachedImage(imageUrl: _cardImageUrl),
+            ),
+          ),
+
+          SizedBox(height: 28.h),
+          Padding(
+            padding: EdgeInsets.only(left: 16.w, right: 10.w),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text('Day ${day.dayNumber}', style: AppTextStyles.h6Bold),
+                    Spacer(),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          ProfileAssets.editIcon,
+                          width: 24.sp,
+                          colorFilter: ColorFilter.mode(
+                            context.colorTheme.primary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Text(
+                          'Edit with AI',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.h7Bold.copyWith(
+                            color: context.colorTheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 18.h),
+                _DayTimeline(day: day),
+                SizedBox(height: 24.h),
+                Center(
+                  child: SizedBox(
+                    width: 218.w,
+                    child: OutlinedActionButton(
+                      key: Key('trip-day-${day.dayNumber}-view-less-button'),
+                      label: 'View less',
+                      onPressed: onToggle,
+                      fontSize: 20.sp,
+                      height: 44.h,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String? get _cardImageUrl {
+    if (day.coverImageUrl.isNotEmpty) return day.coverImageUrl;
+    for (final slot in day.timeSlots) {
+      for (final place in slot.places) {
+        final url = place.imageUrls?.firstOrNull;
+        if (url != null && url.isNotEmpty) return url;
+      }
+    }
+    return null;
+  }
+}
+
+class _DayMetaRow extends StatelessWidget {
+  const _DayMetaRow({required this.day});
+
+  final TripDay day;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 6.w,
+      runSpacing: 6.h,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        _IconText(
+          icon: Icons.location_on_outlined,
+          text: '${day.stopCount} stops',
+        ),
+        const _IconText(icon: Icons.schedule_outlined, text: 'Full day'),
+        _CostChip(cost: day.estimatedCost),
+      ],
+    );
+  }
+}
+
+class _IconText extends StatelessWidget {
+  const _IconText({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14.sp, color: context.colorTheme.outline),
+        SizedBox(width: 4.w),
+        Text(
+          text,
+          style: AppTextStyles.h10Regular.copyWith(
+            color: context.colorTheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CostChip extends StatelessWidget {
+  const _CostChip({required this.cost});
+
+  final double cost;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+      decoration: BoxDecoration(
+        color: AppColors.successGreen.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Text(
+        '~${cost.round()} EGP',
+        style: AppTextStyles.h10Regular.copyWith(
+          color: AppColors.customgreeen2,
+        ),
+      ),
+    );
+  }
+}
+
+class _TagWrap extends StatelessWidget {
+  const _TagWrap({required this.tags});
+
+  final List<String> tags;
+
+  static const _colors = [
+    (Color(0xFFF1EAFD), Color(0xFF9A89D0)),
+    (Color(0xFFC4E0F9), Color(0xFF5596FE)),
+    (Color(0xFFFCE8D1), Color(0xFFD8906A)),
+    (Color(0xFFD7F1F3), Color(0xFF4F919E)),
+    (Color(0xFFEEF7E9), Color(0xFF57925F)),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    if (tags.isEmpty) return const SizedBox.shrink();
+
+    return Wrap(
+      spacing: 8.w,
+      runSpacing: 8.h,
+      children: [
+        for (var i = 0; i < tags.length; i++)
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+            decoration: BoxDecoration(
+              color: _colors[i % _colors.length].$1,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Text(
+              tags[i],
+              style: AppTextStyles.h10Regular.copyWith(
+                color: _colors[i % _colors.length].$2,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _DayTimeline extends StatelessWidget {
+  const _DayTimeline({required this.day});
+
+  final TripDay day;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (var i = 0; i < day.timeSlots.length; i++)
+          _TimelineSlot(
+            slot: day.timeSlots[i],
+            isFirst: i == 0,
+            isLast: i == day.timeSlots.length - 1,
+          ),
+      ],
+    );
+  }
+}
+
+class _TimelineSlot extends StatelessWidget {
+  const _TimelineSlot({
+    required this.slot,
+    required this.isFirst,
+    required this.isLast,
+  });
+
+  final TimeSlot slot;
+  final bool isFirst;
+  final bool isLast;
+
+  @override
+  Widget build(BuildContext context) {
+    final lineColor = context.colorTheme.outline;
+    final dotColor = isFirst ? context.colorTheme.primary : lineColor;
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 18.w,
+            child: Column(
+              children: [
+                Container(
+                  width: 16.w,
+                  height: 16.w,
+                  decoration: BoxDecoration(
+                    color: dotColor,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                if (!isLast)
+                  Expanded(
+                    child: Container(width: 2.5.w, color: lineColor),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 18.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${_periodLabel(slot.period)} - ${slot.title}',
+                    style: AppTextStyles.h9Bold,
+                  ),
+                  SizedBox(height: 12.h),
+                  ...slot.places.map(
+                    (place) => Padding(
+                      padding: EdgeInsets.only(bottom: 6.h, left: 10.w),
+                      child: Text(
+                        '-  ${place.name}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.h9Regular.copyWith(
+                          color: context.colorTheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _periodLabel(DayPeriod period) {
+    switch (period) {
+      case DayPeriod.morning:
+        return 'Morning';
+      case DayPeriod.afternoon:
+        return 'Afternoon';
+      case DayPeriod.evening:
+        return 'Evening';
+    }
+  }
+}

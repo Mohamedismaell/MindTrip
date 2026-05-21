@@ -5,6 +5,7 @@ class AiPlannerMockData {
   static const List<String> destinations = [
     'Cairo',
     'Giza',
+    'Dahab',
     'Alexandria',
     'Aswan',
     'Luxor',
