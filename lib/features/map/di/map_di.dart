@@ -48,13 +48,16 @@ class MapDi {
       () => GetRouteUseCase(routeRepo: sl<MapRouteRepository>()),
     );
     sl.registerLazySingleton<FindAutocompletePredictionsUseCase>(
-      () => FindAutocompletePredictionsUseCase(repository: sl<GooglePlacesRepository>()),
+      () => FindAutocompletePredictionsUseCase(
+        repository: sl<GooglePlacesRepository>(),
+      ),
     );
     sl.registerLazySingleton<FetchPlaceDetailsUseCase>(
       () => FetchPlaceDetailsUseCase(repository: sl<GooglePlacesRepository>()),
     );
     sl.registerLazySingleton<FetchPlacePhotoUrlsUseCase>(
-      () => FetchPlacePhotoUrlsUseCase(repository: sl<GooglePlacesRepository>()),
+      () =>
+          FetchPlacePhotoUrlsUseCase(repository: sl<GooglePlacesRepository>()),
     );
     sl.registerLazySingleton<NearbySearchUseCase>(
       () => NearbySearchUseCase(repository: sl<GooglePlacesRepository>()),
@@ -68,7 +71,8 @@ class MapDi {
     );
     sl.registerFactory<MapSearchCubit>(
       () => MapSearchCubit(
-        findAutocompletePredictionsUseCase: sl<FindAutocompletePredictionsUseCase>(),
+        findAutocompletePredictionsUseCase:
+            sl<FindAutocompletePredictionsUseCase>(),
         fetchPlaceDetailsUseCase: sl<FetchPlaceDetailsUseCase>(),
         nearbySearchUseCase: sl<NearbySearchUseCase>(),
       ),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/outlined_action_button.dart';
+import 'package:mindtrip/features/map/domain/utils/mapbox_static_url_builder.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 
 class TripMapPreviewCard extends StatelessWidget {
   const TripMapPreviewCard({
@@ -27,38 +30,35 @@ class TripMapPreviewCard extends StatelessWidget {
         children: [
           Text('Your Trip Map', style: AppTextStyles.h7Bold),
           SizedBox(height: 18.h),
-          Container(
-            height: 181.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFFFFE4B9), Color(0xFFBDE7FF)],
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.r),
+            child: Container(
+              height: 181.h,
+              width: double.infinity,
+              color: Colors.grey.shade200,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  AppCachedImage(imageUrl: _buildMapUrl(), fit: BoxFit.cover),
+                  Positioned(
+                    left: 10.w,
+                    top: 10.h,
+                    child: _MapLegend(days: days.take(3).toList()),
+                  ),
+                ],
               ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 10.w,
-                  top: 10.h,
-                  child: _MapLegend(days: days.take(3).toList()),
-                ),
-                ..._mapPins(context),
-              ],
             ),
           ),
           SizedBox(height: 18.h),
-          SizedBox(
-            width: 217.w,
-            child: OutlinedActionButton(
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 50.w),
+            child: CustomOtlinedButton(
               key: const Key('trip-map-button'),
-              label: 'View full map',
-              icon: Icons.map_outlined,
+              text: 'View full map',
+              actionIcon: Icons.map_outlined,
               onPressed: onViewMap,
-              fontSize: 20.sp,
-              height: 52.h,
+              color: context.colorTheme.primary,
+              textStyle: AppTextStyles.h7Bold,
             ),
           ),
         ],
@@ -66,35 +66,33 @@ class TripMapPreviewCard extends StatelessWidget {
     );
   }
 
-  List<Widget> _mapPins(BuildContext context) {
-    const pinData = [
-      (Offset(0.48, 0.28), '1', Color(0xFF5596FE)),
-      (Offset(0.36, 0.52), '2', Color(0xFFA36DDB)),
-      (Offset(0.22, 0.78), '3', Color(0xFFEB9242)),
-    ];
+  String _buildMapUrl() {
+    final colors = ['5596FE', 'A36DDB', 'EB9242'];
+    final markers = <PlaceMarker>[];
 
-    return pinData
-        .map(
-          (pin) => Positioned(
-            left: 260.w * pin.$1.dx,
-            top: 150.h * pin.$1.dy,
-            child: Container(
-              width: 24.w,
-              height: 24.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: pin.$3,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: Text(
-                pin.$2,
-                style: AppTextStyles.h10Bold.copyWith(color: Colors.white),
-              ),
+    for (var i = 0; i < days.length; i++) {
+      final day = days[i];
+      final hex = colors[i % colors.length];
+      int count = 1;
+      for (final slot in day.timeSlots) {
+        for (final place in slot.places) {
+          markers.add(
+            PlaceMarker(
+              lat: place.location.latitude,
+              lng: place.location.longitude,
+              colorHex: hex,
+              label: '$count',
             ),
-          ),
-        )
-        .toList();
+          );
+          count++;
+        }
+      }
+    }
+    return MapboxStaticUrlBuilder.buildStaticMapUrl(
+      markers: markers,
+      width: 800,
+      height: 400,
+    );
   }
 }
 

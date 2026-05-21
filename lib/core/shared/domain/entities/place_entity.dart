@@ -61,16 +61,16 @@ class PlaceEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        location,
-        imageUrls,
-        category,
-        rating,
-        reviewCount,
-        price,
-        badge,
-        isFavorite,
-      ];
+    id,
+    name,
+    description,
+    location,
+    imageUrls,
+    category,
+    rating,
+    reviewCount,
+    price,
+    badge,
+    isFavorite,
+  ];
 }

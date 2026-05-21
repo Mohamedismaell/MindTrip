@@ -1,12 +1,8 @@
-
 class PlannerStop {
   final String time;
   final String label;
 
-  const PlannerStop({
-    required this.time,
-    required this.label,
-  });
+  const PlannerStop({required this.time, required this.label});
 }
 
 class PlannerPreview {

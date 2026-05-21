@@ -20,33 +20,22 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/t
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_details_bar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_map_preview_card.dart';
 
-class TripDetailsScreen extends StatefulWidget {
+class TripDetailsScreen extends StatelessWidget {
   final String tripId;
 
   const TripDetailsScreen({super.key, required this.tripId});
 
   @override
-  State<TripDetailsScreen> createState() => _TripDetailsScreenState();
-}
-
-class _TripDetailsScreenState extends State<TripDetailsScreen> {
-  int? _expandedDay;
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<TripDetailsCubit>().loadTripDetails(widget.tripId);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TripDetailsCubit, TripDetailsState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(child: _buildBody(context, state)),
-        );
-      },
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
+          builder: (context, state) {
+            return _buildBody(context, state);
+          },
+        ),
+      ),
     );
   }
 
@@ -66,7 +55,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
     }
 
     final allPlaces = _allPlaces(itinerary);
-    final expandedDay = _expandedDay;
+    final expandedDay = state.activeDay;
 
     return CustomScrollView(
       slivers: [
@@ -75,6 +64,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
           onRefine: () =>
               AiRefinementSheet.show(context, trip.id, trip.chatMessages),
         ),
+        SliverToBoxAdapter(child: SizedBox(height: 52.h)),
         SliverPadding(
           padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 55.h),
           sliver: SliverList.separated(
@@ -90,11 +80,9 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                   tripCoverAsset: trip.coverAsset,
                   isExpanded: day.dayNumber == expandedDay,
                   onToggle: () {
-                    setState(() {
-                      _expandedDay = day.dayNumber == expandedDay
-                          ? null
-                          : day.dayNumber;
-                    });
+                    context.read<TripDetailsCubit>().toggleActiveDay(
+                      day.dayNumber,
+                    );
                   },
                   onRefine: () => AiRefinementSheet.show(
                     context,
@@ -169,16 +157,19 @@ class _EstimateNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomHeadLine(
-      key: const Key('trip-estimate-note'),
-      textAlign: TextAlign.left,
-      firstTitle: 'Note: ',
-      firstStyle: AppTextStyles.h9Medium.copyWith(
-        color: context.colorTheme.onSurface,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
+      child: CustomHeadLine(
+        key: const Key('trip-estimate-note'),
+        textAlign: TextAlign.left,
+        firstTitle: 'Note: ',
+        firstStyle: AppTextStyles.h9Medium.copyWith(
+          color: context.colorTheme.onSurface,
+        ),
+        secondStyle: AppTextStyles.h9Medium.copyWith(color: Colors.black),
+        secondTitle:
+            'This is an approximate estimate and may vary depending on your food choices, activity upgrades, seasonal prices, and any custom changes to your itinerary',
       ),
-      secondStyle: AppTextStyles.h9Medium.copyWith(color: Colors.black),
-      secondTitle:
-          'This is an approximate estimate and may vary depending on your food choices, activity upgrades, seasonal prices, and any custom changes to your itinerary',
     );
   }
 }

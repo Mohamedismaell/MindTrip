@@ -14,6 +14,8 @@ import 'package:mindtrip/features/map/presentation/widgets/map_mark_relcoaiton_b
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_info_bottom_sheet.dart';
+import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';
+import 'package:mindtrip/features/map/presentation/widgets/map_navigate_all_button.dart';
 
 //Todo: handle bottom sheet to show on tap known places from mock or from search later try to handle on tap poe for general if possible
 //! on Tap not Working
@@ -57,14 +59,32 @@ class _MapScreenState extends State<MapScreen> {
       final userPosition = Position(position.longitude, position.latitude);
       final annotations = context.read<MapCubit>().state.annotations;
       final waypoints = [userPosition];
-      for (final entry in annotations) {
-        waypoints.add(
-          Position(
-            entry.place.location.longitude,
-            entry.place.location.latitude,
-          ),
+
+      final unvisited = List.of(annotations);
+      var currentLat = position.latitude;
+      var currentLng = position.longitude;
+
+      while (unvisited.isNotEmpty) {
+        final nearest = DistanceUtils.findNearestAnnotation(
+          unvisited,
+          currentLat,
+          currentLng,
         );
+        if (nearest != null) {
+          waypoints.add(
+            Position(
+              nearest.place.location.longitude,
+              nearest.place.location.latitude,
+            ),
+          );
+          unvisited.remove(nearest);
+          currentLat = nearest.place.location.latitude;
+          currentLng = nearest.place.location.longitude;
+        } else {
+          break;
+        }
       }
+
       context.read<MapNavigationCubit>().navigateAll(waypoints);
     }
   }
@@ -85,6 +105,26 @@ class _MapScreenState extends State<MapScreen> {
       final entries = context.read<MapCubit>().state.annotations;
       await _mapController.addPlaceAnnotations(entries);
       await _mapController.fitToAnnotations();
+      await _autoSelectNearestPlace();
+    }
+  }
+
+  Future<void> _autoSelectNearestPlace() async {
+    final annotations = context.read<MapCubit>().state.annotations;
+    if (annotations.isEmpty) return;
+
+    final position = await sl<LocationService>().getCurrentLocation();
+    if (position != null && mounted) {
+      final nearest = DistanceUtils.findNearestAnnotation(
+        annotations,
+        position.latitude,
+        position.longitude,
+      );
+      if (nearest != null) {
+        context.read<MapCubit>().selectPlace(nearest.place.id);
+      }
+    } else if (mounted) {
+      context.read<MapCubit>().selectPlace(annotations.first.place.id);
     }
   }
 
@@ -102,7 +142,7 @@ class _MapScreenState extends State<MapScreen> {
             MapWidget(
               key: const ValueKey("mapWidget"),
               onMapCreated: _onMapCreated,
-              styleUri: MapboxStyles.OUTDOORS,
+              styleUri: 'mapbox://styles/xmohamedx/cmpc4uw4g00a901s75avq3q3a',
             ),
             Positioned(top: topSpace, child: const MapSearchBar()),
             Positioned(
@@ -112,6 +152,10 @@ class _MapScreenState extends State<MapScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if (context.watch<MapCubit>().state.annotations.isNotEmpty) ...[
+                    MapNavigateAllButton(onPressed: _navigateAll),
+                    SizedBox(height: 16.h),
+                  ],
                   MapMarkRelcoaitonButton(
                     onTap: () => _mapController.fitToAnnotations(),
                   ),

@@ -40,11 +40,7 @@ class TimeSlotModel extends TimeSlot {
   }
 
   TimeSlot toEntity() {
-    return TimeSlot(
-      period: period,
-      title: title,
-      places: places,
-    );
+    return TimeSlot(period: period, title: title, places: places);
   }
 }
 
@@ -81,8 +77,7 @@ class TripDayModel extends TripDay {
       'tags': tags,
       'stopCount': stopCount,
       'estimatedCost': estimatedCost,
-      'timeSlots':
-          timeSlots.map((e) => (e as TimeSlotModel).toJson()).toList(),
+      'timeSlots': timeSlots.map((e) => (e as TimeSlotModel).toJson()).toList(),
     };
   }
 
@@ -94,8 +89,9 @@ class TripDayModel extends TripDay {
       tags: entity.tags,
       stopCount: entity.stopCount,
       estimatedCost: entity.estimatedCost,
-      timeSlots:
-          entity.timeSlots.map((e) => TimeSlotModel.fromEntity(e)).toList(),
+      timeSlots: entity.timeSlots
+          .map((e) => TimeSlotModel.fromEntity(e))
+          .toList(),
     );
   }
 
@@ -107,8 +103,7 @@ class TripDayModel extends TripDay {
       tags: tags,
       stopCount: stopCount,
       estimatedCost: estimatedCost,
-      timeSlots:
-          timeSlots.map((e) => (e as TimeSlotModel).toEntity()).toList(),
+      timeSlots: timeSlots.map((e) => (e as TimeSlotModel).toEntity()).toList(),
     );
   }
 }

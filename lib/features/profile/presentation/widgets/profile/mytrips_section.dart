@@ -58,15 +58,25 @@ class _MyTripsSectionState extends State<MyTripsSection> {
                 return _MyTripCard(
                   trip: trips[index],
                   onTap: () {
-                    //Todo: Handle the navigaiton into the card
+                    //Todo: Handle the navigaiton works but with silly way
                     if (trips[index].status == TripStatus.inProgress) {
                       context.push(
-                        '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
+                        '${AppRoutes.tripDetails}?tripId=${trips[index].id}',
                       );
                     } else if (trips[index].status == TripStatus.draft) {
-                      context.push(
-                        '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
+                      print(
+                        'here===========${AppRoutes.tripDetails}?tripId=${trips[index].id}',
                       );
+
+                      if (trips[index].placePreviews.isEmpty) {
+                        context.push(
+                          '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
+                        );
+                      } else {
+                        context.push(
+                          '${AppRoutes.tripDetails}?tripId=${trips[index].id}',
+                        );
+                      }
                     }
                   },
                 );

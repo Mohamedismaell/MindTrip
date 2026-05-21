@@ -28,10 +28,5 @@ class GooglePlacePhotoEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-    photoReference,
-    height,
-    width,
-    attribution,
-  ];
+  List<Object?> get props => [photoReference, height, width, attribution];
 }

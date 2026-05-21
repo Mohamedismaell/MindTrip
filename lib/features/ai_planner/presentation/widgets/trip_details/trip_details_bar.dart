@@ -40,7 +40,7 @@ class TripDetailsTopBar extends StatelessWidget {
                 firstTitle: 'Trip ',
                 secondTitle: 'Details',
                 firstStyle: AppTextStyles.h5Bold.copyWith(
-                  color: AppColors.primaryBlue,
+                  color: context.colorTheme.primary,
                 ),
                 secondStyle: AppTextStyles.h5Bold.copyWith(
                   color: AppColors.pureBlack,

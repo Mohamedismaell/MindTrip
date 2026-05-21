@@ -16,7 +16,10 @@ class PlacePrediction extends Equatable {
   factory PlacePrediction.fromJson(Map<String, dynamic> json) {
     return PlacePrediction(
       placeId: json['place_id'] ?? '',
-      primaryText: json['structured_formatting']?['main_text'] ?? json['description'] ?? '',
+      primaryText:
+          json['structured_formatting']?['main_text'] ??
+          json['description'] ??
+          '',
       secondaryText: json['structured_formatting']?['secondary_text'] ?? '',
       fullText: json['description'] ?? '',
     );

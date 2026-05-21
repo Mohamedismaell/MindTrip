@@ -87,10 +87,10 @@ class MockChatDataSource implements ChatDataSource {
           final categoryResponses = ChatMockResponses.responses[category]!;
           final response =
               categoryResponses[_random.nextInt(categoryResponses.length)];
-          
+
           // Signal ready if destination is set
           final isReady = category == 'destination';
-          
+
           return _MatchedResponse(
             content: response,
             isReadyToGenerate: isReady,

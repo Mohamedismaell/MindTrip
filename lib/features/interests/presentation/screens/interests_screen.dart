@@ -19,16 +19,21 @@ class InterestsScreen extends StatelessWidget {
     return BlocListener<UserCubit, UserState>(
       listenWhen: (prev, curr) => prev.interestStatus != curr.interestStatus,
       listener: (context, state) {
-        if (isEdit && state.interestStatus == InterestStatus.saved) {
+        if (state.interestStatus == InterestStatus.saved) {
           context.read<AppGateCubit>().interestsComplete();
-          AppSnackBar.showSuccess(
-            context: context,
-            message: 'Interests updated successfully',
-          );
-          if (context.canPop()) {
-            context.pop();
+
+          if (isEdit) {
+            AppSnackBar.showSuccess(
+              context: context,
+              message: 'Interests updated successfully',
+            );
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(AppRoutes.profile);
+            }
           } else {
-            context.go(AppRoutes.profile);
+            context.go(AppRoutes.home);
           }
         } else if (state.interestStatus == InterestStatus.failed) {
           AppSnackBar.showError(

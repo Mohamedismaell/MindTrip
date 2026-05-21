@@ -145,10 +145,7 @@ class TripsCubit extends Cubit<TripsState> {
         if (coverUrl == null && imgUrl.isNotEmpty) {
           coverUrl = imgUrl;
         }
-        previews.add({
-          'name': place.name,
-          'imageUrl': imgUrl,
-        });
+        previews.add({'name': place.name, 'imageUrl': imgUrl});
       }
 
       // Keep trip as draft — status only changes when user taps 'Save Trip'

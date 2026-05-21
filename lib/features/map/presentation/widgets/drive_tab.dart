@@ -128,23 +128,70 @@ class DriveTab extends StatelessWidget {
                     //   ),
                     // ],
                     // SizedBox(height: 16.h),
-
-                    // Stop navigation button
-                    Skeleton.keep(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 48.h,
-                        child: CustomOtlinedButton(
-                          onPressed: isLoading
-                              ? null
-                              : () => context
-                                    .read<MapNavigationCubit>()
-                                    .stopNavigation(),
-                          icon: Icons.close,
-                          text: 'Stop Navigation',
+                    if (state.isSequentialMode) ...[
+                      Skeleton.keep(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 48.h,
+                                child: CustomOtlinedButton(
+                                  onPressed: isLoading
+                                      ? null
+                                      : () => context
+                                            .read<MapNavigationCubit>()
+                                            .stopNavigation(),
+                                  icon: Icons.close,
+                                  text: 'Stop',
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 12.w),
+                            Expanded(
+                              flex: 2,
+                              child: SizedBox(
+                                height: 48.h,
+                                child: CustomOtlinedButton(
+                                  onPressed: isLoading
+                                      ? null
+                                      : () => context
+                                            .read<MapNavigationCubit>()
+                                            .advanceToNextLeg(),
+                                  actionIcon:
+                                      state.currentLegIndex >=
+                                          state.totalLegs - 1
+                                      ? Icons.check
+                                      : Icons.arrow_forward_ios,
+                                  text:
+                                      state.currentLegIndex >=
+                                          state.totalLegs - 1
+                                      ? 'Finish Trip'
+                                      : 'Next Place (${state.currentLegIndex + 1}/${state.totalLegs})',
+                                  color: context.colorTheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                    ] else ...[
+                      // Stop navigation button
+                      Skeleton.keep(
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 48.h,
+                          child: CustomOtlinedButton(
+                            onPressed: isLoading
+                                ? null
+                                : () => context
+                                      .read<MapNavigationCubit>()
+                                      .stopNavigation(),
+                            icon: Icons.close,
+                            text: 'Stop Navigation',
+                          ),
+                        ),
+                      ),
+                    ],
                     SizedBox(height: 20.h),
                   ],
                 ),

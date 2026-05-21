@@ -7,10 +7,7 @@ class UpdateProfileUseCase {
   UpdateProfileUseCase({required UserRepository repository})
     : _repository = repository;
 
-  Future<Result<void>> call({
-    String? displayName,
-    String? phoneNumber,
-  }) {
+  Future<Result<void>> call({String? displayName, String? phoneNumber}) {
     return _repository.updateProfile(
       displayName: displayName,
       phoneNumber: phoneNumber,

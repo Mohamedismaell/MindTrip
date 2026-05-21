@@ -33,14 +33,16 @@ class TimePeriodSection extends StatelessWidget {
             ),
           ],
         ),
-        
+
         SizedBox(height: 12.h),
 
         // List of Places in this slot
         Padding(
           padding: EdgeInsets.only(left: 10.w),
           child: Column(
-            children: slot.places.map((place) => _PlaceActivityTile(place: place)).toList(),
+            children: slot.places
+                .map((place) => _PlaceActivityTile(place: place))
+                .toList(),
           ),
         ),
       ],
@@ -92,7 +94,9 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
       decoration: BoxDecoration(
         color: context.colorTheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: context.colorTheme.outline.withValues(alpha: 0.05)),
+        border: Border.all(
+          color: context.colorTheme.outline.withValues(alpha: 0.05),
+        ),
       ),
       child: Row(
         children: [
@@ -111,7 +115,9 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
                 color: _isCompleted ? Colors.green : Colors.transparent,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: _isCompleted ? Colors.green : context.colorTheme.outline.withValues(alpha: 0.3),
+                  color: _isCompleted
+                      ? Colors.green
+                      : context.colorTheme.outline.withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
@@ -146,8 +152,12 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
                 Text(
                   widget.place.name,
                   style: AppTextStyles.h9SemiBold.copyWith(
-                    decoration: _isCompleted ? TextDecoration.lineThrough : null,
-                    color: _isCompleted ? context.colorTheme.onSurfaceVariant : context.colorTheme.onSurface,
+                    decoration: _isCompleted
+                        ? TextDecoration.lineThrough
+                        : null,
+                    color: _isCompleted
+                        ? context.colorTheme.onSurfaceVariant
+                        : context.colorTheme.onSurface,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -176,7 +186,7 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
               ],
             ),
           ),
-          
+
           // Action (View details?)
           Icon(
             Icons.chevron_right,

@@ -10,6 +10,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   final GetRouteUseCase _getRouteUseCase;
 
   List<Position>? _lastWaypoints;
+  List<Position>? _sequentialWaypoints;
   CancelToken? _getRouteCancelToken;
   int _routeGeneration = 0;
 
@@ -41,7 +42,40 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   }
 
   Future<void> navigateAll(List<Position> waypoints) async {
-    await _fetchRoute(waypoints);
+    await navigateSequential(waypoints);
+  }
+
+  Future<void> navigateSequential(List<Position> waypoints) async {
+    if (waypoints.length < 2) return;
+    _sequentialWaypoints = waypoints;
+    emit(
+      state.copyWith(
+        isSequentialMode: true,
+        totalLegs: waypoints.length - 1,
+        currentLegIndex: 0,
+      ),
+    );
+    await _fetchSequentialLegRoute(0);
+  }
+
+  Future<void> advanceToNextLeg() async {
+    if (_sequentialWaypoints == null || !state.isSequentialMode) return;
+    final nextLeg = state.currentLegIndex + 1;
+    if (nextLeg >= state.totalLegs) {
+      stopNavigation();
+      return;
+    }
+    emit(state.copyWith(currentLegIndex: nextLeg));
+    await _fetchSequentialLegRoute(nextLeg);
+  }
+
+  Future<void> _fetchSequentialLegRoute(int legIndex) async {
+    if (_sequentialWaypoints == null) return;
+    final start = _sequentialWaypoints![legIndex];
+    final end = _sequentialWaypoints![legIndex + 1];
+
+    // Call _fetchRoute for leg
+    await _fetchRoute([start, end]);
   }
 
   Future<void> _fetchRoute(List<Position> waypoints) async {
@@ -57,7 +91,6 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
       cancelToken: token,
     );
 
-    // A newer request was fired while this one was in flight → ignore result
     if (generation != _routeGeneration) return;
 
     result.when(
@@ -78,9 +111,19 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
 
   void stopNavigation() {
     _lastWaypoints = null;
+    _sequentialWaypoints = null;
     _routeGeneration++; // Invalidate any in-flight request
     _getRouteCancelToken?.cancel();
-    emit(state.copyWith(isRouteLoading: false, currentStepIndex: 0));
+    emit(
+      state.copyWith(
+        isRouteLoading: false,
+        currentStepIndex: 0,
+        isSequentialMode: false,
+        currentLegIndex: 0,
+        totalLegs: 0,
+        activeRoute: null,
+      ),
+    );
   }
 
   @override

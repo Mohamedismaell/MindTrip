@@ -62,6 +62,7 @@ class AiPlannerRoutes {
           path: AppRoutes.tripDetails,
           builder: (context, state) {
             final tripId = state.uri.queryParameters['tripId'] ?? '';
+            context.read<TripDetailsCubit>().loadTripDetails(tripId);
             return TripDetailsScreen(tripId: tripId);
           },
         ),

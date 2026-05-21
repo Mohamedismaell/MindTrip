@@ -6,9 +6,7 @@ class GooglePlaceEditorialSummaryModel extends Equatable {
   const GooglePlaceEditorialSummaryModel({required this.overview});
 
   factory GooglePlaceEditorialSummaryModel.fromJson(Map<String, dynamic> json) {
-    return GooglePlaceEditorialSummaryModel(
-      overview: json['overview'] ?? '',
-    );
+    return GooglePlaceEditorialSummaryModel(overview: json['overview'] ?? '');
   }
 
   @override

@@ -11,6 +11,7 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
+
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
 

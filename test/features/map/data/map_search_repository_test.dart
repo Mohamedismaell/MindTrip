@@ -7,7 +7,8 @@ import 'package:mindtrip/features/map/data/repositories/map_search_repository_im
 import 'package:mindtrip/features/map/domain/entities/search_suggestion.dart';
 import 'package:mindtrip/features/map/domain/entities/map_search_result.dart';
 
-class MockMapSearchRemoteDatasource extends Mock implements MapSearchRemoteDatasource {}
+class MockMapSearchRemoteDatasource extends Mock
+    implements MapSearchRemoteDatasource {}
 
 void main() {
   late MapSearchRepositoryImpl repository;
@@ -22,12 +23,17 @@ void main() {
     final tQuery = 'cafe';
     final tToken = 'token123';
     final tSuggestions = [
-      SearchSuggestion(mapboxId: '1', name: 'Cafe 1', placeFormatted: 'Address 1'),
+      SearchSuggestion(
+        mapboxId: '1',
+        name: 'Cafe 1',
+        placeFormatted: 'Address 1',
+      ),
     ];
 
     test('should return suggestions on success', () async {
-      when(() => mockDatasource.suggest(tQuery, tToken))
-          .thenAnswer((_) async => tSuggestions);
+      when(
+        () => mockDatasource.suggest(tQuery, tToken),
+      ).thenAnswer((_) async => tSuggestions);
 
       final result = await repository.suggest(tQuery, tToken);
 
@@ -40,8 +46,9 @@ void main() {
     });
 
     test('should return NetworkFailure on exception', () async {
-      when(() => mockDatasource.suggest(tQuery, tToken))
-          .thenThrow(Exception('Network Error'));
+      when(
+        () => mockDatasource.suggest(tQuery, tToken),
+      ).thenThrow(Exception('Network Error'));
 
       final result = await repository.suggest(tQuery, tToken);
 
@@ -65,8 +72,9 @@ void main() {
     );
 
     test('should return search result on success', () async {
-      when(() => mockDatasource.retrieve(tId, tToken))
-          .thenAnswer((_) async => tResult);
+      when(
+        () => mockDatasource.retrieve(tId, tToken),
+      ).thenAnswer((_) async => tResult);
 
       final result = await repository.retrieve(tId, tToken);
 
@@ -79,8 +87,9 @@ void main() {
     });
 
     test('should return NetworkFailure on exception', () async {
-      when(() => mockDatasource.retrieve(tId, tToken))
-          .thenThrow(Exception('Network Error'));
+      when(
+        () => mockDatasource.retrieve(tId, tToken),
+      ).thenThrow(Exception('Network Error'));
 
       final result = await repository.retrieve(tId, tToken);
 

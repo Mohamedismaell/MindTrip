@@ -5,9 +5,12 @@ import 'package:mindtrip/features/interests/presentation/screens/interests_scree
 
 class InterestsRoutes {
   static List<RouteBase> routes = [
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.fadeSlideBuilder(
       path: AppRoutes.interests,
-      page: const InterestsScreen(isEdit: true),
+      builder: (context, state) {
+        final isEdit = state.extra as bool? ?? false;
+        return InterestsScreen(isEdit: isEdit);
+      },
     ),
   ];
 }

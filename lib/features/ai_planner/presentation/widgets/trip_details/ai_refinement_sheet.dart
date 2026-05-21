@@ -19,7 +19,11 @@ class AiRefinementSheet extends StatefulWidget {
     this.initialMessages = const [],
   });
 
-  static Future<void> show(BuildContext context, String tripId, List<ChatMessage> messages) {
+  static Future<void> show(
+    BuildContext context,
+    String tripId,
+    List<ChatMessage> messages,
+  ) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -109,10 +113,7 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
                   ),
                 ),
                 SizedBox(width: 12.w),
-                Text(
-                  'Refine with Mindy',
-                  style: AppTextStyles.h7Bold,
-                ),
+                Text('Refine with Mindy', style: AppTextStyles.h7Bold),
                 const Spacer(),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -158,15 +159,18 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
               children: [
                 _SuggestionChip(
                   label: '🏰 More museums',
-                  onTap: () => _controller.text = 'Can you add more historical sites and museums?',
+                  onTap: () => _controller.text =
+                      'Can you add more historical sites and museums?',
                 ),
                 _SuggestionChip(
                   label: '🍝 Local food',
-                  onTap: () => _controller.text = 'I want more authentic local food stops.',
+                  onTap: () => _controller.text =
+                      'I want more authentic local food stops.',
                 ),
                 _SuggestionChip(
                   label: '💰 Cheaper options',
-                  onTap: () => _controller.text = 'Make the itinerary more budget-friendly.',
+                  onTap: () => _controller.text =
+                      'Make the itinerary more budget-friendly.',
                 ),
               ],
             ),

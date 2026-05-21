@@ -9,5 +9,7 @@ abstract class FavoritesRepository {
   });
   Future<Result<void>> syncPendingFavorites();
   Future<Result<void>> clearAll();
-  Future<Result<List<PlaceModel>>> getFavoritePlaces({required Set<String> placeIds});
+  Future<Result<List<PlaceModel>>> getFavoritePlaces({
+    required Set<String> placeIds,
+  });
 }

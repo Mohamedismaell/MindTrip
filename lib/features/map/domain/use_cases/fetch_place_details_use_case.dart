@@ -12,9 +12,6 @@ class FetchPlaceDetailsUseCase {
     String placeId, {
     CancelToken? cancelToken,
   }) {
-    return repository.fetchPlaceDetails(
-      placeId,
-      cancelToken: cancelToken,
-    );
+    return repository.fetchPlaceDetails(placeId, cancelToken: cancelToken);
   }
 }

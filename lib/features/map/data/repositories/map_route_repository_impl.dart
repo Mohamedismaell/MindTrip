@@ -26,10 +26,12 @@ class MapRouteRepositoryImpl implements MapRouteRepository {
       );
       return Result.ok(route);
     } on DioException catch (e) {
-      return Result.error(NetworkFailure(
-        message: 'Failed to fetch route',
-        debugMessage: e.message,
-      ));
+      return Result.error(
+        NetworkFailure(
+          message: 'Failed to fetch route',
+          debugMessage: e.message,
+        ),
+      );
     } catch (e) {
       return Result.error(UnknownFailure(debugMessage: e.toString()));
     }

@@ -16,22 +16,30 @@ class TripDetailsCubit extends Cubit<TripDetailsState> {
       final itinerary = await _tripRepository.getItinerary(tripId);
 
       if (isClosed) return;
-      emit(state.copyWith(
-        trip: trip,
-        itinerary: itinerary,
-        status: TripDetailsStatus.loaded,
-      ));
+      emit(
+        state.copyWith(
+          trip: trip,
+          itinerary: itinerary,
+          status: TripDetailsStatus.loaded,
+        ),
+      );
     } catch (e) {
       if (isClosed) return;
-      emit(state.copyWith(
-        status: TripDetailsStatus.error,
-        errorMessage: 'Failed to load trip details: $e',
-      ));
+      emit(
+        state.copyWith(
+          status: TripDetailsStatus.error,
+          errorMessage: 'Failed to load trip details: $e',
+        ),
+      );
     }
   }
 
-  void setActiveDay(int dayNumber) {
+  void toggleActiveDay(int dayNumber) {
     if (isClosed) return;
-    emit(state.copyWith(activeDay: dayNumber));
+    if (state.activeDay == dayNumber) {
+      emit(state.copyWith(clearActiveDay: true));
+    } else {
+      emit(state.copyWith(activeDay: dayNumber));
+    }
   }
 }

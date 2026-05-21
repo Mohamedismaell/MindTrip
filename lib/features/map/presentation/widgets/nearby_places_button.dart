@@ -16,11 +16,7 @@ class NearbyPlacesButton extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           shape: BoxShape.circle,
           boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              spreadRadius: 2,
-            ),
+            BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2),
           ],
         ),
         child: Icon(

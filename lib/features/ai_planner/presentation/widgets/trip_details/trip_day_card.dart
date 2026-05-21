@@ -58,10 +58,7 @@ class TripDayCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        day.title,
-                        style: AppTextStyles.h7Bold,
-                      ),
+                      Text(day.title, style: AppTextStyles.h7Bold),
                       Text(
                         '${day.stopCount} Activities',
                         style: AppTextStyles.h10Regular.copyWith(
@@ -79,7 +76,10 @@ class TripDayCard extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: Icon(Icons.map_outlined, color: context.colorTheme.primary),
+                      icon: Icon(
+                        Icons.map_outlined,
+                        color: context.colorTheme.primary,
+                      ),
                       onPressed: onViewMap,
                     ),
                   )
@@ -117,7 +117,11 @@ class TripDayCard extends StatelessWidget {
                 // The activities
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 32.h, top: 12.h, right: 8.w),
+                    padding: EdgeInsets.only(
+                      bottom: 32.h,
+                      top: 12.h,
+                      right: 8.w,
+                    ),
                     child: Column(
                       children: day.timeSlots.map((slot) {
                         return TimePeriodSection(slot: slot);

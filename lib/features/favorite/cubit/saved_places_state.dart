@@ -17,11 +17,7 @@ class FavoritesScreenState extends Equatable {
 
   List<PlaceModel> get filteredPlaces {
     if (selectedCategory == PlaceCategory.all) return places;
-    return places
-        .where(
-          (p) => p.category == selectedCategory,
-        )
-        .toList();
+    return places.where((p) => p.category == selectedCategory).toList();
   }
 
   FavoritesScreenState copyWith({

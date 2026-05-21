@@ -18,13 +18,11 @@ abstract class EditProfileState with _$EditProfileState {
     @Default('') String draftDisplayName,
     @Default('') String draftPhoneNumber,
 
-    @Default(EditSaveStatus.idle)
-    EditSaveStatus saveStatus,
+    @Default(EditSaveStatus.idle) EditSaveStatus saveStatus,
 
     String? editErrorMessage,
 
-    @Default(DeleteAccountStatus.idle)
-    DeleteAccountStatus deleteStatus,
+    @Default(DeleteAccountStatus.idle) DeleteAccountStatus deleteStatus,
 
     String? deleteErrorMessage,
   }) = _EditProfileState;

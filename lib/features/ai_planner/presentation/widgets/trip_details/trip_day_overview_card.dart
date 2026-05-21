@@ -6,6 +6,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/outlined_action_button.dart';
@@ -101,11 +102,13 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
               //Todo: the tags should be the catgory of the places
               _TagWrap(tags: widget.day.tags.take(3).toList()),
               SizedBox(height: 12.h),
-              OutlinedActionButton(
+              CustomOtlinedButton(
                 key: Key('trip-day-${widget.day.dayNumber}-view-button'),
-                label: 'View',
-                icon: Icons.chevron_right,
+                text: 'View',
+                actionIcon: Icons.chevron_right,
                 onPressed: widget.onToggle,
+                color: context.colorTheme.primary,
+                textStyle: AppTextStyles.h7Bold,
               ),
             ],
           ),
@@ -170,18 +173,16 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
                 SizedBox(height: 18.h),
                 _DayTimeline(day: widget.day),
                 SizedBox(height: 24.h),
-                Center(
-                  child: SizedBox(
-                    width: 218.w,
-                    child: OutlinedActionButton(
-                      key: Key(
-                        'trip-day-${widget.day.dayNumber}-view-less-button',
-                      ),
-                      label: 'View less',
-                      onPressed: widget.onToggle,
-                      fontSize: 20.sp,
-                      height: 44.h,
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.w),
+                  child: CustomOtlinedButton(
+                    key: Key(
+                      'trip-day-${widget.day.dayNumber}-view-less-button',
                     ),
+                    text: 'View less',
+                    onPressed: widget.onToggle,
+                    color: context.colorTheme.primary,
                   ),
                 ),
               ],

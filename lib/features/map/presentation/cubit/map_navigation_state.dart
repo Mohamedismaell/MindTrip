@@ -19,6 +19,12 @@ sealed class MapNavigationState with _$MapNavigationState {
     @Default(NavigationProfile.driving) NavigationProfile selectedProfile,
 
     @Default(0) int currentStepIndex,
+
+    @Default(0) int totalLegs,
+
+    @Default(0) int currentLegIndex,
+
+    @Default(false) bool isSequentialMode,
   }) = _MapNavigationState;
 
   factory MapNavigationState.initial() => const MapNavigationState();

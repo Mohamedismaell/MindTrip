@@ -40,6 +40,7 @@ class UserRepositoryImpl extends UserRepository {
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
+
   @override
   Future<Result<void>> updateProfile({
     String? displayName,

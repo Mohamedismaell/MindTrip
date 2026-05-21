@@ -38,13 +38,13 @@ class RouteStep extends Equatable {
 
   @override
   List<Object?> get props => [
-        instruction,
-        maneuverType,
-        maneuverModifier,
-        distance,
-        duration,
-        bannerText,
-        bannerType,
-        bannerModifier,
-      ];
+    instruction,
+    maneuverType,
+    maneuverModifier,
+    distance,
+    duration,
+    bannerText,
+    bannerType,
+    bannerModifier,
+  ];
 }

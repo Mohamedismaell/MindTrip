@@ -1,4 +1,1 @@
-enum OtpFlow {
-  signUp,
-  forgetPassword,
-}
+enum OtpFlow { signUp, forgetPassword }

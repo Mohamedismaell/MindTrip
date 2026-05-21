@@ -4,11 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 
 class FavoriteBubble extends StatelessWidget {
-  const FavoriteBubble({
-    super.key,
-    required this.placeId,
-    this.small = false,
-  });
+  const FavoriteBubble({super.key, required this.placeId, this.small = false});
 
   final String placeId;
   final bool small;
@@ -20,13 +16,13 @@ class FavoriteBubble extends StatelessWidget {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
         final isFavorite = context.read<FavoriteCubit>().isFavorite(placeId);
-        
+
         return GestureDetector(
           onTap: () {
             context.read<FavoriteCubit>().toggleFavorite(
-                  placeId: placeId,
-                  isFavorite: !isFavorite,
-                );
+              placeId: placeId,
+              isFavorite: !isFavorite,
+            );
           },
           child: Container(
             width: size,

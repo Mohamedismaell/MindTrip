@@ -24,8 +24,9 @@ class SignInScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomHeadLine(
-                    firstTitle: AppStrings.signTitle,
-                    secondTitle: AppStrings.inTitle),
+                  firstTitle: AppStrings.signTitle,
+                  secondTitle: AppStrings.inTitle,
+                ),
                 SizedBox(height: 40.h),
                 const SignInForm(),
                 SizedBox(height: 24.h),

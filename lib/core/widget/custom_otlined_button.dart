@@ -31,7 +31,7 @@ class CustomOtlinedButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         side: BorderSide(
           color: isLoading == true ? buttonColor : isDisabled,
-          width: 1.8,
+          width: 1.6,
         ),
         foregroundColor: isDisabled,
         shape: RoundedRectangleBorder(
@@ -73,8 +73,9 @@ class CustomOtlinedButton extends StatelessWidget {
                                     color: isDisabled,
                                   ),
                             ),
+                            SizedBox(width: 5.w),
                             if (actionIcon != null)
-                              Icon(actionIcon, weight: 20.sp, color: color),
+                              Icon(actionIcon, size: 20.sp, color: color),
                           ],
                         ),
                       ],

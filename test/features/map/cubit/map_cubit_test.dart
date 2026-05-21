@@ -15,6 +15,7 @@ import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
 
 class MockMapSearchRepository extends Mock implements MapSearchRepository {}
+
 class MockMapRouteRepository extends Mock implements MapRouteRepository {}
 
 void main() {
@@ -51,15 +52,13 @@ void main() {
       build: () => cubit,
       act: (cubit) => cubit.loadPlaces([tPlace]),
       expect: () => [
-        isA<MapState>().having(
-          (s) => s.annotations.length,
-          'annotations length',
-          1,
-        ).having(
-          (s) => s.annotations.first.place.id,
-          'annotation place id',
-          '1',
-        )
+        isA<MapState>()
+            .having((s) => s.annotations.length, 'annotations length', 1)
+            .having(
+              (s) => s.annotations.first.place.id,
+              'annotation place id',
+              '1',
+            ),
       ],
     );
 
@@ -73,7 +72,11 @@ void main() {
       expect: () => [
         isA<MapState>()
             .having((s) => s.selectedPlace, 'selectedPlace', tPlace)
-            .having((s) => s.isBottomSheetVisible, 'isBottomSheetVisible', true)
+            .having(
+              (s) => s.isBottomSheetVisible,
+              'isBottomSheetVisible',
+              true,
+            ),
       ],
     );
 
@@ -83,7 +86,11 @@ void main() {
       seed: () => MapState.initial().copyWith(isBottomSheetVisible: true),
       act: (cubit) => cubit.dismissBottomSheet(),
       expect: () => [
-        isA<MapState>().having((s) => s.isBottomSheetVisible, 'isBottomSheetVisible', false)
+        isA<MapState>().having(
+          (s) => s.isBottomSheetVisible,
+          'isBottomSheetVisible',
+          false,
+        ),
       ],
     );
 
@@ -92,7 +99,11 @@ void main() {
       build: () => cubit,
       act: (cubit) => cubit.setLocationGranted(true),
       expect: () => [
-        isA<MapState>().having((s) => s.isLocationGranted, 'isLocationGranted', true)
+        isA<MapState>().having(
+          (s) => s.isLocationGranted,
+          'isLocationGranted',
+          true,
+        ),
       ],
     );
   });

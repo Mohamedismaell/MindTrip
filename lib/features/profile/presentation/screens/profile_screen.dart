@@ -61,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                   width: 20.w,
                   child: InkWell(
                     onTap: () {
-                      context.push(AppRoutes.interests);
+                      context.push(AppRoutes.interests, extra: true);
                     },
                     child: SvgPicture.asset(
                       ProfileAssets.editIcon,

@@ -7,7 +7,8 @@ import 'package:mindtrip/features/map/data/datasources/map_route_remote_datasour
 import 'package:mindtrip/features/map/data/repositories/map_route_repository_impl.dart';
 import 'package:mindtrip/features/map/domain/entities/map_route.dart';
 
-class MockMapRouteRemoteDatasource extends Mock implements MapRouteRemoteDatasource {}
+class MockMapRouteRemoteDatasource extends Mock
+    implements MapRouteRemoteDatasource {}
 
 void main() {
   late MapRouteRepositoryImpl repository;
@@ -19,18 +20,16 @@ void main() {
   });
 
   group('getRoute', () {
-    final tWaypoints = [
-      Position(20.0, 10.0),
-      Position(21.0, 11.0),
-    ];
+    final tWaypoints = [Position(20.0, 10.0), Position(21.0, 11.0)];
     final tRoute = MapRoute(
       waypoints: tWaypoints,
       geoJsonGeometry: '{"type":"LineString","coordinates":[]}',
     );
 
     test('should return route on success', () async {
-      when(() => mockDatasource.getRoute(tWaypoints, 'driving'))
-          .thenAnswer((_) async => tRoute);
+      when(
+        () => mockDatasource.getRoute(tWaypoints, 'driving'),
+      ).thenAnswer((_) async => tRoute);
 
       final result = await repository.getRoute(tWaypoints);
 
@@ -43,8 +42,9 @@ void main() {
     });
 
     test('should return NetworkFailure on exception', () async {
-      when(() => mockDatasource.getRoute(tWaypoints, 'driving'))
-          .thenThrow(Exception('Network Error'));
+      when(
+        () => mockDatasource.getRoute(tWaypoints, 'driving'),
+      ).thenThrow(Exception('Network Error'));
 
       final result = await repository.getRoute(tWaypoints);
 

@@ -157,4 +157,39 @@ class AppTransitionRoute {
       },
     );
   }
+
+  //! Fade + Slide with Builder
+  static GoRoute fadeSlideBuilder({
+    required String path,
+    required Widget Function(BuildContext, GoRouterState) builder,
+    List<RouteBase> routes = const [],
+  }) {
+    return GoRoute(
+      path: path,
+      routes: routes,
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: builder(context, state),
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final slideAnimation =
+                Tween<Offset>(
+                  begin: const Offset(0.08, 0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                );
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(position: slideAnimation, child: child),
+            );
+          },
+        );
+      },
+    );
+  }
 }

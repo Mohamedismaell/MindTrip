@@ -78,13 +78,10 @@ class HomeHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 12.w),
               _HeaderAction(
                 iconPath: HomeAssets.notificaitonIcon,
                 onTap: () {},
               ),
-              SizedBox(width: 10.w),
-              _HeaderAction(iconPath: HomeAssets.drawerIcon, onTap: () {}),
             ],
           ),
         );

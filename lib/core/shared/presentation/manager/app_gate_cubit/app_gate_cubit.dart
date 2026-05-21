@@ -51,7 +51,6 @@ class AppGateCubit extends Cubit<AppGateState> {
         } else {
           emit(AppGateAuthenticated());
         }
-        print('token == > $token');
       } else {
         await authLocal.clear();
         emit(AppGateUnauthenticated());
