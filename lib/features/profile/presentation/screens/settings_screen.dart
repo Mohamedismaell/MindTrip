@@ -9,6 +9,7 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
@@ -155,7 +156,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: 55.h,
               child: CustomOtlinedButton(
                 key: const Key('settings-logout-button'),
-                onPressed: () => context.read<AppGateCubit>().logout(),
+                onPressed: () {
+                  AppDialog.show(
+                    context: context,
+                    title: 'Are you sure you want to log out?',
+                    primaryText: 'Cancel',
+                    onPrimary: () {},
+                    secondaryText: 'Yes',
+                    onSecondary: () => context.read<AppGateCubit>().logout(),
+                  );
+                },
                 icon: Icons.logout_rounded,
                 text: 'Log Out',
               ),
@@ -235,7 +245,7 @@ class _UserSummaryCard extends StatelessWidget {
                 width: 54.w,
                 height: 54.w,
                 child: photoUrl != null
-                    ? AppCachedImage(imageUrl: photoUrl!)
+                    ? AppCachedImage(imagePath: photoUrl!)
                     : Image.asset(
                         'assets/images/profile/deafult_user_cover.png',
                       ),

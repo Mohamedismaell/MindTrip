@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
 
 class AuthHeadline extends StatelessWidget {
@@ -14,6 +15,7 @@ class AuthHeadline extends StatelessWidget {
   final String firstTitle;
   final String secondTitle;
   final String? thirdTitle;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -29,8 +31,12 @@ class AuthHeadline extends StatelessWidget {
           child: CustomHeadLine(
             firstTitle: firstTitle,
             secondTitle: secondTitle,
-            firstStyle: AppTextStyles.h5Bold,
-            secondStyle: AppTextStyles.h5Bold,
+            firstStyle: AppTextStyles.h5Bold.copyWith(
+              color: context.colorTheme.primary,
+            ),
+            secondStyle: AppTextStyles.h5Bold.copyWith(
+              color: context.colorTheme.onSurface,
+            ),
             thirdTitle: thirdTitle,
           ),
         ),

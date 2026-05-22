@@ -78,7 +78,7 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
             width: 106.w,
             height: 200.h,
             // height: double.infinity,
-            child: AppCachedImage(imageUrl: _cardImageUrl),
+            child: AppCachedImage(imagePath: _cardImageUrl),
           ),
         ),
         SizedBox(width: 10.w),
@@ -129,7 +129,7 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
               width: double.infinity,
               height: 202.h,
 
-              child: AppCachedImage(imageUrl: _cardImageUrl),
+              child: AppCachedImage(imagePath: _cardImageUrl),
             ),
           ),
 

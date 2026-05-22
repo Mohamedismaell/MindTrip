@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 
 class ApiErrorMapper {
@@ -24,6 +25,13 @@ class ApiErrorMapper {
     // if (e is AuthException) {
     //   return UnauthorizedFailure(message: e.message);
     // }
+    if (e is GoogleSignInException) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        return const CancelledFailure();
+      }
+
+      return ServerFailure(e.description ?? 'Google sign in failed');
+    }
 
     if (e is SocketException) {
       return NetworkFailure(message: 'No internet connection');

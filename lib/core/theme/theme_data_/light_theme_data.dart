@@ -40,7 +40,7 @@ ThemeData getLightTheme() {
       //* Focused
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(60.r),
-        borderSide: BorderSide(color: lightColorScheme.primary, width: 1.5),
+        borderSide: BorderSide(color: lightColorScheme.outline, width: 1.5),
       ),
 
       //* Error

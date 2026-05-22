@@ -22,14 +22,27 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  late GlobalKey<FormState> _formKey;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  late FocusNode _emailFocus;
+  late FocusNode _passwordFocus;
+  @override
+  void initState() {
+    super.initState();
+    _formKey = GlobalKey<FormState>();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _emailFocus = FocusNode();
+    _passwordFocus = FocusNode();
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     super.dispose();
   }
 
@@ -57,6 +70,11 @@ class _SignInFormState extends State<SignInForm> {
             children: [
               AppTextField(
                 hint: AppStrings.enterYourEmail,
+                focusNode: _emailFocus,
+                autofillHints: const [AutofillHints.email],
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_passwordFocus),
                 prefixIcon: SvgPicture.asset(
                   AppAssets.emailIcon,
                   width: 17.sp,
@@ -69,6 +87,10 @@ class _SignInFormState extends State<SignInForm> {
               SizedBox(height: 28.h),
 
               AppTextField(
+                focusNode: _passwordFocus,
+                autofillHints: const [AutofillHints.password],
+                textInputAction: TextInputAction.done,
+                onEditingComplete: _submit,
                 hint: AppStrings.enterYourPassword,
                 prefixIcon: SvgPicture.asset(
                   AppAssets.lockIcon,

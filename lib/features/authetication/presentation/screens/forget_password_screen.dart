@@ -16,19 +16,20 @@ class ForgetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return OtpRequestStatusListener(
       child: Scaffold(
+        // resizeToAvoidBottomInset: false,
         body: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 28.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AuthHeadline(
                   firstTitle: AppStrings.forgetTitle,
                   secondTitle: AppStrings.passwordTitle,
                 ),
                 SizedBox(height: 20.h),
-                SvgPicture.asset(AppAssets.emailCampaignSvg),
+                Center(child: SvgPicture.asset(AppAssets.emailCampaignSvg)),
                 Text(
                   textAlign: TextAlign.left,
                   AppStrings.enterRegisteredEmail,

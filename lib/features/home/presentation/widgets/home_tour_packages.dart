@@ -51,7 +51,7 @@ class HomeTourPackages extends StatelessWidget {
                         fit: StackFit.expand,
                         children: [
                           //image
-                          AppCachedImage(imageUrl: package.imageUrl),
+                          AppCachedImage(imagePath: package.imageUrl),
                           //Rate badge
                           Positioned(
                             top: 14.h,

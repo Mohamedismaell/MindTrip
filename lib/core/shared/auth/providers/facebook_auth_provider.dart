@@ -6,13 +6,19 @@ class FacebookAuthProvider implements SocialAuthProvider {
   Future<String?> signIn() async {
     final LoginResult result = await FacebookAuth.instance.login();
 
-    if (result.status != LoginStatus.success) {
-      return null;
+    switch (result.status) {
+      case LoginStatus.success:
+        return result.accessToken?.tokenString;
+
+      case LoginStatus.cancelled:
+        return null;
+
+      case LoginStatus.failed:
+        throw Exception(result.message ?? 'Facebook sign in failed');
+
+      case LoginStatus.operationInProgress:
+        throw Exception('Facebook sign in already in progress');
     }
-
-    final accessToken = result.accessToken;
-
-    return accessToken?.tokenString;
   }
 
   @override

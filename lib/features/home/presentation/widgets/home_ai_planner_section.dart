@@ -51,7 +51,7 @@ class HomeAiPlannerSection extends StatelessWidget {
                             child: Stack(
                               fit: StackFit.expand,
                               children: [
-                                AppCachedImage(imageUrl: plan.imageUrl),
+                                AppCachedImage(imagePath: plan.imageUrl),
                                 Positioned(
                                   top: 15.h,
                                   left: 11.w,

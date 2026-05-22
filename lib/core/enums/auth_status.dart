@@ -3,6 +3,7 @@ enum AuthStatus {
   loading,
   otpSent,
   otpVerified,
+  otpFailure,
   passwordResetSuccess,
   success,
   failure,

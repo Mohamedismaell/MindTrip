@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   final String hint;
   final Widget prefixIcon;
   final bool isPassword;
@@ -11,6 +11,11 @@ class AppTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
+  final TextInputAction? textInputAction;
+  final VoidCallback? onEditingComplete;
+  final FocusNode? focusNode;
+  final Iterable<String>? autofillHints;
+  final bool? autocorrect;
 
   const AppTextField({
     super.key,
@@ -22,32 +27,67 @@ class AppTextField extends StatelessWidget {
     this.isPassword = false,
     this.obscureText = false,
     this.onToggleVisibility,
+    this.textInputAction,
+    this.onEditingComplete,
+    this.focusNode,
+    this.autofillHints,
+    this.autocorrect,
   });
-  //TODO  Extract Eye icon **** => for password need to be extracted booth stats
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  bool _hasTyped = false;
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      validator: validator,
-      keyboardType: keyboardType,
+      enableSuggestions: false,
+      enableIMEPersonalizedLearning: false,
+      autocorrect: widget.autocorrect ?? false,
+      focusNode: widget.focusNode,
+      controller: widget.controller,
+      obscureText: widget.obscureText,
+      autofillHints: widget.autofillHints,
+      keyboardType: widget.keyboardType,
       cursorColor: context.colorTheme.primary,
+      textInputAction: widget.textInputAction,
+      onEditingComplete: widget.onEditingComplete,
+      autovalidateMode: _hasTyped
+          ? AutovalidateMode.onUserInteraction
+          : AutovalidateMode.disabled,
+      validator: (value) {
+        if (!_hasTyped) return null;
+        return widget.validator?.call(value);
+      },
+      onChanged: (value) {
+        if (!_hasTyped && value.isNotEmpty) {
+          setState(() {
+            _hasTyped = true;
+          });
+        }
+      },
+      onTapOutside: (_) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       decoration: InputDecoration(
-        hintText: hint,
+        hintText: widget.hint,
         hintStyle: context.textTheme.bodyLarge?.copyWith(
           color: context.colorTheme.outline,
         ),
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 10.w),
-          child: prefixIcon,
+          child: widget.prefixIcon,
         ),
-        suffixIcon: isPassword
+        suffixIcon: widget.isPassword
             ? Padding(
                 padding: EdgeInsets.only(right: 10.w),
                 child: IconButton(
-                  onPressed: onToggleVisibility,
+                  onPressed: widget.onToggleVisibility,
                   icon: Icon(
-                    obscureText
+                    widget.obscureText
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
                     size: 24.sp,

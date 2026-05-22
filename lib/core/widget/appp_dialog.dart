@@ -66,7 +66,7 @@ class AppDialog {
 
                   // Description
                   description == null
-                      ? child!
+                      ? child ?? const SizedBox.shrink()
                       : Text(
                           description,
                           textAlign: TextAlign.center,

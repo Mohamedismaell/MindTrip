@@ -42,7 +42,13 @@ class AuthInterceptor extends Interceptor {
         path.contains(EndPoints.login) ||
         path.contains(EndPoints.register) ||
         path.contains(EndPoints.googleLogin) ||
-        path.contains(EndPoints.facebookLogin)) {
+        path.contains(EndPoints.facebookLogin) ||
+        path.contains(EndPoints.verifyEmail) ||
+        path.contains(EndPoints.verifyPasswordOtp) ||
+        path.contains(EndPoints.resendEmailOtp) ||
+        path.contains(EndPoints.resendPasswordOtp) ||
+        path.contains(EndPoints.forgetPassword) ||
+        path.contains(EndPoints.resetPassword)) {
       handler.next(err);
       return;
     }

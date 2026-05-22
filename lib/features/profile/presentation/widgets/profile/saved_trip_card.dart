@@ -22,7 +22,7 @@ class SavedTripCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            AppCachedImage(imageUrl: data.imageUrl, fit: BoxFit.cover),
+            AppCachedImage(imagePath: data.imageUrl, fit: BoxFit.cover),
             Align(
               alignment: Alignment.bottomCenter,
               child: ClipRRect(

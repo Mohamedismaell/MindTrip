@@ -25,7 +25,7 @@ class ProfileUserAvatar extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       alignment: Alignment.center,
       child: (imageUrl != null && imageUrl!.isNotEmpty)
-          ? AppCachedImage(imageUrl: imageUrl!, width: size.w, height: size.w)
+          ? AppCachedImage(imagePath: imageUrl!, width: size.w, height: size.w)
           : Image.asset('assets/images/profile/deafult_user_cover.png'),
     );
   }

@@ -21,7 +21,7 @@ class AppCacheManager {
 }
 
 class AppCachedImage extends StatelessWidget {
-  final String? imageUrl;
+  final String? imagePath;
   final String? cacheKey;
   final double? width;
   final double? height;
@@ -29,14 +29,14 @@ class AppCachedImage extends StatelessWidget {
 
   const AppCachedImage({
     super.key,
-    this.imageUrl,
+    this.imagePath,
     this.cacheKey,
     this.width,
     this.height,
     this.fit = BoxFit.cover,
   });
   bool get _isNetworkImage {
-    return imageUrl?.startsWith('http') ?? false;
+    return imagePath?.startsWith('http') ?? false;
   }
 
   @override
@@ -44,7 +44,7 @@ class AppCachedImage extends StatelessWidget {
     if (!_isNetworkImage) {
       //Todo add place holder image or random asset images
       return Image.asset(
-        'assets/images/onboarding/Pyramids.jpg',
+        imagePath ?? 'assets/images/onboarding/Pyramids.jpg',
         width: width,
         height: height,
         fit: fit,
@@ -53,7 +53,7 @@ class AppCachedImage extends StatelessWidget {
     }
 
     return CachedNetworkImage(
-      imageUrl: imageUrl!,
+      imageUrl: imagePath!,
       cacheKey: cacheKey,
       cacheManager: AppCacheManager.instance,
       httpHeaders: const {

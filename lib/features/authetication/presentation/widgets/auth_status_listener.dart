@@ -24,7 +24,8 @@ class SignInStatusListener extends StatelessWidget {
           context.read<AppGateCubit>().loginSuccess();
         } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
-            context,
+            context: context,
+            isError: true,
             message: state.errorMessage ?? 'Something went wrong',
           );
         }
@@ -48,7 +49,8 @@ class OtpRequestStatusListener extends StatelessWidget {
           context.push(AppRoutes.otpVerification, extra: state.otpFlow);
         } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
-            context,
+            context: context,
+            isError: true,
             message: state.errorMessage ?? 'Something went wrong',
           );
         }
@@ -75,10 +77,15 @@ class OtpVerificationStatusListener extends StatelessWidget {
             context.pushReplacement(AppRoutes.completeSignUpScreen);
           }
         } else if (state.status == AuthStatus.otpSent) {
-          _showSnackBar(context, message: AppStrings.verificationCodeResent);
-        } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
-            context,
+            context: context,
+            isError: false,
+            message: AppStrings.verificationCodeResent,
+          );
+        } else if (state.status == AuthStatus.otpFailure) {
+          _showSnackBar(
+            context: context,
+            isError: true,
             message: state.errorMessage ?? 'Something went wrong',
           );
         }
@@ -102,8 +109,9 @@ class ResetPasswordStatusListener extends StatelessWidget {
           context.pushReplacement(AppRoutes.completeResetPasswordScreen);
         } else if (state.status == AuthStatus.failure) {
           _showSnackBar(
-            context,
+            context: context,
             message: state.errorMessage ?? 'Something went wrong',
+            isError: true,
           );
         }
       },
@@ -112,6 +120,14 @@ class ResetPasswordStatusListener extends StatelessWidget {
   }
 }
 
-void _showSnackBar(BuildContext context, {required String message}) {
-  AppSnackBar.showError(context: context, message: message);
+void _showSnackBar({
+  required BuildContext context,
+  required String message,
+  required bool isError,
+}) {
+  if (isError) {
+    AppSnackBar.showError(context: context, message: message);
+  } else {
+    AppSnackBar.showSuccess(context: context, message: message);
+  }
 }

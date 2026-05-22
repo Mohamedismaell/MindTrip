@@ -31,15 +31,13 @@ class HomeHeader extends StatelessWidget {
                   context.go(AppRoutes.profile);
                 },
                 child: ClipOval(
-                  child: imageprofile != null
-                      ? AppCachedImage(
-                          imageUrl: imageprofile,
-                          width: 47.w,
-                          height: 47.w,
-                        )
-                      : Image.asset(
-                          'assets/images/profile/deafult_user_cover.png',
-                        ),
+                  child: AppCachedImage(
+                    imagePath:
+                        imageprofile ??
+                        'assets/images/profile/deafult_user_cover.png',
+                    width: 47.w,
+                    height: 47.w,
+                  ),
                 ),
               ),
               SizedBox(width: 13.w),

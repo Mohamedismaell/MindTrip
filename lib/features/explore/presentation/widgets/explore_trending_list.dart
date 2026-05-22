@@ -59,7 +59,7 @@ class _TrendingCard extends StatelessWidget {
             child: AppCachedImage(
               width: double.infinity,
               height: 70.h,
-              imageUrl: item.imageUrls?.first ?? '',
+              imagePath: item.imageUrls?.first ?? '',
             ),
           ),
           SizedBox(height: 7.h),

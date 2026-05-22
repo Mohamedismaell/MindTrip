@@ -35,7 +35,7 @@ class HomePopularDestinations extends StatelessWidget {
                       children: [
                         //! Handle no image later
                         AppCachedImage(
-                          imageUrl: destination.imageUrls?.first ?? '',
+                          imagePath: destination.imageUrls?.first ?? '',
                         ),
 
                         DecoratedBox(
@@ -194,7 +194,7 @@ class _PreviewImageTile extends StatelessWidget {
       child: SizedBox(
         width: 47.r,
         height: 47.r,
-        child: AppCachedImage(imageUrl: imageUrl),
+        child: AppCachedImage(imagePath: imageUrl),
       ),
     );
   }

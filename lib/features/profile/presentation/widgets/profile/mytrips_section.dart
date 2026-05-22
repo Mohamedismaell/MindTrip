@@ -111,7 +111,7 @@ class _MyTripCard extends StatelessWidget {
               isLocal
                   ? Image.asset(trip.coverAsset, fit: BoxFit.cover)
                   : AppCachedImage(
-                      imageUrl: trip.coverAsset,
+                      imagePath: trip.coverAsset,
                       fit: BoxFit.cover,
                     ),
               Align(

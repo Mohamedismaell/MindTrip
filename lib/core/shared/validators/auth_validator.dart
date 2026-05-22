@@ -17,13 +17,19 @@ class AppValidator {
   }
 
   static String? password(String? value) {
-    if (value == null || value.length < 6) {
-      return "Password must be at least 6 characters";
+    if (value == null || value.isEmpty) {
+      return "Password is required";
+    }
+    if (value.length < 8) {
+      return "Password must be at least 8 characters";
     }
     return null;
   }
 
   static String? confirmPassword(String? value, String originalPassword) {
+    if (value == null || value.isEmpty) {
+      return "Confirm password is required";
+    }
     if (value != originalPassword) {
       return "Passwords do not match";
     }

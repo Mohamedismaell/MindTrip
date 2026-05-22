@@ -178,7 +178,7 @@ class _CoverImage extends StatelessWidget {
                 fit: BoxFit.cover,
                 // errorBuilder: (_, _, _) => _FallbackCover(),
               )
-            : AppCachedImage(imageUrl: imageCover, fit: BoxFit.cover),
+            : AppCachedImage(imagePath: imageCover, fit: BoxFit.cover),
       ),
     );
   }

@@ -74,7 +74,7 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               child: SizedBox.expand(
                 child: AppCachedImage(
                   key: ValueKey(_currentPage),
-                  imageUrl: widget.banners[_currentPage].imageUrl,
+                  imagePath: widget.banners[_currentPage].imageUrl,
                   // fit: BoxFit.fitWidth,
                 ),
               ),

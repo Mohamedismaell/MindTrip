@@ -19,14 +19,27 @@ class ResetPasswordForm extends StatefulWidget {
 }
 
 class _ResetPasswordFormState extends State<ResetPasswordForm> {
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmController;
+  late final GlobalKey<FormState> _formKey;
+  late final FocusNode _password;
+  late final FocusNode _confirmPassword;
+  @override
+  void initState() {
+    _passwordController = TextEditingController();
+    _confirmController = TextEditingController();
+    _formKey = GlobalKey<FormState>();
+    _password = FocusNode();
+    _confirmPassword = FocusNode();
+
+    super.initState();
+  }
+
   @override
   void dispose() {
+    super.dispose();
     _passwordController.dispose();
     _confirmController.dispose();
-    super.dispose();
   }
 
   void _submit() {
@@ -47,55 +60,69 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
       builder: (context, state) {
         final cubit = context.read<AuthCubit>();
         final isLoading = state.status == AuthStatus.loading;
-        return Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              AppTextField(
-                hint: AppStrings.enterYourPassword,
-                prefixIcon: SvgPicture.asset(
-                  AppAssets.lockIcon,
-                  width: 20.w,
-                  height: 20.h,
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 14.w),
+          child: Form(
+            autovalidateMode: AutovalidateMode.onUnfocus,
+            key: _formKey,
+            child: Column(
+              children: [
+                AppTextField(
+                  focusNode: _password,
+                  autofillHints: const [AutofillHints.newPassword],
+                  onEditingComplete: () =>
+                      FocusScope.of(context).requestFocus(_confirmPassword),
+                  textInputAction: TextInputAction.next,
+                  hint: AppStrings.enterYourPassword,
+                  prefixIcon: SvgPicture.asset(
+                    AppAssets.lockIcon,
+                    width: 20.w,
+                    height: 20.h,
+                  ),
+                  controller: _passwordController,
+                  isPassword: true,
+                  obscureText: state.obscurePassword,
+                  onToggleVisibility: cubit.togglePassword,
+                  validator: AppValidator.password,
                 ),
-                controller: _passwordController,
-                isPassword: true,
-                obscureText: state.obscurePassword,
-                onToggleVisibility: cubit.togglePassword,
-                validator: AppValidator.password,
-              ),
-              SizedBox(height: 28.h),
+                SizedBox(height: 28.h),
 
-              //  Confirm Password Field
-              AppTextField(
-                hint: AppStrings.confirmPassword,
-                prefixIcon: SvgPicture.asset(
-                  AppAssets.lockIcon,
-                  width: 20.w,
-                  height: 20.h,
+                //  Confirm Password Field
+                AppTextField(
+                  autocorrect: false,
+                  focusNode: _confirmPassword,
+                  autofillHints: const [AutofillHints.newPassword],
+                  onEditingComplete: () => _confirmPassword.unfocus(),
+                  textInputAction: TextInputAction.done,
+                  hint: AppStrings.confirmPassword,
+                  prefixIcon: SvgPicture.asset(
+                    AppAssets.lockIcon,
+                    width: 20.w,
+                    height: 20.h,
+                  ),
+                  controller: _confirmController,
+                  isPassword: true,
+                  obscureText: state.obscureConfirm,
+                  onToggleVisibility: cubit.toggleConfirmPassword,
+                  validator: (value) => AppValidator.confirmPassword(
+                    value,
+                    _passwordController.text,
+                  ),
                 ),
-                controller: _confirmController,
-                isPassword: true,
-                obscureText: state.obscureConfirm,
-                onToggleVisibility: cubit.toggleConfirmPassword,
-                validator: (value) => AppValidator.confirmPassword(
-                  value,
-                  _passwordController.text,
-                ),
-              ),
-              SizedBox(height: 34.h),
+                SizedBox(height: 34.h),
 
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14.5.w),
-                child: CustomGradientButton(
-                  width: double.infinity,
-                  text: isLoading
-                      ? AppStrings.resetting
-                      : AppStrings.resetTitle,
-                  onTap: isLoading ? null : () => _submit(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  child: CustomGradientButton(
+                    width: double.infinity,
+                    text: isLoading
+                        ? AppStrings.resetting
+                        : AppStrings.resetTitle,
+                    onTap: isLoading ? null : () => _submit(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

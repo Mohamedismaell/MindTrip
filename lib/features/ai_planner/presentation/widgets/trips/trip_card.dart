@@ -270,7 +270,7 @@ class _InProgressCoverImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final isNetwork = coverUrl.startsWith('http');
     return isNetwork
-        ? AppCachedImage(imageUrl: coverUrl, fit: BoxFit.cover)
+        ? AppCachedImage(imagePath: coverUrl, fit: BoxFit.cover)
         : Image.asset(
             coverUrl,
             fit: BoxFit.cover,

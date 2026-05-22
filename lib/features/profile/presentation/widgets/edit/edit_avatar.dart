@@ -68,7 +68,7 @@ class EditAvatar extends StatelessWidget {
       );
     }
     return imageUrl != null
-        ? AppCachedImage(imageUrl: imageUrl!)
+        ? AppCachedImage(imagePath: imageUrl!)
         : Image.asset('assets/images/profile/deafult_user_cover.png');
   }
 }

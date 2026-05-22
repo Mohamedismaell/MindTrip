@@ -37,7 +37,6 @@ class ResetPasswordScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 40.h),
-                //!Edit
                 const ResetPasswordForm(),
               ],
             ),

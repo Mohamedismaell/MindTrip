@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,23 +21,47 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmController = TextEditingController();
+  late GlobalKey<FormState> _formKey;
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  late TextEditingController _confirmController;
+  late FocusNode _nameFocus;
+  late FocusNode _emailFocus;
+  late FocusNode _passwordFocus;
+  late FocusNode _confirmFocus;
+
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    _nameController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmController = TextEditingController();
+    _nameFocus = FocusNode();
+    _emailFocus = FocusNode();
+    _passwordFocus = FocusNode();
+    _confirmFocus = FocusNode();
+
+    super.initState();
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmController.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _confirmFocus.dispose();
     super.dispose();
   }
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
       final authCubit = context.read<AuthCubit>();
+      TextInput.finishAutofillContext();
       context.read<AuthCubit>().signUp(
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
@@ -55,16 +80,22 @@ class _SignUpFormState extends State<SignUpForm> {
 
         return Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.onUnfocus,
           child: Column(
             children: [
               //  Name Field
               AppTextField(
+                focusNode: _nameFocus,
                 hint: AppStrings.enterYourName,
+                autofillHints: const [AutofillHints.name],
                 prefixIcon: SvgPicture.asset(
                   AppAssets.personIcon,
                   width: 20.w,
                   height: 20.h,
                 ),
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_emailFocus),
 
                 controller: _nameController,
                 validator: AppValidator.name,
@@ -73,12 +104,17 @@ class _SignUpFormState extends State<SignUpForm> {
 
               //  Email Field
               AppTextField(
+                focusNode: _emailFocus,
                 hint: AppStrings.enterYourEmail,
+                autofillHints: const [AutofillHints.newPassword],
                 prefixIcon: SvgPicture.asset(
                   AppAssets.emailIcon,
                   width: 20.w,
                   height: 20.h,
                 ),
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_passwordFocus),
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: AppValidator.email,
@@ -87,12 +123,18 @@ class _SignUpFormState extends State<SignUpForm> {
 
               //  Password Field
               AppTextField(
+                focusNode: _passwordFocus,
                 hint: AppStrings.enterYourPassword,
+                autofillHints: const [AutofillHints.newPassword],
+
                 prefixIcon: SvgPicture.asset(
                   AppAssets.lockIcon,
                   width: 20.w,
                   height: 20.h,
                 ),
+                textInputAction: TextInputAction.next,
+                onEditingComplete: () =>
+                    FocusScope.of(context).requestFocus(_confirmFocus),
                 controller: _passwordController,
                 isPassword: true,
                 obscureText: state.obscurePassword,
@@ -103,12 +145,17 @@ class _SignUpFormState extends State<SignUpForm> {
 
               //  Confirm Password Field
               AppTextField(
+                focusNode: _confirmFocus,
                 hint: AppStrings.confirmYourPassword,
+
+                // autofillHints: const [AutofillHints.newPassword],
                 prefixIcon: SvgPicture.asset(
                   AppAssets.lockIcon,
                   width: 20.w,
                   height: 20.h,
                 ),
+                textInputAction: TextInputAction.done,
+                onEditingComplete: () => _confirmFocus.unfocus(),
                 controller: _confirmController,
                 isPassword: true,
                 obscureText: state.obscureConfirm,

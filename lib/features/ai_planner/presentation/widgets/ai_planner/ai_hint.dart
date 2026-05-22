@@ -21,11 +21,10 @@ class _AiHintState extends State<AiHint> {
   @override
   void initState() {
     super.initState();
-    _termsRecognizer = TapGestureRecognizer()..onTap = _onTermsTap;
+    _termsRecognizer = TapGestureRecognizer()..onTap = _onTap;
   }
 
-  //! no functionallity yet
-  void _onTermsTap() {
+  void _onTap() {
     context.push(AppRoutes.aiPlannerChat);
   }
 

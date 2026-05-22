@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/enums/otp_flow.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_use_case.dart';
@@ -134,7 +136,6 @@ class AuthCubit extends Cubit<AuthState> {
       final idToken = await _googleAuthProvider.signIn();
       if (isClosed) return;
 
-      print('Id token google here**********$idToken');
       if (idToken == null) {
         emit(state.copyWith(status: AuthStatus.initial));
         return;
@@ -158,8 +159,20 @@ class AuthCubit extends Cubit<AuthState> {
       );
     } catch (e) {
       if (isClosed) return;
-      print('Error google here**********$e');
-      emit(state.copyWith(status: AuthStatus.failure));
+
+      final failure = ApiErrorMapper.fromException(e);
+
+      if (failure is CancelledFailure) {
+        emit(state.copyWith(status: AuthStatus.initial));
+        return;
+      }
+
+      emit(
+        state.copyWith(
+          status: AuthStatus.failure,
+          errorMessage: failure.message,
+        ),
+      );
     }
   }
 
@@ -170,7 +183,6 @@ class AuthCubit extends Cubit<AuthState> {
       final accessToken = await _facebookAuthProvider.signIn();
       if (isClosed) return;
 
-      print('Access token Facebook here**********$accessToken');
       if (accessToken == null) {
         emit(state.copyWith(status: AuthStatus.initial));
         return;
@@ -194,7 +206,6 @@ class AuthCubit extends Cubit<AuthState> {
       );
     } catch (e) {
       if (isClosed) return;
-      print('Error Facebook here**********$e');
       emit(state.copyWith(status: AuthStatus.failure));
     }
   }
@@ -245,7 +256,7 @@ class AuthCubit extends Cubit<AuthState> {
       failure: (error) {
         emit(
           state.copyWith(
-            status: AuthStatus.failure,
+            status: AuthStatus.otpFailure,
             errorMessage: error.message,
           ),
         );
@@ -295,7 +306,7 @@ class AuthCubit extends Cubit<AuthState> {
       failure: (error) {
         emit(
           state.copyWith(
-            status: AuthStatus.failure,
+            status: AuthStatus.otpFailure,
             errorMessage: error.message,
           ),
         );
@@ -308,7 +319,6 @@ class AuthCubit extends Cubit<AuthState> {
     if (email == null) return;
 
     emit(state.copyWith(status: AuthStatus.initial, errorMessage: null));
-    print('pressed');
 
     final result = await _resendEmailOtpUseCase(email: email);
 

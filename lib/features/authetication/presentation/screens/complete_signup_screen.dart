@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
+import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 
 class CompleteSignUpScreen extends StatelessWidget {
   const CompleteSignUpScreen({
@@ -36,13 +37,20 @@ class CompleteSignUpScreen extends StatelessWidget {
                 AppStrings.emailVerified,
                 style: context.textTheme.bodyLarge!.copyWith(
                   color: context.colorTheme.outline,
-                  fontSize: 22.sp,
+                  // fontSize: 22.sp,
                 ),
               ),
               SizedBox(height: 45.h),
-              OutlinedButton(
-                onPressed: () => context.go(AppRoutes.login),
-                child: Text(AppStrings.backToLogin),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18.0),
+                child: CustomOtlinedButton(
+                  onPressed: () => context.go(AppRoutes.login),
+                  text: AppStrings.backToLogin,
+                  textStyle: context.textTheme.headlineSmall?.copyWith(
+                    color: context.colorTheme.primary,
+                  ),
+                  color: context.colorTheme.primary,
+                ),
               ),
             ],
           ),

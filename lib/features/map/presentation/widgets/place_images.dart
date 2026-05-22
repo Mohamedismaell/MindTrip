@@ -21,7 +21,7 @@ class PlaceImages extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
             child: AppCachedImage(
-              imageUrl: photoUrls.first,
+              imagePath: photoUrls.first,
               height: 180.h,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -75,7 +75,7 @@ Widget _buildFewImages(List<String> photoUrls) {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
             child: AppCachedImage(
-              imageUrl: url,
+              imagePath: url,
               height: 120.h,
               fit: BoxFit.cover,
             ),
@@ -100,7 +100,7 @@ Widget _buildImageList(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8.r),
           child: AppCachedImage(
-            imageUrl: photoUrls[index],
+            imagePath: photoUrls[index],
             width: 90.w,
             fit: BoxFit.cover,
           ),
