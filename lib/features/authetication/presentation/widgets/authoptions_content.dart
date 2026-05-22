@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 import 'package:mindtrip/features/authetication/presentation/widgets/auth_options_button.dart';
@@ -60,18 +60,26 @@ class AuthoptionsContent extends StatelessWidget {
               ),
             ),
             SizedBox(height: 28.h),
-            GestureDetector(
-              onTap: onActionTap,
-              child: CustomHeadLine(
-                firstTitle: promptText,
-                secondTitle: actionText,
-                firstStyle: context.textTheme.bodyLarge!.copyWith(
-                  color: context.colorTheme.outline,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  promptText,
+                  style: context.textTheme.bodyLarge!.copyWith(
+                    color: context.colorTheme.outline,
+                  ),
                 ),
-                secondStyle: context.textTheme.bodyLarge!.copyWith(
-                  color: context.colorTheme.primary,
+                SizedBox(width: 4.w),
+                TapScaleEffect(
+                  onTap: onActionTap,
+                  child: Text(
+                    actionText,
+                    style: context.textTheme.bodyLarge!.copyWith(
+                      color: context.colorTheme.primary,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         );

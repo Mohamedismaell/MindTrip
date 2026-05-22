@@ -7,6 +7,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -56,7 +57,7 @@ class FloatMapButton extends StatelessWidget {
           context.push(AppRoutes.map);
         }
         final location = await locationService.getCurrentLocationDetails();
-        // use it
+        //* use it
 
         break;
     }
@@ -64,7 +65,7 @@ class FloatMapButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return TapScaleEffect(
       onTap: () => onTap(context),
 
       child: Container(

@@ -140,7 +140,7 @@ class _SignInFormState extends State<SignInForm> {
 
               CustomGradientButton(
                 width: double.infinity,
-                text: isLoading ? AppStrings.signingIn : AppStrings.signIn,
+                text: AppStrings.signIn,
                 onTap: isLoading ? null : () => _submit(),
                 child: isLoading
                     ? const CircularProgressIndicator(color: Colors.white)

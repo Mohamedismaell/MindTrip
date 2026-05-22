@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
@@ -10,6 +11,7 @@ class CustomHeadLine extends StatelessWidget {
     this.secondStyle,
     this.thirdTitle,
     this.textAlign,
+    // this.gestureRecognizer,
   });
   final String firstTitle;
   final String secondTitle;
@@ -17,6 +19,7 @@ class CustomHeadLine extends StatelessWidget {
   final TextStyle? firstStyle;
   final TextStyle? secondStyle;
   final TextAlign? textAlign;
+  // final GestureRecognizer? gestureRecognizer;
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -42,6 +45,7 @@ class CustomHeadLine extends StatelessWidget {
                 context.textTheme.headlineLarge!.copyWith(
                   color: context.colorTheme.primary,
                 ),
+            // recognizer: gestureRecognizer,
           ),
         ],
       ),

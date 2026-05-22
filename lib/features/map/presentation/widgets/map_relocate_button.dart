@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class MapRelocateButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -10,7 +11,7 @@ class MapRelocateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return TapScaleEffect(
       onTap: onPressed,
       child: Container(
         width: 56.w,

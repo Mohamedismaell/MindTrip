@@ -58,10 +58,7 @@ class _AppTextFieldState extends State<AppTextField> {
       autovalidateMode: _hasTyped
           ? AutovalidateMode.onUserInteraction
           : AutovalidateMode.disabled,
-      validator: (value) {
-        if (!_hasTyped) return null;
-        return widget.validator?.call(value);
-      },
+      validator: widget.validator,
       onChanged: (value) {
         if (!_hasTyped && value.isNotEmpty) {
           setState(() {

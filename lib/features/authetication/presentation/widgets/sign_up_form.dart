@@ -60,6 +60,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
+      print('here ========= ${_formKey.currentState!.validate()}');
+
       final authCubit = context.read<AuthCubit>();
       TextInput.finishAutofillContext();
       context.read<AuthCubit>().signUp(
@@ -80,7 +82,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
         return Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.onUnfocus,
+          // autovalidateMode: AutovalidateMode.onUnfocus,
           child: Column(
             children: [
               //  Name Field
@@ -155,7 +157,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   height: 20.h,
                 ),
                 textInputAction: TextInputAction.done,
-                onEditingComplete: () => _confirmFocus.unfocus(),
+                onEditingComplete: () => _submit(),
                 controller: _confirmController,
                 isPassword: true,
                 obscureText: state.obscureConfirm,
@@ -187,8 +189,11 @@ class _SignUpFormState extends State<SignUpForm> {
               //  Submit Button
               CustomGradientButton(
                 width: double.infinity,
-                text: isLoading ? AppStrings.signingUp : AppStrings.signUp,
+                text: AppStrings.signUp,
                 onTap: isLoading ? null : () => _submit(),
+                child: isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : null,
               ),
             ],
           ),

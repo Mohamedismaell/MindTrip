@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_gradients.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class CustomGradientButton extends StatelessWidget {
   const CustomGradientButton({
@@ -25,7 +26,7 @@ class CustomGradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buttonColor = color;
-    final isDisabled = onTap == null;
+    final isDisabled = onTap == null || isLoading == true;
     final disabledColor = isDisabled ? context.colorTheme.outline : buttonColor;
     final disabledBackground = context.colorTheme.onSurface.withValues(
       alpha: 0.12,
@@ -34,42 +35,38 @@ class CustomGradientButton extends StatelessWidget {
     final disabledTextColor = isDisabled
         ? context.colorTheme.onSurface.withValues(alpha: 0.38)
         : buttonColor;
-    return Container(
-      width: width ?? 200.w,
-      decoration: BoxDecoration(
-        color: isDisabled ? disabledBackground : null,
-        gradient: isDisabled ? null : AppGradients.mainBlueGradient,
-        boxShadow: isDisabled ? [] : [AppShadows.mainElevationButton],
-        borderRadius: BorderRadius.circular(50.r),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(50.r),
-        child: InkWell(
+    return TapScaleEffect(
+      borderRadius: BorderRadius.circular(50.r),
+      onTap: onTap,
+      child: Container(
+        width: width ?? 200.w,
+        decoration: BoxDecoration(
+          color: isDisabled ? disabledBackground : null,
+          gradient: isDisabled ? null : AppGradients.mainBlueGradient,
+          boxShadow: isDisabled ? [] : [AppShadows.mainElevationButton],
           borderRadius: BorderRadius.circular(50.r),
-          onTap: onTap,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.h),
-            child: Center(
-              child: isLoading == true
-                  ? SizedBox(
-                      width: 24.w,
-                      height: 24.w,
-                      child: CircularProgressIndicator(
-                        color: context.colorTheme.onPrimary,
-                        strokeWidth: 2,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          child: Center(
+            child: isLoading == true
+                ? SizedBox(
+                    width: 24.w,
+                    height: 24.w,
+                    child: CircularProgressIndicator(
+                      color: context.colorTheme.onPrimary,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : child ??
+                      Text(
+                        text,
+                        style:
+                            style?.copyWith(color: disabledTextColor) ??
+                            context.textTheme.labelMedium?.copyWith(
+                              color: disabledTextColor,
+                            ),
                       ),
-                    )
-                  : child ??
-                        Text(
-                          text,
-                          style:
-                              style?.copyWith(color: disabledTextColor) ??
-                              context.textTheme.labelMedium?.copyWith(
-                                color: disabledTextColor,
-                              ),
-                        ),
-            ),
           ),
         ),
       ),
