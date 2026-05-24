@@ -75,9 +75,10 @@ class AppRouter {
     }
 
     if (gateState is AppGateUnauthenticated) {
-      return routeFlow == AppFlow.auth ? null : AppRoutes.login;
+      return routeFlow == AppFlow.auth || location == AppRoutes.welcomeAuth
+          ? null
+          : AppRoutes.login;
     }
-
     if (gateState is AppGateAuthenticated) {
       return routeFlow == AppFlow.app || routeFlow == AppFlow.interests
           ? null

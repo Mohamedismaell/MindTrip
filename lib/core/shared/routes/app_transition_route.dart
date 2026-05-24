@@ -134,7 +134,7 @@ class AppTransitionRoute {
         return CustomTransitionPage(
           key: state.pageKey,
           child: page,
-          transitionDuration: const Duration(milliseconds: 300),
+          transitionDuration: const Duration(milliseconds: 600),
 
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             final slideAnimation =

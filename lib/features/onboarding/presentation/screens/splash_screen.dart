@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gat
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/onboarding/data/sources/on_boarding_local_data_source.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,14 +16,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  //  // TODO: remove this after testing
-  // late OnboardingLocalDataSourceImpl onboardingLocalDataSourceImpl =
-  // OnboardingLocalDataSourceImpl(box: AppHive.onboardingBox);
+  // TODO: remove this after testing
+  late OnboardingLocalDataSourceImpl onboardingLocalDataSourceImpl =
+      OnboardingLocalDataSourceImpl();
   @override
   void initState() {
     super.initState();
-    // // TODO: remove this after testing
-    // onboardingLocalDataSourceImpl.clearOnboardingBox();
+    // TODO: remove this after testing
+    onboardingLocalDataSourceImpl.clearOnboardingBox();
 
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;

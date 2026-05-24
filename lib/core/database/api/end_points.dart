@@ -33,6 +33,6 @@ class EndPoints {
 class ApiKeys {
   static String authorization = 'Authorization';
   static String bearer = 'Bearer';
-  static String googleAndroidClientId =
-      '316222442921-faaef736j2ule3pneimge0n46t3tdfd6.apps.googleusercontent.com';
+  // static String googleAndroidClientId =
+  //     '316222442921-faaef736j2ule3pneimge0n46t3tdfd6.apps.googleusercontent.com';
 }

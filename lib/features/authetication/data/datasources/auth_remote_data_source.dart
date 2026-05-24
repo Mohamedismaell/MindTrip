@@ -54,21 +54,6 @@ class AuthRemoteDataSource {
     return AuthResponseModel.fromJson(response);
   }
 
-  // //  Get Current User
-  // Future<UserModel> getCurrentUser({required String accessToken}) async {
-  //   // TODO: Replace with real API call
-  //   // final response = await _api.get('/auth/me', headers: { 'Authorization': 'Bearer $accessToken' });
-  //   await Future.delayed(const Duration(seconds: 1));
-
-  //   return UserModel.fromJson({
-  //     'userId': 'usr_001',
-  //     'displayName': 'Mohamed Ismaeel',
-  //     'email': 'user@example.com',
-  //     'profilePhotoUrl': null,
-  //     'languagePreference': 'AR',
-  //   });
-  // }
-
   Future<AuthResponseModel> signInWithGoogle({required String idToken}) async {
     final response = await _api.post(
       EndPoints.googleLogin,
@@ -126,7 +111,7 @@ class AuthRemoteDataSource {
     await _api.post(EndPoints.resendPasswordOtp, data: {"email": email});
   }
 
-  //  Verify Email (after sign up)
+  //  Verify Email
   Future<void> verifyEmail({required String email, required String otp}) async {
     await _api.post(EndPoints.verifyEmail, data: {'email': email, 'otp': otp});
   }

@@ -13,10 +13,12 @@ class CustomOtlinedButton extends StatelessWidget {
     this.isLoading,
     this.textStyle,
     this.actionIcon,
+    // this.svgIcon,
   });
   final String text;
   final IconData? icon;
   final IconData? actionIcon;
+  // final String? svgIcon;
   final VoidCallback? onPressed;
   final Color? color;
   final bool? isLoading;
@@ -28,18 +30,17 @@ class CustomOtlinedButton extends StatelessWidget {
         ? context.colorTheme.outline
         : buttonColor;
     return TapScaleEffect(
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.r),
+          border: Border.all(
             color: isLoading == true ? buttonColor : isDisabled,
             width: 1.6,
           ),
-          foregroundColor: isDisabled,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.r),
-          ),
         ),
+
         child: SizedBox(
           width: double.infinity,
           child: Stack(
@@ -71,13 +72,15 @@ class CustomOtlinedButton extends StatelessWidget {
                                 text,
                                 style:
                                     textStyle ??
-                                    context.textTheme.labelLarge?.copyWith(
+                                    context.textTheme.labelMedium?.copyWith(
                                       color: isDisabled,
                                     ),
                               ),
                               SizedBox(width: 5.w),
                               if (actionIcon != null)
                                 Icon(actionIcon, size: 20.sp, color: color),
+                              // if (svgIcon != null)
+                              //   SvgPicture.asset(svgIcon!, height: 20.sp),
                             ],
                           ),
                         ],

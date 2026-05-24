@@ -8,6 +8,7 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -63,17 +64,17 @@ class OnboardingContent extends StatelessWidget {
                   maintainSize: true,
                   maintainAnimation: true,
                   maintainState: true,
-                  child: TextButton(
-                    onPressed: () async {
+                  child: TapScaleEffect(
+                    onTap: () async {
                       await context.read<OnboardingCubit>().finishOnboarding();
                       if (context.mounted) {
-                        context.go(AppRoutes.welcomeAuth);
+                        context.pushReplacement(AppRoutes.welcomeAuth);
                       }
                     },
                     child: Text(
                       AppStrings.skip,
                       style: AppTextStyles.h7Light.copyWith(
-                        color: AppColors.mediumLightGray,
+                        color: context.colorTheme.outline,
                       ),
                     ),
                   ),

@@ -56,8 +56,8 @@ class FloatMapButton extends StatelessWidget {
         if (context.mounted) {
           context.push(AppRoutes.map);
         }
-        final location = await locationService.getCurrentLocationDetails();
-        //* use it
+        // final location = await locationService.getCurrentLocationDetails();
+        /// * use it
 
         break;
     }

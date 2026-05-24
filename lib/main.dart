@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,12 +22,17 @@ import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
+import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
+import 'package:mindtrip/firebase_options.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   print('Step 1: ensureInitialized done');
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await GoogleAuthProvider.initialize();
+  print('Firebase initialized');
   Bloc.observer = AppBlocObserver();
   print('Step 2: Bloc observer set');
   HydratedBloc.storage = await buildHydratedStorage();

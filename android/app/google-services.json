@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "441568674116",
+    "project_id": "mind-trip-8abdc",
+    "storage_bucket": "mind-trip-8abdc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441568674116:android:63544829f7ddac02d69711",
+        "android_client_info": {
+          "package_name": "com.example.mindtrip"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6fKue8-UT6fvF8pEh7Ur95CkMY68cPb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

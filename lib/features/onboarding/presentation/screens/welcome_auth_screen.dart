@@ -30,7 +30,7 @@ class WelcomeAuthScreen extends StatelessWidget {
                 text: AppStrings.createAccount,
                 onTap: () {
                   context.read<AppGateCubit>().proceedToAuth();
-                  context.go(AppRoutes.signup);
+                  context.replace(AppRoutes.signup);
                 },
               ),
               SizedBox(height: 33.h),
@@ -39,7 +39,7 @@ class WelcomeAuthScreen extends StatelessWidget {
                 child: CustomOtlinedButton(
                   onPressed: () {
                     context.read<AppGateCubit>().proceedToAuth();
-                    context.go(AppRoutes.login);
+                    context.replace(AppRoutes.login);
                   },
                   text: AppStrings.login,
                   color: context.colorTheme.primary,
