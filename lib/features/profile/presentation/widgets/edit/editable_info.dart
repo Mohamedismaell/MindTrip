@@ -53,7 +53,7 @@ class EditableInfo extends StatelessWidget {
                   keyboardType: keyboardType,
 
                   textAlign: TextAlign.left,
-
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
                   style: AppTextStyles.h9Medium.copyWith(
                     color: context.colorTheme.onSurface,
                   ),

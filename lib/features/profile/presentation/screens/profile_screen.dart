@@ -5,10 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile/edit_profile_button.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/interest_chip.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/mytrips_section.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_identity.dart';
@@ -30,7 +31,6 @@ class ProfileScreen extends StatelessWidget {
 
   //! there is no trips - reviews - saved
   //! there is no saved Trips
-  //! there is no my Trips
   //! there is no reviews
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: 18.h),
               ProfileIdentity(displayName: displayName, photoUrl: photoUrl),
               SizedBox(height: 24.h),
-              const EditProfileButton(),
+              const _EditprofileButoon(),
               SizedBox(height: 34.h),
               Center(child: StatsCard(stats: ProfileMockData.stats)),
               SizedBox(height: 28.h),
@@ -121,6 +121,35 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _EditprofileButoon extends StatelessWidget {
+  const _EditprofileButoon();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CustomGradientButton(
+        onTap: () => context.push(AppRoutes.editProfile),
+        width: 170.w,
+        text: "Edit Profile",
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 20.w,
+              child: SvgPicture.asset(ProfileAssets.editIcon),
+            ),
+            SizedBox(width: 10.w),
+            Text(
+              'Edit Profile',
+              style: AppTextStyles.h8Bold.copyWith(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

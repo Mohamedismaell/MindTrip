@@ -6,11 +6,12 @@ class GoogleAuthProvider implements SocialAuthProvider {
   static const String _googleWebClientId = String.fromEnvironment(
     'GOOGLE_WEB_CLIENT_ID',
   );
+
   @override
   Future<String?> signIn() async {
+    // Provide both serverClientId (for Android to get idToken) and clientId (for Web/iOS)
     await _google.initialize(serverClientId: _googleWebClientId);
     final account = await _google.authenticate();
-
     final auth = account.authentication;
 
     return auth.idToken;

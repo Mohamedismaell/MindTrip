@@ -9,7 +9,6 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/outlined_action_button.dart';
 
 class TripDayOverviewCard extends StatefulWidget {
   const TripDayOverviewCard({
@@ -108,7 +107,9 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
                 actionIcon: Icons.chevron_right,
                 onPressed: widget.onToggle,
                 color: context.colorTheme.primary,
-                textStyle: AppTextStyles.h7Bold,
+                textStyle: AppTextStyles.h8Bold.copyWith(
+                  color: context.colorTheme.primary,
+                ),
               ),
             ],
           ),

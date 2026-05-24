@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
@@ -34,9 +35,9 @@ class AiPlannerRoutes {
       },
 
       routes: [
-        GoRoute(
+        AppTransitionRoute.fadeSlide(
           path: AppRoutes.myTrips,
-          builder: (context, state) => const MyTripsScreen(),
+          page: const MyTripsScreen(),
         ),
 
         GoRoute(
@@ -46,9 +47,9 @@ class AiPlannerRoutes {
             return AiPlannerFlowScreen(tripId: tripId);
           },
           routes: [
-            GoRoute(
+            AppTransitionRoute.slideBottom(
               path: 'chat',
-              builder: (context, state) => const AiPlannerChatScreen(),
+              page: const AiPlannerChatScreen(),
             ),
           ],
         ),
@@ -58,7 +59,7 @@ class AiPlannerRoutes {
           builder: (context, state) => const TripCalendarScreen(),
         ),
         //Todo should it be sub of my trips ?
-        GoRoute(
+        AppTransitionRoute.fadeSlideBuilder(
           path: AppRoutes.tripDetails,
           builder: (context, state) {
             final tripId = state.uri.queryParameters['tripId'] ?? '';

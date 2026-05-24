@@ -134,12 +134,12 @@ class AppTransitionRoute {
         return CustomTransitionPage(
           key: state.pageKey,
           child: page,
-          transitionDuration: const Duration(milliseconds: 600),
+          transitionDuration: const Duration(milliseconds: 250),
 
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             final slideAnimation =
                 Tween<Offset>(
-                  begin: const Offset(0.08, 0),
+                  begin: const Offset(0.04, 0),
                   end: Offset.zero,
                 ).animate(
                   CurvedAnimation(

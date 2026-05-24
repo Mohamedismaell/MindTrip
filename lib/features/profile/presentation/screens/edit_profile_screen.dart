@@ -31,6 +31,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _phoneController;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -55,7 +56,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       source,
     );
     if (file == null) return;
-    print('file path ${file.path}');
     if (context.mounted) {
       context.read<EditProfileCubit>().pickPhoto(file.path);
     }
@@ -65,7 +65,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.user;
 
-    return BlocProvider(
+    return BlocProvider<EditProfileCubit>(
       create: (_) {
         final cubit = sl<EditProfileCubit>();
         if (user != null) {
@@ -106,16 +106,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 "You have unsaved changes. Do you want to save them?",
                             primaryText: "Save Changes",
                             onPrimary: () {
-                              context.read<EditProfileCubit>().saveChanges();
+                              FocusScope.of(context).unfocus();
+                              if (_formKey.currentState?.validate() ?? false) {
+                                context.read<EditProfileCubit>().saveChanges();
+                                context.pop();
+                              } else {
+                                // If validation fails, close the dialog so the user can see the error
+                                context.pop();
+                              }
                             },
                             secondaryText: "Discard changes",
                             iconColor: AppColors.errorRed.withValues(
                               alpha: 0.9,
                             ),
                             onSecondary: () {
-                              // if (context.mounted) {
                               context.pop();
-                              // }
                             },
                           );
                         }
@@ -141,10 +146,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   SizedBox(height: 38.h),
 
                   // Editable Fields
-                  _EditableInfoCard(
-                    nameController: _nameController,
-                    phoneController: _phoneController,
-                    email: email,
+                  Form(
+                    key: _formKey,
+                    child: _EditableInfoCard(
+                      nameController: _nameController,
+                      phoneController: _phoneController,
+                      email: email,
+                    ),
                   ),
                   SizedBox(height: 38.h),
 
@@ -152,10 +160,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40.w),
                     child: CustomOtlinedButton(
-                      onPressed: (isSaving || !state.hasChanges)
+                      onPressed:
+                          (isSaving ||
+                              !state.hasChanges ||
+                              !(_formKey.currentState?.validate() ?? false))
                           ? null
-                          : () =>
-                                context.read<EditProfileCubit>().saveChanges(),
+                          : () {
+                              FocusScope.of(context).unfocus();
+                              // if (_formKey.currentState?.validate() ?? false) {
+                              context.read<EditProfileCubit>().saveChanges();
+                              // }
+                            },
                       text: "Save Changes",
                       color: context.colorTheme.primary,
                       isLoading: isSaving,

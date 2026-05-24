@@ -55,7 +55,10 @@ class TripMapPreviewCard extends StatelessWidget {
               actionIcon: Icons.map_outlined,
               onPressed: onViewMap,
               color: context.colorTheme.primary,
-              textStyle: AppTextStyles.h7Bold,
+
+              textStyle: AppTextStyles.h8Bold.copyWith(
+                color: context.colorTheme.primary,
+              ),
             ),
           ),
         ],
