@@ -1,16 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mindtrip/core/shared/injection/service_locator.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
+import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/entities/navigation_profile.dart';
-import 'package:mindtrip/features/map/domain/entities/route_step.dart';
+import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
+import 'package:mindtrip/features/map/presentation/widgets/map_action_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class DriveTab extends StatelessWidget {
   const DriveTab({super.key});
+
+  //ToDo: Need to be checked
+  Future<void> navigateAll(BuildContext context) async {
+    final position = await sl<LocationService>().getCurrentLocation();
+    if (context.mounted && position != null) {
+      final userPosition = Position(position.longitude, position.latitude);
+      final annotations = context.read<MapCubit>().state.annotations;
+      final waypoints = [userPosition];
+      final placeNames = <String>[];
+
+      final isTripMode = context.read<MapCubit>().state.hasTripDays;
+
+      if (isTripMode) {
+        // In trip mode, route in strict list order
+        for (final entry in annotations) {
+          waypoints.add(
+            Position(
+              entry.place.location.longitude,
+              entry.place.location.latitude,
+            ),
+          );
+          placeNames.add(entry.place.name);
+        }
+      } else {
+        final unvisited = List.of(annotations);
+        var currentLat = position.latitude;
+        var currentLng = position.longitude;
+
+        while (unvisited.isNotEmpty) {
+          final nearest = DistanceUtils.findNearestAnnotation(
+            unvisited,
+            currentLat,
+            currentLng,
+          );
+          if (nearest != null) {
+            waypoints.add(
+              Position(
+                nearest.place.location.longitude,
+                nearest.place.location.latitude,
+              ),
+            );
+            placeNames.add(nearest.place.name);
+            unvisited.remove(nearest);
+            currentLat = nearest.place.location.latitude;
+            currentLng = nearest.place.location.longitude;
+          } else {
+            break;
+          }
+        }
+      }
+
+      context.read<MapNavigationCubit>().navigateAll(waypoints, placeNames);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,155 +79,125 @@ class DriveTab extends StatelessWidget {
         return previous.activeRoute != current.activeRoute ||
             previous.selectedProfile != current.selectedProfile ||
             previous.isRouteLoading != current.isRouteLoading;
+        // previous.routeError != current.routeError;
         // previous.currentStepIndex != current.currentStepIndex;
       },
-      builder: (context, state) {
-        if (state.activeRoute == null && !state.isRouteLoading) {
-          return _buildEmptyRoute(context);
+      builder: (context, navigationState) {
+        if (navigationState.activeRoute == null &&
+            !navigationState.isRouteLoading) {
+          return _buildEmptyRoute(context, () => navigateAll(context));
         }
 
         // Error state
-        if (state.routeError != null) {
+        if (navigationState.routeError != null) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
             child: Column(
               children: [
                 Skeleton.keep(
-                  child: _buildProfileChips(context, state.selectedProfile),
+                  child: _buildProfileChips(
+                    context,
+                    navigationState.selectedProfile,
+                  ),
                 ),
                 SizedBox(height: 14.h),
-                _buildDriveError(context, state.routeError!),
+                _buildDriveError(context, navigationState.routeError!),
               ],
             ),
           );
         }
 
-        // Loading or loaded — SAME widget tree, skeleton toggles on/off
-        final isLoading = state.isRouteLoading;
-        final route = state.activeRoute;
+        final isLoading = navigationState.isRouteLoading;
+        final route = navigationState.activeRoute;
 
-        // Use real data when available, placeholder data when loading
-        final durationMin = route != null ? (route.duration / 60).ceil() : 15;
-        final distanceKm = route != null
-            ? (route.distance / 1000).toStringAsFixed(1)
-            : '5.0';
+        final distanceText = route != null
+            ? navigationState.formatDistance(route.distance)
+            : (isLoading ? '0.0 km' : '5.0');
 
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
-          child: Column(
-            children: [
-              Skeleton.keep(
-                child: _buildProfileChips(context, state.selectedProfile),
-              ),
-              SizedBox(height: 14.h),
-
-              Skeletonizer(
-                enabled: isLoading,
-                justifyMultiLineText: true,
-                enableSwitchAnimation: true,
-                ignorePointers: true,
-                // textBoneBorderRadius: const TextBoneBorderRadius(
-                //   BorderRadius.all(Radius.circular(20)),
-                // ),
-                child: Column(
+          child: Skeletonizer(
+            enabled: isLoading,
+            justifyMultiLineText: true,
+            enableSwitchAnimation: true,
+            ignorePointers: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (navigationState.destinationName != null) ...[
+                  SizedBox(height: 12.h),
+                  Row(
+                    children: [
+                      Text(
+                        '${navigationState.destinationName}',
+                        style: AppTextStyles.h8Bold,
+                        textAlign: TextAlign.center,
+                      ),
+                      Expanded(
+                        child: Text(
+                          distanceText,
+                          style: AppTextStyles.h9SemiBold,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 14.h),
+                ],
+                _buildProfileChips(context, navigationState.selectedProfile),
+                SizedBox(height: 14.h),
+                Column(
                   children: [
-                    SizedBox(height: 14.h),
-                    Container(
-                      padding: EdgeInsets.all(16.r),
-                      decoration: BoxDecoration(
-                        color: context.colorTheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            state.selectedProfile.icon,
-                            color: context.colorTheme.onPrimaryContainer,
-                            size: 32.sp,
-                          ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '$durationMin min',
-                                  style: context.textTheme.titleLarge?.copyWith(
-                                    color:
-                                        context.colorTheme.onPrimaryContainer,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '$distanceKm km · ${state.selectedProfile.label}',
-                                  style: context.textTheme.bodyMedium?.copyWith(
-                                    color: context.colorTheme.onPrimaryContainer
-                                        .withValues(alpha: 0.8),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-
-                    // Step-by-step instructions
-                    // if (allSteps.isNotEmpty) ...[
-                    //   Text(
-                    //     'Directions',
-                    //     style: context.textTheme.titleMedium?.copyWith(
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    //   SizedBox(height: 8.h),
-                    //   ...allSteps.asMap().entries.map(
-                    //     (entry) =>
-                    //         _buildStepItem(context, entry.value, entry.key),
-                    //   ),
-                    // ],
-                    // SizedBox(height: 16.h),
-                    if (state.isSequentialMode) ...[
+                    SizedBox(height: 8.h),
+                    if (navigationState.isSequentialMode) ...[
                       Skeleton.keep(
                         child: Row(
                           children: [
                             Expanded(
-                              child: SizedBox(
-                                height: 48.h,
-                                child: CustomOtlinedButton(
-                                  onPressed: isLoading
-                                      ? null
-                                      : () => context
-                                            .read<MapNavigationCubit>()
-                                            .stopNavigation(),
-                                  icon: Icons.close,
-                                  text: 'Stop',
+                              child: CustomOtlinedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => context
+                                          .read<MapNavigationCubit>()
+                                          .stopNavigation(),
+                                icon: Icons.close,
+                                text: 'Stop',
+                                textStyle: context.textTheme.labelLarge
+                                    ?.copyWith(color: context.colorTheme.error),
+                                color: context.colorTheme.error,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 7.r,
+                                  horizontal: 5.r,
                                 ),
                               ),
                             ),
                             SizedBox(width: 12.w),
                             Expanded(
                               flex: 2,
-                              child: SizedBox(
-                                height: 48.h,
-                                child: CustomOtlinedButton(
-                                  onPressed: isLoading
-                                      ? null
-                                      : () => context
-                                            .read<MapNavigationCubit>()
-                                            .advanceToNextLeg(),
-                                  actionIcon:
-                                      state.currentLegIndex >=
-                                          state.totalLegs - 1
-                                      ? Icons.check
-                                      : Icons.arrow_forward_ios,
-                                  text:
-                                      state.currentLegIndex >=
-                                          state.totalLegs - 1
-                                      ? 'Finish Trip'
-                                      : 'Next Place (${state.currentLegIndex + 1}/${state.totalLegs})',
-                                  color: context.colorTheme.primary,
+                              child: CustomOtlinedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => context
+                                          .read<MapNavigationCubit>()
+                                          .advanceToNextLeg(),
+                                actionIcon:
+                                    navigationState.currentLegIndex >=
+                                        navigationState.totalLegs - 1
+                                    ? Icons.check
+                                    : Icons.arrow_forward_ios,
+                                text:
+                                    navigationState.currentLegIndex >=
+                                        navigationState.totalLegs - 1
+                                    ? 'Finish Trip'
+                                    : 'Next Place (${navigationState.currentLegIndex + 1}/${navigationState.totalLegs})',
+                                color: context.colorTheme.primary,
+                                textStyle: context.textTheme.labelLarge
+                                    ?.copyWith(
+                                      color: context.colorTheme.primary,
+                                    ),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 7.r,
+                                  horizontal: 5.r,
                                 ),
                               ),
                             ),
@@ -175,7 +205,6 @@ class DriveTab extends StatelessWidget {
                         ),
                       ),
                     ] else ...[
-                      // Stop navigation button
                       Skeleton.keep(
                         child: SizedBox(
                           width: double.infinity,
@@ -195,8 +224,8 @@ class DriveTab extends StatelessWidget {
                     SizedBox(height: 20.h),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -211,14 +240,14 @@ Widget _buildDriveError(BuildContext context, String error) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.error_outline, size: 48.sp, color: Colors.red),
-          SizedBox(height: 12.h),
+          Icon(Icons.error_outline, size: 32.sp, color: Colors.red),
+          SizedBox(height: 6.h),
           Text(
             error,
             textAlign: TextAlign.center,
             style: context.textTheme.bodyMedium,
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
           TextButton(
             onPressed: () =>
                 context.read<MapNavigationCubit>().stopNavigation(),
@@ -233,159 +262,99 @@ Widget _buildDriveError(BuildContext context, String error) {
 //  Profile Chips
 
 Widget _buildProfileChips(BuildContext context, NavigationProfile selected) {
-  return Row(
-    children: NavigationProfile.values.map((profile) {
-      final isSelected = selected == profile;
-      return Expanded(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4.w),
+  final navigationState = context.watch<MapNavigationCubit>().state;
+  final route = navigationState.activeRoute;
+  final durationMin = navigationState.formatDuration(
+    route?.duration.ceil() ?? 0,
+  );
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Row(
+      children: NavigationProfile.values.map((profile) {
+        final isSelected = selected == profile;
+
+        return Padding(
+          padding: EdgeInsets.only(right: 8.w),
           child: GestureDetector(
-            onTap: () => context.read<MapNavigationCubit>().setProfile(profile),
+            onTap: () {
+              context.read<MapNavigationCubit>().setProfile(profile);
+            },
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.symmetric(vertical: 10.h),
+              duration: const Duration(milliseconds: 220),
+              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 10.h),
               decoration: BoxDecoration(
                 color: isSelected
                     ? context.colorTheme.primary
                     : context.colorTheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(100.r),
+                border: Border.all(
+                  color: isSelected
+                      ? context.colorTheme.primary
+                      : context.colorTheme.outline.withValues(),
+                ),
               ),
-              child: Column(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    profile.icon,
-                    size: 20.sp,
-                    color: isSelected
-                        ? context.colorTheme.onPrimary
-                        : context.colorTheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    profile.label,
-                    style: context.textTheme.labelSmall?.copyWith(
+                  Skeleton.keep(
+                    child: Icon(
+                      profile.icon,
+                      size: 18.sp,
                       color: isSelected
                           ? context.colorTheme.onPrimary
-                          : context.colorTheme.onSurface.withValues(alpha: 0.6),
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
+                          : context.colorTheme.onSurface,
+                    ),
+                  ),
+
+                  SizedBox(width: 8.w),
+                  Text(
+                    durationMin,
+                    style: AppTextStyles.h10SemiBold.copyWith(
+                      color: isSelected
+                          ? context.colorTheme.onPrimary
+                          : context.colorTheme.onSurface,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      );
-    }).toList(),
-  );
-}
-
-//  Step Item
-
-Widget _buildStepItem(BuildContext context, RouteStep step, int index) {
-  final distanceText = step.distance >= 1000
-      ? '${(step.distance / 1000).toStringAsFixed(1)} km'
-      : '${step.distance.toInt()} m';
-
-  return Padding(
-    padding: EdgeInsets.only(bottom: 4.h),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Step number circle
-        Container(
-          width: 28.w,
-          height: 28.w,
-          decoration: BoxDecoration(
-            color: context.colorTheme.primary.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Icon(
-              _getManeuverIcon(step.bannerType, step.bannerModifier),
-              size: 16.sp,
-              color: context.colorTheme.primary,
-            ),
-          ),
-        ),
-        SizedBox(width: 12.w),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                step.bannerText ?? step.instruction,
-                style: context.textTheme.bodyMedium,
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                distanceText,
-                style: context.textTheme.bodySmall?.copyWith(
-                  color: Colors.grey,
-                ),
-              ),
-              Divider(height: 16.h, color: Colors.grey.shade200),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
     ),
   );
 }
 
-IconData _getManeuverIcon(String? type, String? modifier) {
-  if (type == null) return Icons.straight;
-  switch (type) {
-    case 'turn':
-      if (modifier == 'left' ||
-          modifier == 'slight left' ||
-          modifier == 'sharp left') {
-        return Icons.turn_left;
-      }
-      if (modifier == 'right' ||
-          modifier == 'slight right' ||
-          modifier == 'sharp right') {
-        return Icons.turn_right;
-      }
-      return Icons.straight;
-    case 'roundabout':
-      return Icons.roundabout_left;
-    case 'arrive':
-      return Icons.flag;
-    case 'depart':
-      return Icons.trip_origin;
-    case 'merge':
-      return Icons.merge;
-    case 'fork':
-      return modifier?.contains('left') == true
-          ? Icons.fork_left
-          : Icons.fork_right;
-    default:
-      return Icons.straight;
-  }
-}
-
 //  Empty Route
 
-Widget _buildEmptyRoute(BuildContext context) {
+Widget _buildEmptyRoute(BuildContext context, VoidCallback onTap) {
   return Center(
     child: Padding(
       padding: EdgeInsets.all(32.r),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             Icons.directions_outlined,
-            size: 48.sp,
-            color: Colors.grey.shade400,
+            size: 32.sp,
+            color: context.colorTheme.outline,
+          ),
+          SizedBox(height: 6.h),
+          Text(
+            'Select a place and tap\n"Show route" to get directions or ',
+            textAlign: TextAlign.center,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colorTheme.outline,
+            ),
           ),
           SizedBox(height: 12.h),
-          Text(
-            'Select a place and tap\n"Navigate Here" to get directions',
-            textAlign: TextAlign.center,
-            style: context.textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          MapActionButton(
+            onTap: onTap,
+            icon: Icons.directions_car,
+            label: 'Start Trip',
+            color: context.colorTheme.primary,
+            isFilled: true,
           ),
         ],
       ),

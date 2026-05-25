@@ -243,7 +243,7 @@ class PlaceTab extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// TITLE + DISTANCE
+              // TITLE & DISTANCE
               Row(
                 children: [
                   Expanded(
@@ -272,7 +272,7 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 14.h),
 
-              /// DESCRIPTION
+              // DESCRIPTION
               if (place.description != null)
                 Text(
                   place.description!,
@@ -283,7 +283,7 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 12.h),
 
-              /// REVIEWS + CATEGORY
+              // REVIEWS & CATEGORY
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -299,7 +299,7 @@ class PlaceTab extends StatelessWidget {
                       vertical: 4.h,
                     ),
                     decoration: BoxDecoration(
-                      color: context.colorTheme.primary.withOpacity(0.1),
+                      color: context.colorTheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(100.r),
                     ),
                     child: Text(
@@ -314,7 +314,7 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 10.h),
 
-              /// RATING + PRICE + BADGE
+              // RATING & PRICE & BADGE
               Row(
                 children: [
                   if (place.rating != null) ...[
@@ -340,50 +340,55 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 24.h),
 
-              /// ACTIONS
+              // ACTIONS
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MapActionButton(
-                    label: "Show route",
-                    icon: Icons.directions_rounded,
-                    color: context.colorTheme.primary,
-                    isFilled: true,
-                    onTap: () async {
-                      final pos = await sl<LocationService>()
-                          .getCurrentLocation();
+                  Expanded(
+                    child: MapActionButton(
+                      label: "Show route",
+                      icon: Icons.directions_rounded,
+                      color: context.colorTheme.primary,
+                      isFilled: true,
+                      onTap: () async {
+                        final pos = await sl<LocationService>()
+                            .getCurrentLocation();
 
-                      if (pos != null && context.mounted) {
-                        final userPos = Position(pos.longitude, pos.latitude);
+                        if (pos != null && context.mounted) {
+                          final userPos = Position(pos.longitude, pos.latitude);
 
-                        context.read<MapNavigationCubit>().navigateToPosition(
-                          userPos,
-                          placeLat,
-                          placeLng,
-                        );
+                          context.read<MapNavigationCubit>().navigateToPosition(
+                            userPos,
+                            placeLat,
+                            placeLng,
+                            destinationName: place.name,
+                          );
 
-                        context.read<MapCubit>().dismissBottomSheet();
-                      }
-                    },
+                          context.read<MapCubit>().dismissBottomSheet();
+                        }
+                      },
+                    ),
                   ),
 
                   SizedBox(width: 8.w),
 
-                  MapActionButton(
-                    label: "Show on map",
-                    icon: Icons.map_rounded,
-                    color: context.colorTheme.primary,
-                    isFilled: true,
-                    onTap: () async {
-                      if (context.mounted) {
-                        context.read<MapCubit>().triggerFlyTo(
-                          placeLat,
-                          placeLng,
-                        );
+                  Expanded(
+                    child: MapActionButton(
+                      label: "Show on map",
+                      icon: Icons.map_rounded,
+                      color: context.colorTheme.primary,
+                      isFilled: true,
+                      onTap: () async {
+                        if (context.mounted) {
+                          context.read<MapCubit>().triggerFlyTo(
+                            placeLat,
+                            placeLng,
+                          );
 
-                        context.read<MapCubit>().dismissBottomSheet();
-                      }
-                    },
+                          context.read<MapCubit>().dismissBottomSheet();
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),

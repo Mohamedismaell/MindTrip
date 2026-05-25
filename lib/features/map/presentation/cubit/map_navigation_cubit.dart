@@ -2,21 +2,26 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/use_cases/get_route_use_case.dart';
 import '../../domain/entities/navigation_profile.dart';
 import 'map_navigation_state.dart';
 
 class MapNavigationCubit extends Cubit<MapNavigationState> {
   final GetRouteUseCase _getRouteUseCase;
+  final LocationService _locationService;
 
   List<Position>? _lastWaypoints;
   List<Position>? _sequentialWaypoints;
   CancelToken? _getRouteCancelToken;
   int _routeGeneration = 0;
 
-  MapNavigationCubit({required GetRouteUseCase getRouteUseCase})
-    : _getRouteUseCase = getRouteUseCase,
-      super(MapNavigationState.initial());
+  MapNavigationCubit({
+    required GetRouteUseCase getRouteUseCase,
+    required LocationService locationService,
+  })  : _getRouteUseCase = getRouteUseCase,
+       _locationService = locationService,
+       super(MapNavigationState.initial());
 
   CancelToken _getRouteToken() {
     _getRouteCancelToken?.cancel();
@@ -35,17 +40,21 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   Future<void> navigateToPosition(
     Position userPosition,
     double lat,
-    double lng,
-  ) async {
+    double lng, {
+    String? destinationName,
+  }) async {
+    emit(state.copyWith(destinationName: destinationName));
     final placePosition = Position(lng, lat);
     await _fetchRoute([userPosition, placePosition]);
   }
 
-  Future<void> navigateAll(List<Position> waypoints) async {
-    await navigateSequential(waypoints);
+  Future<void> navigateAll(
+      List<Position> waypoints, List<String> placeNames) async {
+    await navigateSequential(waypoints, placeNames);
   }
 
-  Future<void> navigateSequential(List<Position> waypoints) async {
+  Future<void> navigateSequential(
+      List<Position> waypoints, List<String> placeNames) async {
     if (waypoints.length < 2) return;
     _sequentialWaypoints = waypoints;
     emit(
@@ -53,6 +62,8 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
         isSequentialMode: true,
         totalLegs: waypoints.length - 1,
         currentLegIndex: 0,
+        placeNames: placeNames,
+        destinationName: placeNames.isNotEmpty ? placeNames.first : null,
       ),
     );
     await _fetchSequentialLegRoute(0);
@@ -65,16 +76,25 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
       stopNavigation();
       return;
     }
-    emit(state.copyWith(currentLegIndex: nextLeg));
+    emit(state.copyWith(
+      currentLegIndex: nextLeg,
+      destinationName: nextLeg < state.placeNames.length
+          ? state.placeNames[nextLeg]
+          : null,
+    ));
     await _fetchSequentialLegRoute(nextLeg);
   }
 
   Future<void> _fetchSequentialLegRoute(int legIndex) async {
     if (_sequentialWaypoints == null) return;
-    final start = _sequentialWaypoints![legIndex];
     final end = _sequentialWaypoints![legIndex + 1];
 
-    // Call _fetchRoute for leg
+    // Always route from the user's CURRENT location
+    final pos = await _locationService.getCurrentLocation();
+    final start = pos != null
+        ? Position(pos.longitude, pos.latitude)
+        : _sequentialWaypoints![legIndex]; // fallback to waypoint
+
     await _fetchRoute([start, end]);
   }
 
@@ -83,7 +103,11 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     _lastWaypoints = waypoints;
     final generation = ++_routeGeneration;
 
-    emit(state.copyWith(isRouteLoading: true, currentStepIndex: 0));
+    emit(state.copyWith(
+      isRouteLoading: true,
+      currentStepIndex: 0,
+      routeError: null, // clear any previous error
+    ));
 
     final result = await _getRouteUseCase.call(
       waypoints,
@@ -122,6 +146,8 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
         currentLegIndex: 0,
         totalLegs: 0,
         activeRoute: null,
+        destinationName: null,
+        placeNames: [],
       ),
     );
   }

@@ -25,6 +25,12 @@ sealed class MapNavigationState with _$MapNavigationState {
     @Default(0) int currentLegIndex,
 
     @Default(false) bool isSequentialMode,
+
+    /// Name of the place being navigated to
+    String? destinationName,
+
+    /// All place names in sequential navigation order
+    @Default([]) List<String> placeNames,
   }) = _MapNavigationState;
 
   factory MapNavigationState.initial() => const MapNavigationState();
@@ -35,5 +41,38 @@ sealed class MapNavigationState with _$MapNavigationState {
 
   MapNavigationState clearRouteError() {
     return copyWith(routeError: null);
+  }
+
+  String formatDuration(int minutes) {
+    if (minutes < 60) {
+      return '$minutes min';
+    }
+
+    final hours = minutes ~/ 60;
+    final remainingMinutes = minutes % 60;
+
+    if (remainingMinutes == 0) {
+      return '$hours hr';
+    }
+
+    if (remainingMinutes < 10) {
+      return '$hours hr $remainingMinutes min';
+    }
+
+    return '$hours:${remainingMinutes.toString().padLeft(2, '0')} hr';
+  }
+
+  String formatDistance(double meters) {
+    if (meters < 1000) {
+      return '${meters.toInt()} m';
+    }
+
+    final km = meters / 1000;
+
+    if (km < 10) {
+      return '${km.toStringAsFixed(1)} km';
+    }
+
+    return '${km.toStringAsFixed(0)} km';
   }
 }

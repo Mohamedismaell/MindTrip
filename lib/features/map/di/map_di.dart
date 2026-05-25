@@ -79,7 +79,10 @@ class MapDi {
     );
 
     sl.registerFactory<MapNavigationCubit>(
-      () => MapNavigationCubit(getRouteUseCase: sl<GetRouteUseCase>()),
+      () => MapNavigationCubit(
+        getRouteUseCase: sl<GetRouteUseCase>(),
+        locationService: sl<LocationService>(),
+      ),
     );
   }
 }

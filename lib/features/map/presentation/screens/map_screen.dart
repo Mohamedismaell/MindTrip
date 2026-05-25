@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';
 import 'package:mindtrip/features/map/presentation/controllers/map_controller.dart';
@@ -13,6 +14,7 @@ import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.da
 import 'package:mindtrip/features/map/presentation/widgets/map_listener.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
+import 'package:mindtrip/features/map/presentation/widgets/navigaiotn_step.dart';
 import '../../data/models/map_trip_extra.dart';
 import '../widgets/day_selector_bar.dart';
 import '../widgets/place_card_row.dart';
@@ -52,57 +54,6 @@ class _MapScreenState extends State<MapScreen> {
     final position = await sl<LocationService>().getCurrentLocation();
     if (mounted && position != null) {
       await _mapController.flyTo(position.latitude, position.longitude);
-    }
-  }
-
-  //ToDo: Need to be checked
-  Future<void> _navigateAll() async {
-    final position = await sl<LocationService>().getCurrentLocation();
-    if (mounted && position != null) {
-      final userPosition = Position(position.longitude, position.latitude);
-      final annotations = context.read<MapCubit>().state.annotations;
-      final waypoints = [userPosition];
-
-      final isTripMode = context.read<MapCubit>().state.hasTripDays;
-
-      if (isTripMode) {
-        // In trip mode, route in strict list order
-        for (final entry in annotations) {
-          waypoints.add(
-            Position(
-              entry.place.location.longitude,
-              entry.place.location.latitude,
-            ),
-          );
-        }
-      } else {
-        final unvisited = List.of(annotations);
-        var currentLat = position.latitude;
-        var currentLng = position.longitude;
-
-        while (unvisited.isNotEmpty) {
-          final nearest = DistanceUtils.findNearestAnnotation(
-            unvisited,
-            currentLat,
-            currentLng,
-          );
-          if (nearest != null) {
-            waypoints.add(
-              Position(
-                nearest.place.location.longitude,
-                nearest.place.location.latitude,
-              ),
-            );
-            unvisited.remove(nearest);
-            currentLat = nearest.place.location.latitude;
-            currentLng = nearest.place.location.longitude;
-          } else {
-            break;
-          }
-        }
-      }
-
-      context.read<MapNavigationCubit>().navigateAll(waypoints);
     }
   }
 
@@ -180,38 +131,10 @@ class _MapScreenState extends State<MapScreen> {
             if (!hasTripDays)
               Positioned(top: topSpace, child: const MapSearchBar()),
             Positioned(
-              top: topSpace + 70.h,
-              child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
-                builder: (context, state) {
-                  final route = state.activeRoute;
-                  if (route == null || state.isRouteLoading) {
-                    return const SizedBox.shrink();
-                  }
-                  final durationMin = (route.duration / 60).ceil();
-                  final profileLabel = state.selectedProfile.label
-                      .toLowerCase();
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 8.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.r),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black26, blurRadius: 4),
-                      ],
-                    ),
-                    child: Text(
-                      '~$durationMin min $profileLabel',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                  );
-                },
-              ),
+              top: topSpace,
+              left: 42.w,
+              right: 42.w,
+              child: NavigaiotnStep(),
             ),
             // Grouped controls and cards
             Positioned(

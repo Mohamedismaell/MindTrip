@@ -12,11 +12,11 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_action_button.dart';
 import '../cubit/map_cubit.dart';
 import '../cubit/map_navigation_cubit.dart';
 import 'place_tab.dart';
+import 'drive_tab.dart';
 import '../cubit/map_state.dart';
 
 class PlaceCardRow extends StatefulWidget {
@@ -87,8 +87,12 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             (a) => a.place.id == state.selectedPlace!.id,
           );
 
-          if (index != -1 && index != _currentPage) {
-            _jumpToIndex(index);
+          // Add 1 to account for the DriveTab card at index 0
+          if (index != -1) {
+            final targetIndex = index + 1;
+            if (targetIndex != _currentPage) {
+              _jumpToIndex(targetIndex);
+            }
           }
         }
       },
@@ -111,21 +115,31 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
           height: isExpanded ? expandedCardHeight : collapsedCardHeight,
           child: PageView.builder(
             controller: _pageController,
-            itemCount: state.annotations.length,
+            itemCount: state.annotations.length + 1,
             onPageChanged: (index) {
               _currentPage = index;
 
               if (_isUserSwipe) {
-                final entry = state.annotations[index];
-
-                context.read<MapCubit>().triggerFlyTo(
-                  entry.place.location.latitude,
-                  entry.place.location.longitude,
-                );
+                if (index > 0) {
+                  // final entry = state.annotations[index - 1];
+                  // context.read<MapCubit>().selectPlace(entry.place.id);
+                  // context.read<MapCubit>().triggerFlyTo(
+                  //   entry.place.location.latitude,
+                  //   entry.place.location.longitude,
+                  // );
+                }
               }
             },
             itemBuilder: (context, index) {
-              final entry = state.annotations[index];
+              if (index == 0) {
+                return _buildDriveCard(
+                  context,
+                  isExpanded,
+                  expandedCardHeight,
+                  collapsedCardHeight,
+                );
+              }
+              final entry = state.annotations[index - 1];
 
               final place = entry.place;
 
@@ -377,69 +391,75 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
 
               Row(
                 children: [
-                  MapActionButton(
-                    label: "Show route",
-                    icon: Icons.directions_rounded,
-                    color: context.colorTheme.primary,
-                    isFilled: true,
-                    onTap: () async {
-                      final pos = await sl<LocationService>()
-                          .getCurrentLocation();
+                  Expanded(
+                    child: MapActionButton(
+                      label: "Show route",
+                      icon: Icons.directions_rounded,
+                      color: context.colorTheme.primary,
+                      isFilled: true,
+                      onTap: () async {
+                        final pos = await sl<LocationService>()
+                            .getCurrentLocation();
 
-                      if (pos != null && context.mounted) {
-                        final userPos = Position(pos.longitude, pos.latitude);
+                        if (pos != null && context.mounted) {
+                          final userPos = Position(pos.longitude, pos.latitude);
 
-                        context.read<MapNavigationCubit>().navigateToPosition(
-                          userPos,
-                          placeLat,
-                          placeLng,
-                        );
-                      }
-                    },
+                          context.read<MapNavigationCubit>().navigateToPosition(
+                            userPos,
+                            placeLat,
+                            placeLng,
+                          );
+                        }
+                      },
+                    ),
                   ),
 
                   SizedBox(width: 8.w),
 
                   isSearchResult
-                      ? MapActionButton(
-                          label: "Remove",
-                          icon: Icons.delete_outline_rounded,
-                          color: context.colorTheme.error,
-                          isFilled: false,
-                          onTap: () {
-                            setState(() {
-                              _removingPlaceIds.add(place.id);
-                            });
+                      ? Expanded(
+                          child: MapActionButton(
+                            label: "Remove",
+                            icon: Icons.delete_outline_rounded,
+                            color: context.colorTheme.error,
+                            isFilled: false,
+                            onTap: () {
+                              setState(() {
+                                _removingPlaceIds.add(place.id);
+                              });
 
-                            Future.delayed(
-                              const Duration(milliseconds: 300),
-                              () {
-                                if (mounted) {
-                                  context.read<MapCubit>().removeSearchPlace(
-                                    place.id,
-                                  );
+                              Future.delayed(
+                                const Duration(milliseconds: 300),
+                                () {
+                                  if (mounted) {
+                                    context.read<MapCubit>().removeSearchPlace(
+                                      place.id,
+                                    );
 
-                                  setState(() {
-                                    _removingPlaceIds.remove(place.id);
-                                  });
-                                }
-                              },
-                            );
-                          },
+                                    setState(() {
+                                      _removingPlaceIds.remove(place.id);
+                                    });
+                                  }
+                                },
+                              );
+                            },
+                          ),
                         )
-                      : MapActionButton(
-                          label: "Show map",
-                          icon: Icons.map_rounded,
-                          color: context.colorTheme.primary,
-                          isFilled: false,
-                          onTap: () {
-                            context.read<MapCubit>().triggerFlyTo(
-                              placeLat,
-                              placeLng,
-                            );
+                      : Expanded(
+                          child: MapActionButton(
+                            label: "Show map",
+                            icon: Icons.map_rounded,
+                            color: context.colorTheme.primary,
+                            isFilled: false,
+                            onTap: () {
+                              context.read<MapCubit>().triggerFlyTo(
+                                placeLat,
+                                placeLng,
+                              );
 
-                            context.read<MapCubit>().dismissBottomSheet();
-                          },
+                              context.read<MapCubit>().dismissBottomSheet();
+                            },
+                          ),
                         ),
                 ],
               ),
@@ -447,6 +467,30 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildDriveCard(
+    BuildContext context,
+    bool isExpanded,
+    double expandedHeight,
+    double collapsedHeight,
+  ) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: isExpanded ? expandedHeight : collapsedHeight,
+        margin: EdgeInsets.only(right: 8.w, top: 10.h, bottom: 5.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24.r),
+          boxShadow: [AppShadows.mapToolButtons],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(21.5.r),
+          child: const SingleChildScrollView(child: DriveTab()),
+        ),
+      ),
     );
   }
 }

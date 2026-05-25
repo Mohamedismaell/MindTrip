@@ -14,7 +14,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MapNavigationState {
 
- MapRoute? get activeRoute; bool get isRouteLoading; String? get routeError; NavigationProfile get selectedProfile; int get currentStepIndex; int get totalLegs; int get currentLegIndex; bool get isSequentialMode;
+ MapRoute? get activeRoute; bool get isRouteLoading; String? get routeError; NavigationProfile get selectedProfile; int get currentStepIndex; int get totalLegs; int get currentLegIndex; bool get isSequentialMode;/// Name of the place being navigated to
+ String? get destinationName;/// All place names in sequential navigation order
+ List<String> get placeNames;
 /// Create a copy of MapNavigationState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +27,16 @@ $MapNavigationStateCopyWith<MapNavigationState> get copyWith => _$MapNavigationS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MapNavigationState&&(identical(other.activeRoute, activeRoute) || other.activeRoute == activeRoute)&&(identical(other.isRouteLoading, isRouteLoading) || other.isRouteLoading == isRouteLoading)&&(identical(other.routeError, routeError) || other.routeError == routeError)&&(identical(other.selectedProfile, selectedProfile) || other.selectedProfile == selectedProfile)&&(identical(other.currentStepIndex, currentStepIndex) || other.currentStepIndex == currentStepIndex)&&(identical(other.totalLegs, totalLegs) || other.totalLegs == totalLegs)&&(identical(other.currentLegIndex, currentLegIndex) || other.currentLegIndex == currentLegIndex)&&(identical(other.isSequentialMode, isSequentialMode) || other.isSequentialMode == isSequentialMode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MapNavigationState&&(identical(other.activeRoute, activeRoute) || other.activeRoute == activeRoute)&&(identical(other.isRouteLoading, isRouteLoading) || other.isRouteLoading == isRouteLoading)&&(identical(other.routeError, routeError) || other.routeError == routeError)&&(identical(other.selectedProfile, selectedProfile) || other.selectedProfile == selectedProfile)&&(identical(other.currentStepIndex, currentStepIndex) || other.currentStepIndex == currentStepIndex)&&(identical(other.totalLegs, totalLegs) || other.totalLegs == totalLegs)&&(identical(other.currentLegIndex, currentLegIndex) || other.currentLegIndex == currentLegIndex)&&(identical(other.isSequentialMode, isSequentialMode) || other.isSequentialMode == isSequentialMode)&&(identical(other.destinationName, destinationName) || other.destinationName == destinationName)&&const DeepCollectionEquality().equals(other.placeNames, placeNames));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,activeRoute,isRouteLoading,routeError,selectedProfile,currentStepIndex,totalLegs,currentLegIndex,isSequentialMode);
+int get hashCode => Object.hash(runtimeType,activeRoute,isRouteLoading,routeError,selectedProfile,currentStepIndex,totalLegs,currentLegIndex,isSequentialMode,destinationName,const DeepCollectionEquality().hash(placeNames));
 
 @override
 String toString() {
-  return 'MapNavigationState(activeRoute: $activeRoute, isRouteLoading: $isRouteLoading, routeError: $routeError, selectedProfile: $selectedProfile, currentStepIndex: $currentStepIndex, totalLegs: $totalLegs, currentLegIndex: $currentLegIndex, isSequentialMode: $isSequentialMode)';
+  return 'MapNavigationState(activeRoute: $activeRoute, isRouteLoading: $isRouteLoading, routeError: $routeError, selectedProfile: $selectedProfile, currentStepIndex: $currentStepIndex, totalLegs: $totalLegs, currentLegIndex: $currentLegIndex, isSequentialMode: $isSequentialMode, destinationName: $destinationName, placeNames: $placeNames)';
 }
 
 
@@ -45,7 +47,7 @@ abstract mixin class $MapNavigationStateCopyWith<$Res>  {
   factory $MapNavigationStateCopyWith(MapNavigationState value, $Res Function(MapNavigationState) _then) = _$MapNavigationStateCopyWithImpl;
 @useResult
 $Res call({
- MapRoute? activeRoute, bool isRouteLoading, String? routeError, NavigationProfile selectedProfile, int currentStepIndex, int totalLegs, int currentLegIndex, bool isSequentialMode
+ MapRoute? activeRoute, bool isRouteLoading, String? routeError, NavigationProfile selectedProfile, int currentStepIndex, int totalLegs, int currentLegIndex, bool isSequentialMode, String? destinationName, List<String> placeNames
 });
 
 
@@ -62,7 +64,7 @@ class _$MapNavigationStateCopyWithImpl<$Res>
 
 /// Create a copy of MapNavigationState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? activeRoute = freezed,Object? isRouteLoading = null,Object? routeError = freezed,Object? selectedProfile = null,Object? currentStepIndex = null,Object? totalLegs = null,Object? currentLegIndex = null,Object? isSequentialMode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activeRoute = freezed,Object? isRouteLoading = null,Object? routeError = freezed,Object? selectedProfile = null,Object? currentStepIndex = null,Object? totalLegs = null,Object? currentLegIndex = null,Object? isSequentialMode = null,Object? destinationName = freezed,Object? placeNames = null,}) {
   return _then(_self.copyWith(
 activeRoute: freezed == activeRoute ? _self.activeRoute : activeRoute // ignore: cast_nullable_to_non_nullable
 as MapRoute?,isRouteLoading: null == isRouteLoading ? _self.isRouteLoading : isRouteLoading // ignore: cast_nullable_to_non_nullable
@@ -72,7 +74,9 @@ as NavigationProfile,currentStepIndex: null == currentStepIndex ? _self.currentS
 as int,totalLegs: null == totalLegs ? _self.totalLegs : totalLegs // ignore: cast_nullable_to_non_nullable
 as int,currentLegIndex: null == currentLegIndex ? _self.currentLegIndex : currentLegIndex // ignore: cast_nullable_to_non_nullable
 as int,isSequentialMode: null == isSequentialMode ? _self.isSequentialMode : isSequentialMode // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,destinationName: freezed == destinationName ? _self.destinationName : destinationName // ignore: cast_nullable_to_non_nullable
+as String?,placeNames: null == placeNames ? _self.placeNames : placeNames // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 
@@ -154,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MapRoute? activeRoute,  bool isRouteLoading,  String? routeError,  NavigationProfile selectedProfile,  int currentStepIndex,  int totalLegs,  int currentLegIndex,  bool isSequentialMode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MapRoute? activeRoute,  bool isRouteLoading,  String? routeError,  NavigationProfile selectedProfile,  int currentStepIndex,  int totalLegs,  int currentLegIndex,  bool isSequentialMode,  String? destinationName,  List<String> placeNames)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MapNavigationState() when $default != null:
-return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.selectedProfile,_that.currentStepIndex,_that.totalLegs,_that.currentLegIndex,_that.isSequentialMode);case _:
+return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.selectedProfile,_that.currentStepIndex,_that.totalLegs,_that.currentLegIndex,_that.isSequentialMode,_that.destinationName,_that.placeNames);case _:
   return orElse();
 
 }
@@ -175,10 +179,10 @@ return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.se
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MapRoute? activeRoute,  bool isRouteLoading,  String? routeError,  NavigationProfile selectedProfile,  int currentStepIndex,  int totalLegs,  int currentLegIndex,  bool isSequentialMode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MapRoute? activeRoute,  bool isRouteLoading,  String? routeError,  NavigationProfile selectedProfile,  int currentStepIndex,  int totalLegs,  int currentLegIndex,  bool isSequentialMode,  String? destinationName,  List<String> placeNames)  $default,) {final _that = this;
 switch (_that) {
 case _MapNavigationState():
-return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.selectedProfile,_that.currentStepIndex,_that.totalLegs,_that.currentLegIndex,_that.isSequentialMode);}
+return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.selectedProfile,_that.currentStepIndex,_that.totalLegs,_that.currentLegIndex,_that.isSequentialMode,_that.destinationName,_that.placeNames);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -192,10 +196,10 @@ return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.se
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MapRoute? activeRoute,  bool isRouteLoading,  String? routeError,  NavigationProfile selectedProfile,  int currentStepIndex,  int totalLegs,  int currentLegIndex,  bool isSequentialMode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MapRoute? activeRoute,  bool isRouteLoading,  String? routeError,  NavigationProfile selectedProfile,  int currentStepIndex,  int totalLegs,  int currentLegIndex,  bool isSequentialMode,  String? destinationName,  List<String> placeNames)?  $default,) {final _that = this;
 switch (_that) {
 case _MapNavigationState() when $default != null:
-return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.selectedProfile,_that.currentStepIndex,_that.totalLegs,_that.currentLegIndex,_that.isSequentialMode);case _:
+return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.selectedProfile,_that.currentStepIndex,_that.totalLegs,_that.currentLegIndex,_that.isSequentialMode,_that.destinationName,_that.placeNames);case _:
   return null;
 
 }
@@ -207,7 +211,7 @@ return $default(_that.activeRoute,_that.isRouteLoading,_that.routeError,_that.se
 
 
 class _MapNavigationState extends MapNavigationState {
-  const _MapNavigationState({this.activeRoute, this.isRouteLoading = false, this.routeError, this.selectedProfile = NavigationProfile.driving, this.currentStepIndex = 0, this.totalLegs = 0, this.currentLegIndex = 0, this.isSequentialMode = false}): super._();
+  const _MapNavigationState({this.activeRoute, this.isRouteLoading = false, this.routeError, this.selectedProfile = NavigationProfile.driving, this.currentStepIndex = 0, this.totalLegs = 0, this.currentLegIndex = 0, this.isSequentialMode = false, this.destinationName, final  List<String> placeNames = const []}): _placeNames = placeNames,super._();
   
 
 @override final  MapRoute? activeRoute;
@@ -218,6 +222,17 @@ class _MapNavigationState extends MapNavigationState {
 @override@JsonKey() final  int totalLegs;
 @override@JsonKey() final  int currentLegIndex;
 @override@JsonKey() final  bool isSequentialMode;
+/// Name of the place being navigated to
+@override final  String? destinationName;
+/// All place names in sequential navigation order
+ final  List<String> _placeNames;
+/// All place names in sequential navigation order
+@override@JsonKey() List<String> get placeNames {
+  if (_placeNames is EqualUnmodifiableListView) return _placeNames;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_placeNames);
+}
+
 
 /// Create a copy of MapNavigationState
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +244,16 @@ _$MapNavigationStateCopyWith<_MapNavigationState> get copyWith => __$MapNavigati
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MapNavigationState&&(identical(other.activeRoute, activeRoute) || other.activeRoute == activeRoute)&&(identical(other.isRouteLoading, isRouteLoading) || other.isRouteLoading == isRouteLoading)&&(identical(other.routeError, routeError) || other.routeError == routeError)&&(identical(other.selectedProfile, selectedProfile) || other.selectedProfile == selectedProfile)&&(identical(other.currentStepIndex, currentStepIndex) || other.currentStepIndex == currentStepIndex)&&(identical(other.totalLegs, totalLegs) || other.totalLegs == totalLegs)&&(identical(other.currentLegIndex, currentLegIndex) || other.currentLegIndex == currentLegIndex)&&(identical(other.isSequentialMode, isSequentialMode) || other.isSequentialMode == isSequentialMode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MapNavigationState&&(identical(other.activeRoute, activeRoute) || other.activeRoute == activeRoute)&&(identical(other.isRouteLoading, isRouteLoading) || other.isRouteLoading == isRouteLoading)&&(identical(other.routeError, routeError) || other.routeError == routeError)&&(identical(other.selectedProfile, selectedProfile) || other.selectedProfile == selectedProfile)&&(identical(other.currentStepIndex, currentStepIndex) || other.currentStepIndex == currentStepIndex)&&(identical(other.totalLegs, totalLegs) || other.totalLegs == totalLegs)&&(identical(other.currentLegIndex, currentLegIndex) || other.currentLegIndex == currentLegIndex)&&(identical(other.isSequentialMode, isSequentialMode) || other.isSequentialMode == isSequentialMode)&&(identical(other.destinationName, destinationName) || other.destinationName == destinationName)&&const DeepCollectionEquality().equals(other._placeNames, _placeNames));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,activeRoute,isRouteLoading,routeError,selectedProfile,currentStepIndex,totalLegs,currentLegIndex,isSequentialMode);
+int get hashCode => Object.hash(runtimeType,activeRoute,isRouteLoading,routeError,selectedProfile,currentStepIndex,totalLegs,currentLegIndex,isSequentialMode,destinationName,const DeepCollectionEquality().hash(_placeNames));
 
 @override
 String toString() {
-  return 'MapNavigationState(activeRoute: $activeRoute, isRouteLoading: $isRouteLoading, routeError: $routeError, selectedProfile: $selectedProfile, currentStepIndex: $currentStepIndex, totalLegs: $totalLegs, currentLegIndex: $currentLegIndex, isSequentialMode: $isSequentialMode)';
+  return 'MapNavigationState(activeRoute: $activeRoute, isRouteLoading: $isRouteLoading, routeError: $routeError, selectedProfile: $selectedProfile, currentStepIndex: $currentStepIndex, totalLegs: $totalLegs, currentLegIndex: $currentLegIndex, isSequentialMode: $isSequentialMode, destinationName: $destinationName, placeNames: $placeNames)';
 }
 
 
@@ -249,7 +264,7 @@ abstract mixin class _$MapNavigationStateCopyWith<$Res> implements $MapNavigatio
   factory _$MapNavigationStateCopyWith(_MapNavigationState value, $Res Function(_MapNavigationState) _then) = __$MapNavigationStateCopyWithImpl;
 @override @useResult
 $Res call({
- MapRoute? activeRoute, bool isRouteLoading, String? routeError, NavigationProfile selectedProfile, int currentStepIndex, int totalLegs, int currentLegIndex, bool isSequentialMode
+ MapRoute? activeRoute, bool isRouteLoading, String? routeError, NavigationProfile selectedProfile, int currentStepIndex, int totalLegs, int currentLegIndex, bool isSequentialMode, String? destinationName, List<String> placeNames
 });
 
 
@@ -266,7 +281,7 @@ class __$MapNavigationStateCopyWithImpl<$Res>
 
 /// Create a copy of MapNavigationState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? activeRoute = freezed,Object? isRouteLoading = null,Object? routeError = freezed,Object? selectedProfile = null,Object? currentStepIndex = null,Object? totalLegs = null,Object? currentLegIndex = null,Object? isSequentialMode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? activeRoute = freezed,Object? isRouteLoading = null,Object? routeError = freezed,Object? selectedProfile = null,Object? currentStepIndex = null,Object? totalLegs = null,Object? currentLegIndex = null,Object? isSequentialMode = null,Object? destinationName = freezed,Object? placeNames = null,}) {
   return _then(_MapNavigationState(
 activeRoute: freezed == activeRoute ? _self.activeRoute : activeRoute // ignore: cast_nullable_to_non_nullable
 as MapRoute?,isRouteLoading: null == isRouteLoading ? _self.isRouteLoading : isRouteLoading // ignore: cast_nullable_to_non_nullable
@@ -276,7 +291,9 @@ as NavigationProfile,currentStepIndex: null == currentStepIndex ? _self.currentS
 as int,totalLegs: null == totalLegs ? _self.totalLegs : totalLegs // ignore: cast_nullable_to_non_nullable
 as int,currentLegIndex: null == currentLegIndex ? _self.currentLegIndex : currentLegIndex // ignore: cast_nullable_to_non_nullable
 as int,isSequentialMode: null == isSequentialMode ? _self.isSequentialMode : isSequentialMode // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,destinationName: freezed == destinationName ? _self.destinationName : destinationName // ignore: cast_nullable_to_non_nullable
+as String?,placeNames: null == placeNames ? _self._placeNames : placeNames // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 

@@ -13,6 +13,7 @@ class CustomOtlinedButton extends StatelessWidget {
     this.isLoading,
     this.textStyle,
     this.actionIcon,
+    this.padding,
     // this.svgIcon,
   });
   final String text;
@@ -23,6 +24,7 @@ class CustomOtlinedButton extends StatelessWidget {
   final Color? color;
   final bool? isLoading;
   final TextStyle? textStyle;
+  final EdgeInsetsGeometry? padding;
   @override
   Widget build(BuildContext context) {
     final buttonColor = color ?? context.colorTheme.error;
@@ -32,7 +34,8 @@ class CustomOtlinedButton extends StatelessWidget {
     return TapScaleEffect(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
+        padding:
+            padding ?? EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
           border: Border.all(
