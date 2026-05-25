@@ -5,19 +5,14 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
+import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';
 import 'package:mindtrip/features/map/presentation/controllers/map_controller.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
-import 'package:mindtrip/features/map/presentation/data/places_mock_data.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_listener.dart';
-import 'package:mindtrip/features/map/presentation/widgets/map_mark_relcoaiton_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
-import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';
-import 'package:mindtrip/features/map/presentation/widgets/map_navigate_all_button.dart';
-
 import '../../data/models/map_trip_extra.dart';
 import '../widgets/day_selector_bar.dart';
 import '../widgets/place_card_row.dart';
@@ -42,10 +37,8 @@ class _MapScreenState extends State<MapScreen> {
 
     if (widget.tripExtra != null) {
       context.read<MapCubit>().loadTripDays(widget.tripExtra!.days);
-    } else {
-      context.read<MapCubit>().loadPlaces(
-        widget.places ?? PlacesMockData.mockPlaces,
-      );
+    } else if (widget.places != null) {
+      context.read<MapCubit>().loadPlaces(widget.places!);
     }
   }
 
@@ -128,7 +121,8 @@ class _MapScreenState extends State<MapScreen> {
       final entries = context.read<MapCubit>().state.annotations;
       await _mapController.addPlaceAnnotations(entries);
       await _mapController.fitToAnnotations();
-      if (!context.read<MapCubit>().state.hasTripDays) {
+
+      if (mounted && !context.read<MapCubit>().state.hasTripDays) {
         await _autoSelectNearestPlace();
       }
     }
@@ -162,111 +156,91 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<MapCubit, MapState>(
-            listenWhen: (prev, curr) =>
-                prev.selectedDayIndex != curr.selectedDayIndex,
-            listener: (context, state) async {
-              // Removed automatic _navigateAll() trigger.
-            },
-          ),
-          BlocListener<MapCubit, MapState>(
-            listenWhen: (prev, curr) => prev.annotations != curr.annotations,
-            listener: (context, state) async {
-              await _mapController.clearRoute();
-              if (state.annotations.isNotEmpty) {
-                await _mapController.addPlaceAnnotations(state.annotations);
-                await _mapController.fitToAnnotations();
-              }
-            },
-          ),
-        ],
-        child: MapListener(
-          mapController: _mapController,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              MapWidget(
-                key: const ValueKey("mapWidget"),
-                onMapCreated: _onMapCreated,
-                styleUri: 'mapbox://styles/xmohamedx/cmpc4uw4g00a901s75avq3q3a',
+      body: MapListener(
+        mapController: _mapController,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            MapWidget(
+              key: const ValueKey("mapWidget"),
+              onMapCreated: _onMapCreated,
+              styleUri: 'mapbox://styles/xmohamedx/cmpc4uw4g00a901s75avq3q3a',
+            ),
+            // Layer to catch taps on "empty" map areas to collapse the sheet
+            Positioned.fill(
+              child: Listener(
+                behavior: HitTestBehavior.translucent,
+                onPointerDown: (_) {
+                  if (context.read<MapCubit>().state.isBottomSheetVisible) {
+                    context.read<MapCubit>().dismissBottomSheet();
+                  }
+                },
               ),
+            ),
+            if (!hasTripDays)
               Positioned(top: topSpace, child: const MapSearchBar()),
-              Positioned(
-                top: topSpace + 70.h,
-                child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
-                  builder: (context, state) {
-                    final route = state.activeRoute;
-                    if (route == null || state.isRouteLoading) {
-                      return const SizedBox.shrink();
-                    }
-                    final durationMin = (route.duration / 60).ceil();
-                    final profileLabel = state.selectedProfile.label
-                        .toLowerCase();
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.r),
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black26, blurRadius: 4),
-                        ],
-                      ),
-                      child: Text(
-                        '~$durationMin min $profileLabel',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              // Grouped controls and cards
-              Positioned(
-                bottom: 20.h,
-                left: 0,
-                right: 0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Control buttons and Day Selector (aligned right)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          if (hasTripDays) ...[
-                            const DaySelectorBar(),
-                            SizedBox(height: 12.h),
-                            // MapNavigateAllButton(
-                            //   onPressed: _navigateAll,
-                            //   label: 'Start Trip',
-                            // ),
-                            // SizedBox(height: 12.h),
-                          ],
-                          // MapMarkRelcoaitonButton(
-                          //   onTap: () => _mapController.fitToAnnotations(),
-                          // ),
-                          // SizedBox(height: 12.h),
-                          MapRelocateButton(onPressed: _relocateUser),
-                        ],
+            Positioned(
+              top: topSpace + 70.h,
+              child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
+                builder: (context, state) {
+                  final route = state.activeRoute;
+                  if (route == null || state.isRouteLoading) {
+                    return const SizedBox.shrink();
+                  }
+                  final durationMin = (route.duration / 60).ceil();
+                  final profileLabel = state.selectedProfile.label
+                      .toLowerCase();
+                  return Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.r),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black26, blurRadius: 4),
+                      ],
+                    ),
+                    child: Text(
+                      '~$durationMin min $profileLabel',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    const PlaceCardRow(),
-                  ],
-                ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+            // Grouped controls and cards
+            Positioned(
+              bottom: 20.h,
+              left: 0,
+              right: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        if (hasTripDays) ...[
+                          const DaySelectorBar(),
+                          SizedBox(height: 12.h),
+                        ],
+                        MapRelocateButton(onPressed: _relocateUser),
+                      ],
+                    ),
+                  ),
+                  const PlaceCardRow(),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

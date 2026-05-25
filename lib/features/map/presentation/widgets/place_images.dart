@@ -25,6 +25,7 @@ class PlaceImages extends StatelessWidget {
             child: heroTag != null
                 ? Hero(
                     tag: heroTag!,
+                    transitionOnUserGestures: true,
                     child: AppCachedImage(
                       imagePath: photoUrls.first,
                       height: 180.h,
@@ -53,21 +54,22 @@ class PlaceImages extends StatelessWidget {
             ),
           ),
 
-        SizedBox(height: 16.h),
-
         if (photoUrls.length > 1)
           SizedBox(
             height: 90.h,
-            child: Scrollbar(
-              controller: scrollController,
-              thumbVisibility: true,
-              trackVisibility: true,
-              thickness: 2.w,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 8.h),
-                child: photoUrls.length <= 3
-                    ? _buildFewImages(photoUrls)
-                    : _buildImageList(photoUrls, scrollController),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(4.w, 16.h, 4.w, 0),
+              child: Scrollbar(
+                controller: scrollController,
+                thumbVisibility: true,
+                trackVisibility: true,
+                thickness: 2.w,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: photoUrls.length <= 3
+                      ? _buildFewImages(photoUrls)
+                      : _buildImageList(photoUrls, scrollController),
+                ),
               ),
             ),
           ),

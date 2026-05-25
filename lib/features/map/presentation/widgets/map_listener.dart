@@ -39,14 +39,6 @@ class MapListener extends StatelessWidget {
               curr.resolvedSearchPlace != null,
           listener: (context, state) async {
             final result = state.resolvedSearchPlace!;
-            if (result.latitude != null && result.longitude != null) {
-              await _mapController.addSearchResultMarker(
-                result.latitude!,
-                result.longitude!,
-                place: result,
-              );
-              await _mapController.flyTo(result.latitude!, result.longitude!);
-            }
 
             if (context.mounted) {
               context.read<MapCubit>().showGooglePlaceDetails(result);
@@ -73,6 +65,25 @@ class MapListener extends StatelessWidget {
               await _mapController.addGooglePlaceAnnotations(
                 state.nearbyPlaces,
               );
+            }
+          },
+        ),
+        BlocListener<MapCubit, MapState>(
+          listenWhen: (prev, curr) =>
+              prev.selectedDayIndex != curr.selectedDayIndex,
+          listener: (context, state) async {
+            // Removed automatic _navigateAll() trigger.
+          },
+        ),
+        BlocListener<MapCubit, MapState>(
+          listenWhen: (prev, curr) => prev.annotations != curr.annotations,
+          listener: (context, state) async {
+            await _mapController.clearRoute();
+            if (state.annotations.isNotEmpty) {
+              await _mapController.addPlaceAnnotations(state.annotations);
+              await _mapController.fitToAnnotations();
+            } else {
+              await _mapController.clearPlaceAnnotations();
             }
           },
         ),

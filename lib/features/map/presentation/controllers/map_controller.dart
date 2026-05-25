@@ -133,8 +133,11 @@ class MapController {
     await clearPlaceAnnotations();
 
     for (final entry in entries) {
-      final category = entry.place.category;
-      final img = await _loadImage(category.annotationAssetPath);
+      final img = await _loadImage(
+        entry.isSearchResult 
+            ? PlaceCategory.searchPinAssetPath 
+            : entry.place.category.annotationAssetPath
+      );
       final coord = Position(
         entry.place.location.longitude,
         entry.place.location.latitude,
@@ -144,13 +147,13 @@ class MapController {
         PointAnnotationOptions(
           geometry: Point(coordinates: coord),
           image: img,
-          iconSize: 0.2,
+          iconSize: entry.isSearchResult ? 0.25 : 0.2,
         ),
       );
 
       _annotationCoordinates.add(coord);
       _annotationIdToPlaceId[annotation.id] = entry.place.id;
-      _defaultIconSizes[annotation.id] = 0.2;
+      _defaultIconSizes[annotation.id] = entry.isSearchResult ? 0.25 : 0.2;
     }
   }
 
@@ -188,35 +191,6 @@ class MapController {
     await fitBounds(_annotationCoordinates);
   }
 
-  Future<void> addSearchResultMarker(
-    double lat,
-    double lng, {
-    GooglePlaceEntity? place,
-  }) async {
-    if (_pointAnnotationManager == null) return;
-
-    await removeSearchResultMarker();
-
-    final img = await _loadImage(PlaceCategory.searchPinAssetPath);
-
-    _searchResultAnnotation = await _pointAnnotationManager!.create(
-      PointAnnotationOptions(
-        geometry: Point(coordinates: Position(lng, lat)),
-        image: img,
-        iconSize: 0.25,
-      ),
-    );
-    _searchResultGooglePlace = place;
-    _defaultIconSizes[_searchResultAnnotation!.id] = 0.25;
-  }
-
-  Future<void> removeSearchResultMarker() async {
-    if (_pointAnnotationManager != null && _searchResultAnnotation != null) {
-      await _pointAnnotationManager!.delete(_searchResultAnnotation!);
-      _searchResultAnnotation = null;
-      _searchResultGooglePlace = null;
-    }
-  }
 
   Future<void> drawRoute(
     String geoJsonGeometry, {
@@ -250,7 +224,6 @@ class MapController {
     await fitBounds(coordinates);
   }
 
-  //Todo: Check again
   Future<void> _drawCongestionRoute(
     List<Position> coordinates,
     List<String> congestionLevels,

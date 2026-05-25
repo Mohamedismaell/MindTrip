@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 import '../../../../core/shared/data/models/place_model.dart';
 
+import 'package:mindtrip/features/map/domain/entities/google_place.dart';
+
 class MapAnnotationEntry extends Equatable {
   final PlaceModel place;
   final int sequenceNumber;
@@ -17,6 +19,12 @@ class MapAnnotationEntry extends Equatable {
   /// Day number this entry belongs to (1-indexed). Null when no trip context.
   final int? dayNumber;
 
+  /// Flags if this entry was dynamically added via Google search
+  final bool isSearchResult;
+
+  /// Stores full detailed Google place information dynamically if available
+  final GooglePlaceEntity? googlePlace;
+
   const MapAnnotationEntry({
     required this.place,
     required this.sequenceNumber,
@@ -24,6 +32,8 @@ class MapAnnotationEntry extends Equatable {
     this.periodColor,
     this.periodLabel,
     this.dayNumber,
+    this.isSearchResult = false,
+    this.googlePlace,
   });
 
   MapAnnotationEntry copyWith({
@@ -33,6 +43,8 @@ class MapAnnotationEntry extends Equatable {
     Color? periodColor,
     String? periodLabel,
     int? dayNumber,
+    bool? isSearchResult,
+    GooglePlaceEntity? googlePlace,
   }) {
     return MapAnnotationEntry(
       place: place ?? this.place,
@@ -41,6 +53,8 @@ class MapAnnotationEntry extends Equatable {
       periodColor: periodColor ?? this.periodColor,
       periodLabel: periodLabel ?? this.periodLabel,
       dayNumber: dayNumber ?? this.dayNumber,
+      isSearchResult: isSearchResult ?? this.isSearchResult,
+      googlePlace: googlePlace ?? this.googlePlace,
     );
   }
 
@@ -52,5 +66,7 @@ class MapAnnotationEntry extends Equatable {
         periodColor,
         periodLabel,
         dayNumber,
+        isSearchResult,
+        googlePlace,
       ];
 }

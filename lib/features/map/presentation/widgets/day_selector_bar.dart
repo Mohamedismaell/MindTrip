@@ -81,9 +81,12 @@ class _DaySelectorBarState extends State<DaySelectorBar>
                           return Padding(
                             padding: EdgeInsets.only(right: 6.w),
                             child: GestureDetector(
-                              onTap: () => context.read<MapCubit>().selectDay(
-                                reversedIndex,
-                              ),
+                              onTap: () {
+                                context.read<MapCubit>().selectDay(
+                                  reversedIndex,
+                                );
+                                _toggleExpand();
+                              },
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
                                 padding: EdgeInsets.symmetric(

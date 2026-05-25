@@ -13,6 +13,7 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
+import 'package:mindtrip/features/map/presentation/widgets/map_action_button.dart';
 import '../cubit/map_cubit.dart';
 import '../cubit/map_navigation_cubit.dart';
 import 'place_tab.dart';
@@ -27,12 +28,16 @@ class PlaceCardRow extends StatefulWidget {
 
 class _PlaceCardRowState extends State<PlaceCardRow> {
   late final PageController _pageController;
+
   int _currentPage = 0;
   bool _isUserSwipe = true;
+
+  final Set<String> _removingPlaceIds = {};
 
   @override
   void initState() {
     super.initState();
+
     _pageController = PageController(viewportFraction: 0.85);
   }
 
@@ -44,7 +49,9 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
 
   void _jumpToIndex(int index) {
     if (!_pageController.hasClients) return;
+
     _isUserSwipe = false;
+
     _pageController
         .animateToPage(
           index,
@@ -56,6 +63,16 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+
+    final collapsedCardHeight = screenHeight * 0.28;
+
+    final expandedCardHeight = screenHeight * 0.5;
+
+    final imageHeight = screenHeight * 0.12;
+
+    final contentHeight = collapsedCardHeight - imageHeight;
+
     return BlocConsumer<MapCubit, MapState>(
       listenWhen: (prev, curr) =>
           prev.selectedPlace != curr.selectedPlace ||
@@ -64,10 +81,12 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
         if (state.annotations != context.read<MapCubit>().state.annotations) {
           _currentPage = 0;
         }
+
         if (state.selectedPlace != null) {
           final index = state.annotations.indexWhere(
             (a) => a.place.id == state.selectedPlace!.id,
           );
+
           if (index != -1 && index != _currentPage) {
             _jumpToIndex(index);
           }
@@ -75,23 +94,30 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
       },
       buildWhen: (prev, curr) =>
           prev.annotations != curr.annotations ||
-          prev.selectedPlace != curr.selectedPlace,
+          prev.selectedPlace != curr.selectedPlace ||
+          prev.isBottomSheetVisible != curr.isBottomSheetVisible ||
+          prev.selectedGooglePlace != curr.selectedGooglePlace ||
+          prev.selectedPlacePhotoUrls != curr.selectedPlacePhotoUrls,
       builder: (context, state) {
-        if (state.annotations.isEmpty) return const SizedBox.shrink();
+        if (state.annotations.isEmpty) {
+          return const SizedBox.shrink();
+        }
 
         final isExpanded = state.isBottomSheetVisible;
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: isExpanded ? 0.7.sh : 310.h,
+          height: isExpanded ? expandedCardHeight : collapsedCardHeight,
           child: PageView.builder(
             controller: _pageController,
             itemCount: state.annotations.length,
             onPageChanged: (index) {
               _currentPage = index;
+
               if (_isUserSwipe) {
                 final entry = state.annotations[index];
+
                 context.read<MapCubit>().triggerFlyTo(
                   entry.place.location.latitude,
                   entry.place.location.longitude,
@@ -100,80 +126,85 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             },
             itemBuilder: (context, index) {
               final entry = state.annotations[index];
+
               final place = entry.place;
+
               final isSelected = state.selectedPlace?.id == place.id;
+
               final imageUrl =
                   (place.imageUrls != null && place.imageUrls!.isNotEmpty)
                   ? place.imageUrls!.first
                   : null;
 
-              final googlePlace = isSelected ? state.selectedGooglePlace : null;
+              final googlePlace =
+                  entry.googlePlace ??
+                  (isSelected ? state.selectedGooglePlace : null);
+
               final statePhotoUrls = isSelected
                   ? state.selectedPlacePhotoUrls
                   : null;
+
               final finalPhotoUrls =
                   statePhotoUrls != null && statePhotoUrls.isNotEmpty
                   ? statePhotoUrls
                   : place.imageUrls;
 
+              final isRemoving = _removingPlaceIds.contains(place.id);
+
               return Align(
                 alignment: Alignment.bottomCenter,
-                child: AnimatedSize(
-                  duration: const Duration(milliseconds: 350),
-                  curve: Curves.easeOutCubic,
-                  alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onTap: () {
-                      if (isSelected && isExpanded) {
-                        context.read<MapCubit>().dismissBottomSheet();
-                      } else {
-                        context.read<MapCubit>().selectPlace(place.id);
-                      }
-                    },
-                    child: Container(
-                      height: (isSelected && isExpanded) ? null : 290,
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 8.w,
-                        vertical: 10.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24.r),
-                        border: Border.all(
-                          color: isSelected
-                              ? context.colorTheme.primary
-                              : Colors.transparent,
-                          width: 2.5,
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: isRemoving ? 0 : 1,
+                  child: AnimatedScale(
+                    duration: const Duration(milliseconds: 300),
+                    scale: isRemoving ? .8 : 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (isSelected && isExpanded) {
+                          context.read<MapCubit>().dismissBottomSheet();
+                        } else {
+                          context.read<MapCubit>().selectPlace(place.id);
+                        }
+                      },
+                      child: Container(
+                        height: isSelected && isExpanded
+                            ? expandedCardHeight
+                            : collapsedCardHeight,
+                        margin: EdgeInsets.only(
+                          right: 8.w,
+                          top: 10.h,
+                          bottom: 5.h,
                         ),
-                        boxShadow: [AppShadows.mapToolButtons],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(21.5.r),
-                        //Todo: Edit the expanded state to show the details in a better way
-                        child: (isSelected && isExpanded)
-                            ? SingleChildScrollView(
-                                child: Stack(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24.r),
+                          boxShadow: [AppShadows.mapToolButtons],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(21.5.r),
+                          child: (isSelected && isExpanded)
+                              ? Stack(
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        PlaceTab(
-                                          place: place,
-                                          googlePlace: googlePlace,
-                                          photoUrls: finalPhotoUrls,
-                                          imagesScrollController:
-                                              ScrollController(),
-                                        ),
-                                      ],
+                                    SingleChildScrollView(
+                                      child: PlaceTab(
+                                        place: place,
+                                        googlePlace: googlePlace,
+                                        photoUrls: finalPhotoUrls,
+                                        imagesScrollController:
+                                            ScrollController(),
+                                      ),
                                     ),
+
                                     Positioned(
                                       top: 12.h,
                                       right: 12.w,
                                       child: GestureDetector(
-                                        onTap: () => context
-                                            .read<MapCubit>()
-                                            .dismissBottomSheet(),
+                                        onTap: () {
+                                          context
+                                              .read<MapCubit>()
+                                              .dismissBottomSheet();
+                                        },
                                         child: Container(
                                           width: 32.w,
                                           height: 32.w,
@@ -186,26 +217,24 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                           ),
                                           alignment: Alignment.center,
                                           child: Icon(
-                                            Icons.close_rounded,
-                                            size: 18.sp,
-                                            color: Colors.black87,
+                                            Icons.keyboard_arrow_down_rounded,
+                                            size: 24.sp,
+                                            color: context.colorTheme.primary,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ],
+                                )
+                              : _buildCardOverview(
+                                  context,
+                                  place,
+                                  imageUrl,
+                                  imageHeight,
+                                  contentHeight,
+                                  entry.isSearchResult,
                                 ),
-                              )
-                            // If it's not currently expanded view, show basic card overview mode
-                            : _buildCardOverview(
-                                context,
-                                place,
-                                googlePlace,
-                                finalPhotoUrls,
-                                isSelected,
-                                isExpanded,
-                                imageUrl,
-                              ),
+                        ),
                       ),
                     ),
                   ),
@@ -218,72 +247,39 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
     );
   }
 
-  Widget _buildActionButton({
-    required BuildContext context,
-    required String label,
-    required IconData icon,
-    required Color color,
-    required bool isFilled,
-    required VoidCallback onTap,
-  }) {
-    return Expanded(
-      flex: isFilled ? 3 : 2,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
-          decoration: BoxDecoration(
-            color: isFilled ? color : Colors.white,
-            borderRadius: BorderRadius.circular(100.r),
-            border: isFilled
-                ? null
-                : Border.all(color: color.withValues(alpha: 0.3)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 16.sp, color: isFilled ? Colors.white : color),
-              SizedBox(width: 4.w),
-              Text(
-                label,
-                style: AppTextStyles.h10Bold.copyWith(
-                  color: isFilled ? Colors.white : color,
-                  fontSize: 11.sp,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildCardOverview(
     BuildContext context,
     PlaceModel place,
-    GooglePlaceEntity? googlePlace,
-    List<String>? finalPhotoUrls,
-    bool isSelected,
-    bool isExpanded,
     String? imageUrl,
+    double imageHeight,
+    double contentHeight,
+    bool isSearchResult,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Image with overlay sequence badge
-        AspectRatio(
-          aspectRatio: 16 / 9,
+    final placeLat = place.location.latitude;
 
-          child: Stack(
-            children: [
-              SizedBox(
-                width: double.infinity,
+    final placeLng = place.location.longitude;
+
+    return Column(
+      children: [
+        Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: imageHeight,
+              child: Hero(
+                tag: 'place-${place.id}',
+                transitionOnUserGestures: true,
                 child: AppCachedImage(imagePath: imageUrl, fit: BoxFit.cover),
               ),
-              //Todo Need to be Connected with the saved Cubit and widget
-              Positioned(
-                top: 12.h,
-                right: 12.w,
+            ),
+
+            Positioned(
+              top: 12.h,
+              right: 12.w,
+              child: GestureDetector(
+                onTap: () {
+                  context.read<MapCubit>().selectPlace(place.id);
+                },
                 child: Container(
                   width: 32.w,
                   height: 32.w,
@@ -294,124 +290,160 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                   ),
                   alignment: Alignment.center,
                   child: Icon(
-                    Icons.bookmark_rounded,
-                    size: 18.sp,
+                    Icons.keyboard_arrow_up_rounded,
+                    size: 24.sp,
                     color: context.colorTheme.primary,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        // Content Section
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title and distance/time metrics
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        place.name,
-                        style: AppTextStyles.h8Bold,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+
+        Padding(
+          padding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 6.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      place.name,
+                      style: AppTextStyles.h8Bold,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    BlocBuilder<LocationCubit, LocationState>(
-                      builder: (context, state) {
-                        final distance = context
-                            .read<LocationCubit>()
-                            .getDistanceBetween(
-                              placeLat: place.location.latitude,
-                              placeLng: place.location.longitude,
-                            );
-                        return Text(
-                          state.formatDistance(distance),
-                          style: AppTextStyles.h9Medium.copyWith(
-                            color: context.colorTheme.outline,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 2.h),
-                // Subtitle / Rating
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        place.description ?? "No description available",
-                        style: AppTextStyles.h10Regular.copyWith(
+                  ),
+
+                  SizedBox(width: 10.w),
+
+                  BlocBuilder<LocationCubit, LocationState>(
+                    builder: (context, state) {
+                      final distance = context
+                          .read<LocationCubit>()
+                          .getDistanceBetween(
+                            placeLat: placeLat,
+                            placeLng: placeLng,
+                          );
+
+                      return Text(
+                        state.formatDistance(distance),
+                        style: AppTextStyles.h9Medium.copyWith(
                           color: context.colorTheme.outline,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      );
+                    },
+                  ),
+                ],
+              ),
+
+              // const Spacer(),
+              SizedBox(height: 10.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      place.description ?? "No description available",
+                      style: AppTextStyles.h10Regular.copyWith(
+                        color: context.colorTheme.outline,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    if (place.rating != null) ...[
-                      Row(
-                        children: [
-                          RatingStars(rating: place.rating!, size: 22.sp),
-                          SizedBox(width: 4.h),
-                          Text(
-                            place.rating.toString(),
-                            style: context.textTheme.labelLarge,
+                  ),
+
+                  if (place.rating != null) ...[
+                    Row(
+                      children: [
+                        RatingStars(rating: place.rating!, size: 18.sp),
+
+                        SizedBox(width: 4.w),
+
+                        Text(
+                          place.rating.toString(),
+                          style: AppTextStyles.h10SemiBold.copyWith(
+                            color: Colors.black87,
                           ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
-                const Spacer(),
-                // Action Buttons Row
-                Row(
-                  children: [
-                    _buildActionButton(
-                      context: context,
-                      label: "Show route",
-                      icon: Icons.directions_rounded,
-                      color: context.colorTheme.primary,
-                      isFilled: true,
-                      onTap: () async {
-                        final pos = await sl<LocationService>()
-                            .getCurrentLocation();
-                        if (pos != null && context.mounted) {
-                          final userPos = Position(pos.longitude, pos.latitude);
-                          context.read<MapNavigationCubit>().navigateToPosition(
-                            userPos,
-                            place.location.latitude,
-                            place.location.longitude,
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(width: 8.w),
-                    _buildActionButton(
-                      context: context,
-                      label: "Call",
-                      icon: Icons.call_rounded,
-                      color: context.colorTheme.primary,
-                      isFilled: false,
-                      onTap: () {},
-                    ),
-                    SizedBox(width: 8.w),
-                    _buildActionButton(
-                      context: context,
-                      label: "Share",
-                      icon: Icons.share_rounded,
-                      color: context.colorTheme.primary,
-                      isFilled: false,
-                      onTap: () {},
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
-            ),
+                ],
+              ),
+
+              // const Spacer(),
+              SizedBox(height: 10.h),
+
+              Row(
+                children: [
+                  MapActionButton(
+                    label: "Show route",
+                    icon: Icons.directions_rounded,
+                    color: context.colorTheme.primary,
+                    isFilled: true,
+                    onTap: () async {
+                      final pos = await sl<LocationService>()
+                          .getCurrentLocation();
+
+                      if (pos != null && context.mounted) {
+                        final userPos = Position(pos.longitude, pos.latitude);
+
+                        context.read<MapNavigationCubit>().navigateToPosition(
+                          userPos,
+                          placeLat,
+                          placeLng,
+                        );
+                      }
+                    },
+                  ),
+
+                  SizedBox(width: 8.w),
+
+                  isSearchResult
+                      ? MapActionButton(
+                          label: "Remove",
+                          icon: Icons.delete_outline_rounded,
+                          color: context.colorTheme.error,
+                          isFilled: false,
+                          onTap: () {
+                            setState(() {
+                              _removingPlaceIds.add(place.id);
+                            });
+
+                            Future.delayed(
+                              const Duration(milliseconds: 300),
+                              () {
+                                if (mounted) {
+                                  context.read<MapCubit>().removeSearchPlace(
+                                    place.id,
+                                  );
+
+                                  setState(() {
+                                    _removingPlaceIds.remove(place.id);
+                                  });
+                                }
+                              },
+                            );
+                          },
+                        )
+                      : MapActionButton(
+                          label: "Show map",
+                          icon: Icons.map_rounded,
+                          color: context.colorTheme.primary,
+                          isFilled: false,
+                          onTap: () {
+                            context.read<MapCubit>().triggerFlyTo(
+                              placeLat,
+                              placeLng,
+                            );
+
+                            context.read<MapCubit>().dismissBottomSheet();
+                          },
+                        ),
+                ],
+              ),
+            ],
           ),
         ),
       ],
