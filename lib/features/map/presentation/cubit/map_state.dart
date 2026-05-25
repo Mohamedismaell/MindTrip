@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/shared/data/models/place_model.dart';
+import '../../../ai_planner/domain/entities/trip_day.dart';
 import '../../domain/entities/google_place.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 
@@ -27,7 +28,16 @@ sealed class MapState with _$MapState {
     @Default(false) bool clearFlyToLocation,
     double? flyToLat,
     double? flyToLng,
+
+    /// Trip days passed from trip‐details; null when map is opened standalone.
+    @Default(null) List<TripDay>? tripDays,
+
+    /// Currently selected day (0-indexed); null means "all days".
+    @Default(null) int? selectedDayIndex,
   }) = _MapState;
 
   factory MapState.initial() => const MapState();
+
+  bool get hasTripDays => tripDays != null && tripDays!.isNotEmpty;
 }
+

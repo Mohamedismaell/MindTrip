@@ -253,108 +253,178 @@ class MockItineraryDataSource implements ItineraryDataSource {
   }
 
   TripItineraryModel _buildDahabItinerary(String tripId, int days) {
+    final tripDays = [
+      {
+        'title': 'Arrival & Lighthouse Walk',
+        'tags': ['Relax', 'Beach', 'Cafe'],
+        'morning': [
+          ['Dahab Lagoon', 28.4889, 34.5155],
+          ['Lagona Beach', 28.4872, 34.5148],
+          ['Coral Coast', 28.4901, 34.5164],
+        ],
+        'afternoon': [
+          ['Lighthouse Reef', 28.4971, 34.5161],
+          ['Bridge Pool', 28.5004, 34.5185],
+          ['Dahab Promenade', 28.4966, 34.5179],
+        ],
+        'evening': [
+          ['Ali Baba Restaurant', 28.4967, 34.5158],
+          ['Everyday Cafe', 28.4981, 34.5180],
+          ['Shark Restaurant', 28.4975, 34.5167],
+        ],
+      },
+
+      {
+        'title': 'Blue Hole Adventure',
+        'tags': ['Diving', 'Adventure', 'Sea'],
+        'morning': [
+          ['Blue Hole', 28.5723, 34.5365],
+          ['Blue Hole Canyon', 28.5698, 34.5352],
+          ['Bells Dive Site', 28.5782, 34.5399],
+        ],
+        'afternoon': [
+          ['Three Pools', 28.5552, 34.5314],
+          ['Ras Abu Galum', 28.6213, 34.5350],
+          ['Abu Helal', 28.5611, 34.5328],
+        ],
+        'evening': [
+          ['El Mundo Restaurant', 28.4968, 34.5171],
+          ['Ralphs German Bakery', 28.4977, 34.5175],
+          ['Red Cat', 28.4959, 34.5162],
+        ],
+      },
+
+      {
+        'title': 'Lagoon & Kitesurfing',
+        'tags': ['Surfing', 'Lagoon', 'Adventure'],
+        'morning': [
+          ['KiteHouse Dahab', 28.4862, 34.5135],
+          ['Harry Nass Center', 28.4874, 34.5142],
+          ['Lagoon Kite Beach', 28.4856, 34.5129],
+        ],
+        'afternoon': [
+          ['Speedy Beach', 28.4917, 34.5169],
+          ['Poseidon Divers', 28.4950, 34.5174],
+          ['Octopus World', 28.4932, 34.5161],
+        ],
+        'evening': [
+          ['Yum Yum Restaurant', 28.4960, 34.5168],
+          ['Namaste Cafe', 28.4986, 34.5184],
+          ['Blue Beach Club', 28.4972, 34.5170],
+        ],
+      },
+
+      {
+        'title': 'Safari & Desert Camp',
+        'tags': ['Desert', 'Safari', 'Nature'],
+        'morning': [
+          ['Wadi Gnai', 28.4508, 34.5007],
+          ['Sinai Safari Camp', 28.4584, 34.5060],
+          ['Camel Canyon', 28.4620, 34.5035],
+        ],
+        'afternoon': [
+          ['Colored Canyon', 28.8067, 34.4442],
+          ['White Canyon', 28.7210, 34.4125],
+          ['Desert Fox Camp', 28.4702, 34.5077],
+        ],
+        'evening': [
+          ['Bedouin Moon Hotel', 28.5007, 34.5194],
+          ['Tea Garden Cafe', 28.4979, 34.5177],
+          ['Desert BBQ Camp', 28.4684, 34.5051],
+        ],
+      },
+
+      {
+        'title': 'Island Boat Trip',
+        'tags': ['Boat', 'Snorkeling', 'Sunset'],
+        'morning': [
+          ['Tiran Island Boat', 28.5025, 34.5205],
+          ['Napoleon Reef', 28.5102, 34.5241],
+          ['Bannerfish Bay', 28.5140, 34.5263],
+        ],
+        'afternoon': [
+          ['Golden Blocks', 28.5201, 34.5300],
+          ['Moray Garden', 28.5185, 34.5282],
+          ['Coral Island Stop', 28.5222, 34.5311],
+        ],
+        'evening': [
+          ['Sea Bride Restaurant', 28.4971, 34.5165],
+          ['Downtown Cafe', 28.4964, 34.5172],
+          ['Sunset Lounge', 28.4980, 34.5189],
+        ],
+      },
+    ];
+
     return TripItineraryModel(
       tripId: tripId,
-      estimatedTotalCost: 900.0 * days,
-      days: List.generate(days.clamp(1, 3), (i) {
-        final dayNum = i + 1;
+      estimatedTotalCost: 1200.0 * days,
+      days: List.generate(days.clamp(1, 5), (i) {
+        final dayData = tripDays[i];
+
         return TripDayModel(
-          dayNumber: dayNum,
-          title: [
-            'Arrival & Beach',
-            'Blue Hole Adventure',
-            'Desert & Sunset',
-          ][i % 3],
+          dayNumber: i + 1,
+          title: dayData['title'] as String,
           coverImageUrl:
-              'https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800',
-          tags: [
-            ['Beach', 'Relax', 'Sea'],
-            ['Diving', 'Snorkeling', 'Nature'],
-            ['Desert', 'Camel', 'Sunset'],
-          ][i % 3],
-          stopCount: 3,
-          estimatedCost: 900.0,
+              'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200',
+          tags: dayData['tags'] as List<String>,
+          stopCount: 9,
+          estimatedCost: 1200,
           timeSlots: [
+            /// MORNING
             TimeSlotModel(
               period: DayPeriod.morning,
-              title: 'Morning by the Sea',
-              places: [
-                _place(
-                  id: 'dahab-m-$dayNum',
-                  name: 'Eel Garden Beach',
-                  description: 'Start the day with Dahab\'s natural wonders.',
-                  lat: 28.5065,
-                  lng: 34.5204,
-                  category: PlaceCategory.park,
-                  rating: 4.7,
-                  imageUrl:
-                      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
-                ),
-                _place(
-                  id: 'dahab-m-$dayNum',
-                  name: 'Blue Hole',
-                  description: 'Start the day with Dahab\'s natural wonders.',
-                  lat: 28.5065,
-                  lng: 34.5204,
-                  category: PlaceCategory.park,
-                  rating: 4.7,
-                  imageUrl:
-                      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
-                ),
-                _place(
-                  id: 'dahab-m-$dayNum',
-                  name: 'Wadi Gnai Desert',
-                  description: 'Start the day with Dahab\'s natural wonders.',
-                  lat: 28.5065,
-                  lng: 34.5204,
-                  category: PlaceCategory.park,
-                  rating: 4.7,
-                  imageUrl:
-                      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
-                ),
-              ],
-            ),
-            TimeSlotModel(
-              period: DayPeriod.afternoon,
-              title: 'Afternoon Adventure',
-              places: [
-                _place(
-                  id: 'dahab-a-$dayNum',
-                  name: [
-                    'Lagoon Kitesurf',
-                    'Ras Abu Galum',
-                    'Canyon Snorkeling',
-                  ][i % 3],
-                  description: 'Afternoon thrills in the Sinai.',
-                  lat: 28.5721,
-                  lng: 34.5372,
+              title: 'Morning Exploration',
+              places: (dayData['morning'] as List<List<dynamic>>).map((p) {
+                return _place(
+                  id: 'dahab-m-${i}-${p[0]}',
+                  name: p[0] as String,
+                  description: 'A beautiful morning spot in Dahab.',
+                  lat: p[1] as double,
+                  lng: p[2] as double,
                   category: PlaceCategory.activity,
                   rating: 4.8,
                   imageUrl:
-                      'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400',
-                ),
-              ],
+                      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
+                );
+              }).toList(),
             ),
+
+            /// AFTERNOON
+            TimeSlotModel(
+              period: DayPeriod.afternoon,
+              title: 'Adventure Time',
+              places: (dayData['afternoon'] as List<List<dynamic>>).map((p) {
+                return _place(
+                  id: 'dahab-a-${i}-${p[0]}',
+                  name: p[0] as String,
+                  description: 'Afternoon thrills in the Sinai.',
+                  lat: p[1] as double,
+                  lng: p[2] as double,
+                  category: PlaceCategory.activity,
+                  rating: 4.7,
+                  imageUrl:
+                      'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400',
+                );
+              }).toList(),
+            ),
+
+            /// EVENING
             TimeSlotModel(
               period: DayPeriod.evening,
-              title: 'Sunset & Local Food',
-              places: [
-                _place(
-                  id: 'dahab-e-$dayNum',
-                  name: [
-                    'Lighthouse Promenade',
-                    'Everyday Cafe',
-                    'Star Nights Camp',
-                  ][i % 3],
+              title: 'Food & Sunset',
+              places: (dayData['evening'] as List<List<dynamic>>).map((p) {
+                return _place(
+                  id: 'dahab-e-${i}-${p[0]}',
+                  name: p[0] as String,
                   description: 'Watch the sunset over the Red Sea.',
-                  lat: 28.4985,
-                  lng: 34.5186,
+                  lat: p[1] as double,
+                  lng: p[2] as double,
                   category: PlaceCategory.restaurant,
                   rating: 4.6,
                   imageUrl:
                       'https://images.unsplash.com/photo-1498307833015-e7b400441eb8?w=400',
-                ),
-              ],
+                );
+              }).toList(),
             ),
           ],
         );

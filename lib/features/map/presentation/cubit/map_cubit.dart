@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import '../../../../core/shared/data/models/place_model.dart';
+import '../../../ai_planner/domain/entities/trip_day.dart';
+import '../../../ai_planner/domain/entities/time_slot.dart';
+import '../../../ai_planner/presentation/utils/trip_color_palette.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 import '../../domain/entities/google_place.dart';
 import 'map_state.dart';
@@ -29,7 +33,59 @@ class MapCubit extends Cubit<MapState> {
       (index) =>
           MapAnnotationEntry(place: places[index], sequenceNumber: index + 1),
     );
-    emit(state.copyWith(annotations: annotations));
+    emit(state.copyWith(annotations: annotations, tripDays: null, selectedDayIndex: null));
+  }
+
+  void loadTripDays(List<TripDay> days) {
+    emit(state.copyWith(tripDays: days));
+    if (days.isNotEmpty) {
+      selectDay(0);
+    }
+  }
+
+  void selectDay(int dayIndex) {
+    if (state.tripDays == null || dayIndex < 0 || dayIndex >= state.tripDays!.length) return;
+    
+    final day = state.tripDays![dayIndex];
+    final annotations = <MapAnnotationEntry>[];
+    int sequence = 1;
+    
+    for (final slot in day.timeSlots) {
+      Color periodColor;
+      String periodLabel;
+      switch (slot.period) {
+        case DayPeriod.morning:
+          periodColor = TripColorPalette.getColorsForId('morning').edge;
+          periodLabel = 'Morning';
+          break;
+        case DayPeriod.afternoon:
+          periodColor = TripColorPalette.getColorsForId('afternoon').edge;
+          periodLabel = 'Afternoon';
+          break;
+        case DayPeriod.evening:
+          periodColor = TripColorPalette.getColorsForId('evening').edge;
+          periodLabel = 'Evening';
+          break;
+      }
+      
+      for (final place in slot.places) {
+        annotations.add(MapAnnotationEntry(
+          place: place,
+          sequenceNumber: sequence++,
+          periodColor: periodColor,
+          periodLabel: periodLabel,
+          dayNumber: day.dayNumber,
+        ));
+      }
+    }
+    
+    emit(state.copyWith(
+      selectedDayIndex: dayIndex,
+      annotations: annotations,
+      clearSelectedPlace: true,
+      selectedPlacePhotoUrls: [],
+      isBottomSheetVisible: false,
+    ));
   }
 
   void selectPlace(String placeId) {

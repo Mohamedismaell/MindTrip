@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' hide DayPeriod;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
@@ -11,7 +10,6 @@ import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
@@ -19,6 +17,7 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/a
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_day_overview_card.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_details_bar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/trip_details/trip_map_preview_card.dart';
+import 'package:mindtrip/features/map/data/models/map_trip_extra.dart';
 
 class TripDetailsScreen extends StatelessWidget {
   final String tripId;
@@ -54,7 +53,6 @@ class TripDetailsScreen extends StatelessWidget {
       return const _MessageState(message: 'Trip not found');
     }
 
-    final allPlaces = _allPlaces(itinerary);
     final expandedDay = state.activeDay;
 
     return CustomScrollView(
@@ -95,9 +93,12 @@ class TripDetailsScreen extends StatelessWidget {
               if (index == itinerary.days.length) {
                 return TripMapPreviewCard(
                   days: itinerary.days,
-                  onViewMap: allPlaces.isEmpty
+                  onViewMap: itinerary.days.isEmpty
                       ? null
-                      : () => context.push(AppRoutes.map, extra: allPlaces),
+                      : () => context.push(
+                          AppRoutes.map,
+                          extra: MapTripExtra(days: itinerary.days),
+                        ),
                 );
               }
 
@@ -120,13 +121,6 @@ class TripDetailsScreen extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  List<PlaceModel> _allPlaces(TripItinerary itinerary) {
-    return itinerary.days
-        .expand((day) => day.timeSlots)
-        .expand((slot) => slot.places)
-        .toList();
   }
 
   Future<void> _saveTrip(BuildContext context, Trip trip) async {
