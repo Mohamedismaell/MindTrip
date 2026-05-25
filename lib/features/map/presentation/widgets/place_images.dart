@@ -7,10 +7,12 @@ class PlaceImages extends StatelessWidget {
     super.key,
     required this.photoUrls,
     required this.scrollController,
+    this.heroTag,
   });
 
   final List<String> photoUrls;
   final ScrollController scrollController;
+  final String? heroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +22,22 @@ class PlaceImages extends StatelessWidget {
         if (photoUrls.isNotEmpty)
           ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
-            child: AppCachedImage(
-              imagePath: photoUrls.first,
-              height: 180.h,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            child: heroTag != null
+                ? Hero(
+                    tag: heroTag!,
+                    child: AppCachedImage(
+                      imagePath: photoUrls.first,
+                      height: 180.h,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : AppCachedImage(
+                    imagePath: photoUrls.first,
+                    height: 180.h,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
           )
         else
           Container(

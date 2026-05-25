@@ -171,11 +171,11 @@ class AppTransitionRoute {
         return CustomTransitionPage(
           key: state.pageKey,
           child: builder(context, state),
-          transitionDuration: const Duration(milliseconds: 300),
+          transitionDuration: const Duration(milliseconds: 250),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             final slideAnimation =
                 Tween<Offset>(
-                  begin: const Offset(0.08, 0),
+                  begin: const Offset(0.04, 0),
                   end: Offset.zero,
                 ).animate(
                   CurvedAnimation(
@@ -187,6 +187,40 @@ class AppTransitionRoute {
               opacity: animation,
               child: SlideTransition(position: slideAnimation, child: child),
             );
+          },
+        );
+      },
+    );
+  }
+
+  //! Slide From Top with Builder
+  static GoRoute slideTopBuilder({
+    required String path,
+    required Widget Function(BuildContext, GoRouterState) builder,
+    List<RouteBase> routes = const [],
+  }) {
+    return GoRoute(
+      path: path,
+      routes: routes,
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: builder(context, state),
+          transitionDuration: const Duration(milliseconds: 300),
+
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final slideAnimation =
+                Tween<Offset>(
+                  begin: const Offset(0, -1),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                );
+
+            return SlideTransition(position: slideAnimation, child: child);
           },
         );
       },

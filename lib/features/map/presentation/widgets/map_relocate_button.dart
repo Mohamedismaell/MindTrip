@@ -19,7 +19,7 @@ class MapRelocateButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: context.colorTheme.surface,
           shape: BoxShape.circle,
-          boxShadow: [AppShadows.mainElevationButton],
+          boxShadow: [AppShadows.mapToolButtons],
           border: Border.all(
             color: context.colorTheme.outline.withValues(alpha: 0.1),
             width: 1,

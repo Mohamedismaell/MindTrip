@@ -12,12 +12,12 @@ class PlaceActions extends StatelessWidget {
     super.key,
     required this.latitude,
     required this.longitude,
-    required this.dragController,
+    this.dragController,
   });
 
   final double? latitude;
   final double? longitude;
-  final DraggableScrollableController dragController;
+  final DraggableScrollableController? dragController;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class PlaceActions extends StatelessWidget {
                 onPressed: () async {
                   if (latitude == null || longitude == null) return;
 
-                  if (dragController.isAttached) {
-                    await dragController.animateTo(
+                  if (dragController?.isAttached ?? false) {
+                    await dragController?.animateTo(
                       0.1,
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,

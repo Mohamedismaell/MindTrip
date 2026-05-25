@@ -118,10 +118,20 @@ class MapController {
     await _mapboxMap!.flyTo(cameraOptions, MapAnimationOptions(duration: 1500));
   }
 
+  Future<void> clearPlaceAnnotations() async {
+    if (_pointAnnotationManager == null) return;
+    await _pointAnnotationManager!.deleteAll();
+    _annotationIdToPlaceId.clear();
+    _annotationCoordinates.clear();
+    _defaultIconSizes.clear();
+    _selectedAnnotationId = null;
+  }
+
   Future<void> addPlaceAnnotations(List<MapAnnotationEntry> entries) async {
     if (_pointAnnotationManager == null) return;
-    //! check
-    _annotationCoordinates.clear();
+    // Clear old annotations first
+    await clearPlaceAnnotations();
+
     for (final entry in entries) {
       final category = entry.place.category;
       final img = await _loadImage(category.annotationAssetPath);

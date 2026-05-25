@@ -15,13 +15,15 @@ class PlaceTab extends StatelessWidget {
     this.googlePlace,
     this.photoUrls,
     required this.imagesScrollController,
-    required this.dragController,
+    this.dragController,
+    this.heroTag,
   });
   final PlaceModel? place;
   final GooglePlaceEntity? googlePlace;
   final List<String>? photoUrls;
   final ScrollController imagesScrollController;
-  final DraggableScrollableController dragController;
+  final DraggableScrollableController? dragController;
+  final String? heroTag;
   @override
   Widget build(BuildContext context) {
     if (googlePlace != null) {
@@ -47,94 +49,90 @@ class PlaceTab extends StatelessWidget {
     GooglePlaceEntity place,
     List<String>? photoUrls,
   ) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (photoUrls != null && photoUrls.isNotEmpty)
-            PlaceImages(
-              photoUrls: photoUrls,
-              scrollController: imagesScrollController,
-            ),
-          // Name & Category & Rating
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      place.displayName,
-                      style: context.textTheme.headlineSmall,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (photoUrls != null && photoUrls.isNotEmpty)
+          PlaceImages(
+            photoUrls: photoUrls,
+            scrollController: imagesScrollController,
+            heroTag: heroTag,
+          ),
+        // Name & Category & Rating
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    place.displayName,
+                    style: context.textTheme.headlineSmall,
+                  ),
+                  SizedBox(height: 8.h),
+                  if (place.rating != null) ...[
+                    Row(
+                      children: [
+                        RatingStars(rating: place.rating!, size: 22.sp),
+                        SizedBox(width: 4.h),
+                        Text(
+                          place.rating.toString(),
+                          style: context.textTheme.labelLarge,
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 8.h),
-                    if (place.rating != null) ...[
-                      Row(
-                        children: [
-                          RatingStars(rating: place.rating!, size: 22.sp),
-                          SizedBox(width: 4.h),
-                          Text(
-                            place.rating.toString(),
-                            style: context.textTheme.labelLarge,
-                          ),
-                        ],
-                      ),
-                    ],
                   ],
+                ],
+              ),
+            ),
+
+            if (place.primaryType != null)
+              Chip(
+                label: Text(
+                  place.primaryType!.replaceAll('_', ' '),
+                  style: context.textTheme.labelLarge,
                 ),
+                backgroundColor: context.colorTheme.primary.withValues(
+                  alpha: 0.2,
+                ),
+                side: BorderSide.none,
+              ),
+          ],
+        ),
+        SizedBox(height: 8.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (place.userRatingCount != null && place.userRatingCount! > 0)
+              Text(
+                '${place.userRatingCount} Reviews ',
+                style: AppTextStyles.h8SemiBold,
               ),
 
-              if (place.primaryType != null)
-                Chip(
-                  label: Text(
-                    place.primaryType!.replaceAll('_', ' '),
-                    style: context.textTheme.labelLarge,
-                  ),
-                  backgroundColor: context.colorTheme.primary.withValues(
-                    alpha: 0.2,
-                  ),
-                  side: BorderSide.none,
+            // Opening Hours
+            if (place.openingHours != null)
+              Text(
+                place.openingHours!.openNow == true ? 'Open Now' : 'Closed Now',
+                style: AppTextStyles.h8SemiBold.copyWith(
+                  color: place.openingHours!.openNow == true
+                      ? Colors.green
+                      : Colors.red,
                 ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (place.userRatingCount != null && place.userRatingCount! > 0)
-                Text(
-                  '${place.userRatingCount} Reviews ',
-                  style: AppTextStyles.h8SemiBold,
-                ),
+              ),
+          ],
+        ),
+        // Description
+        if (place.editorialSummary != null)
+          Text(place.editorialSummary!, style: context.textTheme.bodyMedium),
 
-              // Opening Hours
-              if (place.openingHours != null)
-                Text(
-                  place.openingHours!.openNow == true
-                      ? 'Open Now'
-                      : 'Closed Now',
-                  style: AppTextStyles.h8SemiBold.copyWith(
-                    color: place.openingHours!.openNow == true
-                        ? Colors.green
-                        : Colors.red,
-                  ),
-                ),
-            ],
-          ),
-          // Description
-          if (place.editorialSummary != null)
-            Text(place.editorialSummary!, style: context.textTheme.bodyMedium),
-
-          SizedBox(height: 24.h),
-          PlaceActions(
-            latitude: place.latitude,
-            longitude: place.longitude,
-            dragController: dragController,
-          ),
-        ],
-      ),
+        SizedBox(height: 24.h),
+        PlaceActions(
+          latitude: place.latitude,
+          longitude: place.longitude,
+          dragController: dragController,
+        ),
+      ],
     );
   }
 
@@ -148,6 +146,7 @@ class PlaceTab extends StatelessWidget {
             PlaceImages(
               photoUrls: photoUrls,
               scrollController: imagesScrollController,
+              heroTag: heroTag,
             ),
           // Name & Rating
           Row(

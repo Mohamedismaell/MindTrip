@@ -1,58 +1,143 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import '../cubit/map_cubit.dart';
 import '../cubit/map_state.dart';
 
-class DaySelectorBar extends StatelessWidget {
+class DaySelectorBar extends StatefulWidget {
   const DaySelectorBar({super.key});
+
+  @override
+  State<DaySelectorBar> createState() => _DaySelectorBarState();
+}
+
+class _DaySelectorBarState extends State<DaySelectorBar>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animController;
+  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+  }
+
+  void _toggleExpand() {
+    setState(() => _isExpanded = !_isExpanded);
+    if (_isExpanded) {
+      _animController.forward();
+    } else {
+      _animController.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MapCubit, MapState>(
-      buildWhen: (previous, current) =>
-          previous.tripDays != current.tripDays ||
-          previous.selectedDayIndex != current.selectedDayIndex,
+      buildWhen: (prev, curr) =>
+          prev.tripDays != curr.tripDays ||
+          prev.selectedDayIndex != curr.selectedDayIndex,
       builder: (context, state) {
         final days = state.tripDays;
         if (days == null || days.isEmpty) return const SizedBox.shrink();
 
-        return SizedBox(
-          height: 60.h,
-          child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-            scrollDirection: Axis.horizontal,
-            itemCount: days.length,
-            separatorBuilder: (context, index) => SizedBox(width: 8.w),
-            itemBuilder: (context, index) {
-              final day = days[index];
-              final isSelected = state.selectedDayIndex == index;
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Expandable day buttons — slides in from the right
+            Expanded(
+              child: ClipRRect(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SizeTransition(
+                    axis: Axis.horizontal,
+                    sizeFactor: CurvedAnimation(
+                      parent: _animController,
+                      curve: Curves.easeOutCubic,
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(days.length, (index) {
+                          final reversedIndex = days.length - 1 - index;
+                          final day = days[reversedIndex];
+                          final isSelected =
+                              state.selectedDayIndex == reversedIndex;
 
-              return ChoiceChip(
-                label: Text('Day ${day.dayNumber}'),
-                selected: isSelected,
-                onSelected: (_) {
-                   context.read<MapCubit>().selectDay(index);
-                },
-                selectedColor: context.colorTheme.primary,
-                showCheckmark: false,
-                labelStyle: AppTextStyles.h8SemiBold.copyWith(
-                  color: isSelected ? Colors.white : Colors.black87,
-                ),
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.r),
-                  side: BorderSide(
-                    color: isSelected
-                        ? context.colorTheme.primary
-                        : Colors.grey.shade300,
+                          return Padding(
+                            padding: EdgeInsets.only(right: 6.w),
+                            child: GestureDetector(
+                              onTap: () => context.read<MapCubit>().selectDay(
+                                reversedIndex,
+                              ),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 14.w,
+                                  vertical: 8.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? context.colorTheme.primary
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(14.r),
+                                ),
+                                child: Text(
+                                  'Day ${day.dayNumber}',
+                                  style: AppTextStyles.h10Bold.copyWith(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+
+            // Toggle button (calendar icon)
+            GestureDetector(
+              onTap: _toggleExpand,
+              child: Container(
+                width: 56.w,
+                height: 56.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [AppShadows.mapToolButtons],
+                ),
+                child: AnimatedRotation(
+                  turns: _isExpanded ? 0.5 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Icon(
+                    Icons.calendar_today_rounded,
+                    size: 20.sp,
+                    color: context.colorTheme.primary,
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

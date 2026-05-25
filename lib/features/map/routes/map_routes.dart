@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/map/data/models/map_trip_extra.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
@@ -24,7 +25,7 @@ class MapRoutes {
         );
       },
       routes: [
-        GoRoute(
+        AppTransitionRoute.fadeSlideBuilder(
           path: AppRoutes.map,
           builder: (context, state) {
             final extra = state.extra;
@@ -37,9 +38,9 @@ class MapRoutes {
             return const MapScreen();
           },
           routes: [
-            GoRoute(
+            AppTransitionRoute.slideTopBuilder(
               path: "search",
-              builder: (context, state) => const MapSearchOverlay(),
+              builder: (_, _) => const MapSearchOverlay(),
             ),
           ],
         ),

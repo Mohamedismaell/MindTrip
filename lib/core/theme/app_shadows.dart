@@ -42,4 +42,9 @@ class AppShadows {
     blurRadius: 8.r,
     offset: Offset(0, 2.h),
   );
+  static BoxShadow mapToolButtons = BoxShadow(
+    color: Colors.black12,
+    blurRadius: 10,
+    spreadRadius: 2,
+  );
 }

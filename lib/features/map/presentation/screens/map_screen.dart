@@ -21,17 +21,12 @@ import 'package:mindtrip/features/map/presentation/widgets/map_navigate_all_butt
 import '../../data/models/map_trip_extra.dart';
 import '../widgets/day_selector_bar.dart';
 import '../widgets/place_card_row.dart';
-import '../widgets/place_detail_sheet.dart';
 
 class MapScreen extends StatefulWidget {
   final List<PlaceModel>? places;
   final MapTripExtra? tripExtra;
 
-  const MapScreen({
-    super.key,
-    this.places,
-    this.tripExtra,
-  });
+  const MapScreen({super.key, this.places, this.tripExtra});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -44,11 +39,13 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     _mapController = MapController();
-    
+
     if (widget.tripExtra != null) {
       context.read<MapCubit>().loadTripDays(widget.tripExtra!.days);
     } else {
-      context.read<MapCubit>().loadPlaces(widget.places ?? PlacesMockData.mockPlaces);
+      context.read<MapCubit>().loadPlaces(
+        widget.places ?? PlacesMockData.mockPlaces,
+      );
     }
   }
 
@@ -65,13 +62,14 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  //ToDo: Need to be checked
   Future<void> _navigateAll() async {
     final position = await sl<LocationService>().getCurrentLocation();
     if (mounted && position != null) {
       final userPosition = Position(position.longitude, position.latitude);
       final annotations = context.read<MapCubit>().state.annotations;
       final waypoints = [userPosition];
-      
+
       final isTripMode = context.read<MapCubit>().state.hasTripDays;
 
       if (isTripMode) {
@@ -158,37 +156,29 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final topSpace = MediaQuery.of(context).padding.top + 10.h;
-    final hasTripDays = context.select<MapCubit, bool>((cubit) => cubit.state.hasTripDays);
+    final hasTripDays = context.select<MapCubit, bool>(
+      (cubit) => cubit.state.hasTripDays,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: MultiBlocListener(
         listeners: [
           BlocListener<MapCubit, MapState>(
-            listenWhen: (prev, curr) => !prev.isBottomSheetVisible && curr.isBottomSheetVisible,
-            listener: (context, state) {
-               PlaceDetailSheet.show(context);
-            },
-          ),
-          BlocListener<MapCubit, MapState>(
-            listenWhen: (prev, curr) => prev.selectedDayIndex != curr.selectedDayIndex,
+            listenWhen: (prev, curr) =>
+                prev.selectedDayIndex != curr.selectedDayIndex,
             listener: (context, state) async {
-              if (state.selectedDayIndex != null && state.annotations.isNotEmpty) {
-                 final mapCubit = context.read<MapCubit>();
-                 await Future.delayed(const Duration(milliseconds: 300));
-                 if (context.mounted && mapCubit.state.annotations.isNotEmpty) {
-                    _navigateAll();
-                 }
-              }
+              // Removed automatic _navigateAll() trigger.
             },
           ),
           BlocListener<MapCubit, MapState>(
             listenWhen: (prev, curr) => prev.annotations != curr.annotations,
             listener: (context, state) async {
-               if (state.annotations.isNotEmpty) {
-                 await _mapController.addPlaceAnnotations(state.annotations);
-                 await _mapController.fitToAnnotations();
-               }
+              await _mapController.clearRoute();
+              if (state.annotations.isNotEmpty) {
+                await _mapController.addPlaceAnnotations(state.annotations);
+                await _mapController.fitToAnnotations();
+              }
             },
           ),
         ],
@@ -204,60 +194,77 @@ class _MapScreenState extends State<MapScreen> {
               ),
               Positioned(top: topSpace, child: const MapSearchBar()),
               Positioned(
-                 top: topSpace + 70.h,
-                 child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
-                    builder: (context, state) {
-                       final route = state.activeRoute;
-                       if (route == null || state.isRouteLoading) return const SizedBox.shrink();
-                       final durationMin = (route.duration / 60).ceil();
-                       final profileLabel = state.selectedProfile.label.toLowerCase();
-                       return Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.r),
-                            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
-                          ),
-                          child: Text(
-                            '~$durationMin min $profileLabel',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
-                          ),
-                       );
-                    },
-                 ),
+                top: topSpace + 70.h,
+                child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
+                  builder: (context, state) {
+                    final route = state.activeRoute;
+                    if (route == null || state.isRouteLoading) {
+                      return const SizedBox.shrink();
+                    }
+                    final durationMin = (route.duration / 60).ceil();
+                    final profileLabel = state.selectedProfile.label
+                        .toLowerCase();
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.r),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black26, blurRadius: 4),
+                        ],
+                      ),
+                      child: Text(
+                        '~$durationMin min $profileLabel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
+              // Grouped controls and cards
               Positioned(
-                bottom: hasTripDays ? 210.h : 130.h,
-                right: 16.w,
+                bottom: 20.h,
+                left: 0,
+                right: 0,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (context.watch<MapCubit>().state.annotations.isNotEmpty && !hasTripDays) ...[
-                      MapNavigateAllButton(onPressed: _navigateAll),
-                      SizedBox(height: 16.h),
-                    ],
-                    MapMarkRelcoaitonButton(
-                      onTap: () => _mapController.fitToAnnotations(),
+                    // Control buttons and Day Selector (aligned right)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (hasTripDays) ...[
+                            const DaySelectorBar(),
+                            SizedBox(height: 12.h),
+                            // MapNavigateAllButton(
+                            //   onPressed: _navigateAll,
+                            //   label: 'Start Trip',
+                            // ),
+                            // SizedBox(height: 12.h),
+                          ],
+                          // MapMarkRelcoaitonButton(
+                          //   onTap: () => _mapController.fitToAnnotations(),
+                          // ),
+                          // SizedBox(height: 12.h),
+                          MapRelocateButton(onPressed: _relocateUser),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 16.h),
-                    MapRelocateButton(onPressed: _relocateUser),
+                    const PlaceCardRow(),
                   ],
                 ),
               ),
-              Positioned(
-                 bottom: hasTripDays ? 80.h : 30.h,
-                 left: 0,
-                 right: 0,
-                 child: const PlaceCardRow(),
-              ),
-              if (hasTripDays)
-                 Positioned(
-                    bottom: 20.h,
-                    left: 0,
-                    right: 0,
-                    child: const DaySelectorBar(),
-                 ),
             ],
           ),
         ),

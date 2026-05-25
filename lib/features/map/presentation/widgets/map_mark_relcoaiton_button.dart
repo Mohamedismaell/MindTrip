@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
 class MapMarkRelcoaitonButton extends StatelessWidget {
@@ -15,9 +16,7 @@ class MapMarkRelcoaitonButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: context.colorTheme.surface,
           shape: BoxShape.circle,
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2),
-          ],
+          boxShadow: [AppShadows.mapToolButtons],
         ),
         child: Icon(
           Icons.fit_screen_rounded,

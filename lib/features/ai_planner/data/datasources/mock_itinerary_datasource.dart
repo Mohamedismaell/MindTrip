@@ -268,7 +268,6 @@ class MockItineraryDataSource implements ItineraryDataSource {
           ['Dahab Promenade', 28.4966, 34.5179],
         ],
         'evening': [
-          ['Ali Baba Restaurant', 28.4967, 34.5158],
           ['Everyday Cafe', 28.4981, 34.5180],
           ['Shark Restaurant', 28.4975, 34.5167],
         ],
@@ -310,7 +309,6 @@ class MockItineraryDataSource implements ItineraryDataSource {
         'evening': [
           ['Yum Yum Restaurant', 28.4960, 34.5168],
           ['Namaste Cafe', 28.4986, 34.5184],
-          ['Blue Beach Club', 28.4972, 34.5170],
         ],
       },
 
@@ -318,8 +316,6 @@ class MockItineraryDataSource implements ItineraryDataSource {
         'title': 'Safari & Desert Camp',
         'tags': ['Desert', 'Safari', 'Nature'],
         'morning': [
-          ['Wadi Gnai', 28.4508, 34.5007],
-          ['Sinai Safari Camp', 28.4584, 34.5060],
           ['Camel Canyon', 28.4620, 34.5035],
         ],
         'afternoon': [
@@ -344,7 +340,6 @@ class MockItineraryDataSource implements ItineraryDataSource {
         ],
         'afternoon': [
           ['Golden Blocks', 28.5201, 34.5300],
-          ['Moray Garden', 28.5185, 34.5282],
           ['Coral Island Stop', 28.5222, 34.5311],
         ],
         'evening': [
