@@ -2,21 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 
-class PlaceImages extends StatelessWidget {
+class PlaceImages extends StatefulWidget {
   const PlaceImages({
     super.key,
     required this.photoUrls,
-    required this.scrollController,
     this.heroTag,
   });
 
   final List<String> photoUrls;
-  final ScrollController scrollController;
   final String? heroTag;
 
   @override
+  State<PlaceImages> createState() => _PlaceImagesState();
+}
+
+class _PlaceImagesState extends State<PlaceImages> {
+  late final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print('photoUrls $photoUrls');
+    final photoUrls = widget.photoUrls;
+    final heroTag = widget.heroTag;
+
     return Column(
       children: [
         if (photoUrls.isNotEmpty)
@@ -24,7 +37,7 @@ class PlaceImages extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.r),
             child: heroTag != null
                 ? Hero(
-                    tag: heroTag!,
+                    tag: heroTag,
                     transitionOnUserGestures: true,
                     child: AppCachedImage(
                       imagePath: photoUrls.first,
@@ -60,7 +73,7 @@ class PlaceImages extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.fromLTRB(4.w, 16.h, 4.w, 0),
               child: Scrollbar(
-                controller: scrollController,
+                controller: _scrollController,
                 thumbVisibility: true,
                 trackVisibility: true,
                 thickness: 2.w,
@@ -68,7 +81,7 @@ class PlaceImages extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 8.h),
                   child: photoUrls.length <= 3
                       ? _buildFewImages(photoUrls)
-                      : _buildImageList(photoUrls, scrollController),
+                      : _buildImageList(photoUrls, _scrollController),
                 ),
               ),
             ),

@@ -4,10 +4,6 @@ import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
-import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
-import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
-import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
-import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import '../shared/test_helpers.dart';
 
 void main() {
@@ -138,7 +134,6 @@ void main() {
     test('initial state has correct defaults', () {
       expect(harness.onboardingCubit.state.currentIndex, 0);
       expect(harness.onboardingCubit.state.isLastPage, false);
-      expect(harness.onboardingCubit.state.selectedCategories, isEmpty);
     });
 
     test('updateIndex updates state correctly', () {
@@ -151,19 +146,6 @@ void main() {
       expect(harness.onboardingCubit.state.isLastPage, true);
     });
 
-    test('editSelectedCategory toggles category', () {
-      harness.onboardingCubit.editSelectedCategory('Beaches');
-      expect(
-        harness.onboardingCubit.state.selectedCategories,
-        contains('Beaches'),
-      );
-
-      harness.onboardingCubit.editSelectedCategory('Beaches');
-      expect(
-        harness.onboardingCubit.state.selectedCategories,
-        isNot(contains('Beaches')),
-      );
-    });
   });
 
   group('Auth Cubit', () {

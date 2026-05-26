@@ -36,6 +36,9 @@ sealed class MapState with _$MapState {
     double? flyToLng,
 
     /// Trip days passed from trip‐details; null when map is opened standalone.
+    /// Pulse that increments whenever we want to force-navigate to the route tab
+    @Default(0) int navigationPulse,
+
     @Default(null) List<TripDay>? tripDays,
 
     /// Currently selected day (0-indexed); null means "all days".

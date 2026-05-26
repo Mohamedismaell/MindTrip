@@ -6,8 +6,9 @@ import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class MapRelocateButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final IconData? icon;
 
-  const MapRelocateButton({super.key, required this.onPressed});
+  const MapRelocateButton({super.key, required this.onPressed, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class MapRelocateButton extends StatelessWidget {
           ),
         ),
         child: Icon(
-          Icons.my_location_rounded,
+          icon ?? Icons.my_location_rounded,
           color: context.colorTheme.primary,
           size: 28.sp,
         ),

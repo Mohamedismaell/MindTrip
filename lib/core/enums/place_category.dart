@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 
 part 'place_category.g.dart';
@@ -83,9 +84,29 @@ enum PlaceCategory {
     PlaceCategory.other => '📍',
   };
 
-  String get annotationAssetPath => 'assets/images/map/location-pin.webp';
+  IconData get iconData => switch (this) {
+    PlaceCategory.hotel => Icons.hotel_rounded,
+    PlaceCategory.restaurant => Icons.restaurant_rounded,
+    PlaceCategory.beach => Icons.beach_access_rounded,
+    PlaceCategory.mountain => Icons.landscape_rounded,
+    PlaceCategory.desert => Icons.wb_sunny_rounded,
+    PlaceCategory.diving => Icons.scuba_diving_rounded,
+    PlaceCategory.trip => Icons.flight_rounded,
+    PlaceCategory.activity => Icons.directions_bike_rounded,
+    PlaceCategory.park => Icons.park_rounded,
+    PlaceCategory.museum => Icons.museum_rounded,
+    PlaceCategory.shopping => Icons.shopping_bag_rounded,
+    PlaceCategory.entertainment => Icons.attractions_rounded,
+    PlaceCategory.heritage => Icons.account_balance_rounded,
+    PlaceCategory.camping => Icons.holiday_village_rounded,
+    PlaceCategory.wellness => Icons.spa_rounded,
+    PlaceCategory.cafe => Icons.local_cafe_rounded,
+    _ => Icons.location_on_rounded,
+  };
 
-  static String get searchPinAssetPath => 'assets/images/map/location-pin.webp';
+  String get annotationAssetPath => 'assets/images/map/location-pin.png';
+
+  static String get searchPinAssetPath => 'assets/images/map/location-pin.png';
 
   static PlaceCategory fromCategory(String? category) {
     if (category == null) return PlaceCategory.other;

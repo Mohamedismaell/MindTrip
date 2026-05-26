@@ -41,6 +41,7 @@ import 'package:mindtrip/features/authetication/domain/usecases/verify_email_use
 import 'package:mindtrip/features/authetication/domain/usecases/verify_password_otp_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
+import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';

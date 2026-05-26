@@ -10,19 +10,14 @@ class MapAnnotationEntry extends Equatable {
   final int sequenceNumber;
   final String? mapboxAnnotationId;
 
-  /// Colour associated with the day period (morning/afternoon/evening).
   final Color? periodColor;
 
-  /// Human-readable period label, e.g. "Morning", "Afternoon", "Evening".
   final String? periodLabel;
 
-  /// Day number this entry belongs to (1-indexed). Null when no trip context.
   final int? dayNumber;
 
-  /// Flags if this entry was dynamically added via Google search
   final bool isSearchResult;
 
-  /// Stores full detailed Google place information dynamically if available
   final GooglePlaceEntity? googlePlace;
 
   const MapAnnotationEntry({
@@ -60,13 +55,13 @@ class MapAnnotationEntry extends Equatable {
 
   @override
   List<Object?> get props => [
-        place,
-        sequenceNumber,
-        mapboxAnnotationId,
-        periodColor,
-        periodLabel,
-        dayNumber,
-        isSearchResult,
-        googlePlace,
-      ];
+    place,
+    sequenceNumber,
+    mapboxAnnotationId,
+    periodColor,
+    periodLabel,
+    dayNumber,
+    isSearchResult,
+    googlePlace,
+  ];
 }

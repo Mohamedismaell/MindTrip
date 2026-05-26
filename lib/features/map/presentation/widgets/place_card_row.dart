@@ -16,6 +16,7 @@ import 'package:mindtrip/features/map/presentation/widgets/map_action_button.dar
 import '../../domain/entities/map_annotation_entry.dart';
 import '../cubit/map_cubit.dart';
 import '../cubit/map_navigation_cubit.dart';
+import '../cubit/map_navigation_state.dart';
 import 'place_tab.dart';
 import 'drive_tab.dart';
 import '../cubit/map_state.dart';
@@ -53,20 +54,15 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
 
     _isUserSwipe = false;
 
-    _pageController
-        .animateToPage(
-          index,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeInOut,
-        )
-        .then((_) => _isUserSwipe = true);
+    _pageController.jumpToPage(index);
+    _isUserSwipe = true;
   }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.sizeOf(context).height;
 
-    final collapsedCardHeight = screenHeight * 0.28;
+    final collapsedCardHeight = screenHeight * 0.29;
 
     final expandedCardHeight = screenHeight * 0.5;
 
@@ -77,10 +73,10 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
     return BlocConsumer<MapCubit, MapState>(
       listenWhen: (prev, curr) =>
           prev.selectedPlace != curr.selectedPlace ||
-          prev.annotations != curr.annotations,
+          prev.annotations != curr.annotations ||
+          prev.isBottomSheetVisible != curr.isBottomSheetVisible ||
+          prev.navigationPulse != curr.navigationPulse,
       listener: (context, state) {
-        // Reset to the first card when the annotation list is replaced
-        // (e.g. switching trip day or loading a new place set).
         if (_lastAnnotations != null && _lastAnnotations != state.annotations) {
           _currentPage = 0;
           _jumpToIndex(0);
@@ -92,13 +88,16 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             (a) => a.place.id == state.selectedPlace!.id,
           );
 
-          // Add 1 to account for the DriveTab
           if (index != -1) {
             final targetIndex = index + 1;
             if (targetIndex != _currentPage) {
               _jumpToIndex(targetIndex);
             }
           }
+        } else if (state.selectedPlace == null ||
+            state.navigationPulse > 0) {
+          // Force jump to DriveTab whenever selection is null OR pulse is triggered
+          _jumpToIndex(0);
         }
       },
       buildWhen: (prev, curr) =>
@@ -124,11 +123,13 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             onPageChanged: (index) {
               _currentPage = index;
 
-              // When the user swipes to a place card, select it and fly to it.
-              if (_isUserSwipe && index > 0) {
-                final entry = state.annotations[index - 1];
-                //! we Can close it if its bad UX
-                context.read<MapCubit>().selectPlace(entry.place.id);
+              if (_isUserSwipe) {
+                if (index > 0) {
+                  // final entry = state.annotations[index - 1];
+                  // context.read<MapCubit>().selectPlace(entry.place.id);
+                } else {
+                  context.read<MapCubit>().clearSelection();
+                }
               }
             },
             itemBuilder: (context, index) {
@@ -136,6 +137,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                 return _buildDriveCard(
                   context,
                   isExpanded,
+                  state.selectedPlace == null,
                   expandedCardHeight,
                   collapsedCardHeight,
                 );
@@ -195,6 +197,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(24.r),
                           boxShadow: [AppShadows.mapToolButtons],
+                          border: Border.all(color: Colors.white, width: 2),
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(21.5.r),
@@ -206,8 +209,6 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                         place: place,
                                         googlePlace: googlePlace,
                                         photoUrls: finalPhotoUrls,
-                                        imagesScrollController:
-                                            ScrollController(),
                                       ),
                                     ),
 
@@ -393,24 +394,49 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
               Row(
                 children: [
                   Expanded(
-                    child: MapActionButton(
-                      label: "Show route",
-                      icon: Icons.directions_rounded,
-                      color: context.colorTheme.primary,
-                      isFilled: true,
-                      onTap: () async {
-                        final pos = await sl<LocationService>()
-                            .getCurrentLocation();
+                    child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
+                      builder: (context, navState) {
+                        return MapActionButton(
+                          label: navState.isRouteLoading
+                              ? "Loading..."
+                              : "Show route",
+                          icon: Icons.directions_rounded,
+                          color: context.colorTheme.primary,
+                          isFilled: true,
+                           onTap: navState.isRouteLoading
+                              ? null
+                              : () {
+                                  // Immediately disable button + jump to DriveTab
+                                  context
+                                      .read<MapNavigationCubit>()
+                                      .beginLoading(
+                                        destinationName: place.name,
+                                      );
+                                  context.read<MapCubit>().clearSelection();
 
-                        if (pos != null && context.mounted) {
-                          final userPos = Position(pos.longitude, pos.latitude);
+                                  () async {
+                                    final pos = await sl<LocationService>()
+                                        .getCurrentLocation();
 
-                          context.read<MapNavigationCubit>().navigateToPosition(
-                            userPos,
-                            placeLat,
-                            placeLng,
-                          );
-                        }
+                                    if (pos != null && context.mounted) {
+                                      final userPos = Position(
+                                        pos.longitude,
+                                        pos.latitude,
+                                      );
+
+                                      context
+                                          .read<MapNavigationCubit>()
+                                          .navigateSequential(
+                                        [
+                                          userPos,
+                                          Position(placeLng, placeLat)
+                                        ],
+                                        [place.name],
+                                      );
+                                    }
+                                  }();
+                                },
+                        );
                       },
                     ),
                   ),
@@ -436,6 +462,9 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                     context.read<MapCubit>().removeSearchPlace(
                                       place.id,
                                     );
+                                    context
+                                        .read<MapNavigationCubit>()
+                                        .stopNavigation();
 
                                     setState(() {
                                       _removingPlaceIds.remove(place.id);
@@ -474,13 +503,15 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
   Widget _buildDriveCard(
     BuildContext context,
     bool isExpanded,
+    bool isRouteSelected,
     double expandedHeight,
     double collapsedHeight,
   ) {
+    bool showExpanded = isExpanded && isRouteSelected;
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        height: isExpanded ? expandedHeight : collapsedHeight,
+        height: showExpanded ? expandedHeight : collapsedHeight,
         margin: EdgeInsets.only(right: 8.w, top: 10.h, bottom: 5.h),
         decoration: BoxDecoration(
           color: Colors.white,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
-import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import '../../shared/test_helpers.dart';
 
 void main() {
@@ -29,7 +27,7 @@ void main() {
         user: testUser,
       );
 
-      expect(harness.userCubit.state.status, UserStatus.loaded);
+      expect(harness.userCubit.state.userStatus, UserStatus.loaded);
       expect(harness.userCubit.state.user, isNotNull);
 
       harness.dispose();

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
+import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
+import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
+
 import '../../shared/test_helpers.dart';
 
 void main() {
@@ -13,8 +15,10 @@ void main() {
     late OnboardingRepository repository;
 
     setUp(() {
-      repository = FakeOnboardingRepository(isFirstTime: true);
-      cubit = OnboardingCubit(completeOnboarding: CompleteOnboardingUseCase(repository));
+      repository = FakeOnboardingRepository(hasCompletedOnboardingValue: true);
+      cubit = OnboardingCubit(
+        completeOnboarding: CompleteOnboardingUseCase(repository),
+      );
     });
 
     tearDown(() {
@@ -24,7 +28,6 @@ void main() {
     test('initial state has currentIndex 0 and isLastPage false', () {
       expect(cubit.state.currentIndex, 0);
       expect(cubit.state.isLastPage, false);
-      expect(cubit.state.selectedCategories, isEmpty);
     });
 
     test('updateIndex changes currentIndex and isLastPage correctly', () {
@@ -39,19 +42,6 @@ void main() {
       cubit.updateIndex(2);
       expect(cubit.state.currentIndex, 2);
       expect(cubit.state.isLastPage, true);
-    });
-
-    test('editSelectedCategory toggles category selection', () {
-      cubit.editSelectedCategory('Beaches');
-      expect(cubit.state.selectedCategories, contains('Beaches'));
-
-      cubit.editSelectedCategory('Adventure');
-      expect(cubit.state.selectedCategories, contains('Adventure'));
-      expect(cubit.state.selectedCategories!.length, 2);
-
-      cubit.editSelectedCategory('Beaches');
-      expect(cubit.state.selectedCategories, isNot(contains('Beaches')));
-      expect(cubit.state.selectedCategories!.length, 1);
     });
 
     test('finishOnboarding calls repository', () async {

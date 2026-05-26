@@ -13,6 +13,7 @@ import 'package:mindtrip/features/map/Services/location_service/location_service
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
+import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_action_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_images.dart';
 
@@ -22,18 +23,16 @@ class PlaceTab extends StatelessWidget {
     this.place,
     this.googlePlace,
     this.photoUrls,
-    required this.imagesScrollController,
     this.dragController,
   });
   final PlaceModel? place;
   final GooglePlaceEntity? googlePlace;
   final List<String>? photoUrls;
-  final ScrollController imagesScrollController;
   final DraggableScrollableController? dragController;
   @override
   Widget build(BuildContext context) {
     if (googlePlace != null) {
-      return _buildGooglePlaceContent(context, googlePlace!, photoUrls!);
+      return _buildGooglePlaceContent(context, googlePlace!, photoUrls);
     } else if (place != null) {
       return _buildContent(context, place!);
     }
@@ -61,11 +60,7 @@ class PlaceTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (photoUrls != null && photoUrls.isNotEmpty)
-          PlaceImages(
-            photoUrls: photoUrls,
-            scrollController: imagesScrollController,
-            heroTag: googlePlace!.placeId,
-          ),
+          PlaceImages(photoUrls: photoUrls, heroTag: googlePlace!.placeId),
 
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -168,50 +163,78 @@ class PlaceTab extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MapActionButton(
-                    label: "Show route",
-                    icon: Icons.directions_rounded,
-                    color: context.colorTheme.primary,
-                    isFilled: true,
-                    onTap: () async {
-                      final pos = await sl<LocationService>()
-                          .getCurrentLocation();
-                      if (pos != null && context.mounted) {
-                        final userPos = Position(pos.longitude, pos.latitude);
-                        context.read<MapNavigationCubit>().navigateToPosition(
-                          userPos,
-                          placeLat!,
-                          placeLng!,
+                  Expanded(
+                    child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
+                      builder: (context, navState) {
+                        return MapActionButton(
+                          label: navState.isRouteLoading
+                              ? "Loading..."
+                              : "Show route",
+                          icon: Icons.directions_rounded,
+                          color: context.colorTheme.primary,
+                          isFilled: true,
+                          onTap: navState.isRouteLoading
+                              ? null
+                              : () {
+                                  // Immediately disable button + jump to DriveTab
+                                  context
+                                      .read<MapNavigationCubit>()
+                                      .beginLoading(
+                                        destinationName: place.displayName,
+                                      );
+                                  context.read<MapCubit>().clearSelection();
+
+                                  () async {
+                                    final pos = await sl<LocationService>()
+                                        .getCurrentLocation();
+                                    if (pos != null && context.mounted) {
+                                      final userPos = Position(
+                                        pos.longitude,
+                                        pos.latitude,
+                                      );
+                                      context
+                                          .read<MapNavigationCubit>()
+                                          .navigateSequential(
+                                            [
+                                              userPos,
+                                              Position(placeLng!, placeLat!),
+                                            ],
+                                            [place.displayName],
+                                          );
+                                    }
+                                  }();
+                                },
                         );
-                        context.read<MapCubit>().dismissBottomSheet();
-                      }
-                    },
+                      },
+                    ),
                   ),
                   SizedBox(width: 8.w),
-                  MapActionButton(
-                    label: "Show on map",
-                    icon: Icons.map_rounded,
-                    color: context.colorTheme.primary,
-                    isFilled: true,
-                    onTap: () async {
-                      if (placeLat == null || placeLng == null) return;
+                  Expanded(
+                    child: MapActionButton(
+                      label: "Show on map",
+                      icon: Icons.map_rounded,
+                      color: context.colorTheme.primary,
+                      isFilled: true,
+                      onTap: () async {
+                        if (placeLat == null || placeLng == null) return;
 
-                      // if (dragController?.isAttached ?? false) {
-                      //   await dragController?.animateTo(
-                      //     0.1,
-                      //     duration: const Duration(milliseconds: 300),
-                      //     curve: Curves.easeInOut,
-                      //   );
-                      // }
+                        // if (dragController?.isAttached ?? false) {
+                        //   await dragController?.animateTo(
+                        //     0.1,
+                        //     duration: const Duration(milliseconds: 300),
+                        //     curve: Curves.easeInOut,
+                        //   );
+                        // }
 
-                      if (context.mounted) {
-                        context.read<MapCubit>().triggerFlyTo(
-                          placeLat,
-                          placeLng,
-                        );
-                        context.read<MapCubit>().dismissBottomSheet();
-                      }
-                    },
+                        if (context.mounted) {
+                          context.read<MapCubit>().triggerFlyTo(
+                            placeLat,
+                            placeLng,
+                          );
+                          context.read<MapCubit>().dismissBottomSheet();
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -232,11 +255,7 @@ class PlaceTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (photoUrls != null && photoUrls.isNotEmpty)
-          PlaceImages(
-            photoUrls: photoUrls,
-            scrollController: imagesScrollController,
-            heroTag: 'place-${place.id}',
-          ),
+          PlaceImages(photoUrls: photoUrls, heroTag: 'place-${place.id}'),
 
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -345,27 +364,49 @@ class PlaceTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: MapActionButton(
-                      label: "Show route",
-                      icon: Icons.directions_rounded,
-                      color: context.colorTheme.primary,
-                      isFilled: true,
-                      onTap: () async {
-                        final pos = await sl<LocationService>()
-                            .getCurrentLocation();
+                    child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
+                      builder: (context, navState) {
+                        return MapActionButton(
+                          label: navState.isRouteLoading
+                              ? "Loading..."
+                              : "Show route",
+                          icon: Icons.directions_rounded,
+                          color: context.colorTheme.primary,
+                          isFilled: true,
+                          onTap: navState.isRouteLoading
+                              ? null
+                              : () {
+                                  // Immediately disable button + jump to DriveTab
+                                  context
+                                      .read<MapNavigationCubit>()
+                                      .beginLoading(
+                                        destinationName: place.name,
+                                      );
+                                  context.read<MapCubit>().clearSelection();
 
-                        if (pos != null && context.mounted) {
-                          final userPos = Position(pos.longitude, pos.latitude);
+                                  () async {
+                                    final pos = await sl<LocationService>()
+                                        .getCurrentLocation();
 
-                          context.read<MapNavigationCubit>().navigateToPosition(
-                            userPos,
-                            placeLat,
-                            placeLng,
-                            destinationName: place.name,
-                          );
+                                    if (pos != null && context.mounted) {
+                                      final userPos = Position(
+                                        pos.longitude,
+                                        pos.latitude,
+                                      );
 
-                          context.read<MapCubit>().dismissBottomSheet();
-                        }
+                                      context
+                                          .read<MapNavigationCubit>()
+                                          .navigateSequential(
+                                            [
+                                              userPos,
+                                              Position(placeLng, placeLat),
+                                            ],
+                                            [place.name],
+                                          );
+                                    }
+                                  }();
+                                },
+                        );
                       },
                     ),
                   ),

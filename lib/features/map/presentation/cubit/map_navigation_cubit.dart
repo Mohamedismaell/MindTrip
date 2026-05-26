@@ -29,6 +29,16 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     return _getRouteCancelToken!;
   }
 
+  /// Call this immediately on button tap so the UI reflects loading state
+  /// before the GPS location fetch completes in the widget layer.
+  void beginLoading({String? destinationName}) {
+    emit(state.copyWith(
+      isRouteLoading: true,
+      routeError: null,
+      destinationName: destinationName,
+    ));
+  }
+
   void setProfile(NavigationProfile profile) {
     emit(state.copyWith(selectedProfile: profile, currentStepIndex: 0));
 
@@ -43,7 +53,10 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     double lng, {
     String? destinationName,
   }) async {
-    emit(state.copyWith(destinationName: destinationName));
+    emit(state.copyWith(
+      destinationName: destinationName,
+      isRouteLoading: true,
+    ));
     final placePosition = Position(lng, lat);
     await _fetchRoute([userPosition, placePosition]);
   }
@@ -60,6 +73,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     emit(
       state.copyWith(
         isSequentialMode: true,
+        isRouteLoading: true,
         totalLegs: waypoints.length - 1,
         currentLegIndex: 0,
         placeNames: placeNames,

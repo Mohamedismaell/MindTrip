@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/features/map/domain/entities/map_annotation_entry.dart';
-import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
+import '../widgets/custom_map_pin.dart';
 
 class MapController {
   MapboxMap? _mapboxMap;
@@ -122,22 +123,45 @@ class MapController {
     if (_pointAnnotationManager == null) return;
     await _pointAnnotationManager!.deleteAll();
     _annotationIdToPlaceId.clear();
+    _annotationIdToGooglePlace.clear();
     _annotationCoordinates.clear();
     _defaultIconSizes.clear();
     _selectedAnnotationId = null;
   }
 
+  Future<Uint8List> _getOrCreatePinImage(Color color, IconData icon) async {
+    final key = '${color.value}_${icon.codePoint}';
+    if (_imageCache.containsKey(key)) {
+      return _imageCache[key]!;
+    }
+
+    final img = await CustomMapPin.createCustomMarkerImage(
+      color: color,
+      iconData: icon,
+    );
+    _imageCache[key] = img;
+    return img;
+  }
+
   Future<void> addPlaceAnnotations(List<MapAnnotationEntry> entries) async {
     if (_pointAnnotationManager == null) return;
-    // Clear old annotations first
     await clearPlaceAnnotations();
 
     for (final entry in entries) {
-      final img = await _loadImage(
-        entry.isSearchResult 
-            ? PlaceCategory.searchPinAssetPath 
-            : entry.place.category.annotationAssetPath
-      );
+      final Uint8List img;
+
+      if (entry.isSearchResult) {
+        img = await _getOrCreatePinImage(
+          const Color(0xFFE91E63),
+          Icons.search_rounded,
+        );
+      } else {
+        img = await _getOrCreatePinImage(
+          entry.periodColor ?? const Color(0xFFE91E63),
+          entry.place.category.iconData,
+        );
+      }
+
       final coord = Position(
         entry.place.location.longitude,
         entry.place.location.latitude,
@@ -147,13 +171,20 @@ class MapController {
         PointAnnotationOptions(
           geometry: Point(coordinates: coord),
           image: img,
-          iconSize: entry.isSearchResult ? 0.25 : 0.2,
+          iconSize: 1.0,
+          iconAnchor: IconAnchor.BOTTOM,
         ),
       );
 
       _annotationCoordinates.add(coord);
       _annotationIdToPlaceId[annotation.id] = entry.place.id;
-      _defaultIconSizes[annotation.id] = entry.isSearchResult ? 0.25 : 0.2;
+      _defaultIconSizes[annotation.id] = 1.0;
+
+      if (entry.isSearchResult && entry.googlePlace != null) {
+        _annotationIdToGooglePlace[annotation.id] = entry.googlePlace!;
+        _searchResultAnnotation = annotation;
+        _searchResultGooglePlace = entry.googlePlace;
+      }
     }
   }
 
@@ -163,19 +194,24 @@ class MapController {
     for (final place in places) {
       if (place.latitude == null || place.longitude == null) continue;
 
-      final img = await _loadImage(PlaceCategory.searchPinAssetPath);
+      final img = await _getOrCreatePinImage(
+        const Color(0xFFE91E63),
+        Icons.search_rounded,
+      );
+
       final coord = Position(place.longitude!, place.latitude!);
 
       final annotation = await _pointAnnotationManager!.create(
         PointAnnotationOptions(
           geometry: Point(coordinates: coord),
           image: img,
-          iconSize: 0.25,
+          iconSize: 1.0,
+          iconAnchor: IconAnchor.BOTTOM,
         ),
       );
 
       _annotationIdToGooglePlace[annotation.id] = place;
-      _defaultIconSizes[annotation.id] = 0.25;
+      _defaultIconSizes[annotation.id] = 1.0;
     }
   }
 
@@ -190,7 +226,6 @@ class MapController {
 
     await fitBounds(_annotationCoordinates);
   }
-
 
   Future<void> drawRoute(
     String geoJsonGeometry, {
@@ -237,7 +272,6 @@ class MapController {
           !isLast && congestionLevels[i] != congestionLevels[i + 1];
 
       if (isLast || nextDiffers) {
-        // Draw segment from segStart to i+1 (inclusive end coordinate)
         final endIdx = (i + 1 < coordinates.length)
             ? i + 1
             : coordinates.length - 1;
@@ -280,16 +314,6 @@ class MapController {
     await _polylineAnnotationManager!.deleteAll();
   }
 
-  Future<Uint8List> _loadImage(String assetPath) async {
-    if (_imageCache.containsKey(assetPath)) {
-      return _imageCache[assetPath]!;
-    }
-    final bytes = await rootBundle.load(assetPath);
-    final data = bytes.buffer.asUint8List();
-    _imageCache[assetPath] = data;
-    return data;
-  }
-
   Future<void> dispose() async {
     _tapEventsCancelable?.cancel();
     _imageCache.clear();
@@ -297,6 +321,7 @@ class MapController {
     _annotationIdToGooglePlace.clear();
     _defaultIconSizes.clear();
     _selectedAnnotationId = null;
+    _searchResultAnnotation = null;
     _searchResultGooglePlace = null;
   }
 
@@ -316,11 +341,9 @@ class MapController {
     if (_pointAnnotationManager == null) return;
 
     await _resetSelectedAnnotation();
-
     _selectedAnnotationId = annotationId;
 
-    final defaultSize = _defaultIconSizes[annotationId] ?? 0.2;
-
+    final defaultSize = _defaultIconSizes[annotationId] ?? 1.0;
     await _popAnnotation(annotationId, defaultSize);
   }
 
@@ -335,7 +358,6 @@ class MapController {
 
     for (int i = 0; i < frames.length; i++) {
       await _updateAnnotationSize(annotationId, frames[i]);
-
       await Future.delayed(durations[i]);
     }
   }
@@ -346,7 +368,6 @@ class MapController {
     }
 
     final defaultSize = _defaultIconSizes[_selectedAnnotationId!];
-
     if (defaultSize != null) {
       await _updateAnnotationSize(_selectedAnnotationId!, defaultSize);
     }

@@ -10,18 +10,18 @@ class MapActionButton extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.isFilled,
-    required this.onTap,
+    this.onTap,
   });
   final String label;
   final IconData icon;
   final Color color;
   final bool isFilled;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
-      onTap: onTap,
+      onTap: onTap ?? () {},
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(

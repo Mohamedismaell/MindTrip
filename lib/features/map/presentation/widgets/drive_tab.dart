@@ -128,10 +128,14 @@ class DriveTab extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Row(
                     children: [
-                      Text(
-                        '${navigationState.destinationName}',
-                        style: AppTextStyles.h8Bold,
-                        textAlign: TextAlign.center,
+                      Flexible(
+                        child: Text(
+                          '${navigationState.destinationName}',
+                          style: AppTextStyles.h8Bold,
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       Expanded(
                         child: Text(
@@ -206,17 +210,21 @@ class DriveTab extends StatelessWidget {
                       ),
                     ] else ...[
                       Skeleton.keep(
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 48.h,
-                          child: CustomOtlinedButton(
-                            onPressed: isLoading
-                                ? null
-                                : () => context
-                                      .read<MapNavigationCubit>()
-                                      .stopNavigation(),
-                            icon: Icons.close,
-                            text: 'Stop Navigation',
+                        child: CustomOtlinedButton(
+                          onPressed: isLoading
+                              ? null
+                              : () => context
+                                    .read<MapNavigationCubit>()
+                                    .stopNavigation(),
+                          icon: Icons.close,
+                          text: 'Stop',
+                          textStyle: context.textTheme.labelLarge?.copyWith(
+                            color: context.colorTheme.error,
+                          ),
+                          color: context.colorTheme.error,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 7.r,
+                            horizontal: 5.r,
                           ),
                         ),
                       ),

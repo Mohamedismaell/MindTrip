@@ -26,10 +26,8 @@ sealed class MapNavigationState with _$MapNavigationState {
 
     @Default(false) bool isSequentialMode,
 
-    /// Name of the place being navigated to
     String? destinationName,
 
-    /// All place names in sequential navigation order
     @Default([]) List<String> placeNames,
   }) = _MapNavigationState;
 
@@ -44,22 +42,21 @@ sealed class MapNavigationState with _$MapNavigationState {
   }
 
   String formatDuration(int minutes) {
-    if (minutes < 60) {
-      return '$minutes min';
+    final days = minutes ~/ 1440;
+    final hours = (minutes % 1440) ~/ 60;
+    final mins = minutes % 60;
+
+    if (days > 0) {
+      if (hours > 0) return '${days}d ${hours}h';
+      return '${days}d';
     }
 
-    final hours = minutes ~/ 60;
-    final remainingMinutes = minutes % 60;
-
-    if (remainingMinutes == 0) {
-      return '$hours hr';
+    if (hours > 0) {
+      if (mins > 0) return '${hours}h ${mins}m';
+      return '${hours}h';
     }
 
-    if (remainingMinutes < 10) {
-      return '$hours hr $remainingMinutes min';
-    }
-
-    return '$hours:${remainingMinutes.toString().padLeft(2, '0')} hr';
+    return '${mins}m';
   }
 
   String formatDistance(double meters) {

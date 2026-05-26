@@ -14,9 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MapNavigationState {
 
- MapRoute? get activeRoute; bool get isRouteLoading; String? get routeError; NavigationProfile get selectedProfile; int get currentStepIndex; int get totalLegs; int get currentLegIndex; bool get isSequentialMode;/// Name of the place being navigated to
- String? get destinationName;/// All place names in sequential navigation order
- List<String> get placeNames;
+ MapRoute? get activeRoute; bool get isRouteLoading; String? get routeError; NavigationProfile get selectedProfile; int get currentStepIndex; int get totalLegs; int get currentLegIndex; bool get isSequentialMode; String? get destinationName; List<String> get placeNames;
 /// Create a copy of MapNavigationState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -222,11 +220,8 @@ class _MapNavigationState extends MapNavigationState {
 @override@JsonKey() final  int totalLegs;
 @override@JsonKey() final  int currentLegIndex;
 @override@JsonKey() final  bool isSequentialMode;
-/// Name of the place being navigated to
 @override final  String? destinationName;
-/// All place names in sequential navigation order
  final  List<String> _placeNames;
-/// All place names in sequential navigation order
 @override@JsonKey() List<String> get placeNames {
   if (_placeNames is EqualUnmodifiableListView) return _placeNames;
   // ignore: implicit_dynamic_type

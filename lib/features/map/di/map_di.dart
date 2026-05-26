@@ -6,7 +6,6 @@ import 'package:mindtrip/features/map/domain/use_cases/fetch_place_details_use_c
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import 'package:mindtrip/features/map/domain/use_cases/find_autocomplete_predictions_use_case.dart';
 import 'package:mindtrip/features/map/domain/use_cases/get_route_use_case.dart';
-import 'package:mindtrip/features/map/domain/use_cases/nearby_search_use_case.dart';
 
 import '../data/datasources/map_route_remote_datasource.dart';
 import '../data/datasources/google_places_datasource.dart';
@@ -59,10 +58,6 @@ class MapDi {
       () =>
           FetchPlacePhotoUrlsUseCase(repository: sl<GooglePlacesRepository>()),
     );
-    sl.registerLazySingleton<NearbySearchUseCase>(
-      () => NearbySearchUseCase(repository: sl<GooglePlacesRepository>()),
-    );
-
     // Cubits
     sl.registerFactory<MapCubit>(
       () => MapCubit(
@@ -74,7 +69,6 @@ class MapDi {
         findAutocompletePredictionsUseCase:
             sl<FindAutocompletePredictionsUseCase>(),
         fetchPlaceDetailsUseCase: sl<FetchPlaceDetailsUseCase>(),
-        nearbySearchUseCase: sl<NearbySearchUseCase>(),
       ),
     );
 

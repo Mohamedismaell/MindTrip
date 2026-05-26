@@ -74,6 +74,7 @@ class _MapScreenState extends State<MapScreen> {
 
     if (annotations.isNotEmpty) {
       //! Annotations loaded before the map was ready
+      await _mapController.addPlaceAnnotations(annotations);
       await _mapController.fitToAnnotations();
 
       if (mounted && !context.read<MapCubit>().state.hasTripDays) {
@@ -102,6 +103,10 @@ class _MapScreenState extends State<MapScreen> {
       );
       if (nearest != null && mounted) {
         context.read<MapCubit>().selectPlace(nearest.place.id);
+        context.read<MapCubit>().triggerFlyTo(
+          nearest.place.location.latitude,
+          nearest.place.location.longitude,
+        );
       }
     } else {
       //* select first place.
@@ -156,7 +161,7 @@ class _MapScreenState extends State<MapScreen> {
               right: 42.w,
               child: NavigaiotnStep(),
             ),
-            // buttons controls and cards
+            //  controls and cards
             Positioned(
               bottom: 20.h,
               left: 0,
@@ -174,7 +179,14 @@ class _MapScreenState extends State<MapScreen> {
                         if (hasTripDays) ...[
                           const DaySelectorBar(),
                           SizedBox(height: 12.h),
+                          MapRelocateButton(
+                            icon: Icons.directions_rounded,
+                            onPressed: () {
+                              context.read<MapCubit>().clearSelection();
+                            },
+                          ),
                         ],
+                        SizedBox(height: 12.h),
                         MapRelocateButton(onPressed: _relocateUser),
                       ],
                     ),

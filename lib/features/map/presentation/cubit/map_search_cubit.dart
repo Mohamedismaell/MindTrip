@@ -4,14 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_details_use_case.dart';
 import 'package:mindtrip/features/map/domain/use_cases/find_autocomplete_predictions_use_case.dart';
-import 'package:mindtrip/features/map/domain/use_cases/nearby_search_use_case.dart';
 import '../../domain/entities/google_place.dart';
 import 'map_search_state.dart';
 
 class MapSearchCubit extends Cubit<MapSearchState> {
   final FindAutocompletePredictionsUseCase _findAutocompletePredictionsUseCase;
   final FetchPlaceDetailsUseCase _fetchPlaceDetailsUseCase;
-  final NearbySearchUseCase _nearbySearchUseCase;
 
   Timer? _searchDebounce;
   CancelToken? _autocompleteCancelToken;
@@ -22,10 +20,8 @@ class MapSearchCubit extends Cubit<MapSearchState> {
     required FindAutocompletePredictionsUseCase
     findAutocompletePredictionsUseCase,
     required FetchPlaceDetailsUseCase fetchPlaceDetailsUseCase,
-    required NearbySearchUseCase nearbySearchUseCase,
   }) : _findAutocompletePredictionsUseCase = findAutocompletePredictionsUseCase,
        _fetchPlaceDetailsUseCase = fetchPlaceDetailsUseCase,
-       _nearbySearchUseCase = nearbySearchUseCase,
        super(MapSearchState.initial());
 
   CancelToken _getAutocompleteToken() {
@@ -38,12 +34,6 @@ class MapSearchCubit extends Cubit<MapSearchState> {
     _resolveCancelToken?.cancel();
     _resolveCancelToken = CancelToken();
     return _resolveCancelToken!;
-  }
-
-  CancelToken _nearbyToken() {
-    _nearbyCancelToken?.cancel();
-    _nearbyCancelToken = CancelToken();
-    return _nearbyCancelToken!;
   }
 
   void search(String query) {
@@ -133,35 +123,6 @@ class MapSearchCubit extends Cubit<MapSearchState> {
 
   void clearResolvedSearchResult() {
     emit(state.copyWith(clearResolvedSearchPlace: true));
-  }
-
-  Future<void> discoverNearby(double lat, double lng) async {
-    final token = _nearbyToken();
-    emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
-    final result = await _nearbySearchUseCase.call(
-      lat,
-      lng,
-      1500,
-      cancelToken: token,
-    );
-
-    result.when(
-      success: (places) {
-        if (!isClosed) {
-          emit(state.copyWith(nearbyPlaces: places, isSearchLoading: false));
-        }
-      },
-      failure: (failure) {
-        if (!isClosed && failure is! CancelledFailure) {
-          emit(
-            state.copyWith(
-              isSearchLoading: false,
-              searchError: failure.message,
-            ),
-          );
-        }
-      },
-    );
   }
 
   @override

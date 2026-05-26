@@ -22,7 +22,7 @@ class MapCubit extends Cubit<MapState> {
     : _fetchPlacePhotoUrlsUseCase = fetchPlacePhotoUrlsUseCase,
       super(MapState.initial());
 
-  // ─── Cancel token helpers ────────────────────────────────────────────────
+  //  Cancel token helpers
 
   CancelToken _getNewPhotosToken() {
     _photosCancelToken?.cancel();
@@ -30,7 +30,7 @@ class MapCubit extends Cubit<MapState> {
     return _photosCancelToken!;
   }
 
-  // ─── Place loading ───────────────────────────────────────────────────────
+  //  Place loading ──
 
   void loadPlaces(List<PlaceModel> places) {
     if (isClosed) return;
@@ -69,22 +69,10 @@ class MapCubit extends Cubit<MapState> {
     int sequence = 1;
 
     for (final slot in day.timeSlots) {
-      Color periodColor;
-      String periodLabel;
-      switch (slot.period) {
-        case DayPeriod.morning:
-          periodColor = TripColorPalette.getColorsForId('morning').edge;
-          periodLabel = 'Morning';
-          break;
-        case DayPeriod.afternoon:
-          periodColor = TripColorPalette.getColorsForId('afternoon').edge;
-          periodLabel = 'Afternoon';
-          break;
-        case DayPeriod.evening:
-          periodColor = TripColorPalette.getColorsForId('evening').edge;
-          periodLabel = 'Evening';
-          break;
-      }
+      final tripColors = TripColorPalette.getPeriodColors(slot.period);
+      final periodColor = tripColors.edge;
+      final periodLabel =
+          slot.period.name[0].toUpperCase() + slot.period.name.substring(1);
 
       for (final place in slot.places) {
         annotations.add(
@@ -109,24 +97,29 @@ class MapCubit extends Cubit<MapState> {
       ),
     );
   }
-
-  // ─── Place selection ─────────────────────────────────────────────────────
+  //  Place selection
 
   void selectPlace(String placeId) {
     if (isClosed) return;
-    final entry = state.annotations.where((e) => e.place.id == placeId).firstOrNull;
+    final entry = state.annotations
+        .where((e) => e.place.id == placeId)
+        .firstOrNull;
     if (entry == null) return;
 
-    // If same place already fully visible — just re-center.
     if (state.selectedPlace?.id == placeId && state.isBottomSheetVisible) {
-      triggerFlyTo(entry.place.location.latitude, entry.place.location.longitude);
+      triggerFlyTo(
+        entry.place.location.latitude,
+        entry.place.location.longitude,
+      );
       return;
     }
 
-    // If same place but sheet was dismissed — re-open without clearing photos.
     if (state.selectedPlace?.id == placeId && !state.isBottomSheetVisible) {
       emit(state.copyWith(isBottomSheetVisible: true));
-      triggerFlyTo(entry.place.location.latitude, entry.place.location.longitude);
+      triggerFlyTo(
+        entry.place.location.latitude,
+        entry.place.location.longitude,
+      );
       return;
     }
 
@@ -185,6 +178,19 @@ class MapCubit extends Cubit<MapState> {
     }
   }
 
+  void clearSelection() {
+    if (isClosed) return;
+    emit(
+      state.copyWith(
+        clearSelectedPlace: true,
+        clearSelectedGooglePlace: true,
+        isBottomSheetVisible: false,
+        selectedPlacePhotoUrls: [],
+        navigationPulse: state.navigationPulse + 1,
+      ),
+    );
+  }
+
   void removeSearchPlace(String placeId) {
     if (isClosed) return;
     final annotations = List<MapAnnotationEntry>.from(state.annotations)
@@ -198,14 +204,18 @@ class MapCubit extends Cubit<MapState> {
           isBottomSheetVisible: false,
           selectedPlacePhotoUrls: [],
           clearSelectedGooglePlace: true,
+          navigationPulse: state.navigationPulse + 1,
         ),
       );
     } else {
-      emit(state.copyWith(annotations: annotations));
+      emit(state.copyWith(
+        annotations: annotations,
+        navigationPulse: state.navigationPulse + 1,
+      ));
     }
   }
 
-  // ─── Photos ──────────────────────────────────────────────────────────────
+  //  Photos
 
   Future<void> fetchPlacePhotoUrls(List<dynamic> photos) async {
     final token = _getNewPhotosToken();
@@ -221,18 +231,19 @@ class MapCubit extends Cubit<MapState> {
       success: (urls) {
         if (isClosed || urls.isEmpty) return;
 
-        // Update the selected place's imageUrls if it has none yet.
         if (state.selectedPlace != null &&
             (state.selectedPlace!.imageUrls == null ||
                 state.selectedPlace!.imageUrls!.isEmpty)) {
           final updatedPlace = state.selectedPlace!.copyWith(imageUrls: urls);
 
           final annotations = List<MapAnnotationEntry>.from(state.annotations);
-          final index =
-              annotations.indexWhere((e) => e.place.id == updatedPlace.id);
+          final index = annotations.indexWhere(
+            (e) => e.place.id == updatedPlace.id,
+          );
           if (index != -1) {
-            annotations[index] =
-                annotations[index].copyWith(place: updatedPlace);
+            annotations[index] = annotations[index].copyWith(
+              place: updatedPlace,
+            );
           }
 
           emit(
@@ -248,12 +259,12 @@ class MapCubit extends Cubit<MapState> {
       },
       failure: (failure) {
         if (failure is CancelledFailure) return;
-        // Photo fetch failure is non-critical — silently ignore.
+        // Photo fetch failure is non-critical  silently ignore.
       },
     );
   }
 
-  // ─── UI helpers ──────────────────────────────────────────────────────────
+  //  UI helpers ──
 
   void dismissBottomSheet() {
     if (isClosed) return;
@@ -266,12 +277,6 @@ class MapCubit extends Cubit<MapState> {
     );
   }
 
-  /// Triggers the map to fly to [lat]/[lng].
-  ///
-  /// Uses a monotonically-increasing [flyToPulse] counter so the listener
-  /// fires even when the coordinates are identical to the previous flyTo.
-  /// This avoids the old double-emit (null → value) pattern that polluted
-  /// the state stream with a spurious null emission.
   void triggerFlyTo(double lat, double lng) {
     if (isClosed) return;
     emit(
