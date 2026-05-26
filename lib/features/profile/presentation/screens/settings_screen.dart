@@ -162,11 +162,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: 'Are you sure you want to log out?',
                     primaryText: 'Cancel',
                     onPrimary: () {},
-                    secondaryText: 'Yes',
+                    secondaryText: 'Log Out',
                     onSecondary: () => context.read<AppGateCubit>().logout(),
                   );
                 },
                 icon: Icons.logout_rounded,
+                color: context.colorTheme.error,
                 text: 'Log Out',
               ),
             ),

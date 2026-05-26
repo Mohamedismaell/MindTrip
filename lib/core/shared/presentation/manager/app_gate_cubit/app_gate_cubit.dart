@@ -61,6 +61,8 @@ class AppGateCubit extends Cubit<AppGateState> {
   }
 
   Future<void> loginSuccess() async {
+    emit(AppGateLoading());
+
     await userCubit.loadUser();
 
     if (userCubit.state.userStatus != UserStatus.loaded) {
