@@ -324,7 +324,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: AuthStatus.otpSent));
+        emit(state.copyWith(status: AuthStatus.otpResent));
       },
       failure: (error) {
         emit(

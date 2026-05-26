@@ -76,7 +76,7 @@ class OtpVerificationStatusListener extends StatelessWidget {
           } else {
             context.pushReplacement(AppRoutes.completeSignUpScreen);
           }
-        } else if (state.status == AuthStatus.otpSent) {
+        } else if (state.status == AuthStatus.otpResent) {
           _showSnackBar(
             context: context,
             isError: false,

@@ -22,7 +22,7 @@ class GoogleAuthProvider implements SocialAuthProvider {
     await _google.signOut();
   }
 }
-
+// metohiw694@okcpress.com
 // import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 // import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:mindtrip/core/shared/auth/providers/social_auth_provider.dart';
