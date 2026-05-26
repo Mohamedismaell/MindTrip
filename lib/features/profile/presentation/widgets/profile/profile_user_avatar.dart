@@ -26,7 +26,7 @@ class ProfileUserAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: (imageUrl != null && imageUrl!.isNotEmpty)
           ? AppCachedImage(imagePath: imageUrl!, width: size.w, height: size.w)
-          : Image.asset('assets/images/profile/deafult_user_cover.png'),
+          : Image.asset('assets/images/profile/deafult_user_cover.webp'),
     );
   }
 }

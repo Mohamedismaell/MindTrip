@@ -4,17 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';
 import 'package:mindtrip/features/map/presentation/controllers/map_controller.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_listener.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_relocate_button.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_search_bar.dart';
 import 'package:mindtrip/features/map/presentation/widgets/navigaiotn_step.dart';
+
 import '../../data/models/map_trip_extra.dart';
 import '../widgets/day_selector_bar.dart';
 import '../widgets/place_card_row.dart';
@@ -39,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
 
     if (widget.tripExtra != null) {
       context.read<MapCubit>().loadTripDays(widget.tripExtra!.days);
-    } else if (widget.places != null) {
+    } else if (widget.places != null && widget.places!.isNotEmpty) {
       context.read<MapCubit>().loadPlaces(widget.places!);
     }
   }
@@ -50,6 +48,7 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
+  // Current user position
   Future<void> _relocateUser() async {
     final position = await sl<LocationService>().getCurrentLocation();
     if (mounted && position != null) {
@@ -59,6 +58,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     await _mapController.init(mapboxMap);
+
     _mapController.setupAnnotationTapHandler(
       onPlaceTap: (placeId) {
         if (mounted) context.read<MapCubit>().selectPlace(placeId);
@@ -68,33 +68,53 @@ class _MapScreenState extends State<MapScreen> {
       },
     );
 
-    if (mounted) {
-      final entries = context.read<MapCubit>().state.annotations;
-      await _mapController.addPlaceAnnotations(entries);
+    if (!mounted) return;
+
+    final annotations = context.read<MapCubit>().state.annotations;
+
+    if (annotations.isNotEmpty) {
+      //! Annotations loaded before the map was ready
       await _mapController.fitToAnnotations();
 
       if (mounted && !context.read<MapCubit>().state.hasTripDays) {
         await _autoSelectNearestPlace();
       }
+    } else {
+      await _flyToUserLocation();
     }
   }
 
+  // Selects Nearest Place or first annotation
+
   Future<void> _autoSelectNearestPlace() async {
+    if (!mounted) return;
     final annotations = context.read<MapCubit>().state.annotations;
     if (annotations.isEmpty) return;
 
     final position = await sl<LocationService>().getCurrentLocation();
-    if (position != null && mounted) {
+    if (!mounted) return;
+
+    if (position != null) {
       final nearest = DistanceUtils.findNearestAnnotation(
         annotations,
         position.latitude,
         position.longitude,
       );
-      if (nearest != null) {
+      if (nearest != null && mounted) {
         context.read<MapCubit>().selectPlace(nearest.place.id);
       }
-    } else if (mounted) {
-      context.read<MapCubit>().selectPlace(annotations.first.place.id);
+    } else {
+      //* select first place.
+      if (mounted) {
+        context.read<MapCubit>().selectPlace(annotations.first.place.id);
+      }
+    }
+  }
+
+  Future<void> _flyToUserLocation() async {
+    final position = await sl<LocationService>().getCurrentLocation();
+    if (mounted && position != null) {
+      await _mapController.flyTo(position.latitude, position.longitude);
     }
   }
 
@@ -117,7 +137,7 @@ class _MapScreenState extends State<MapScreen> {
               onMapCreated: _onMapCreated,
               styleUri: 'mapbox://styles/xmohamedx/cmpc4uw4g00a901s75avq3q3a',
             ),
-            // Layer to catch taps on "empty" map areas to collapse the sheet
+            //collapses the bottom sheet on tap.
             Positioned.fill(
               child: Listener(
                 behavior: HitTestBehavior.translucent,
@@ -136,7 +156,7 @@ class _MapScreenState extends State<MapScreen> {
               right: 42.w,
               child: NavigaiotnStep(),
             ),
-            // Grouped controls and cards
+            // buttons controls and cards
             Positioned(
               bottom: 20.h,
               left: 0,

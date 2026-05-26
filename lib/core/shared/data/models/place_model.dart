@@ -81,6 +81,34 @@ class PlaceModel extends Equatable {
     };
   }
 
+  PlaceModel copyWith({
+    String? id,
+    String? name,
+    String? description,
+    LocationModel? location,
+    List<String>? imageUrls,
+    PlaceCategory? category,
+    double? rating,
+    int? reviewCount,
+    double? price,
+    bool? isFavorite,
+    PlaceBadge? badge,
+  }) {
+    return PlaceModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      location: location ?? this.location,
+      imageUrls: imageUrls ?? this.imageUrls,
+      category: category ?? this.category,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      price: price ?? this.price,
+      isFavorite: isFavorite ?? this.isFavorite,
+      badge: badge ?? this.badge,
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,

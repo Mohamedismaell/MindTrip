@@ -39,7 +39,7 @@ class TripMapPreviewCard extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   AppCachedImage(
-                    imagePath: 'assets/images/map/map_preview.png',
+                    imagePath: 'assets/images/map/map_preview.webp',
                     fit: BoxFit.cover,
                   ),
                 ],

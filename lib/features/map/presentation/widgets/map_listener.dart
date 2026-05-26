@@ -14,12 +14,15 @@ class MapListener extends StatelessWidget {
     required this.child,
     required MapController mapController,
   }) : _mapController = mapController;
+
   final MapController _mapController;
   final Widget child;
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
+        //  Route draw
         BlocListener<MapNavigationCubit, MapNavigationState>(
           listenWhen: (prev, curr) => prev.activeRoute != curr.activeRoute,
           listener: (context, state) async {
@@ -33,31 +36,35 @@ class MapListener extends StatelessWidget {
             }
           },
         ),
+
+        //  Search result resolved → show on map
         BlocListener<MapSearchCubit, MapSearchState>(
           listenWhen: (prev, curr) =>
               prev.resolvedSearchPlace != curr.resolvedSearchPlace &&
               curr.resolvedSearchPlace != null,
           listener: (context, state) async {
             final result = state.resolvedSearchPlace!;
-
             if (context.mounted) {
               context.read<MapCubit>().showGooglePlaceDetails(result);
               context.read<MapSearchCubit>().clearResolvedSearchResult();
             }
           },
         ),
+
+        //  FlyTo trigger (pulse-based)
         BlocListener<MapCubit, MapState>(
-          listenWhen: (prev, curr) =>
-              prev.flyToLat != curr.flyToLat &&
-              curr.flyToLat != null &&
-              curr.flyToLng != null,
+          listenWhen: (prev, curr) => prev.flyToPulse != curr.flyToPulse,
           listener: (context, state) async {
-            await _mapController.flyTo(state.flyToLat!, state.flyToLng!);
-            if (context.mounted) {
-              context.read<MapCubit>().clearFlyToLocation();
+            if (state.flyToLat != null && state.flyToLng != null) {
+              await _mapController.flyTo(state.flyToLat!, state.flyToLng!);
+              if (context.mounted) {
+                context.read<MapCubit>().clearFlyToLocation();
+              }
             }
           },
         ),
+
+        //  Nearby places pins
         BlocListener<MapSearchCubit, MapSearchState>(
           listenWhen: (prev, curr) => prev.nearbyPlaces != curr.nearbyPlaces,
           listener: (context, state) async {
@@ -68,13 +75,8 @@ class MapListener extends StatelessWidget {
             }
           },
         ),
-        BlocListener<MapCubit, MapState>(
-          listenWhen: (prev, curr) =>
-              prev.selectedDayIndex != curr.selectedDayIndex,
-          listener: (context, state) async {
-            // Removed automatic _navigateAll() trigger.
-          },
-        ),
+
+        //  Annotations changed (day switch || place load)
         BlocListener<MapCubit, MapState>(
           listenWhen: (prev, curr) => prev.annotations != curr.annotations,
           listener: (context, state) async {

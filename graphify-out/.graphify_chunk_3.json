@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {"id": "android_app_icon", "label": "Android Launcher Icon", "file_type": "image", "source_file": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "android_splash_screen", "label": "Android Splash Screen", "file_type": "image", "source_file": "android/app/src/main/res/drawable-xxxhdpi/splash.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "android_splash_android12", "label": "Android 12 Splash Screen", "file_type": "image", "source_file": "android/app/src/main/res/drawable-xxxhdpi/android12splash.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "android_splash_background", "label": "Android Splash Background", "file_type": "image", "source_file": "android/app/src/main/res/drawable/background.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "android_foreground_icon", "label": "Android Adaptive Icon Foreground", "file_type": "image", "source_file": "android/app/src/main/res/drawable-xxxhdpi/ic_launcher_foreground.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "android_night_splash", "label": "Android Dark Mode Splash Screens", "file_type": "image", "source_file": "android/app/src/main/res/drawable-night-xxxhdpi/android12splash.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "ios_app_icon", "label": "iOS App Icon (All Sizes)", "file_type": "image", "source_file": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "ios_launch_image", "label": "iOS Launch Screen Image", "file_type": "image", "source_file": "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "ios_launch_background", "label": "iOS Launch Background", "file_type": "image", "source_file": "ios/Runner/Assets.xcassets/LaunchBackground.imageset/background.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "macos_app_icon", "label": "macOS App Icon (All Sizes)", "file_type": "image", "source_file": "macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "web_favicon", "label": "Web Favicon", "file_type": "image", "source_file": "web/favicon.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "web_pwa_icons", "label": "PWA App Icons (192/512px)", "file_type": "image", "source_file": "web/icons/Icon-512.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "web_maskable_icons", "label": "PWA Maskable Icons", "file_type": "image", "source_file": "web/icons/Icon-maskable-512.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "web_splash_light", "label": "Web Splash Screen (Light Mode)", "file_type": "image", "source_file": "web/splash/img/light-4x.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "web_splash_dark", "label": "Web Splash Screen (Dark Mode)", "file_type": "image", "source_file": "web/splash/img/dark-4x.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}
+  ],
+  "edges": [
+    {"source": "android_app_icon", "target": "ios_app_icon", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "android/app/src/main/res", "source_location": null, "weight": 1.0},
+    {"source": "android_app_icon", "target": "macos_app_icon", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "android/app/src/main/res", "source_location": null, "weight": 1.0},
+    {"source": "ios_app_icon", "target": "macos_app_icon", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "ios/Runner/Assets.xcassets", "source_location": null, "weight": 1.0},
+    {"source": "web_favicon", "target": "web_pwa_icons", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "web", "source_location": null, "weight": 1.0},
+    {"source": "web_pwa_icons", "target": "web_maskable_icons", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "web/icons", "source_location": null, "weight": 1.0},
+    {"source": "android_splash_screen", "target": "ios_launch_image", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "android/app/src/main/res", "source_location": null, "weight": 1.0},
+    {"source": "android_splash_android12", "target": "android_splash_background", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "android/app/src/main/res", "source_location": null, "weight": 1.0},
+    {"source": "android_night_splash", "target": "android_splash_android12", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "android/app/src/main/res/drawable-night-xxxhdpi", "source_location": null, "weight": 1.0},
+    {"source": "web_splash_light", "target": "web_splash_dark", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "web/splash/img", "source_location": null, "weight": 1.0},
+    {"source": "ios_launch_image", "target": "ios_launch_background", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "ios/Runner/Assets.xcassets", "source_location": null, "weight": 1.0}
+  ],
+  "hyperedges": [
+    {
+      "id": "platform_app_icons",
+      "label": "Cross-Platform App Icons",
+      "nodes": ["android_app_icon", "ios_app_icon", "macos_app_icon", "web_favicon"],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "android/app/src/main/res"
+    },
+    {
+      "id": "platform_splash_screens",
+      "label": "Cross-Platform Splash Screens",
+      "nodes": ["android_splash_screen", "android_splash_android12", "ios_launch_image", "web_splash_light"],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "android/app/src/main/res"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

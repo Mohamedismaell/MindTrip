@@ -44,7 +44,7 @@ class AppCachedImage extends StatelessWidget {
     if (!_isNetworkImage) {
       //Todo add place holder image or random asset images
       return Image.asset(
-        imagePath ?? 'assets/images/onboarding/Pyramids.jpg',
+        imagePath ?? 'assets/images/onboarding/Pyramids.webp',
         width: width,
         height: height,
         fit: fit,

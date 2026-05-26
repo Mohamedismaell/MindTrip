@@ -23,7 +23,7 @@ class UserRemoteDataSource {
     final formDataMap = {
       'file': await MultipartFile.fromFile(
         filePath,
-        filename: 'profile_photo.jpg',
+        filename: 'profile_photo.webp',
       ),
     };
 

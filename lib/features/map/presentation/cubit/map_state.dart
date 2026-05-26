@@ -26,6 +26,12 @@ sealed class MapState with _$MapState {
     @Default(false) bool clearSelectedPlace,
     @Default(false) bool clearSelectedGooglePlace,
     @Default(false) bool clearFlyToLocation,
+
+    /// Monotonically-increasing counter that bumps on every triggerFlyTo call.
+    /// The MapListener uses this to reliably detect a new flyTo request even
+    /// when the lat/lng coordinates are the same as the previous request.
+    @Default(0) int flyToPulse,
+
     double? flyToLat,
     double? flyToLng,
 

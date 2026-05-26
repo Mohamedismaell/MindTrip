@@ -1,14 +1,14 @@
 class TripCoverAssets {
   //Todo Change them later
   static const _cityAssets = <String, String>{
-    'Cairo': 'assets/images/onboarding/Pyramids.jpg',
-    'Dahab': 'assets/images/onboarding/Pyramids.jpg',
-    'Luxor': 'assets/images/onboarding/Pyramids.jpg',
-    'Aswan': 'assets/images/onboarding/Pyramids.jpg',
-    'Siwa': 'assets/images/onboarding/Pyramids.jpg',
+    'Cairo': 'assets/images/onboarding/Pyramids.webp',
+    'Dahab': 'assets/images/onboarding/Pyramids.webp',
+    'Luxor': 'assets/images/onboarding/Pyramids.webp',
+    'Aswan': 'assets/images/onboarding/Pyramids.webp',
+    'Siwa': 'assets/images/onboarding/Pyramids.webp',
   };
 
-  static const _defaultAsset = 'assets/images/onboarding/Pyramids.jpg';
+  static const _defaultAsset = 'assets/images/onboarding/Pyramids.webp';
 
   static String getForCity(String city) {
     final lowercaseCity = city.toLowerCase();

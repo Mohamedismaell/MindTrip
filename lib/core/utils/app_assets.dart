@@ -10,18 +10,18 @@ class AppAssets {
   static const String _iconsPath = 'assets/icons';
 
   // Splash
-  static const String splashPattern = '$_splashImagesPath/Pattern.jpg';
-  static const String splashLogo = '$_splashImagesPath/logo.png';
+  static const String splashPattern = '$_splashImagesPath/Pattern.webp';
+  static const String splashLogo = '$_splashImagesPath/logo.webp';
   static const String loadingAnimation = '$_animationImagesPath/Loading.json';
 
   // Onboarding Images
-  static const String pyramidsImage = '$_onboardingImagesPath/Pyramids.jpg';
-  static const String aiPlannerImage = '$_onboardingImagesPath/Ai_Planner.png';
+  static const String pyramidsImage = '$_onboardingImagesPath/Pyramids.webp';
+  static const String aiPlannerImage = '$_onboardingImagesPath/Ai_Planner.webp';
   static const String budgetOptimizerImage =
-      '$_onboardingImagesPath/Budget_Optimizer.png';
+      '$_onboardingImagesPath/Budget_Optimizer.webp';
   static const String hiddenGemsImage =
-      '$_onboardingImagesPath/Hidden_Gems.png';
-  static const String mapImage = '$_mapImagesPath/map_marker.png';
+      '$_onboardingImagesPath/Hidden_Gems.webp';
+  static const String mapImage = '$_mapImagesPath/map_marker.webp';
   // Auth Images & SVGs
   static const String emailCampaignSvg =
       '$_authImagesPath/Email campaign-cuate 1(1).svg';

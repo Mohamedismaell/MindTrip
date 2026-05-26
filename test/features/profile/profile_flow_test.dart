@@ -35,9 +35,11 @@ import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:mindtrip/features/profile/presentation/screens/fq_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/user_policy_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
+import 'package:mindtrip/features/profile/presentation/screens/terms_of_service_screen.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
 
 void main() {

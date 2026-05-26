@@ -1,0 +1,6 @@
+﻿  AST extraction: 100/479 uncached files (20%) [16 workers]
+  AST extraction: 200/479 uncached files (41%) [16 workers]
+  AST extraction: 300/479 uncached files (62%) [16 workers]
+  AST extraction: 400/479 uncached files (83%) [16 workers]
+  AST extraction: 480/480 files (100%) [16 workers]
+AST: 4422 nodes, 4104 edges

@@ -1,0 +1,115 @@
+{
+  "nodes": [
+    {"id": "auth_icon_closed_eyes", "label": "Closed Eyes Icon (Password Toggle)", "file_type": "image", "source_file": "assets/icons/Closed Eyes.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "auth_icon_google", "label": "Google Sign-In Icon", "file_type": "image", "source_file": "assets/icons/devicon_google.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "auth_icon_email", "label": "Email Input Icon", "file_type": "image", "source_file": "assets/icons/email.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "auth_icon_facebook", "label": "Facebook Sign-In Icon", "file_type": "image", "source_file": "assets/icons/icon-park_facebook.png", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "auth_icon_lock", "label": "Lock/Password Icon", "file_type": "image", "source_file": "assets/icons/lock.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "auth_icon_person", "label": "Person/Username Icon", "file_type": "image", "source_file": "assets/icons/person.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "ai_planner_icon_face", "label": "AI Chat Bot Face Icon", "file_type": "image", "source_file": "assets/icons/ai_planner/ai_chat_face.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "ai_planner_icon_chatbot", "label": "AI Chatbot Illustration", "file_type": "image", "source_file": "assets/icons/ai_planner/Chat bot-amico 1.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "bottom_nav_ai_star_filled", "label": "Bottom Nav: AI Planner (active)", "file_type": "image", "source_file": "assets/icons/bottom_nav/ai_star_filled.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "bottom_nav_ai_star_outlined", "label": "Bottom Nav: AI Planner (inactive)", "file_type": "image", "source_file": "assets/icons/bottom_nav/ai_star_outlined.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "bottom_nav_explore_filled", "label": "Bottom Nav: Explore (active)", "file_type": "image", "source_file": "assets/icons/bottom_nav/explore_filled.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "bottom_nav_explore_outlined", "label": "Bottom Nav: Explore (inactive)", "file_type": "image", "source_file": "assets/icons/bottom_nav/explore_outlined.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "bottom_nav_home_filled", "label": "Bottom Nav: Home (active)", "file_type": "image", "source_file": "assets/icons/bottom_nav/home_filled.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "bottom_nav_home_outlined", "label": "Bottom Nav: Home (inactive)", "file_type": "image", "source_file": "assets/icons/bottom_nav/home_outlined.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "bottom_nav_person_filled", "label": "Bottom Nav: Profile (active)", "file_type": "image", "source_file": "assets/icons/bottom_nav/person_filled.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "bottom_nav_person_outlined", "label": "Bottom Nav: Profile (inactive)", "file_type": "image", "source_file": "assets/icons/bottom_nav/person_outlined.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "map_icon_beach", "label": "Map Category Icon: Beach", "file_type": "image", "source_file": "assets/icons/map/beach.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_icon_culture", "label": "Map Category Icon: Culture", "file_type": "image", "source_file": "assets/icons/map/callture.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_icon_education", "label": "Map Category Icon: Education", "file_type": "image", "source_file": "assets/icons/map/educaiton.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_icon_entertainment", "label": "Map Category Icon: Entertainment", "file_type": "image", "source_file": "assets/icons/map/entertainment.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_icon_food", "label": "Map Category Icon: Food/Restaurant", "file_type": "image", "source_file": "assets/icons/map/food.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_icon_hospital", "label": "Map Category Icon: Hospital/Medical", "file_type": "image", "source_file": "assets/icons/map/hospital.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_icon_hotel", "label": "Map Category Icon: Hotel/Accommodation", "file_type": "image", "source_file": "assets/icons/map/hotel.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_icon_shopping", "label": "Map Category Icon: Shopping", "file_type": "image", "source_file": "assets/icons/map/shopping.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "auth_image_center_vec", "label": "Auth Screen Center Vector Decoration", "file_type": "image", "source_file": "assets/images/authentication/center_vec.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "auth_image_email_campaign", "label": "Auth: Email Campaign Illustration", "file_type": "image", "source_file": "assets/images/authentication/Email campaign-cuate 1(1).svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "auth_image_well_done", "label": "Auth: Success/Well-Done Illustration", "file_type": "image", "source_file": "assets/images/authentication/undraw_well-done_kqud 1.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "map_image_preview", "label": "Map Static Preview Image", "file_type": "image", "source_file": "assets/images/map/map_preview.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_image_location_pin", "label": "Map Location Pin Marker", "file_type": "image", "source_file": "assets/images/map/location-pin.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_image_map_marker", "label": "Map Custom Marker", "file_type": "image", "source_file": "assets/images/map/map_marker.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_image_beach", "label": "Map Place Image: Beach", "file_type": "image", "source_file": "assets/images/map/beach.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_image_food", "label": "Map Place Image: Food", "file_type": "image", "source_file": "assets/images/map/food.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "map_image_hotel", "label": "Map Place Image: Hotel", "file_type": "image", "source_file": "assets/images/map/hotels.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "onboarding_image_ai_planner", "label": "Onboarding: AI Planner Feature", "file_type": "image", "source_file": "assets/images/onboarding/Ai_Planner.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "onboarding_image_budget", "label": "Onboarding: Budget Optimizer Feature", "file_type": "image", "source_file": "assets/images/onboarding/Budget_Optimizer.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "onboarding_image_hidden_gems", "label": "Onboarding: Hidden Gems Feature", "file_type": "image", "source_file": "assets/images/onboarding/Hidden_Gems.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "onboarding_image_pyramids", "label": "Onboarding: Egypt/Pyramids Hero", "file_type": "image", "source_file": "assets/images/onboarding/Pyramids.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "splash_brand_logo", "label": "Splash/Brand Logo", "file_type": "image", "source_file": "assets/images/splash/brand_logo.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "splash_pattern", "label": "Splash Background Pattern", "file_type": "image", "source_file": "assets/images/splash/Pattern.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "profile_default_cover", "label": "Profile Default Cover Image", "file_type": "image", "source_file": "assets/images/profile/deafult_user_cover.webp", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "home_icon_ai_stars", "label": "Home: AI Stars Feature Icon", "file_type": "image", "source_file": "assets/icons/home/ai_stars.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "home_icon_heart", "label": "Home: Favorites/Heart Icon", "file_type": "image", "source_file": "assets/icons/home/black_heart.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "home_icon_notification", "label": "Home: Notification Bell Icon", "file_type": "image", "source_file": "assets/icons/home/carbon_notification-new.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "home_icon_location", "label": "Home: Location Pin Icon", "file_type": "image", "source_file": "assets/icons/home/location.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+
+    {"id": "profile_icon_edit", "label": "Profile: Edit Profile Icon", "file_type": "image", "source_file": "assets/icons/profile/boxicons_edit.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "profile_icon_settings", "label": "Profile: Settings/Gear Icon", "file_type": "image", "source_file": "assets/icons/profile/setting.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null},
+    {"id": "profile_icon_wallet", "label": "Profile: Wallet/Payment Icon", "file_type": "image", "source_file": "assets/icons/profile/wallet.svg", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}
+  ],
+  "edges": [
+    {"source": "auth_icon_closed_eyes", "target": "auth_icon_lock", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "assets/icons", "source_location": null, "weight": 1.0},
+    {"source": "auth_icon_google", "target": "auth_icon_facebook", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "assets/icons", "source_location": null, "weight": 1.0},
+    {"source": "auth_icon_email", "target": "auth_icon_lock", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "assets/icons", "source_location": null, "weight": 1.0},
+
+    {"source": "bottom_nav_ai_star_filled", "target": "bottom_nav_ai_star_outlined", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "assets/icons/bottom_nav", "source_location": null, "weight": 1.0},
+    {"source": "bottom_nav_explore_filled", "target": "bottom_nav_explore_outlined", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "assets/icons/bottom_nav", "source_location": null, "weight": 1.0},
+    {"source": "bottom_nav_home_filled", "target": "bottom_nav_home_outlined", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "assets/icons/bottom_nav", "source_location": null, "weight": 1.0},
+    {"source": "bottom_nav_person_filled", "target": "bottom_nav_person_outlined", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "assets/icons/bottom_nav", "source_location": null, "weight": 1.0},
+
+    {"source": "map_icon_beach", "target": "map_image_beach", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "assets/icons/map", "source_location": null, "weight": 1.0},
+    {"source": "map_icon_food", "target": "map_image_food", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "assets/icons/map", "source_location": null, "weight": 1.0},
+    {"source": "map_icon_hotel", "target": "map_image_hotel", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "assets/icons/map", "source_location": null, "weight": 1.0},
+    {"source": "map_image_map_marker", "target": "map_image_location_pin", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "assets/images/map", "source_location": null, "weight": 1.0},
+
+    {"source": "onboarding_image_ai_planner", "target": "ai_planner_icon_chatbot", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "assets/images/onboarding", "source_location": null, "weight": 1.0},
+    {"source": "onboarding_image_ai_planner", "target": "bottom_nav_ai_star_outlined", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "assets/images/onboarding", "source_location": null, "weight": 1.0},
+
+    {"source": "splash_brand_logo", "target": "splash_pattern", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "assets/images/splash", "source_location": null, "weight": 1.0},
+
+    {"source": "home_icon_ai_stars", "target": "bottom_nav_ai_star_outlined", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "assets/icons/home", "source_location": null, "weight": 1.0},
+    {"source": "home_icon_notification", "target": "profile_icon_settings", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.65, "source_file": "assets/icons", "source_location": null, "weight": 1.0}
+  ],
+  "hyperedges": [
+    {
+      "id": "map_category_icons_group",
+      "label": "Map Place Category Icons",
+      "nodes": ["map_icon_beach", "map_icon_culture", "map_icon_education", "map_icon_entertainment", "map_icon_food", "map_icon_hotel", "map_icon_hospital", "map_icon_shopping"],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "assets/icons/map"
+    },
+    {
+      "id": "bottom_nav_icons_group",
+      "label": "Bottom Navigation Bar Icons (4 tabs)",
+      "nodes": ["bottom_nav_home_filled", "bottom_nav_explore_filled", "bottom_nav_ai_star_filled", "bottom_nav_person_filled"],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "assets/icons/bottom_nav"
+    },
+    {
+      "id": "auth_icons_group",
+      "label": "Authentication Screen Icons",
+      "nodes": ["auth_icon_email", "auth_icon_lock", "auth_icon_person", "auth_icon_google", "auth_icon_facebook"],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "assets/icons"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

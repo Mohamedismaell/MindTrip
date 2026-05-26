@@ -13,6 +13,7 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/features/map/presentation/widgets/map_action_button.dart';
+import '../../domain/entities/map_annotation_entry.dart';
 import '../cubit/map_cubit.dart';
 import '../cubit/map_navigation_cubit.dart';
 import 'place_tab.dart';
@@ -31,13 +32,13 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
 
   int _currentPage = 0;
   bool _isUserSwipe = true;
+  List<MapAnnotationEntry>? _lastAnnotations;
 
   final Set<String> _removingPlaceIds = {};
 
   @override
   void initState() {
     super.initState();
-
     _pageController = PageController(viewportFraction: 0.85);
   }
 
@@ -78,16 +79,20 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
           prev.selectedPlace != curr.selectedPlace ||
           prev.annotations != curr.annotations,
       listener: (context, state) {
-        if (state.annotations != context.read<MapCubit>().state.annotations) {
+        // Reset to the first card when the annotation list is replaced
+        // (e.g. switching trip day or loading a new place set).
+        if (_lastAnnotations != null && _lastAnnotations != state.annotations) {
           _currentPage = 0;
+          _jumpToIndex(0);
         }
+        _lastAnnotations = state.annotations;
 
         if (state.selectedPlace != null) {
           final index = state.annotations.indexWhere(
             (a) => a.place.id == state.selectedPlace!.id,
           );
 
-          // Add 1 to account for the DriveTab card at index 0
+          // Add 1 to account for the DriveTab
           if (index != -1) {
             final targetIndex = index + 1;
             if (targetIndex != _currentPage) {
@@ -119,15 +124,11 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             onPageChanged: (index) {
               _currentPage = index;
 
-              if (_isUserSwipe) {
-                if (index > 0) {
-                  // final entry = state.annotations[index - 1];
-                  // context.read<MapCubit>().selectPlace(entry.place.id);
-                  // context.read<MapCubit>().triggerFlyTo(
-                  //   entry.place.location.latitude,
-                  //   entry.place.location.longitude,
-                  // );
-                }
+              // When the user swipes to a place card, select it and fly to it.
+              if (_isUserSwipe && index > 0) {
+                final entry = state.annotations[index - 1];
+                //! we Can close it if its bad UX
+                context.read<MapCubit>().selectPlace(entry.place.id);
               }
             },
             itemBuilder: (context, index) {
@@ -431,7 +432,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                               Future.delayed(
                                 const Duration(milliseconds: 300),
                                 () {
-                                  if (mounted) {
+                                  if (context.mounted) {
                                     context.read<MapCubit>().removeSearchPlace(
                                       place.id,
                                     );

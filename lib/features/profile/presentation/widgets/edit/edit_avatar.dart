@@ -69,6 +69,6 @@ class EditAvatar extends StatelessWidget {
     }
     return imageUrl != null
         ? AppCachedImage(imagePath: imageUrl!)
-        : Image.asset('assets/images/profile/deafult_user_cover.png');
+        : Image.asset('assets/images/profile/deafult_user_cover.webp');
   }
 }

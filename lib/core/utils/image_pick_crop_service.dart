@@ -70,7 +70,7 @@ class ImagePickCropService {
 
   Future<File?> _compressFile(File file) async {
     final String targetPath =
-        '${file.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        '${file.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.webp';
 
     final XFile? result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,

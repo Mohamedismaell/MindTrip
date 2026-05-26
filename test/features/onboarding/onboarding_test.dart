@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
-import '../shared/test_helpers.dart';
+import '../../shared/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ void main() {
 
     setUp(() {
       repository = FakeOnboardingRepository(isFirstTime: true);
-      cubit = OnboardingCubit(CompleteOnboardingUseCase(repository));
+      cubit = OnboardingCubit(completeOnboarding: CompleteOnboardingUseCase(repository));
     });
 
     tearDown(() {

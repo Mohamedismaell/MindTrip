@@ -247,7 +247,7 @@ class _UserSummaryCard extends StatelessWidget {
                 child: photoUrl != null
                     ? AppCachedImage(imagePath: photoUrl!)
                     : Image.asset(
-                        'assets/images/profile/deafult_user_cover.png',
+                        'assets/images/profile/deafult_user_cover.webp',
                       ),
               ),
             ),

@@ -34,7 +34,7 @@ class HomeHeader extends StatelessWidget {
                   child: AppCachedImage(
                     imagePath:
                         imageprofile ??
-                        'assets/images/profile/deafult_user_cover.png',
+                        'assets/images/profile/deafult_user_cover.webp',
                     width: 47.w,
                     height: 47.w,
                   ),

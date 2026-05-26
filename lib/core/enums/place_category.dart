@@ -83,9 +83,9 @@ enum PlaceCategory {
     PlaceCategory.other => '📍',
   };
 
-  String get annotationAssetPath => 'assets/images/map/location-pin.png';
+  String get annotationAssetPath => 'assets/images/map/location-pin.webp';
 
-  static String get searchPinAssetPath => 'assets/images/map/location-pin.png';
+  static String get searchPinAssetPath => 'assets/images/map/location-pin.webp';
 
   static PlaceCategory fromCategory(String? category) {
     if (category == null) return PlaceCategory.other;

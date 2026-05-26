@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 240.w,
               height: 240.h,
               child: Image.asset(
-                'assets/images/splash/nativelogo.png',
+                'assets/images/splash/nativelogo.webp',
                 fit: BoxFit.contain,
                 // color: Colors.white,
                 // colorBlendMode: BlendMode.srcIn,

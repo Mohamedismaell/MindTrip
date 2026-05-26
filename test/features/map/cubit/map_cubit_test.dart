@@ -1,32 +1,35 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
+import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
-import 'package:mindtrip/features/map/domain/entities/map_annotation_entry.dart';
-import 'package:mindtrip/features/map/domain/entities/map_route.dart';
-import 'package:mindtrip/features/map/domain/entities/map_search_result.dart';
-import 'package:mindtrip/features/map/domain/entities/search_suggestion.dart';
-import 'package:mindtrip/features/map/domain/repositories/map_route_repository.dart';
-import 'package:mindtrip/features/map/domain/repositories/map_search_repository.dart';
+import 'package:mindtrip/features/map/domain/repositories/google_places_repository.dart';
+import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
 
-class MockMapSearchRepository extends Mock implements MapSearchRepository {}
-
-class MockMapRouteRepository extends Mock implements MapRouteRepository {}
+class MockGooglePlacesRepository extends Mock
+    implements GooglePlacesRepository {}
 
 void main() {
   late MapCubit cubit;
-  late MockMapSearchRepository mockSearchRepo;
-  late MockMapRouteRepository mockRouteRepo;
+  late MockGooglePlacesRepository mockRepo;
 
   setUp(() {
-    mockSearchRepo = MockMapSearchRepository();
-    mockRouteRepo = MockMapRouteRepository();
-    cubit = MapCubit(searchRepo: mockSearchRepo, routeRepo: mockRouteRepo);
+    mockRepo = MockGooglePlacesRepository();
+    when(
+      () => mockRepo.fetchPlacePhotoUrls(
+        any(),
+        maxWidth: any(named: 'maxWidth'),
+        cancelToken: any(named: 'cancelToken'),
+      ),
+    ).thenAnswer((_) async => const Result.ok([]));
+    cubit = MapCubit(
+      fetchPlacePhotoUrlsUseCase: FetchPlacePhotoUrlsUseCase(
+        repository: mockRepo,
+      ),
+    );
   });
 
   tearDown(() {
@@ -36,9 +39,9 @@ void main() {
   final tPlace = PlaceModel(
     id: '1',
     name: 'Test Place',
-    location: LocationModel(latitude: 10.0, longitude: 20.0),
+    location: LocationModel(address: '', latitude: 10.0, longitude: 20.0),
     description: 'A test place',
-    category: 'Cafe',
+    category: PlaceCategory.cafe,
     rating: 4.5,
   );
 
@@ -47,64 +50,43 @@ void main() {
       expect(cubit.state, MapState.initial());
     });
 
-    blocTest<MapCubit, MapState>(
-      'emits updated annotations when loadPlaces is called',
-      build: () => cubit,
-      act: (cubit) => cubit.loadPlaces([tPlace]),
-      expect: () => [
-        isA<MapState>()
-            .having((s) => s.annotations.length, 'annotations length', 1)
-            .having(
-              (s) => s.annotations.first.place.id,
-              'annotation place id',
-              '1',
-            ),
-      ],
-    );
+    test('loadPlaces updates annotations', () {
+      cubit.loadPlaces([tPlace]);
+      expect(cubit.state.annotations.length, 1);
+      expect(cubit.state.annotations.first.place.id, '1');
+    });
 
-    blocTest<MapCubit, MapState>(
-      'selectPlace updates selectedPlace and shows bottom sheet',
-      build: () => cubit,
-      seed: () => MapState.initial().copyWith(
-        annotations: [MapAnnotationEntry(place: tPlace, sequenceNumber: 1)],
-      ),
-      act: (cubit) => cubit.selectPlace('1'),
-      expect: () => [
-        isA<MapState>()
-            .having((s) => s.selectedPlace, 'selectedPlace', tPlace)
-            .having(
-              (s) => s.isBottomSheetVisible,
-              'isBottomSheetVisible',
-              true,
-            ),
-      ],
-    );
+    test('selectPlace updates selectedPlace and shows bottom sheet', () {
+      cubit.loadPlaces([tPlace]);
+      cubit.selectPlace('1');
+      expect(cubit.state.selectedPlace, tPlace);
+      expect(cubit.state.isBottomSheetVisible, true);
+    });
 
-    blocTest<MapCubit, MapState>(
-      'dismissBottomSheet sets isBottomSheetVisible to false',
-      build: () => cubit,
-      seed: () => MapState.initial().copyWith(isBottomSheetVisible: true),
-      act: (cubit) => cubit.dismissBottomSheet(),
-      expect: () => [
-        isA<MapState>().having(
-          (s) => s.isBottomSheetVisible,
-          'isBottomSheetVisible',
-          false,
-        ),
-      ],
-    );
+    test('dismissBottomSheet sets isBottomSheetVisible to false', () {
+      cubit.loadPlaces([tPlace]);
+      cubit.selectPlace('1');
+      expect(cubit.state.isBottomSheetVisible, true);
+      cubit.dismissBottomSheet();
+      expect(cubit.state.isBottomSheetVisible, false);
+    });
 
-    blocTest<MapCubit, MapState>(
-      'setLocationGranted updates state correctly',
-      build: () => cubit,
-      act: (cubit) => cubit.setLocationGranted(true),
-      expect: () => [
-        isA<MapState>().having(
-          (s) => s.isLocationGranted,
-          'isLocationGranted',
-          true,
-        ),
-      ],
-    );
+    test('setLocationGranted updates state correctly', () {
+      expect(cubit.state.isLocationGranted, false);
+      cubit.setLocationGranted(true);
+      expect(cubit.state.isLocationGranted, true);
+    });
+
+    test('triggerFlyTo updates lat/lng and increments flyToPulse', () {
+      expect(cubit.state.flyToPulse, 0);
+      cubit.triggerFlyTo(40.0, 50.0);
+      expect(cubit.state.flyToLat, 40.0);
+      expect(cubit.state.flyToLng, 50.0);
+      expect(cubit.state.flyToPulse, 1);
+
+      // Triggering to the same location still increments pulse
+      cubit.triggerFlyTo(40.0, 50.0);
+      expect(cubit.state.flyToPulse, 2);
+    });
   });
 }

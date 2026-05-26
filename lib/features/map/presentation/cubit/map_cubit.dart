@@ -22,13 +22,18 @@ class MapCubit extends Cubit<MapState> {
     : _fetchPlacePhotoUrlsUseCase = fetchPlacePhotoUrlsUseCase,
       super(MapState.initial());
 
+  // ─── Cancel token helpers ────────────────────────────────────────────────
+
   CancelToken _getNewPhotosToken() {
     _photosCancelToken?.cancel();
     _photosCancelToken = CancelToken();
     return _photosCancelToken!;
   }
 
+  // ─── Place loading ───────────────────────────────────────────────────────
+
   void loadPlaces(List<PlaceModel> places) {
+    if (isClosed) return;
     final annotations = List<MapAnnotationEntry>.generate(
       places.length,
       (index) =>
@@ -44,6 +49,7 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void loadTripDays(List<TripDay> days) {
+    if (isClosed) return;
     emit(state.copyWith(tripDays: days));
     if (days.isNotEmpty) {
       selectDay(0);
@@ -51,6 +57,7 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void selectDay(int dayIndex) {
+    if (isClosed) return;
     if (state.tripDays == null ||
         dayIndex < 0 ||
         dayIndex >= state.tripDays!.length) {
@@ -103,22 +110,23 @@ class MapCubit extends Cubit<MapState> {
     );
   }
 
+  // ─── Place selection ─────────────────────────────────────────────────────
+
   void selectPlace(String placeId) {
-    final entry = state.annotations
-        .where((e) => e.place.id == placeId)
-        .firstOrNull;
+    if (isClosed) return;
+    final entry = state.annotations.where((e) => e.place.id == placeId).firstOrNull;
     if (entry == null) return;
 
-    triggerFlyTo(entry.place.location.latitude, entry.place.location.longitude);
-
-    // If the same place is already selected, toggle the sheet to re-trigger listeners
+    // If same place already fully visible — just re-center.
     if (state.selectedPlace?.id == placeId && state.isBottomSheetVisible) {
-      return; // Already showing this place
+      triggerFlyTo(entry.place.location.latitude, entry.place.location.longitude);
+      return;
     }
 
-    // If sheet is collapsed but same place, just re-open
+    // If same place but sheet was dismissed — re-open without clearing photos.
     if (state.selectedPlace?.id == placeId && !state.isBottomSheetVisible) {
       emit(state.copyWith(isBottomSheetVisible: true));
+      triggerFlyTo(entry.place.location.latitude, entry.place.location.longitude);
       return;
     }
 
@@ -130,9 +138,11 @@ class MapCubit extends Cubit<MapState> {
         selectedPlacePhotoUrls: [],
       ),
     );
+    triggerFlyTo(entry.place.location.latitude, entry.place.location.longitude);
   }
 
   Future<void> showGooglePlaceDetails(GooglePlaceEntity place) async {
+    if (isClosed) return;
     final placeModel = PlaceModel(
       id: place.placeId,
       name: place.displayName,
@@ -157,6 +167,7 @@ class MapCubit extends Cubit<MapState> {
       ..removeWhere((e) => e.place.id == place.placeId)
       ..add(newEntry);
 
+    if (isClosed) return;
     emit(
       state.copyWith(
         annotations: updatedAnnotations,
@@ -175,16 +186,26 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void removeSearchPlace(String placeId) {
-    var annotations = List<MapAnnotationEntry>.from(state.annotations);
-    annotations.removeWhere((e) => e.place.id == placeId && e.isSearchResult);
+    if (isClosed) return;
+    final annotations = List<MapAnnotationEntry>.from(state.annotations)
+      ..removeWhere((e) => e.place.id == placeId && e.isSearchResult);
 
     if (state.selectedPlace?.id == placeId) {
-      dismissBottomSheet();
-      emit(state.copyWith(annotations: annotations, clearSelectedPlace: true));
+      emit(
+        state.copyWith(
+          annotations: annotations,
+          clearSelectedPlace: true,
+          isBottomSheetVisible: false,
+          selectedPlacePhotoUrls: [],
+          clearSelectedGooglePlace: true,
+        ),
+      );
     } else {
       emit(state.copyWith(annotations: annotations));
     }
   }
+
+  // ─── Photos ──────────────────────────────────────────────────────────────
 
   Future<void> fetchPlacePhotoUrls(List<dynamic> photos) async {
     final token = _getNewPhotosToken();
@@ -194,54 +215,48 @@ class MapCubit extends Cubit<MapState> {
       cancelToken: token,
     );
 
+    if (isClosed) return;
+
     result.when(
       success: (urls) {
-        if (!isClosed && urls.isNotEmpty) {
-          var newState = state.copyWith(selectedPlacePhotoUrls: urls);
+        if (isClosed || urls.isEmpty) return;
 
-          if (state.selectedPlace != null &&
-              (state.selectedPlace!.imageUrls == null ||
-                  state.selectedPlace!.imageUrls!.isEmpty)) {
-            final updatedPlace = PlaceModel(
-              id: state.selectedPlace!.id,
-              name: state.selectedPlace!.name,
-              location: state.selectedPlace!.location,
-              description: state.selectedPlace!.description,
-              rating: state.selectedPlace!.rating,
-              reviewCount: state.selectedPlace!.reviewCount,
-              category: state.selectedPlace!.category,
-              price: state.selectedPlace!.price,
-              isFavorite: state.selectedPlace!.isFavorite,
-              badge: state.selectedPlace!.badge,
-              imageUrls: urls,
-            );
+        // Update the selected place's imageUrls if it has none yet.
+        if (state.selectedPlace != null &&
+            (state.selectedPlace!.imageUrls == null ||
+                state.selectedPlace!.imageUrls!.isEmpty)) {
+          final updatedPlace = state.selectedPlace!.copyWith(imageUrls: urls);
 
-            final annotations = List<MapAnnotationEntry>.from(
-              state.annotations,
-            );
-            final index = annotations.indexWhere(
-              (e) => e.place.id == updatedPlace.id,
-            );
-            if (index != -1) {
-              annotations[index] = annotations[index].copyWith(
-                place: updatedPlace,
-              );
-              newState = newState.copyWith(
-                annotations: annotations,
-                selectedPlace: updatedPlace,
-              );
-            }
+          final annotations = List<MapAnnotationEntry>.from(state.annotations);
+          final index =
+              annotations.indexWhere((e) => e.place.id == updatedPlace.id);
+          if (index != -1) {
+            annotations[index] =
+                annotations[index].copyWith(place: updatedPlace);
           }
-          emit(newState);
+
+          emit(
+            state.copyWith(
+              selectedPlacePhotoUrls: urls,
+              annotations: annotations,
+              selectedPlace: updatedPlace,
+            ),
+          );
+        } else {
+          emit(state.copyWith(selectedPlacePhotoUrls: urls));
         }
       },
       failure: (failure) {
         if (failure is CancelledFailure) return;
+        // Photo fetch failure is non-critical — silently ignore.
       },
     );
   }
 
+  // ─── UI helpers ──────────────────────────────────────────────────────────
+
   void dismissBottomSheet() {
+    if (isClosed) return;
     emit(
       state.copyWith(
         isBottomSheetVisible: false,
@@ -251,17 +266,30 @@ class MapCubit extends Cubit<MapState> {
     );
   }
 
+  /// Triggers the map to fly to [lat]/[lng].
+  ///
+  /// Uses a monotonically-increasing [flyToPulse] counter so the listener
+  /// fires even when the coordinates are identical to the previous flyTo.
+  /// This avoids the old double-emit (null → value) pattern that polluted
+  /// the state stream with a spurious null emission.
   void triggerFlyTo(double lat, double lng) {
-    // We emit null first to ensure the listener sees a change if we're flying to the same spot twice
-    emit(state.copyWith(flyToLat: null, flyToLng: null));
-    emit(state.copyWith(flyToLat: lat, flyToLng: lng));
+    if (isClosed) return;
+    emit(
+      state.copyWith(
+        flyToLat: lat,
+        flyToLng: lng,
+        flyToPulse: state.flyToPulse + 1,
+      ),
+    );
   }
 
   void clearFlyToLocation() {
+    if (isClosed) return;
     emit(state.copyWith(flyToLat: null, flyToLng: null));
   }
 
   void setLocationGranted(bool granted) {
+    if (isClosed) return;
     emit(state.copyWith(isLocationGranted: granted));
   }
 

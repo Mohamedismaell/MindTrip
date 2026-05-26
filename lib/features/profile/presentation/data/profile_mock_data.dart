@@ -18,7 +18,7 @@ class ProfileMockData {
   const ProfileMockData._();
 
   // static const String defaultAvatarUrl =
-  //     'assets/images/profile/deafult_user_cover.png';
+  //     'assets/images/profile/deafult_user_cover.webp';
   static const String username = '@UnKnown';
   static const String phoneNumber = '0122 547 9032';
   static const String location = 'Cairo,Egypt';

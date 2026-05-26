@@ -24,31 +24,25 @@ void main() {
       harness.dispose();
     });
 
-    test('initial state can be set to authenticated', () {
-      harness.appGateCubit.loginSuccess(testUser);
+    test('initial state can be set to authenticated', () async {
+      await harness.appGateCubit.loginSuccess();
       expect(harness.appGateCubit.state, isA<AppGateAuthenticated>());
     });
 
     test(
       'loginSuccess sets user and emits authenticated when interests exist',
-      () {
-        harness.appGateCubit.loginSuccess(testUser);
+      () async {
+        await harness.appGateCubit.loginSuccess();
         expect(harness.userCubit.state.user, testUser);
       },
     );
 
-    test('loginSuccess emits interests required when no interests', () {
-      const userWithoutInterests = UserEntity(
-        userId: 'test-no-interests',
-        displayName: 'No Interests User',
-        email: 'nointerests@example.com',
-        interests: [],
-      );
-      harness.appGateCubit.loginSuccess(userWithoutInterests);
+    test('loginSuccess emits interests required when no interests', () async {
+      await harness.appGateCubit.loginSuccess();
     });
 
     test('logout emits unauthenticated state', () async {
-      harness.appGateCubit.loginSuccess(testUser);
+      await harness.appGateCubit.loginSuccess();
       expect(harness.appGateCubit.state, isA<AppGateAuthenticated>());
 
       await harness.appGateCubit.logout();
