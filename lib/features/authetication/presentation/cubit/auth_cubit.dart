@@ -70,7 +70,15 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required bool rememberMe,
   }) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    emit(
+      state.copyWith(
+        status: AuthStatus.loading,
+        errorMessage: null,
+        email: email,
+        password: password,
+        rememberMe: rememberMe,
+      ),
+    );
 
     final result = await _signInUseCase(
       email: email,
@@ -82,13 +90,36 @@ class AuthCubit extends Cubit<AuthState> {
       success: (user) {
         emit(state.copyWith(status: AuthStatus.success, user: user));
       },
-      failure: (error) {
-        emit(
-          state.copyWith(
-            status: AuthStatus.failure,
-            errorMessage: error.message,
-          ),
-        );
+      failure: (error) async {
+        final msg = error.message.toLowerCase();
+        if (msg.contains('verify') || msg.contains('verified')) {
+          final resendResult = await _resendEmailOtpUseCase(email: email);
+          resendResult.when(
+            success: (_) {
+              emit(
+                state.copyWith(
+                  status: AuthStatus.otpSent,
+                  otpFlow: OtpFlow.signInVerify,
+                ),
+              );
+            },
+            failure: (resendError) {
+              emit(
+                state.copyWith(
+                  status: AuthStatus.failure,
+                  errorMessage: error.message,
+                ),
+              );
+            },
+          );
+        } else {
+          emit(
+            state.copyWith(
+              status: AuthStatus.failure,
+              errorMessage: error.message,
+            ),
+          );
+        }
       },
     );
   }
@@ -99,7 +130,15 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required bool rememberMe,
   }) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    emit(
+      state.copyWith(
+        status: AuthStatus.loading,
+        errorMessage: null,
+        email: email,
+        password: password,
+        rememberMe: rememberMe,
+      ),
+    );
 
     final result = await _signUpUseCase(
       name: name,
@@ -111,11 +150,7 @@ class AuthCubit extends Cubit<AuthState> {
     result.when(
       success: (_) {
         emit(
-          state.copyWith(
-            status: AuthStatus.otpSent,
-            otpFlow: OtpFlow.signUp,
-            email: email,
-          ),
+          state.copyWith(status: AuthStatus.otpSent, otpFlow: OtpFlow.signUp),
         );
       },
       failure: (error) {

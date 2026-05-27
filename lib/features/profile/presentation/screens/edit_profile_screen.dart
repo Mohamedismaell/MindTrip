@@ -111,7 +111,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 context.read<EditProfileCubit>().saveChanges();
                                 context.pop();
                               } else {
-                                // If validation fails, close the dialog so the user can see the error
+                                //! If validation fails, close the dialog so the user can see the error
                                 context.pop();
                               }
                             },
@@ -160,16 +160,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40.w),
                     child: CustomOtlinedButton(
-                      onPressed:
-                          (isSaving ||
-                              !state.hasChanges ||
-                              !(_formKey.currentState?.validate() ?? false))
+                      onPressed: (isSaving || !state.hasChanges)
                           ? null
                           : () {
                               FocusScope.of(context).unfocus();
-                              // if (_formKey.currentState?.validate() ?? false) {
-                              context.read<EditProfileCubit>().saveChanges();
-                              // }
+                              if (_formKey.currentState?.validate() ?? false) {
+                                context.read<EditProfileCubit>().saveChanges();
+                              }
                             },
                       text: "Save Changes",
                       color: context.colorTheme.primary,

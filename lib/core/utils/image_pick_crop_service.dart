@@ -70,7 +70,7 @@ class ImagePickCropService {
 
   Future<File?> _compressFile(File file) async {
     final String targetPath =
-        '${file.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.webp';
+        '${file.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.png';
 
     final XFile? result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -78,7 +78,7 @@ class ImagePickCropService {
       quality: 70,
       minWidth: 600,
       minHeight: 600,
-      format: CompressFormat.jpeg,
+      format: CompressFormat.png,
     );
 
     if (result == null) return file;

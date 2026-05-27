@@ -19,6 +19,7 @@ abstract class AuthState with _$AuthState {
 
     @Default(OtpFlow.forgetPassword) OtpFlow otpFlow,
     String? email,
+    String? password,
     String? resetToken,
   }) = _AuthState;
 }

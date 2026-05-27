@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 mixin _$AuthState {
 
  AuthStatus get status; UserEntity? get user; String? get errorMessage;// UI helpers
- bool get obscurePassword; bool get obscureConfirm; bool get rememberMe; OtpFlow get otpFlow; String? get email; String? get resetToken;
+ bool get obscurePassword; bool get obscureConfirm; bool get rememberMe; OtpFlow get otpFlow; String? get email; String? get password; String? get resetToken;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.obscurePassword, obscurePassword) || other.obscurePassword == obscurePassword)&&(identical(other.obscureConfirm, obscureConfirm) || other.obscureConfirm == obscureConfirm)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.otpFlow, otpFlow) || other.otpFlow == otpFlow)&&(identical(other.email, email) || other.email == email)&&(identical(other.resetToken, resetToken) || other.resetToken == resetToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.obscurePassword, obscurePassword) || other.obscurePassword == obscurePassword)&&(identical(other.obscureConfirm, obscureConfirm) || other.obscureConfirm == obscureConfirm)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.otpFlow, otpFlow) || other.otpFlow == otpFlow)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.resetToken, resetToken) || other.resetToken == resetToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,user,errorMessage,obscurePassword,obscureConfirm,rememberMe,otpFlow,email,resetToken);
+int get hashCode => Object.hash(runtimeType,status,user,errorMessage,obscurePassword,obscureConfirm,rememberMe,otpFlow,email,password,resetToken);
 
 @override
 String toString() {
-  return 'AuthState(status: $status, user: $user, errorMessage: $errorMessage, obscurePassword: $obscurePassword, obscureConfirm: $obscureConfirm, rememberMe: $rememberMe, otpFlow: $otpFlow, email: $email, resetToken: $resetToken)';
+  return 'AuthState(status: $status, user: $user, errorMessage: $errorMessage, obscurePassword: $obscurePassword, obscureConfirm: $obscureConfirm, rememberMe: $rememberMe, otpFlow: $otpFlow, email: $email, password: $password, resetToken: $resetToken)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- AuthStatus status, UserEntity? user, String? errorMessage, bool obscurePassword, bool obscureConfirm, bool rememberMe, OtpFlow otpFlow, String? email, String? resetToken
+ AuthStatus status, UserEntity? user, String? errorMessage, bool obscurePassword, bool obscureConfirm, bool rememberMe, OtpFlow otpFlow, String? email, String? password, String? resetToken
 });
 
 
@@ -63,7 +63,7 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? user = freezed,Object? errorMessage = freezed,Object? obscurePassword = null,Object? obscureConfirm = null,Object? rememberMe = null,Object? otpFlow = null,Object? email = freezed,Object? resetToken = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? user = freezed,Object? errorMessage = freezed,Object? obscurePassword = null,Object? obscureConfirm = null,Object? rememberMe = null,Object? otpFlow = null,Object? email = freezed,Object? password = freezed,Object? resetToken = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AuthStatus,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
@@ -73,6 +73,7 @@ as bool,obscureConfirm: null == obscureConfirm ? _self.obscureConfirm : obscureC
 as bool,rememberMe: null == rememberMe ? _self.rememberMe : rememberMe // ignore: cast_nullable_to_non_nullable
 as bool,otpFlow: null == otpFlow ? _self.otpFlow : otpFlow // ignore: cast_nullable_to_non_nullable
 as OtpFlow,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,password: freezed == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String?,resetToken: freezed == resetToken ? _self.resetToken : resetToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -171,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AuthStatus status,  UserEntity? user,  String? errorMessage,  bool obscurePassword,  bool obscureConfirm,  bool rememberMe,  OtpFlow otpFlow,  String? email,  String? resetToken)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AuthStatus status,  UserEntity? user,  String? errorMessage,  bool obscurePassword,  bool obscureConfirm,  bool rememberMe,  OtpFlow otpFlow,  String? email,  String? password,  String? resetToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword,_that.obscureConfirm,_that.rememberMe,_that.otpFlow,_that.email,_that.resetToken);case _:
+return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword,_that.obscureConfirm,_that.rememberMe,_that.otpFlow,_that.email,_that.password,_that.resetToken);case _:
   return orElse();
 
 }
@@ -192,10 +193,10 @@ return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AuthStatus status,  UserEntity? user,  String? errorMessage,  bool obscurePassword,  bool obscureConfirm,  bool rememberMe,  OtpFlow otpFlow,  String? email,  String? resetToken)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AuthStatus status,  UserEntity? user,  String? errorMessage,  bool obscurePassword,  bool obscureConfirm,  bool rememberMe,  OtpFlow otpFlow,  String? email,  String? password,  String? resetToken)  $default,) {final _that = this;
 switch (_that) {
 case _AuthState():
-return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword,_that.obscureConfirm,_that.rememberMe,_that.otpFlow,_that.email,_that.resetToken);case _:
+return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword,_that.obscureConfirm,_that.rememberMe,_that.otpFlow,_that.email,_that.password,_that.resetToken);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +213,10 @@ return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AuthStatus status,  UserEntity? user,  String? errorMessage,  bool obscurePassword,  bool obscureConfirm,  bool rememberMe,  OtpFlow otpFlow,  String? email,  String? resetToken)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AuthStatus status,  UserEntity? user,  String? errorMessage,  bool obscurePassword,  bool obscureConfirm,  bool rememberMe,  OtpFlow otpFlow,  String? email,  String? password,  String? resetToken)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword,_that.obscureConfirm,_that.rememberMe,_that.otpFlow,_that.email,_that.resetToken);case _:
+return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword,_that.obscureConfirm,_that.rememberMe,_that.otpFlow,_that.email,_that.password,_that.resetToken);case _:
   return null;
 
 }
@@ -227,7 +228,7 @@ return $default(_that.status,_that.user,_that.errorMessage,_that.obscurePassword
 
 
 class _AuthState implements AuthState {
-  const _AuthState({this.status = AuthStatus.initial, this.user, this.errorMessage, this.obscurePassword = true, this.obscureConfirm = true, this.rememberMe = false, this.otpFlow = OtpFlow.forgetPassword, this.email, this.resetToken});
+  const _AuthState({this.status = AuthStatus.initial, this.user, this.errorMessage, this.obscurePassword = true, this.obscureConfirm = true, this.rememberMe = false, this.otpFlow = OtpFlow.forgetPassword, this.email, this.password, this.resetToken});
   
 
 @override@JsonKey() final  AuthStatus status;
@@ -239,6 +240,7 @@ class _AuthState implements AuthState {
 @override@JsonKey() final  bool rememberMe;
 @override@JsonKey() final  OtpFlow otpFlow;
 @override final  String? email;
+@override final  String? password;
 @override final  String? resetToken;
 
 /// Create a copy of AuthState
@@ -251,16 +253,16 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.obscurePassword, obscurePassword) || other.obscurePassword == obscurePassword)&&(identical(other.obscureConfirm, obscureConfirm) || other.obscureConfirm == obscureConfirm)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.otpFlow, otpFlow) || other.otpFlow == otpFlow)&&(identical(other.email, email) || other.email == email)&&(identical(other.resetToken, resetToken) || other.resetToken == resetToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.obscurePassword, obscurePassword) || other.obscurePassword == obscurePassword)&&(identical(other.obscureConfirm, obscureConfirm) || other.obscureConfirm == obscureConfirm)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.otpFlow, otpFlow) || other.otpFlow == otpFlow)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.resetToken, resetToken) || other.resetToken == resetToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,user,errorMessage,obscurePassword,obscureConfirm,rememberMe,otpFlow,email,resetToken);
+int get hashCode => Object.hash(runtimeType,status,user,errorMessage,obscurePassword,obscureConfirm,rememberMe,otpFlow,email,password,resetToken);
 
 @override
 String toString() {
-  return 'AuthState(status: $status, user: $user, errorMessage: $errorMessage, obscurePassword: $obscurePassword, obscureConfirm: $obscureConfirm, rememberMe: $rememberMe, otpFlow: $otpFlow, email: $email, resetToken: $resetToken)';
+  return 'AuthState(status: $status, user: $user, errorMessage: $errorMessage, obscurePassword: $obscurePassword, obscureConfirm: $obscureConfirm, rememberMe: $rememberMe, otpFlow: $otpFlow, email: $email, password: $password, resetToken: $resetToken)';
 }
 
 
@@ -271,7 +273,7 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- AuthStatus status, UserEntity? user, String? errorMessage, bool obscurePassword, bool obscureConfirm, bool rememberMe, OtpFlow otpFlow, String? email, String? resetToken
+ AuthStatus status, UserEntity? user, String? errorMessage, bool obscurePassword, bool obscureConfirm, bool rememberMe, OtpFlow otpFlow, String? email, String? password, String? resetToken
 });
 
 
@@ -288,7 +290,7 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? user = freezed,Object? errorMessage = freezed,Object? obscurePassword = null,Object? obscureConfirm = null,Object? rememberMe = null,Object? otpFlow = null,Object? email = freezed,Object? resetToken = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? user = freezed,Object? errorMessage = freezed,Object? obscurePassword = null,Object? obscureConfirm = null,Object? rememberMe = null,Object? otpFlow = null,Object? email = freezed,Object? password = freezed,Object? resetToken = freezed,}) {
   return _then(_AuthState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AuthStatus,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
@@ -298,6 +300,7 @@ as bool,obscureConfirm: null == obscureConfirm ? _self.obscureConfirm : obscureC
 as bool,rememberMe: null == rememberMe ? _self.rememberMe : rememberMe // ignore: cast_nullable_to_non_nullable
 as bool,otpFlow: null == otpFlow ? _self.otpFlow : otpFlow // ignore: cast_nullable_to_non_nullable
 as OtpFlow,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,password: freezed == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String?,resetToken: freezed == resetToken ? _self.resetToken : resetToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

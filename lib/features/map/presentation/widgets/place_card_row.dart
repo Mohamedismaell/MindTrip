@@ -32,7 +32,8 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
   late final PageController _pageController;
 
   int _currentPage = 0;
-  bool _isUserSwipe = true;
+  int _lastPulse = 0;
+  String? _lastSelectedPlaceId;
   List<MapAnnotationEntry>? _lastAnnotations;
 
   final Set<String> _removingPlaceIds = {};
@@ -51,11 +52,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
 
   void _jumpToIndex(int index) {
     if (!_pageController.hasClients) return;
-
-    _isUserSwipe = false;
-
     _pageController.jumpToPage(index);
-    _isUserSwipe = true;
   }
 
   @override
@@ -83,21 +80,33 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
         }
         _lastAnnotations = state.annotations;
 
-        if (state.selectedPlace != null) {
-          final index = state.annotations.indexWhere(
-            (a) => a.place.id == state.selectedPlace!.id,
-          );
+        final pulseTriggered = state.navigationPulse > _lastPulse;
+        _lastPulse = state.navigationPulse;
 
-          if (index != -1) {
-            final targetIndex = index + 1;
-            if (targetIndex != _currentPage) {
-              _jumpToIndex(targetIndex);
+        final selectionChanged =
+            state.selectedPlace?.id != _lastSelectedPlaceId;
+        _lastSelectedPlaceId = state.selectedPlace?.id;
+
+        if (selectionChanged || pulseTriggered) {
+          if (state.selectedPlace != null) {
+            final index = state.annotations.indexWhere(
+              (a) => a.place.id == state.selectedPlace!.id,
+            );
+
+            if (index != -1) {
+              final targetIndex = index;
+              if (targetIndex != _currentPage) {
+                _currentPage = targetIndex;
+                _jumpToIndex(targetIndex);
+              }
+            }
+          } else if (state.selectedPlace == null || pulseTriggered) {
+            // Force jump to DriveTab whenever selection is null OR pulse is explicitly triggered
+            if (_currentPage != 0) {
+              _currentPage = 0;
+              _jumpToIndex(0);
             }
           }
-        } else if (state.selectedPlace == null ||
-            state.navigationPulse > 0) {
-          // Force jump to DriveTab whenever selection is null OR pulse is triggered
-          _jumpToIndex(0);
         }
       },
       buildWhen: (prev, curr) =>
@@ -123,14 +132,14 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             onPageChanged: (index) {
               _currentPage = index;
 
-              if (_isUserSwipe) {
-                if (index > 0) {
-                  // final entry = state.annotations[index - 1];
-                  // context.read<MapCubit>().selectPlace(entry.place.id);
-                } else {
-                  context.read<MapCubit>().clearSelection();
-                }
-              }
+              // if (_isUserSwipe) {
+              //   if (index > 0) {
+              //     // final entry = state.annotations[index - 1];
+              //     // context.read<MapCubit>().selectPlace(entry.place.id);
+              //   } else {
+              //     context.read<MapCubit>().clearSelection();
+              //   }
+              // }
             },
             itemBuilder: (context, index) {
               if (index == 0) {
@@ -403,7 +412,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                           icon: Icons.directions_rounded,
                           color: context.colorTheme.primary,
                           isFilled: true,
-                           onTap: navState.isRouteLoading
+                          onTap: navState.isRouteLoading
                               ? null
                               : () {
                                   // Immediately disable button + jump to DriveTab
@@ -427,12 +436,12 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                       context
                                           .read<MapNavigationCubit>()
                                           .navigateSequential(
-                                        [
-                                          userPos,
-                                          Position(placeLng, placeLat)
-                                        ],
-                                        [place.name],
-                                      );
+                                            [
+                                              userPos,
+                                              Position(placeLng, placeLat),
+                                            ],
+                                            [place.name],
+                                          );
                                     }
                                   }();
                                 },

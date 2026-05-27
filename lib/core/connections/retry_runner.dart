@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mindtrip/core/connections/retry_queue.dart';
 
 class RetryRunner {
@@ -11,11 +12,13 @@ class RetryRunner {
     if (queue.isEmpty) return;
 
     final requests = queue.drain();
+    debugPrint('RetryRunner: retrying ${requests.length} queued request(s)');
+
     for (final options in requests) {
       try {
         await dio.fetch(options);
-      } catch (_) {
-        print('Can\'t retry request');
+      } catch (e) {
+        debugPrint('RetryRunner: failed to retry ${options.method} ${options.path}');
       }
     }
   }

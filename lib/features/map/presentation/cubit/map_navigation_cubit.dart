@@ -19,7 +19,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   MapNavigationCubit({
     required GetRouteUseCase getRouteUseCase,
     required LocationService locationService,
-  })  : _getRouteUseCase = getRouteUseCase,
+  }) : _getRouteUseCase = getRouteUseCase,
        _locationService = locationService,
        super(MapNavigationState.initial());
 
@@ -29,14 +29,14 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     return _getRouteCancelToken!;
   }
 
-  /// Call this immediately on button tap so the UI reflects loading state
-  /// before the GPS location fetch completes in the widget layer.
   void beginLoading({String? destinationName}) {
-    emit(state.copyWith(
-      isRouteLoading: true,
-      routeError: null,
-      destinationName: destinationName,
-    ));
+    emit(
+      state.copyWith(
+        isRouteLoading: true,
+        routeError: null,
+        destinationName: destinationName,
+      ),
+    );
   }
 
   void setProfile(NavigationProfile profile) {
@@ -53,21 +53,24 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     double lng, {
     String? destinationName,
   }) async {
-    emit(state.copyWith(
-      destinationName: destinationName,
-      isRouteLoading: true,
-    ));
+    emit(
+      state.copyWith(destinationName: destinationName, isRouteLoading: true),
+    );
     final placePosition = Position(lng, lat);
     await _fetchRoute([userPosition, placePosition]);
   }
 
   Future<void> navigateAll(
-      List<Position> waypoints, List<String> placeNames) async {
+    List<Position> waypoints,
+    List<String> placeNames,
+  ) async {
     await navigateSequential(waypoints, placeNames);
   }
 
   Future<void> navigateSequential(
-      List<Position> waypoints, List<String> placeNames) async {
+    List<Position> waypoints,
+    List<String> placeNames,
+  ) async {
     if (waypoints.length < 2) return;
     _sequentialWaypoints = waypoints;
     emit(
@@ -90,12 +93,14 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
       stopNavigation();
       return;
     }
-    emit(state.copyWith(
-      currentLegIndex: nextLeg,
-      destinationName: nextLeg < state.placeNames.length
-          ? state.placeNames[nextLeg]
-          : null,
-    ));
+    emit(
+      state.copyWith(
+        currentLegIndex: nextLeg,
+        destinationName: nextLeg < state.placeNames.length
+            ? state.placeNames[nextLeg]
+            : null,
+      ),
+    );
     await _fetchSequentialLegRoute(nextLeg);
   }
 
@@ -103,11 +108,11 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     if (_sequentialWaypoints == null) return;
     final end = _sequentialWaypoints![legIndex + 1];
 
-    // Always route from the user's CURRENT location
+    // Always route from CURRENT location
     final pos = await _locationService.getCurrentLocation();
     final start = pos != null
         ? Position(pos.longitude, pos.latitude)
-        : _sequentialWaypoints![legIndex]; // fallback to waypoint
+        : _sequentialWaypoints![legIndex];
 
     await _fetchRoute([start, end]);
   }
@@ -117,11 +122,13 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     _lastWaypoints = waypoints;
     final generation = ++_routeGeneration;
 
-    emit(state.copyWith(
-      isRouteLoading: true,
-      currentStepIndex: 0,
-      routeError: null, // clear any previous error
-    ));
+    emit(
+      state.copyWith(
+        isRouteLoading: true,
+        currentStepIndex: 0,
+        routeError: null,
+      ),
+    );
 
     final result = await _getRouteUseCase.call(
       waypoints,
@@ -150,7 +157,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   void stopNavigation() {
     _lastWaypoints = null;
     _sequentialWaypoints = null;
-    _routeGeneration++; // Invalidate any in-flight request
+    _routeGeneration++;
     _getRouteCancelToken?.cancel();
     emit(
       state.copyWith(

@@ -14,8 +14,9 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SignInStatusListener(
-      child: AppBackground(
+    return OtpRequestStatusListener(
+      child: SignInStatusListener(
+        child: AppBackground(
         child: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -38,6 +39,7 @@ class SignInScreen extends StatelessWidget {
               ],
             ),
           ),
+        ),
         ),
       ),
     );

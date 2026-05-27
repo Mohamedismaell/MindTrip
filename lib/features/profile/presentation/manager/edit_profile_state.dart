@@ -29,7 +29,10 @@ abstract class EditProfileState with _$EditProfileState {
 
   bool get hasChanges {
     if (originalUser == null) return false;
-    if (pendingPhotoPath != null) return true;
+    if (pendingPhotoPath != null &&
+        pendingPhotoPath != originalUser!.profilePhotoUrl) {
+      return true;
+    }
     if (draftDisplayName != originalUser!.displayName) return true;
     if (draftPhoneNumber != (originalUser!.phoneNumber ?? '')) {
       return true;

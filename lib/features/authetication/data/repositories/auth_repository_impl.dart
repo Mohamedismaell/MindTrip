@@ -70,14 +70,14 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       // Account exists but email is not verified — resend OTP
       // so the user can complete verification.
-      if (_isEmailExistsButUnverified(e)) {
-        try {
-          await _remoteDataSource.resendEmailOtp(email: email);
-          return const Result.ok(null);
-        } catch (_) {
-          // Resend failed — fall through to original error.
-        }
-      }
+      // if (_isEmailExistsButUnverified(e)) {
+      //   try {
+      //     await _remoteDataSource.resendEmailOtp(email: email);
+      //     return const Result.ok(null);
+      //   } catch (_) {
+      //     // Resend failed — fall through to original error.
+      //   }
+      // }
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
@@ -251,30 +251,30 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  // registered but not yet verified
-  bool _isEmailExistsButUnverified(Object e) {
-    if (e is! DioException) return false;
-    final response = e.response;
-    if (response == null) return false;
+  // // registered but not yet verified
+  // bool _isEmailExistsButUnverified(Object e) {
+  //   if (e is! DioException) return false;
+  //   final response = e.response;
+  //   if (response == null) return false;
 
-    final statusCode = response.statusCode ?? 0;
+  //   final statusCode = response.statusCode ?? 0;
 
-    // 409 Conflict is the canonical "already exists" status.
-    if (statusCode == 409) return true;
+  //   // 409 Conflict is the canonical "already exists" status.
+  //   if (statusCode == 409) return true;
 
-    // Some APIs return 400/401/422 with a message about verification or already exists.
-    if (statusCode == 400 || statusCode == 401 || statusCode == 422) {
-      final data = response.data;
-      if (data is Map<String, dynamic>) {
-        final msg = (data['detail'] ?? data['message'] ?? data['title'] ?? '')
-            .toString()
-            .toLowerCase();
-        return msg.contains('verify') ||
-            msg.contains('verified') ||
-            msg.contains('already exists');
-      }
-    }
+  //   // Some APIs return 400/401/422 with a message about verification or already exists.
+  //   if (statusCode == 400 || statusCode == 401 || statusCode == 422) {
+  //     final data = response.data;
+  //     if (data is Map<String, dynamic>) {
+  //       final msg = (data['detail'] ?? data['message'] ?? data['title'] ?? '')
+  //           .toString()
+  //           .toLowerCase();
+  //       return msg.contains('verify') ||
+  //           msg.contains('verified') ||
+  //           msg.contains('already exists');
+  //     }
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 }

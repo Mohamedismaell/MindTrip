@@ -49,7 +49,13 @@ Future<void> main() async {
   await placesCache.cachePlaces(HomeMockData.recommendedDestinations);
   await placesCache.cachePlaces(ExploreMockData.trendingPlaces);
   await placesCache.cachePlaces(ExploreMockData.otherPlaces);
+  const accessToken = String.fromEnvironment('ACCESS_TOKEN');
+  const googlePlacesKey = String.fromEnvironment('GOOGLE_PLACES_KEY');
+  const googleWebClientId = String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
 
+  debugPrint('TOKEN => $accessToken');
+  debugPrint('GOOGLE_PLACES_KEY => $googlePlacesKey');
+  debugPrint('GOOGLE_WEB_CLIENT_ID => $googleWebClientId');
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
     AppBootstrap(),

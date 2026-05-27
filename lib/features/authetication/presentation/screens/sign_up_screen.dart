@@ -15,27 +15,29 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OtpRequestStatusListener(
-      child: AppBackground(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomHeadLine(
-                  firstTitle: AppStrings.signTitle,
-                  secondTitle: AppStrings.upTitle,
-                ),
-                SizedBox(height: 40.h),
-                const SignUpForm(),
-                SizedBox(height: 24.h),
-                AuthoptionsContent(
-                  promptText: AppStrings.alreadyHaveAccount,
-                  actionText: AppStrings.signIn,
-                  onActionTap: () => context.pushReplacement(AppRoutes.login),
-                ),
-              ],
+      child: SignInStatusListener(
+        child: AppBackground(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomHeadLine(
+                    firstTitle: AppStrings.signTitle,
+                    secondTitle: AppStrings.upTitle,
+                  ),
+                  SizedBox(height: 40.h),
+                  const SignUpForm(),
+                  SizedBox(height: 24.h),
+                  AuthoptionsContent(
+                    promptText: AppStrings.alreadyHaveAccount,
+                    actionText: AppStrings.signIn,
+                    onActionTap: () => context.pushReplacement(AppRoutes.login),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

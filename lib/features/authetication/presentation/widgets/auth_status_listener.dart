@@ -75,6 +75,17 @@ class OtpVerificationStatusListener extends StatelessWidget {
             context.push(AppRoutes.resetPassword);
           } else {
             context.pushReplacement(AppRoutes.completeSignUpScreen);
+
+            // Auto login after verification
+            final email = state.email;
+            final password = state.password;
+            if (email != null && password != null) {
+              context.read<AuthCubit>().signIn(
+                email: email,
+                password: password,
+                rememberMe: state.rememberMe,
+              );
+            }
           }
         } else if (state.status == AuthStatus.otpResent) {
           _showSnackBar(

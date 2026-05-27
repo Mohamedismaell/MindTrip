@@ -120,25 +120,44 @@ class _CountryPickerState extends State<CountryPicker> {
   void initState() {
     super.initState();
     initialPhoneNumber = PhoneNumber(isoCode: widget.initialIsoCode);
+    _initPhoneNumber();
+  }
+
+  Future<void> _initPhoneNumber() async {
+    final text = widget.controller?.text;
+    if (text != null && text.isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          isValidNumber = true;
+        });
+      }
+
+      try {
+        final number = await PhoneNumber.getRegionInfoFromPhoneNumber(text);
+        if (mounted) {
+          setState(() {
+            initialPhoneNumber = number;
+          });
+        }
+      } catch (_) {}
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return InternationalPhoneNumberInput(
       isEnabled: widget.enabled,
-      initialValue: initialPhoneNumber, // Use fixed initial value
+      initialValue: initialPhoneNumber,
       textFieldController: widget.controller,
-      formatInput:
-          false, // Set to false to prevent parse crashes when invalid characters are typed
-      ignoreBlank: true, // IMPORTANT: Avoids crash when parsing empty strings
+      formatInput: false,
+      ignoreBlank: true,
       autoValidateMode: AutovalidateMode.onUserInteraction,
-
       keyboardType: const TextInputType.numberWithOptions(
         signed: false,
         decimal: false,
       ),
       onInputValidated: (bool value) {
-        if (mounted) {
+        if (mounted && isValidNumber != value) {
           setState(() {
             isValidNumber = value;
           });

@@ -159,12 +159,13 @@ class DriveTab extends StatelessWidget {
                           children: [
                             Expanded(
                               child: CustomOtlinedButton(
-                                onPressed: isLoading
-                                    ? null
-                                    : () => context
-                                          .read<MapNavigationCubit>()
-                                          .stopNavigation(),
-                                icon: Icons.close,
+                                onPressed: () {
+                                  print('Pressed');
+                                  context
+                                      .read<MapNavigationCubit>()
+                                      .stopNavigation();
+                                },
+                                actionIcon: Icons.close,
                                 text: 'Stop',
                                 textStyle: context.textTheme.labelLarge
                                     ?.copyWith(color: context.colorTheme.error),
@@ -197,7 +198,9 @@ class DriveTab extends StatelessWidget {
                                 color: context.colorTheme.primary,
                                 textStyle: context.textTheme.labelLarge
                                     ?.copyWith(
-                                      color: context.colorTheme.primary,
+                                      color: isLoading
+                                          ? context.colorTheme.outline
+                                          : context.colorTheme.primary,
                                     ),
                                 padding: EdgeInsets.symmetric(
                                   vertical: 7.r,

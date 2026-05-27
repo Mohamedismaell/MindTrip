@@ -76,12 +76,20 @@ class CustomOtlinedButton extends StatelessWidget {
                                 style:
                                     textStyle ??
                                     context.textTheme.labelMedium?.copyWith(
-                                      color: isDisabled,
+                                      color: isLoading == true
+                                          ? buttonColor
+                                          : isDisabled,
                                     ),
                               ),
                               SizedBox(width: 5.w),
                               if (actionIcon != null)
-                                Icon(actionIcon, size: 20.sp, color: color),
+                                Icon(
+                                  actionIcon,
+                                  size: 20.sp,
+                                  color: isLoading == true
+                                      ? buttonColor
+                                      : isDisabled,
+                                ),
                               // if (svgIcon != null)
                               //   SvgPicture.asset(svgIcon!, height: 20.sp),
                             ],
