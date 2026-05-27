@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MapSearchState {
 
- List<PlacePrediction> get autocompletePredictions; bool get isSearchLoading; String? get searchError; GooglePlaceEntity? get resolvedSearchPlace; bool get clearResolvedSearchPlace; bool get clearSearchError; List<GooglePlaceEntity> get nearbyPlaces;
+ List<PlacePrediction> get autocompletePredictions; MapSearchStatus get searchStatus; String? get searchErrorMessage; GooglePlaceEntity? get resolvedSearchPlace; bool get clearResolvedSearchPlace; bool get clearSearchError; List<GooglePlaceEntity> get nearbyPlaces;
 /// Create a copy of MapSearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MapSearchStateCopyWith<MapSearchState> get copyWith => _$MapSearchStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MapSearchState&&const DeepCollectionEquality().equals(other.autocompletePredictions, autocompletePredictions)&&(identical(other.isSearchLoading, isSearchLoading) || other.isSearchLoading == isSearchLoading)&&(identical(other.searchError, searchError) || other.searchError == searchError)&&(identical(other.resolvedSearchPlace, resolvedSearchPlace) || other.resolvedSearchPlace == resolvedSearchPlace)&&(identical(other.clearResolvedSearchPlace, clearResolvedSearchPlace) || other.clearResolvedSearchPlace == clearResolvedSearchPlace)&&(identical(other.clearSearchError, clearSearchError) || other.clearSearchError == clearSearchError)&&const DeepCollectionEquality().equals(other.nearbyPlaces, nearbyPlaces));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MapSearchState&&const DeepCollectionEquality().equals(other.autocompletePredictions, autocompletePredictions)&&(identical(other.searchStatus, searchStatus) || other.searchStatus == searchStatus)&&(identical(other.searchErrorMessage, searchErrorMessage) || other.searchErrorMessage == searchErrorMessage)&&(identical(other.resolvedSearchPlace, resolvedSearchPlace) || other.resolvedSearchPlace == resolvedSearchPlace)&&(identical(other.clearResolvedSearchPlace, clearResolvedSearchPlace) || other.clearResolvedSearchPlace == clearResolvedSearchPlace)&&(identical(other.clearSearchError, clearSearchError) || other.clearSearchError == clearSearchError)&&const DeepCollectionEquality().equals(other.nearbyPlaces, nearbyPlaces));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(autocompletePredictions),isSearchLoading,searchError,resolvedSearchPlace,clearResolvedSearchPlace,clearSearchError,const DeepCollectionEquality().hash(nearbyPlaces));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(autocompletePredictions),searchStatus,searchErrorMessage,resolvedSearchPlace,clearResolvedSearchPlace,clearSearchError,const DeepCollectionEquality().hash(nearbyPlaces));
 
 @override
 String toString() {
-  return 'MapSearchState(autocompletePredictions: $autocompletePredictions, isSearchLoading: $isSearchLoading, searchError: $searchError, resolvedSearchPlace: $resolvedSearchPlace, clearResolvedSearchPlace: $clearResolvedSearchPlace, clearSearchError: $clearSearchError, nearbyPlaces: $nearbyPlaces)';
+  return 'MapSearchState(autocompletePredictions: $autocompletePredictions, searchStatus: $searchStatus, searchErrorMessage: $searchErrorMessage, resolvedSearchPlace: $resolvedSearchPlace, clearResolvedSearchPlace: $clearResolvedSearchPlace, clearSearchError: $clearSearchError, nearbyPlaces: $nearbyPlaces)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MapSearchStateCopyWith<$Res>  {
   factory $MapSearchStateCopyWith(MapSearchState value, $Res Function(MapSearchState) _then) = _$MapSearchStateCopyWithImpl;
 @useResult
 $Res call({
- List<PlacePrediction> autocompletePredictions, bool isSearchLoading, String? searchError, GooglePlaceEntity? resolvedSearchPlace, bool clearResolvedSearchPlace, bool clearSearchError, List<GooglePlaceEntity> nearbyPlaces
+ List<PlacePrediction> autocompletePredictions, MapSearchStatus searchStatus, String? searchErrorMessage, GooglePlaceEntity? resolvedSearchPlace, bool clearResolvedSearchPlace, bool clearSearchError, List<GooglePlaceEntity> nearbyPlaces
 });
 
 
@@ -62,11 +62,11 @@ class _$MapSearchStateCopyWithImpl<$Res>
 
 /// Create a copy of MapSearchState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? autocompletePredictions = null,Object? isSearchLoading = null,Object? searchError = freezed,Object? resolvedSearchPlace = freezed,Object? clearResolvedSearchPlace = null,Object? clearSearchError = null,Object? nearbyPlaces = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? autocompletePredictions = null,Object? searchStatus = null,Object? searchErrorMessage = freezed,Object? resolvedSearchPlace = freezed,Object? clearResolvedSearchPlace = null,Object? clearSearchError = null,Object? nearbyPlaces = null,}) {
   return _then(_self.copyWith(
 autocompletePredictions: null == autocompletePredictions ? _self.autocompletePredictions : autocompletePredictions // ignore: cast_nullable_to_non_nullable
-as List<PlacePrediction>,isSearchLoading: null == isSearchLoading ? _self.isSearchLoading : isSearchLoading // ignore: cast_nullable_to_non_nullable
-as bool,searchError: freezed == searchError ? _self.searchError : searchError // ignore: cast_nullable_to_non_nullable
+as List<PlacePrediction>,searchStatus: null == searchStatus ? _self.searchStatus : searchStatus // ignore: cast_nullable_to_non_nullable
+as MapSearchStatus,searchErrorMessage: freezed == searchErrorMessage ? _self.searchErrorMessage : searchErrorMessage // ignore: cast_nullable_to_non_nullable
 as String?,resolvedSearchPlace: freezed == resolvedSearchPlace ? _self.resolvedSearchPlace : resolvedSearchPlace // ignore: cast_nullable_to_non_nullable
 as GooglePlaceEntity?,clearResolvedSearchPlace: null == clearResolvedSearchPlace ? _self.clearResolvedSearchPlace : clearResolvedSearchPlace // ignore: cast_nullable_to_non_nullable
 as bool,clearSearchError: null == clearSearchError ? _self.clearSearchError : clearSearchError // ignore: cast_nullable_to_non_nullable
@@ -153,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<PlacePrediction> autocompletePredictions,  bool isSearchLoading,  String? searchError,  GooglePlaceEntity? resolvedSearchPlace,  bool clearResolvedSearchPlace,  bool clearSearchError,  List<GooglePlaceEntity> nearbyPlaces)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<PlacePrediction> autocompletePredictions,  MapSearchStatus searchStatus,  String? searchErrorMessage,  GooglePlaceEntity? resolvedSearchPlace,  bool clearResolvedSearchPlace,  bool clearSearchError,  List<GooglePlaceEntity> nearbyPlaces)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MapSearchState() when $default != null:
-return $default(_that.autocompletePredictions,_that.isSearchLoading,_that.searchError,_that.resolvedSearchPlace,_that.clearResolvedSearchPlace,_that.clearSearchError,_that.nearbyPlaces);case _:
+return $default(_that.autocompletePredictions,_that.searchStatus,_that.searchErrorMessage,_that.resolvedSearchPlace,_that.clearResolvedSearchPlace,_that.clearSearchError,_that.nearbyPlaces);case _:
   return orElse();
 
 }
@@ -174,10 +174,10 @@ return $default(_that.autocompletePredictions,_that.isSearchLoading,_that.search
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<PlacePrediction> autocompletePredictions,  bool isSearchLoading,  String? searchError,  GooglePlaceEntity? resolvedSearchPlace,  bool clearResolvedSearchPlace,  bool clearSearchError,  List<GooglePlaceEntity> nearbyPlaces)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<PlacePrediction> autocompletePredictions,  MapSearchStatus searchStatus,  String? searchErrorMessage,  GooglePlaceEntity? resolvedSearchPlace,  bool clearResolvedSearchPlace,  bool clearSearchError,  List<GooglePlaceEntity> nearbyPlaces)  $default,) {final _that = this;
 switch (_that) {
 case _MapSearchState():
-return $default(_that.autocompletePredictions,_that.isSearchLoading,_that.searchError,_that.resolvedSearchPlace,_that.clearResolvedSearchPlace,_that.clearSearchError,_that.nearbyPlaces);}
+return $default(_that.autocompletePredictions,_that.searchStatus,_that.searchErrorMessage,_that.resolvedSearchPlace,_that.clearResolvedSearchPlace,_that.clearSearchError,_that.nearbyPlaces);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +191,10 @@ return $default(_that.autocompletePredictions,_that.isSearchLoading,_that.search
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<PlacePrediction> autocompletePredictions,  bool isSearchLoading,  String? searchError,  GooglePlaceEntity? resolvedSearchPlace,  bool clearResolvedSearchPlace,  bool clearSearchError,  List<GooglePlaceEntity> nearbyPlaces)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<PlacePrediction> autocompletePredictions,  MapSearchStatus searchStatus,  String? searchErrorMessage,  GooglePlaceEntity? resolvedSearchPlace,  bool clearResolvedSearchPlace,  bool clearSearchError,  List<GooglePlaceEntity> nearbyPlaces)?  $default,) {final _that = this;
 switch (_that) {
 case _MapSearchState() when $default != null:
-return $default(_that.autocompletePredictions,_that.isSearchLoading,_that.searchError,_that.resolvedSearchPlace,_that.clearResolvedSearchPlace,_that.clearSearchError,_that.nearbyPlaces);case _:
+return $default(_that.autocompletePredictions,_that.searchStatus,_that.searchErrorMessage,_that.resolvedSearchPlace,_that.clearResolvedSearchPlace,_that.clearSearchError,_that.nearbyPlaces);case _:
   return null;
 
 }
@@ -206,7 +206,7 @@ return $default(_that.autocompletePredictions,_that.isSearchLoading,_that.search
 
 
 class _MapSearchState extends MapSearchState {
-  const _MapSearchState({final  List<PlacePrediction> autocompletePredictions = const [], this.isSearchLoading = false, this.searchError, this.resolvedSearchPlace, this.clearResolvedSearchPlace = false, this.clearSearchError = false, final  List<GooglePlaceEntity> nearbyPlaces = const []}): _autocompletePredictions = autocompletePredictions,_nearbyPlaces = nearbyPlaces,super._();
+  const _MapSearchState({final  List<PlacePrediction> autocompletePredictions = const [], this.searchStatus = MapSearchStatus.initial, this.searchErrorMessage, this.resolvedSearchPlace, this.clearResolvedSearchPlace = false, this.clearSearchError = false, final  List<GooglePlaceEntity> nearbyPlaces = const []}): _autocompletePredictions = autocompletePredictions,_nearbyPlaces = nearbyPlaces,super._();
   
 
  final  List<PlacePrediction> _autocompletePredictions;
@@ -216,8 +216,8 @@ class _MapSearchState extends MapSearchState {
   return EqualUnmodifiableListView(_autocompletePredictions);
 }
 
-@override@JsonKey() final  bool isSearchLoading;
-@override final  String? searchError;
+@override@JsonKey() final  MapSearchStatus searchStatus;
+@override final  String? searchErrorMessage;
 @override final  GooglePlaceEntity? resolvedSearchPlace;
 @override@JsonKey() final  bool clearResolvedSearchPlace;
 @override@JsonKey() final  bool clearSearchError;
@@ -239,16 +239,16 @@ _$MapSearchStateCopyWith<_MapSearchState> get copyWith => __$MapSearchStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MapSearchState&&const DeepCollectionEquality().equals(other._autocompletePredictions, _autocompletePredictions)&&(identical(other.isSearchLoading, isSearchLoading) || other.isSearchLoading == isSearchLoading)&&(identical(other.searchError, searchError) || other.searchError == searchError)&&(identical(other.resolvedSearchPlace, resolvedSearchPlace) || other.resolvedSearchPlace == resolvedSearchPlace)&&(identical(other.clearResolvedSearchPlace, clearResolvedSearchPlace) || other.clearResolvedSearchPlace == clearResolvedSearchPlace)&&(identical(other.clearSearchError, clearSearchError) || other.clearSearchError == clearSearchError)&&const DeepCollectionEquality().equals(other._nearbyPlaces, _nearbyPlaces));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MapSearchState&&const DeepCollectionEquality().equals(other._autocompletePredictions, _autocompletePredictions)&&(identical(other.searchStatus, searchStatus) || other.searchStatus == searchStatus)&&(identical(other.searchErrorMessage, searchErrorMessage) || other.searchErrorMessage == searchErrorMessage)&&(identical(other.resolvedSearchPlace, resolvedSearchPlace) || other.resolvedSearchPlace == resolvedSearchPlace)&&(identical(other.clearResolvedSearchPlace, clearResolvedSearchPlace) || other.clearResolvedSearchPlace == clearResolvedSearchPlace)&&(identical(other.clearSearchError, clearSearchError) || other.clearSearchError == clearSearchError)&&const DeepCollectionEquality().equals(other._nearbyPlaces, _nearbyPlaces));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_autocompletePredictions),isSearchLoading,searchError,resolvedSearchPlace,clearResolvedSearchPlace,clearSearchError,const DeepCollectionEquality().hash(_nearbyPlaces));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_autocompletePredictions),searchStatus,searchErrorMessage,resolvedSearchPlace,clearResolvedSearchPlace,clearSearchError,const DeepCollectionEquality().hash(_nearbyPlaces));
 
 @override
 String toString() {
-  return 'MapSearchState(autocompletePredictions: $autocompletePredictions, isSearchLoading: $isSearchLoading, searchError: $searchError, resolvedSearchPlace: $resolvedSearchPlace, clearResolvedSearchPlace: $clearResolvedSearchPlace, clearSearchError: $clearSearchError, nearbyPlaces: $nearbyPlaces)';
+  return 'MapSearchState(autocompletePredictions: $autocompletePredictions, searchStatus: $searchStatus, searchErrorMessage: $searchErrorMessage, resolvedSearchPlace: $resolvedSearchPlace, clearResolvedSearchPlace: $clearResolvedSearchPlace, clearSearchError: $clearSearchError, nearbyPlaces: $nearbyPlaces)';
 }
 
 
@@ -259,7 +259,7 @@ abstract mixin class _$MapSearchStateCopyWith<$Res> implements $MapSearchStateCo
   factory _$MapSearchStateCopyWith(_MapSearchState value, $Res Function(_MapSearchState) _then) = __$MapSearchStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<PlacePrediction> autocompletePredictions, bool isSearchLoading, String? searchError, GooglePlaceEntity? resolvedSearchPlace, bool clearResolvedSearchPlace, bool clearSearchError, List<GooglePlaceEntity> nearbyPlaces
+ List<PlacePrediction> autocompletePredictions, MapSearchStatus searchStatus, String? searchErrorMessage, GooglePlaceEntity? resolvedSearchPlace, bool clearResolvedSearchPlace, bool clearSearchError, List<GooglePlaceEntity> nearbyPlaces
 });
 
 
@@ -276,11 +276,11 @@ class __$MapSearchStateCopyWithImpl<$Res>
 
 /// Create a copy of MapSearchState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? autocompletePredictions = null,Object? isSearchLoading = null,Object? searchError = freezed,Object? resolvedSearchPlace = freezed,Object? clearResolvedSearchPlace = null,Object? clearSearchError = null,Object? nearbyPlaces = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? autocompletePredictions = null,Object? searchStatus = null,Object? searchErrorMessage = freezed,Object? resolvedSearchPlace = freezed,Object? clearResolvedSearchPlace = null,Object? clearSearchError = null,Object? nearbyPlaces = null,}) {
   return _then(_MapSearchState(
 autocompletePredictions: null == autocompletePredictions ? _self._autocompletePredictions : autocompletePredictions // ignore: cast_nullable_to_non_nullable
-as List<PlacePrediction>,isSearchLoading: null == isSearchLoading ? _self.isSearchLoading : isSearchLoading // ignore: cast_nullable_to_non_nullable
-as bool,searchError: freezed == searchError ? _self.searchError : searchError // ignore: cast_nullable_to_non_nullable
+as List<PlacePrediction>,searchStatus: null == searchStatus ? _self.searchStatus : searchStatus // ignore: cast_nullable_to_non_nullable
+as MapSearchStatus,searchErrorMessage: freezed == searchErrorMessage ? _self.searchErrorMessage : searchErrorMessage // ignore: cast_nullable_to_non_nullable
 as String?,resolvedSearchPlace: freezed == resolvedSearchPlace ? _self.resolvedSearchPlace : resolvedSearchPlace // ignore: cast_nullable_to_non_nullable
 as GooglePlaceEntity?,clearResolvedSearchPlace: null == clearResolvedSearchPlace ? _self.clearResolvedSearchPlace : clearResolvedSearchPlace // ignore: cast_nullable_to_non_nullable
 as bool,clearSearchError: null == clearSearchError ? _self.clearSearchError : clearSearchError // ignore: cast_nullable_to_non_nullable

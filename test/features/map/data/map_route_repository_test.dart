@@ -48,7 +48,9 @@ void main() {
         success: (data) => expect(data, equals(tRoute)),
         failure: (_) => fail('Should be success'),
       );
-      verify(() => mockDatasource.getRoute(tWaypoints, NavigationProfile.driving)).called(1);
+      verify(
+        () => mockDatasource.getRoute(tWaypoints, NavigationProfile.driving),
+      ).called(1);
     });
 
     test('should return UnknownFailure on exception', () async {
@@ -67,7 +69,9 @@ void main() {
         success: (_) => fail('Should be failure'),
         failure: (error) => expect(error, isA<UnknownFailure>()),
       );
-      verify(() => mockDatasource.getRoute(tWaypoints, NavigationProfile.driving)).called(1);
+      verify(
+        () => mockDatasource.getRoute(tWaypoints, NavigationProfile.driving),
+      ).called(1);
     });
   });
 }

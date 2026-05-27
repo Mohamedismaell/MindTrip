@@ -49,8 +49,12 @@ class CompleteSignUpScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 18.0),
                       child: CustomOtlinedButton(
-                        onPressed: isLoading ? null : () => context.go(AppRoutes.login),
-                        text: isLoading ? "Logging in..." : AppStrings.backToLogin,
+                        onPressed: isLoading
+                            ? null
+                            : () => context.go(AppRoutes.login),
+                        text: isLoading
+                            ? "Logging in..."
+                            : AppStrings.backToLogin,
                         textStyle: context.textTheme.headlineSmall?.copyWith(
                           color: context.colorTheme.primary,
                         ),

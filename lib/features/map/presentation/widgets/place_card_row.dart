@@ -52,7 +52,11 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
 
   void _jumpToIndex(int index) {
     if (!_pageController.hasClients) return;
-    _pageController.jumpToPage(index);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -87,21 +91,25 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             state.selectedPlace?.id != _lastSelectedPlaceId;
         _lastSelectedPlaceId = state.selectedPlace?.id;
 
-        if (selectionChanged || pulseTriggered) {
+        if (pulseTriggered) {
+          if (_currentPage != 0) {
+            _currentPage = 0;
+            _jumpToIndex(0);
+          }
+        } else if (selectionChanged) {
           if (state.selectedPlace != null) {
             final index = state.annotations.indexWhere(
               (a) => a.place.id == state.selectedPlace!.id,
             );
 
             if (index != -1) {
-              final targetIndex = index;
+              final targetIndex = index + 1;
               if (targetIndex != _currentPage) {
                 _currentPage = targetIndex;
                 _jumpToIndex(targetIndex);
               }
             }
-          } else if (state.selectedPlace == null || pulseTriggered) {
-            // Force jump to DriveTab whenever selection is null OR pulse is explicitly triggered
+          } else {
             if (_currentPage != 0) {
               _currentPage = 0;
               _jumpToIndex(0);
@@ -517,19 +525,25 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
     double collapsedHeight,
   ) {
     bool showExpanded = isExpanded && isRouteSelected;
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: showExpanded ? expandedHeight : collapsedHeight,
-        margin: EdgeInsets.only(right: 8.w, top: 10.h, bottom: 5.h),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24.r),
-          boxShadow: [AppShadows.mapToolButtons],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(21.5.r),
-          child: const SingleChildScrollView(child: DriveTab()),
+    return GestureDetector(
+      onTap: () {
+        // context.read<MapCubit>().clearSelection();
+        _jumpToIndex(0);
+      },
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: showExpanded ? expandedHeight : collapsedHeight,
+          margin: EdgeInsets.only(right: 8.w, top: 10.h, bottom: 5.h),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24.r),
+            boxShadow: [AppShadows.mapToolButtons],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(21.5.r),
+            child: const SingleChildScrollView(child: DriveTab()),
+          ),
         ),
       ),
     );

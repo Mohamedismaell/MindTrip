@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
 
@@ -34,7 +36,6 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
     super.dispose();
   }
 
-  //Todo Edit ui later
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,41 +102,49 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
 
             // Search Results
             Expanded(
-              child: BlocBuilder<MapSearchCubit, MapSearchState>(
-                buildWhen: (previous, current) =>
-                    previous.autocompletePredictions !=
-                        current.autocompletePredictions ||
-                    previous.isSearchLoading != current.isSearchLoading ||
-                    previous.searchError != current.searchError,
+              child: BlocConsumer<MapSearchCubit, MapSearchState>(
+                // buildWhen: (previous, current) =>
+                //     previous.autocompletePredictions !=
+                //         current.autocompletePredictions ||
+                //     previous.isSearchLoading != current.isSearchLoading ||
+                //     previous.searchError != current.searchError,
+                listenWhen: (previous, current) =>
+                    previous.searchStatus != current.searchStatus,
+                listener: (BuildContext context, MapSearchState state) {
+                  if (state.searchStatus == MapSearchStatus.error) {
+                    AppSnackBar.showError(
+                      context: context,
+                      message: state.searchErrorMessage!,
+                    );
+                  }
+                },
                 builder: (context, state) {
-                  if (state.isSearchLoading &&
+                  if (state.searchStatus == MapSearchStatus.loading &&
                       state.autocompletePredictions.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  if (state.searchError != null) {
+                  if (state.autocompletePredictions.isEmpty ||
+                      _searchController.text.isEmpty) {
                     return Center(
                       child: Padding(
-                        padding: EdgeInsets.all(20.w),
-                        child: Text(
-                          state.searchError!,
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            color: context.colorTheme.error,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    );
-                  }
-
-                  if (state.autocompletePredictions.isEmpty &&
-                      _searchController.text.isNotEmpty &&
-                      !state.isSearchLoading) {
-                    return Center(
-                      child: Text(
-                        'No places found.',
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          color: context.colorTheme.outline,
+                        padding: EdgeInsets.all(32.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.travel_explore,
+                              size: 64.sp,
+                              color: context.colorTheme.outline,
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              'No places found',
+                              style: context.textTheme.titleLarge?.copyWith(
+                                color: context.colorTheme.outline,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -183,14 +192,6 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
 
                           if (place != null && context.mounted) {
                             context.pop(); // close overlay
-                          } else if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Failed to retrieve place details',
-                                ),
-                              ),
-                            );
                           }
                         },
                       );

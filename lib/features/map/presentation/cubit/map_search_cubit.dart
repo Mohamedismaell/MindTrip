@@ -46,7 +46,12 @@ class MapSearchCubit extends Cubit<MapSearchState> {
     }
 
     _searchDebounce = Timer(const Duration(milliseconds: 300), () async {
-      emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
+      emit(
+        state.copyWith(
+          searchStatus: MapSearchStatus.loading,
+          clearSearchError: true,
+        ),
+      );
 
       final result = await _findAutocompletePredictionsUseCase.call(
         query,
@@ -58,7 +63,7 @@ class MapSearchCubit extends Cubit<MapSearchState> {
           if (!isClosed) {
             emit(
               state.copyWith(
-                isSearchLoading: false,
+                searchStatus: MapSearchStatus.success,
                 autocompletePredictions: predictions,
               ),
             );
@@ -68,8 +73,8 @@ class MapSearchCubit extends Cubit<MapSearchState> {
           if (!isClosed && failure is! CancelledFailure) {
             emit(
               state.copyWith(
-                isSearchLoading: false,
-                searchError: failure.message,
+                searchStatus: MapSearchStatus.error,
+                searchErrorMessage: failure.message,
               ),
             );
           }
@@ -82,14 +87,19 @@ class MapSearchCubit extends Cubit<MapSearchState> {
     emit(
       state.copyWith(
         autocompletePredictions: const [],
-        isSearchLoading: false,
+        searchStatus: MapSearchStatus.initial,
         clearSearchError: true,
       ),
     );
   }
 
   Future<GooglePlaceEntity?> resolveAutocompleteResult(String placeId) async {
-    emit(state.copyWith(isSearchLoading: true, clearSearchError: true));
+    emit(
+      state.copyWith(
+        searchStatus: MapSearchStatus.loading,
+        clearSearchError: true,
+      ),
+    );
     final token = _resolveToken();
     final result = await _fetchPlaceDetailsUseCase.call(
       placeId,
@@ -102,7 +112,10 @@ class MapSearchCubit extends Cubit<MapSearchState> {
         resolvedPlace = place;
         if (!isClosed) {
           emit(
-            state.copyWith(isSearchLoading: false, resolvedSearchPlace: place),
+            state.copyWith(
+              searchStatus: MapSearchStatus.success,
+              resolvedSearchPlace: place,
+            ),
           );
           clearSearch();
         }
@@ -111,8 +124,8 @@ class MapSearchCubit extends Cubit<MapSearchState> {
         if (!isClosed && failure is! CancelledFailure) {
           emit(
             state.copyWith(
-              isSearchLoading: false,
-              searchError: failure.message,
+              searchStatus: MapSearchStatus.error,
+              searchErrorMessage: failure.message,
             ),
           );
         }

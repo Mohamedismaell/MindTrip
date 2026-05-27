@@ -15,6 +15,7 @@ import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/widget/connection_listener.dart';
 import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
@@ -110,7 +111,10 @@ class MyApp extends StatelessWidget {
             darkTheme: getLightTheme(),
             themeMode: mode.themeMode,
             routerConfig: sl<AppRouter>().appRouter,
-            builder: DevicePreview.appBuilder,
+            builder: (context, child) {
+              child = DevicePreview.appBuilder(context, child);
+              return ConnectionListener(child: child);
+            },
           ),
         );
       },

@@ -114,7 +114,7 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
   RouteStep _parseStep(Map<String, dynamic> rawStep) {
     final maneuver = rawStep['maneuver'] as Map<String, dynamic>;
 
-    // Parse banner instructions (first primary banner)
+    // Parse banner instructions
     String? bannerText;
     String? bannerType;
     String? bannerModifier;

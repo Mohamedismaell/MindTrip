@@ -49,4 +49,3 @@ sealed class MapState with _$MapState {
 
   bool get hasTripDays => tripDays != null && tripDays!.isNotEmpty;
 }
-

@@ -182,7 +182,7 @@ class _MapScreenState extends State<MapScreen> {
                           MapRelocateButton(
                             icon: Icons.directions_rounded,
                             onPressed: () {
-                              context.read<MapCubit>().clearSelection();
+                              context.read<MapCubit>().triggerNavigationPulse();
                             },
                           ),
                         ],

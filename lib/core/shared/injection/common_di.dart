@@ -7,6 +7,7 @@ import 'package:mindtrip/core/database/api/dio_consumer.dart';
 import 'package:mindtrip/core/database/api/interceptors/api_interceptor.dart';
 import 'package:mindtrip/core/database/api/interceptors/auth_interceptor.dart';
 import 'package:mindtrip/core/database/api/interceptors/logging_interceptor.dart';
+import 'package:mindtrip/core/database/api/interceptors/retry_interceptor.dart';
 import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/core/database/cache/cache_helper.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
@@ -42,7 +43,6 @@ import 'package:mindtrip/features/authetication/data/datasources/auth_remote_dat
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/favorite/cubit/saved_places_cubit.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
-import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 
 CacheHelper get cacheHelper => sl<CacheHelper>();
 
@@ -86,10 +86,14 @@ class CommonDi {
       ),
     );
     sl.registerLazySingleton(
+      () => RetryInterceptor(dio: sl<Dio>(), retryQueue: sl<RetryQueue>()),
+    );
+    sl.registerLazySingleton(
       () => DioConsumer(
         sl<Dio>(),
         sl<ApiInterceptor>(),
         sl<AuthInterceptor>(),
+        sl<RetryInterceptor>(),
         sl<LoggingInterceptor>(),
       ),
     );

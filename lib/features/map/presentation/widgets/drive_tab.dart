@@ -120,7 +120,7 @@ class DriveTab extends StatelessWidget {
             enabled: isLoading,
             justifyMultiLineText: true,
             enableSwitchAnimation: true,
-            ignorePointers: true,
+            ignorePointers: false,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -153,85 +153,62 @@ class DriveTab extends StatelessWidget {
                 Column(
                   children: [
                     SizedBox(height: 8.h),
-                    if (navigationState.isSequentialMode) ...[
-                      Skeleton.keep(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: CustomOtlinedButton(
-                                onPressed: () {
-                                  print('Pressed');
-                                  context
-                                      .read<MapNavigationCubit>()
-                                      .stopNavigation();
-                                },
-                                actionIcon: Icons.close,
-                                text: 'Stop',
-                                textStyle: context.textTheme.labelLarge
-                                    ?.copyWith(color: context.colorTheme.error),
-                                color: context.colorTheme.error,
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 7.r,
-                                  horizontal: 5.r,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              flex: 2,
-                              child: CustomOtlinedButton(
-                                onPressed: isLoading
-                                    ? null
-                                    : () => context
-                                          .read<MapNavigationCubit>()
-                                          .advanceToNextLeg(),
-                                actionIcon:
-                                    navigationState.currentLegIndex >=
-                                        navigationState.totalLegs - 1
-                                    ? Icons.check
-                                    : Icons.arrow_forward_ios,
-                                text:
-                                    navigationState.currentLegIndex >=
-                                        navigationState.totalLegs - 1
-                                    ? 'Finish Trip'
-                                    : 'Next Place (${navigationState.currentLegIndex + 1}/${navigationState.totalLegs})',
-                                color: context.colorTheme.primary,
-                                textStyle: context.textTheme.labelLarge
-                                    ?.copyWith(
-                                      color: isLoading
-                                          ? context.colorTheme.outline
-                                          : context.colorTheme.primary,
-                                    ),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 7.r,
-                                  horizontal: 5.r,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ] else ...[
-                      Skeleton.keep(
-                        child: CustomOtlinedButton(
-                          onPressed: isLoading
-                              ? null
-                              : () => context
+                    Skeleton.keep(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomOtlinedButton(
+                              onPressed: () {
+                                context
                                     .read<MapNavigationCubit>()
-                                    .stopNavigation(),
-                          icon: Icons.close,
-                          text: 'Stop',
-                          textStyle: context.textTheme.labelLarge?.copyWith(
-                            color: context.colorTheme.error,
+                                    .stopNavigation();
+                              },
+                              actionIcon: Icons.close,
+                              text: 'Stop',
+                              textStyle: context.textTheme.labelLarge?.copyWith(
+                                color: context.colorTheme.error,
+                              ),
+                              color: context.colorTheme.error,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 7.r,
+                                horizontal: 5.r,
+                              ),
+                            ),
                           ),
-                          color: context.colorTheme.error,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 7.r,
-                            horizontal: 5.r,
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            flex: 2,
+                            child: CustomOtlinedButton(
+                              onPressed: isLoading
+                                  ? null
+                                  : () => context
+                                        .read<MapNavigationCubit>()
+                                        .advanceToNextLeg(),
+                              actionIcon:
+                                  navigationState.currentLegIndex >=
+                                      navigationState.totalLegs - 1
+                                  ? Icons.check
+                                  : Icons.arrow_forward_ios,
+                              text:
+                                  navigationState.currentLegIndex >=
+                                      navigationState.totalLegs - 1
+                                  ? 'Finish Trip'
+                                  : 'Next Place (${navigationState.currentLegIndex + 1}/${navigationState.totalLegs})',
+                              color: context.colorTheme.primary,
+                              textStyle: context.textTheme.labelLarge?.copyWith(
+                                color: isLoading
+                                    ? context.colorTheme.outline
+                                    : context.colorTheme.primary,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                vertical: 7.r,
+                                horizontal: 5.r,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                     SizedBox(height: 20.h),
                   ],
                 ),

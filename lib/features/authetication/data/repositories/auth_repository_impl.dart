@@ -44,7 +44,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Result.ok(response.user.toEntity());
     } catch (e) {
-      print('Error here ===== > $e');
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }

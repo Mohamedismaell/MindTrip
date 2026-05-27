@@ -145,7 +145,6 @@ void main() {
       expect(harness.onboardingCubit.state.currentIndex, 2);
       expect(harness.onboardingCubit.state.isLastPage, true);
     });
-
   });
 
   group('Auth Cubit', () {

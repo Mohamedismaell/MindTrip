@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
+import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
 
 class AppShell extends StatefulWidget {
   final Widget child;
@@ -31,7 +32,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       final cubit = context.read<LocationCubit>();
-      if (!cubit.state.hasLocation) {
+      if (!cubit.state.hasLocation &&
+          cubit.state.status != LocationStatus.loading) {
         cubit.retry();
       }
     }

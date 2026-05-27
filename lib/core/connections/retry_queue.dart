@@ -1,9 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-/// Queue of failed requests to retry when connectivity is restored.
-///
-/// Deduplicates by method+path and caps at [maxSize] to prevent memory issues.
 class RetryQueue {
   final List<RequestOptions> _queue = [];
   final int maxSize;

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mindtrip/core/database/api/interceptors/logging_interceptor.dart';
+import 'package:mindtrip/core/database/api/interceptors/retry_interceptor.dart';
 import 'api_consumer.dart';
 import 'interceptors/api_interceptor.dart';
 import 'end_points.dart';
@@ -9,16 +10,19 @@ class DioConsumer extends ApiConsumer {
   final Dio dio;
   final ApiInterceptor apiInterceptor;
   final AuthInterceptor authInterceptor;
+  final RetryInterceptor retryInterceptor;
   final LoggingInterceptor loggingInterceptor;
   DioConsumer(
     this.dio,
     this.apiInterceptor,
     this.authInterceptor,
+    this.retryInterceptor,
     this.loggingInterceptor,
   ) {
     dio.interceptors.addAll([
       apiInterceptor,
       authInterceptor,
+      retryInterceptor,
       loggingInterceptor,
     ]);
 

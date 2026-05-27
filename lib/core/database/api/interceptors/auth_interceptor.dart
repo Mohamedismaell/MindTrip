@@ -61,7 +61,7 @@ class AuthInterceptor extends Interceptor {
     final newTokens = await tokenManager.refreshIfNeeded();
 
     if (newTokens == null) {
-      // failed — session is expired ==> logout.
+      // failed || session is expired ==> logout.
       await onLogout?.call();
       handler.reject(err);
       return;

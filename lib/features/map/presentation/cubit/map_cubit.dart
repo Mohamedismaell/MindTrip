@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
@@ -7,7 +6,6 @@ import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_us
 import '../../../../core/shared/data/models/place_model.dart';
 import '../../../../core/shared/data/models/location_model.dart';
 import '../../../ai_planner/domain/entities/trip_day.dart';
-import '../../../ai_planner/domain/entities/time_slot.dart';
 import '../../../ai_planner/presentation/utils/trip_color_palette.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 import '../../domain/entities/google_place.dart';
@@ -191,6 +189,11 @@ class MapCubit extends Cubit<MapState> {
     );
   }
 
+  void triggerNavigationPulse() {
+    if (isClosed) return;
+    emit(state.copyWith(navigationPulse: state.navigationPulse + 1));
+  }
+
   void removeSearchPlace(String placeId) {
     if (isClosed) return;
     final annotations = List<MapAnnotationEntry>.from(state.annotations)
@@ -208,10 +211,12 @@ class MapCubit extends Cubit<MapState> {
         ),
       );
     } else {
-      emit(state.copyWith(
-        annotations: annotations,
-        navigationPulse: state.navigationPulse + 1,
-      ));
+      emit(
+        state.copyWith(
+          annotations: annotations,
+          navigationPulse: state.navigationPulse + 1,
+        ),
+      );
     }
   }
 

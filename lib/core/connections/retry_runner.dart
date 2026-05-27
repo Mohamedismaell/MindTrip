@@ -18,7 +18,9 @@ class RetryRunner {
       try {
         await dio.fetch(options);
       } catch (e) {
-        debugPrint('RetryRunner: failed to retry ${options.method} ${options.path}');
+        debugPrint(
+          'RetryRunner: failed to retry ${options.method} ${options.path}',
+        );
       }
     }
   }

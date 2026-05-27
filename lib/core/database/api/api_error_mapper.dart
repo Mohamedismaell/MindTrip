@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mindtrip/core/errors/exceptions/no_internet_exception.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 
 class ApiErrorMapper {
@@ -73,6 +74,9 @@ class ApiErrorMapper {
       case DioExceptionType.cancel:
         return const CancelledFailure();
       case DioExceptionType.unknown:
+        if (e.error is NoInternetException || e.error is SocketException) {
+          return const NetworkFailure(message: 'No internet connection');
+        }
         return const UnknownFailure();
     }
   }

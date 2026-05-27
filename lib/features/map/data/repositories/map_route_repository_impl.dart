@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import '../../domain/entities/map_route.dart';
 import '../../domain/entities/navigation_profile.dart';
 import '../../domain/repositories/map_route_repository.dart';
@@ -25,15 +25,8 @@ class MapRouteRepositoryImpl implements MapRouteRepository {
         cancelToken: cancelToken,
       );
       return Result.ok(route);
-    } on DioException catch (e) {
-      return Result.error(
-        NetworkFailure(
-          message: 'Failed to fetch route',
-          debugMessage: e.message,
-        ),
-      );
     } catch (e) {
-      return Result.error(UnknownFailure(debugMessage: e.toString()));
+      return Result.error(ApiErrorMapper.fromException(e));
     }
   }
 }

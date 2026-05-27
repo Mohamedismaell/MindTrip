@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mindtrip/core/connections/retry_queue.dart';
 
 /// Dio interceptor that automatically retries transient network errors
 /// (timeouts, connection errors, and 5xx server errors) with exponential backoff.
@@ -9,11 +10,13 @@ import 'package:flutter/foundation.dart';
 /// Non-retryable errors (4xx, cancelled requests) are passed through immediately.
 class RetryInterceptor extends Interceptor {
   final Dio dio;
+  final RetryQueue retryQueue;
   final int maxRetries;
   final Duration baseDelay;
 
   RetryInterceptor({
     required this.dio,
+    required this.retryQueue,
     this.maxRetries = 3,
     this.baseDelay = const Duration(seconds: 1),
   });
@@ -35,7 +38,7 @@ class RetryInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    final delay = baseDelay * (1 << retryCount); // 1s → 2s → 4s
+    final delay = baseDelay * (1 << retryCount); // 1s => 2s => 4s
     debugPrint(
       '🔄 Retry ${retryCount + 1}/$maxRetries '
       'for ${err.requestOptions.method} ${err.requestOptions.path} '
@@ -58,18 +61,25 @@ class RetryInterceptor extends Interceptor {
     // Never retry cancelled requests
     if (CancelToken.isCancel(err)) return false;
 
-    switch (err.type) {
+    if (_isConnectivityIssue(err.type)) return true;
+
+    if (err.type == DioExceptionType.badResponse) {
+      final code = err.response?.statusCode ?? 0;
+      // Only retry server errors
+      return code >= 500;
+    }
+
+    return false;
+  }
+
+  bool _isConnectivityIssue(DioExceptionType type) {
+    switch (type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.connectionError:
         return true;
-      case DioExceptionType.badResponse:
-        final code = err.response?.statusCode ?? 0;
-        return code >= 500; // Only retry server errors
-      case DioExceptionType.badCertificate:
-      case DioExceptionType.cancel:
-      case DioExceptionType.unknown:
+      default:
         return false;
     }
   }

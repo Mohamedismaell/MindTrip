@@ -21,10 +21,7 @@ class ConnectionListener extends StatelessWidget {
             message: 'No internet connection',
           );
         } else if (state is Connected) {
-          AppSnackBar.showSuccess(
-            context: context,
-            message: 'Back online',
-          );
+          AppSnackBar.showSuccess(context: context, message: 'Back online');
         }
       },
       child: child,

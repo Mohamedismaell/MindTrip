@@ -3,11 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 
 class PlaceImages extends StatefulWidget {
-  const PlaceImages({
-    super.key,
-    required this.photoUrls,
-    this.heroTag,
-  });
+  const PlaceImages({super.key, required this.photoUrls, this.heroTag});
 
   final List<String> photoUrls;
   final String? heroTag;
