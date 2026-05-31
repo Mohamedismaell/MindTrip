@@ -45,4 +45,13 @@ class AppHive {
     tripsBox = await Hive.openBox('tripsBox');
     itinerariesBox = await Hive.openBox<String>('itinerariesBox');
   }
+
+  static Future<void> clearBoxes() async {
+    await onboardingBox.clear();
+    favoritesBox.clear();
+    favoritesSyncQueueBox.clear();
+    placesCacheBox.clear();
+    tripsBox.clear();
+    itinerariesBox.clear();
+  }
 }

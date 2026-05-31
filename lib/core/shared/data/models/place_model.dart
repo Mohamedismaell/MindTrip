@@ -6,6 +6,7 @@ import 'location_model.dart';
 
 part 'place_model.g.dart';
 
+//Todo: add cover image or depend on the liast of the images and take the first but it will be too much load i think so nvm
 @HiveType(typeId: 1)
 class PlaceModel extends Equatable {
   @HiveField(0)
@@ -17,18 +18,20 @@ class PlaceModel extends Equatable {
   @HiveField(3)
   final LocationModel location;
   @HiveField(4)
-  final List<String>? imageUrls;
+  final List<String>? coverImage;
   @HiveField(5)
-  final PlaceCategory category;
+  final List<String>? imageUrls;
   @HiveField(6)
-  final double? rating;
+  final PlaceCategory category;
   @HiveField(7)
-  final int? reviewCount;
+  final double? rating;
   @HiveField(8)
-  final double? price;
+  final int? reviewCount;
   @HiveField(9)
-  final bool isFavorite;
+  final double? price;
   @HiveField(10)
+  final bool isFavorite;
+  @HiveField(11)
   final PlaceBadge badge;
 
   const PlaceModel({
@@ -43,6 +46,7 @@ class PlaceModel extends Equatable {
     this.price,
     this.isFavorite = false,
     this.badge = PlaceBadge.none,
+    this.coverImage,
   });
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) {

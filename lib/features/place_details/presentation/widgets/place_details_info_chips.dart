@@ -6,26 +6,26 @@ import 'package:mindtrip/core/utils/extension.dart';
 
 class PlaceDetailsInfoChips extends StatelessWidget {
   final PlaceModel place;
-  
+
   const PlaceDetailsInfoChips({super.key, required this.place});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: _ChipItem(
+        const Expanded(
+          child: _OutlinedInfoChip(
             icon: Icons.timer_outlined,
-            title: 'Duration',
-            subtitle: '1-2 Hours', // Placeholder logic since we don't have duration in model yet
+            label: '2-3 Hours',
           ),
         ),
         SizedBox(width: 16.w),
         Expanded(
-          child: _ChipItem(
-            icon: Icons.attach_money_outlined,
-            title: 'Budget',
-            subtitle: place.price != null ? '\$${place.price?.toStringAsFixed(0)}' : 'Free',
+          child: _OutlinedInfoChip(
+            icon: Icons.savings_outlined,
+            label: place.price == null || place.price == 0
+                ? 'Free entry'
+                : 'Moderate budget',
           ),
         ),
       ],
@@ -33,46 +33,39 @@ class PlaceDetailsInfoChips extends StatelessWidget {
   }
 }
 
-class _ChipItem extends StatelessWidget {
+class _OutlinedInfoChip extends StatelessWidget {
   final IconData icon;
-  final String title;
-  final String subtitle;
+  final String label;
 
-  const _ChipItem({required this.icon, required this.title, required this.subtitle});
+  const _OutlinedInfoChip({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      height: 46.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
-        color: context.colorTheme.primaryContainer.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: context.colorTheme.outline.withValues(alpha: 0.2)),
+        color: AppColors.pureWhite,
+        borderRadius: BorderRadius.circular(9.r),
+        border: Border.all(
+          color: AppColors.mediumLightGray.withValues(alpha: 0.7),
+        ),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: AppColors.primaryBlue, size: 24.sp),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: context.textTheme.bodySmall?.copyWith(
-                    color: AppColors.darkGray2,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: context.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: context.colorTheme.onSurface,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+          Icon(icon, size: 18.r, color: AppColors.darkGray2),
+          SizedBox(width: 6.w),
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: AppColors.darkGray1,
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

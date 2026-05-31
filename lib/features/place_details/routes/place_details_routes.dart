@@ -15,9 +15,9 @@ class PlaceDetailsRoutes {
         if (placeId == null) {
           throw Exception('placeId is required for place details route');
         }
-        
+
         final preview = state.extra as PlaceModel?;
-        
+
         return BlocProvider(
           create: (_) => sl<PlaceDetailsCubit>()
             ..loadPlaceDetails(placeId, preview: preview)

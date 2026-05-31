@@ -37,6 +37,7 @@ Future<void> main() async {
   HydratedBloc.storage = await buildHydratedStorage();
   print('Step 3: HydratedStorage built');
   await AppHive.init();
+
   await initializeDependencies();
   print('Step 4: Service Locator initialized');
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -58,9 +59,10 @@ Future<void> main() async {
   debugPrint('TOKEN => $accessToken');
   debugPrint('GOOGLE_PLACES_KEY => $googlePlacesKey');
   debugPrint('GOOGLE_WEB_CLIENT_ID => $googleWebClientId');
+
   runApp(
-    DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
-    // AppBootstrap(),
+    // DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),
+    AppBootstrap(),
   );
 }
 
