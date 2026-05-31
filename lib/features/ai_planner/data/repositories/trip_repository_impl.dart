@@ -49,9 +49,6 @@ class TripRepositoryImpl implements TripRepository {
 
   @override
   Future<TripItinerary?> getItinerary(String tripId) async {
-    // For Phase 1, we will store itineraries using the mock datasource directly if needed,
-    // or we can add local storage for itineraries later.
-    // The plan specifies adding get/save to the ItineraryDataSource contract, let me update it.
     final model = await _itineraryDataSource.getByTripId(tripId);
     return model?.toEntity();
   }

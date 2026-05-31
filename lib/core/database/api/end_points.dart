@@ -21,6 +21,11 @@ class EndPoints {
   static String updateProfile = 'api/v1/users/me';
   static String insertInterests = 'api/v1/users/me/interests';
   static String uploadPhoto = 'api/v1/users/me/photo';
+
+  // //! Places (placeholder)
+  // static String placeDetails(String id) => 'api/v1/places/$id';
+  // static String nearbyPlaces(String id) => 'api/v1/places/$id/nearby';
+
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }

@@ -43,8 +43,8 @@ class HomeMockData {
 
   static const popularDestinations = [
     PlaceModel(
-      id: 'p1',
       name: 'The Blue Hole',
+      id: 'p1',
       location: LocationModel(address: 'Dahab', latitude: 20, longitude: 30),
       category: PlaceCategory.diving,
       imageUrls: [

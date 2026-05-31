@@ -5,6 +5,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 
 class RangeCalendar extends StatelessWidget {
@@ -77,64 +78,88 @@ class RangeCalendar extends StatelessWidget {
           SizedBox(height: 14.h),
 
           // Grid
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: days.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 7,
-              mainAxisSpacing: 6.h,
-              crossAxisSpacing: 4.w,
-              childAspectRatio: 1.1,
-            ),
-            itemBuilder: (_, i) {
-              final d = days[i];
-              final isStart = _isSame(start, d.date);
-              final isEnd = _isSame(end, d.date);
-              final selected = isStart || isEnd;
-
-              return InkWell(
-                onTap: d.isCurrent ? () => cubit.selectTripDate(d.date) : null,
-                borderRadius: BorderRadius.circular(8.r),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (_inRange(d.date, start, end))
-                      Positioned.fill(
-                        top: 5.h,
-                        bottom: 5.h,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryLightBlue1.withValues(
-                              alpha: 0.45,
-                            ),
-                            borderRadius: BorderRadius.circular(7.r),
-                          ),
-                        ),
-                      ),
-                    Container(
-                      width: 34.w,
-                      height: 34.h,
-                      alignment: Alignment.center,
-                      decoration: selected
-                          ? const BoxDecoration(
-                              color: AppColors.primaryLightBlue1,
-                              shape: BoxShape.circle,
-                            )
-                          : null,
-                      child: Text(
-                        '${d.date.day}',
-                        style: AppTextStyles.h10Medium.copyWith(
-                          color: d.isCurrent
-                              ? context.colorTheme.onSurface
-                              : AppColors.primaryShadow,
-                        ),
-                      ),
-                    ),
-                  ],
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 280),
+            transitionBuilder: (child, animation) {
+              final curved = CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+              );
+              return ClipRect(
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1, 0),
+                    end: Offset.zero,
+                  ).animate(curved),
+                  child: child,
                 ),
               );
             },
+            layoutBuilder: (currentChild, previousChildren) {
+              return Stack(children: [...previousChildren, ?currentChild]);
+            },
+            child: GridView.builder(
+              key: ValueKey('${visibleMonth.year}-${visibleMonth.month}'),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: days.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                mainAxisSpacing: 6.h,
+                crossAxisSpacing: 4.w,
+                childAspectRatio: 1.1,
+              ),
+              itemBuilder: (_, i) {
+                final d = days[i];
+                final isStart = _isSame(start, d.date);
+                final isEnd = _isSame(end, d.date);
+                final selected = isStart || isEnd;
+
+                return InkWell(
+                  onTap: d.isCurrent
+                      ? () => cubit.selectTripDate(d.date)
+                      : null,
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      if (_inRange(d.date, start, end))
+                        Positioned.fill(
+                          top: 5.h,
+                          bottom: 5.h,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryLightBlue1.withValues(
+                                alpha: 0.45,
+                              ),
+                              borderRadius: BorderRadius.circular(7.r),
+                            ),
+                          ),
+                        ),
+                      Container(
+                        width: 34.w,
+                        height: 34.h,
+                        alignment: Alignment.center,
+                        decoration: selected
+                            ? const BoxDecoration(
+                                color: AppColors.primaryLightBlue1,
+                                shape: BoxShape.circle,
+                              )
+                            : null,
+                        child: Text(
+                          '${d.date.day}',
+                          style: AppTextStyles.h10Medium.copyWith(
+                            color: d.isCurrent
+                                ? context.colorTheme.onSurface
+                                : AppColors.primaryShadow,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -179,17 +204,21 @@ class _CalendarArrowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return TapScaleEffect(
       onTap: onTap,
       borderRadius: BorderRadius.circular(11.r),
       child: Container(
         width: 22.w,
         height: 22.h,
         decoration: const BoxDecoration(
-          color: Color(0xFFF7F8FC),
+          color: AppColors.primaryLightGray,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, size: 15.sp, color: context.colorTheme.outline),
+        child: Icon(
+          icon,
+          size: 24.sp,
+          color: context.colorTheme.onSurfaceVariant,
+        ),
       ),
     );
   }

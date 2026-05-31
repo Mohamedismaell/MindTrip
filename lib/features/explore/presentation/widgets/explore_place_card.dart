@@ -17,6 +17,10 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/core/widget/favorite_place_button.dart';
 
+import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+
 class ExplorePlaceCard extends StatelessWidget {
   const ExplorePlaceCard({
     super.key,
@@ -28,57 +32,64 @@ class ExplorePlaceCard extends StatelessWidget {
   final bool hasBadge;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.pureWhite,
-        borderRadius: BorderRadius.circular(15.r),
-        //Todo: Check the shadow later
-        boxShadow: [AppShadows.tourPackagesCard],
-        border: Border.all(color: context.colorTheme.outline, width: 0.5),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //  Image section
-            Expanded(
-              flex: 5,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  //Todod: Handle no image later
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(22.r),
-                      topRight: Radius.circular(60.r),
-                      bottomLeft: Radius.circular(12.r),
-                      bottomRight: Radius.circular(12.r),
+    return TapScaleEffect(
+      onTap: () {
+        context.push(
+          '${AppRoutes.placeDetails}?placeId=${place.id}',
+          extra: place,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.pureWhite,
+          borderRadius: BorderRadius.circular(15.r),
+          //Todo: Check the shadow later
+          boxShadow: [AppShadows.tourPackagesCard],
+          border: Border.all(color: context.colorTheme.outline, width: 0.5),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //  Image section
+              Expanded(
+                flex: 5,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    //Todod: Handle no image later
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(22.r),
+                        topRight: Radius.circular(60.r),
+                        bottomLeft: Radius.circular(12.r),
+                        bottomRight: Radius.circular(12.r),
+                      ),
+                      child: AppCachedImage(
+                        imagePath: place.imageUrls?.first ?? '',
+                      ),
                     ),
-                    child: AppCachedImage(
-                      imagePath: place.imageUrls?.first ?? '',
-                    ),
-                  ),
 
-                  // Badge
-                  if (place.badge != PlaceBadge.none && hasBadge)
+                    // Badge
+                    if (place.badge != PlaceBadge.none && hasBadge)
+                      Positioned(
+                        top: 10.h,
+                        right: 10.w,
+                        child: _BadgeChip(badge: place.badge),
+                      ),
                     Positioned(
-                      top: 10.h,
-                      right: 10.w,
-                      child: _BadgeChip(badge: place.badge),
+                      top: 0.h,
+                      right: 0.w,
+                      child: FavoriteButton(placeId: place.id),
                     ),
-                  Positioned(
-                    top: 0.h,
-                    right: 0.w,
-                    child: FavoriteButton(placeId: place.id),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 10.h),
-            //  Details section
-            _buildCardInfo(context, place),
-          ],
+              SizedBox(height: 10.h),
+              _buildCardInfo(context, place),
+            ],
+          ),
         ),
       ),
     );

@@ -16,6 +16,7 @@ import 'package:mindtrip/features/interests/routes/interests_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 import 'package:mindtrip/features/explore/routes/explore_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
+import 'package:mindtrip/features/place_details/routes/place_details_routes.dart';
 
 class AppRouter {
   final AppGateCubit appGateCubit;
@@ -49,6 +50,7 @@ class AppRouter {
           ...AiPlannerRoutes.aiPlannerFlowRoutes,
           ...ProfileRoutes.routes,
           ...MapRoutes.routes,
+          ...PlaceDetailsRoutes.routes,
 
           // ...CategoriesRoutes.extraRoutes,
           // ...PostDetailsRoutes.routes,

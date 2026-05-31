@@ -97,8 +97,6 @@ class _MyTripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLocal = !trip.coverAsset.startsWith('http');
-
     return GestureDetector(
       onTap: onTap,
       child: ClipRRect(
@@ -108,12 +106,10 @@ class _MyTripCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              isLocal
-                  ? Image.asset(trip.coverAsset, fit: BoxFit.cover)
-                  : AppCachedImage(
-                      imagePath: trip.coverAsset,
-                      fit: BoxFit.cover,
-                    ),
+              AppCachedImage(
+                imagePath: trip.itineraryCoverUrl ?? trip.coverAsset,
+                fit: BoxFit.cover,
+              ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ClipRRect(

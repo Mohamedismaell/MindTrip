@@ -45,4 +45,7 @@ class AppRoutes {
   //! map
   static const String map = '/map';
   static const String mapSearch = '/map/search';
+
+  //! place details
+  static const String placeDetails = '/place-details';
 }

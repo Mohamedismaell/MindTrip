@@ -16,6 +16,7 @@ class AiPlannerState extends Equatable {
   final String customBudget;
   final DateTime visibleMonth;
   final List<String> selectedInterests;
+  final DateTime focusedDay;
   AiPlannerState({
     this.tripId,
     this.currentPage = 0,
@@ -31,6 +32,7 @@ class AiPlannerState extends Equatable {
     this.customBudget = '',
     DateTime? visibleMonth,
     this.selectedInterests = const [],
+    required this.focusedDay,
   }) : visibleMonth =
            visibleMonth ?? DateTime(DateTime.now().year, DateTime.now().month);
 
@@ -53,6 +55,7 @@ class AiPlannerState extends Equatable {
     String? customBudget,
     DateTime? visibleMonth,
     List<String>? selectedInterests,
+    DateTime? focusedDay,
   }) {
     return AiPlannerState(
       tripId: tripId ?? this.tripId,
@@ -73,6 +76,7 @@ class AiPlannerState extends Equatable {
       customBudget: customBudget ?? this.customBudget,
       visibleMonth: visibleMonth ?? this.visibleMonth,
       selectedInterests: selectedInterests ?? this.selectedInterests,
+      focusedDay: focusedDay ?? this.focusedDay,
     );
   }
 
@@ -128,5 +132,6 @@ class AiPlannerState extends Equatable {
     customBudget,
     visibleMonth,
     selectedInterests,
+    focusedDay,
   ];
 }

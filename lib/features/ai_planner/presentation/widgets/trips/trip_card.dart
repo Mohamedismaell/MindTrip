@@ -59,7 +59,10 @@ class TripCard extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      child: _InProgressCoverImage(coverUrl: _coverImage),
+                      child: AppCachedImage(
+                        imagePath: _coverImage,
+                        fit: BoxFit.cover,
+                      ),
                     ),
 
                     Container(
@@ -265,28 +268,5 @@ class TripCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _InProgressCoverImage extends StatelessWidget {
-  const _InProgressCoverImage({required this.coverUrl});
-  final String coverUrl;
-  @override
-  Widget build(BuildContext context) {
-    final isNetwork = coverUrl.startsWith('http');
-    return isNetwork
-        ? AppCachedImage(imagePath: coverUrl, fit: BoxFit.cover)
-        : Image.asset(
-            coverUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => Container(
-              color: context.colorTheme.primary.withValues(alpha: 0.12),
-              child: Icon(
-                Icons.travel_explore_rounded,
-                color: context.colorTheme.primary.withValues(alpha: 0.5),
-                size: 28.sp,
-              ),
-            ),
-          );
   }
 }

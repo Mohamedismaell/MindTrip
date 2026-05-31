@@ -7,10 +7,10 @@ import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_d
 import 'ai_planner_state.dart';
 
 class AiPlannerCubit extends Cubit<AiPlannerState> {
-  AiPlannerCubit() : super(AiPlannerState());
+  AiPlannerCubit() : super(AiPlannerState(focusedDay: DateTime.now()));
 
   void reset() {
-    emit(AiPlannerState());
+    emit(AiPlannerState(focusedDay: DateTime.now()));
   }
 
   void loadFromTrip(Trip trip) {
@@ -143,6 +143,10 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     emit(
       state.copyWith(visibleMonth: DateTime(current.year, current.month + 1)),
     );
+  }
+
+  void changeMonth(DateTime focusedDay) {
+    emit(state.copyWith(focusedDay: focusedDay));
   }
 
   void previousMonth() {

@@ -45,7 +45,7 @@ class SavedTripCard extends StatelessWidget {
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       alignment: Alignment.centerLeft,
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       child: Text(
                         data.title,
                         style: context.textTheme.labelLarge?.copyWith(
