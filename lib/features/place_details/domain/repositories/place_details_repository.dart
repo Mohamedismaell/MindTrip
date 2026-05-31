@@ -1,10 +1,10 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 abstract class PlaceDetailsRepository {
-  Future<Result<PlaceModel>> getPlaceDetails(String placeId);
+  Future<Result<PlaceEntity>> getPlaceDetails(String placeId);
 
-  Future<Result<List<PlaceModel>>> getNearbyPlaces(
+  Future<Result<List<PlaceEntity>>> getNearbyPlaces(
     String placeId, {
     double? lat,
     double? lng,

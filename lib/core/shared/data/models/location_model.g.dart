@@ -6,25 +6,25 @@ part of 'location_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class LocationModelAdapter extends TypeAdapter<LocationModel> {
+class LocationModelAdapter extends TypeAdapter<_LocationModel> {
   @override
   final typeId = 2;
 
   @override
-  LocationModel read(BinaryReader reader) {
+  _LocationModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return LocationModel(
-      address: fields[0] as String,
-      latitude: (fields[1] as num).toDouble(),
-      longitude: (fields[2] as num).toDouble(),
+    return _LocationModel(
+      address: fields[0] == null ? '' : fields[0] as String,
+      latitude: fields[1] == null ? 0.0 : (fields[1] as num).toDouble(),
+      longitude: fields[2] == null ? 0.0 : (fields[2] as num).toDouble(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, LocationModel obj) {
+  void write(BinaryWriter writer, _LocationModel obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -45,3 +45,21 @@ class LocationModelAdapter extends TypeAdapter<LocationModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_LocationModel _$LocationModelFromJson(Map<String, dynamic> json) =>
+    _LocationModel(
+      address: json['location'] as String? ?? '',
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+    );
+
+Map<String, dynamic> _$LocationModelToJson(_LocationModel instance) =>
+    <String, dynamic>{
+      'location': instance.address,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+    };

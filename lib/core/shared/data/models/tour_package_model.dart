@@ -1,57 +1,23 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 
-class TourPackageModel extends Equatable {
-  final String id;
-  final String title;
-  final LocationModel location;
-  final String imageUrl;
-  final double price;
-  final double rating;
-  final int durationDays;
+part 'tour_package_model.freezed.dart';
+part 'tour_package_model.g.dart';
 
-  const TourPackageModel({
-    required this.id,
-    required this.title,
-    required this.location,
-    required this.imageUrl,
-    required this.price,
-    required this.rating,
-    required this.durationDays,
-  });
+@freezed
+abstract class TourPackageModel with _$TourPackageModel {
+  const factory TourPackageModel({
+    @Default('') String id,
+    @Default('') String title,
+    required LocationModel location,
+    @Default('') String imageUrl,
+    @Default(0.0) double price,
+    @Default(0.0) double rating,
+    @Default(0) int durationDays,
+  }) = _TourPackageModel;
 
-  factory TourPackageModel.fromJson(Map<String, dynamic> json) {
-    return TourPackageModel(
-      id: json['id'] ?? '',
-      title: json['title'] ?? '',
-      location: LocationModel.fromJson(json['location']),
-      imageUrl: json['imageUrl'] ?? '',
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      durationDays: json['durationDays'] ?? 0,
-    );
-  }
+  const TourPackageModel._();
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'location': location.toJson(),
-      'imageUrl': imageUrl,
-      'price': price,
-      'rating': rating,
-      'durationDays': durationDays,
-    };
-  }
-
-  @override
-  List<Object?> get props => [
-    id,
-    title,
-    location,
-    imageUrl,
-    price,
-    rating,
-    durationDays,
-  ];
+  factory TourPackageModel.fromJson(Map<String, dynamic> json) =>
+      _$TourPackageModelFromJson(json);
 }

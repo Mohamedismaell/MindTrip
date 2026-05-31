@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_place_card.dart';
 
 class ExplorePlacesGrid extends StatelessWidget {
   const ExplorePlacesGrid({super.key, required this.places});
 
-  final List<PlaceModel> places;
+  final List<PlaceEntity> places;
 
   @override
   Widget build(BuildContext context) {

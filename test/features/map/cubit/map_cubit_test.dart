@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/shared/data/models/location_model.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/map/domain/repositories/google_places_repository.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
@@ -36,10 +36,10 @@ void main() {
     cubit.close();
   });
 
-  final tPlace = PlaceModel(
+  final tPlace = PlaceEntity(
     id: '1',
     name: 'Test Place',
-    location: LocationModel(address: '', latitude: 10.0, longitude: 20.0),
+    location: LocationEntity(address: '', latitude: 10.0, longitude: 20.0),
     description: 'A test place',
     category: PlaceCategory.cafe,
     rating: 4.5,

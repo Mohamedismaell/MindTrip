@@ -6,7 +6,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
@@ -15,7 +15,7 @@ import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 class HomeRecommendedGrid extends StatelessWidget {
   const HomeRecommendedGrid({super.key, required this.destinations});
 
-  final List<PlaceModel> destinations;
+  final List<PlaceEntity> destinations;
 
   @override
   Widget build(BuildContext context) {

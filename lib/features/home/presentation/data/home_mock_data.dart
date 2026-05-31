@@ -1,8 +1,8 @@
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/shared/data/models/banner_model.dart';
-import 'package:mindtrip/core/shared/data/models/location_model.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
-import 'package:mindtrip/core/shared/data/models/tour_package_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
 import 'package:mindtrip/features/home/presentation/models/home_models.dart';
 
 //!Dummy data for the home screen **Not working right now**
@@ -21,19 +21,19 @@ class HomeMockData {
   ];
 
   static const banners = [
-    BannerModel(
+    BannerEntity(
       id: 'b1',
       title: 'Escape the Noise',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/27a1b2d0-178d-43c6-a2cb-f6d785526666',
     ),
-    BannerModel(
+    BannerEntity(
       id: 'b2',
       title: 'Seek Adventure',
       imageUrl:
           'https://www.figma.com/api/mcp/asset/fb3d5dd3-5857-4e1c-b4d0-11c97a44acb7',
     ),
-    BannerModel(
+    BannerEntity(
       id: 'b3',
       title: 'Travel Through Time',
       imageUrl:
@@ -42,10 +42,10 @@ class HomeMockData {
   ];
 
   static const popularDestinations = [
-    PlaceModel(
+    PlaceEntity(
       name: 'The Blue Hole',
       id: 'p1',
-      location: LocationModel(address: 'Dahab', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Dahab', latitude: 20, longitude: 30),
       category: PlaceCategory.diving,
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/b9754e96-0dbc-4221-8692-a92c88ba8c1e',
@@ -53,20 +53,20 @@ class HomeMockData {
         'https://www.figma.com/api/mcp/asset/e084fbc7-7d7f-4e9f-b765-09050f8d88a4',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p2',
       name: 'White Desert',
-      location: LocationModel(address: 'Farafra', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Farafra', latitude: 20, longitude: 30),
       category: PlaceCategory.desert,
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/7757b795-65f2-4a3e-9fa8-78d17c1ad58c',
         'https://www.figma.com/api/mcp/asset/7ca7a24d-98e1-4160-b8a6-25ad588d9515',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p3',
       name: 'Siwa Salt Lakes',
-      location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Siwa', latitude: 20, longitude: 30),
       category: PlaceCategory.wellness,
       imageUrls: [
         'https://www.figma.com/api/mcp/asset/6d50a379-383d-4729-8571-6371ac253ff9',
@@ -76,24 +76,24 @@ class HomeMockData {
   ];
 
   static const recommendedDestinations = [
-    PlaceModel(
+    PlaceEntity(
       id: 'p4',
       name: 'Fjord Bay',
-      location: LocationModel(address: 'Taba', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Taba', latitude: 20, longitude: 30),
       price: 150,
       category: PlaceCategory.beach,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p5',
       name: 'Wadi El Rayan',
-      location: LocationModel(address: 'Fayoum', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Fayoum', latitude: 20, longitude: 30),
       price: 150,
       category: PlaceCategory.park,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p6',
       name: 'Ras Mohamed',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Sharm El Sheikh',
         latitude: 20,
         longitude: 30,
@@ -101,10 +101,10 @@ class HomeMockData {
       price: 150,
       category: PlaceCategory.diving,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p7',
       name: 'Qaitbay Citadel',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Alexandria',
         latitude: 20,
         longitude: 30,
@@ -112,10 +112,10 @@ class HomeMockData {
       price: 150,
       category: PlaceCategory.heritage,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p8',
       name: 'Mount Sinai',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'St. Catherine',
         latitude: 20,
         longitude: 30,
@@ -123,24 +123,24 @@ class HomeMockData {
       price: 150,
       category: PlaceCategory.mountain,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p9',
       name: 'Cleopatra\'s Pool',
-      location: LocationModel(address: 'Siwa', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Siwa', latitude: 20, longitude: 30),
       price: 150,
       category: PlaceCategory.wellness,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p10',
       name: 'Khan el-Khalili',
-      location: LocationModel(address: 'Cairo', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Cairo', latitude: 20, longitude: 30),
       price: 150,
       category: PlaceCategory.shopping,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'p11',
       name: 'Wadi El Gemal',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Marsa Alam',
         latitude: 20,
         longitude: 30,
@@ -151,30 +151,30 @@ class HomeMockData {
   ];
 
   static const tourPackages = [
-    TourPackageModel(
+    TourPackageEntity(
       id: 'pkg1',
       title: 'Magic Lake Escape',
-      location: LocationModel(address: 'Fayoum', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Fayoum', latitude: 20, longitude: 30),
       imageUrl:
           'https://www.figma.com/api/mcp/asset/b57bb337-5ceb-4f23-b123-b5f5424d72e2',
       price: 350,
       rating: 4.5,
       durationDays: 3,
     ),
-    TourPackageModel(
+    TourPackageEntity(
       id: 'pkg2',
       title: 'White Desert',
-      location: LocationModel(address: 'Farafra', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Farafra', latitude: 20, longitude: 30),
       imageUrl:
           'https://www.figma.com/api/mcp/asset/7ca7a24d-98e1-4160-b8a6-25ad588d9515',
       price: 350,
       rating: 4.7,
       durationDays: 2,
     ),
-    TourPackageModel(
+    TourPackageEntity(
       id: 'pkg3',
       title: 'Aswan Getaway',
-      location: LocationModel(address: 'Aswan', latitude: 20, longitude: 30),
+      location: LocationEntity(address: 'Aswan', latitude: 20, longitude: 30),
       imageUrl:
           'https://www.figma.com/api/mcp/asset/d79ef4b5-b669-4d5c-82d6-f7a4fed5c5e4',
       price: 390,

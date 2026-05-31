@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 enum DayPeriod { morning, afternoon, evening }
 
@@ -12,7 +12,7 @@ class TimeSlot extends Equatable {
 
   final DayPeriod period;
   final String title;
-  final List<PlaceModel> places;
+  final List<PlaceEntity> places;
 
   @override
   List<Object?> get props => [period, title, places];

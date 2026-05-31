@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
 class PlaceDetailsNearbyPlaces extends StatelessWidget {
-  final List<PlaceModel> places;
+  final List<PlaceEntity> places;
   final bool isLoading;
 
   const PlaceDetailsNearbyPlaces({
@@ -57,7 +57,7 @@ class PlaceDetailsNearbyPlaces extends StatelessWidget {
 }
 
 class _NearbyPlaceCard extends StatelessWidget {
-  final PlaceModel place;
+  final PlaceEntity place;
 
   const _NearbyPlaceCard({required this.place});
 

@@ -1,8 +1,10 @@
 import 'dart:convert';
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
+import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/ai_planner/data/models/trip_itinerary_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
@@ -595,8 +597,8 @@ class MockItineraryDataSource implements ItineraryDataSource {
     );
   }
 
-  /// Helper to construct a [PlaceModel].
-  PlaceModel _place({
+  /// Helper to construct a [PlaceEntity].
+  PlaceEntity _place({
     required String id,
     required String name,
     String? description,
@@ -614,6 +616,6 @@ class MockItineraryDataSource implements ItineraryDataSource {
       category: category,
       rating: rating,
       imageUrls: imageUrl != null ? [imageUrl] : null,
-    );
+    ).toEntity();
   }
 }

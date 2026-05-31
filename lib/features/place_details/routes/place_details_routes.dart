@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
@@ -16,7 +16,7 @@ class PlaceDetailsRoutes {
           throw Exception('placeId is required for place details route');
         }
 
-        final preview = state.extra as PlaceModel?;
+        final preview = state.extra as PlaceEntity?;
 
         return BlocProvider(
           create: (_) => sl<PlaceDetailsCubit>()

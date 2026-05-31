@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
-import 'package:mindtrip/core/shared/data/models/banner_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
 
 class HomeBannerCarousel extends StatefulWidget {
   const HomeBannerCarousel({super.key, required this.banners});
 
-  final List<BannerModel> banners;
+  final List<BannerEntity> banners;
 
   @override
   State<HomeBannerCarousel> createState() => _HomeBannerCarouselState();

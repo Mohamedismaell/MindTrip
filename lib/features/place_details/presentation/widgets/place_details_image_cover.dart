@@ -5,7 +5,7 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 
 class PlaceDetailsImageCover extends StatelessWidget {
-  final String? imageUrls;
+  final List<String>? imageUrls;
 
   const PlaceDetailsImageCover({super.key, this.imageUrls});
 
@@ -20,7 +20,8 @@ class PlaceDetailsImageCover extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           AppCachedImage(
-            imagePath: imageUrls ?? 'assets/images/onboarding/Pyramids.webp',
+            imagePath:
+                imageUrls?.first ?? 'assets/images/onboarding/Pyramids.webp',
             fit: BoxFit.cover,
             width: double.infinity,
           ),

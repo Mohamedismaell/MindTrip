@@ -1,35 +1,19 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class BannerModel extends Equatable {
-  final String id;
-  final String title;
-  final String imageUrl;
-  final String? targetUrl;
+part 'banner_model.freezed.dart';
+part 'banner_model.g.dart';
 
-  const BannerModel({
-    required this.id,
-    required this.title,
-    required this.imageUrl,
-    this.targetUrl,
-  });
-  factory BannerModel.fromJson(Map<String, dynamic> json) {
-    return BannerModel(
-      id: json['id'] ?? '',
-      title: json['title'] ?? '',
-      imageUrl: json['imageUrl'] ?? '',
-      targetUrl: json['targetUrl'],
-    );
-  }
+@freezed
+abstract class BannerModel with _$BannerModel {
+  const factory BannerModel({
+    @Default('') String id,
+    @Default('') String title,
+    @Default('') String imageUrl,
+    String? targetUrl,
+  }) = _BannerModel;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'imageUrl': imageUrl,
-      'targetUrl': targetUrl,
-    };
-  }
+  const BannerModel._();
 
-  @override
-  List<Object?> get props => [id, title, imageUrl, targetUrl];
+  factory BannerModel.fromJson(Map<String, dynamic> json) =>
+      _$BannerModelFromJson(json);
 }

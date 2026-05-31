@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
-import '../../../../core/shared/data/models/place_model.dart';
+import '../../../../core/shared/domain/entities/place_entity.dart';
 
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 
 class MapAnnotationEntry extends Equatable {
-  final PlaceModel place;
+  final PlaceEntity place;
   final int sequenceNumber;
   final String? mapboxAnnotationId;
 
@@ -32,7 +32,7 @@ class MapAnnotationEntry extends Equatable {
   });
 
   MapAnnotationEntry copyWith({
-    PlaceModel? place,
+    PlaceEntity? place,
     int? sequenceNumber,
     String? mapboxAnnotationId,
     Color? periodColor,

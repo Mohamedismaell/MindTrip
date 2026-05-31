@@ -3,7 +3,8 @@ import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_local_data_source.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart';
 import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 
 class FavoritesRepositoryImpl implements FavoritesRepository {
@@ -103,7 +104,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Result<List<PlaceModel>>> getFavoritePlaces({
+  Future<Result<List<PlaceEntity>>> getFavoritePlaces({
     required Set<String> placeIds,
   }) async {
     if (placeIds.isEmpty) return Result.ok([]);
@@ -115,11 +116,12 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       } else {
         await _placesLocal.cachePlaces(result);
       }
-      return Result.ok(result);
+      
+      return Result.ok(result.map((m) => m.toEntity()).toList());
     } catch (e) {
       final localResult = await _placesLocal.getPlaces(placeIds.toList());
       if (localResult.isNotEmpty) {
-        return Result.ok(localResult);
+        return Result.ok(localResult.map((m) => m.toEntity()).toList());
       }
       return Result.error(ApiErrorMapper.fromException(e));
     }

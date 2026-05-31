@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 class TimePeriodSection extends StatelessWidget {
   final TimeSlot slot;
@@ -73,7 +73,7 @@ class TimePeriodSection extends StatelessWidget {
 }
 
 class _PlaceActivityTile extends StatefulWidget {
-  final PlaceModel place;
+  final PlaceEntity place;
 
   const _PlaceActivityTile({required this.place});
 
@@ -136,7 +136,7 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
                 width: 60.w,
                 height: 60.h,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, _) => _PlaceholderImage(),
+                errorBuilder: (_, _, _) => _PlaceholderImage(),
               ),
             )
           else

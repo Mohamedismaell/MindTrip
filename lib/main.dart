@@ -1,5 +1,4 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +22,7 @@ import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
+import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 
@@ -48,10 +48,18 @@ Future<void> main() async {
   //Todo: remove later
   print('Step 5: Bootstrapping Mock Places Cache');
   final placesCache = sl<PlacesLocalDataSource>();
-  await placesCache.cachePlaces(HomeMockData.popularDestinations);
-  await placesCache.cachePlaces(HomeMockData.recommendedDestinations);
-  await placesCache.cachePlaces(ExploreMockData.trendingPlaces);
-  await placesCache.cachePlaces(ExploreMockData.otherPlaces);
+  await placesCache.cachePlaces(
+    HomeMockData.popularDestinations.map((e) => e.toModel()).toList(),
+  );
+  await placesCache.cachePlaces(
+    HomeMockData.recommendedDestinations.map((e) => e.toModel()).toList(),
+  );
+  await placesCache.cachePlaces(
+    ExploreMockData.trendingPlaces.map((e) => e.toModel()).toList(),
+  );
+  await placesCache.cachePlaces(
+    ExploreMockData.otherPlaces.map((e) => e.toModel()).toList(),
+  );
   const accessToken = String.fromEnvironment('ACCESS_TOKEN');
   const googlePlacesKey = String.fromEnvironment('GOOGLE_PLACES_KEY');
   const googleWebClientId = String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
-import 'package:mindtrip/core/shared/data/models/location_model.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart';
 import 'package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
@@ -20,20 +20,20 @@ void main() {
   late MockGetPlaceDetailsUseCase mockGetDetails;
   late MockGetNearbyPlacesUseCase mockGetNearby;
 
-  final tPlace = PlaceModel(
+  final tPlace = PlaceEntity(
     id: '1',
     name: 'Test Place',
-    location: const LocationModel(
+    location: const LocationEntity(
       address: '123 Test St',
       latitude: 0.0,
       longitude: 0.0,
     ),
   );
 
-  final tPreviewPlace = PlaceModel(
+  final tPreviewPlace = PlaceEntity(
     id: '1',
     name: 'Preview Place',
-    location: const LocationModel(
+    location: const LocationEntity(
       address: '123 Test St',
       latitude: 0.0,
       longitude: 0.0,

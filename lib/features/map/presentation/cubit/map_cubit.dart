@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
-import '../../../../core/shared/data/models/place_model.dart';
-import '../../../../core/shared/data/models/location_model.dart';
+import '../../../../core/shared/domain/entities/place_entity.dart';
+import '../../../../core/shared/domain/entities/location_entity.dart';
 import '../../../ai_planner/domain/entities/trip_day.dart';
 import '../../../ai_planner/presentation/utils/trip_color_palette.dart';
 import '../../domain/entities/map_annotation_entry.dart';
@@ -30,7 +30,7 @@ class MapCubit extends Cubit<MapState> {
 
   //  Place loading ──
 
-  void loadPlaces(List<PlaceModel> places) {
+  void loadPlaces(List<PlaceEntity> places) {
     if (isClosed) return;
     final annotations = List<MapAnnotationEntry>.generate(
       places.length,
@@ -134,10 +134,10 @@ class MapCubit extends Cubit<MapState> {
 
   Future<void> showGooglePlaceDetails(GooglePlaceEntity place) async {
     if (isClosed) return;
-    final placeModel = PlaceModel(
+    final placeModel = PlaceEntity(
       id: place.placeId,
       name: place.displayName,
-      location: LocationModel(
+      location: LocationEntity(
         address: place.formattedAddress ?? '',
         latitude: place.latitude ?? 0.0,
         longitude: place.longitude ?? 0.0,

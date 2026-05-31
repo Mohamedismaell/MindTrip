@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/shared/data/models/location_model.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/explore/presentation/models/explore_models.dart';
 
 /// Dummy data for the Explore screen — static UI only.
@@ -28,10 +28,10 @@ class ExploreMockData {
 
   //  Trending Now
   static const trendingPlaces = [
-    PlaceModel(
+    PlaceEntity(
       id: 't1',
       name: 'Nile Cafe',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Cairo',
         latitude: 30.0,
         longitude: 31.2,
@@ -44,10 +44,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't2',
       name: 'Sokhna Beach',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Ain Sokhna',
         latitude: 29.5984,
         longitude: 32.3157,
@@ -60,10 +60,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't3',
       name: 'Siwa Oasis',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Siwa',
         latitude: 29.2077,
         longitude: 25.5366,
@@ -76,10 +76,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1596627116790-af6f46dddbfb?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't4',
       name: 'Dahab Coast',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Dahab',
         latitude: 28.4905,
         longitude: 34.5163,
@@ -92,10 +92,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't5',
       name: 'Aswan Nile',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Aswan',
         latitude: 24.0882,
         longitude: 32.8992,
@@ -108,10 +108,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't6',
       name: 'Fayoum Lake',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Fayoum',
         latitude: 29.2999,
         longitude: 30.6445,
@@ -124,10 +124,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't7',
       name: 'Luxor Sunset',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Luxor',
         latitude: 25.6996,
         longitude: 32.6386,
@@ -140,10 +140,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't8',
       name: 'Marsa Alam',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Marsa Alam',
         latitude: 25.4428,
         longitude: 34.3384,
@@ -160,10 +160,10 @@ class ExploreMockData {
 
   //  Other Places (grid)
   static const otherPlaces = [
-    PlaceModel(
+    PlaceEntity(
       id: 't1',
       name: 'Nile Cafe',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Cairo',
         latitude: 30.0,
         longitude: 31.2,
@@ -176,10 +176,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't2',
       name: 'Sokhna Beach',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Ain Sokhna',
         latitude: 29.5984,
         longitude: 32.3157,
@@ -192,10 +192,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't3',
       name: 'Siwa Oasis',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Siwa',
         latitude: 29.2077,
         longitude: 25.5366,
@@ -208,10 +208,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1596627116790-af6f46dddbfb?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't4',
       name: 'Dahab Coast',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Dahab',
         latitude: 28.4905,
         longitude: 34.5163,
@@ -224,10 +224,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't5',
       name: 'Aswan Nile',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Aswan',
         latitude: 24.0882,
         longitude: 32.8992,
@@ -240,10 +240,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1568322503193-d7a3a9e32513?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't6',
       name: 'Fayoum Lake',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Fayoum',
         latitude: 29.2999,
         longitude: 30.6445,
@@ -256,10 +256,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't7',
       name: 'Luxor Sunset',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Luxor',
         latitude: 25.6996,
         longitude: 32.6386,
@@ -272,10 +272,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 't8',
       name: 'Marsa Alam',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Marsa Alam',
         latitude: 25.4428,
         longitude: 34.3384,
@@ -288,10 +288,10 @@ class ExploreMockData {
         'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400',
       ],
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'op1',
       name: 'Giza Pyramids',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Giza',
         latitude: 29.9792,
         longitude: 31.1342,
@@ -305,10 +305,10 @@ class ExploreMockData {
       ],
       // badge: PlaceBadge.topRated,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'op2',
       name: 'Luxor Temple',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Luxor',
         latitude: 25.6996,
         longitude: 32.6386,
@@ -322,10 +322,10 @@ class ExploreMockData {
       ],
       // badge: PlaceBadge.popular,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'op3',
       name: 'Blue Hole',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Dahab',
         latitude: 28.4905,
         longitude: 34.5163,
@@ -339,10 +339,10 @@ class ExploreMockData {
       ],
       // // badge: PlaceBadge.trending,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'op4',
       name: 'Old Cairo',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Cairo',
         latitude: 30.0444,
         longitude: 31.2357,
@@ -356,10 +356,10 @@ class ExploreMockData {
       ],
       // // badge: PlaceBadge.topRated,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'op5',
       name: 'Nile Cruise',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Aswan',
         latitude: 24.0882,
         longitude: 32.8992,
@@ -373,10 +373,10 @@ class ExploreMockData {
       ],
       // // badge: PlaceBadge.popular,
     ),
-    PlaceModel(
+    PlaceEntity(
       id: 'op6',
       name: 'Karnak Temple',
-      location: LocationModel(
+      location: LocationEntity(
         address: 'Luxor',
         latitude: 25.6996,
         longitude: 32.6386,

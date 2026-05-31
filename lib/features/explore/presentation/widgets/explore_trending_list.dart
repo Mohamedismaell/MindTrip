@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 class ExploreTrendingList extends StatelessWidget {
   const ExploreTrendingList({super.key, required this.items});
 
-  final List<PlaceModel> items;
+  final List<PlaceEntity> items;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class ExploreTrendingList extends StatelessWidget {
 class _TrendingCard extends StatelessWidget {
   const _TrendingCard({required this.item});
 
-  final PlaceModel item;
+  final PlaceEntity item;
 
   @override
   Widget build(BuildContext context) {

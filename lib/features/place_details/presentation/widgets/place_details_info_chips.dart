@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
 class PlaceDetailsInfoChips extends StatelessWidget {
-  final PlaceModel place;
+  final PlaceEntity place;
 
   const PlaceDetailsInfoChips({super.key, required this.place});
 

@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/shared/data/models/location_model.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
@@ -132,7 +132,7 @@ Future<void> _pumpTripDetails(
       GoRoute(
         path: AppRoutes.map,
         builder: (_, state) {
-          final places = state.extra as List<PlaceModel>? ?? const [];
+          final places = state.extra as List<PlaceEntity>? ?? const [];
           return Scaffold(body: Text('Map places: ${places.length}'));
         },
       ),
@@ -214,10 +214,10 @@ class _FakeTripRepository implements TripRepository {
       title: title,
       places: [
         for (final name in names)
-          PlaceModel(
+          PlaceEntity(
             id: name,
             name: name,
-            location: const LocationModel(
+            location: const LocationEntity(
               address: 'Dahab',
               latitude: 28.5,
               longitude: 34.5,

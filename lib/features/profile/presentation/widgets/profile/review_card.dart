@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/data/models/review_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/review_entity.dart';
 
 class ReviewCard extends StatelessWidget {
   const ReviewCard({super.key, required this.data});
 
-  final ReviewModel data;
+  final ReviewEntity data;
 
   @override
   Widget build(BuildContext context) {

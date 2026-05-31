@@ -4,7 +4,7 @@ import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 extension LocationMapper on LocationModel {
   LocationEntity toEntity() {
     return LocationEntity(
-      location: address,
+      address: address,
       latitude: latitude,
       longitude: longitude,
     );
@@ -14,7 +14,7 @@ extension LocationMapper on LocationModel {
 extension LocationEntityMapper on LocationEntity {
   LocationModel toModel() {
     return LocationModel(
-      address: location,
+      address: address,
       latitude: latitude,
       longitude: longitude,
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
@@ -25,7 +25,7 @@ class PlaceTab extends StatelessWidget {
     this.photoUrls,
     this.dragController,
   });
-  final PlaceModel? place;
+  final PlaceEntity? place;
   final GooglePlaceEntity? googlePlace;
   final List<String>? photoUrls;
   final DraggableScrollableController? dragController;
@@ -246,7 +246,7 @@ class PlaceTab extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, PlaceModel place) {
+  Widget _buildContent(BuildContext context, PlaceEntity place) {
     final photoUrls = place.imageUrls;
     final placeLat = place.location.latitude;
     final placeLng = place.location.longitude;

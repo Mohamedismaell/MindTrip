@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mindtrip/core/shared/data/models/tour_package_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
@@ -15,7 +15,7 @@ import 'package:mindtrip/features/home/presentation/widgets/custom_circle_icon.d
 class HomeTourPackages extends StatelessWidget {
   const HomeTourPackages({super.key, required this.packages});
 
-  final List<TourPackageModel> packages;
+  final List<TourPackageEntity> packages;
 
   @override
   Widget build(BuildContext context) {

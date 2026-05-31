@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart';
 
 class GetNearbyPlacesUseCase {
@@ -7,7 +7,7 @@ class GetNearbyPlacesUseCase {
 
   GetNearbyPlacesUseCase({required this.repository});
 
-  Future<Result<List<PlaceModel>>> call(
+  Future<Result<List<PlaceEntity>>> call(
     String placeId, {
     double? lat,
     double? lng,

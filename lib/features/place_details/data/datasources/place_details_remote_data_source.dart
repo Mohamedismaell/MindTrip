@@ -1,6 +1,7 @@
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
 import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
+import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 
 class PlaceDetailsRemoteDataSource {
 
@@ -15,10 +16,10 @@ class PlaceDetailsRemoteDataSource {
     await Future.delayed(const Duration(milliseconds: 600));
 
     final List<PlaceModel> allMockPlaces = [
-      ...HomeMockData.popularDestinations,
-      ...HomeMockData.recommendedDestinations,
-      ...ExploreMockData.trendingPlaces,
-      ...ExploreMockData.otherPlaces,
+      ...HomeMockData.popularDestinations.map((e) => e.toModel()),
+      ...HomeMockData.recommendedDestinations.map((e) => e.toModel()),
+      ...ExploreMockData.trendingPlaces.map((e) => e.toModel()),
+      ...ExploreMockData.otherPlaces.map((e) => e.toModel()),
     ];
 
     try {
@@ -45,7 +46,7 @@ class PlaceDetailsRemoteDataSource {
 
     // Mock fallback: return a shuffled sublist of trending places
     await Future.delayed(const Duration(milliseconds: 800));
-    final List<PlaceModel> nearby = List.from(ExploreMockData.trendingPlaces);
+    final List<PlaceModel> nearby = List.from(ExploreMockData.trendingPlaces.map((e) => e.toModel()));
     nearby.shuffle();
     return nearby.take(4).toList();
   }

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../core/shared/data/models/place_model.dart';
+import '../../../../core/shared/domain/entities/place_entity.dart';
 import '../../../ai_planner/domain/entities/trip_day.dart';
 import '../../domain/entities/google_place.dart';
 import '../../domain/entities/map_annotation_entry.dart';
@@ -14,7 +14,7 @@ sealed class MapState with _$MapState {
   const factory MapState({
     @Default([]) List<MapAnnotationEntry> annotations,
 
-    PlaceModel? selectedPlace,
+    PlaceEntity? selectedPlace,
 
     GooglePlaceEntity? selectedGooglePlace,
 

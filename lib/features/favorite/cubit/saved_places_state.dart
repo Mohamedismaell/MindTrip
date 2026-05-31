@@ -3,7 +3,7 @@ part of 'saved_places_cubit.dart';
 enum FavoritesTabStatus { initial, loading, loaded, empty, error }
 
 class FavoritesScreenState extends Equatable {
-  final List<PlaceModel> places;
+  final List<PlaceEntity> places;
   final FavoritesTabStatus placesStatus;
   final String? errorMessage;
   final PlaceCategory selectedCategory;
@@ -15,13 +15,13 @@ class FavoritesScreenState extends Equatable {
     this.selectedCategory = PlaceCategory.all,
   });
 
-  List<PlaceModel> get filteredPlaces {
+  List<PlaceEntity> get filteredPlaces {
     if (selectedCategory == PlaceCategory.all) return places;
     return places.where((p) => p.category == selectedCategory).toList();
   }
 
   FavoritesScreenState copyWith({
-    List<PlaceModel>? places,
+    List<PlaceEntity>? places,
     FavoritesTabStatus? placesStatus,
     String? errorMessage,
     PlaceCategory? selectedCategory,

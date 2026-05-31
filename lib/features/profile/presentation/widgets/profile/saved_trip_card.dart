@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/data/models/trip_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/trip_entity.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/favorite_bubble.dart';
 
 class SavedTripCard extends StatelessWidget {
   const SavedTripCard({super.key, required this.data});
 
-  final TripModel data;
+  final TripEntity data;
 
   @override
   Widget build(BuildContext context) {

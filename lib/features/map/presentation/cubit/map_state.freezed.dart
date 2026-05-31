@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MapState {
 
- List<MapAnnotationEntry> get annotations; PlaceModel? get selectedPlace; GooglePlaceEntity? get selectedGooglePlace; List<String> get selectedPlacePhotoUrls; bool get isBottomSheetVisible; bool get isLocationGranted; bool get clearSelectedPlace; bool get clearSelectedGooglePlace; bool get clearFlyToLocation;/// Monotonically-increasing counter that bumps on every triggerFlyTo call.
+ List<MapAnnotationEntry> get annotations; PlaceEntity? get selectedPlace; GooglePlaceEntity? get selectedGooglePlace; List<String> get selectedPlacePhotoUrls; bool get isBottomSheetVisible; bool get isLocationGranted; bool get clearSelectedPlace; bool get clearSelectedGooglePlace; bool get clearFlyToLocation;/// Monotonically-increasing counter that bumps on every triggerFlyTo call.
 /// The MapListener uses this to reliably detect a new flyTo request even
 /// when the lat/lng coordinates are the same as the previous request.
  int get flyToPulse; double? get flyToLat; double? get flyToLng;/// Trip days passed from trip‐details; null when map is opened standalone.
@@ -51,7 +51,7 @@ abstract mixin class $MapStateCopyWith<$Res>  {
   factory $MapStateCopyWith(MapState value, $Res Function(MapState) _then) = _$MapStateCopyWithImpl;
 @useResult
 $Res call({
- List<MapAnnotationEntry> annotations, PlaceModel? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, List<TripDay>? tripDays, int? selectedDayIndex
+ List<MapAnnotationEntry> annotations, PlaceEntity? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, List<TripDay>? tripDays, int? selectedDayIndex
 });
 
 
@@ -72,7 +72,7 @@ class _$MapStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 annotations: null == annotations ? _self.annotations : annotations // ignore: cast_nullable_to_non_nullable
 as List<MapAnnotationEntry>,selectedPlace: freezed == selectedPlace ? _self.selectedPlace : selectedPlace // ignore: cast_nullable_to_non_nullable
-as PlaceModel?,selectedGooglePlace: freezed == selectedGooglePlace ? _self.selectedGooglePlace : selectedGooglePlace // ignore: cast_nullable_to_non_nullable
+as PlaceEntity?,selectedGooglePlace: freezed == selectedGooglePlace ? _self.selectedGooglePlace : selectedGooglePlace // ignore: cast_nullable_to_non_nullable
 as GooglePlaceEntity?,selectedPlacePhotoUrls: null == selectedPlacePhotoUrls ? _self.selectedPlacePhotoUrls : selectedPlacePhotoUrls // ignore: cast_nullable_to_non_nullable
 as List<String>,isBottomSheetVisible: null == isBottomSheetVisible ? _self.isBottomSheetVisible : isBottomSheetVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLocationGranted: null == isLocationGranted ? _self.isLocationGranted : isLocationGranted // ignore: cast_nullable_to_non_nullable
@@ -167,7 +167,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceModel? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MapState() when $default != null:
 return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.tripDays,_that.selectedDayIndex);case _:
@@ -188,7 +188,7 @@ return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceModel? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)  $default,) {final _that = this;
 switch (_that) {
 case _MapState():
 return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.tripDays,_that.selectedDayIndex);}
@@ -205,7 +205,7 @@ return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<MapAnnotationEntry> annotations,  PlaceModel? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)?  $default,) {final _that = this;
 switch (_that) {
 case _MapState() when $default != null:
 return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.tripDays,_that.selectedDayIndex);case _:
@@ -230,7 +230,7 @@ class _MapState extends MapState {
   return EqualUnmodifiableListView(_annotations);
 }
 
-@override final  PlaceModel? selectedPlace;
+@override final  PlaceEntity? selectedPlace;
 @override final  GooglePlaceEntity? selectedGooglePlace;
  final  List<String> _selectedPlacePhotoUrls;
 @override@JsonKey() List<String> get selectedPlacePhotoUrls {
@@ -295,7 +295,7 @@ abstract mixin class _$MapStateCopyWith<$Res> implements $MapStateCopyWith<$Res>
   factory _$MapStateCopyWith(_MapState value, $Res Function(_MapState) _then) = __$MapStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<MapAnnotationEntry> annotations, PlaceModel? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, List<TripDay>? tripDays, int? selectedDayIndex
+ List<MapAnnotationEntry> annotations, PlaceEntity? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, List<TripDay>? tripDays, int? selectedDayIndex
 });
 
 
@@ -316,7 +316,7 @@ class __$MapStateCopyWithImpl<$Res>
   return _then(_MapState(
 annotations: null == annotations ? _self._annotations : annotations // ignore: cast_nullable_to_non_nullable
 as List<MapAnnotationEntry>,selectedPlace: freezed == selectedPlace ? _self.selectedPlace : selectedPlace // ignore: cast_nullable_to_non_nullable
-as PlaceModel?,selectedGooglePlace: freezed == selectedGooglePlace ? _self.selectedGooglePlace : selectedGooglePlace // ignore: cast_nullable_to_non_nullable
+as PlaceEntity?,selectedGooglePlace: freezed == selectedGooglePlace ? _self.selectedGooglePlace : selectedGooglePlace // ignore: cast_nullable_to_non_nullable
 as GooglePlaceEntity?,selectedPlacePhotoUrls: null == selectedPlacePhotoUrls ? _self._selectedPlacePhotoUrls : selectedPlacePhotoUrls // ignore: cast_nullable_to_non_nullable
 as List<String>,isBottomSheetVisible: null == isBottomSheetVisible ? _self.isBottomSheetVisible : isBottomSheetVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLocationGranted: null == isLocationGranted ? _self.isLocationGranted : isLocationGranted // ignore: cast_nullable_to_non_nullable

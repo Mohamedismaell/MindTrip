@@ -1,5 +1,5 @@
-import 'package:mindtrip/core/shared/data/models/review_model.dart';
-import 'package:mindtrip/core/shared/data/models/trip_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/review_entity.dart';
+import 'package:mindtrip/core/shared/domain/entities/trip_entity.dart';
 
 class ProfileStatData {
   const ProfileStatData({required this.label, required this.value});
@@ -39,8 +39,8 @@ class ProfileMockData {
   //   ProfileInterestData(emoji: '🎭', label: 'Culture'),
   // ];
 
-  static const List<TripModel> savedTrips = [
-    TripModel(
+  static const List<TripEntity> savedTrips = [
+    TripEntity(
       id: 'trip_saved_1',
       title: 'Dahab',
       subtitle: 'Saved destination',
@@ -48,7 +48,7 @@ class ProfileMockData {
           'https://www.figma.com/api/mcp/asset/942ac9bb-0a22-4c80-8aaf-e5e8535a1ee0',
       isFavorite: true,
     ),
-    TripModel(
+    TripEntity(
       id: 'trip_saved_2',
       title: 'El-Alamein',
       subtitle: 'Saved destination',
@@ -58,8 +58,8 @@ class ProfileMockData {
     ),
   ];
 
-  static const List<TripModel> myTrips = [
-    TripModel(
+  static const List<TripEntity> myTrips = [
+    TripEntity(
       id: 'trip_1',
       title: 'The Caves',
       subtitle: 'Dahab | Mar 2026',
@@ -67,7 +67,7 @@ class ProfileMockData {
           'https://www.figma.com/api/mcp/asset/4f6f22df-9ba2-4d55-b473-58c8248bcbf8',
       isFavorite: true,
     ),
-    TripModel(
+    TripEntity(
       id: 'trip_2',
       title: 'Lighthouse Reef',
       subtitle: 'Dahab | Mar 2026',
@@ -77,8 +77,8 @@ class ProfileMockData {
     ),
   ];
 
-  static const List<ReviewModel> reviews = [
-    ReviewModel(
+  static const List<ReviewEntity> reviews = [
+    ReviewEntity(
       id: 'rev_1',
       userId: 'user_1',
       placeId: 'place_1',
@@ -89,7 +89,7 @@ class ProfileMockData {
           'experience. The crystal clear water is beyond words.',
       rating: 5,
     ),
-    ReviewModel(
+    ReviewEntity(
       id: 'rev_2',
       userId: 'user_1',
       placeId: 'place_2',

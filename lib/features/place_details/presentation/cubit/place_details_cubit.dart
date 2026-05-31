@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart';
 import 'package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
@@ -15,7 +15,7 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
        _getNearby = getNearby,
        super(const PlaceDetailsState());
 
-  Future<void> loadPlaceDetails(String placeId, {PlaceModel? preview}) async {
+  Future<void> loadPlaceDetails(String placeId, {PlaceEntity? preview}) async {
     if (preview != null) {
       emit(
         state.copyWith(

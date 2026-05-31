@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 abstract class FavoritesRepository {
   Future<Result<Set<String>>> getFavoriteIds();
@@ -9,7 +9,7 @@ abstract class FavoritesRepository {
   });
   Future<Result<void>> syncPendingFavorites();
   Future<Result<void>> clearAll();
-  Future<Result<List<PlaceModel>>> getFavoritePlaces({
+  Future<Result<List<PlaceEntity>>> getFavoritePlaces({
     required Set<String> placeIds,
   });
 }

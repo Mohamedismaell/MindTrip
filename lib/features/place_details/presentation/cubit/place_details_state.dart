@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 enum PlaceDetailsStatus { initial, loading, loaded, error }
 
 class PlaceDetailsState extends Equatable {
   final PlaceDetailsStatus status;
-  final PlaceModel? place;
-  final PlaceModel? preview;
-  final List<PlaceModel> nearbyPlaces;
+  final PlaceEntity? place;
+  final PlaceEntity? preview;
+  final List<PlaceEntity> nearbyPlaces;
   final bool isNearbyLoading;
   final String? errorMessage;
 
@@ -22,9 +22,9 @@ class PlaceDetailsState extends Equatable {
 
   PlaceDetailsState copyWith({
     PlaceDetailsStatus? status,
-    PlaceModel? place,
-    PlaceModel? preview,
-    List<PlaceModel>? nearbyPlaces,
+    PlaceEntity? place,
+    PlaceEntity? preview,
+    List<PlaceEntity>? nearbyPlaces,
     bool? isNearbyLoading,
     String? errorMessage,
   }) {

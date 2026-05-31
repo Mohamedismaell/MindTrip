@@ -12,7 +12,7 @@ import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/core/widget/favorite_place_button.dart';
@@ -28,7 +28,7 @@ class ExplorePlaceCard extends StatelessWidget {
     required this.hasBadge,
   });
 
-  final PlaceModel place;
+  final PlaceEntity place;
   final bool hasBadge;
   @override
   Widget build(BuildContext context) {
@@ -129,7 +129,7 @@ class _BadgeChip extends StatelessWidget {
   }
 }
 
-Widget _buildHotelInfo(BuildContext context, PlaceModel place) {
+Widget _buildHotelInfo(BuildContext context, PlaceEntity place) {
   return Expanded(
     flex: 4,
     child: Column(
@@ -207,7 +207,7 @@ Widget _buildHotelInfo(BuildContext context, PlaceModel place) {
 }
 
 //restaurant and cafe and activities
-Widget _buildRestaurantInfo(BuildContext context, PlaceModel place) {
+Widget _buildRestaurantInfo(BuildContext context, PlaceEntity place) {
   return Expanded(
     flex: 4,
     child: Column(
@@ -265,7 +265,7 @@ Widget _buildRestaurantInfo(BuildContext context, PlaceModel place) {
   );
 }
 
-Widget _buildCardInfo(BuildContext context, PlaceModel place) {
+Widget _buildCardInfo(BuildContext context, PlaceEntity place) {
   switch (place.category) {
     case PlaceCategory.hotel:
       return _buildHotelInfo(context, place);

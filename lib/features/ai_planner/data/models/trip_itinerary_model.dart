@@ -1,3 +1,4 @@
+import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
@@ -18,7 +19,7 @@ class TimeSlotModel extends TimeSlot {
       ),
       title: json['title'] as String,
       places: (json['places'] as List<dynamic>)
-          .map((e) => PlaceModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => PlaceModel.fromJson(e as Map<String, dynamic>).toEntity())
           .toList(),
     );
   }
@@ -27,7 +28,7 @@ class TimeSlotModel extends TimeSlot {
     return {
       'period': period.name,
       'title': title,
-      'places': places.map((e) => e.toJson()).toList(),
+      'places': places.map((e) => e.toModel().toJson()).toList(),
     };
   }
 

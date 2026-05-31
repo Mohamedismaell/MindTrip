@@ -1,63 +1,23 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ReviewModel extends Equatable {
-  final String id;
-  final String userId;
-  final String placeId;
-  final String location;
-  final double rating;
-  final String title;
-  final String body;
-  final DateTime? createdAt;
+part 'review_model.freezed.dart';
+part 'review_model.g.dart';
 
-  const ReviewModel({
-    required this.id,
-    required this.userId,
-    required this.placeId,
-    required this.location,
-    required this.rating,
-    required this.title,
-    required this.body,
-    this.createdAt,
-  });
+@freezed
+abstract class ReviewModel with _$ReviewModel {
+  const factory ReviewModel({
+    @Default('') String id,
+    @Default('') String userId,
+    @Default('') String placeId,
+    @Default('') String location,
+    @Default(0.0) double rating,
+    @Default('') String title,
+    @Default('') String body,
+    DateTime? createdAt,
+  }) = _ReviewModel;
 
-  factory ReviewModel.fromJson(Map<String, dynamic> json) {
-    return ReviewModel(
-      id: json['id'] ?? '',
-      userId: json['userId'] ?? '',
-      placeId: json['placeId'] ?? '',
-      location: json['location'] ?? '',
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      title: json['title'] ?? '',
-      body: json['body'] ?? '',
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
-          : null,
-    );
-  }
+  const ReviewModel._();
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'userId': userId,
-      'placeId': placeId,
-      'location': location,
-      'rating': rating,
-      'title': title,
-      'body': body,
-      'createdAt': createdAt?.toIso8601String(),
-    };
-  }
-
-  @override
-  List<Object?> get props => [
-    id,
-    userId,
-    placeId,
-    location,
-    rating,
-    title,
-    body,
-    createdAt,
-  ];
+  factory ReviewModel.fromJson(Map<String, dynamic> json) =>
+      _$ReviewModelFromJson(json);
 }

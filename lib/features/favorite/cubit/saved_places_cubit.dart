@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_use_case.dart';
 import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 

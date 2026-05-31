@@ -9,7 +9,7 @@ import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
@@ -773,7 +773,7 @@ class FakeFavoritesRepository implements FavoritesRepository {
   Future<Result<Set<String>>> getFavoriteIds() async => Result.ok(_favoriteIds);
 
   @override
-  Future<Result<List<PlaceModel>>> getFavoritePlaces({
+  Future<Result<List<PlaceEntity>>> getFavoritePlaces({
     required Set<String> placeIds,
   }) async {
     return const Result.ok([]);

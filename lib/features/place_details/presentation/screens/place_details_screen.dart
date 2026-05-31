@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
@@ -49,7 +49,7 @@ class PlaceDetailsScreen extends StatelessWidget {
 }
 
 class _PlaceDetailsBody extends StatelessWidget {
-  final PlaceModel place;
+  final PlaceEntity place;
   final PlaceDetailsState state;
 
   const _PlaceDetailsBody({required this.place, required this.state});
@@ -70,7 +70,7 @@ class _PlaceDetailsBody extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(
                   child: PlaceDetailsImageCover(
-                    imageUrls: place.imageUrls.first,
+                    imageUrls: place.imageUrls,
                   ),
                 ),
                 SliverToBoxAdapter(

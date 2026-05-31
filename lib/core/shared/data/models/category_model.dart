@@ -1,18 +1,18 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 
-class CategoryModel extends Equatable {
-  final String name;
-  //* Helpful for UI state
-  final bool isSelected;
+part 'category_model.freezed.dart';
+part 'category_model.g.dart';
 
-  final PlaceCategory type;
+@freezed
+abstract class CategoryModel with _$CategoryModel {
+  const factory CategoryModel({
+    @Default('') String name,
+    @Default(false) bool isSelected,
+    @Default(PlaceCategory.other) PlaceCategory type,
+  }) = _CategoryModel;
 
-  const CategoryModel({
-    required this.name,
-    required this.isSelected,
-    this.type = PlaceCategory.other,
-  });
+  const CategoryModel._();
 
   factory CategoryModel.fromEnum(
     PlaceCategory category, {
@@ -25,18 +25,6 @@ class CategoryModel extends Equatable {
     );
   }
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    return CategoryModel(
-      name: json['name'] ?? '',
-      isSelected: json['isSelected'] ?? false,
-      type: PlaceCategory.fromCategory(json['type'] ?? json['id']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'isSelected': isSelected, 'type': type.name};
-  }
-
-  @override
-  List<Object?> get props => [name, isSelected, type];
+  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
+      _$CategoryModelFromJson(json);
 }

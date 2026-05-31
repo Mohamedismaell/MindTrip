@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart';
 
 class GetPlaceDetailsUseCase {
@@ -7,6 +7,6 @@ class GetPlaceDetailsUseCase {
 
   GetPlaceDetailsUseCase({required this.repository});
 
-  Future<Result<PlaceModel>> call(String placeId) =>
+  Future<Result<PlaceEntity>> call(String placeId) =>
       repository.getPlaceDetails(placeId);
 }
