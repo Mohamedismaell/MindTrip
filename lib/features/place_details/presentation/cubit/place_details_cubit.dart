@@ -4,6 +4,7 @@ import 'package:mindtrip/features/place_details/domain/use_cases/get_nearby_plac
 import 'package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
 
+//Todo: add cancel token
 class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
   final GetPlaceDetailsUseCase _getDetails;
   final GetNearbyPlacesUseCase _getNearby;
@@ -17,33 +18,37 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
 
   Future<void> loadPlaceDetails(String placeId, {PlaceEntity? preview}) async {
     if (preview != null) {
+      if (isClosed) return;
       emit(
         state.copyWith(
-          status: PlaceDetailsStatus.loading,
+          placeDetailsStatus: PlaceDetailsStatus.loading,
           preview: preview,
           place: state.place ?? preview,
         ),
       );
     } else {
-      emit(state.copyWith(status: PlaceDetailsStatus.loading));
+      if (isClosed) return;
+      emit(state.copyWith(placeDetailsStatus: PlaceDetailsStatus.loading));
     }
 
     final result = await _getDetails(placeId);
 
     result.when(
       success: (place) {
+        if (isClosed) return;
         emit(
           state.copyWith(
-            status: PlaceDetailsStatus.loaded,
+            placeDetailsStatus: PlaceDetailsStatus.loaded,
             place: place,
             errorMessage: null,
           ),
         );
       },
       failure: (error) {
+        if (isClosed) return;
         emit(
           state.copyWith(
-            status: PlaceDetailsStatus.error,
+            placeDetailsStatus: PlaceDetailsStatus.error,
             errorMessage: error.message,
           ),
         );
@@ -56,17 +61,28 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
     double? lat,
     double? lng,
   }) async {
-    emit(state.copyWith(isNearbyLoading: true));
+    if (isClosed) return;
+    emit(state.copyWith(nearbyStatus: NearbyStatus.loading));
 
     final result = await _getNearby(placeId, lat: lat, lng: lng);
 
     result.when(
       success: (places) {
-        emit(state.copyWith(nearbyPlaces: places, isNearbyLoading: false));
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            nearbyPlaces: places,
+            nearbyStatus: NearbyStatus.loaded,
+          ),
+        );
       },
       failure: (error) {
+        if (isClosed) return;
         emit(
-          state.copyWith(isNearbyLoading: false, errorMessage: error.message),
+          state.copyWith(
+            nearbyStatus: NearbyStatus.error,
+            errorMessage: error.message,
+          ),
         );
       },
     );

@@ -14,6 +14,18 @@ class TimeSlot extends Equatable {
   final String title;
   final List<PlaceEntity> places;
 
+  TimeSlot copyWith({
+    DayPeriod? period,
+    String? title,
+    List<PlaceEntity>? places,
+  }) {
+    return TimeSlot(
+      period: period ?? this.period,
+      title: title ?? this.title,
+      places: places ?? this.places,
+    );
+  }
+
   @override
   List<Object?> get props => [period, title, places];
 }

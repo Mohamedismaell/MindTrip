@@ -66,8 +66,11 @@ class ExplorePlaceCard extends StatelessWidget {
                         bottomLeft: Radius.circular(12.r),
                         bottomRight: Radius.circular(12.r),
                       ),
-                      child: AppCachedImage(
-                        imagePath: place.imageUrls?.first ?? '',
+                      child: Hero(
+                        tag: place.id,
+                        child: AppCachedImage(
+                          imagePath: place.imageUrls?.first ?? '',
+                        ),
                       ),
                     ),
 

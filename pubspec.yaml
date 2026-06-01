@@ -109,7 +109,7 @@ flutter:
     - assets/icons/explore/
     - assets/icons/bottom_nav/
     - assets/icons/ai_planner/
-    - assets/icons/map/
+    # - assets/icons/map/
   fonts:
     - family: SFPro
       fonts:

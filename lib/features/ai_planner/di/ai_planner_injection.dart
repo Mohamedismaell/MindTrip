@@ -13,6 +13,7 @@ import 'package:mindtrip/features/ai_planner/data/repositories/trip_repository_i
 import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/edit_itinerary_use_case.dart';
 
 class AiPlannerDi {
   AiPlannerDi._();
@@ -40,8 +41,11 @@ class AiPlannerDi {
     sl.registerLazySingleton<TripsCubit>(
       () => TripsCubit(sl<TripRepository>()),
     );
+    sl.registerFactory<EditItineraryUseCase>(
+      () => EditItineraryUseCase(),
+    );
     sl.registerFactory<TripDetailsCubit>(
-      () => TripDetailsCubit(sl<TripRepository>()),
+      () => TripDetailsCubit(sl<TripRepository>(), sl<EditItineraryUseCase>()),
     );
 
     //! Chat — Data sources

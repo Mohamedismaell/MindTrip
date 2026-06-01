@@ -3,48 +3,50 @@ import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 enum PlaceDetailsStatus { initial, loading, loaded, error }
 
+enum NearbyStatus { initial, loading, loaded, error }
+
 class PlaceDetailsState extends Equatable {
-  final PlaceDetailsStatus status;
+  final PlaceDetailsStatus placeDetailsStatus;
   final PlaceEntity? place;
   final PlaceEntity? preview;
   final List<PlaceEntity> nearbyPlaces;
-  final bool isNearbyLoading;
+  final NearbyStatus nearbyStatus;
   final String? errorMessage;
 
   const PlaceDetailsState({
-    this.status = PlaceDetailsStatus.initial,
+    this.placeDetailsStatus = PlaceDetailsStatus.initial,
     this.place,
     this.preview,
     this.nearbyPlaces = const [],
-    this.isNearbyLoading = false,
+    this.nearbyStatus = NearbyStatus.initial,
     this.errorMessage,
   });
 
   PlaceDetailsState copyWith({
-    PlaceDetailsStatus? status,
+    PlaceDetailsStatus? placeDetailsStatus,
     PlaceEntity? place,
     PlaceEntity? preview,
     List<PlaceEntity>? nearbyPlaces,
-    bool? isNearbyLoading,
+    NearbyStatus? nearbyStatus,
     String? errorMessage,
   }) {
     return PlaceDetailsState(
-      status: status ?? this.status,
+      placeDetailsStatus: placeDetailsStatus ?? this.placeDetailsStatus,
       place: place ?? this.place,
       preview: preview ?? this.preview,
       nearbyPlaces: nearbyPlaces ?? this.nearbyPlaces,
-      isNearbyLoading: isNearbyLoading ?? this.isNearbyLoading,
+      nearbyStatus: nearbyStatus ?? this.nearbyStatus,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
   List<Object?> get props => [
-        status,
-        place,
-        preview,
-        nearbyPlaces,
-        isNearbyLoading,
-        errorMessage,
-      ];
+    placeDetailsStatus,
+    place,
+    preview,
+    nearbyPlaces,
+    nearbyStatus,
+    errorMessage,
+  ];
 }

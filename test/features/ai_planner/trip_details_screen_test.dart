@@ -13,6 +13,7 @@ import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/edit_itinerary_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/trip_details_screen.dart';
@@ -123,7 +124,7 @@ Future<void> _pumpTripDetails(
         path: AppRoutes.tripDetails,
         builder: (context, state) => MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => TripDetailsCubit(repo)),
+            BlocProvider(create: (_) => TripDetailsCubit(repo, EditItineraryUseCase())),
             BlocProvider.value(value: tripsCubit),
           ],
           child: TripDetailsScreen(tripId: repo.trip.id),

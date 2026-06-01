@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
 class PlaceDetailsReviews extends StatelessWidget {
@@ -20,71 +21,66 @@ class PlaceDetailsReviews extends StatelessWidget {
       children: [
         Text(
           'Reviews',
-          style: context.textTheme.titleMedium?.copyWith(
+          style: context.textTheme.labelMedium?.copyWith(
             color: AppColors.pureBlack,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(height: 14.h),
+        SizedBox(height: 13.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: 116.w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    rating.toStringAsFixed(1),
-                    style: context.textTheme.headlineSmall?.copyWith(
-                      color: AppColors.darkGray1,
-                      fontSize: 23.sp,
-                      fontWeight: FontWeight.w700,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  rating.toStringAsFixed(1),
+                  style: AppTextStyles.h6Bold.copyWith(
+                    color: context.colorTheme.onSurface,
                   ),
-                  SizedBox(height: 6.h),
-                  const _StarsRow(size: 13),
-                  SizedBox(height: 7.h),
-                  Text(
-                    'from $reviewCount visitors',
-                    style: context.textTheme.bodySmall?.copyWith(
-                      color: AppColors.pureBlack,
-                      fontSize: 13.sp,
-                    ),
+                ),
+                SizedBox(height: 7.h),
+                RatingStars(size: 13, rating: rating),
+                SizedBox(height: 7.h),
+                Text(
+                  'from $reviewCount visitors',
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.pureBlack,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            SizedBox(width: 33.w),
             Expanded(child: _RatingBars(rating: rating)),
           ],
         ),
-        SizedBox(height: 18.h),
-        const _ReviewCard(
-          name: 'Elif',
-          imagePath: 'assets/images/profile/deafult_user_cover.webp',
-          body:
-              'One of the most unforgettable places in Egypt. The view at sunrise was incredible.',
-        ),
-        SizedBox(height: 22.h),
-        const _ReviewCard(
-          name: 'Leyla',
-          imagePath: 'assets/images/profile/deafult_user_cover.webp',
-          body:
-              'Perfect for photography. We spent almost 3 hours exploring the site.',
-        ),
-        SizedBox(height: 22.h),
-        const _ReviewCard(
-          name: 'Kerem',
-          imagePath: 'assets/images/profile/deafult_user_cover.webp',
-          body:
-              'Very crowded at noon, so visiting early morning is definitely better.',
-        ),
+        //! no review cards for now
+        // SizedBox(height: 29.h),
+        // const _ReviewCard(
+        //   name: 'Elif',
+        //   imagePath: 'assets/images/profile/deafult_user_cover.webp',
+        //   body:
+        //       'One of the most unforgettable places in Egypt. The view at sunrise was incredible.',
+        // ),
+        // SizedBox(height: 24.h),
+        // const _ReviewCard(
+        //   name: 'Leyla',
+        //   imagePath: 'assets/images/profile/deafult_user_cover.webp',
+        //   body:
+        //       'Perfect for photography. We spent almost 3 hours exploring the site.',
+        // ),
+        // SizedBox(height: 24.h),
+        // const _ReviewCard(
+        //   name: 'Kerem',
+        //   imagePath: 'assets/images/profile/deafult_user_cover.webp',
+        //   body:
+        //       'Very crowded at noon, so visiting early morning is definitely better.',
+        // ),
       ],
     );
   }
 }
 
+//Todo need to be replaced with real data
 class _RatingBars extends StatelessWidget {
   final double rating;
 
@@ -120,9 +116,8 @@ class _RatingBar extends StatelessWidget {
           width: 14.w,
           child: Text(
             label,
-            style: context.textTheme.bodySmall?.copyWith(
+            style: context.textTheme.bodyMedium?.copyWith(
               color: AppColors.pureBlack,
-              fontSize: 12.sp,
             ),
           ),
         ),
@@ -132,8 +127,8 @@ class _RatingBar extends StatelessWidget {
             child: LinearProgressIndicator(
               minHeight: 7.h,
               value: value,
-              color: AppColors.primaryBlue,
-              backgroundColor: const Color(0xFFF0F1F4),
+              color: context.colorTheme.primary,
+              backgroundColor: AppColors.primaryLightGray,
             ),
           ),
         ),
@@ -142,90 +137,98 @@ class _RatingBar extends StatelessWidget {
   }
 }
 
-class _ReviewCard extends StatelessWidget {
-  final String name;
-  final String imagePath;
-  final String body;
+// class _ReviewCard extends StatelessWidget {
+//   final String name;
+//   final String imagePath;
+//   final String body;
 
-  const _ReviewCard({
-    required this.name,
-    required this.imagePath,
-    required this.body,
-  });
+//   const _ReviewCard({
+//     required this.name,
+//     required this.imagePath,
+//     required this.body,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.fromLTRB(20.w, 18.h, 16.w, 14.h),
-      decoration: BoxDecoration(
-        color: AppColors.pureWhite,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: AppColors.mediumLightGray.withValues(alpha: 0.65),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipOval(
-            child: AppCachedImage(
-              imagePath: imagePath,
-              width: 54.r,
-              height: 54.r,
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(width: 14.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: context.textTheme.labelLarge?.copyWith(
-                    color: AppColors.pureBlack,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                const _StarsRow(size: 13),
-                SizedBox(height: 2.h),
-                Text(
-                  body,
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.pureBlack,
-                    fontSize: 13.sp,
-                    height: 1.35,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: double.infinity,
+//       height: 143.h,
+//       padding: EdgeInsets.zero,
+//       decoration: BoxDecoration(
+//         color: AppColors.pureWhite,
+//         borderRadius: BorderRadius.circular(8.r),
+//         border: Border.all(
+//           color: AppColors.mediumLightGray.withValues(alpha: 0.65),
+//         ),
+//       ),
+//       child: Stack(
+//         children: [
+//           Positioned(
+//             left: 27.w,
+//             top: 51.h,
+//             child: ClipOval(
+//               child: AppCachedImage(
+//                 imagePath: imagePath,
+//                 width: 58.r,
+//                 height: 58.r,
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           Positioned(
+//             left: 84.w,
+//             top: 15.h,
+//             right: 18.w,
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   name,
+//                   style: context.textTheme.labelLarge?.copyWith(
+//                     color: AppColors.pureBlack,
+//                     fontSize: 14.sp,
+//                     fontWeight: FontWeight.w700,
+//                   ),
+//                 ),
+//                 SizedBox(height: 34.h),
+//                 const _StarsRow(size: 13),
+//                 SizedBox(height: 2.h),
+//                 Text(
+//                   body,
+//                   maxLines: 3,
+//                   overflow: TextOverflow.ellipsis,
+//                   style: context.textTheme.bodyMedium?.copyWith(
+//                     color: AppColors.pureBlack,
+//                     fontSize: 14.sp,
+//                     height: 1.35,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class _StarsRow extends StatelessWidget {
-  final double size;
+// class _StarsRow extends StatelessWidget {
+//   final double size;
 
-  const _StarsRow({required this.size});
+//   const _StarsRow({required this.size});
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        5,
-        (index) => Icon(
-          Icons.star_rounded,
-          color: AppColors.customYellow,
-          size: size.r,
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisSize: MainAxisSize.min,
+//       children: List.generate(
+//         5,
+//         (index) => Icon(
+//           Icons.star_rounded,
+//           color: AppColors.customYellow,
+//           size: size.r,
+//         ),
+//       ),
+//     );
+//   }
+// }

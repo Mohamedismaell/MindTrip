@@ -46,8 +46,11 @@ class HomeRecommendedGrid extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       //! Handle no image later
-                      AppCachedImage(
-                        imagePath: destination.imageUrls?.first ?? '',
+                      Hero(
+                        tag: destination.id,
+                        child: AppCachedImage(
+                          imagePath: destination.imageUrls?.first ?? '',
+                        ),
                       ),
                       if (destination.price != null)
                         Positioned(

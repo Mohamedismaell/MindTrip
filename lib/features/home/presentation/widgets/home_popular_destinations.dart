@@ -45,8 +45,11 @@ class HomePopularDestinations extends StatelessWidget {
                         fit: StackFit.expand,
                         children: [
                           //! Handle no image later
-                          AppCachedImage(
-                            imagePath: destination.imageUrls?.first ?? '',
+                          Hero(
+                            tag: destination.id,
+                            child: AppCachedImage(
+                              imagePath: destination.imageUrls?.first ?? '',
+                            ),
                           ),
 
                           DecoratedBox(

@@ -66,7 +66,7 @@ class CustomOtlinedButton extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           if (icon != null) ...[
-                            Icon(icon, size: 20.sp),
+                            Icon(icon, size: 20.sp, color: buttonColor),
                             SizedBox(width: 8.w),
                           ],
                           Row(

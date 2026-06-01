@@ -30,6 +30,8 @@ class AppAssets {
       '$_authImagesPath/Email campaign-cuate 1(3).svg';
   static const String completeSvg =
       '$_authImagesPath/undraw_well-done_kqud 1.svg';
+  static const String errorBot = '$_imagesPath/error_bot.webp';
+  static const String errorBotMap = '$_imagesPath/error_bot_map.webp';
 
   // Icons
   static const String emailIcon = '$_iconsPath/email.svg';

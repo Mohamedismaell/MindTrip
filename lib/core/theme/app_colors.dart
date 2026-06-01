@@ -11,7 +11,7 @@ class AppColors {
   static const Color mediumLightGray = Color(0xFF9CA3AF);
   static const Color darkGray1 = Color(0xFF374151);
   static const Color darkGray2 = Color(0xFF717171);
-  static const Color pureBlack = Colors.black;
+  static const Color pureBlack = Colors.black87;
   static const Color pureWhite = Colors.white;
   static const Color customYellow = Color(0xFFF8BD00);
   static const Color customLightBlue = Color(0xFFC4E0F9);

@@ -13,7 +13,7 @@ class PlaceDetailsRemoteDataSource {
     // return PlaceModel.fromJson(response);
 
     // Mock fallback: search all mock data lists to return a valid PlaceModel
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 2500));
 
     final List<PlaceModel> allMockPlaces = [
       ...HomeMockData.popularDestinations.map((e) => e.toModel()),
@@ -45,7 +45,7 @@ class PlaceDetailsRemoteDataSource {
     // return (response as List).map((json) => PlaceModel.fromJson(json)).toList();
 
     // Mock fallback: return a shuffled sublist of trending places
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(seconds: 5));
     final List<PlaceModel> nearby = List.from(ExploreMockData.trendingPlaces.map((e) => e.toModel()));
     nearby.shuffle();
     return nearby.take(4).toList();

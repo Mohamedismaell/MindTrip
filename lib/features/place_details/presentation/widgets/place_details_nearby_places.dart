@@ -1,57 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
+import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
+//Todo replace it with real data
 class PlaceDetailsNearbyPlaces extends StatelessWidget {
-  final List<PlaceEntity> places;
-  final bool isLoading;
-
-  const PlaceDetailsNearbyPlaces({
-    super.key,
-    required this.places,
-    required this.isLoading,
-  });
+  final String placeId;
+  const PlaceDetailsNearbyPlaces({super.key, required this.placeId});
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return SizedBox(
-        height: 118.h,
-        child: const Center(child: CircularProgressIndicator()),
-      );
-    }
+    return BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+      buildWhen: (previous, current) =>
+          previous.nearbyStatus != current.nearbyStatus ||
+          previous.nearbyPlaces != current.nearbyPlaces,
+      builder: (context, state) {
+        final cubit = context.read<PlaceDetailsCubit>();
+        if (state.nearbyStatus == NearbyStatus.error) {
+          return AppErrorWidget.nearbyPlaces(
+            onRetry: () => cubit.loadNearbyPlaces(placeId),
+          );
+        }
 
-    if (places.isEmpty) {
-      return const SizedBox.shrink();
-    }
+        final isNearbyLoading = state.nearbyStatus == NearbyStatus.loading;
+        final places = isNearbyLoading
+            ? [
+                PlaceEntity(
+                  id: '1',
+                  name: 'Loading...',
+                  location: LocationEntity(
+                    address: '',
+                    latitude: 0,
+                    longitude: 0,
+                  ),
+                ),
+                PlaceEntity(
+                  id: '2',
+                  name: 'Loading...',
+                  location: LocationEntity(
+                    address: '',
+                    latitude: 0,
+                    longitude: 0,
+                  ),
+                ),
+                PlaceEntity(
+                  id: '3',
+                  name: 'Loading...',
+                  location: LocationEntity(
+                    address: '',
+                    latitude: 0,
+                    longitude: 0,
+                  ),
+                ),
+              ]
+            : state.nearbyPlaces;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Nearby Places',
-          style: context.textTheme.titleMedium?.copyWith(
-            color: AppColors.pureBlack,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w700,
+        return Skeletonizer(
+          enabled: isNearbyLoading,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Skeleton.keep(
+                child: Text(
+                  'Nearby Places',
+                  style: context.textTheme.labelMedium?.copyWith(
+                    color: AppColors.pureBlack,
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              SizedBox(
+                height: 139.h,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  physics: isNearbyLoading
+                      ? const NeverScrollableScrollPhysics()
+                      : const BouncingScrollPhysics(),
+                  itemCount: places.length,
+                  separatorBuilder: (context, index) => SizedBox(width: 18.w),
+                  itemBuilder: (context, index) =>
+                      _NearbyPlaceCard(place: places[index]),
+                ),
+              ),
+            ],
           ),
-        ),
-        SizedBox(height: 16.h),
-        SizedBox(
-          height: 114.h,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            itemCount: places.length,
-            separatorBuilder: (context, index) => SizedBox(width: 12.w),
-            itemBuilder: (context, index) =>
-                _NearbyPlaceCard(place: places[index]),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -68,55 +111,68 @@ class _NearbyPlaceCard extends StatelessWidget {
         : 'assets/images/onboarding/Pyramids.webp';
 
     return Container(
-      width: 126.w,
+      width: 152.w,
       decoration: BoxDecoration(
         color: AppColors.pureWhite,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: AppColors.mediumLightGray.withValues(alpha: 0.55),
-        ),
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: context.colorTheme.outline),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          AppCachedImage(
-            imagePath: image,
-            width: double.infinity,
-            height: 66.h,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(6.w, 6.h, 6.w, 0),
-            child: Text(
-              place.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: context.textTheme.labelLarge?.copyWith(
-                color: AppColors.darkGray1,
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w600,
-              ),
+          Expanded(
+            child: AppCachedImage(
+              imagePath: image,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 6.w),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.directions_car_filled_outlined,
-                  size: 13.r,
-                  color: AppColors.primaryBlue,
-                ),
-                SizedBox(width: 4.w),
-                Text(
-                  '0.4 km',
-                  style: context.textTheme.bodySmall?.copyWith(
-                    color: AppColors.primaryBlue,
-                    fontSize: 12.sp,
+          // SizedBox(height: 10.h),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      place.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.h8SemiBold.copyWith(
+                        color: context.colorTheme.onSurface,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 4.h),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.directions_car_filled_outlined,
+                          size: 20.r,
+                          color: context.colorTheme.primary,
+                        ),
+                        SizedBox(width: 8.w),
+
+                        //Todo replace it with real data
+                        Expanded(
+                          child: Text(
+                            '0.4 km0.4 km0.4 km0.4 km0.4 km0.4 km',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colorTheme.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

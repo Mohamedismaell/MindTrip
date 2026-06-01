@@ -60,8 +60,11 @@ void main() {
       ).thenAnswer((_) async => Result.ok(tPlace));
 
       final expectedStates = [
-        const PlaceDetailsState(status: PlaceDetailsStatus.loading),
-        PlaceDetailsState(status: PlaceDetailsStatus.loaded, place: tPlace),
+        const PlaceDetailsState(placeDetailsStatus: PlaceDetailsStatus.loading),
+        PlaceDetailsState(
+          placeDetailsStatus: PlaceDetailsStatus.loaded,
+          place: tPlace,
+        ),
       ];
 
       expectLater(cubit.stream, emitsInOrder(expectedStates));
@@ -70,28 +73,31 @@ void main() {
       verify(() => mockGetDetails('1')).called(1);
     });
 
-    test('emits preview first, then full details when preview is provided', () async {
-      when(
-        () => mockGetDetails('1'),
-      ).thenAnswer((_) async => Result.ok(tPlace));
+    test(
+      'emits preview first, then full details when preview is provided',
+      () async {
+        when(
+          () => mockGetDetails('1'),
+        ).thenAnswer((_) async => Result.ok(tPlace));
 
-      final expectedStates = [
-        PlaceDetailsState(
-          status: PlaceDetailsStatus.loading,
-          preview: tPreviewPlace,
-          place: tPreviewPlace,
-        ),
-        PlaceDetailsState(
-          status: PlaceDetailsStatus.loaded,
-          preview: tPreviewPlace,
-          place: tPlace,
-        ),
-      ];
+        final expectedStates = [
+          PlaceDetailsState(
+            placeDetailsStatus: PlaceDetailsStatus.loading,
+            preview: tPreviewPlace,
+            place: tPreviewPlace,
+          ),
+          PlaceDetailsState(
+            placeDetailsStatus: PlaceDetailsStatus.loaded,
+            preview: tPreviewPlace,
+            place: tPlace,
+          ),
+        ];
 
-      expectLater(cubit.stream, emitsInOrder(expectedStates));
+        expectLater(cubit.stream, emitsInOrder(expectedStates));
 
-      await cubit.loadPlaceDetails('1', preview: tPreviewPlace);
-    });
+        await cubit.loadPlaceDetails('1', preview: tPreviewPlace);
+      },
+    );
 
     test('emits [loading, error] when unokful', () async {
       when(
@@ -99,9 +105,9 @@ void main() {
       ).thenAnswer((_) async => Result.error(ServerFailure('Server Error')));
 
       final expectedStates = [
-        const PlaceDetailsState(status: PlaceDetailsStatus.loading),
+        const PlaceDetailsState(placeDetailsStatus: PlaceDetailsStatus.loading),
         const PlaceDetailsState(
-          status: PlaceDetailsStatus.error,
+          placeDetailsStatus: PlaceDetailsStatus.error,
           errorMessage: 'Server Error',
         ),
       ];
@@ -121,8 +127,8 @@ void main() {
       ).thenAnswer((_) async => Result.ok(tPlacesList));
 
       final expectedStates = [
-        const PlaceDetailsState(isNearbyLoading: true),
-        PlaceDetailsState(isNearbyLoading: false, nearbyPlaces: tPlacesList),
+        const PlaceDetailsState(nearbyStatus: true),
+        PlaceDetailsState(nearbyStatus: false, nearbyPlaces: tPlacesList),
       ];
 
       expectLater(cubit.stream, emitsInOrder(expectedStates));
@@ -136,9 +142,9 @@ void main() {
       ).thenAnswer((_) async => Result.error(ServerFailure('Nearby Error')));
 
       final expectedStates = [
-        const PlaceDetailsState(isNearbyLoading: true),
+        const PlaceDetailsState(nearbyStatus: true),
         const PlaceDetailsState(
-          isNearbyLoading: false,
+          nearbyStatus: false,
           errorMessage: 'Nearby Error',
         ),
       ];

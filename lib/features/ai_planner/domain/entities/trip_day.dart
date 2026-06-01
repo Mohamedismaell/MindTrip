@@ -21,6 +21,26 @@ class TripDay extends Equatable {
   final double estimatedCost;
   final List<TimeSlot> timeSlots;
 
+  TripDay copyWith({
+    int? dayNumber,
+    String? title,
+    String? coverImageUrl,
+    List<String>? tags,
+    int? stopCount,
+    double? estimatedCost,
+    List<TimeSlot>? timeSlots,
+  }) {
+    return TripDay(
+      dayNumber: dayNumber ?? this.dayNumber,
+      title: title ?? this.title,
+      coverImageUrl: coverImageUrl ?? this.coverImageUrl,
+      tags: tags ?? this.tags,
+      stopCount: stopCount ?? this.stopCount,
+      estimatedCost: estimatedCost ?? this.estimatedCost,
+      timeSlots: timeSlots ?? this.timeSlots,
+    );
+  }
+
   @override
   List<Object?> get props => [
     dayNumber,
