@@ -46,6 +46,21 @@ class MapCubit extends Cubit<MapState> {
     );
   }
 
+  void loadPlace(PlaceEntity place) {
+    if (isClosed) return;
+    final annotations = List<MapAnnotationEntry>.generate(
+      1,
+      (index) => MapAnnotationEntry(place: place, sequenceNumber: 1),
+    );
+    emit(
+      state.copyWith(
+        annotations: annotations,
+        tripDays: null,
+        selectedDayIndex: null,
+      ),
+    );
+  }
+
   void loadTripDays(List<TripDay> days) {
     if (isClosed) return;
     emit(state.copyWith(tripDays: days));

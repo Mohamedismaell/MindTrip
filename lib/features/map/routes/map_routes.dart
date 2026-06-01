@@ -32,10 +32,12 @@ class MapRoutes {
             if (extra is MapTripExtra) {
               return MapScreen(tripExtra: extra);
             } else if (extra is List<PlaceEntity>) {
-              // tehre is no list places i think
               return MapScreen(places: extra);
+            } else if (extra is PlaceEntity) {
+              return MapScreen(place: extra);
+            } else {
+              return const MapScreen();
             }
-            return const MapScreen();
           },
           routes: [
             AppTransitionRoute.slideTopBuilder(

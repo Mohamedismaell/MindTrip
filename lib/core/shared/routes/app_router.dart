@@ -4,6 +4,7 @@ import 'package:mindtrip/core/enums/app_flow.dart';
 import 'package:mindtrip/core/shared/presentation/shell/tabs_shell.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/shell/app_shell.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
@@ -103,31 +104,6 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Error')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
-            Text(
-              'Something went wrong!',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              error?.toString() ?? 'Unknown error occurred',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => context.go(AppRoutes.home),
-              child: const Text('Go Home'),
-            ),
-          ],
-        ),
-      ),
-    );
+    return AppErrorWidget.route(onRetry: () => context.go(AppRoutes.home));
   }
 }

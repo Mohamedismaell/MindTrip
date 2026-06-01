@@ -39,7 +39,8 @@ class PlaceDetailsImageCover extends StatelessWidget {
                 tag: placeId,
                 child: AppCachedImage(
                   imagePath:
-                      imageUrls?.first ?? 'assets/images/onboarding/Pyramids.webp',
+                      imageUrls?.first ??
+                      'assets/images/onboarding/Pyramids.webp',
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -79,7 +80,8 @@ class PlaceDetailsImageCover extends StatelessWidget {
                     ),
                     alignment: Alignment.center,
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      //Todo check apdding again
+                      padding: const EdgeInsets.all(0),
                       child: TweenAnimationBuilder<Color?>(
                         tween: ColorTween(
                           begin: context.colorTheme.onSurface,

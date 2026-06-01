@@ -4,6 +4,7 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class AppErrorWidget extends StatelessWidget {
   final String? title;
@@ -111,12 +112,16 @@ class AppErrorWidget extends StatelessWidget {
 
             if (hasButton) ...[
               SizedBox(height: 20.h),
-              action ??
-                  FilledButton.icon(
-                    onPressed: onPressed,
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: Text(buttonText ?? 'Try Again'),
-                  ),
+              TapScaleEffect(
+                onTap: onPressed,
+                child:
+                    action ??
+                    FilledButton.icon(
+                      onPressed: onPressed,
+                      icon: const Icon(Icons.refresh_rounded),
+                      label: Text(buttonText ?? 'Try Again'),
+                    ),
+              ),
             ],
           ],
         ),

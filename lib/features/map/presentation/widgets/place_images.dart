@@ -68,17 +68,17 @@ class _PlaceImagesState extends State<PlaceImages> {
             height: 90.h,
             child: Padding(
               padding: EdgeInsets.fromLTRB(4.w, 16.h, 4.w, 0),
-              child: Scrollbar(
-                controller: _scrollController,
-                thumbVisibility: true,
-                trackVisibility: true,
-                thickness: 2.w,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 8.h),
-                  child: photoUrls.length <= 3
-                      ? _buildFewImages(photoUrls)
-                      : _buildImageList(photoUrls, _scrollController),
-                ),
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 8.h),
+                child: photoUrls.length <= 3
+                    ? _buildFewImages(photoUrls)
+                    : Scrollbar(
+                        controller: _scrollController,
+                        thumbVisibility: true,
+                        trackVisibility: true,
+                        thickness: 2.w,
+                        child: _buildImageList(photoUrls, _scrollController),
+                      ),
               ),
             ),
           ),

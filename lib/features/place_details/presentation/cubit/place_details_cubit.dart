@@ -16,7 +16,24 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
        _getNearby = getNearby,
        super(const PlaceDetailsState());
 
+  DateTime? _lastCall;
+
+  bool canRefresh({Duration cooldown = const Duration(seconds: 5)}) {
+    final now = DateTime.now();
+
+    if (_lastCall != null && now.difference(_lastCall!) < cooldown) {
+      return false;
+    }
+
+    _lastCall = now;
+    return true;
+  }
+
   Future<void> loadPlaceDetails(String placeId, {PlaceEntity? preview}) async {
+    if (!canRefresh()) {
+      return;
+    }
+
     if (preview != null) {
       if (isClosed) return;
       emit(
@@ -30,7 +47,7 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
       if (isClosed) return;
       emit(state.copyWith(placeDetailsStatus: PlaceDetailsStatus.loading));
     }
-
+    await Future.delayed(Duration(seconds: 3));
     final result = await _getDetails(placeId);
 
     result.when(

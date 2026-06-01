@@ -66,16 +66,13 @@ class AppCachedImage extends StatelessWidget {
       fit: fit,
       placeholder: (_, _) => Skeletonizer(
         enabled: true,
-        effect: ShimmerEffect(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-        ),
-        child: Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(8.r),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8.r),
+          child: Image.asset(
+            'assets/images/onboarding/Pyramids.webp',
+            width: width,
+            height: height,
+            fit: fit,
           ),
         ),
       ),

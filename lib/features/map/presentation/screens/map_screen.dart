@@ -18,10 +18,11 @@ import '../widgets/day_selector_bar.dart';
 import '../widgets/place_card_row.dart';
 
 class MapScreen extends StatefulWidget {
+  final PlaceEntity? place;
   final List<PlaceEntity>? places;
   final MapTripExtra? tripExtra;
 
-  const MapScreen({super.key, this.places, this.tripExtra});
+  const MapScreen({super.key, this.places, this.tripExtra, this.place});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -39,6 +40,8 @@ class _MapScreenState extends State<MapScreen> {
       context.read<MapCubit>().loadTripDays(widget.tripExtra!.days);
     } else if (widget.places != null && widget.places!.isNotEmpty) {
       context.read<MapCubit>().loadPlaces(widget.places!);
+    } else if (widget.place != null) {
+      context.read<MapCubit>().loadPlace(widget.place!);
     }
   }
 

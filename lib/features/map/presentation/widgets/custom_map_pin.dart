@@ -28,7 +28,7 @@ class CustomMapPin {
     );
     canvas.drawShadow(
       shadowPath.shift(const Offset(0, 3)),
-      Colors.black.withOpacity(0.3),
+      Colors.black.withValues(alpha: 0.3),
       6.0,
       true,
     );
