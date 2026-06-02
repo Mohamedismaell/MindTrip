@@ -13,7 +13,10 @@ import 'package:mindtrip/features/ai_planner/data/repositories/trip_repository_i
 import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/edit_itinerary_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/add_place_to_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/remove_place_from_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_in_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_between_trips_use_case.dart';
 
 class AiPlannerDi {
   AiPlannerDi._();
@@ -38,14 +41,23 @@ class AiPlannerDi {
     sl.registerLazySingleton<GenerateItineraryUseCase>(
       () => GenerateItineraryUseCase(sl<TripRepository>()),
     );
+    sl.registerLazySingleton<AddPlaceToTripUseCase>(
+      () => AddPlaceToTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<RemovePlaceFromTripUseCase>(
+      () => RemovePlaceFromTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<MovePlaceInTripUseCase>(
+      () => MovePlaceInTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<MovePlaceBetweenTripsUseCase>(
+      () => MovePlaceBetweenTripsUseCase(sl<TripRepository>()),
+    );
     sl.registerLazySingleton<TripsCubit>(
       () => TripsCubit(sl<TripRepository>()),
     );
-    sl.registerFactory<EditItineraryUseCase>(
-      () => EditItineraryUseCase(),
-    );
     sl.registerFactory<TripDetailsCubit>(
-      () => TripDetailsCubit(sl<TripRepository>(), sl<EditItineraryUseCase>()),
+      () => TripDetailsCubit(sl<TripRepository>()),
     );
 
     //! Chat — Data sources

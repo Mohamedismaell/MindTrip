@@ -13,7 +13,6 @@ import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/edit_itinerary_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/trip_details_screen.dart';
@@ -124,7 +123,9 @@ Future<void> _pumpTripDetails(
         path: AppRoutes.tripDetails,
         builder: (context, state) => MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => TripDetailsCubit(repo, EditItineraryUseCase())),
+            BlocProvider(
+              create: (_) => TripDetailsCubit(repo),
+            ),
             BlocProvider.value(value: tripsCubit),
           ],
           child: TripDetailsScreen(tripId: repo.trip.id),
@@ -261,5 +262,35 @@ class _FakeTripRepository implements TripRepository {
   @override
   Future<void> updateTrip(Trip trip) async {
     this.trip = trip;
+  }
+
+  @override
+  Future<TripItinerary> addPlace(String tripId, PlaceEntity place, {int? dayNumber, DayPeriod? period}) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Trip?> getTripContainingPlace(String placeId) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> isPlaceInAnyTrip(String placeId) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<TripItinerary> movePlace(String tripId, String placeId, int toDayNumber, DayPeriod toPeriod) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<(TripItinerary, TripItinerary)> movePlaceBetweenTrips({required String sourceTripId, required String targetTripId, required String placeId, required int toDayNumber, required DayPeriod toPeriod}) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<TripItinerary> removePlace(String tripId, String placeId) async {
+    throw UnimplementedError();
   }
 }
