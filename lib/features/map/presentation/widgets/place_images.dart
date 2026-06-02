@@ -77,6 +77,7 @@ class _PlaceImagesState extends State<PlaceImages> {
                         thumbVisibility: true,
                         trackVisibility: true,
                         thickness: 2.w,
+
                         child: _buildImageList(photoUrls, _scrollController),
                       ),
               ),
@@ -116,6 +117,7 @@ Widget _buildImageList(
   return ListView.builder(
     controller: scrollController,
     scrollDirection: Axis.horizontal,
+    padding: EdgeInsets.only(bottom: 8.h),
     itemCount: photoUrls.length,
     itemBuilder: (context, index) {
       return Padding(

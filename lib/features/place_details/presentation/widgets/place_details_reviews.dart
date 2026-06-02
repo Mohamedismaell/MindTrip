@@ -5,6 +5,7 @@ import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class PlaceDetailsReviews extends StatelessWidget {
   final PlaceEntity place;
@@ -42,7 +43,7 @@ class PlaceDetailsReviews extends StatelessWidget {
                 RatingStars(size: 13, rating: rating),
                 SizedBox(height: 7.h),
                 Text(
-                  'from $reviewCount visitors',
+                  '($reviewCount) reviews',
                   style: context.textTheme.bodyMedium?.copyWith(
                     color: AppColors.pureBlack,
                   ),
@@ -122,13 +123,15 @@ class _RatingBar extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: LinearProgressIndicator(
-              minHeight: 7.h,
-              value: value,
-              color: context.colorTheme.primary,
-              backgroundColor: AppColors.primaryLightGray,
+          child: Skeleton.shade(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.r),
+              child: LinearProgressIndicator(
+                minHeight: 7.h,
+                value: value,
+                color: context.colorTheme.primary,
+                backgroundColor: AppColors.primaryLightGray,
+              ),
             ),
           ),
         ),

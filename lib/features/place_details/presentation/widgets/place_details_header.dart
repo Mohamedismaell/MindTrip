@@ -6,6 +6,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class PlaceDetailsHeader extends StatelessWidget {
   final PlaceEntity place;
@@ -45,13 +46,16 @@ class PlaceDetailsHeader extends StatelessWidget {
         SizedBox(height: 12.h),
         Row(
           children: [
-            SvgPicture.asset(
-              HomeAssets.locationIcon,
-              colorFilter: ColorFilter.mode(
-                context.colorTheme.primary,
-                BlendMode.srcIn,
+            Skeleton.shade(
+              // enabled: place.rating == null,
+              child: SvgPicture.asset(
+                HomeAssets.locationIcon,
+                colorFilter: ColorFilter.mode(
+                  context.colorTheme.primary,
+                  BlendMode.srcIn,
+                ),
+                width: 18.w,
               ),
-              width: 18.w,
             ),
             SizedBox(width: 8.w),
             Expanded(

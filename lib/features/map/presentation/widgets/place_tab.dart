@@ -7,8 +7,10 @@ import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
@@ -24,43 +26,88 @@ class PlaceTab extends StatelessWidget {
     this.googlePlace,
     this.photoUrls,
     this.dragController,
+    this.heroTag,
   });
   final PlaceEntity? place;
   final GooglePlaceEntity? googlePlace;
   final List<String>? photoUrls;
   final DraggableScrollableController? dragController;
+  final String? heroTag;
   @override
   Widget build(BuildContext context) {
-    if (googlePlace != null) {
-      return _buildGooglePlaceContent(context, googlePlace!, photoUrls);
-    } else if (place != null) {
-      return _buildContent(context, place!);
-    }
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.only(top: 100.h),
-        child: Text(
-          'Tap a place on the map to see details',
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorTheme.outline,
+    return Stack(
+      key: const ValueKey('expanded'),
+      children: [
+        SingleChildScrollView(
+          child: googlePlace != null
+              ? BuildGooglePlaceContent(
+                  place: googlePlace!,
+                  photoUrls: photoUrls,
+                  heroTag: heroTag,
+                )
+              : place != null
+              ? PlaceContent(place: place!, heroTag: heroTag)
+              : Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 100.h),
+                    child: Text(
+                      'Tap a place on the map to see details',
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        color: context.colorTheme.outline,
+                      ),
+                    ),
+                  ),
+                ),
+        ),
+        Positioned(
+          top: 12.h,
+          right: 12.w,
+          child: TapScaleEffect(
+            onTap: () {
+              context.read<MapCubit>().dismissBottomSheet();
+            },
+            child: Container(
+              width: 32.w,
+              height: 32.w,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [AppShadows.tourPackagesCard],
+              ),
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 24.sp,
+                color: context.colorTheme.primary,
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
+}
 
-  Widget _buildGooglePlaceContent(
-    BuildContext context,
-    GooglePlaceEntity place,
-    List<String>? photoUrls,
-  ) {
+class BuildGooglePlaceContent extends StatelessWidget {
+  const BuildGooglePlaceContent({
+    super.key,
+    required this.place,
+    this.photoUrls,
+    this.heroTag,
+  });
+  final GooglePlaceEntity place;
+  final List<String>? photoUrls;
+  final String? heroTag;
+  @override
+  Widget build(BuildContext context) {
     final placeLat = place.latitude;
     final placeLng = place.longitude;
+    final photos = photoUrls;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (photoUrls != null && photoUrls.isNotEmpty)
-          PlaceImages(photoUrls: photoUrls, heroTag: googlePlace!.placeId),
+        if (photos != null && photos.isNotEmpty)
+          PlaceImages(photoUrls: photos, heroTag: heroTag),
 
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -245,8 +292,16 @@ class PlaceTab extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildContent(BuildContext context, PlaceEntity place) {
+class PlaceContent extends StatelessWidget {
+  const PlaceContent({super.key, required this.place, this.heroTag});
+
+  final PlaceEntity place;
+  final String? heroTag;
+
+  @override
+  Widget build(BuildContext context) {
     final photoUrls = place.imageUrls;
     final placeLat = place.location.latitude;
     final placeLng = place.location.longitude;
@@ -255,14 +310,13 @@ class PlaceTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (photoUrls != null && photoUrls.isNotEmpty)
-          PlaceImages(photoUrls: photoUrls, heroTag: 'place-${place.id}'),
+          PlaceImages(photoUrls: photoUrls, heroTag: heroTag),
 
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TITLE & DISTANCE
               Row(
                 children: [
                   Expanded(
@@ -291,7 +345,6 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 14.h),
 
-              // DESCRIPTION
               if (place.description != null)
                 Text(
                   place.description!,
@@ -302,7 +355,6 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 12.h),
 
-              // REVIEWS & CATEGORY
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -333,7 +385,6 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 10.h),
 
-              // RATING & PRICE & BADGE
               Row(
                 children: [
                   if (place.rating != null) ...[
@@ -349,6 +400,8 @@ class PlaceTab extends StatelessWidget {
                     SizedBox(width: 12.w),
                   ],
 
+                  const Spacer(),
+
                   if (place.price != null)
                     Text(
                       '\$${place.price!.toStringAsFixed(0)}',
@@ -359,52 +412,48 @@ class PlaceTab extends StatelessWidget {
 
               SizedBox(height: 24.h),
 
-              // ACTIONS
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
                       builder: (context, navState) {
                         return MapActionButton(
                           label: navState.isRouteLoading
-                              ? "Loading..."
-                              : "Show route",
+                              ? 'Loading...'
+                              : 'Show route',
                           icon: Icons.directions_rounded,
                           color: context.colorTheme.primary,
                           isFilled: true,
                           onTap: navState.isRouteLoading
                               ? null
-                              : () {
-                                  // Immediately disable button + jump to DriveTab
+                              : () async {
                                   context
                                       .read<MapNavigationCubit>()
                                       .beginLoading(
                                         destinationName: place.name,
                                       );
+
                                   context.read<MapCubit>().clearSelection();
 
-                                  () async {
-                                    final pos = await sl<LocationService>()
-                                        .getCurrentLocation();
+                                  final pos = await sl<LocationService>()
+                                      .getCurrentLocation();
 
-                                    if (pos != null && context.mounted) {
-                                      final userPos = Position(
-                                        pos.longitude,
-                                        pos.latitude,
-                                      );
+                                  if (pos != null && context.mounted) {
+                                    final userPos = Position(
+                                      pos.longitude,
+                                      pos.latitude,
+                                    );
 
-                                      context
-                                          .read<MapNavigationCubit>()
-                                          .navigateSequential(
-                                            [
-                                              userPos,
-                                              Position(placeLng, placeLat),
-                                            ],
-                                            [place.name],
-                                          );
-                                    }
-                                  }();
+                                    context
+                                        .read<MapNavigationCubit>()
+                                        .navigateSequential(
+                                          [
+                                            userPos,
+                                            Position(placeLng, placeLat),
+                                          ],
+                                          [place.name],
+                                        );
+                                  }
                                 },
                         );
                       },
@@ -415,19 +464,17 @@ class PlaceTab extends StatelessWidget {
 
                   Expanded(
                     child: MapActionButton(
-                      label: "Show on map",
+                      label: 'Show on map',
                       icon: Icons.map_rounded,
                       color: context.colorTheme.primary,
                       isFilled: true,
-                      onTap: () async {
-                        if (context.mounted) {
-                          context.read<MapCubit>().triggerFlyTo(
-                            placeLat,
-                            placeLng,
-                          );
+                      onTap: () {
+                        context.read<MapCubit>().triggerFlyTo(
+                          placeLat,
+                          placeLng,
+                        );
 
-                          context.read<MapCubit>().dismissBottomSheet();
-                        }
+                        context.read<MapCubit>().dismissBottomSheet();
                       },
                     ),
                   ),

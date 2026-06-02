@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
-import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
-import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mindtrip/features/map/presentation/widgets/map_action_button.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/features/map/presentation/widgets/place_card_overview_map.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 import '../cubit/map_cubit.dart';
-import '../cubit/map_navigation_cubit.dart';
-import '../cubit/map_navigation_state.dart';
 import 'place_tab.dart';
 import 'drive_tab.dart';
 import '../cubit/map_state.dart';
@@ -151,12 +141,12 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
             },
             itemBuilder: (context, index) {
               if (index == 0) {
-                return _buildDriveCard(
-                  context,
-                  isExpanded,
-                  state.selectedPlace == null,
-                  expandedCardHeight,
-                  collapsedCardHeight,
+                return BuildDriveCard(
+                  isExpanded: isExpanded,
+                  isRouteSelected: state.selectedPlace == null,
+                  expandedHeight: expandedCardHeight,
+                  collapsedHeight: collapsedCardHeight,
+                  onTap: () => _jumpToIndex(0),
                 );
               }
               final entry = state.annotations[index - 1];
@@ -193,15 +183,13 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                   child: AnimatedScale(
                     duration: const Duration(milliseconds: 300),
                     scale: isRemoving ? .8 : 1,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (isSelected && isExpanded) {
-                          context.read<MapCubit>().dismissBottomSheet();
-                        } else {
-                          context.read<MapCubit>().selectPlace(place.id);
-                        }
-                      },
-                      child: Container(
+                    child: TapScaleEffect(
+                      onTap: () => isSelected && isExpanded
+                          ? context.read<MapCubit>().dismissBottomSheet()
+                          : context.read<MapCubit>().selectPlace(place.id),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
                         height: isSelected && isExpanded
                             ? expandedCardHeight
                             : collapsedCardHeight,
@@ -218,55 +206,58 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(21.5.r),
-                          child: (isSelected && isExpanded)
-                              ? Stack(
-                                  children: [
-                                    SingleChildScrollView(
-                                      child: PlaceTab(
-                                        place: place,
-                                        googlePlace: googlePlace,
-                                        photoUrls: finalPhotoUrls,
-                                      ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(21.5.r),
+                            child: Stack(
+                              children: [
+                                IgnorePointer(
+                                  ignoring: isSelected && isExpanded,
+                                  child: AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 250),
+                                    opacity: isSelected && isExpanded ? 0 : 1,
+                                    child: PlaceCardOverviewMap(
+                                      place: place,
+                                      imageUrl: imageUrl,
+                                      imageHeight: imageHeight,
+                                      contentHeight: contentHeight,
+                                      isSearchResult: entry.isSearchResult,
+                                      heroTag:
+                                          (isSelected && isExpanded)
+                                              ? null
+                                              : place.id,
+                                      onAdd: () {
+                                        setState(() {
+                                          _removingPlaceIds.add(place.id);
+                                        });
+                                      },
+                                      onRemove: () {
+                                        setState(() {
+                                          _removingPlaceIds.remove(place.id);
+                                        });
+                                      },
                                     ),
-
-                                    Positioned(
-                                      top: 12.h,
-                                      right: 12.w,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .read<MapCubit>()
-                                              .dismissBottomSheet();
-                                        },
-                                        child: Container(
-                                          width: 32.w,
-                                          height: 32.w,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              AppShadows.tourPackagesCard,
-                                            ],
-                                          ),
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.keyboard_arrow_down_rounded,
-                                            size: 24.sp,
-                                            color: context.colorTheme.primary,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : _buildCardOverview(
-                                  context,
-                                  place,
-                                  imageUrl,
-                                  imageHeight,
-                                  contentHeight,
-                                  entry.isSearchResult,
+                                  ),
                                 ),
+
+                                IgnorePointer(
+                                  ignoring: !(isSelected && isExpanded),
+                                  child: AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 250),
+                                    opacity: isSelected && isExpanded ? 1 : 0,
+                                    child: PlaceTab(
+                                      place: place,
+                                      googlePlace: googlePlace,
+                                      photoUrls: finalPhotoUrls,
+                                      heroTag:
+                                          (isSelected && isExpanded)
+                                              ? place.id
+                                              : null,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -279,257 +270,28 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
       },
     );
   }
+}
 
-  Widget _buildCardOverview(
-    BuildContext context,
-    PlaceEntity place,
-    String? imageUrl,
-    double imageHeight,
-    double contentHeight,
-    bool isSearchResult,
-  ) {
-    final placeLat = place.location.latitude;
-
-    final placeLng = place.location.longitude;
-
-    return Column(
-      children: [
-        Stack(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: imageHeight,
-              child: Hero(
-                tag: 'place-${place.id}',
-                transitionOnUserGestures: true,
-                child: AppCachedImage(imagePath: imageUrl, fit: BoxFit.cover),
-              ),
-            ),
-
-            Positioned(
-              top: 12.h,
-              right: 12.w,
-              child: GestureDetector(
-                onTap: () {
-                  context.read<MapCubit>().selectPlace(place.id);
-                },
-                child: Container(
-                  width: 32.w,
-                  height: 32.w,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [AppShadows.tourPackagesCard],
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.keyboard_arrow_up_rounded,
-                    size: 24.sp,
-                    color: context.colorTheme.primary,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        Padding(
-          padding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 6.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      place.name,
-                      style: AppTextStyles.h8Bold,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-
-                  SizedBox(width: 10.w),
-
-                  BlocBuilder<LocationCubit, LocationState>(
-                    builder: (context, state) {
-                      final distance = context
-                          .read<LocationCubit>()
-                          .getDistanceBetween(
-                            placeLat: placeLat,
-                            placeLng: placeLng,
-                          );
-
-                      return Text(
-                        state.formatDistance(distance),
-                        style: AppTextStyles.h9Medium.copyWith(
-                          color: context.colorTheme.outline,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-
-              // const Spacer(),
-              SizedBox(height: 10.h),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      place.description ?? "No description available",
-                      style: AppTextStyles.h10Regular.copyWith(
-                        color: context.colorTheme.outline,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-
-                  if (place.rating != null) ...[
-                    Row(
-                      children: [
-                        RatingStars(rating: place.rating!, size: 18.sp),
-
-                        SizedBox(width: 4.w),
-
-                        Text(
-                          place.rating.toString(),
-                          style: AppTextStyles.h10SemiBold.copyWith(
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ],
-              ),
-
-              // const Spacer(),
-              SizedBox(height: 10.h),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: BlocBuilder<MapNavigationCubit, MapNavigationState>(
-                      builder: (context, navState) {
-                        return MapActionButton(
-                          label: navState.isRouteLoading
-                              ? "Loading..."
-                              : "Show route",
-                          icon: Icons.directions_rounded,
-                          color: context.colorTheme.primary,
-                          isFilled: true,
-                          onTap: navState.isRouteLoading
-                              ? null
-                              : () {
-                                  // Immediately disable button + jump to DriveTab
-                                  context
-                                      .read<MapNavigationCubit>()
-                                      .beginLoading(
-                                        destinationName: place.name,
-                                      );
-                                  context.read<MapCubit>().clearSelection();
-
-                                  () async {
-                                    final pos = await sl<LocationService>()
-                                        .getCurrentLocation();
-
-                                    if (pos != null && context.mounted) {
-                                      final userPos = Position(
-                                        pos.longitude,
-                                        pos.latitude,
-                                      );
-
-                                      context
-                                          .read<MapNavigationCubit>()
-                                          .navigateSequential(
-                                            [
-                                              userPos,
-                                              Position(placeLng, placeLat),
-                                            ],
-                                            [place.name],
-                                          );
-                                    }
-                                  }();
-                                },
-                        );
-                      },
-                    ),
-                  ),
-
-                  SizedBox(width: 8.w),
-
-                  isSearchResult
-                      ? Expanded(
-                          child: MapActionButton(
-                            label: "Remove",
-                            icon: Icons.delete_outline_rounded,
-                            color: context.colorTheme.error,
-                            isFilled: false,
-                            onTap: () {
-                              setState(() {
-                                _removingPlaceIds.add(place.id);
-                              });
-
-                              Future.delayed(
-                                const Duration(milliseconds: 300),
-                                () {
-                                  if (context.mounted) {
-                                    context.read<MapCubit>().removeSearchPlace(
-                                      place.id,
-                                    );
-                                    context
-                                        .read<MapNavigationCubit>()
-                                        .stopNavigation();
-
-                                    setState(() {
-                                      _removingPlaceIds.remove(place.id);
-                                    });
-                                  }
-                                },
-                              );
-                            },
-                          ),
-                        )
-                      : Expanded(
-                          child: MapActionButton(
-                            label: "Show map",
-                            icon: Icons.map_rounded,
-                            color: context.colorTheme.primary,
-                            isFilled: false,
-                            onTap: () {
-                              context.read<MapCubit>().triggerFlyTo(
-                                placeLat,
-                                placeLng,
-                              );
-
-                              context.read<MapCubit>().dismissBottomSheet();
-                            },
-                          ),
-                        ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDriveCard(
-    BuildContext context,
-    bool isExpanded,
-    bool isRouteSelected,
-    double expandedHeight,
-    double collapsedHeight,
-  ) {
+class BuildDriveCard extends StatelessWidget {
+  const BuildDriveCard({
+    super.key,
+    required this.isExpanded,
+    required this.isRouteSelected,
+    required this.expandedHeight,
+    required this.collapsedHeight,
+    required this.onTap,
+  });
+  final bool isExpanded;
+  final bool isRouteSelected;
+  final double expandedHeight;
+  final double collapsedHeight;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
     bool showExpanded = isExpanded && isRouteSelected;
-    return GestureDetector(
-      onTap: () {
-        // context.read<MapCubit>().clearSelection();
-        _jumpToIndex(0);
-      },
+
+    return TapScaleEffect(
+      onTap: onTap,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Container(

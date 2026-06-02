@@ -64,6 +64,8 @@ class AppCachedImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
+      // fadeInDuration: Duration.zero,
+      // fadeOutDuration: Duration.zero,
       placeholder: (_, _) => Skeletonizer(
         enabled: true,
         child: ClipRRect(

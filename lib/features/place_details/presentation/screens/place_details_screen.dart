@@ -136,6 +136,10 @@ class _PlaceDetailsBody extends StatelessWidget {
                     children: [
                       Skeletonizer(
                         enabled: isMainLoading,
+                        justifyMultiLineText: true,
+                        enableSwitchAnimation: true,
+
+                        // ignorePointers: false,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
