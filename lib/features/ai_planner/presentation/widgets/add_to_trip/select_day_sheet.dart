@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
 
 class SelectDaySheet extends StatelessWidget {
   const SelectDaySheet({super.key});
@@ -15,9 +17,11 @@ class SelectDaySheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listener: (context, state) {
-        if (state.status == AddToTripStatus.error && state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!)),
+        if (state.addingStatus == ActionStatus.error &&
+            state.errorMessage != null) {
+          AppSnackBar.showError(
+            context: context,
+            message: state.errorMessage ?? 'Failed to add to trip',
           );
         }
       },
@@ -31,10 +35,10 @@ class SelectDaySheet extends StatelessWidget {
 
         return Container(
           padding: EdgeInsets.only(
-            left: 24.w,
-            right: 24.w,
-            top: 24.h,
-            bottom: MediaQuery.of(context).padding.bottom + 24.h,
+            left: 30.w,
+            right: 30.w,
+            top: 29.h,
+            bottom: 24.h,
           ),
           decoration: BoxDecoration(
             color: context.colorTheme.surface,
@@ -43,141 +47,174 @@ class SelectDaySheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 48.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLightGray,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
+              DragDivider(),
               SizedBox(height: 16.h),
               Stack(
+                alignment: Alignment.center,
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back),
                       onPressed: () {
-                        context.read<AddToTripCubit>().loadTrips();
+                        context.read<AddToTripCubit>().backToSelectTrip();
                       },
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.center,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 48.w),
                     child: Column(
                       children: [
                         Text(
                           'Add to $tripTitle',
-                          style: AppTextStyles.h6Bold.copyWith(color: context.colorTheme.onSurface),
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.h6Bold.copyWith(
+                            color: context.colorTheme.onSurface,
+                          ),
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           'Choose where to add it',
-                          style: context.textTheme.bodyMedium?.copyWith(color: context.colorTheme.onSurfaceVariant),
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colorTheme.onSurfaceVariant,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 24.h),
-              if (state.status == AddToTripStatus.processing)
-                const Padding(
-                  padding: EdgeInsets.all(32.0),
-                  child: Center(child: CircularProgressIndicator()),
-                )
-              else ...[
-                Flexible(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: itinerary.days.length,
-                    itemBuilder: (context, index) {
-                      final day = itinerary.days[index];
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 16.h),
-                        padding: EdgeInsets.all(16.w),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.primaryLightBlue1),
-                          borderRadius: BorderRadius.circular(16),
-                          color: AppColors.primaryLightBlue1.withOpacity(0.1),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(Icons.calendar_today, size: 16, color: AppColors.primaryBlue),
-                                SizedBox(width: 8.w),
-                                Text('Day ${day.dayNumber}', style: context.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            SizedBox(height: 12.h),
-                            Wrap(
-                              spacing: 8.w,
-                              runSpacing: 8.h,
-                              children: DayPeriod.values.map((period) {
-                                return InkWell(
-                                  onTap: () {
-                                    if (state.status == AddToTripStatus.managing) {
-                                      context.read<AddToTripCubit>().moveToDay(day.dayNumber, period);
-                                    } else {
-                                      context.read<AddToTripCubit>().addToTrip(dayNumber: day.dayNumber, period: period);
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.pureWhite,
-                                      border: Border.all(color: context.colorTheme.outline),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      period.name[0].toUpperCase() + period.name.substring(1),
-                                      style: context.textTheme.bodyMedium,
-                                    ),
+              SizedBox(height: 30.h),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: itinerary.days.length,
+                  itemBuilder: (context, index) {
+                    final day = itinerary.days[index];
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 24.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 5.w,
+                        vertical: 10.h,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: context.colorTheme.outline),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                size: 20.r,
+                                color: AppColors.pureBlack,
+                              ),
+                              SizedBox(width: 12.w),
+                              Text(
+                                'Day ${day.dayNumber}',
+                                style: context.textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12.h),
+                          Wrap(
+                            spacing: 8.w,
+                            runSpacing: 8.h,
+                            children: DayPeriod.values.map((period) {
+                              return InkWell(
+                                onTap: () {
+                                  if (state.flowStatus ==
+                                      AddToTripFlowStatus.managing) {
+                                    context.read<AddToTripCubit>().moveToDay(
+                                      day.dayNumber,
+                                      period,
+                                    );
+                                  } else {
+                                    context.read<AddToTripCubit>().addToTrip(
+                                      dayNumber: day.dayNumber,
+                                      period: period,
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w,
+                                    vertical: 8.h,
                                   ),
-                                );
-                              }).toList(),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.pureWhite,
+                                    border: Border.all(
+                                      color: context.colorTheme.outline,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    period.name[0].toUpperCase() +
+                                        period.name.substring(1),
+                                    style: context.textTheme.bodyMedium,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(height: 12.h),
+                          Text(
+                            'Includes ${day.stopCount} places',
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colorTheme.onSurfaceVariant,
                             ),
-                            SizedBox(height: 12.h),
-                            Text('Includes ${day.stopCount} places', style: context.textTheme.bodyMedium?.copyWith(color: context.colorTheme.onSurfaceVariant)),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                InkWell(
-                  onTap: () {
-                    context.read<AddToTripCubit>().addToTrip(); // Let AI decide
+                          ),
+                        ],
+                      ),
+                    );
                   },
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryLightBlue1,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.auto_awesome, color: AppColors.primaryBlue),
-                        SizedBox(width: 8.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Let AI Decide', style: context.textTheme.bodyLarge?.copyWith(color: AppColors.primaryBlue, fontWeight: FontWeight.bold)),
-                            Text('Find the best day automatically', style: context.textTheme.bodySmall?.copyWith(color: AppColors.primaryBlue)),
-                          ],
-                        ),
-                      ],
-                    ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              InkWell(
+                onTap: () {
+                  context.read<AddToTripCubit>().addToTrip(); // Let AI decide
+                },
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLightBlue1,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.auto_awesome,
+                        color: AppColors.primaryBlue,
+                      ),
+                      SizedBox(width: 8.w),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Let AI Decide',
+                            style: context.textTheme.bodyLarge?.copyWith(
+                              color: AppColors.primaryBlue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Find the best day automatically',
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: AppColors.primaryBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ],
           ),
         );

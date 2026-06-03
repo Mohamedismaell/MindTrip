@@ -1,3 +1,6 @@
+import 'package:mindtrip/core/connections/result.dart';
+import 'package:mindtrip/core/database/api/api_error_mapper.dart';
+import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/ai_planner/data/datasources/trip_local_datasource.dart';
 import 'package:mindtrip/features/ai_planner/data/models/trip_model.dart';
@@ -15,187 +18,325 @@ class TripRepositoryImpl implements TripRepository {
   const TripRepositoryImpl(this._localDataSource, this._itineraryDataSource);
 
   @override
-  Future<List<Trip>> getAllTrips() async {
-    final models = await _localDataSource.getAll();
-    return models.map((e) => e.toEntity()).toList();
-  }
-
-  @override
-  Future<Trip?> getTripById(String id) async {
-    final model = await _localDataSource.getById(id);
-    return model?.toEntity();
-  }
-
-  @override
-  Future<void> saveTrip(Trip trip) async {
-    final model = TripModel.fromEntity(trip);
-    await _localDataSource.save(model);
-  }
-
-  @override
-  Future<void> updateTrip(Trip trip) async {
-    final model = TripModel.fromEntity(trip);
-    await _localDataSource.save(model);
-  }
-
-  @override
-  Future<void> deleteTrip(String id) async {
-    await _localDataSource.delete(id);
-  }
-
-  @override
-  Future<TripItinerary> generateItinerary(Trip trip) async {
-    final model = await _itineraryDataSource.generate(trip);
-    return model.toEntity();
-  }
-
-  @override
-  Future<TripItinerary?> getItinerary(String tripId) async {
-    final model = await _itineraryDataSource.getByTripId(tripId);
-    return model?.toEntity();
-  }
-
-  @override
-  Future<void> saveItinerary(TripItinerary itinerary) async {
-    final model = TripItineraryModel.fromEntity(itinerary);
-    await _itineraryDataSource.save(model);
-  }
-
-  @override
-  Future<Trip?> getTripContainingPlace(String placeId) async {
-    final trips = await getAllTrips();
-    for (var trip in trips) {
-      final itinerary = await getItinerary(trip.id);
-      if (itinerary != null && _containsPlace(itinerary, placeId)) {
-        return trip;
-      }
+  Future<Result<List<Trip>>> getAllTrips() async {
+    try {
+      final models = await _localDataSource.getAll();
+      return Result.ok(models.map((e) => e.toEntity()).toList());
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
     }
-    return null;
   }
 
   @override
-  Future<bool> isPlaceInAnyTrip(String placeId) async {
-    return await getTripContainingPlace(placeId) != null;
+  Future<Result<Trip?>> getTripById(String id) async {
+    try {
+      final model = await _localDataSource.getById(id);
+      return Result.ok(model?.toEntity());
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
   }
 
   @override
-  Future<TripItinerary> addPlace(
+  Future<Result<void>> saveTrip(Trip trip) async {
+    try {
+      final model = TripModel.fromEntity(trip);
+      await _localDataSource.save(model);
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<void>> updateTrip(Trip trip) async {
+    try {
+      final model = TripModel.fromEntity(trip);
+      await _localDataSource.save(model);
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<void>> deleteTrip(String id) async {
+    try {
+      await _localDataSource.delete(id);
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<TripItinerary>> generateItinerary(Trip trip) async {
+    try {
+      final model = await _itineraryDataSource.generate(trip);
+      return Result.ok(model.toEntity());
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<TripItinerary?>> getItinerary(String tripId) async {
+    try {
+      final model = await _itineraryDataSource.getByTripId(tripId);
+      return Result.ok(model?.toEntity());
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<void>> saveItinerary(TripItinerary itinerary) async {
+    try {
+      final model = TripItineraryModel.fromEntity(itinerary);
+      await _itineraryDataSource.save(model);
+      return const Result.ok(null);
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<Trip?>> getTripContainingPlace(String placeId) async {
+    try {
+      final tripsResult = await getAllTrips();
+      return await tripsResult.when(
+        success: (trips) async {
+          // Fetch all itineraries in parallel
+          final itineraryResults = await Future.wait(
+            trips.map((trip) => getItinerary(trip.id)),
+          );
+
+          for (int i = 0; i < trips.length; i++) {
+            final result = itineraryResults[i];
+            final trip = trips[i];
+
+            final isFound = result.when(
+              success: (itinerary) =>
+                  itinerary != null && _containsPlace(itinerary, placeId),
+              failure: (_) => false,
+            );
+
+            if (isFound) return Result.ok(trip);
+          }
+          return const Result.ok(null);
+        },
+        failure: (error) async => Result.error(error),
+      );
+    } catch (e) {
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
+  Future<Result<bool>> isPlaceInAnyTrip(String placeId) async {
+    final result = await getTripContainingPlace(placeId);
+    return result.when(
+      success: (trip) => Result.ok(trip != null),
+      failure: (error) => Result.error(error),
+    );
+  }
+
+  @override
+  Future<Result<TripItinerary>> addPlace(
     String tripId,
     PlaceEntity place, {
     int? dayNumber,
     DayPeriod? period,
   }) async {
-    final currentItinerary = await getItinerary(tripId);
-    if (currentItinerary == null) {
-      throw Exception('Itinerary not found for trip $tripId');
+    try {
+      final currentItineraryResult = await getItinerary(tripId);
+
+      return await currentItineraryResult.when(
+        success: (currentItinerary) async {
+          if (currentItinerary == null) {
+            return Result.error(
+              ServerFailure('Itinerary not found for trip $tripId'),
+            );
+          }
+
+          if (_containsPlace(currentItinerary, place.id)) {
+            return Result.ok(currentItinerary);
+          }
+
+          int targetDay = dayNumber ?? _suggestBestSlot(currentItinerary).$1;
+          DayPeriod targetPeriod =
+              period ?? _suggestBestSlot(currentItinerary).$2;
+
+          final newDays = currentItinerary.days.map((day) {
+            if (day.dayNumber != targetDay) return day;
+
+            final newSlots = day.timeSlots.map((slot) {
+              if (slot.period != targetPeriod) return slot;
+              return slot.copyWith(places: [...slot.places, place]);
+            }).toList();
+
+            return day.copyWith(
+              timeSlots: newSlots,
+              stopCount: day.stopCount + 1,
+            );
+          }).toList();
+
+          final newItinerary = currentItinerary.copyWith(days: newDays);
+          await saveItinerary(newItinerary);
+          return Result.ok(newItinerary);
+        },
+        failure: (error) async => Result.error(error),
+      );
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
     }
-
-    if (_containsPlace(currentItinerary, place.id)) return currentItinerary;
-
-    int targetDay = dayNumber ?? _suggestBestSlot(currentItinerary).$1;
-    DayPeriod targetPeriod = period ?? _suggestBestSlot(currentItinerary).$2;
-
-    final newDays = currentItinerary.days.map((day) {
-      if (day.dayNumber != targetDay) return day;
-
-      final newSlots = day.timeSlots.map((slot) {
-        if (slot.period != targetPeriod) return slot;
-        return slot.copyWith(places: [...slot.places, place]);
-      }).toList();
-
-      return day.copyWith(timeSlots: newSlots, stopCount: day.stopCount + 1);
-    }).toList();
-
-    final newItinerary = currentItinerary.copyWith(days: newDays);
-    await saveItinerary(newItinerary);
-    return newItinerary;
   }
 
   @override
-  Future<TripItinerary> removePlace(String tripId, String placeId) async {
-    final currentItinerary = await getItinerary(tripId);
-    if (currentItinerary == null) {
-      throw Exception('Itinerary not found for trip $tripId');
-    }
+  Future<Result<TripItinerary>> removePlace(
+    String tripId,
+    String placeId,
+  ) async {
+    try {
+      final currentItineraryResult = await getItinerary(tripId);
 
-    final newItinerary = _removePlaceFromItinerary(currentItinerary, placeId);
-    await saveItinerary(newItinerary);
-    return newItinerary;
+      return await currentItineraryResult.when(
+        success: (currentItinerary) async {
+          if (currentItinerary == null) {
+            return Result.error(
+              ServerFailure('Itinerary not found for trip $tripId'),
+            );
+          }
+
+          final newItinerary = _removePlaceFromItinerary(
+            currentItinerary,
+            placeId,
+          );
+          await saveItinerary(newItinerary);
+          return Result.ok(newItinerary);
+        },
+        failure: (error) async => Result.error(error),
+      );
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
   }
 
   @override
-  Future<TripItinerary> movePlace(
+  Future<Result<TripItinerary>> movePlace(
     String tripId,
     String placeId,
     int toDayNumber,
     DayPeriod toPeriod,
   ) async {
-    final currentItinerary = await getItinerary(tripId);
-    if (currentItinerary == null) {
-      throw Exception('Itinerary not found for trip $tripId');
+    try {
+      final currentItineraryResult = await getItinerary(tripId);
+
+      return await currentItineraryResult.when(
+        success: (currentItinerary) async {
+          if (currentItinerary == null) {
+            return Result.error(
+              ServerFailure('Itinerary not found for trip $tripId'),
+            );
+          }
+
+          final place = _findPlace(currentItinerary, placeId);
+          if (place == null) return Result.ok(currentItinerary);
+
+          final afterRemove = _removePlaceFromItinerary(
+            currentItinerary,
+            placeId,
+          );
+
+          final newDays = afterRemove.days.map((day) {
+            if (day.dayNumber != toDayNumber) return day;
+
+            final newSlots = day.timeSlots.map((slot) {
+              if (slot.period != toPeriod) return slot;
+              return slot.copyWith(places: [...slot.places, place]);
+            }).toList();
+
+            return day.copyWith(
+              timeSlots: newSlots,
+              stopCount: day.stopCount + 1,
+            );
+          }).toList();
+
+          final newItinerary = afterRemove.copyWith(days: newDays);
+          await saveItinerary(newItinerary);
+          return Result.ok(newItinerary);
+        },
+        failure: (error) async => Result.error(error),
+      );
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
     }
-
-    final place = _findPlace(currentItinerary, placeId);
-    if (place == null) return currentItinerary;
-
-    final afterRemove = _removePlaceFromItinerary(currentItinerary, placeId);
-
-    final newDays = afterRemove.days.map((day) {
-      if (day.dayNumber != toDayNumber) return day;
-
-      final newSlots = day.timeSlots.map((slot) {
-        if (slot.period != toPeriod) return slot;
-        return slot.copyWith(places: [...slot.places, place]);
-      }).toList();
-
-      return day.copyWith(timeSlots: newSlots, stopCount: day.stopCount + 1);
-    }).toList();
-
-    final newItinerary = afterRemove.copyWith(days: newDays);
-    await saveItinerary(newItinerary);
-    return newItinerary;
   }
 
   @override
-  Future<(TripItinerary, TripItinerary)> movePlaceBetweenTrips({
+  Future<Result<(TripItinerary, TripItinerary)>> movePlaceBetweenTrips({
     required String sourceTripId,
     required String targetTripId,
     required String placeId,
     required int toDayNumber,
     required DayPeriod toPeriod,
   }) async {
-    final sourceItinerary = await getItinerary(sourceTripId);
-    var targetItinerary = await getItinerary(targetTripId);
+    try {
+      final sourceResult = await getItinerary(sourceTripId);
+      final targetResult = await getItinerary(targetTripId);
 
-    if (sourceItinerary == null || targetItinerary == null) {
-      throw Exception('Source or target itinerary not found');
+      return await sourceResult.when(
+        success: (sourceItinerary) async {
+          return await targetResult.when(
+            success: (targetItinerary) async {
+              if (sourceItinerary == null || targetItinerary == null) {
+                return Result.error(
+                  ServerFailure('Source or target itinerary not found'),
+                );
+              }
+
+              final place = _findPlace(sourceItinerary, placeId);
+              if (place == null) {
+                return Result.ok((sourceItinerary, targetItinerary));
+              }
+
+              final updatedSource = _removePlaceFromItinerary(
+                sourceItinerary,
+                placeId,
+              );
+
+              final newDays = targetItinerary.days.map((day) {
+                if (day.dayNumber != toDayNumber) return day;
+
+                final newSlots = day.timeSlots.map((slot) {
+                  if (slot.period != toPeriod) return slot;
+                  return slot.copyWith(places: [...slot.places, place]);
+                }).toList();
+
+                return day.copyWith(
+                  timeSlots: newSlots,
+                  stopCount: day.stopCount + 1,
+                );
+              }).toList();
+
+              var updatedTarget = targetItinerary.copyWith(days: newDays);
+
+              await saveItinerary(updatedSource);
+              await saveItinerary(updatedTarget);
+
+              return Result.ok((updatedSource, updatedTarget));
+            },
+            failure: (error) async => Result.error(error),
+          );
+        },
+        failure: (error) async => Result.error(error),
+      );
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
     }
-
-    final place = _findPlace(sourceItinerary, placeId);
-    if (place == null) return (sourceItinerary, targetItinerary);
-
-    final updatedSource = _removePlaceFromItinerary(sourceItinerary, placeId);
-
-    final newDays = targetItinerary.days.map((day) {
-      if (day.dayNumber != toDayNumber) return day;
-
-      final newSlots = day.timeSlots.map((slot) {
-        if (slot.period != toPeriod) return slot;
-        return slot.copyWith(places: [...slot.places, place]);
-      }).toList();
-
-      return day.copyWith(timeSlots: newSlots, stopCount: day.stopCount + 1);
-    }).toList();
-
-    var updatedTarget = targetItinerary.copyWith(days: newDays);
-
-    await saveItinerary(updatedSource);
-    await saveItinerary(updatedTarget);
-
-    return (updatedSource, updatedTarget);
   }
 
-  // --- Helpers ---
+  // Helpers
   bool _containsPlace(TripItinerary itinerary, String placeId) {
     for (final day in itinerary.days) {
       for (final slot in day.timeSlots) {
@@ -216,7 +357,10 @@ class TripRepositoryImpl implements TripRepository {
     return null;
   }
 
-  TripItinerary _removePlaceFromItinerary(TripItinerary itinerary, String placeId) {
+  TripItinerary _removePlaceFromItinerary(
+    TripItinerary itinerary,
+    String placeId,
+  ) {
     final newDays = itinerary.days.map((day) {
       bool removed = false;
 

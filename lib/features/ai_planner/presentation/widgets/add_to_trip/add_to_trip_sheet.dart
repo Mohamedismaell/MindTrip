@@ -5,87 +5,121 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class AddToTripSheet extends StatelessWidget {
   const AddToTripSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AddToTripCubit, AddToTripState>(
-      listener: (context, state) {
-        if (state.status == AddToTripStatus.error &&
-            state.errorMessage != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
-        }
-      },
+    return BlocBuilder<AddToTripCubit, AddToTripState>(
       builder: (context, state) {
+        if (state.tripsStatus == TripsLoadStatus.error) {
+          //Todo change the ui
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 40.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.error_outline, size: 48.r, color: Colors.red),
+                SizedBox(height: 16.h),
+                Text('Failed to load trips', style: AppTextStyles.h6Bold),
+                SizedBox(height: 8.h),
+                Text(
+                  state.errorMessage ?? 'Please check your connection',
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.bodyMedium,
+                ),
+                SizedBox(height: 24.h),
+                ElevatedButton(
+                  onPressed: () => context.read<AddToTripCubit>().loadTrips(),
+                  child: const Text('Try Again'),
+                ),
+              ],
+            ),
+          );
+        }
+
         return Container(
           padding: EdgeInsets.only(
-            left: 24.w,
-            right: 24.w,
-            top: 24.h,
-            bottom: MediaQuery.of(context).padding.bottom + 24.h,
+            left: 30.w,
+            right: 30.w,
+            top: 29.h,
+            bottom: 24.h,
           ),
           decoration: BoxDecoration(
             color: context.colorTheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 48.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLightGray,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              SizedBox(height: 24.h),
+              DragDivider(),
+              SizedBox(height: 25.h),
               Text(
                 'Add to a Trip',
-                style: AppTextStyles.h4SemiBold.copyWith(
-                  color: context.colorTheme.onSurface,
+                style: AppTextStyles.h6Bold.copyWith(
+                  color: AppColors.pureBlack,
                 ),
               ),
               SizedBox(height: 8.h),
               Text(
                 'Choose where you want to add this place',
                 style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorTheme.onSurfaceVariant,
+                  color: context.colorTheme.outline,
                 ),
               ),
               SizedBox(height: 24.h),
-              if (state.status == AddToTripStatus.loadingTrips)
-                const Center(child: CircularProgressIndicator())
-              else
-                Flexible(
+              Expanded(
+                child: Skeletonizer(
+                  enabled: state.tripsStatus == TripsLoadStatus.loading,
                   child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: state.trips.length + 1,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount:
+                        state.trips.isEmpty &&
+                            state.tripsStatus == TripsLoadStatus.loading
+                        ? 2
+                        : state.trips.length + 1,
                     separatorBuilder: (_, _) => SizedBox(height: 16.h),
                     itemBuilder: (context, index) {
+                      if (state.trips.isEmpty &&
+                          state.tripsStatus == TripsLoadStatus.loading) {
+                        return _TripTile(
+                          title: 'Loading Trip Title',
+                          subtitle: 'Loading description...',
+                          onTap: () {},
+                        );
+                      }
+
                       if (index == state.trips.length) {
-                        return _CreateNewTripTile(
+                        return _TripTile(
+                          title: 'Create New Trip',
+                          subtitle: 'Start planning with AI',
+                          leadingIcon: Icons.add,
                           onTap: () =>
                               context.read<AddToTripCubit>().triggerCreateNew(),
                         );
                       }
                       final trip = state.trips[index];
-                      return _TripListTile(
-                        trip: trip,
-                        onTap: () {
-                          context.read<AddToTripCubit>().selectTrip(trip);
-                        },
+                      final coverImage =
+                          trip.itineraryCoverUrl ?? trip.coverAsset;
+                      final placesCount = trip.placePreviews.length;
+                      return _TripTile(
+                        title: trip.title,
+                        subtitle:
+                            '${trip.durationDays} days · $placesCount places',
+                        imagePath: coverImage,
+                        onTap: () =>
+                            context.read<AddToTripCubit>().selectTrip(trip),
                       );
                     },
                   ),
                 ),
+              ),
             ],
           ),
         );
@@ -94,45 +128,71 @@ class AddToTripSheet extends StatelessWidget {
   }
 }
 
-class _TripListTile extends StatelessWidget {
-  final Trip trip;
+class _TripTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String? imagePath;
   final VoidCallback onTap;
+  final IconData? leadingIcon;
 
-  const _TripListTile({required this.trip, required this.onTap});
+  const _TripTile({
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.imagePath,
+    this.leadingIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final coverImage = trip.itineraryCoverUrl ?? trip.coverAsset;
-    final placesCount = trip.placePreviews.length;
-    return InkWell(
+    return TapScaleEffect(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: EdgeInsets.all(12.w),
+        padding: EdgeInsets.all(8.r),
         decoration: BoxDecoration(
           border: Border.all(color: context.colorTheme.outline),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(15.r),
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: SizedBox(
-                width: 64.w,
-                height: 48.w,
-                child: AppCachedImage(imagePath: coverImage, fit: BoxFit.cover),
-              ),
+              borderRadius: BorderRadius.circular(20.r),
+              child: imagePath != null
+                  ? AppCachedImage(
+                      width: 84.w,
+                      height: 84.h,
+                      imagePath: imagePath,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      width: 84.w,
+                      height: 84.h,
+                      color: AppColors.primaryLightGray,
+                      alignment: Alignment.center,
+                      child: Skeleton.ignore(
+                        child: Icon(
+                          leadingIcon ?? Icons.add,
+                          size: 30.r,
+                          color: context.colorTheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: 13.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(trip.title, style: context.textTheme.bodyLarge),
-                  SizedBox(height: 4.h),
                   Text(
-                    '${trip.durationDays} days · $placesCount places',
-                    style: context.textTheme.bodyMedium?.copyWith(
+                    title,
+                    style: AppTextStyles.h8SemiBold.copyWith(
+                      color: context.colorTheme.onSurface,
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.h9Medium.copyWith(
                       color: context.colorTheme.onSurfaceVariant,
                     ),
                   ),
@@ -141,62 +201,7 @@ class _TripListTile extends StatelessWidget {
             ),
             Icon(
               Icons.chevron_right,
-              color: context.colorTheme.onSurfaceVariant,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CreateNewTripTile extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _CreateNewTripTile({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: EdgeInsets.all(12.w),
-        decoration: BoxDecoration(
-          border: Border.all(color: context.colorTheme.outline),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 64.w,
-              height: 48.w,
-              decoration: BoxDecoration(
-                color: AppColors.primaryLightGray,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                Icons.add,
-                color: context.colorTheme.onSurfaceVariant,
-              ),
-            ),
-            SizedBox(width: 16.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Create New Trip', style: context.textTheme.bodyLarge),
-                SizedBox(height: 4.h),
-                Text(
-                  'Start planning with AI',
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorTheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Icon(
-              Icons.chevron_right,
+              size: 24.r,
               color: context.colorTheme.onSurfaceVariant,
             ),
           ],

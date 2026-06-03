@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
 
@@ -14,9 +15,11 @@ class ManagePlaceSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listener: (context, state) {
-        if (state.status == AddToTripStatus.error && state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!)),
+        if (state.addingStatus == ActionStatus.error &&
+            state.errorMessage != null) {
+          AppSnackBar.showError(
+            context: context,
+            message: state.errorMessage ?? 'Operation failed',
           );
         }
       },
@@ -28,7 +31,7 @@ class ManagePlaceSheet extends StatelessWidget {
             left: 24.w,
             right: 24.w,
             top: 24.h,
-            bottom: MediaQuery.of(context).padding.bottom + 24.h,
+            bottom: 24.h,
           ),
           decoration: BoxDecoration(
             color: context.colorTheme.surface,
@@ -48,22 +51,24 @@ class ManagePlaceSheet extends StatelessWidget {
               SizedBox(height: 24.h),
               Text(
                 'Added to ${state.hostTripName}',
-                style: AppTextStyles.h4SemiBold.copyWith(color: context.colorTheme.onSurface),
+                style: AppTextStyles.h4SemiBold.copyWith(
+                    color: context.colorTheme.onSurface),
               ),
               SizedBox(height: 24.h),
-              if (state.status == AddToTripStatus.processing)
-                const Padding(
-                  padding: EdgeInsets.all(32.0),
-                  child: Center(child: CircularProgressIndicator()),
+              if (state.addingStatus == ActionStatus.processing)
+                Padding(
+                  padding: EdgeInsets.all(32.0.r),
+                  child: const Center(child: CircularProgressIndicator()),
                 )
               else ...[
                 _ManageActionItem(
                   icon: Icons.calendar_today,
                   title: 'Move to another day',
                   onTap: () {
-                    // Open select day sheet for current trip.
-                    // First we select current trip.
-                    context.read<AddToTripCubit>().selectTrip(state.trips.firstWhere((t) => t.id == state.hostTripId));
+                    final trip = state.trips.firstWhere(
+                        (t) => t.id == state.hostTripId,
+                        orElse: () => state.trips.first);
+                    context.read<AddToTripCubit>().selectTrip(trip);
                   },
                 ),
                 SizedBox(height: 12.h),
@@ -80,7 +85,7 @@ class ManagePlaceSheet extends StatelessWidget {
                   title: 'Remove from trip',
                   isDestructive: true,
                   onTap: () {
-                     _showRemoveConfirmation(context);
+                    _showRemoveConfirmation(context);
                   },
                 ),
               ],
@@ -97,7 +102,8 @@ class ManagePlaceSheet extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Remove Place?'),
-        content: const Text('Are you sure you want to remove this place from your trip?'),
+        content: const Text(
+            'Are you sure you want to remove this place from your trip?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -131,7 +137,9 @@ class _ManageActionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDestructive ? context.colorTheme.error : context.colorTheme.onSurface;
+    final color = isDestructive
+        ? context.colorTheme.error
+        : context.colorTheme.onSurface;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -151,7 +159,8 @@ class _ManageActionItem extends StatelessWidget {
                 style: context.textTheme.bodyLarge?.copyWith(color: color),
               ),
             ),
-            Icon(Icons.chevron_right, color: context.colorTheme.onSurfaceVariant),
+            Icon(Icons.chevron_right,
+                color: context.colorTheme.onSurfaceVariant),
           ],
         ),
       ),

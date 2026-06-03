@@ -6,10 +6,7 @@ import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/add_to_trip_sheet.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/create_trip_planner_sheet.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/manage_place_sheet.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/select_day_sheet.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/add_to_trip_flow_wrapper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PlaceDetailsTripButton extends StatelessWidget {
@@ -22,11 +19,17 @@ class PlaceDetailsTripButton extends StatelessWidget {
     return BlocProvider(
       create: (context) => AddToTripCubit(
         place: place,
-        tripRepository: sl(),
+        getTripContainingPlace: sl(),
+        getAllTrips: sl(),
+        getItinerary: sl(),
         addPlaceUseCase: sl(),
         removePlaceUseCase: sl(),
         movePlaceInTripUseCase: sl(),
         movePlaceBetweenTripsUseCase: sl(),
+        getTripById: sl(),
+        saveTrip: sl(),
+        generateItinerary: sl(),
+        saveItinerary: sl(),
       )..init(),
       child: BlocBuilder<AddToTripCubit, AddToTripState>(
         builder: (context, state) {
@@ -53,59 +56,31 @@ class PlaceDetailsTripButton extends StatelessWidget {
   void _handleOnTap(BuildContext context, AddToTripState state) {
     if (state.placeAlreadyInTrip) {
       context.read<AddToTripCubit>().openManage();
-      _showSheet(context, const ManagePlaceSheet());
     } else {
       context.read<AddToTripCubit>().loadTrips();
-      _showSheet(context, const AddToTripSheet());
     }
+    showAddToTripSheet(context);
   }
 
-  void _showSheet(BuildContext parentContext, Widget sheetContent) {
+  void showAddToTripSheet(BuildContext parentContext) {
     final cubit = parentContext.read<AddToTripCubit>();
+
     showModalBottomSheet(
       context: parentContext,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) {
-        return BlocProvider.value(
-          value: cubit,
-          child: BlocConsumer<AddToTripCubit, AddToTripState>(
-            listener: (ctx2, state) {
-              if (state.status == AddToTripStatus.selectDay) {
-                Navigator.pop(ctx2);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _showSheet(parentContext, const SelectDaySheet());
-                });
-              } else if (state.status == AddToTripStatus.creatingNew) {
-                Navigator.pop(ctx2);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _showSheet(parentContext, const CreateTripPlannerSheet());
-                });
-              } else if (state.status == AddToTripStatus.added) {
-                Navigator.pop(ctx2);
-                ScaffoldMessenger.of(ctx2).showSnackBar(
-                  const SnackBar(content: Text('Successfully updated trip!')),
-                );
-              } else if (state.status == AddToTripStatus.initial &&
-                  sheetContent is ManagePlaceSheet) {
-                Navigator.pop(ctx2); // Closes manage sheet after removal
-              } else if (state.status == AddToTripStatus.selectTrip &&
-                  sheetContent is ManagePlaceSheet) {
-                Navigator.pop(ctx2);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _showSheet(
-                    parentContext,
-                    const AddToTripSheet(),
-                  ); // Move to another trip
-                });
-              }
-            },
-            builder: (ctx2, state) {
-              return sheetContent;
-            },
+      builder: (context) => BlocProvider.value(
+        value: cubit,
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          maxChildSize: 0.9,
+          minChildSize: 0.4,
+          builder: (_, controller) => ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: AddToTripFlowWrapper(),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

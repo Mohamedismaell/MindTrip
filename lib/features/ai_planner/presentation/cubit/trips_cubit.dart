@@ -1,15 +1,37 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_all_trips_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/save_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/delete_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/update_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/generate_itinerary_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/save_itinerary_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 import 'package:uuid/uuid.dart';
 
 class TripsCubit extends Cubit<TripsState> {
-  final TripRepository _tripRepository;
+  final GetAllTripsUseCase _getAllTrips;
+  final SaveTripUseCase _saveTrip;
+  final DeleteTripUseCase _deleteTrip;
+  final UpdateTripUseCase _updateTrip;
+  final GenerateItineraryUseCase _generateItinerary;
+  final SaveItineraryUseCase _saveItinerary;
   final _uuid = const Uuid();
 
-  TripsCubit(this._tripRepository)
-    : super(TripsState(focusedDay: DateTime.now()));
+  TripsCubit({
+    required GetAllTripsUseCase getAllTrips,
+    required SaveTripUseCase saveTrip,
+    required DeleteTripUseCase deleteTrip,
+    required UpdateTripUseCase updateTrip,
+    required GenerateItineraryUseCase generateItinerary,
+    required SaveItineraryUseCase saveItinerary,
+  })  : _getAllTrips = getAllTrips,
+        _saveTrip = saveTrip,
+        _deleteTrip = deleteTrip,
+        _updateTrip = updateTrip,
+        _generateItinerary = generateItinerary,
+        _saveItinerary = saveItinerary,
+        super(TripsState(focusedDay: DateTime.now()));
 
   Future<void> updateSearchQuary(String? searchQuary) async {
     if (isClosed) return;
@@ -24,19 +46,23 @@ class TripsCubit extends Cubit<TripsState> {
   Future<void> loadTrips() async {
     if (isClosed) return;
     emit(state.copyWith(tripsStatus: TripsStatus.loading));
-    try {
-      final trips = await _tripRepository.getAllTrips();
-      if (isClosed) return;
-      emit(state.copyWith(tripsStatus: TripsStatus.loaded, trips: trips));
-    } catch (e) {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          tripsStatus: TripsStatus.error,
-          errorMessage: 'Failed to load trips: $e',
-        ),
-      );
-    }
+
+    final result = await _getAllTrips();
+    if (isClosed) return;
+
+    result.when(
+      success: (trips) {
+        emit(state.copyWith(tripsStatus: TripsStatus.loaded, trips: trips));
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            tripsStatus: TripsStatus.error,
+            errorMessage: 'Failed to load trips: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
   Future<String> createDraft(String destination) async {
@@ -64,168 +90,196 @@ class TripsCubit extends Cubit<TripsState> {
   }
 
   Future<void> saveTripDraft(Trip trip) async {
-    try {
-      await _tripRepository.saveTrip(trip);
-      if (isClosed) return;
-      final index = state.trips.indexWhere((t) => t.id == trip.id);
-      final updatedTrips = List<Trip>.from(state.trips);
-      if (index != -1) {
-        updatedTrips[index] = trip;
-      } else {
-        updatedTrips.add(trip);
-      }
+    final result = await _saveTrip(trip);
+    if (isClosed) return;
 
-      emit(state.copyWith(trips: updatedTrips));
-    } catch (e) {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          tripsStatus: TripsStatus.error,
-          errorMessage: 'Failed to save draft: $e',
-        ),
-      );
-    }
+    result.when(
+      success: (_) {
+        final index = state.trips.indexWhere((t) => t.id == trip.id);
+        final updatedTrips = List<Trip>.from(state.trips);
+        if (index != -1) {
+          updatedTrips[index] = trip;
+        } else {
+          updatedTrips.add(trip);
+        }
+        emit(state.copyWith(trips: updatedTrips));
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            tripsStatus: TripsStatus.error,
+            errorMessage: 'Failed to save draft: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
   Future<void> completeTrip(String tripId) async {
-    try {
-      final index = state.getTripIndex(tripId);
-      if (index == -1) return;
+    final index = state.getTripIndex(tripId);
+    if (index == -1) return;
 
-      // 'Save Trip' transitions draft → inProgress (the user is committing to go)
-      final trip = state.trips[index].copyWith(
-        status: TripStatus.inProgress,
-        updatedAt: DateTime.now(),
-      );
+    final trip = state.trips[index].copyWith(
+      status: TripStatus.inProgress,
+      updatedAt: DateTime.now(),
+    );
 
-      await _tripRepository.saveTrip(trip);
-      if (isClosed) return;
+    final result = await _saveTrip(trip);
+    if (isClosed) return;
 
-      final updatedTrips = List<Trip>.from(state.trips);
-      updatedTrips[index] = trip;
-
-      emit(state.copyWith(trips: updatedTrips));
-    } catch (e) {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          tripsStatus: TripsStatus.error,
-          errorMessage: 'Failed to complete trip: $e',
-        ),
-      );
-    }
+    result.when(
+      success: (_) {
+        final updatedTrips = List<Trip>.from(state.trips);
+        updatedTrips[index] = trip;
+        emit(state.copyWith(trips: updatedTrips));
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            tripsStatus: TripsStatus.error,
+            errorMessage: 'Failed to complete trip: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
-  //Todo: edit with real api
   Future<void> generateTrip(String tripId) async {
     final index = state.getTripIndex(tripId);
     if (index == -1) return;
 
-    // Emit generating state so UI can show dialog reactively
     emit(state.copyWith(isGenerating: true, clearGeneratedTripId: true));
 
-    try {
-      final trip = state.trips[index];
+    final trip = state.trips[index];
 
-      // Call backend / mock — this returns the full itinerary
-      final itinerary = await _tripRepository.generateItinerary(trip);
+    final itineraryResult = await _generateItinerary(trip);
+    if (isClosed) return;
 
-      // Save itinerary locally
-      await _tripRepository.saveItinerary(itinerary);
+    itineraryResult.when(
+      success: (itinerary) async {
+        final saveItineraryResult = await _saveItinerary(itinerary);
+        if (isClosed) return;
 
-      // Extract lightweight preview data from the itinerary
-      final allPlaces = itinerary.days
-          .expand((day) => day.timeSlots.expand((slot) => slot.places))
-          .toList();
+        saveItineraryResult.when(
+          success: (_) async {
+            final allPlaces = itinerary.days
+                .expand((day) => day.timeSlots.expand((slot) => slot.places))
+                .toList();
 
-      String? coverUrl;
-      final previews = <Map<String, String>>[];
-      for (final place in allPlaces) {
-        final imgUrl = place.imageUrls?.firstOrNull ?? '';
-        if (coverUrl == null && imgUrl.isNotEmpty) {
-          coverUrl = imgUrl;
-        }
-        previews.add({'name': place.name, 'imageUrl': imgUrl});
-      }
+            String? coverUrl;
+            final previews = <Map<String, String>>[];
+            for (final place in allPlaces) {
+              final imgUrl = place.imageUrls?.firstOrNull ?? '';
+              if (coverUrl == null && imgUrl.isNotEmpty) {
+                coverUrl = imgUrl;
+              }
+              previews.add({'name': place.name, 'imageUrl': imgUrl});
+            }
 
-      // Keep trip as draft — status only changes when user taps 'Save Trip'
-      final updatedTrip = trip.copyWith(
-        status: TripStatus.draft,
-        updatedAt: DateTime.now(),
-        itineraryCoverUrl: coverUrl,
-        placePreviews: previews,
-      );
-      await _tripRepository.saveTrip(updatedTrip);
-      if (isClosed) return;
+            final updatedTrip = trip.copyWith(
+              status: TripStatus.draft,
+              updatedAt: DateTime.now(),
+              itineraryCoverUrl: coverUrl,
+              placePreviews: previews,
+            );
 
-      final updatedTrips = List<Trip>.from(state.trips);
-      updatedTrips[index] = updatedTrip;
+            final saveTripResult = await _saveTrip(updatedTrip);
+            if (isClosed) return;
 
-      // Emit success state with generatedTripId
-      emit(
-        state.copyWith(
-          trips: updatedTrips,
-          isGenerating: false,
-          generatedTripId: tripId,
-        ),
-      );
-    } catch (e) {
-      if (isClosed) return;
+            saveTripResult.when(
+              success: (_) {
+                final updatedTrips = List<Trip>.from(state.trips);
+                updatedTrips[index] = updatedTrip;
 
-      emit(
-        state.copyWith(
-          tripsStatus: TripsStatus.error,
-          isGenerating: false,
-          errorMessage: 'Failed to generate itinerary: $e',
-        ),
-      );
-    }
+                emit(
+                  state.copyWith(
+                    trips: updatedTrips,
+                    isGenerating: false,
+                    generatedTripId: tripId,
+                  ),
+                );
+              },
+              failure: (error) {
+                emit(
+                  state.copyWith(
+                    tripsStatus: TripsStatus.error,
+                    isGenerating: false,
+                    errorMessage: 'Failed to update trip object: ${error.message}',
+                  ),
+                );
+              },
+            );
+          },
+          failure: (error) {
+            emit(
+              state.copyWith(
+                tripsStatus: TripsStatus.error,
+                isGenerating: false,
+                errorMessage: 'Failed to save itinerary: ${error.message}',
+              ),
+            );
+          },
+        );
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            tripsStatus: TripsStatus.error,
+            isGenerating: false,
+            errorMessage: 'Failed to generate itinerary: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
   Future<void> deleteTrip(String tripId) async {
-    try {
-      await _tripRepository.deleteTrip(tripId);
-      if (isClosed) return;
+    final result = await _deleteTrip(tripId);
+    if (isClosed) return;
 
-      final updatedTrips = state.trips.where((t) => t.id != tripId).toList();
-      emit(state.copyWith(trips: updatedTrips));
-    } catch (e) {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          tripsStatus: TripsStatus.error,
-          errorMessage: 'Failed to delete trip: $e',
-        ),
-      );
-    }
+    result.when(
+      success: (_) {
+        final updatedTrips = state.trips.where((t) => t.id != tripId).toList();
+        emit(state.copyWith(trips: updatedTrips));
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            tripsStatus: TripsStatus.error,
+            errorMessage: 'Failed to delete trip: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
   Future<void> updateTripTitle(String tripId, String newTitle) async {
-    try {
-      final index = state.getTripIndex(tripId);
-      if (index == -1) return;
+    final index = state.getTripIndex(tripId);
+    if (index == -1) return;
 
-      final trip = state.trips[index].copyWith(
-        title: newTitle,
-        updatedAt: DateTime.now(),
-      );
-      //! Same as save jsut for scalling
-      await _tripRepository.updateTrip(trip);
-      if (isClosed) return;
+    final trip = state.trips[index].copyWith(
+      title: newTitle,
+      updatedAt: DateTime.now(),
+    );
+    
+    final result = await _updateTrip(trip);
+    if (isClosed) return;
 
-      final updatedTrips = List<Trip>.from(state.trips);
-      updatedTrips[index] = trip;
-
-      emit(state.copyWith(trips: updatedTrips));
-    } catch (e) {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          tripsStatus: TripsStatus.error,
-          errorMessage: 'Failed to update title: $e',
-        ),
-      );
-    }
+    result.when(
+      success: (_) {
+        final updatedTrips = List<Trip>.from(state.trips);
+        updatedTrips[index] = trip;
+        emit(state.copyWith(trips: updatedTrips));
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            tripsStatus: TripsStatus.error,
+            errorMessage: 'Failed to update title: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
   void nextMonth(DateTime focusedDay) {

@@ -1,13 +1,14 @@
+import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
 
 class MovePlaceBetweenTripsUseCase {
   final TripRepository repo;
-  
+
   MovePlaceBetweenTripsUseCase(this.repo);
 
-  Future<(TripItinerary source, TripItinerary target)> call({
+  Future<Result<(TripItinerary source, TripItinerary target)>> call({
     required String sourceTripId,
     required String targetTripId,
     required String placeId,

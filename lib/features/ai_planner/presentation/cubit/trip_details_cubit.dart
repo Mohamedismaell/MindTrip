@@ -1,37 +1,55 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_itinerary_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_trip_by_id_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_state.dart';
 
 class TripDetailsCubit extends Cubit<TripDetailsState> {
-  final TripRepository _tripRepository;
+  final GetTripByIdUseCase _getTripByIdUseCase;
+  final GetItineraryUseCase _getItineraryUseCase;
 
-  TripDetailsCubit(this._tripRepository) : super(const TripDetailsState());
+  TripDetailsCubit(this._getTripByIdUseCase, this._getItineraryUseCase) : super(const TripDetailsState());
 
   Future<void> loadTripDetails(String tripId) async {
     if (isClosed) return;
     emit(state.copyWith(status: TripDetailsStatus.loading));
 
-    try {
-      final trip = await _tripRepository.getTripById(tripId);
-      final itinerary = await _tripRepository.getItinerary(tripId);
+    final tripResult = await _getTripByIdUseCase(tripId);
+    if (isClosed) return;
 
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          trip: trip,
-          itinerary: itinerary,
-          status: TripDetailsStatus.loaded,
-        ),
-      );
-    } catch (e) {
-      if (isClosed) return;
-      emit(
-        state.copyWith(
-          status: TripDetailsStatus.error,
-          errorMessage: 'Failed to load trip details: $e',
-        ),
-      );
-    }
+    tripResult.when(
+      success: (trip) async {
+        final itineraryResult = await _getItineraryUseCase(tripId);
+        if (isClosed) return;
+
+        itineraryResult.when(
+          success: (itinerary) {
+            emit(
+              state.copyWith(
+                trip: trip,
+                itinerary: itinerary,
+                status: TripDetailsStatus.loaded,
+              ),
+            );
+          },
+          failure: (error) {
+            emit(
+              state.copyWith(
+                status: TripDetailsStatus.error,
+                errorMessage: 'Failed to load trip details: ${error.message}',
+              ),
+            );
+          },
+        );
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            status: TripDetailsStatus.error,
+            errorMessage: 'Failed to load trip details: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
   void toggleActiveDay(int dayNumber) {
@@ -43,3 +61,4 @@ class TripDetailsCubit extends Cubit<TripDetailsState> {
     }
   }
 }
+

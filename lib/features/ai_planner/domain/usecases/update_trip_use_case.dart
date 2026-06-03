@@ -1,14 +1,13 @@
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
 
-class GenerateItineraryUseCase {
+class UpdateTripUseCase {
   final TripRepository repository;
 
-  GenerateItineraryUseCase(this.repository);
+  UpdateTripUseCase(this.repository);
 
-  Future<Result<TripItinerary>> call(Trip trip) {
-    return repository.generateItinerary(trip);
+  Future<Result<void>> call(Trip trip) async {
+    return repository.updateTrip(trip);
   }
 }

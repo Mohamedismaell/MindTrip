@@ -17,6 +17,14 @@ import 'package:mindtrip/features/ai_planner/domain/usecases/add_place_to_trip_u
 import 'package:mindtrip/features/ai_planner/domain/usecases/remove_place_from_trip_use_case.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_in_trip_use_case.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_between_trips_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_all_trips_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_trip_by_id_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/save_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/delete_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/update_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_itinerary_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/save_itinerary_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_trip_containing_place_use_case.dart';
 
 class AiPlannerDi {
   AiPlannerDi._();
@@ -53,12 +61,44 @@ class AiPlannerDi {
     sl.registerLazySingleton<MovePlaceBetweenTripsUseCase>(
       () => MovePlaceBetweenTripsUseCase(sl<TripRepository>()),
     );
+    sl.registerLazySingleton<GetAllTripsUseCase>(
+      () => GetAllTripsUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<GetTripByIdUseCase>(
+      () => GetTripByIdUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<SaveTripUseCase>(
+      () => SaveTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<DeleteTripUseCase>(
+      () => DeleteTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<UpdateTripUseCase>(
+      () => UpdateTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<GetItineraryUseCase>(
+      () => GetItineraryUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<SaveItineraryUseCase>(
+      () => SaveItineraryUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<GetTripContainingPlaceUseCase>(
+      () => GetTripContainingPlaceUseCase(sl<TripRepository>()),
+    );
     sl.registerLazySingleton<TripsCubit>(
-      () => TripsCubit(sl<TripRepository>()),
+      () => TripsCubit(
+        getAllTrips: sl<GetAllTripsUseCase>(),
+        saveTrip: sl<SaveTripUseCase>(),
+        deleteTrip: sl<DeleteTripUseCase>(),
+        updateTrip: sl<UpdateTripUseCase>(),
+        generateItinerary: sl<GenerateItineraryUseCase>(),
+        saveItinerary: sl<SaveItineraryUseCase>(),
+      ),
     );
     sl.registerFactory<TripDetailsCubit>(
-      () => TripDetailsCubit(sl<TripRepository>()),
+      () => TripDetailsCubit(sl<GetTripByIdUseCase>(), sl<GetItineraryUseCase>()),
     );
+
 
     //! Chat — Data sources
     sl.registerLazySingleton<ChatDataSource>(() => MockChatDataSource());

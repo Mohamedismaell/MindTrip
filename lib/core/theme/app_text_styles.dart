@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'app_colors.dart';
 import 'app_font_family_old.dart';
 
 class AppTextStyles {
@@ -14,7 +15,7 @@ class AppTextStyles {
     fontSize: size,
     fontWeight: weight,
     fontFamily: AppFontFamily.sfPro,
-    color: color,
+    color: color ?? AppColors.pureBlack,
   );
 
   //! Headline 1

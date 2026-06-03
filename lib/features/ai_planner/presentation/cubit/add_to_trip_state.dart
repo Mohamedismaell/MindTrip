@@ -3,20 +3,34 @@ import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
 
-enum AddToTripStatus {
+enum AddToTripFlowStatus {
   initial,
-  loadingTrips,
   selectTrip,
   selectDay,
-  processing,
-  added,
   managing,
   creatingNew,
-  error
+  added,
+}
+
+enum TripsLoadStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+}
+
+enum ActionStatus {
+  initial,
+  processing,
+  success,
+  error,
 }
 
 class AddToTripState extends Equatable {
-  final AddToTripStatus status;
+  final AddToTripFlowStatus flowStatus;
+  final TripsLoadStatus tripsStatus;
+  final ActionStatus addingStatus;
+  final ActionStatus creatingStatus;
   final PlaceEntity place;
   final List<Trip> trips;
   final Trip? selectedTrip;
@@ -27,7 +41,10 @@ class AddToTripState extends Equatable {
   final String? errorMessage;
 
   const AddToTripState({
-    this.status = AddToTripStatus.initial,
+    this.flowStatus = AddToTripFlowStatus.initial,
+    this.tripsStatus = TripsLoadStatus.initial,
+    this.addingStatus = ActionStatus.initial,
+    this.creatingStatus = ActionStatus.initial,
     required this.place,
     this.trips = const [],
     this.selectedTrip,
@@ -39,7 +56,10 @@ class AddToTripState extends Equatable {
   });
 
   AddToTripState copyWith({
-    AddToTripStatus? status,
+    AddToTripFlowStatus? flowStatus,
+    TripsLoadStatus? tripsStatus,
+    ActionStatus? addingStatus,
+    ActionStatus? creatingStatus,
     PlaceEntity? place,
     List<Trip>? trips,
     Trip? selectedTrip,
@@ -51,7 +71,10 @@ class AddToTripState extends Equatable {
     bool clearHostTrip = false,
   }) {
     return AddToTripState(
-      status: status ?? this.status,
+      flowStatus: flowStatus ?? this.flowStatus,
+      tripsStatus: tripsStatus ?? this.tripsStatus,
+      addingStatus: addingStatus ?? this.addingStatus,
+      creatingStatus: creatingStatus ?? this.creatingStatus,
       place: place ?? this.place,
       trips: trips ?? this.trips,
       selectedTrip: selectedTrip ?? this.selectedTrip,
@@ -65,14 +88,17 @@ class AddToTripState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        place,
-        trips,
-        selectedTrip,
-        selectedItinerary,
-        placeAlreadyInTrip,
-        hostTripName,
-        hostTripId,
-        errorMessage,
-      ];
+    flowStatus,
+    tripsStatus,
+    addingStatus,
+    creatingStatus,
+    place,
+    trips,
+    selectedTrip,
+    selectedItinerary,
+    placeAlreadyInTrip,
+    hostTripName,
+    hostTripId,
+    errorMessage,
+  ];
 }

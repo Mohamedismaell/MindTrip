@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
 import 'package:intl/intl.dart';
@@ -59,7 +60,6 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
     setState(() {
       if (isStart) {
         _startDate = picked;
-        // Reset end date if it's before the new start
         if (_endDate != null && _endDate!.isBefore(picked)) _endDate = null;
       } else {
         _endDate = picked;
@@ -69,8 +69,9 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
 
   void _onGenerate(BuildContext context) {
     if (_startDate == null || _endDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select start and end dates')),
+      AppSnackBar.showError(
+        context: context,
+        message: 'Please select start and end dates',
       );
       return;
     }
@@ -87,11 +88,12 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
   Widget build(BuildContext context) {
     return BlocListener<AddToTripCubit, AddToTripState>(
       listener: (context, state) {
-        if (state.status == AddToTripStatus.error &&
+        if (state.creatingStatus == ActionStatus.error &&
             state.errorMessage != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+          AppSnackBar.showError(
+            context: context,
+            message: state.errorMessage ?? 'Generation failed',
+          );
         }
       },
       child: Container(
@@ -99,7 +101,7 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
           left: 24.w,
           right: 24.w,
           top: 20.h,
-          bottom: MediaQuery.of(context).padding.bottom + 24.h,
+          bottom: 24.h,
         ),
         decoration: BoxDecoration(
           color: context.colorTheme.surface,
@@ -109,7 +111,6 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Handle bar
               Container(
                 width: 48.w,
                 height: 4.h,
@@ -119,18 +120,31 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
                 ),
               ),
               SizedBox(height: 24.h),
-
-              // Title
-              Text(
-                'Quick AI Trip Planning',
-                style: AppTextStyles.h7Bold.copyWith(
-                  color: context.colorTheme.onSurface,
-                ),
-                textAlign: TextAlign.center,
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        context.read<AddToTripCubit>().backToSelectTrip();
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 48.w),
+                    child: Text(
+                      'Quick AI Trip Planning',
+                      style: AppTextStyles.h7Bold.copyWith(
+                        color: context.colorTheme.onSurface,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 6.h),
-
-              // Subtitle with link
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
@@ -165,8 +179,6 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
                 ),
               ),
               SizedBox(height: 24.h),
-
-              // Duration card
               _SectionCard(
                 title: 'Duration',
                 child: Column(
@@ -193,8 +205,6 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
                 ),
               ),
               SizedBox(height: 16.h),
-
-              // Budget card
               _SectionCard(
                 title: 'Budget',
                 child: Wrap(
@@ -233,8 +243,6 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
                 ),
               ),
               SizedBox(height: 16.h),
-
-              // Number of people card
               _SectionCard(
                 title: 'Number of people',
                 child: TextField(
@@ -252,11 +260,12 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
                 ),
               ),
               SizedBox(height: 28.h),
-
-              // Generate Plan button
               BlocBuilder<AddToTripCubit, AddToTripState>(
                 builder: (context, state) {
-                  final isLoading = state.status == AddToTripStatus.processing;
+                  final isLoading =
+                      state.creatingStatus == ActionStatus.processing ||
+                      state.addingStatus == ActionStatus.processing;
+
                   return SizedBox(
                     width: double.infinity,
                     height: 56.h,
@@ -280,10 +289,10 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
                         ),
                         child: Center(
                           child: isLoading
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
+                              ? SizedBox(
+                                  width: 24.r,
+                                  height: 24.r,
+                                  child: const CircularProgressIndicator(
                                     color: AppColors.primaryBlue,
                                     strokeWidth: 2.5,
                                   ),
@@ -308,7 +317,6 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
   }
 }
 
-/// Reusable card that wraps a section with a bold title and rounded border.
 class _SectionCard extends StatelessWidget {
   final String title;
   final Widget child;
@@ -341,7 +349,6 @@ class _SectionCard extends StatelessWidget {
   }
 }
 
-/// A tappable date display row inside the Duration card.
 class _DateField extends StatelessWidget {
   final String label;
   final String? value;

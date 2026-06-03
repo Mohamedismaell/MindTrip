@@ -42,9 +42,7 @@ class TripDetailsTopBar extends StatelessWidget {
                 firstStyle: AppTextStyles.h5Bold.copyWith(
                   color: context.colorTheme.primary,
                 ),
-                secondStyle: AppTextStyles.h5Bold.copyWith(
-                  color: AppColors.pureBlack,
-                ),
+                secondStyle: AppTextStyles.h5Bold,
               ),
               //Todo Chcek the share
               Align(

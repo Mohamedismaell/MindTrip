@@ -22,9 +22,7 @@ class AiPlannerIntroScreen extends StatelessWidget {
             children: [
               Text(
                 'Plan your perfect trip',
-                style: context.textTheme.headlineMedium?.copyWith(
-                  // color: AppColors.pureBlack,
-                ),
+                style: context.textTheme.headlineMedium,
               ),
               SizedBox(height: 12.h),
               Text(
