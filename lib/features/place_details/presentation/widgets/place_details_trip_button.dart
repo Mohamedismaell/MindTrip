@@ -68,6 +68,8 @@ class PlaceDetailsTripButton extends StatelessWidget {
     showModalBottomSheet(
       context: parentContext,
       isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
       backgroundColor: Colors.transparent,
       builder: (context) => BlocProvider.value(
         value: cubit,
@@ -75,6 +77,7 @@ class PlaceDetailsTripButton extends StatelessWidget {
           initialChildSize: 0.7,
           maxChildSize: 0.9,
           minChildSize: 0.4,
+
           builder: (_, controller) => ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: AddToTripFlowWrapper(),

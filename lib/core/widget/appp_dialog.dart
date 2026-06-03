@@ -191,4 +191,79 @@ class AppDialog {
       },
     );
   }
+
+  static Future<void> showLoading({
+    required BuildContext context,
+    String title = 'Loading',
+    String? description,
+  }) {
+    return showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: 'Loading',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 250),
+      pageBuilder: (dialogContext, _, _) {
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 24.w),
+              padding: EdgeInsets.all(24.r),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.r),
+                boxShadow: const [
+                  BoxShadow(blurRadius: 20, color: Colors.black12),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 36.w,
+                    height: 36.w,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: context.colorTheme.primary,
+                    ),
+                  ),
+
+                  SizedBox(height: 20.h),
+
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: context.textTheme.headlineSmall,
+                  ),
+
+                  if (description != null) ...[
+                    SizedBox(height: 8.h),
+
+                    Text(
+                      description,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.bodyLarge?.copyWith(
+                        color: context.colorTheme.outline,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (_, animation, _, child) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+    );
+  }
+
+  static void hideLoading(BuildContext context) {
+    final navigator = Navigator.of(context, rootNavigator: true);
+    if (navigator.canPop()) {
+      navigator.pop();
+    }
+  }
 }

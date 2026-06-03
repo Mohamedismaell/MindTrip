@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/add_to_trip_sheet.dart';
@@ -44,7 +46,19 @@ class AddToTripFlowWrapper extends StatelessWidget {
             transitionBuilder: (Widget child, Animation<double> animation) {
               return FadeTransition(opacity: animation, child: child);
             },
-            child: _buildCurrentSheet(state.flowStatus),
+            child: Container(
+              padding: EdgeInsets.only(
+                left: 30.w,
+                right: 30.w,
+                top: 29.h,
+                bottom: 24.h,
+              ),
+              decoration: BoxDecoration(
+                color: context.colorTheme.surface,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+              ),
+              child: _buildCurrentSheet(state.flowStatus),
+            ),
           ),
         );
       },

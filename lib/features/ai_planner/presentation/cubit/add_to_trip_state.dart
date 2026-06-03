@@ -12,19 +12,9 @@ enum AddToTripFlowStatus {
   added,
 }
 
-enum TripsLoadStatus {
-  initial,
-  loading,
-  loaded,
-  error,
-}
+enum TripsLoadStatus { initial, loading, loaded, error }
 
-enum ActionStatus {
-  initial,
-  processing,
-  success,
-  error,
-}
+enum ActionStatus { initial, processing, success, error }
 
 class AddToTripState extends Equatable {
   final AddToTripFlowStatus flowStatus;
@@ -35,6 +25,7 @@ class AddToTripState extends Equatable {
   final List<Trip> trips;
   final Trip? selectedTrip;
   final TripItinerary? selectedItinerary;
+  final int? selectedDay;
   final bool placeAlreadyInTrip;
   final String? hostTripName;
   final String? hostTripId;
@@ -53,6 +44,7 @@ class AddToTripState extends Equatable {
     this.hostTripName,
     this.hostTripId,
     this.errorMessage,
+    this.selectedDay,
   });
 
   AddToTripState copyWith({
@@ -69,6 +61,7 @@ class AddToTripState extends Equatable {
     String? hostTripId,
     String? errorMessage,
     bool clearHostTrip = false,
+    int? selectedDay,
   }) {
     return AddToTripState(
       flowStatus: flowStatus ?? this.flowStatus,
@@ -83,6 +76,7 @@ class AddToTripState extends Equatable {
       hostTripName: clearHostTrip ? null : (hostTripName ?? this.hostTripName),
       hostTripId: clearHostTrip ? null : (hostTripId ?? this.hostTripId),
       errorMessage: errorMessage ?? this.errorMessage,
+      selectedDay: selectedDay ?? this.selectedDay,
     );
   }
 
@@ -100,5 +94,6 @@ class AddToTripState extends Equatable {
     hostTripName,
     hostTripId,
     errorMessage,
+    selectedDay,
   ];
 }

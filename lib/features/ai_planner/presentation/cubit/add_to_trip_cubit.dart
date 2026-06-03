@@ -42,18 +42,18 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     required SaveTripUseCase saveTrip,
     required GenerateItineraryUseCase generateItinerary,
     required SaveItineraryUseCase saveItinerary,
-  })  : _getTripContainingPlace = getTripContainingPlace,
-        _getAllTrips = getAllTrips,
-        _getItinerary = getItinerary,
-        _addPlaceUseCase = addPlaceUseCase,
-        _removePlaceUseCase = removePlaceUseCase,
-        _movePlaceInTripUseCase = movePlaceInTripUseCase,
-        _movePlaceBetweenTripsUseCase = movePlaceBetweenTripsUseCase,
-        _getTripById = getTripById,
-        _saveTrip = saveTrip,
-        _generateItinerary = generateItinerary,
-        _saveItinerary = saveItinerary,
-        super(AddToTripState(place: place));
+  }) : _getTripContainingPlace = getTripContainingPlace,
+       _getAllTrips = getAllTrips,
+       _getItinerary = getItinerary,
+       _addPlaceUseCase = addPlaceUseCase,
+       _removePlaceUseCase = removePlaceUseCase,
+       _movePlaceInTripUseCase = movePlaceInTripUseCase,
+       _movePlaceBetweenTripsUseCase = movePlaceBetweenTripsUseCase,
+       _getTripById = getTripById,
+       _saveTrip = saveTrip,
+       _generateItinerary = generateItinerary,
+       _saveItinerary = saveItinerary,
+       super(AddToTripState(place: place));
 
   Future<void> init() async {
     final result = await _getTripContainingPlace(state.place.id);
@@ -92,11 +92,13 @@ class AddToTripCubit extends Cubit<AddToTripState> {
   }
 
   void reset() {
-    emit(state.copyWith(
-      flowStatus: AddToTripFlowStatus.initial,
-      addingStatus: ActionStatus.initial,
-      creatingStatus: ActionStatus.initial,
-    ));
+    emit(
+      state.copyWith(
+        flowStatus: AddToTripFlowStatus.initial,
+        addingStatus: ActionStatus.initial,
+        creatingStatus: ActionStatus.initial,
+      ),
+    );
   }
 
   void backToSelectTrip() {
@@ -114,16 +116,18 @@ class AddToTripCubit extends Cubit<AddToTripState> {
 
     final result = await _getAllTrips();
     if (isClosed) return;
-
+    await Future.delayed(const Duration(seconds: 2));
     result.when(
       success: (trips) {
         emit(
           state.copyWith(
             tripsStatus: TripsLoadStatus.loaded,
-            flowStatus: state.flowStatus == AddToTripFlowStatus.initial 
-                ? AddToTripFlowStatus.selectTrip 
+            flowStatus: state.flowStatus == AddToTripFlowStatus.initial
+                ? AddToTripFlowStatus.selectTrip
                 : state.flowStatus,
-            trips: trips.where((t) => t.status != TripStatus.completed).toList(),
+            trips: trips
+                .where((t) => t.status != TripStatus.completed)
+                .toList(),
           ),
         );
       },
@@ -175,6 +179,10 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
+  void selectDay(int dayNumber) {
+    emit(state.copyWith(selectedDay: dayNumber));
+  }
+
   Future<void> addToTrip({int? dayNumber, DayPeriod? period}) async {
     if (state.selectedTrip == null) return;
     emit(state.copyWith(addingStatus: ActionStatus.processing));
@@ -185,7 +193,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
       dayNumber: dayNumber,
       period: period,
     );
-
+    await Future.delayed(const Duration(seconds: 3));
     if (isClosed) return;
 
     result.when(
@@ -197,6 +205,9 @@ class AddToTripCubit extends Cubit<AddToTripState> {
             placeAlreadyInTrip: true,
             hostTripId: state.selectedTrip!.id,
             hostTripName: state.selectedTrip!.title,
+            selectedDay: null,
+            selectedItinerary: null,
+            selectedTrip: null,
           ),
         );
       },
@@ -296,33 +307,42 @@ class AddToTripCubit extends Cubit<AddToTripState> {
 
             saveItineraryResult.when(
               success: (_) async {
-                emit(state.copyWith(
-                  selectedTrip: trip,
-                  creatingStatus: ActionStatus.success,
-                ));
+                emit(
+                  state.copyWith(
+                    selectedTrip: trip,
+                    creatingStatus: ActionStatus.success,
+                  ),
+                );
                 await addToTrip();
               },
               failure: (error) {
-                emit(state.copyWith(
-                  creatingStatus: ActionStatus.error,
-                  errorMessage: 'Failed to save generated itinerary: ${error.message}',
-                ));
+                emit(
+                  state.copyWith(
+                    creatingStatus: ActionStatus.error,
+                    errorMessage:
+                        'Failed to save generated itinerary: ${error.message}',
+                  ),
+                );
               },
             );
           },
           failure: (error) {
-            emit(state.copyWith(
-              creatingStatus: ActionStatus.error,
-              errorMessage: 'Failed to generate itinerary: ${error.message}',
-            ));
+            emit(
+              state.copyWith(
+                creatingStatus: ActionStatus.error,
+                errorMessage: 'Failed to generate itinerary: ${error.message}',
+              ),
+            );
           },
         );
       },
       failure: (error) {
-        emit(state.copyWith(
-          creatingStatus: ActionStatus.error,
-          errorMessage: 'Failed to save trip draft: ${error.message}',
-        ));
+        emit(
+          state.copyWith(
+            creatingStatus: ActionStatus.error,
+            errorMessage: 'Failed to save trip draft: ${error.message}',
+          ),
+        );
       },
     );
   }
@@ -342,10 +362,12 @@ class AddToTripCubit extends Cubit<AddToTripState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(
-          flowStatus: AddToTripFlowStatus.added,
-          addingStatus: ActionStatus.success,
-        ));
+        emit(
+          state.copyWith(
+            flowStatus: AddToTripFlowStatus.added,
+            addingStatus: ActionStatus.success,
+          ),
+        );
       },
       failure: (error) {
         emit(

@@ -61,6 +61,7 @@ class CustomGradientButton extends StatelessWidget {
                 : child ??
                       Text(
                         text,
+                        textAlign: TextAlign.center,
                         style:
                             style?.copyWith(color: disabledTextColor) ??
                             context.textTheme.labelMedium?.copyWith(
