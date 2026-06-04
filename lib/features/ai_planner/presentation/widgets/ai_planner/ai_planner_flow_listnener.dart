@@ -5,9 +5,9 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
 class AiPlannerFlowListnener extends StatelessWidget {
   const AiPlannerFlowListnener({

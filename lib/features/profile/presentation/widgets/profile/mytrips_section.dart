@@ -9,9 +9,9 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
 class MyTripsSection extends StatefulWidget {
   const MyTripsSection({super.key});
@@ -64,10 +64,6 @@ class _MyTripsSectionState extends State<MyTripsSection> {
                         '${AppRoutes.tripDetails}?tripId=${trips[index].id}',
                       );
                     } else if (trips[index].status == TripStatus.draft) {
-                      print(
-                        'here===========${AppRoutes.tripDetails}?tripId=${trips[index].id}',
-                      );
-
                       if (trips[index].placePreviews.isEmpty) {
                         context.push(
                           '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',

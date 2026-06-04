@@ -3,7 +3,7 @@ import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
-import 'package:mindtrip/features/ai_planner/data/models/trip_model.dart';
+import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 
 class AppHive {
   static late Box onboardingBox;
@@ -12,6 +12,7 @@ class AppHive {
   static late Box<PlaceModel> placesCacheBox;
   static late Box<TripModel> tripsBox;
   static late Box<String> itinerariesBox;
+  static late Box planningSessionsBox;
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -44,6 +45,7 @@ class AppHive {
     placesCacheBox = await Hive.openBox('placesCacheBox');
     tripsBox = await Hive.openBox('tripsBox');
     itinerariesBox = await Hive.openBox<String>('itinerariesBox');
+    planningSessionsBox = await Hive.openBox('planning_sessions');
   }
 
   static Future<void> clearBoxes() async {
@@ -53,5 +55,6 @@ class AppHive {
     placesCacheBox.clear();
     tripsBox.clear();
     itinerariesBox.clear();
+    planningSessionsBox.clear();
   }
 }

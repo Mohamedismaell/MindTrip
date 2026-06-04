@@ -25,7 +25,7 @@ class AiPlannerState extends Equatable {
     this.destinationQuery = '',
     this.tripStart,
     this.tripEnd,
-    this.adults = 1,
+    this.adults = 0,
     this.children = 0,
     this.pets = 0,
     this.selectedBudget,

@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mindtrip/core/shared/injection/common_di.dart';
+import 'package:mindtrip/features/trips/di/trips_di.dart';
+import 'package:mindtrip/features/itinerary/di/itinerary_di.dart';
 import 'package:mindtrip/features/ai_planner/di/ai_planner_injection.dart';
 import 'package:mindtrip/features/authetication/di/auth_di.dart';
 import 'package:mindtrip/features/map/di/map_di.dart';
@@ -14,6 +16,8 @@ Future<void> initializeDependencies() async {
 
   AuthDi.init();
   OnboardingDi.init();
+  ItineraryDi.init();
+  TripsDi.init();
   AiPlannerDi.init();
   MapDi.init();
   ProfileDi.init();

@@ -2,21 +2,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/add_place_to_trip_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_in_trip_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_between_trips_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/remove_place_from_trip_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/add_place_to_trip_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_between_trips_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_in_trip_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/remove_place_from_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockTripRepository extends Mock implements TripRepository {}
+
 class MockAddPlaceToTripUseCase extends Mock implements AddPlaceToTripUseCase {}
-class MockRemovePlaceFromTripUseCase extends Mock implements RemovePlaceFromTripUseCase {}
-class MockMovePlaceInTripUseCase extends Mock implements MovePlaceInTripUseCase {}
-class MockMovePlaceBetweenTripsUseCase extends Mock implements MovePlaceBetweenTripsUseCase {}
+
+class MockRemovePlaceFromTripUseCase extends Mock
+    implements RemovePlaceFromTripUseCase {}
+
+class MockMovePlaceInTripUseCase extends Mock
+    implements MovePlaceInTripUseCase {}
+
+class MockMovePlaceBetweenTripsUseCase extends Mock
+    implements MovePlaceBetweenTripsUseCase {}
 
 void main() {
   late AddToTripCubit cubit;
@@ -50,8 +57,6 @@ void main() {
       budgetTier: 'Cheap',
       customBudget: '',
       interests: const [],
-      currentPage: 0,
-      chatMessages: const [],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       status: TripStatus.inProgress,
@@ -74,8 +79,10 @@ void main() {
     });
 
     test('init sets placeAlreadyInTrip successfully', () async {
-      when(() => mockRepo.getTripContainingPlace('place1')).thenAnswer((_) async => testTrip);
-      
+      when(
+        () => mockRepo.getTripContainingPlace('place1'),
+      ).thenAnswer((_) async => testTrip);
+
       await cubit.init();
 
       expect(cubit.state.placeAlreadyInTrip, true);

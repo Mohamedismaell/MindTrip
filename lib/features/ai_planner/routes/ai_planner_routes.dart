@@ -5,14 +5,14 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/screens/trips_screen.dart';
+import 'package:mindtrip/features/trips/presentation/screens/trip_calendar_screen.dart';
+import 'package:mindtrip/features/itinerary/presentation/screens/trip_details_screen.dart';
+import 'package:mindtrip/features/itinerary/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_chat_screen.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_flow_screen.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_intro_screen.dart';
-import 'package:mindtrip/features/ai_planner/presentation/screens/my_trips_screen.dart';
-import 'package:mindtrip/features/ai_planner/presentation/screens/trip_calendar_screen.dart';
-import 'package:mindtrip/features/ai_planner/presentation/screens/trip_details_screen.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
 
 class AiPlannerRoutes {
   static final aiPlannerRoute = GoRoute(
@@ -37,7 +37,7 @@ class AiPlannerRoutes {
       routes: [
         AppTransitionRoute.fadeSlide(
           path: AppRoutes.myTrips,
-          page: const MyTripsScreen(),
+          page: const TripsScreen(),
         ),
 
         GoRoute(

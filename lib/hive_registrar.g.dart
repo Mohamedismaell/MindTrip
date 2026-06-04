@@ -7,7 +7,7 @@ import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
-import 'package:mindtrip/features/ai_planner/data/models/trip_model.dart';
+import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {

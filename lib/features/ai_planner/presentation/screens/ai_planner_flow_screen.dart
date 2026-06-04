@@ -6,7 +6,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_planner_flow_listnener.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/animated_progress_bar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/budget_step.dart';
@@ -85,14 +85,21 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     if (trip == null || !mounted) return;
 
     if (!_plannerCubit.isClosed) _plannerCubit.loadFromTrip(trip);
-    if (!_chatCubit.isClosed) _chatCubit.loadMessages(trip.chatMessages);
+
+    if (_plannerCubit.isClosed) return;
+    final session = await _plannerCubit.loadSession(tripId);
+
+    if (_chatCubit.isClosed) return;
+    if (session != null && session.chatMessages.isNotEmpty) {
+      _chatCubit.loadMessages(session.chatMessages);
+    }
 
     _destinationController.text = trip.destination;
     _customBudgetController.text = trip.customBudget;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
-        _pageController.jumpToPage(trip.currentPage);
+        _pageController.jumpToPage(_plannerCubit.state.currentPage);
       }
     });
   }
@@ -108,37 +115,35 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
 
   Future<void> _handleBack(bool isLeaving) async {
     if (_plannerCubit.isClosed) return;
+
     if (_plannerCubit.state.currentPage == 0 || isLeaving) {
       await _autoSave();
       if (mounted) context.pop();
       return;
     }
     _plannerCubit.previousPage();
-    _autoSave();
+    await _autoSave();
   }
 
-  void _onStepCompleted() {
+  Future<void> _onStepCompleted() async {
     if (_plannerCubit.isClosed) return;
+
     if (_plannerCubit.state.currentPage < 4) {
       _plannerCubit.nextPage();
-      _autoSave();
+      await _autoSave();
     } else {
       _finishPlanning();
     }
   }
 
   Future<void> _autoSave() async {
-    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed) {
-      return;
-    }
+    if (_tripsCubit.isClosed || _plannerCubit.isClosed) return;
 
     final plannerState = _plannerCubit.state;
     if (plannerState.selectedDestination == null ||
         plannerState.selectedDestination!.isEmpty) {
       return;
     }
-
-    final chatMessages = _chatCubit.state.messages;
 
     if (_activeTripId == null) {
       //* First time need to create a draft
@@ -149,19 +154,28 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
       _activeTripId = newId;
     }
 
-    final snapshot = _plannerCubit.toTripSnapshot(
-      chatMessages,
-      tripId: _activeTripId!,
-    );
+    final snapshot = _plannerCubit.toTripSnapshot(tripId: _activeTripId!);
     await _tripsCubit.saveTripDraft(snapshot);
+
+    if (_plannerCubit.isClosed || _chatCubit.isClosed) return;
+    // Single writer: pass current chat state into session
+    await _plannerCubit.saveCurrentSession(
+      chatMessages: _chatCubit.state.messages,
+      tripId: _activeTripId,
+    );
   }
 
   Future<void> _finishPlanning() async {
-    if (_plannerCubit.isClosed || _tripsCubit.isClosed || _chatCubit.isClosed) {
+    if (_tripsCubit.isClosed || _plannerCubit.isClosed) {
       return;
     }
     _plannerCubit.markReadyToGenerate();
     await _autoSave();
+
+    if (_tripsCubit.isClosed || _plannerCubit.isClosed) return;
+
+    // Session cleanup: the planning chat has no value after generation starts.
+    await _plannerCubit.clearSession(tripId: _activeTripId);
 
     if (_activeTripId == null) {
       if (mounted) context.pop();

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 enum AddToTripFlowStatus {
   initial,

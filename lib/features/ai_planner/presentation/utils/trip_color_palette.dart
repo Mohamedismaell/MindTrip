@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart' hide DayPeriod;
-import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
+import 'package:flutter/material.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 
 class TripColors {
   final Color edge;
@@ -34,13 +34,13 @@ class TripColorPalette {
     fill: Color(0xFFEDE9FE),
   );
 
-  static TripColors getPeriodColors(DayPeriod period) {
+  static TripColors getPeriodColors(PlaceDayPeriod period) {
     switch (period) {
-      case DayPeriod.morning:
+      case PlaceDayPeriod.morning:
         return morningColors;
-      case DayPeriod.afternoon:
+      case PlaceDayPeriod.afternoon:
         return afternoonColors;
-      case DayPeriod.evening:
+      case PlaceDayPeriod.evening:
         return eveningColors;
     }
   }

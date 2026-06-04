@@ -16,10 +16,10 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_message_bubble.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_suggestion_chips.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_typing_indicator.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
 //Todo Bug with float button wrong nav route
 class AiPlannerChatScreen extends StatefulWidget {
@@ -197,8 +197,8 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
       pets: 0,
       customBudget: metadata?['budget'] as String? ?? '',
       interests: (metadata?['interests'] as List?)?.cast<String>() ?? const [],
-      currentPage: 5,
-      chatMessages: messages,
+      // currentPage: 5,
+      // chatMessages: messages,
     );
 
     await tripsCubit.saveTripDraft(snapshot);

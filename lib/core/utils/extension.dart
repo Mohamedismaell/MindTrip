@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_state.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 import '../theme/cubit/theme_cubit.dart';
 
 extension ThemeContextX on BuildContext {

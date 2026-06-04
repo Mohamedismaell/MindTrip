@@ -1,16 +1,69 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/planning_session.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/delete_planning_session_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/get_planning_session_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/save_planning_session_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
 
 import 'ai_planner_state.dart';
 
 class AiPlannerCubit extends Cubit<AiPlannerState> {
-  AiPlannerCubit() : super(AiPlannerState(focusedDay: DateTime.now()));
+  final GetPlanningSessionUseCase _getPlanningSessionUseCase;
+  final SavePlanningSessionUseCase _savePlanningSessionUseCase;
+  final DeletePlanningSessionUseCase _deletePlanningSessionUseCase;
+
+  AiPlannerCubit(
+    this._getPlanningSessionUseCase,
+    this._savePlanningSessionUseCase,
+    this._deletePlanningSessionUseCase,
+  ) : super(AiPlannerState(focusedDay: DateTime.now()));
 
   void reset() {
     emit(AiPlannerState(focusedDay: DateTime.now()));
+  }
+
+  Future<PlanningSession?> loadSession(String tripId) async {
+    final result = await _getPlanningSessionUseCase(tripId);
+    return result.when(
+      success: (session) {
+        if (session != null) {
+          emit(
+            state.copyWith(
+              tripId: session.id,
+              currentPage: session.currentPage,
+              maxReachedPage: session.currentPage,
+            ),
+          );
+        }
+        return session;
+      },
+      failure: (_) => null,
+    );
+  }
+
+  Future<void> saveCurrentSession({
+    List<ChatMessage> chatMessages = const [],
+    String? tripId,
+  }) async {
+    final id = tripId ?? state.tripId;
+    if (id == null) return;
+
+    final session = PlanningSession(
+      id: id,
+      currentPage: state.currentPage,
+      chatMessages: chatMessages,
+      updatedAt: DateTime.now(),
+    );
+    await _savePlanningSessionUseCase(session);
+  }
+
+  Future<void> clearSession({String? tripId}) async {
+    final id = tripId ?? state.tripId;
+    if (id == null) return;
+    await _deletePlanningSessionUseCase(id);
   }
 
   void loadFromTrip(Trip trip) {
@@ -26,8 +79,6 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     emit(
       state.copyWith(
         tripId: trip.id,
-        currentPage: trip.currentPage > 4 ? 4 : trip.currentPage,
-        maxReachedPage: trip.currentPage,
         selectedDestination: trip.destination,
         destinationQuery: trip.destination,
         tripStart: trip.tripStart,
@@ -46,10 +97,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     emit(state.copyWith(maxReachedPage: 5));
   }
 
-  Trip toTripSnapshot(
-    List<ChatMessage> chatMessages, {
-    required String tripId,
-  }) {
+  Trip toTripSnapshot({required String tripId}) {
     return Trip(
       id: tripId,
       title: 'Trip to ${state.selectedDestination ?? 'Unknown'}',
@@ -65,8 +113,6 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
       budgetTier: state.selectedBudget?.title,
       customBudget: state.customBudget,
       interests: state.selectedInterests,
-      currentPage: state.maxReachedPage,
-      chatMessages: chatMessages,
     );
   }
 

@@ -1,19 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/add_place_to_trip_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_between_trips_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/move_place_in_trip_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/remove_place_from_trip_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/get_all_trips_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/get_itinerary_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/get_trip_containing_place_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/get_trip_by_id_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/save_trip_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/generate_itinerary_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/save_itinerary_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/add_place_to_trip_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/generate_itinerary_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/get_itinerary_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_between_trips_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_in_trip_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/remove_place_from_trip_use_case.dart';
+import 'package:mindtrip/features/itinerary/domain/use_cases/save_itinerary_use_case.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/get_all_trips_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/get_trip_by_id_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/get_trip_containing_place_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/save_trip_use_case.dart';
 import 'package:uuid/uuid.dart';
 
 class AddToTripCubit extends Cubit<AddToTripState> {
@@ -183,7 +183,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     emit(state.copyWith(selectedDay: dayNumber));
   }
 
-  Future<void> addToTrip({int? dayNumber, DayPeriod? period}) async {
+  Future<void> addToTrip({int? dayNumber, PlaceDayPeriod? period}) async {
     if (state.selectedTrip == null) return;
     emit(state.copyWith(addingStatus: ActionStatus.processing));
 
@@ -288,8 +288,6 @@ class AddToTripCubit extends Cubit<AddToTripState> {
       budgetTier: budgetTier,
       customBudget: '',
       interests: const [],
-      currentPage: 4,
-      chatMessages: const [],
     );
 
     final saveResult = await _saveTrip(trip);
@@ -347,7 +345,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  Future<void> moveToDay(int toDayNumber, DayPeriod toPeriod) async {
+  Future<void> moveToDay(int toDayNumber, PlaceDayPeriod toPeriod) async {
     if (state.hostTripId == null) return;
     emit(state.copyWith(addingStatus: ActionStatus.processing));
 
@@ -383,7 +381,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
   Future<void> moveToAnotherTrip(
     Trip targetTrip,
     int toDayNumber,
-    DayPeriod toPeriod,
+    PlaceDayPeriod toPeriod,
   ) async {
     if (state.hostTripId == null) return;
     emit(state.copyWith(addingStatus: ActionStatus.processing));

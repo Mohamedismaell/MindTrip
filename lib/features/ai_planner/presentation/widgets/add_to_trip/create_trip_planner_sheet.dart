@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
@@ -10,6 +8,7 @@ import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
 import 'package:intl/intl.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/range_calendar.dart';
 
 class CreateTripPlannerSheet extends StatefulWidget {
   const CreateTripPlannerSheet({super.key});
@@ -96,221 +95,182 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
           );
         }
       },
-      child: Container(
-        padding: EdgeInsets.only(
-          left: 24.w,
-          right: 24.w,
-          top: 20.h,
-          bottom: 24.h,
-        ),
-        decoration: BoxDecoration(
-          color: context.colorTheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 48.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLightGray,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 48.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLightGray,
+                borderRadius: BorderRadius.circular(2),
               ),
-              SizedBox(height: 24.h),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        context.read<AddToTripCubit>().backToSelectTrip();
-                      },
-                    ),
+            ),
+            SizedBox(height: 24.h),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      context.read<AddToTripCubit>().backToSelectTrip();
+                    },
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 48.w),
-                    child: Text(
-                      'Quick AI Trip Planning',
-                      style: AppTextStyles.h7Bold.copyWith(
-                        color: context.colorTheme.onSurface,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 48.w),
+                  child: Text(
+                    'Quick AI Trip Planning',
+                    style: AppTextStyles.h6Bold.copyWith(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 6.h),
+            Text(
+              'This is a quick overview. For a detailed itinerary. ',
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.colorTheme.outline,
+              ),
+            ),
+            SizedBox(height: 33.h),
+            _SectionCard(
+              title: 'Duration',
+              child: Column(
+                children: [
+                  _DateField(
+                    label: 'Start date :',
+                    value: _startDate != null
+                        ? _dateFormat.format(_startDate!)
+                        : null,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => RangeCalendar(),
+                      );
+                    },
+                  ),
+                  Divider(height: 1, color: context.colorTheme.outlineVariant),
+                  _DateField(
+                    label: 'End date :',
+                    value: _endDate != null
+                        ? _dateFormat.format(_endDate!)
+                        : null,
+                    onTap: () => _pickDate(isStart: false),
                   ),
                 ],
               ),
-              SizedBox(height: 6.h),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: context.textTheme.bodySmall?.copyWith(
-                    color: context.colorTheme.onSurfaceVariant,
-                  ),
-                  children: [
-                    const TextSpan(
-                      text:
-                          'This is a quick overview. For a detailed itinerary,\nreturn to the ',
+            ),
+            SizedBox(height: 16.h),
+            _SectionCard(
+              title: 'Budget',
+              child: Wrap(
+                spacing: 8.w,
+                children: _budgetOptions.map((b) {
+                  final selected = _selectedBudget == b;
+                  return ChoiceChip(
+                    label: Text(b),
+                    selected: selected,
+                    onSelected: (_) => setState(() => _selectedBudget = b),
+                    selectedColor: AppColors.primaryLightBlue1,
+                    labelStyle: context.textTheme.bodyMedium?.copyWith(
+                      color: selected
+                          ? AppColors.primaryBlue
+                          : context.colorTheme.onSurface,
+                      fontWeight: selected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.baseline,
-                      baseline: TextBaseline.alphabetic,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.go(AppRoutes.aiPlannerIntro);
-                        },
-                        child: Text(
-                          'AI trip planner',
-                          style: context.textTheme.bodySmall?.copyWith(
-                            color: AppColors.primaryBlue,
-                            decoration: TextDecoration.underline,
-                            decorationColor: AppColors.primaryBlue,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const TextSpan(text: '.'),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24.h),
-              _SectionCard(
-                title: 'Duration',
-                child: Column(
-                  children: [
-                    _DateField(
-                      label: 'Start date :',
-                      value: _startDate != null
-                          ? _dateFormat.format(_startDate!)
-                          : null,
-                      onTap: () => _pickDate(isStart: true),
-                    ),
-                    Divider(
-                      height: 1,
-                      color: context.colorTheme.outlineVariant,
-                    ),
-                    _DateField(
-                      label: 'End date :',
-                      value: _endDate != null
-                          ? _dateFormat.format(_endDate!)
-                          : null,
-                      onTap: () => _pickDate(isStart: false),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.h),
-              _SectionCard(
-                title: 'Budget',
-                child: Wrap(
-                  spacing: 8.w,
-                  children: _budgetOptions.map((b) {
-                    final selected = _selectedBudget == b;
-                    return ChoiceChip(
-                      label: Text(b),
-                      selected: selected,
-                      onSelected: (_) => setState(() => _selectedBudget = b),
-                      selectedColor: AppColors.primaryLightBlue1,
-                      labelStyle: context.textTheme.bodyMedium?.copyWith(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(
                         color: selected
                             ? AppColors.primaryBlue
-                            : context.colorTheme.onSurface,
-                        fontWeight: selected
-                            ? FontWeight.w600
-                            : FontWeight.normal,
+                            : context.colorTheme.outline,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(
-                          color: selected
-                              ? AppColors.primaryBlue
-                              : context.colorTheme.outline,
-                        ),
-                      ),
-                      backgroundColor: context.colorTheme.surface,
-                      showCheckmark: false,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8.w,
-                        vertical: 4.h,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(height: 16.h),
-              _SectionCard(
-                title: 'Number of people',
-                child: TextField(
-                  controller: _peopleController,
-                  keyboardType: TextInputType.number,
-                  style: context.textTheme.bodyLarge,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 4.h),
-                    hintText: '1',
-                    hintStyle: context.textTheme.bodyLarge?.copyWith(
-                      color: context.colorTheme.onSurfaceVariant,
                     ),
+                    backgroundColor: context.colorTheme.surface,
+                    showCheckmark: false,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 4.h,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            _SectionCard(
+              title: 'Number of people',
+              child: TextField(
+                controller: _peopleController,
+                keyboardType: TextInputType.number,
+                style: context.textTheme.bodyLarge,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                  hintText: '1',
+                  hintStyle: context.textTheme.bodyLarge?.copyWith(
+                    color: context.colorTheme.onSurfaceVariant,
                   ),
                 ),
               ),
-              SizedBox(height: 28.h),
-              BlocBuilder<AddToTripCubit, AddToTripState>(
-                builder: (context, state) {
-                  final isLoading =
-                      state.creatingStatus == ActionStatus.processing ||
-                      state.addingStatus == ActionStatus.processing;
+            ),
+            SizedBox(height: 28.h),
+            BlocBuilder<AddToTripCubit, AddToTripState>(
+              builder: (context, state) {
+                final isLoading =
+                    state.creatingStatus == ActionStatus.processing ||
+                    state.addingStatus == ActionStatus.processing;
 
-                  return SizedBox(
-                    width: double.infinity,
-                    height: 56.h,
-                    child: ElevatedButton(
-                      onPressed: isLoading ? null : () => _onGenerate(context),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
+                return SizedBox(
+                  width: double.infinity,
+                  height: 56.h,
+                  child: ElevatedButton(
+                    onPressed: isLoading ? null : () => _onGenerate(context),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
                       ),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          gradient: isLoading
-                              ? null
-                              : AppColors.blueLightGradient,
-                          color: isLoading ? AppColors.primaryLightGray : null,
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        child: Center(
-                          child: isLoading
-                              ? SizedBox(
-                                  width: 24.r,
-                                  height: 24.r,
-                                  child: const CircularProgressIndicator(
-                                    color: AppColors.primaryBlue,
-                                    strokeWidth: 2.5,
-                                  ),
-                                )
-                              : Text(
-                                  'Generate Plan',
-                                  style: AppTextStyles.h9Bold.copyWith(
-                                    color: AppColors.pureWhite,
-                                  ),
+                      padding: EdgeInsets.zero,
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        gradient: isLoading
+                            ? null
+                            : AppColors.blueLightGradient,
+                        color: isLoading ? AppColors.primaryLightGray : null,
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      child: Center(
+                        child: isLoading
+                            ? SizedBox(
+                                width: 24.r,
+                                height: 24.r,
+                                child: const CircularProgressIndicator(
+                                  color: AppColors.primaryBlue,
+                                  strokeWidth: 2.5,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                'Generate Plan',
+                                style: AppTextStyles.h9Bold.copyWith(
+                                  color: AppColors.pureWhite,
+                                ),
+                              ),
                       ),
                     ),
-                  );
-                },
-              ),
-            ],
-          ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -327,21 +287,16 @@ class _SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(10.r),
       decoration: BoxDecoration(
         border: Border.all(color: context.colorTheme.outlineVariant),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: AppTextStyles.h9Bold.copyWith(
-              color: context.colorTheme.onSurface,
-            ),
-          ),
-          SizedBox(height: 12.h),
+          Text(title, style: AppTextStyles.h7Bold),
+          SizedBox(height: 10.h),
           child,
         ],
       ),

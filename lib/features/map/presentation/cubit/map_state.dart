@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
 
 import '../../../../core/shared/domain/entities/place_entity.dart';
-import '../../../ai_planner/domain/entities/trip_day.dart';
 import '../../domain/entities/google_place.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 
