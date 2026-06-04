@@ -116,7 +116,7 @@ class _CreateTripPlannerSheetState extends State<CreateTripPlannerSheet> {
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      context.read<AddToTripCubit>().backToSelectTrip();
+                      context.read<AddToTripCubit>().handleBack();
                     },
                   ),
                 ),

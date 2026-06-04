@@ -11,6 +11,7 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/se
 
 class AddToTripFlowWrapper extends StatelessWidget {
   const AddToTripFlowWrapper({super.key});
+  // final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -23,22 +24,19 @@ class AddToTripFlowWrapper extends StatelessWidget {
       },
       builder: (context, state) {
         final canPopInternally =
-            state.flowStatus == AddToTripFlowStatus.selectDay ||
-            state.flowStatus == AddToTripFlowStatus.creatingNew ||
-            (state.flowStatus == AddToTripFlowStatus.selectTrip &&
-                state.placeAlreadyInTrip);
+            state.flowStatus != AddToTripFlowStatus.initial &&
+            state.flowStatus != AddToTripFlowStatus.selectTrip &&
+            state.flowStatus != AddToTripFlowStatus.managing;
+
+        // Special case: if we are in selectTrip but managing, we should allow internal pop to go back to manage
+        final shouldHandleInternally = canPopInternally || 
+            (state.flowStatus == AddToTripFlowStatus.selectTrip && state.placeAlreadyInTrip);
 
         return PopScope(
-          canPop: !canPopInternally,
+          canPop: !shouldHandleInternally,
           onPopInvokedWithResult: (didPop, result) {
             if (didPop) return;
-            if (state.flowStatus == AddToTripFlowStatus.selectDay ||
-                state.flowStatus == AddToTripFlowStatus.creatingNew) {
-              context.read<AddToTripCubit>().backToSelectTrip();
-            } else if (state.flowStatus == AddToTripFlowStatus.selectTrip &&
-                state.placeAlreadyInTrip) {
-              context.read<AddToTripCubit>().openManage();
-            }
+            context.read<AddToTripCubit>().handleBack();
           },
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
@@ -71,9 +69,15 @@ class AddToTripFlowWrapper extends StatelessWidget {
         return const ManagePlaceSheet(key: ValueKey('managing'));
       case AddToTripFlowStatus.selectTrip:
       case AddToTripFlowStatus.initial:
-        return const AddToTripSheet(key: ValueKey('select_trip'));
+        return AddToTripSheet(
+          key: const ValueKey('select_trip'),
+          // scrollController: scrollController,
+        );
       case AddToTripFlowStatus.selectDay:
-        return const SelectDaySheet(key: ValueKey('select_day'));
+        return SelectDaySheet(
+          key: const ValueKey('select_day'),
+          // scrollController: scrollController,
+        );
       case AddToTripFlowStatus.creatingNew:
         return const CreateTripPlannerSheet(key: ValueKey('creating_new'));
       case AddToTripFlowStatus.added:

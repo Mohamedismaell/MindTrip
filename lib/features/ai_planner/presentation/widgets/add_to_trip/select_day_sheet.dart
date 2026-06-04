@@ -13,20 +13,23 @@ import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 
 class SelectDaySheet extends StatelessWidget {
-  const SelectDaySheet({super.key});
+  const SelectDaySheet({super.key, this.scrollController});
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listener: (context, state) {
-        if (state.addingStatus == ActionStatus.processing) {
+        if (state.itineraryStatus == TripsLoadStatus.loading ||
+            state.addingStatus == ActionStatus.processing ||
+            state.creatingStatus == ActionStatus.processing) {
           AppDialog.showLoading(
             context: context,
-            title: 'Adding to trip',
-            description:
-                'Please wait while our AI works its magic to create the perfect trip plan tailored to your preferences.',
+            title: state.loadingTitle,
+            description: state.loadingDescription,
           );
         } else {
           AppDialog.hideLoading(context);
@@ -40,15 +43,10 @@ class SelectDaySheet extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        // if (state.selectedTrip == null || state.selectedItinerary == null) {
-        //   return const SizedBox.shrink();
-        // }
-
         final tripTitle = state.selectedTrip!.title;
         final itinerary = state.selectedItinerary!;
 
         return Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             const DragDivider(),
             SizedBox(height: 16.h),
@@ -60,7 +58,7 @@ class SelectDaySheet extends StatelessWidget {
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      context.read<AddToTripCubit>().backToSelectTrip();
+                      context.read<AddToTripCubit>().handleBack();
                     },
                   ),
                 ),
@@ -91,99 +89,146 @@ class SelectDaySheet extends StatelessWidget {
             SizedBox(height: 30.h),
             Expanded(
               child: ListView.builder(
+                controller: scrollController,
                 itemCount: itinerary.days.length,
                 itemBuilder: (context, index) {
                   final day = itinerary.days[index];
                   final places = day.timeSlots
                       .expand((slot) => slot.places)
                       .toList();
-                  final isDaySelected = day.dayNumber == state.selectedDay;
-                  return TapScaleEffect(
-                    onTap: () =>
-                        context.read<AddToTripCubit>().selectDay(day.dayNumber),
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 24.h),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 5.w,
-                        vertical: 10.h,
+                  final isDaySelected =
+                      day.dayNumber == state.selectedDay &&
+                      state.selectedPeriod != null;
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 24.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5.w,
+                      vertical: 10.h,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: isDaySelected
+                            ? context.colorTheme.primary
+                            : context.colorTheme.outline,
+                        width: isDaySelected ? 1.5 : 1,
                       ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: isDaySelected
-                              ? context.colorTheme.primary
-                              : context.colorTheme.outline,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              size: 20.r,
+                              color: AppColors.pureBlack,
+                            ),
+                            SizedBox(width: 12.w),
+                            Text(
+                              'Day ${day.dayNumber}',
+                              style: context.textTheme.bodyLarge,
+                            ),
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_today,
-                                size: 20.r,
-                                color: AppColors.pureBlack,
-                              ),
-                              SizedBox(width: 12.w),
-                              Text(
-                                'Day ${day.dayNumber}',
-                                style: context.textTheme.bodyLarge,
-                              ),
-                            ],
-                          ),
-                          if (places.isNotEmpty) ...[
-                            SizedBox(height: 12.h),
-                            ...places
-                                .take(2)
-                                .map(
-                                  (place) => Padding(
+                        SizedBox(height: 16.h),
+                        Row(
+                          children: PlaceDayPeriod.values.map((period) {
+                            final isSelected =
+                                state.selectedDay == day.dayNumber &&
+                                state.selectedPeriod == period;
+                            return Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: TapScaleEffect(
+                                  onTap: () => context
+                                      .read<AddToTripCubit>()
+                                      .selectPeriod(day.dayNumber, period),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(microseconds: 250),
+                                    curve: Curves.easeInOutCubic,
                                     padding: EdgeInsets.symmetric(
                                       horizontal: 10.w,
-                                      vertical: 2,
+                                      vertical: 2.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? context.colorTheme.primary
+                                          : context.colorTheme.surface,
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? context.colorTheme.primary
+                                            : context.colorTheme.outline,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.r),
                                     ),
                                     child: Text(
-                                      "• ${place.name}",
-                                      style: context.textTheme.bodyMedium
-                                          ?.copyWith(
-                                            color: context
-                                                .colorTheme
-                                                .onSurfaceVariant,
-                                          ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                      period.name.capitalize(),
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.h9SemiBold.copyWith(
+                                        color: isSelected
+                                            ? Colors.white
+                                            : context.colorTheme.onSurface,
+                                      ),
                                     ),
                                   ),
                                 ),
-                            if (places.length > 2)
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10.w,
-                                  vertical: 4,
-                                ),
-                                child: Text(
-                                  '+${places.length - 2} more places',
-                                  style: context.textTheme.bodyMedium?.copyWith(
-                                    color: context.colorTheme.outline,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        if (places.isNotEmpty) ...[
+                          SizedBox(height: 16.h),
+                          ...places
+                              .take(2)
+                              .map(
+                                (place) => Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w,
+                                    vertical: 2.h,
+                                  ),
+                                  child: Text(
+                                    "• ${place.name}",
+                                    style: context.textTheme.bodySmall
+                                        ?.copyWith(
+                                          color: context
+                                              .colorTheme
+                                              .onSurfaceVariant,
+                                        ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
-                            SizedBox(height: 12.h),
+                          if (places.length > 2)
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 10.w,
-                                vertical: 4,
+                                horizontal: 8.w,
+                                vertical: 2.h,
                               ),
                               child: Text(
-                                'Includes ${day.stopCount} places',
-                                style: context.textTheme.labelLarge?.copyWith(
-                                  color: AppColors.pureBlack,
+                                '+${places.length - 2} more places',
+                                style: context.textTheme.bodySmall?.copyWith(
+                                  color: context.colorTheme.outline,
+                                  fontStyle: FontStyle.italic,
                                 ),
                               ),
                             ),
-                          ],
+                          SizedBox(height: 12.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 2.h,
+                            ),
+                            child: Text(
+                              'Includes ${day.stopCount} places',
+                              style: context.textTheme.labelSmall?.copyWith(
+                                color: context.colorTheme.outline,
+                              ),
+                            ),
+                          ),
                         ],
-                      ),
+                      ],
                     ),
                   );
                 },
@@ -193,7 +238,8 @@ class SelectDaySheet extends StatelessWidget {
             SizedBox(height: 16.h),
             TapScaleEffect(
               onTap: () {
-                context.read<AddToTripCubit>().addToTrip(); // Let AI decide
+                // Let AI decide
+                context.read<AddToTripCubit>().addToTrip();
               },
               child: Container(
                 width: double.infinity,
@@ -245,8 +291,26 @@ class SelectDaySheet extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 30.w),
               child: CustomGradientButton(
                 width: double.infinity,
-                text: 'Add',
-                onTap: state.selectedDay != null
+                text: state.placeAlreadyInTrip ? 'Move' : 'Add',
+                onTap: state.placeAlreadyInTrip
+                    ? () {
+                        final isDifferentTrip =
+                            state.selectedTrip?.id != state.hostTripId;
+                        if (isDifferentTrip) {
+                          context.read<AddToTripCubit>().moveToAnotherTrip(
+                            state.selectedTrip!,
+                            state.selectedDay!,
+                            state.selectedPeriod!,
+                          );
+                        } else {
+                          context.read<AddToTripCubit>().moveToDay(
+                            toDayNumber: state.selectedDay!,
+                            toPeriod: state.selectedPeriod!,
+                          );
+                        }
+                      }
+                    : (state.selectedDay != null &&
+                          state.selectedPeriod != null)
                     ? () {
                         context.read<AddToTripCubit>().addToTrip();
                       }

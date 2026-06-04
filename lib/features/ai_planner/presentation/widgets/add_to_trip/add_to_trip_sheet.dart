@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
@@ -13,11 +14,25 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/dr
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AddToTripSheet extends StatelessWidget {
-  const AddToTripSheet({super.key});
+  const AddToTripSheet({super.key, this.scrollController});
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddToTripCubit, AddToTripState>(
+    return BlocConsumer<AddToTripCubit, AddToTripState>(
+      listener: (context, state) {
+        if (state.itineraryStatus == TripsLoadStatus.loading ||
+            state.addingStatus == ActionStatus.processing ||
+            state.creatingStatus == ActionStatus.processing) {
+          AppDialog.showLoading(
+            context: context,
+            title: state.loadingTitle,
+            description: state.loadingDescription,
+          );
+        } else {
+          AppDialog.hideLoading(context);
+        }
+      },
       builder: (context, state) {
         if (state.tripsStatus == TripsLoadStatus.error) {
           //Todo change the ui
@@ -36,9 +51,28 @@ class AddToTripSheet extends StatelessWidget {
           children: [
             DragDivider(),
             SizedBox(height: 25.h),
-            Text(
-              'Add to a Trip',
-              style: AppTextStyles.h6Bold.copyWith(color: AppColors.pureBlack),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                if (state.placeAlreadyInTrip)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        context.read<AddToTripCubit>().handleBack();
+                      },
+                    ),
+                  ),
+                Text(
+                  state.placeAlreadyInTrip
+                      ? 'Move to another Trip'
+                      : 'Add to a Trip',
+                  style: AppTextStyles.h6Bold.copyWith(
+                    color: AppColors.pureBlack,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 8.h),
             Text(
@@ -52,6 +86,7 @@ class AddToTripSheet extends StatelessWidget {
               child: Skeletonizer(
                 enabled: state.tripsStatus == TripsLoadStatus.loading,
                 child: ListView.separated(
+                  controller: scrollController,
                   physics: const BouncingScrollPhysics(),
                   itemCount:
                       state.trips.isEmpty &&
@@ -87,8 +122,10 @@ class AddToTripSheet extends StatelessWidget {
                       subtitle:
                           '${trip.durationDays} days · $placesCount places',
                       imagePath: coverImage,
-                      onTap: () =>
-                          context.read<AddToTripCubit>().selectTrip(trip),
+                      onTap: () => context.read<AddToTripCubit>().selectTrip(
+                        trip,
+                        comeFromSelection: true,
+                      ),
                     );
                   },
                 ),

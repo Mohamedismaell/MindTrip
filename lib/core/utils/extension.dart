@@ -3,6 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 import '../theme/cubit/theme_cubit.dart';
 
+extension StringCasingExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
 extension ThemeContextX on BuildContext {
   ThemeState get themeState => watch<ThemeCubit>().state;
 

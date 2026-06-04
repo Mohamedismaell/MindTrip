@@ -101,12 +101,60 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  void backToSelectTrip() {
+  //  Navigation Methods
+
+  void startFlow() {
+    if (state.hostTripId != null) {
+      goToManagement();
+    } else {
+      goToTripSelection();
+    }
+  }
+
+  void handleBack() {
+    if (state.flowStatus == AddToTripFlowStatus.selectDay) {
+      if (state.comeFromSelection) {
+        goToTripSelection();
+      } else {
+        goToManagement();
+      }
+      return;
+    }
+
+    if (state.hostTripId != null) {
+      goToManagement();
+    } else {
+      goToTripSelection();
+    }
+  }
+
+  void goToManagement() {
     emit(
       state.copyWith(
-        flowStatus: AddToTripFlowStatus.selectTrip,
-        selectedItinerary: null,
+        flowStatus: AddToTripFlowStatus.managing,
+        // Keep host info
+        clearHostTrip: false,
+      ),
+    );
+    _clearSelectionMetadata();
+  }
+
+  void goToTripSelection() {
+    emit(state.copyWith(flowStatus: AddToTripFlowStatus.selectTrip));
+    _clearSelectionMetadata();
+    loadTrips();
+  }
+
+  void _clearSelectionMetadata() {
+    emit(
+      state.copyWith(
         selectedTrip: null,
+        selectedItinerary: null,
+        selectedDay: null,
+        selectedPeriod: null,
+        itineraryStatus: TripsLoadStatus.initial,
+        addingStatus: ActionStatus.initial,
+        comeFromSelection: false,
       ),
     );
   }
@@ -122,11 +170,18 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         emit(
           state.copyWith(
             tripsStatus: TripsLoadStatus.loaded,
-            flowStatus: state.flowStatus == AddToTripFlowStatus.initial
+            flowStatus:
+                state.flowStatus == AddToTripFlowStatus.initial ||
+                    state.flowStatus == AddToTripFlowStatus.managing ||
+                    state.flowStatus == AddToTripFlowStatus.added
                 ? AddToTripFlowStatus.selectTrip
                 : state.flowStatus,
             trips: trips
-                .where((t) => t.status != TripStatus.completed)
+                .where(
+                  (t) =>
+                      t.status != TripStatus.completed &&
+                      t.status != TripStatus.draft,
+                )
                 .toList(),
           ),
         );
@@ -142,18 +197,18 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  Future<void> selectTrip(Trip trip) async {
-    emit(state.copyWith(addingStatus: ActionStatus.processing));
+  Future<void> selectTrip(Trip trip, {bool? comeFromSelection}) async {
+    emit(state.copyWith(itineraryStatus: TripsLoadStatus.loading));
 
     final result = await _getItinerary(trip.id);
     if (isClosed) return;
-
+    await Future.delayed(const Duration(seconds: 2));
     result.when(
       success: (itinerary) {
         if (itinerary == null) {
           emit(
             state.copyWith(
-              addingStatus: ActionStatus.error,
+              itineraryStatus: TripsLoadStatus.error,
               errorMessage: 'Itinerary not found',
             ),
           );
@@ -162,16 +217,17 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         emit(
           state.copyWith(
             flowStatus: AddToTripFlowStatus.selectDay,
-            addingStatus: ActionStatus.initial,
+            itineraryStatus: TripsLoadStatus.loaded,
             selectedTrip: trip,
             selectedItinerary: itinerary,
+            comeFromSelection: comeFromSelection ?? state.comeFromSelection,
           ),
         );
       },
       failure: (error) {
         emit(
           state.copyWith(
-            addingStatus: ActionStatus.error,
+            itineraryStatus: TripsLoadStatus.error,
             errorMessage: 'Failed to load itinerary: ${error.message}',
           ),
         );
@@ -179,8 +235,8 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  void selectDay(int dayNumber) {
-    emit(state.copyWith(selectedDay: dayNumber));
+  void selectPeriod(int dayNumber, PlaceDayPeriod period) {
+    emit(state.copyWith(selectedDay: dayNumber, selectedPeriod: period));
   }
 
   Future<void> addToTrip({int? dayNumber, PlaceDayPeriod? period}) async {
@@ -190,8 +246,8 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     final result = await _addPlaceUseCase(
       tripId: state.selectedTrip!.id,
       place: state.place,
-      dayNumber: dayNumber,
-      period: period,
+      dayNumber: dayNumber ?? state.selectedDay,
+      period: period ?? state.selectedPeriod,
     );
     await Future.delayed(const Duration(seconds: 3));
     if (isClosed) return;
@@ -258,7 +314,43 @@ class AddToTripCubit extends Cubit<AddToTripState> {
   }
 
   void openManage() {
-    emit(state.copyWith(flowStatus: AddToTripFlowStatus.managing));
+    goToManagement();
+  }
+
+  Future<void> goToDaySelection() async {
+    if (state.hostTripId == null) return;
+    emit(
+      state.copyWith(
+        itineraryStatus: TripsLoadStatus.loading,
+        comeFromSelection: false,
+      ),
+    );
+
+    final result = await _getTripById(state.hostTripId!);
+    if (isClosed) return;
+    await Future.delayed(const Duration(seconds: 2));
+    result.when(
+      success: (trip) async {
+        if (trip != null) {
+          await selectTrip(trip, comeFromSelection: false);
+        } else {
+          emit(
+            state.copyWith(
+              itineraryStatus: TripsLoadStatus.error,
+              errorMessage: 'Original trip could not be found.',
+            ),
+          );
+        }
+      },
+      failure: (error) {
+        emit(
+          state.copyWith(
+            itineraryStatus: TripsLoadStatus.error,
+            errorMessage: 'Failed to load trip: ${error.message}',
+          ),
+        );
+      },
+    );
   }
 
   Future<void> quickGenerateTrip({
@@ -345,19 +437,20 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  Future<void> moveToDay(int toDayNumber, PlaceDayPeriod toPeriod) async {
+  Future<void> moveToDay({
+    required int toDayNumber,
+    required PlaceDayPeriod toPeriod,
+  }) async {
     if (state.hostTripId == null) return;
     emit(state.copyWith(addingStatus: ActionStatus.processing));
-
     final result = await _movePlaceInTripUseCase(
       tripId: state.hostTripId!,
       placeId: state.place.id,
       toDayNumber: toDayNumber,
       toPeriod: toPeriod,
     );
-
+    await Future.delayed(const Duration(seconds: 2));
     if (isClosed) return;
-
     result.when(
       success: (_) {
         emit(
@@ -395,7 +488,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
 
     if (isClosed) return;
-
+    await Future.delayed(const Duration(seconds: 2));
     result.when(
       success: (_) {
         emit(
@@ -428,12 +521,12 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
 
     if (isClosed) return;
-
+    await Future.delayed(const Duration(seconds: 2));
     result.when(
       success: (_) {
         emit(
           state.copyWith(
-            flowStatus: AddToTripFlowStatus.initial,
+            flowStatus: AddToTripFlowStatus.added,
             addingStatus: ActionStatus.success,
             placeAlreadyInTrip: false,
             clearHostTrip: true,

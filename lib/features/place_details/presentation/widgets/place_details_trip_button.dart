@@ -54,11 +54,7 @@ class PlaceDetailsTripButton extends StatelessWidget {
   }
 
   void _handleOnTap(BuildContext context, AddToTripState state) {
-    if (state.placeAlreadyInTrip) {
-      context.read<AddToTripCubit>().openManage();
-    } else {
-      context.read<AddToTripCubit>().loadTrips();
-    }
+    context.read<AddToTripCubit>().startFlow();
     showAddToTripSheet(context);
   }
 
@@ -70,6 +66,7 @@ class PlaceDetailsTripButton extends StatelessWidget {
       isScrollControlled: true,
       isDismissible: true,
       enableDrag: true,
+
       backgroundColor: Colors.transparent,
       builder: (context) => BlocProvider.value(
         value: cubit,
@@ -77,7 +74,7 @@ class PlaceDetailsTripButton extends StatelessWidget {
           initialChildSize: 0.7,
           maxChildSize: 0.9,
           minChildSize: 0.4,
-
+          expand: false,
           builder: (_, controller) => ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: AddToTripFlowWrapper(),
