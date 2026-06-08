@@ -43,7 +43,7 @@ class PlaceDetailsTripButton extends StatelessWidget {
             child: Skeleton.shade(
               child: CustomGradientButton(
                 width: double.infinity,
-                onTap: () => _handleOnTap(context, state),
+                onTap: () => _handleOnTap(context),
                 text: buttonText,
               ),
             ),
@@ -53,8 +53,7 @@ class PlaceDetailsTripButton extends StatelessWidget {
     );
   }
 
-  void _handleOnTap(BuildContext context, AddToTripState state) {
-    context.read<AddToTripCubit>().startFlow();
+  void _handleOnTap(BuildContext context) {
     showAddToTripSheet(context);
   }
 
@@ -77,7 +76,10 @@ class PlaceDetailsTripButton extends StatelessWidget {
           expand: false,
           builder: (_, controller) => ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: AddToTripFlowWrapper(),
+            child: PrimaryScrollController(
+              controller: controller,
+              child: const AddToTripFlowWrapper(),
+            ),
           ),
         ),
       ),

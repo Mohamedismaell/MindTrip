@@ -227,3 +227,21 @@ class AppTransitionRoute {
     );
   }
 }
+
+class BottomSheetPage extends CustomTransitionPage<void> {
+  BottomSheetPage({required super.child, super.key})
+      : super(
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+              ),
+              child: child,
+            );
+          },
+        );
+}

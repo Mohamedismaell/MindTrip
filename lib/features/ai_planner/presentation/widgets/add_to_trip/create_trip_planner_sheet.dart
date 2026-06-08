@@ -15,7 +15,14 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/dr
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/range_calendar.dart';
 
 class CreateTripPlannerSheet extends StatelessWidget {
-  const CreateTripPlannerSheet({super.key});
+  const CreateTripPlannerSheet({
+    super.key,
+    required this.onBack,
+    required this.onClose,
+  });
+
+  final VoidCallback onBack;
+  final VoidCallback onClose;
 
   void _showCalendar(BuildContext context) {
     final cubit = context.read<AddToTripCubit>();
@@ -28,32 +35,10 @@ class CreateTripPlannerSheet extends StatelessWidget {
             borderRadius: BorderRadius.circular(48.r),
           ),
           insetPadding: EdgeInsets.all(20.r),
-          child: Padding(
-            padding: EdgeInsetsGeometry.symmetric(
-              horizontal: 20.r,
-              vertical: 20.r,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: RangeCalendar(
-                    startDate: state.startDate,
-                    endDate: state.endDate,
-                    onDateSelected: cubit.selectTripDate,
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                Padding(
-                  padding: EdgeInsetsGeometry.symmetric(horizontal: 10.r),
-                  child: CustomGradientButton(
-                    width: double.infinity,
-                    onTap: () => Navigator.pop(context),
-                    text: 'Confirm',
-                  ),
-                ),
-              ],
-            ),
+          child: RangeCalendar(
+            startDate: state.startDate,
+            endDate: state.endDate,
+            onDateSelected: cubit.selectTripDate,
           ),
         ),
       ),
@@ -68,13 +53,15 @@ class CreateTripPlannerSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listener: (context, state) {
-        if (state.creatingStatus == ActionStatus.processing) {
+        if (state.creatingStatus == ActionStatus.processing ||
+            state.addingStatus == ActionStatus.processing) {
           AppDialog.showLoading(
             context: context,
             title: state.loadingTitle,
             description: state.loadingDescription,
           );
-        } else if (state.creatingStatus == ActionStatus.error) {
+        } else if (state.creatingStatus == ActionStatus.error ||
+            state.addingStatus == ActionStatus.error) {
           AppDialog.hideLoading(context);
           if (state.errorMessage != null) {
             AppSnackBar.showError(
@@ -82,29 +69,29 @@ class CreateTripPlannerSheet extends StatelessWidget {
               message: state.errorMessage!,
             );
           }
-        } else if (state.creatingStatus == ActionStatus.success) {
-          // AppDialog.hideLoading(context);
+        } else if (state.creatingStatus == ActionStatus.success &&
+            state.addingStatus == ActionStatus.success) {
+          AppDialog.hideLoading(context);
           AppDialog.show(
             context: context,
             title: 'Your trip has been generated',
-            primaryText: 'Have Fun',
+            primaryText: 'Continue Exploring',
             icon: Icons.check_circle_outline_outlined,
             // iconColor: AppColors.customgreeen,
             onPrimary: () {
               context.read<AddToTripCubit>().reset();
-              Navigator.pop(context);
+              onClose();
             },
           );
         }
       },
       builder: (context, state) {
         final cubit = context.read<AddToTripCubit>();
-
         return SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              DragDivider(),
+              const DragDivider(),
               SizedBox(height: 24.h),
               Stack(
                 alignment: Alignment.center,
@@ -113,16 +100,14 @@ class CreateTripPlannerSheet extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        cubit.handleBack();
-                      },
+                      onPressed: onBack,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 48.w),
                     child: Text(
                       'Quick AI Trip Planning',
-                      style: AppTextStyles.h6Bold.copyWith(),
+                      style: AppTextStyles.h6Bold,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -147,7 +132,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
                     ),
                     SizedBox(height: 18.h),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4.0.w),
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
                       child: Divider(
                         height: 1,
                         color: context.colorTheme.outlineVariant,

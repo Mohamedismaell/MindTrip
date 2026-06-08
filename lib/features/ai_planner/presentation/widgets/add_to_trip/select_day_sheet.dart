@@ -2,6 +2,8 @@ import 'package:flutter/material.dart' hide DayPeriod;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
@@ -16,8 +18,16 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/dr
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 
 class SelectDaySheet extends StatelessWidget {
-  const SelectDaySheet({super.key, this.scrollController});
+  const SelectDaySheet({
+    super.key,
+    this.scrollController,
+    required this.onBack,
+    required this.onClose,
+  });
+
   final ScrollController? scrollController;
+  final VoidCallback onBack;
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +54,12 @@ class SelectDaySheet extends StatelessWidget {
             ),
             primaryText: 'Continue Exploring',
             onPrimary: () {
-              context.read<AddToTripCubit>().reset();
-              Navigator.pop(context);
+              // final tripId = state.selectedTrip?.id ?? state.hostTripId;
+              // context.read<AddToTripCubit>().reset();
+              // onClose();
+              // if (tripId != null) {
+              //   context.push('${AppRoutes.tripDetails}?tripId=$tripId');
+              // }
             },
           );
         }
@@ -57,6 +71,10 @@ class SelectDaySheet extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        if (state.selectedTrip == null || state.selectedItinerary == null) {
+          return const SizedBox.shrink();
+        }
+
         final tripTitle = state.selectedTrip!.title;
         final itinerary = state.selectedItinerary!;
 
@@ -71,9 +89,7 @@ class SelectDaySheet extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      context.read<AddToTripCubit>().handleBack();
-                    },
+                    onPressed: onBack,
                   ),
                 ),
                 Padding(
@@ -269,7 +285,7 @@ class SelectDaySheet extends StatelessWidget {
                       AiPlannerAssets.chatFaceIcon,
                       width: 42.w,
                       height: 42.h,
-                      colorFilter: ColorFilter.mode(
+                      colorFilter: const ColorFilter.mode(
                         AppColors.pureBlack,
                         BlendMode.srcIn,
                       ),
@@ -290,7 +306,6 @@ class SelectDaySheet extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     Icon(
                       Icons.chevron_right,
                       size: 24.r,
@@ -300,6 +315,7 @@ class SelectDaySheet extends StatelessWidget {
                 ),
               ),
             ),
+
             SizedBox(height: 16.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -331,6 +347,7 @@ class SelectDaySheet extends StatelessWidget {
                     : null,
               ),
             ),
+            SizedBox(height: 24.h),
           ],
         );
       },

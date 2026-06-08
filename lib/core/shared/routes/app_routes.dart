@@ -48,4 +48,10 @@ class AppRoutes {
 
   //! place details
   static const String placeDetails = '/place-details';
+
+  //! Add to Trip
+  static const String addToTripSelectTrip = '/add-to-trip/select-trip';
+  static const String addToTripCreatePlan = '/add-to-trip/create-plan';
+  static const String addToTripManage = '/add-to-trip/manage';
+  static const String addToTripSelectDay = '/add-to-trip/select-day';
 }

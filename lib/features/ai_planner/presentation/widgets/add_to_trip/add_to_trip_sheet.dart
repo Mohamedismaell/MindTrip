@@ -11,11 +11,22 @@ import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AddToTripSheet extends StatelessWidget {
-  const AddToTripSheet({super.key, this.scrollController});
+  const AddToTripSheet({
+    super.key,
+    this.scrollController,
+    required this.onBack,
+    required this.onCreateNew,
+    required this.onTripSelected,
+  });
+
   final ScrollController? scrollController;
+  final VoidCallback onBack;
+  final VoidCallback onCreateNew;
+  final ValueChanged<Trip> onTripSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -49,21 +60,20 @@ class AddToTripSheet extends StatelessWidget {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            DragDivider(),
+            const DragDivider(),
             SizedBox(height: 25.h),
             Stack(
               alignment: Alignment.center,
               children: [
-                if (state.placeAlreadyInTrip)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        context.read<AddToTripCubit>().handleBack();
-                      },
-                    ),
-                  ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: state.placeAlreadyInTrip
+                      ? IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: onBack,
+                        )
+                      : const SizedBox.shrink(),
+                ),
                 Text(
                   state.placeAlreadyInTrip
                       ? 'Move to another Trip'
@@ -109,8 +119,7 @@ class AddToTripSheet extends StatelessWidget {
                         title: 'Create New Trip',
                         subtitle: 'Start planning with AI',
                         leadingIcon: Icons.add,
-                        onTap: () =>
-                            context.read<AddToTripCubit>().triggerCreateNew(),
+                        onTap: onCreateNew,
                       );
                     }
                     final trip = state.trips[index];
@@ -122,10 +131,7 @@ class AddToTripSheet extends StatelessWidget {
                       subtitle:
                           '${trip.durationDays} days · $placesCount places',
                       imagePath: coverImage,
-                      onTap: () => context.read<AddToTripCubit>().selectTrip(
-                        trip,
-                        comeFromSelection: true,
-                      ),
+                      onTap: () => onTripSelected(trip),
                     );
                   },
                 ),

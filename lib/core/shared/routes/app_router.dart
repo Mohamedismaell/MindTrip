@@ -23,7 +23,11 @@ class AppRouter {
   final AppGateCubit appGateCubit;
   AppRouter({required this.appGateCubit});
 
+  static final GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+
   late final GoRouter appRouter = GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: AppRoutes.splash,
     refreshListenable: GoRouterRefreshStream(appGateCubit.stream),
     redirect: _redirect,
@@ -31,6 +35,7 @@ class AppRouter {
       ...OnBoardingRoutes.routes,
       ...AuthRoutes.routes,
       ...InterestsRoutes.routes,
+      ...AiPlannerRoutes.addToTripRoutes,
       ShellRoute(
         builder: (context, state, child) {
           return AppShell(child: child);

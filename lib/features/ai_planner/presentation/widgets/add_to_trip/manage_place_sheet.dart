@@ -11,15 +11,22 @@ import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_stat
 import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
 
 class ManagePlaceSheet extends StatelessWidget {
-  const ManagePlaceSheet({super.key});
+  const ManagePlaceSheet({
+    super.key,
+    required this.onMoveToDay,
+    required this.onMoveToTrip,
+    required this.onClose,
+  });
+
+  final VoidCallback onMoveToDay;
+  final VoidCallback onMoveToTrip;
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listener: (context, state) {
-        if (
-        // state.tripsStatus == TripsLoadStatus.loading ||
-        state.itineraryStatus == TripsLoadStatus.loading ||
+        if (state.itineraryStatus == TripsLoadStatus.loading ||
             state.addingStatus == ActionStatus.processing ||
             state.creatingStatus == ActionStatus.processing) {
           AppDialog.showLoading(
@@ -30,6 +37,12 @@ class ManagePlaceSheet extends StatelessWidget {
         } else {
           AppDialog.hideLoading(context);
         }
+
+        if (state.addingStatus == ActionStatus.success) {
+          context.read<AddToTripCubit>().reset();
+          onClose();
+        }
+
         if (state.addingStatus == ActionStatus.error) {
           AppSnackBar.showError(
             context: context,
@@ -40,7 +53,7 @@ class ManagePlaceSheet extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            DragDivider(),
+            const DragDivider(),
             SizedBox(height: 25.h),
             Text(
               'Manage Trip',
@@ -57,17 +70,13 @@ class ManagePlaceSheet extends StatelessWidget {
             _ManageActionItem(
               icon: Icons.calendar_today,
               title: 'Move to another day',
-              onTap: () {
-                context.read<AddToTripCubit>().goToDaySelection();
-              },
+              onTap: onMoveToDay,
             ),
             SizedBox(height: 12.h),
             _ManageActionItem(
               icon: Icons.swap_horiz,
               title: 'Move to another trip',
-              onTap: () {
-                context.read<AddToTripCubit>().goToTripSelection();
-              },
+              onTap: onMoveToTrip,
             ),
             SizedBox(height: 12.h),
             _ManageActionItem(

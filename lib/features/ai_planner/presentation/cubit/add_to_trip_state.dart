@@ -5,21 +5,11 @@ import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
-enum AddToTripFlowStatus {
-  initial,
-  selectTrip,
-  selectDay,
-  managing,
-  creatingNew,
-  added,
-}
-
 enum TripsLoadStatus { initial, loading, loaded, error }
 
 enum ActionStatus { initial, processing, success, error }
 
 class AddToTripState extends Equatable {
-  final AddToTripFlowStatus flowStatus;
   final TripsLoadStatus tripsStatus;
   final TripsLoadStatus itineraryStatus;
   final ActionStatus addingStatus;
@@ -31,7 +21,6 @@ class AddToTripState extends Equatable {
   final int? selectedDay;
   final PlaceDayPeriod? selectedPeriod;
   final bool placeAlreadyInTrip;
-  final bool comeFromSelection;
   final String? hostTripName;
   final String? hostTripId;
   final DateTime? startDate;
@@ -41,7 +30,6 @@ class AddToTripState extends Equatable {
   final String? errorMessage;
 
   const AddToTripState({
-    this.flowStatus = AddToTripFlowStatus.initial,
     this.tripsStatus = TripsLoadStatus.initial,
     this.itineraryStatus = TripsLoadStatus.initial,
     this.addingStatus = ActionStatus.initial,
@@ -51,7 +39,6 @@ class AddToTripState extends Equatable {
     this.selectedTrip,
     this.selectedItinerary,
     this.placeAlreadyInTrip = false,
-    this.comeFromSelection = false,
     this.hostTripName,
     this.hostTripId,
     this.errorMessage,
@@ -64,7 +51,6 @@ class AddToTripState extends Equatable {
   });
 
   AddToTripState copyWith({
-    AddToTripFlowStatus? flowStatus,
     TripsLoadStatus? tripsStatus,
     TripsLoadStatus? itineraryStatus,
     ActionStatus? addingStatus,
@@ -74,11 +60,13 @@ class AddToTripState extends Equatable {
     Trip? selectedTrip,
     TripItinerary? selectedItinerary,
     bool? placeAlreadyInTrip,
-    bool? comeFromSelection,
     String? hostTripName,
     String? hostTripId,
     String? errorMessage,
     bool clearHostTrip = false,
+    bool clearSelectedTrip = false,
+    bool clearSelectedItinerary = false,
+    bool clearSelectedDayPeriod = false,
     int? selectedDay,
     PlaceDayPeriod? selectedPeriod,
     DateTime? startDate,
@@ -89,22 +77,28 @@ class AddToTripState extends Equatable {
     bool clearEndDate = false,
   }) {
     return AddToTripState(
-      flowStatus: flowStatus ?? this.flowStatus,
       tripsStatus: tripsStatus ?? this.tripsStatus,
       itineraryStatus: itineraryStatus ?? this.itineraryStatus,
       addingStatus: addingStatus ?? this.addingStatus,
       creatingStatus: creatingStatus ?? this.creatingStatus,
       place: place ?? this.place,
       trips: trips ?? this.trips,
-      selectedTrip: selectedTrip ?? this.selectedTrip,
-      selectedItinerary: selectedItinerary ?? this.selectedItinerary,
+      selectedTrip: clearSelectedTrip
+          ? null
+          : (selectedTrip ?? this.selectedTrip),
+      selectedItinerary: clearSelectedItinerary
+          ? null
+          : (selectedItinerary ?? this.selectedItinerary),
       placeAlreadyInTrip: placeAlreadyInTrip ?? this.placeAlreadyInTrip,
-      comeFromSelection: comeFromSelection ?? this.comeFromSelection,
       hostTripName: clearHostTrip ? null : (hostTripName ?? this.hostTripName),
       hostTripId: clearHostTrip ? null : (hostTripId ?? this.hostTripId),
       errorMessage: errorMessage ?? this.errorMessage,
-      selectedDay: selectedDay ?? this.selectedDay,
-      selectedPeriod: selectedPeriod ?? this.selectedPeriod,
+      selectedDay: clearSelectedDayPeriod
+          ? null
+          : (selectedDay ?? this.selectedDay),
+      selectedPeriod: clearSelectedDayPeriod
+          ? null
+          : (selectedPeriod ?? this.selectedPeriod),
       startDate: clearStartDate ? null : (startDate ?? this.startDate),
       endDate: clearEndDate ? null : (endDate ?? this.endDate),
       selectedBudget: selectedBudget ?? this.selectedBudget,
@@ -114,7 +108,6 @@ class AddToTripState extends Equatable {
 
   @override
   List<Object?> get props => [
-    flowStatus,
     tripsStatus,
     itineraryStatus,
     addingStatus,
@@ -124,7 +117,6 @@ class AddToTripState extends Equatable {
     selectedTrip,
     selectedItinerary,
     placeAlreadyInTrip,
-    comeFromSelection,
     hostTripName,
     hostTripId,
     errorMessage,
