@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_all_trips_use_case.dart';
@@ -25,13 +26,13 @@ class TripsCubit extends Cubit<TripsState> {
     required UpdateTripUseCase updateTrip,
     required GenerateItineraryUseCase generateItinerary,
     required SaveItineraryUseCase saveItinerary,
-  })  : _getAllTrips = getAllTrips,
-        _saveTrip = saveTrip,
-        _deleteTrip = deleteTrip,
-        _updateTrip = updateTrip,
-        _generateItinerary = generateItinerary,
-        _saveItinerary = saveItinerary,
-        super(TripsState(focusedDay: DateTime.now()));
+  }) : _getAllTrips = getAllTrips,
+       _saveTrip = saveTrip,
+       _deleteTrip = deleteTrip,
+       _updateTrip = updateTrip,
+       _generateItinerary = generateItinerary,
+       _saveItinerary = saveItinerary,
+       super(TripsState(focusedDay: DateTime.now()));
 
   Future<void> updateSearchQuary(String? searchQuary) async {
     if (isClosed) return;
@@ -202,7 +203,8 @@ class TripsCubit extends Cubit<TripsState> {
                   state.copyWith(
                     tripsStatus: TripsStatus.error,
                     isGenerating: false,
-                    errorMessage: 'Failed to update trip object: ${error.message}',
+                    errorMessage:
+                        'Failed to update trip object: ${error.message}',
                   ),
                 );
               },
@@ -259,7 +261,7 @@ class TripsCubit extends Cubit<TripsState> {
       title: newTitle,
       updatedAt: DateTime.now(),
     );
-    
+
     final result = await _updateTrip(trip);
     if (isClosed) return;
 
@@ -278,6 +280,37 @@ class TripsCubit extends Cubit<TripsState> {
         );
       },
     );
+  }
+
+  List<Trip> getTripsForMonth(DateTime month) {
+    final startOfMonth = DateTime(month.year, month.month, 1);
+
+    final endOfMonth = DateTime(month.year, month.month + 1, 0);
+
+    return state.trips.where((trip) {
+      if (trip.tripStart == null) return false;
+
+      final start = trip.tripStart!;
+      final end = trip.tripEnd ?? start;
+
+      return start.isBefore(endOfMonth.add(const Duration(days: 1))) &&
+          end.isAfter(startOfMonth.subtract(const Duration(days: 1)));
+    }).toList();
+  }
+
+  List<Trip> getTripsForDay(DateTime day, List<Trip> trips) {
+    final current = DateUtils.dateOnly(day);
+
+    return trips.where((trip) {
+      if (trip.tripStart == null || trip.tripEnd == null) {
+        return false;
+      }
+
+      final start = DateUtils.dateOnly(trip.tripStart!);
+      final end = DateUtils.dateOnly(trip.tripEnd!);
+
+      return !current.isBefore(start) && !current.isAfter(end);
+    }).toList();
   }
 
   void nextMonth(DateTime focusedDay) {

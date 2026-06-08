@@ -185,21 +185,30 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
   // Month navigation
 
   void nextMonth() {
-    final current = state.visibleMonth;
-    emit(
-      state.copyWith(visibleMonth: DateTime(current.year, current.month + 1)),
-    );
+    final current = state.focusedDay;
+    final next = DateTime(current.year, current.month + 1, 1);
+    if (next.isAfter(DateTime.utc(2030, 12, 31))) return;
+    emit(state.copyWith(focusedDay: next));
   }
 
   void changeMonth(DateTime focusedDay) {
-    emit(state.copyWith(focusedDay: focusedDay));
+    final firstDay = DateTime.utc(2020, 1, 1);
+    final lastDay = DateTime.utc(2030, 12, 31);
+
+    if (focusedDay.isBefore(firstDay)) {
+      emit(state.copyWith(focusedDay: firstDay));
+    } else if (focusedDay.isAfter(lastDay)) {
+      emit(state.copyWith(focusedDay: lastDay));
+    } else {
+      emit(state.copyWith(focusedDay: focusedDay));
+    }
   }
 
   void previousMonth() {
-    final current = state.visibleMonth;
-    emit(
-      state.copyWith(visibleMonth: DateTime(current.year, current.month - 1)),
-    );
+    final current = state.focusedDay;
+    final prev = DateTime(current.year, current.month - 1, 1);
+    if (prev.isBefore(DateTime.utc(2020, 1, 1))) return;
+    emit(state.copyWith(focusedDay: prev));
   }
 
   // Travelers

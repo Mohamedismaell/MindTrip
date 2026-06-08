@@ -11,16 +11,13 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/se
 
 class AddToTripFlowWrapper extends StatelessWidget {
   const AddToTripFlowWrapper({super.key});
-  // final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listenWhen: (prev, curr) => prev.flowStatus != curr.flowStatus,
       listener: (context, state) {
-        if (state.flowStatus == AddToTripFlowStatus.added) {
-          Navigator.pop(context);
-        }
+        // Handled internally by individual sheets through success dialogs
       },
       builder: (context, state) {
         final canPopInternally =
@@ -28,9 +25,10 @@ class AddToTripFlowWrapper extends StatelessWidget {
             state.flowStatus != AddToTripFlowStatus.selectTrip &&
             state.flowStatus != AddToTripFlowStatus.managing;
 
-        // Special case: if we are in selectTrip but managing, we should allow internal pop to go back to manage
-        final shouldHandleInternally = canPopInternally || 
-            (state.flowStatus == AddToTripFlowStatus.selectTrip && state.placeAlreadyInTrip);
+        final shouldHandleInternally =
+            canPopInternally ||
+            (state.flowStatus == AddToTripFlowStatus.selectTrip &&
+                state.placeAlreadyInTrip);
 
         return PopScope(
           canPop: !shouldHandleInternally,
@@ -40,7 +38,6 @@ class AddToTripFlowWrapper extends StatelessWidget {
           },
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-
             transitionBuilder: (Widget child, Animation<double> animation) {
               return FadeTransition(opacity: animation, child: child);
             },
@@ -71,12 +68,10 @@ class AddToTripFlowWrapper extends StatelessWidget {
       case AddToTripFlowStatus.initial:
         return AddToTripSheet(
           key: const ValueKey('select_trip'),
-          // scrollController: scrollController,
         );
       case AddToTripFlowStatus.selectDay:
         return SelectDaySheet(
           key: const ValueKey('select_day'),
-          // scrollController: scrollController,
         );
       case AddToTripFlowStatus.creatingNew:
         return const CreateTripPlannerSheet(key: ValueKey('creating_new'));
@@ -85,16 +80,3 @@ class AddToTripFlowWrapper extends StatelessWidget {
     }
   }
 }
-// transitionBuilder: (child, animation) {
-//               final isEntering = animation.status != AnimationStatus.reverse;
-//               final offsetTween = Tween<Offset>(
-//                 begin: Offset(isEntering ? 1.0 : -1.0, 0),
-//                 end: Offset.zero,
-//               );
-//               return SlideTransition(
-//                 position: offsetTween.animate(
-//                   CurvedAnimation(
-//                     parent: animation,
-//                     curve: Curves.easeOutCubic,
-//                   ),
-//                 ),

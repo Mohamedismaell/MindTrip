@@ -1,41 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_head_line.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/presentation/utils/trip_color_palette.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
+import 'package:mindtrip/features/trips/presentation/widgets/calendar_day_cell.dart';
+import 'package:mindtrip/features/trips/presentation/widgets/custom_calender_header.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/schedule_trip_tile.dart';
+import 'package:mindtrip/features/trips/presentation/widgets/swipe_calender_arrrow.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
-List<Trip> _getTripsForDay(DateTime day, List<Trip> trips) {
-  final d = DateTime(day.year, day.month, day.day);
-  return trips.where((trip) {
-    if (trip.tripStart == null || trip.tripEnd == null) return false;
-    final s = DateTime(
-      trip.tripStart!.year,
-      trip.tripStart!.month,
-      trip.tripStart!.day,
-    );
-    final e = DateTime(
-      trip.tripEnd!.year,
-      trip.tripEnd!.month,
-      trip.tripEnd!.day,
-    );
-    return d.isAtSameMomentAs(s) ||
-        d.isAtSameMomentAs(e) ||
-        (d.isAfter(s) && d.isBefore(e));
-  }).toList();
-}
-
-//Todo: impelement same style of the cale in the ai planner flow
 class TripCalendarScreen extends StatelessWidget {
   const TripCalendarScreen({super.key});
 
@@ -54,9 +32,7 @@ class TripCalendarScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 16.h),
-
-                    const _CustomHeader(),
-
+                    const CustomCalenderHeader(),
                     SizedBox(height: 28.h),
                   ],
                 ),
@@ -68,7 +44,6 @@ class TripCalendarScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.pureWhite,
                     borderRadius: BorderRadius.circular(48.r),
-
                     border: Border.all(
                       color: context.colorTheme.outline.withValues(alpha: 0.6),
                       width: 1.w,
@@ -79,7 +54,6 @@ class TripCalendarScreen extends StatelessWidget {
                     builder: (context, state) {
                       final focusedDay = state.focusedDay;
                       final selectedDay = state.selectedDay;
-
                       final cubit = context.read<TripsCubit>();
 
                       return Padding(
@@ -94,7 +68,6 @@ class TripCalendarScreen extends StatelessWidget {
                                   selector: (state) {
                                     return state.focusedDay;
                                   },
-
                                   builder: (context, focusedDay) {
                                     return Expanded(
                                       child: Text(
@@ -110,23 +83,19 @@ class TripCalendarScreen extends StatelessWidget {
                                   },
                                 ),
 
-                                _ArrrowIcon(
+                                SwipeCalenderArrrow(
                                   onTap: () {
                                     context.read<TripsCubit>().previouseMonth(
                                       focusedDay,
                                     );
                                   },
-
                                   icon: Icons.chevron_left_rounded,
                                 ),
-
                                 SizedBox(width: 12.w),
-
-                                _ArrrowIcon(
+                                SwipeCalenderArrrow(
                                   onTap: () {
                                     cubit.nextMonth(focusedDay);
                                   },
-
                                   icon: Icons.chevron_right_rounded,
                                 ),
                               ],
@@ -137,23 +106,18 @@ class TripCalendarScreen extends StatelessWidget {
                             // CALENDAR
                             TableCalendar<Trip>(
                               firstDay: DateTime.utc(2020, 1, 1),
-
                               lastDay: DateTime.utc(2030, 12, 31),
-
                               focusedDay: focusedDay,
-
                               headerVisible: false,
-
                               daysOfWeekHeight: 40.h,
                               rowHeight: 50.h,
-
                               calendarStyle: const CalendarStyle(
                                 cellMargin: EdgeInsets.zero,
                                 cellPadding: EdgeInsets.zero,
                               ),
 
                               eventLoader: (day) =>
-                                  _getTripsForDay(day, state.trips),
+                                  cubit.getTripsForDay(day, state.trips),
 
                               selectedDayPredicate: (day) {
                                 return isSameDay(selectedDay, day);
@@ -194,37 +158,33 @@ class TripCalendarScreen extends StatelessWidget {
                                 },
 
                                 defaultBuilder: (context, day, focusedDay) {
-                                  return _buildDayCell(
-                                    context,
-                                    day,
-                                    state.trips,
+                                  return CalendarDayCell(
+                                    day: day,
+                                    trips: state.trips,
                                   );
                                 },
 
                                 outsideBuilder: (context, day, focusedDay) {
-                                  return _buildDayCell(
-                                    context,
-                                    day,
-                                    state.trips,
-                                    isOutside: true,
+                                  return CalendarDayCell(
+                                    day: day,
+                                    trips: state.trips,
+                                    isToday: true,
                                   );
                                 },
 
                                 todayBuilder: (context, day, focusedDay) {
-                                  return _buildDayCell(
-                                    context,
-                                    day,
-                                    state.trips,
+                                  return CalendarDayCell(
+                                    day: day,
+                                    trips: state.trips,
                                     isToday: true,
                                   );
                                 },
 
                                 selectedBuilder: (context, day, focusedDay) {
-                                  return _buildDayCell(
-                                    context,
-                                    day,
-                                    state.trips,
-                                    isSelected: true,
+                                  return CalendarDayCell(
+                                    day: day,
+                                    trips: state.trips,
+                                    isToday: true,
                                   );
                                 },
 
@@ -245,7 +205,6 @@ class TripCalendarScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 28.h),
-
                     Align(
                       alignment: Alignment.centerLeft,
 
@@ -257,7 +216,6 @@ class TripCalendarScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 16.h),
                   ],
                 ),
@@ -266,35 +224,9 @@ class TripCalendarScreen extends StatelessWidget {
               // SCHEDULE LIST
               BlocBuilder<TripsCubit, TripsState>(
                 builder: (context, state) {
-                  final focusedMonth = state.focusedDay;
-
-                  final currentMonthTrips = state.trips.where((t) {
-                    if (t.tripStart == null) {
-                      return false;
-                    }
-
-                    final start = t.tripStart!;
-                    final end = t.tripEnd ?? start;
-
-                    final startOfMonth = DateTime(
-                      focusedMonth.year,
-                      focusedMonth.month,
-                      1,
-                    );
-
-                    final endOfMonth = DateTime(
-                      focusedMonth.year,
-                      focusedMonth.month + 1,
-                      0,
-                    );
-
-                    return start.isBefore(
-                          endOfMonth.add(const Duration(days: 1)),
-                        ) &&
-                        end.isAfter(
-                          startOfMonth.subtract(const Duration(days: 1)),
-                        );
-                  }).toList();
+                  final currentMonthTrips = context
+                      .read<TripsCubit>()
+                      .getTripsForMonth(state.focusedDay);
 
                   if (currentMonthTrips.isEmpty) {
                     return SliverToBoxAdapter(
@@ -321,11 +253,8 @@ class TripCalendarScreen extends StatelessWidget {
 
                         child: TweenAnimationBuilder<double>(
                           duration: Duration(milliseconds: 350 + (index * 60)),
-
                           tween: Tween(begin: 0, end: 1),
-
                           curve: Curves.easeOutCubic,
-
                           builder: (context, value, child) {
                             return Opacity(
                               opacity: value,
@@ -341,7 +270,6 @@ class TripCalendarScreen extends StatelessWidget {
                               ),
                             );
                           },
-
                           child: ScheduleTripTile(
                             key: ValueKey(trip.id),
                             trip: trip,
@@ -352,162 +280,9 @@ class TripCalendarScreen extends StatelessWidget {
                   );
                 },
               ),
-
               SliverToBoxAdapter(child: SizedBox(height: 100.h)),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDayCell(
-    BuildContext context,
-    DateTime day,
-    List<Trip> trips, {
-    bool isToday = false,
-    bool isSelected = false,
-    bool isOutside = false,
-  }) {
-    final events = _getTripsForDay(day, trips);
-
-    // Day text
-    Widget dayText = Center(
-      child: Container(
-        width: isToday ? 42.w : 30.w,
-        height: isToday ? 42.w : 30.w,
-
-        decoration: BoxDecoration(
-          color: isSelected
-              ? context.colorTheme.primary
-              : (isToday ? AppColors.primaryLightBlue2 : Colors.transparent),
-
-          shape: BoxShape.circle,
-
-          border: isToday
-              ? Border.all(color: context.colorTheme.primary, width: 2.w)
-              : null,
-        ),
-
-        child: Center(
-          child: Text(
-            '${day.day}',
-            style: AppTextStyles.h9Medium.copyWith(
-              color: isSelected
-                  ? context.colorTheme.onPrimary
-                  : (isToday
-                        ? AppColors.pureWhite
-                        : (isOutside
-                              ? context.colorTheme.outline.withValues(
-                                  alpha: 0.5,
-                                )
-                              : context.colorTheme.onSurface)),
-            ),
-          ),
-        ),
-      ),
-    );
-    if (events.isEmpty) {
-      return dayText;
-    }
-
-    events.sort((a, b) => b.tripStart!.compareTo(a.tripStart!));
-
-    final trip = events.first;
-
-    final colors = TripColorPalette.getColorsForId(trip.id);
-
-    return Stack(
-      alignment: Alignment.center,
-
-      children: [
-        Center(
-          child: Container(
-            width: 36.w,
-            height: 36.w,
-
-            decoration: BoxDecoration(
-              color: colors.edge,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-
-        // DAY NUMBER
-        dayText,
-      ],
-    );
-  }
-}
-
-class _CustomHeader extends StatelessWidget {
-  const _CustomHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () => context.pop(),
-                child: Icon(
-                  Icons.arrow_back_rounded,
-                  size: 30.sp,
-                  color: context.colorTheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-
-            CustomHeadLine(
-              firstTitle: 'My ',
-              secondTitle: 'Trips',
-              firstStyle: AppTextStyles.h5Bold.copyWith(
-                color: context.colorTheme.onSurface,
-              ),
-              secondStyle: AppTextStyles.h5Bold.copyWith(
-                color: context.colorTheme.primary,
-              ),
-            ),
-          ],
-        ),
-
-        SizedBox(height: 17.h),
-
-        Text(
-          'All your travel dates in one place',
-          style: AppTextStyles.h7Regular.copyWith(
-            color: context.colorTheme.onSurfaceVariant,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ArrrowIcon extends StatelessWidget {
-  const _ArrrowIcon({required this.onTap, required this.icon});
-  final VoidCallback onTap;
-  final IconData icon;
-  @override
-  Widget build(BuildContext context) {
-    return TapScaleEffect(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.primaryLightGray,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          size: 24.sp,
-          color: context.colorTheme.onSurfaceVariant,
         ),
       ),
     );

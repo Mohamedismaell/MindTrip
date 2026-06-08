@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
@@ -33,6 +34,10 @@ class AddToTripState extends Equatable {
   final bool comeFromSelection;
   final String? hostTripName;
   final String? hostTripId;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? selectedBudget;
+  final int numberOfPeople;
   final String? errorMessage;
 
   const AddToTripState({
@@ -52,6 +57,10 @@ class AddToTripState extends Equatable {
     this.errorMessage,
     this.selectedDay,
     this.selectedPeriod,
+    this.startDate,
+    this.endDate,
+    this.selectedBudget,
+    this.numberOfPeople = 0,
   });
 
   AddToTripState copyWith({
@@ -72,6 +81,12 @@ class AddToTripState extends Equatable {
     bool clearHostTrip = false,
     int? selectedDay,
     PlaceDayPeriod? selectedPeriod,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? selectedBudget,
+    int? numberOfPeople,
+    bool clearStartDate = false,
+    bool clearEndDate = false,
   }) {
     return AddToTripState(
       flowStatus: flowStatus ?? this.flowStatus,
@@ -90,6 +105,10 @@ class AddToTripState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       selectedDay: selectedDay ?? this.selectedDay,
       selectedPeriod: selectedPeriod ?? this.selectedPeriod,
+      startDate: clearStartDate ? null : (startDate ?? this.startDate),
+      endDate: clearEndDate ? null : (endDate ?? this.endDate),
+      selectedBudget: selectedBudget ?? this.selectedBudget,
+      numberOfPeople: numberOfPeople ?? this.numberOfPeople,
     );
   }
 
@@ -111,7 +130,23 @@ class AddToTripState extends Equatable {
     errorMessage,
     selectedDay,
     selectedPeriod,
+    startDate,
+    endDate,
+    selectedBudget,
+    numberOfPeople,
   ];
+
+  String? get formattedStartDate =>
+      startDate != null ? DateFormat('dd/MM/yyyy').format(startDate!) : null;
+
+  String? get formattedEndDate =>
+      endDate != null ? DateFormat('dd/MM/yyyy').format(endDate!) : null;
+
+  bool get isPlanReady =>
+      startDate != null &&
+      endDate != null &&
+      selectedBudget != null &&
+      numberOfPeople > 0;
 
   String get loadingTitle {
     if (tripsStatus == TripsLoadStatus.loading) return 'Loading Trips';
@@ -120,7 +155,7 @@ class AddToTripState extends Equatable {
     }
     if (addingStatus == ActionStatus.processing) {
       if (placeAlreadyInTrip) return 'Updating your Trip';
-      'Adding to Trip';
+      return 'Adding to Trip';
     }
     if (creatingStatus == ActionStatus.processing) return 'Creating Your Trip';
     return 'Processing';

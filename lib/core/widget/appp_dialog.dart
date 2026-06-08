@@ -15,8 +15,10 @@ class AppDialog {
     String? secondaryText,
     required VoidCallback onPrimary,
     VoidCallback? onSecondary,
+    bool? showIcon,
     IconData icon = Icons.info,
     Color? iconColor,
+    TextStyle? titleStyle,
     Widget? child,
     Widget Function(BuildContext, Widget)? providerBuilder,
   }) {
@@ -45,22 +47,25 @@ class AppDialog {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Icon
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: (iconColor ?? AppColors.primaryLightBlue1)
-                        .withValues(alpha: 0.2),
-                    child: Icon(
-                      icon,
-                      color: iconColor ?? context.colorTheme.primary,
-                      size: 32.sp,
-                    ),
-                  ),
+                  showIcon == false
+                      ? const SizedBox.shrink()
+                      : CircleAvatar(
+                          radius: 28,
+                          backgroundColor:
+                              (iconColor ?? AppColors.primaryLightBlue1)
+                                  .withValues(alpha: 0.2),
+                          child: Icon(
+                            icon,
+                            color: iconColor ?? context.colorTheme.primary,
+                            size: 32.sp,
+                          ),
+                        ),
                   SizedBox(height: 16.h),
                   // Title
                   Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: context.textTheme.headlineSmall,
+                    style: titleStyle ?? context.textTheme.headlineSmall,
                   ),
                   SizedBox(height: 8.h),
 

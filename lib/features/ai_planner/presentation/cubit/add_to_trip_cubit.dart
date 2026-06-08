@@ -353,12 +353,43 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
+  void selectTripDate(DateTime day) {
+    final picked = DateTime(day.year, day.month, day.day);
+    if (state.startDate == null ||
+        (state.startDate != null && state.endDate != null)) {
+      emit(state.copyWith(startDate: picked, clearEndDate: true));
+      return;
+    }
+
+    if (picked.isBefore(state.startDate!)) {
+      emit(state.copyWith(startDate: picked));
+      return;
+    }
+
+    emit(state.copyWith(endDate: picked));
+  }
+
+  void updateBudget(String budget) {
+    emit(state.copyWith(selectedBudget: budget));
+  }
+
+  void updatePeople(int people) {
+    emit(state.copyWith(numberOfPeople: people.clamp(0, 10)));
+  }
+
   Future<void> quickGenerateTrip({
-    required DateTime startDate,
-    required DateTime endDate,
-    required String budgetTier,
-    required int numberOfPeople,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? budgetTier,
+    int? numberOfPeople,
   }) async {
+    final sDate = startDate ?? state.startDate;
+    final eDate = endDate ?? state.endDate;
+    final bTier = budgetTier ?? state.selectedBudget ?? 'Economic';
+    final nPeople = numberOfPeople ?? state.numberOfPeople;
+
+    if (sDate == null || eDate == null) return;
+
     emit(state.copyWith(creatingStatus: ActionStatus.processing));
 
     final destination = state.place.location.address;
@@ -372,12 +403,12 @@ class AddToTripCubit extends Cubit<AddToTripState> {
       createdAt: now,
       updatedAt: now,
       destination: destination,
-      tripStart: startDate,
-      tripEnd: endDate,
-      adults: numberOfPeople,
+      tripStart: sDate,
+      tripEnd: eDate,
+      adults: nPeople,
       children: 0,
       pets: 0,
-      budgetTier: budgetTier,
+      budgetTier: bTier,
       customBudget: '',
       interests: const [],
     );

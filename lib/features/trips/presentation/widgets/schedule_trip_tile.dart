@@ -49,35 +49,36 @@ class ScheduleTripTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          trip.title,
-                          style: context.textTheme.headlineSmall?.copyWith(
-                            color: AppColors.pureBlack,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        //   Container(
-                        //     padding: EdgeInsets.symmetric(
-                        //       horizontal: 6.w,
-                        //       vertical: 2.h,
-                        //     ),
-                        //     decoration: BoxDecoration(
-                        //       color: AppColors.warning.withValues(alpha: 0.1),
-                        //       borderRadius: BorderRadius.circular(6.r),
-                        //     ),
-                        //     child: Text(
-                        //       'Draft',
-                        //       style: AppTextStyles.h10Medium.copyWith(
-                        //         color: AppColors.warning,
-                        //       ),
-                        //     ),
-                        //   ),
-                      ],
+                    Text(
+                      trip.title,
+                      style: context.textTheme.headlineSmall?.copyWith(
+                        color: AppColors.pureBlack,
+                      ),
+                      // maxLines: 1,
+                      // overflow: TextOverflow.ellipsis,
                     ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+
+                    //     //   Container(
+                    //     //     padding: EdgeInsets.symmetric(
+                    //     //       horizontal: 6.w,
+                    //     //       vertical: 2.h,
+                    //     //     ),
+                    //     //     decoration: BoxDecoration(
+                    //     //       color: AppColors.warning.withValues(alpha: 0.1),
+                    //     //       borderRadius: BorderRadius.circular(6.r),
+                    //     //     ),
+                    //     //     child: Text(
+                    //     //       'Draft',
+                    //     //       style: AppTextStyles.h10Medium.copyWith(
+                    //     //         color: AppColors.warning,
+                    //     //       ),
+                    //     //     ),
+                    //     //   ),
+                    //   ],
+                    // ),
                     SizedBox(height: 12.h),
                     Row(
                       children: [
@@ -99,8 +100,8 @@ class ScheduleTripTile extends StatelessWidget {
                             style: context.textTheme.bodyMedium?.copyWith(
                               color: context.colorTheme.onSurfaceVariant,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                            // maxLines: 1,
+                            // overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],

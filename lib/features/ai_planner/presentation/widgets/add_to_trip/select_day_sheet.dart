@@ -34,7 +34,21 @@ class SelectDaySheet extends StatelessWidget {
         } else {
           AppDialog.hideLoading(context);
         }
-
+        if (state.addingStatus == ActionStatus.success) {
+          AppDialog.show(
+            context: context,
+            title: 'Your Trip Has Been Updated !',
+            //Todo navigate into the trip details screen
+            titleStyle: context.textTheme.headlineSmall?.copyWith(
+              color: context.colorTheme.primary,
+            ),
+            primaryText: 'Continue Exploring',
+            onPrimary: () {
+              context.read<AddToTripCubit>().reset();
+              Navigator.pop(context);
+            },
+          );
+        }
         if (state.addingStatus == ActionStatus.error) {
           AppSnackBar.showError(
             context: context,
