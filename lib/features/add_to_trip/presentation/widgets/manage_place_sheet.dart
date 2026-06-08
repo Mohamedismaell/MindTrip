@@ -6,9 +6,9 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/drag_divider.dart';
 
 class ManagePlaceSheet extends StatelessWidget {
   const ManagePlaceSheet({

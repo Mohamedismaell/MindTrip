@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/add_to_trip_flow_wrapper.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/add_to_trip_flow_wrapper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PlaceDetailsTripButton extends StatelessWidget {

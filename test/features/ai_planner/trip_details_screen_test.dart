@@ -8,14 +8,7 @@ import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip_day.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/trip_itinerary.dart';
-import 'package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trip_details_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/trips_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/screens/trip_details_screen.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 
 void main() {
   group('TripDetailsScreen', () {
@@ -123,9 +116,7 @@ Future<void> _pumpTripDetails(
         path: AppRoutes.tripDetails,
         builder: (context, state) => MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (_) => TripDetailsCubit(repo),
-            ),
+            BlocProvider(create: (_) => TripDetailsCubit(repo)),
             BlocProvider.value(value: tripsCubit),
           ],
           child: TripDetailsScreen(tripId: repo.trip.id),
@@ -265,7 +256,12 @@ class _FakeTripRepository implements TripRepository {
   }
 
   @override
-  Future<TripItinerary> addPlace(String tripId, PlaceEntity place, {int? dayNumber, DayPeriod? period}) async {
+  Future<TripItinerary> addPlace(
+    String tripId,
+    PlaceEntity place, {
+    int? dayNumber,
+    DayPeriod? period,
+  }) async {
     throw UnimplementedError();
   }
 
@@ -280,12 +276,23 @@ class _FakeTripRepository implements TripRepository {
   }
 
   @override
-  Future<TripItinerary> movePlace(String tripId, String placeId, int toDayNumber, DayPeriod toPeriod) async {
+  Future<TripItinerary> movePlace(
+    String tripId,
+    String placeId,
+    int toDayNumber,
+    DayPeriod toPeriod,
+  ) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<(TripItinerary, TripItinerary)> movePlaceBetweenTrips({required String sourceTripId, required String targetTripId, required String placeId, required int toDayNumber, required DayPeriod toPeriod}) async {
+  Future<(TripItinerary, TripItinerary)> movePlaceBetweenTrips({
+    required String sourceTripId,
+    required String targetTripId,
+    required String placeId,
+    required int toDayNumber,
+    required DayPeriod toPeriod,
+  }) async {
     throw UnimplementedError();
   }
 

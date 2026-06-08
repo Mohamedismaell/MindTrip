@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/add_to_trip_sheet.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/create_trip_planner_sheet.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/manage_place_sheet.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/select_day_sheet.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/add_to_trip_sheet.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/create_trip_planner_sheet.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/manage_place_sheet.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/select_day_sheet.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 class AddToTripFlowWrapper extends StatefulWidget {

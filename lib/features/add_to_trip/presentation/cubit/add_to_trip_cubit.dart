@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/add_place_to_trip_use_case.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/generate_itinerary_use_case.dart';
@@ -56,7 +56,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
        _saveItinerary = saveItinerary,
        super(AddToTripState(place: place));
 
-  // ─── Initialization ───────────────────────────────────────────────────────
+  //  Initialization ─
 
   Future<void> init() async {
     final result = await _getTripContainingPlace(state.place.id);
@@ -108,7 +108,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  // ─── Trip List ─────────────────────────────────────────────────────────────
+  //  Trip List
 
   Future<void> loadTrips() async {
     emit(state.copyWith(tripsStatus: TripsLoadStatus.loading));
@@ -142,7 +142,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  // ─── Selection & Navigation ───────────────────────────────────────────────
+  //  Selection & Navigation
 
   /// Loads the itinerary for [trip]. Returns `true` on success.
   Future<bool> selectTrip(Trip trip) async {
@@ -185,7 +185,6 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  /// Entry point for "Manage" flow: Loads original trip then selects it.
   Future<bool> loadHostTripItinerary() async {
     if (state.hostTripId == null) return false;
     emit(state.copyWith(itineraryStatus: TripsLoadStatus.loading));
@@ -224,7 +223,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     emit(state.copyWith(selectedDay: dayNumber, selectedPeriod: period));
   }
 
-  // ─── Actions ──────────────────────────────────────────────────────────────
+  //  Actions
 
   Future<bool> addToTrip({int? dayNumber, PlaceDayPeriod? period}) async {
     if (state.selectedTrip == null) return false;
@@ -247,9 +246,6 @@ class AddToTripCubit extends Cubit<AddToTripState> {
             placeAlreadyInTrip: true,
             hostTripId: state.selectedTrip!.id,
             hostTripName: state.selectedTrip!.title,
-            clearSelectedDayPeriod: true,
-            clearSelectedItinerary: true,
-            clearSelectedTrip: true,
           ),
         );
         return true;
@@ -374,7 +370,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
   }
 
-  // ─── AI Planner ───────────────────────────────────────────────────────────
+  //  AI Planner
 
   void selectTripDate(DateTime day) {
     final picked = DateTime(day.year, day.month, day.day);

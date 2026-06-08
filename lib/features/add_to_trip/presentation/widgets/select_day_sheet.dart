@@ -2,8 +2,6 @@ import 'package:flutter/material.dart' hide DayPeriod;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
@@ -12,9 +10,9 @@ import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/drag_divider.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 
 class SelectDaySheet extends StatelessWidget {
@@ -52,14 +50,11 @@ class SelectDaySheet extends StatelessWidget {
             titleStyle: context.textTheme.headlineSmall?.copyWith(
               color: context.colorTheme.primary,
             ),
+            icon: Icons.check_circle_outline_outlined,
             primaryText: 'Continue Exploring',
             onPrimary: () {
-              // final tripId = state.selectedTrip?.id ?? state.hostTripId;
               // context.read<AddToTripCubit>().reset();
-              // onClose();
-              // if (tripId != null) {
-              //   context.push('${AppRoutes.tripDetails}?tripId=$tripId');
-              // }
+              onClose();
             },
           );
         }

@@ -8,10 +8,10 @@ import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/add_to_trip_state.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/add_to_trip/drag_divider.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/drag_divider.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/range_calendar.dart';
 
 class CreateTripPlannerSheet extends StatelessWidget {
