@@ -7,6 +7,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/utils/wavy_clipper.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 
@@ -24,11 +25,11 @@ class TripShareCard extends StatelessWidget {
         : 'TBD';
 
     return Container(
-      width: 450.w,
+      width: 450,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(40.r),
+        borderRadius: BorderRadius.circular(40),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -41,126 +42,129 @@ class TripShareCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
-            height: 480.h,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                // Background Image
-                AppCachedImage(
-                  imagePath: trip.itineraryCoverUrl,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+          ClipPath(
+            clipper: SmoothWavyClipper(),
+            child: SizedBox(
+              height: 480,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Background Image
+                  AppCachedImage(
+                    imagePath: trip.itineraryCoverUrl,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
 
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.8),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.8),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Positioned(
+                    top: 32,
+                    left: 0,
+                    right: 0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(AppAssets.planeLogo, width: 30),
+
+                            SizedBox(width: 8),
+                            Text(
+                              'MindTrip',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.h4SemiBold.copyWith(
+                                color: AppColors.pureBlack,
+                                letterSpacing: -1,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          textAlign: TextAlign.center,
+                          'Your journey, perfectly planned.',
+                          style: AppTextStyles.h10Medium.copyWith(
+                            color: AppColors.pureBlack,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ),
 
-                Positioned(
-                  top: 32.h,
-                  left: 0,
-                  right: 0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(AppAssets.planeLogo, width: 30.r),
-
-                          SizedBox(width: 8.w),
-                          Text(
-                            'MindTrip',
-                            textAlign: TextAlign.center,
-                            style: AppTextStyles.h4SemiBold.copyWith(
-                              color: AppColors.pureBlack,
-                              letterSpacing: -1,
+                  Positioned(
+                    bottom: 45, // Adjusted for wave height
+                    left: 24,
+                    right: 24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Let's go to",
+                              style: AppTextStyles.h5Light.copyWith(
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        textAlign: TextAlign.center,
-                        'Your journey, perfectly planned.',
-                        style: AppTextStyles.h10Medium.copyWith(
-                          color: AppColors.pureBlack,
+                            SizedBox(width: 12),
+                            Icon(
+                              Icons.flight_takeoff,
+                              color: AppColors.testBlue,
+                              size: 28,
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Positioned(
-                  bottom: 30.h,
-                  left: 24.w,
-                  right: 24.w,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Let's go to",
-                            style: AppTextStyles.h5Light.copyWith(
-                              color: Colors.white,
-                              fontStyle: FontStyle.italic,
-                            ),
+                        Text(
+                          trip.destination,
+                          style: AppTextStyles.h3Bold.copyWith(
+                            color: Colors.white,
                           ),
-                          SizedBox(width: 12.w),
-                          Icon(
-                            Icons.flight_takeoff,
-                            color: AppColors.testBlue,
-                            size: 28.r,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        trip.destination,
-                        style: AppTextStyles.h3Bold.copyWith(
-                          color: Colors.white,
                         ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            color: AppColors.testBlue,
-                            size: 20.r,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            trip.destination,
-                            style: AppTextStyles.h8Medium.copyWith(
-                              color: Colors.white,
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: AppColors.testBlue,
+                              size: 20,
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            SizedBox(width: 4),
+                            Text(
+                              trip.destination,
+                              style: AppTextStyles.h8Medium.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.h),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,17 +193,17 @@ class TripShareCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: Container(
-              padding: EdgeInsets.all(20.r),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: const Color(0xFFF9FAFB),
-                borderRadius: BorderRadius.circular(20.r),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(10.r),
+                    padding: EdgeInsets.all(10),
                     decoration: const BoxDecoration(
                       color: AppColors.primaryLightGray,
                       // color: Color(0xFFE0E7FF),
@@ -208,10 +212,10 @@ class TripShareCard extends StatelessWidget {
                     child: Icon(
                       Icons.format_quote,
                       color: AppColors.testBlue,
-                      size: 20.r,
+                      size: 20,
                     ),
                   ),
-                  SizedBox(width: 16.w),
+                  SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,16 +236,16 @@ class TripShareCard extends StatelessWidget {
                     ),
                   ),
 
-                  SvgPicture.asset(AppAssets.travelIllustration, width: 90.w),
+                  SvgPicture.asset(AppAssets.travelIllustration, width: 90),
                 ],
               ),
             ),
           ),
 
-          SizedBox(height: 30.h),
+          SizedBox(height: 30),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.w),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: const Divider(
               color: Color(0xFFF3F4F6),
               height: 1,
@@ -251,13 +255,13 @@ class TripShareCard extends StatelessWidget {
 
           // 4. Footer Section
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 24.h),
+            padding: EdgeInsets.symmetric(vertical: 24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(AppAssets.planeLogo, width: 18.r),
+                SvgPicture.asset(AppAssets.planeLogo, width: 18),
                 // Container(
-                //   padding: EdgeInsets.all(4.r),
+                //   padding: EdgeInsets.all(4),
                 //   decoration: BoxDecoration(
                 //     color: Colors.white,
                 //     shape: BoxShape.circle,
@@ -266,10 +270,10 @@ class TripShareCard extends StatelessWidget {
                 //   child: Icon(
                 //     Icons.airplanemode_active,
                 //     color: AppColors.testBlue,
-                //     size: 14.r,
+                //     size: 14,
                 //   ),
                 // ),
-                SizedBox(width: 8.w),
+                SizedBox(width: 8),
                 RichText(
                   text: TextSpan(
                     style: AppTextStyles.h9Medium.copyWith(
@@ -315,12 +319,12 @@ class _TripShareInfoItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             decoration: const BoxDecoration(
               color: AppColors.pureWhite,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: AppColors.testBlue, size: 20.r),
+            child: Icon(icon, color: AppColors.testBlue, size: 20),
           ),
           Expanded(
             child: Column(
@@ -332,17 +336,17 @@ class _TripShareInfoItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                   label,
                   style: AppTextStyles.h10SemiBold.copyWith(
-                    fontSize: 10.sp,
+                    fontSize: 10,
                     color: AppColors.mediumLightGray,
                     letterSpacing: 0.5,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 2),
                 Text(
                   textAlign: TextAlign.center,
                   value,
                   style: AppTextStyles.h10Bold.copyWith(
-                    fontSize: 10.sp,
+                    fontSize: 10,
                     color: AppColors.pureBlack,
                   ),
                 ),
@@ -361,10 +365,10 @@ class _TripShareVerticalDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 35.h,
+      height: 35,
       width: 1,
       color: const Color(0xFFE5E7EB),
-      margin: EdgeInsets.symmetric(horizontal: 4.w),
+      margin: EdgeInsets.symmetric(horizontal: 4),
     );
   }
 }

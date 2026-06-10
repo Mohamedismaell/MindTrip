@@ -48,6 +48,7 @@ class TripShareCubit extends Cubit<TripShareState> {
       //     "Check out my upcoming trip to ${trip.destination}! 🌍\n\nhttps://mindtrip.app/trips/${trip.id}";
 
       final text = "Check out my trip to ${trip.destination}! ✈️";
+
       if (imageBytes != null && imageBytes.isNotEmpty) {
         final xFile = XFile.fromData(
           imageBytes,

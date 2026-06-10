@@ -95,9 +95,8 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
                   color: context.colorTheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12.h),
               _DayMetaRow(day: widget.day),
-              SizedBox(height: 12.h),
+              SizedBox(height: 8.h),
               //Todo: the tags should be the catgory of the places
               _TagWrap(tags: widget.day.tags.take(3).toList()),
               SizedBox(height: 12.h),
@@ -215,14 +214,15 @@ class _DayMetaRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 6.w,
-      runSpacing: 6.h,
+      runSpacing: 10.h,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         _IconText(
           icon: Icons.location_on_outlined,
-          text: '${day.stopCount} stops',
+          text: '${day.totalPlaces} places',
         ),
         const _IconText(icon: Icons.schedule_outlined, text: 'Full day'),
+        SizedBox(width: 10.w),
         _CostChip(cost: day.estimatedCost),
       ],
     );

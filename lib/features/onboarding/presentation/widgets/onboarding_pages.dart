@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/utils/wavy_clipper.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/onboarding/presentation/models/onboarding_model.dart';
-import 'package:mindtrip/features/onboarding/presentation/widgets/wavy_clipper.dart';
 
 class OnboardingPages extends StatelessWidget {
   const OnboardingPages({super.key, required this.pageController});

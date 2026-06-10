@@ -7,15 +7,14 @@ class ScreenshotUtils {
   static Future<Uint8List?> captureWidget({
     required BuildContext context,
     required Widget widget,
-    Duration delay = const Duration(milliseconds: 500),
-    double pixelRatio = 5.0,
+    double pixelRatio = 6.0,
   }) async {
     final GlobalKey repaintKey = GlobalKey();
 
-    // Wrap the widget in a RepaintBoundary and hide it off-screen
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        left: -9999, // Render out of view
+        // Render out of view
+        left: -9999,
         top: -9999,
         child: Material(
           color: Colors.transparent,
@@ -28,7 +27,7 @@ class ScreenshotUtils {
     Overlay.of(context).insert(overlayEntry);
 
     // Wait for the widget to render (allowing time for images to load if needed)
-    await Future.delayed(delay);
+    await WidgetsBinding.instance.endOfFrame;
 
     try {
       final boundary =
@@ -36,6 +35,7 @@ class ScreenshotUtils {
               as RenderRepaintBoundary?;
       if (boundary == null) return null;
 
+      print('Boundary size: ${boundary.size.width} x ${boundary.size.height}');
       final ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
       final ByteData? byteData = await image.toByteData(
         format: ui.ImageByteFormat.png,

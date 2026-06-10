@@ -21,6 +21,9 @@ class TripDay extends Equatable {
   final double estimatedCost;
   final List<TimeSlot> timeSlots;
 
+  int get totalPlaces =>
+      timeSlots.fold(0, (sum, slot) => sum + slot.places.length);
+
   TripDay copyWith({
     int? dayNumber,
     String? title,
