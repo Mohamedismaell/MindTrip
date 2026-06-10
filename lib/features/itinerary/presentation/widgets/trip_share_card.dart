@@ -119,7 +119,7 @@ class TripShareCard extends StatelessWidget {
                           children: [
                             Text(
                               "Let's go to",
-                              style: AppTextStyles.h5Light.copyWith(
+                              style: AppTextStyles.h5Regular.copyWith(
                                 color: Colors.white,
                                 fontStyle: FontStyle.italic,
                               ),

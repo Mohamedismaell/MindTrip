@@ -73,7 +73,7 @@ class OnboardingContent extends StatelessWidget {
                     },
                     child: Text(
                       AppStrings.skip,
-                      style: AppTextStyles.h7Light.copyWith(
+                      style: AppTextStyles.h7Regular.copyWith(
                         color: context.colorTheme.outline,
                       ),
                     ),

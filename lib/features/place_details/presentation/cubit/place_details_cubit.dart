@@ -47,7 +47,8 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
       if (isClosed) return;
       emit(state.copyWith(placeDetailsStatus: PlaceDetailsStatus.loading));
     }
-    await Future.delayed(Duration(seconds: 3));
+    // await Future.delayed(Duration(seconds: 1));
+
     final result = await _getDetails(placeId);
 
     result.when(

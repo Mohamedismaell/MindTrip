@@ -4,7 +4,6 @@ import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
 import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 
 class PlaceDetailsRemoteDataSource {
-
   PlaceDetailsRemoteDataSource();
 
   Future<PlaceModel> getPlaceDetails(String placeId) async {
@@ -13,7 +12,7 @@ class PlaceDetailsRemoteDataSource {
     // return PlaceModel.fromJson(response);
 
     // Mock fallback: search all mock data lists to return a valid PlaceModel
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 2000));
 
     final List<PlaceModel> allMockPlaces = [
       ...HomeMockData.popularDestinations.map((e) => e.toModel()),
@@ -30,9 +29,9 @@ class PlaceDetailsRemoteDataSource {
   }
 
   Future<List<PlaceModel>> getNearbyPlaces(
-      String placeId, {
-      double? lat,
-      double? lng,
+    String placeId, {
+    double? lat,
+    double? lng,
   }) async {
     /// TODO: Make real API call when backend connects nearby places endpoints
     // final response = await _api.get(
@@ -46,7 +45,9 @@ class PlaceDetailsRemoteDataSource {
 
     // Mock fallback: return a shuffled sublist of trending places
     await Future.delayed(const Duration(seconds: 5));
-    final List<PlaceModel> nearby = List.from(ExploreMockData.trendingPlaces.map((e) => e.toModel()));
+    final List<PlaceModel> nearby = List.from(
+      ExploreMockData.trendingPlaces.map((e) => e.toModel()),
+    );
     nearby.shuffle();
     return nearby.take(4).toList();
   }
