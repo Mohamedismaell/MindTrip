@@ -46,4 +46,7 @@ class AppColors {
   // Semantic aliases
   static const Color success = Color(0xFF4CAF50);
   static const Color warning = Color(0xFFF59E0B);
+
+  //! test
+  static const Color testBlue = Color(0xFF4b6cf2);
 }

@@ -9,120 +9,23 @@ import 'package:mindtrip/core/widget/app_snackbar.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/features/itinerary/presentation/cubit/trp_share_state.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/itinerary/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/itinerary/presentation/cubit/trip_details_state.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/itinerary/presentation/cubit/trip_share_cubit.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/itinerary/presentation/widgets/ai_refinement_sheet.dart';
 import 'package:mindtrip/features/itinerary/presentation/widgets/trip_day_overview_card.dart';
 import 'package:mindtrip/features/itinerary/presentation/widgets/trip_details_bar.dart';
 import 'package:mindtrip/features/itinerary/presentation/widgets/trip_map_preview_card.dart';
 import 'package:mindtrip/features/map/data/models/map_trip_extra.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class TripDetailsScreen extends StatelessWidget {
   final String tripId;
-
-  const TripDetailsScreen({super.key, required this.tripId});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
-          builder: (context, state) {
-            return _buildBody(context, state);
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context, TripDetailsState state) {
-    if (state.status == TripDetailsStatus.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state.status == TripDetailsStatus.error) {
-      return _MessageState(message: state.errorMessage ?? 'Error loading trip');
-    }
-
-    final trip = state.trip;
-    final itinerary = state.itinerary;
-    if (trip == null || itinerary == null || itinerary.days.isEmpty) {
-      return const _MessageState(message: 'Trip not found');
-    }
-
-    final expandedDay = state.activeDay;
-
-    return CustomScrollView(
-      slivers: [
-        TripDetailsTopBar(
-          onBack: () => context.go(AppRoutes.myTrips),
-          onRefine: () =>
-              AiRefinementSheet.show(context, trip.id, const []),
-        ),
-        SliverToBoxAdapter(child: SizedBox(height: 52.h)),
-        SliverPadding(
-          padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 55.h),
-          sliver: SliverList.separated(
-            itemCount: itinerary.days.length + 3,
-            separatorBuilder: (_, index) {
-              return SizedBox(height: 42.h);
-            },
-            itemBuilder: (context, index) {
-              if (index < itinerary.days.length) {
-                final day = itinerary.days[index];
-                return TripDayOverviewCard(
-                  day: day,
-                  tripCoverAsset: trip.coverAsset,
-                  isExpanded: day.dayNumber == expandedDay,
-                  onToggle: () {
-                    context.read<TripDetailsCubit>().toggleActiveDay(
-                      day.dayNumber,
-                    );
-                  },
-                  onRefine: () => AiRefinementSheet.show(
-                    context,
-                    trip.id,
-                    const [],
-                  ),
-                );
-              }
-
-              if (index == itinerary.days.length) {
-                return TripMapPreviewCard(
-                  days: itinerary.days,
-                  onViewMap: itinerary.days.isEmpty
-                      ? null
-                      : () => context.push(
-                          AppRoutes.map,
-                          extra: MapTripExtra(days: itinerary.days),
-                        ),
-                );
-              }
-
-              if (index == itinerary.days.length + 1) {
-                return _EstimateNote(
-                  estimatedTotalCost: itinerary.estimatedTotalCost,
-                );
-              }
-
-              return trip.status == TripStatus.completed
-                  ? const SizedBox.shrink()
-                  : _SaveTripButton(
-                      trip: trip,
-                      onSave: () {
-                        _saveTrip(context, trip);
-                      },
-                    );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
   Future<void> _saveTrip(BuildContext context, Trip trip) async {
     AppDialog.show(
       context: context,
@@ -140,6 +43,150 @@ class TripDetailsScreen extends StatelessWidget {
         );
         context.go(AppRoutes.myTrips);
       },
+    );
+  }
+
+  const TripDetailsScreen({super.key, required this.tripId});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<TripShareCubit, TripShareState>(
+      listener: (context, state) {
+        if (state is TripShareLoading) {
+          AppDialog.showLoading(context: context);
+        } else if (state is TripShareSuccess) {
+          AppDialog.hideLoading(context);
+        } else if (state is TripShareError) {
+          AppDialog.hideLoading(context);
+          AppSnackBar.showError(context: context, message: state.message);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
+            builder: (context, state) {
+              final isLoading = state.status == TripDetailsStatus.loading;
+
+              if (state.status == TripDetailsStatus.error) {
+                return _MessageState(
+                  message: state.errorMessage ?? 'Error loading trip',
+                );
+              }
+
+              final trip = isLoading ? _dummyTrip : state.trip;
+              final itinerary = isLoading ? _dummyItinerary : state.itinerary;
+
+              if (!isLoading &&
+                  (trip == null || itinerary == null || itinerary.days.isEmpty)) {
+                return const _MessageState(message: 'Trip not found');
+              }
+
+              final expandedDay = state.activeDay;
+
+              return Skeletonizer(
+                enabled: isLoading,
+                child: CustomScrollView(
+                  slivers: [
+                    TripDetailsTopBar(
+                      onBack: () => context.go(AppRoutes.myTrips),
+                      onShare: () {
+                        if (isLoading || trip == null || itinerary == null) {
+                          return;
+                        }
+                        final RenderBox? box =
+                            context.findRenderObject() as RenderBox?;
+                        final sharePositionOrigin = box != null
+                            ? box.localToGlobal(Offset.zero) & box.size
+                            : null;
+
+                        context.read<TripShareCubit>().shareTrip(
+                          context: context,
+                          trip: trip,
+                          itinerary: itinerary,
+                          sharePositionOrigin: sharePositionOrigin,
+                        );
+                      },
+                    ),
+                    SliverToBoxAdapter(child: SizedBox(height: 52.h)),
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        left: 14.w,
+                        right: 14.w,
+                        bottom: 55.h,
+                      ),
+                      sliver: SliverList.separated(
+                        itemCount: itinerary?.days.length ?? 0 + 3,
+                        separatorBuilder: (_, index) {
+                          return SizedBox(height: 42.h);
+                        },
+                        itemBuilder: (context, index) {
+                          if (itinerary != null &&
+                              index < itinerary.days.length) {
+                            final day = itinerary.days[index];
+                            return TripDayOverviewCard(
+                              day: day,
+                              tripCoverAsset: trip?.coverAsset ?? '',
+                              isExpanded: day.dayNumber == expandedDay,
+                              onToggle: () {
+                                context
+                                    .read<TripDetailsCubit>()
+                                    .toggleActiveDay(
+                                      day.dayNumber,
+                                    );
+                              },
+                              onRefine: () => AiRefinementSheet.show(
+                                context,
+                                trip?.id ?? '',
+                                const [],
+                              ),
+                            );
+                          }
+
+                          final dayCount = itinerary?.days.length ?? 0;
+
+                          if (index == dayCount) {
+                            return TripMapPreviewCard(
+                              days: itinerary?.days ?? [],
+                              onViewMap: itinerary?.days.isEmpty ?? true
+                                  ? null
+                                  : () => context.push(
+                                      AppRoutes.map,
+                                      extra: MapTripExtra(
+                                        days: itinerary?.days ?? [],
+                                      ),
+                                    ),
+                            );
+                          }
+
+                          if (index == dayCount + 1) {
+                            return _EstimateNote(
+                              estimatedTotalCost:
+                                  itinerary?.estimatedTotalCost ?? 0,
+                            );
+                          }
+
+                          return (trip?.status ?? TripStatus.draft) ==
+                                  TripStatus.completed
+                              ? const SizedBox.shrink()
+                              : _SaveTripButton(
+                                  trip: trip ?? _dummyTrip,
+                                  onSave: () {
+                                    if (trip != null) {
+                                      _saveTrip(context, trip);
+                                    }
+                                  },
+                                );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
@@ -193,7 +240,6 @@ class _MessageState extends StatelessWidget {
   const _MessageState({required this.message});
 
   final String message;
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -208,3 +254,34 @@ class _MessageState extends StatelessWidget {
     );
   }
 }
+
+final _dummyTrip = Trip(
+  id: 'skeleton',
+  title: 'Loading Trip...',
+  status: TripStatus.draft,
+  createdAt: DateTime.now(),
+  updatedAt: DateTime.now(),
+  destination: 'Loading Destination',
+  adults: 2,
+  children: 0,
+  pets: 0,
+  customBudget: '',
+  interests: const [],
+);
+
+final _dummyItinerary = TripItinerary(
+  tripId: 'skeleton',
+  days: List.generate(
+    3,
+    (i) => TripDay(
+      dayNumber: i + 1,
+      title: 'Loading Day...',
+      coverImageUrl: '',
+      tags: const ['Category', 'Category'],
+      stopCount: 3,
+      estimatedCost: 1500,
+      timeSlots: const [],
+    ),
+  ),
+  estimatedTotalCost: 4500,
+);

@@ -9,11 +9,11 @@ class TripDetailsTopBar extends StatelessWidget {
   const TripDetailsTopBar({
     super.key,
     required this.onBack,
-    required this.onRefine,
+    required this.onShare,
   });
 
   final VoidCallback onBack;
-  final VoidCallback onRefine;
+  final VoidCallback onShare;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class TripDetailsTopBar extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
-                  onPressed: onRefine,
+                  onPressed: onShare,
                   style: IconButton.styleFrom(
                     backgroundColor: AppColors.primaryLightGray,
                     fixedSize: Size(40.w, 40.w),

@@ -13,28 +13,28 @@ class PlaceLocalDataSourceImpl implements PlaceLocalDataSource {
   @override
   Future<List<PlaceEntity>> getPopularPlaces() async {
     // Simulate network delay
-    await Future.delayed(const Duration(seconds: 10));
+    await Future.delayed(const Duration(seconds: 1));
     return HomeMockData.popularDestinations;
   }
 
   @override
   Future<List<PlaceEntity>> getRecommendedPlaces() async {
     // Simulate network delay
-    await Future.delayed(const Duration(seconds: 10));
+    await Future.delayed(const Duration(seconds: 1));
     return HomeMockData.recommendedDestinations;
   }
 
   @override
   Future<List<PlaceEntity>> getTrendingPlaces() async {
     // Simulate network delay
-    await Future.delayed(const Duration(seconds: 10));
+    await Future.delayed(const Duration(seconds: 1));
     return ExploreMockData.trendingPlaces;
   }
 
   @override
   Future<List<PlaceEntity>> getOtherPlaces() async {
     // Simulate network delay
-    await Future.delayed(const Duration(seconds: 10));
+    await Future.delayed(const Duration(seconds: 1));
     return ExploreMockData.otherPlaces;
   }
 }

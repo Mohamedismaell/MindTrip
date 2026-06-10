@@ -27,14 +27,18 @@ class ExploreTrendingList extends StatelessWidget {
             child: AppErrorWidget(
               message: state.trendingPlacesError,
               imageSize: 60,
-              onPressed: () => context.read<ExploreCubit>().loadTrendingPlaces(),
+              onPressed: () =>
+                  context.read<ExploreCubit>().loadTrendingPlaces(),
             ),
           );
         }
 
-        final isLoading = state.trendingPlacesStatus == ExploreDataStatus.loading ||
+        final isLoading =
+            state.trendingPlacesStatus == ExploreDataStatus.loading ||
             state.trendingPlacesStatus == ExploreDataStatus.initial;
-        final items = isLoading ? DummyData.popularPlaces : state.trendingPlaces;
+        final items = isLoading
+            ? DummyData.popularPlaces
+            : state.trendingPlaces;
 
         if (!isLoading && items.isEmpty) {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -75,10 +79,7 @@ class _TrendingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.primaryLightGray.withValues(alpha: 0.4),
         // boxShadow: [AppShadows.tourPackagesCard],
-        border: Border.all(
-          color: context.colorTheme.onSurfaceVariant,
-          width: 0.4,
-        ),
+        border: Border.all(color: context.colorTheme.outline, width: 0.8),
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Column(
@@ -88,6 +89,7 @@ class _TrendingCard extends StatelessWidget {
               topLeft: Radius.circular(10.r),
               topRight: Radius.circular(10.r),
             ),
+
             //! Handle no image later
             child: AppCachedImage(
               width: double.infinity,

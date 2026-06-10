@@ -11,6 +11,7 @@ import 'package:mindtrip/features/itinerary/domain/use_cases/remove_place_from_t
 import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_in_trip_use_case.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_between_trips_use_case.dart';
 import 'package:mindtrip/features/itinerary/presentation/cubit/trip_details_cubit.dart';
+import 'package:mindtrip/features/itinerary/presentation/cubit/trip_share_cubit.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_by_id_use_case.dart';
 
 class ItineraryDi {
@@ -57,5 +58,6 @@ class ItineraryDi {
         sl<GetItineraryUseCase>(),
       ),
     );
+    sl.registerFactory<TripShareCubit>(() => TripShareCubit());
   }
 }

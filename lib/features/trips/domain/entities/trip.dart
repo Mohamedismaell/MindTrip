@@ -119,7 +119,6 @@ class Trip extends Equatable {
   }
 
   String get coverAsset => TripCoverAssets.getForCity(destination);
-
   @override
   List<Object?> get props => [
     id,

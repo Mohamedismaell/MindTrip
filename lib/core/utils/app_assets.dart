@@ -37,6 +37,9 @@ class AppAssets {
   static const String emailIcon = '$_iconsPath/email.svg';
   static const String lockIcon = '$_iconsPath/lock.svg';
   static const String personIcon = '$_iconsPath/person.svg';
+  static const String planeLogo = '$_iconsPath/plane_logo.svg';
+  static const String travelIllustration =
+      '$_iconsPath/travel_illustration.svg';
 }
 
 class HomeAssets {

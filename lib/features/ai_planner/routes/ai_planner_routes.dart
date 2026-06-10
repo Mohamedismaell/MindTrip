@@ -10,6 +10,7 @@ import 'package:mindtrip/features/trips/presentation/screens/trips_screen.dart';
 import 'package:mindtrip/features/trips/presentation/screens/trip_calendar_screen.dart';
 import 'package:mindtrip/features/itinerary/presentation/screens/trip_details_screen.dart';
 import 'package:mindtrip/features/itinerary/presentation/cubit/trip_details_cubit.dart';
+import 'package:mindtrip/features/itinerary/presentation/cubit/trip_share_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_chat_screen.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_flow_screen.dart';
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_intro_screen.dart';
@@ -29,6 +30,7 @@ class AiPlannerRoutes {
             BlocProvider.value(value: sl<TripsCubit>()..loadTrips()),
             BlocProvider(create: (_) => sl<ChatCubit>()),
             BlocProvider(create: (_) => sl<TripDetailsCubit>()),
+            BlocProvider(create: (_) => sl<TripShareCubit>()),
           ],
           child: child,
         );

@@ -213,6 +213,7 @@ class AppDialog {
           child: Material(
             color: Colors.transparent,
             child: Container(
+              width: MediaQuery.sizeOf(context).width * 0.7,
               margin: EdgeInsets.symmetric(horizontal: 24.w),
               padding: EdgeInsets.all(24.r),
               decoration: BoxDecoration(
