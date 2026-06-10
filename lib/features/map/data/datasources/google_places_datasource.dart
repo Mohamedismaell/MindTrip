@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mindtrip/core/app_env.dart';
 import 'package:mindtrip/features/map/data/models/google_place_model.dart';
 import 'package:mindtrip/features/map/data/models/place_prediction.dart';
 
@@ -8,7 +9,8 @@ class GooglePlacesRemoteDatasource {
 
   GooglePlacesRemoteDatasource({required Dio dio})
     : _dio = dio,
-      _apiKey = const String.fromEnvironment('GOOGLE_PLACES_KEY');
+      _apiKey = AppEnv.googlePlacesKey;
+  //  const String.fromEnvironment('GOOGLE_PLACES_KEY');
 
   Future<List<PlacePrediction>> findAutocompletePredictions(
     String query, {

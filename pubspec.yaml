@@ -58,6 +58,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   firebase_core: ^4.9.0
   firebase_auth: ^6.5.1
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
@@ -110,6 +111,7 @@ flutter:
     - assets/icons/bottom_nav/
     - assets/icons/ai_planner/
     # - assets/icons/map/
+    - .env.dev
   fonts:
     - family: SFPro
       fonts:

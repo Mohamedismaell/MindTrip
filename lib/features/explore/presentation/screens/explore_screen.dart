@@ -53,18 +53,18 @@ class ExploreScreen extends StatelessWidget {
               SliverToBoxAdapter(child: SizedBox(height: 20.h)),
 
               //  Trending Now
-              ExploreSectionHeader(
+              const ExploreSectionHeader(
                 title: 'Trending now',
-                count: ExploreMockData.trendingPlaces.length,
+                count: 8, // This should probably also come from Cubit if needed
               ),
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-              ExploreTrendingList(items: ExploreMockData.trendingPlaces),
+              const ExploreTrendingList(),
               SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
               //  Other Places
-              ExploreSectionHeader(title: 'Other Places', count: 40),
+              const ExploreSectionHeader(title: 'Other Places', count: 40),
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-              ExplorePlacesGrid(places: ExploreMockData.otherPlaces),
+              const ExplorePlacesGrid(),
               SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
               //  Show More + Map

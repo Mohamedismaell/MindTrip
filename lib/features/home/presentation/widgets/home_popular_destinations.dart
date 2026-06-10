@@ -6,153 +6,198 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
-class HomePopularDestinations extends StatelessWidget {
-  const HomePopularDestinations({super.key, required this.destinations});
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home_state.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mindtrip/core/utils/dummy_data.dart';
 
-  final List<PlaceEntity> destinations;
+class HomePopularDestinations extends StatelessWidget {
+  const HomePopularDestinations({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: SizedBox(
-        height: 198.h,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: destinations.length,
+    return BlocBuilder<HomeCubit, HomeState>(
+      buildWhen: (previous, current) =>
+          previous.popularPlacesStatus != current.popularPlacesStatus ||
+          previous.popularPlaces != current.popularPlaces,
+      builder: (context, state) {
+        if (state.popularPlacesStatus == HomeDataStatus.failure) {
+          return SliverToBoxAdapter(
+            child: AppErrorWidget(
+              message: state.popularPlacesError,
+              imageSize: 80,
+              onPressed: () => context.read<HomeCubit>().loadPopularPlaces(),
+            ),
+          );
+        }
+        final isLoading = state.popularPlacesStatus == HomeDataStatus.loading ||
+            state.popularPlacesStatus == HomeDataStatus.initial;
+        final destinations = isLoading ? DummyData.popularPlaces : state.popularPlaces;
 
-          itemBuilder: (context, index) {
-            final destination = destinations[index];
-            return Row(
-              children: [
-                TapScaleEffect(
-                  onTap: () {
-                    context.push(
-                      '${AppRoutes.placeDetails}?placeId=${destination.id}',
-                      extra: destination,
-                    );
-                  },
-                  child: SizedBox(
-                    width: 289.w,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(40.r),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          //! Handle no image later
-                          Hero(
-                            tag: destination.id,
-                            child: AppCachedImage(
-                              imagePath: destination.imageUrls?.first ?? '',
-                            ),
-                          ),
+        if (!isLoading && destinations.isEmpty) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
 
-                          DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.black.withValues(alpha: 0.3),
-                                  Colors.transparent,
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-                            child: Container(color: Colors.transparent),
-                          ),
-
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: 20.w,
-                              left: 20.w,
-                              top: 30.h,
-                              bottom: 20.h,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+        return SliverToBoxAdapter(
+          child: Skeletonizer(
+            enabled: isLoading,
+            child: SizedBox(
+              height: 198.h,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: destinations.length,
+                itemBuilder: (context, index) {
+                  final destination = destinations[index];
+                  return Row(
+                    children: [
+                      TapScaleEffect(
+                        onTap: () {
+                          if (isLoading) return;
+                          context.push(
+                            '${AppRoutes.placeDetails}?placeId=${destination.id}',
+                            extra: destination,
+                          );
+                        },
+                        child: SizedBox(
+                          width: 289.w,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(40.r),
+                            child: Stack(
+                              fit: StackFit.expand,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      destination.name,
-                                      style: context.textTheme.headlineSmall!
-                                          .copyWith(color: AppColors.pureWhite),
-                                    ),
-                                    SizedBox(height: 6.h),
-                                    Text(
-                                      destination.location.address,
-                                      style: context.textTheme.bodyMedium!
-                                          .copyWith(
-                                            color: AppColors.primaryLightGray,
-                                          ),
-                                    ),
-                                  ],
+                                //! Handle no image later
+                                Hero(
+                                  tag: destination.id,
+                                  child: AppCachedImage(
+                                    imagePath:
+                                        destination.imageUrls?.first ?? '',
+                                  ),
                                 ),
 
-                                Row(
-                                  children: [
-                                    for (final previewImageUrl
-                                        in (destination.imageUrls ?? []).take(
-                                          2,
-                                        )) ...[
-                                      _PreviewImageTile(
-                                        imageUrl: previewImageUrl,
+                                DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.black.withValues(alpha: 0.3),
+                                        Colors.transparent,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                                BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 1,
+                                    sigmaY: 1,
+                                  ),
+                                  child: Container(color: Colors.transparent),
+                                ),
+
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: 20.w,
+                                    left: 20.w,
+                                    top: 30.h,
+                                    bottom: 20.h,
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            destination.name,
+                                            style: context
+                                                .textTheme
+                                                .headlineSmall!
+                                                .copyWith(
+                                                  color: AppColors.pureWhite,
+                                                ),
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          Text(
+                                            destination.location.address,
+                                            style: context.textTheme.bodyMedium!
+                                                .copyWith(
+                                                  color: AppColors
+                                                      .primaryLightGray,
+                                                ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(width: 8.w),
+
+                                      Row(
+                                        children: [
+                                          for (final previewImageUrl
+                                              in (destination.imageUrls ?? [])
+                                                  .take(2)) ...[
+                                            _PreviewImageTile(
+                                              imageUrl: previewImageUrl,
+                                            ),
+                                            SizedBox(width: 8.w),
+                                          ],
+                                          if ((destination.imageUrls?.length ??
+                                                  0) >
+                                              2)
+                                            _ExtraPhotosTile(
+                                              extraPhotoCount:
+                                                  (destination
+                                                          .imageUrls
+                                                          ?.length ??
+                                                      0) -
+                                                  2,
+                                            ),
+                                        ],
+                                      ),
                                     ],
-                                    if ((destination.imageUrls?.length ?? 0) >
-                                        2)
-                                      _ExtraPhotosTile(
-                                        extraPhotoCount:
-                                            (destination.imageUrls?.length ??
-                                                0) -
-                                            2,
-                                      ),
-                                  ],
+                                  ),
+                                ),
+
+                                Positioned(
+                                  top: 20.h,
+                                  right: 20.w,
+                                  child: _CircleIcon(
+                                    icon: HomeAssets.blackHeartIcon,
+                                    size: 24,
+                                  ),
+                                ),
+
+                                Positioned(
+                                  bottom: 20.h,
+                                  right: 20.w,
+                                  child: _CircleIcon(
+                                    icon: HomeAssets.upTRightArrowtIcon,
+                                    size: 16,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-
-                          Positioned(
-                            top: 20.h,
-                            right: 20.w,
-                            child: _CircleIcon(
-                              icon: HomeAssets.blackHeartIcon,
-                              size: 24,
-                            ),
-                          ),
-
-                          Positioned(
-                            bottom: 20.h,
-                            right: 20.w,
-                            child: _CircleIcon(
-                              icon: HomeAssets.upTRightArrowtIcon,
-                              size: 16,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 24.w),
-              ],
-            );
-          },
-        ),
-      ),
+                      SizedBox(width: 24.w),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

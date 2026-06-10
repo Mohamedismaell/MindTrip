@@ -26,6 +26,8 @@ class AppCachedImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit fit;
+  final int? cacheWidth;
+  final int? cacheHeight;
 
   const AppCachedImage({
     super.key,
@@ -34,6 +36,8 @@ class AppCachedImage extends StatelessWidget {
     this.width,
     this.height,
     this.fit = BoxFit.cover,
+    this.cacheWidth,
+    this.cacheHeight,
   });
   bool get _isNetworkImage {
     return imagePath?.startsWith('http') ?? false;
@@ -52,6 +56,18 @@ class AppCachedImage extends StatelessWidget {
       );
     }
 
+    final double pixelRatio = MediaQuery.devicePixelRatioOf(context);
+    final cacheWidth =
+        this.cacheWidth ??
+        (width != null && width!.isFinite
+            ? (width! * pixelRatio).round()
+            : null);
+
+    final cacheHeight =
+        this.cacheHeight ??
+        (height != null && height!.isFinite
+            ? (height! * pixelRatio).round()
+            : null);
     return CachedNetworkImage(
       imageUrl: imagePath!,
       cacheKey: cacheKey,
@@ -64,6 +80,8 @@ class AppCachedImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
+      memCacheWidth: cacheWidth,
+      memCacheHeight: cacheHeight,
       // fadeInDuration: Duration.zero,
       // fadeOutDuration: Duration.zero,
       placeholder: (_, _) => Skeletonizer(

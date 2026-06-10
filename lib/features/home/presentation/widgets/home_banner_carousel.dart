@@ -1,61 +1,117 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
+import 'package:mindtrip/core/utils/dummy_data.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeBannerCarousel extends StatefulWidget {
-  const HomeBannerCarousel({super.key, required this.banners});
-
-  final List<BannerEntity> banners;
+  const HomeBannerCarousel({super.key});
 
   @override
   State<HomeBannerCarousel> createState() => _HomeBannerCarouselState();
 }
 
 class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
-  final PageController _pageController = PageController();
+  // final PageController _pageController = PageController();
   int _currentPage = 0;
-
+  Timer? _timer;
   @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  void initState() {
+    super.initState();
 
-  void _next() {
-    setState(() {
-      _currentPage = (_currentPage + 1) % widget.banners.length;
+    _timer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!mounted) return;
+      final banners = context.read<HomeCubit>().state.banners;
+      if (banners.isEmpty) return;
+
+      setState(() {
+        _currentPage = (_currentPage + 1) % banners.length;
+      });
     });
   }
 
-  void _prev() {
+  @override
+  void dispose() {
+    _timer?.cancel();
+    // _pageController.dispose();
+    super.dispose();
+  }
+
+  void _next(int length) {
+    if (length == 0) return;
     setState(() {
-      _currentPage =
-          (_currentPage - 1 + widget.banners.length) % widget.banners.length;
+      _currentPage = (_currentPage + 1) % length;
+    });
+  }
+
+  void _prev(int length) {
+    if (length == 0) return;
+    setState(() {
+      _currentPage = (_currentPage - 1 + length) % length;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: GestureDetector(
-        onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity! < 0) {
-            // swipe left
-            _next();
-          } else if (details.primaryVelocity! > 0) {
-            // swipe right
-            _prev();
-          }
-        },
-        child: _buildBanner(),
-      ),
+    return BlocBuilder<HomeCubit, HomeState>(
+      buildWhen: (previous, current) =>
+          previous.bannersStatus != current.bannersStatus ||
+          previous.banners != current.banners,
+      builder: (context, state) {
+        if (state.bannersStatus == HomeDataStatus.loading ||
+            state.bannersStatus == HomeDataStatus.initial) {
+          return SliverToBoxAdapter(
+            child: Skeletonizer(
+              enabled: true,
+              child: _buildBanner(DummyData.banners),
+            ),
+          );
+        }
+
+        if (state.bannersStatus == HomeDataStatus.failure) {
+          return SliverToBoxAdapter(
+            child: AppErrorWidget(
+              message: state.bannersError,
+              imageSize: 80,
+              onPressed: () => context.read<HomeCubit>().loadBanners(),
+            ),
+          );
+        }
+
+        final banners = state.banners;
+        if (banners.isEmpty) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
+
+        return SliverToBoxAdapter(
+          child: GestureDetector(
+            onHorizontalDragEnd: (details) {
+              if (details.primaryVelocity! < 0) {
+                // swipe left
+                _next(banners.length);
+              } else if (details.primaryVelocity! > 0) {
+                // swipe right
+                _prev(banners.length);
+              }
+            },
+            child: _buildBanner(banners),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildBanner() {
+  Widget _buildBanner(List<BannerEntity> banners) {
     return SizedBox(
       height: 174.h,
       width: double.infinity,
@@ -74,14 +130,13 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               child: SizedBox.expand(
                 child: AppCachedImage(
                   key: ValueKey(_currentPage),
-                  imagePath: widget.banners[_currentPage].imageUrl,
-                  // fit: BoxFit.fitWidth,
+                  imagePath: banners.isNotEmpty
+                      ? banners[_currentPage].imageUrl
+                      : '',
                 ),
               ),
             ),
 
-            // * Could be extracted to a separate widget later i think
-            //  GRADIENT
             IgnorePointer(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -97,26 +152,30 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               ),
             ),
 
-            // Content
             IgnorePointer(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: Text(
-                      widget.banners[_currentPage].title,
-                      key: ValueKey(_currentPage),
-                      style: AppTextStyles.h6SemiBold.copyWith(
-                        color: AppColors.pureWhite,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Center(
+                        child: Text(
+                          banners.isNotEmpty ? banners[_currentPage].title : '',
+                          textAlign: TextAlign.center,
+                          key: ValueKey(_currentPage),
+                          style: AppTextStyles.h6SemiBold.copyWith(
+                            color: AppColors.pureWhite,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(height: 24.h),
-                  //indectors
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(widget.banners.length, (index) {
+                    children: List.generate(banners.length, (index) {
                       final isActive = _currentPage == index;
 
                       return AnimatedContainer(

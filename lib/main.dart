@@ -2,14 +2,15 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
+import 'package:mindtrip/core/app_env.dart';
 import 'package:mindtrip/core/connections/retry_runner.dart';
 import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/core/helper/hydrated_storage.dart';
-import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
 import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
@@ -20,9 +21,6 @@ import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
-import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
-import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
-import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'core/observers/app_bloc_observer.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 
@@ -37,36 +35,27 @@ Future<void> main() async {
   HydratedBloc.storage = await buildHydratedStorage();
   print('Step 3: HydratedStorage built');
   await AppHive.init();
-
+  print('Step 4: AppHive initialized');
   await initializeDependencies();
-  print('Step 4: Service Locator initialized');
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  //! do we need it ?
-  //map
-  const token = String.fromEnvironment("ACCESS_TOKEN");
-  mapbox.MapboxOptions.setAccessToken(token);
-  //Todo: remove later
-  print('Step 5: Bootstrapping Mock Places Cache');
-  final placesCache = sl<PlacesLocalDataSource>();
-  await placesCache.cachePlaces(
-    HomeMockData.popularDestinations.map((e) => e.toModel()).toList(),
-  );
-  await placesCache.cachePlaces(
-    HomeMockData.recommendedDestinations.map((e) => e.toModel()).toList(),
-  );
-  await placesCache.cachePlaces(
-    ExploreMockData.trendingPlaces.map((e) => e.toModel()).toList(),
-  );
-  await placesCache.cachePlaces(
-    ExploreMockData.otherPlaces.map((e) => e.toModel()).toList(),
-  );
-  const accessToken = String.fromEnvironment('ACCESS_TOKEN');
-  const googlePlacesKey = String.fromEnvironment('GOOGLE_PLACES_KEY');
-  const googleWebClientId = String.fromEnvironment('GOOGLE_WEB_CLIENT_ID');
+  print('Step 5: Service Locator initialized');
+  const envFile = String.fromEnvironment('ENV_FILE', defaultValue: '.env.dev');
+  await dotenv.load(fileName: envFile);
+  print('Step 6: Env Variables');
 
-  debugPrint('TOKEN => $accessToken');
-  debugPrint('GOOGLE_PLACES_KEY => $googlePlacesKey');
-  debugPrint('GOOGLE_WEB_CLIENT_ID => $googleWebClientId');
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  mapbox.MapboxOptions.setAccessToken(AppEnv.mapBoxApiKey);
+
+  final mapToken = AppEnv.mapBoxApiKey;
+  final googlePlacesKey = AppEnv.googlePlacesKey;
+  final googleWebClientId = AppEnv.googleWebClientId;
+
+  print('MAP_TOKEN => $mapToken');
+  print('GOOGLE_PLACES_KEY => $googlePlacesKey');
+  print('GOOGLE_WEB_CLIENT_ID => $googleWebClientId');
 
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => AppBootstrap()),

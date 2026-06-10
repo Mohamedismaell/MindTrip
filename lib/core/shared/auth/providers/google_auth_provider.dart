@@ -1,16 +1,17 @@
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mindtrip/core/app_env.dart';
 import 'package:mindtrip/core/shared/auth/providers/social_auth_provider.dart';
 
 class GoogleAuthProvider implements SocialAuthProvider {
   final GoogleSignIn _google = GoogleSignIn.instance;
-  static const String _googleWebClientId = String.fromEnvironment(
-    'GOOGLE_WEB_CLIENT_ID',
-  );
+  // static const String _googleWebClientId = String.fromEnvironment(
+  //   'GOOGLE_WEB_CLIENT_ID',
+  // );
 
   @override
   Future<String?> signIn() async {
     // Provide both serverClientId (for Android to get idToken) and clientId (for Web/iOS)
-    await _google.initialize(serverClientId: _googleWebClientId);
+    await _google.initialize(serverClientId: AppEnv.googleWebClientId);
     final account = await _google.authenticate();
     final auth = account.authentication;
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/home/presentation/models/home_models.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
 
 class PlannerTimeline extends StatelessWidget {
   const PlannerTimeline({super.key, required this.stops});
 
-  final List<PlannerStop> stops;
+  final List<PlannerStopEntity> stops;
 
   @override
   Widget build(BuildContext context) {

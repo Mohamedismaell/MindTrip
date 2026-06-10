@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_ai_planner_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_banner_carousel.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_header.dart';
@@ -25,31 +24,27 @@ class HomeScreen extends StatelessWidget {
           const HomeSearchBar(),
           SliverToBoxAdapter(child: SizedBox(height: 20.h)),
           // //! there is no functionallity for this right now
-          HomeBannerCarousel(banners: HomeMockData.banners),
+          const HomeBannerCarousel(),
           SliverToBoxAdapter(child: SizedBox(height: 28.h)),
           const HomeSectionHeader(title: 'Popular Destinations'),
           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
           // //! there is no functionallity for this right now
-          HomePopularDestinations(
-            destinations: HomeMockData.popularDestinations,
-          ),
+          const HomePopularDestinations(),
           SliverToBoxAdapter(child: SizedBox(height: 28.h)),
           const HomeSectionHeader(
             title: 'Recommended',
             subtitle: 'Based on your interests',
           ),
           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          HomeRecommendedGrid(
-            destinations: HomeMockData.recommendedDestinations,
-          ),
+          const HomeRecommendedGrid(),
           SliverToBoxAdapter(child: SizedBox(height: 28.h)),
           const HomeSectionHeader(title: 'Tour Packages'),
           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          HomeTourPackages(packages: HomeMockData.tourPackages),
+          const HomeTourPackages(),
           SliverToBoxAdapter(child: SizedBox(height: 28.h)),
           const HomeSectionHeader(title: 'AI Planner', actionLabel: 'Try'),
           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          HomeAiPlannerSection(plans: HomeMockData.plannerPreviews),
+          const HomeAiPlannerSection(),
           SliverToBoxAdapter(child: SizedBox(height: 50.h)),
         ],
       ),

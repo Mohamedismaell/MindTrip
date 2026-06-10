@@ -5,26 +5,59 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 
-class ExploreTrendingList extends StatelessWidget {
-  const ExploreTrendingList({super.key, required this.items});
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
+import 'package:mindtrip/core/utils/dummy_data.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
+import 'package:mindtrip/features/explore/presentation/cubit/explore_state.dart';
 
-  final List<PlaceEntity> items;
+class ExploreTrendingList extends StatelessWidget {
+  const ExploreTrendingList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: SizedBox(
-        height: 110.h,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          itemCount: items.length,
-          separatorBuilder: (_, _) => SizedBox(width: 17.w),
-          itemBuilder: (context, index) {
-            final item = items[index];
-            return _TrendingCard(item: item);
-          },
-        ),
-      ),
+    return BlocBuilder<ExploreCubit, ExploreState>(
+      buildWhen: (previous, current) =>
+          previous.trendingPlacesStatus != current.trendingPlacesStatus ||
+          previous.trendingPlaces != current.trendingPlaces,
+      builder: (context, state) {
+        if (state.trendingPlacesStatus == ExploreDataStatus.failure) {
+          return SliverToBoxAdapter(
+            child: AppErrorWidget(
+              message: state.trendingPlacesError,
+              imageSize: 60,
+              onPressed: () => context.read<ExploreCubit>().loadTrendingPlaces(),
+            ),
+          );
+        }
+
+        final isLoading = state.trendingPlacesStatus == ExploreDataStatus.loading ||
+            state.trendingPlacesStatus == ExploreDataStatus.initial;
+        final items = isLoading ? DummyData.popularPlaces : state.trendingPlaces;
+
+        if (!isLoading && items.isEmpty) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
+
+        return SliverToBoxAdapter(
+          child: Skeletonizer(
+            enabled: isLoading,
+            child: SizedBox(
+              height: 110.h,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: items.length,
+                separatorBuilder: (_, _) => SizedBox(width: 17.w),
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return _TrendingCard(item: item);
+                },
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

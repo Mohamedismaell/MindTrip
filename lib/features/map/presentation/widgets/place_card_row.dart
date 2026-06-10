@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
-import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_card_overview_map.dart';
 import '../../domain/entities/map_annotation_entry.dart';
@@ -221,10 +220,9 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                       imageHeight: imageHeight,
                                       contentHeight: contentHeight,
                                       isSearchResult: entry.isSearchResult,
-                                      heroTag:
-                                          (isSelected && isExpanded)
-                                              ? null
-                                              : place.id,
+                                      heroTag: (isSelected && isExpanded)
+                                          ? null
+                                          : place.id,
                                       onAdd: () {
                                         setState(() {
                                           _removingPlaceIds.add(place.id);
@@ -248,10 +246,9 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                       place: place,
                                       googlePlace: googlePlace,
                                       photoUrls: finalPhotoUrls,
-                                      heroTag:
-                                          (isSelected && isExpanded)
-                                              ? place.id
-                                              : null,
+                                      heroTag: (isSelected && isExpanded)
+                                          ? place.id
+                                          : null,
                                     ),
                                   ),
                                 ),
