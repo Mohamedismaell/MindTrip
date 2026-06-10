@@ -76,10 +76,10 @@ class HomeHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              _HeaderAction(
-                iconPath: HomeAssets.notificaitonIcon,
-                onTap: () {},
-              ),
+              // _HeaderAction(
+              //   iconPath: HomeAssets.notificaitonIcon,
+              //   onTap: () {},
+              // ),
             ],
           ),
         );

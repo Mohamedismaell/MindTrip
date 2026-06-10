@@ -104,6 +104,7 @@ class BottomNavAssets {
 
   static const String personFilled = '$_iconPath/person_filled.svg';
   static const String personOutlined = '$_iconPath/person_outlined.svg';
+  static const String heartFilled = '$_iconPath/heart_filled.svg';
 }
 
 class AiPlannerAssets {

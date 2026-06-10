@@ -84,23 +84,23 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ],
               SizedBox(height: 26.h),
-              const SectionHeading(title: 'Saved Trips', actionText: 'See all'),
-              SizedBox(height: 16.h),
-              SizedBox(
-                height: 101.h,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  // clipBehavior: Clip.none,
-                  itemCount: ProfileMockData.savedTrips.length,
-                  separatorBuilder: (_, _) => SizedBox(width: 28.w),
-                  itemBuilder: (context, index) {
-                    return SavedTripCard(
-                      data: ProfileMockData.savedTrips[index],
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 28.h),
+              // const SectionHeading(title: 'Saved Trips', actionText: 'See all'),
+              // SizedBox(height: 16.h),
+              // SizedBox(
+              //   height: 101.h,
+              //   child: ListView.separated(
+              //     scrollDirection: Axis.horizontal,
+              //     // clipBehavior: Clip.none,
+              //     itemCount: ProfileMockData.savedTrips.length,
+              //     separatorBuilder: (_, _) => SizedBox(width: 28.w),
+              //     itemBuilder: (context, index) {
+              //       return SavedTripCard(
+              //         data: ProfileMockData.savedTrips[index],
+              //       );
+              //     },
+              //   ),
+              // ),
+              // SizedBox(height: 28.h),
               SectionHeading(
                 title: 'My Trips',
                 actionText: 'See all',
@@ -109,14 +109,14 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: 18.h),
               const MyTripsSection(),
               SizedBox(height: 28.h),
-              const SectionHeading(title: 'My Reviews', actionText: 'See all'),
-              SizedBox(height: 24.h),
-              ...ProfileMockData.reviews.map(
-                (review) => Padding(
-                  padding: EdgeInsets.only(bottom: 18.h),
-                  child: ReviewCard(data: review),
-                ),
-              ),
+              // const SectionHeading(title: 'My Reviews', actionText: 'See all'),
+              // SizedBox(height: 24.h),
+              // ...ProfileMockData.reviews.map(
+              //   (review) => Padding(
+              //     padding: EdgeInsets.only(bottom: 18.h),
+              //     child: ReviewCard(data: review),
+              //   ),
+              // ),
             ],
           ),
         );

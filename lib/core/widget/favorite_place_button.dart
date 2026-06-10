@@ -29,31 +29,29 @@ class FavoriteButton extends StatelessWidget {
               color: AppColors.pureWhite,
               boxShadow: [AppShadows.favoritePlaceButtonShadow],
             ),
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TweenAnimationBuilder<Color?>(
-                tween: ColorTween(
-                  begin: context.colorTheme.onSurface,
-                  end: isFavorite
-                      ? context.colorTheme.error
-                      : context.colorTheme.outline,
-                ),
-                duration: const Duration(milliseconds: 250),
-                builder: (context, color, _) {
-                  return TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 1, end: isFavorite ? 1.2 : 0.8),
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeOutBack,
-                    builder: (context, scale, child) {
-                      return Transform.scale(
-                        scale: scale,
-                        child: Icon(Icons.favorite_rounded, color: color),
-                      );
-                    },
-                  );
-                },
+            child: TweenAnimationBuilder<Color?>(
+              tween: ColorTween(
+                begin: context.colorTheme.onSurface,
+                end: isFavorite
+                    ? context.colorTheme.error
+                    : context.colorTheme.outline,
               ),
+              duration: const Duration(milliseconds: 250),
+              builder: (context, color, _) {
+                return TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 1, end: isFavorite ? 1.2 : 0.8),
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOutBack,
+                  builder: (context, scale, child) {
+                    return Transform.scale(
+                      scale: scale,
+                      child: Center(
+                        child: Icon(Icons.favorite_rounded, color: color),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
         );

@@ -59,13 +59,13 @@ class ProfileIdentity extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12.h),
-          Text(
-            ProfileMockData.username,
-            style: AppTextStyles.h8Medium.copyWith(
-              color: context.colorTheme.onSurface,
-            ),
-          ),
-          SizedBox(height: 12.h),
+          // Text(
+          //   ProfileMockData.username,
+          //   style: AppTextStyles.h8Medium.copyWith(
+          //     color: context.colorTheme.onSurface,
+          //   ),
+          // ),
+          // SizedBox(height: 12.h),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [

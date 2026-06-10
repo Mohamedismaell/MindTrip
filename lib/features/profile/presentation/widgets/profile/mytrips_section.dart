@@ -109,49 +109,42 @@ class _MyTripCard extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ClipRRect(
-                  child: Stack(
-                    children: [
-                      BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 0, sigmaY: 4),
-                        child: Container(
-                          height: 72.h,
-                          padding: EdgeInsets.all(10.w),
-                          color: Colors.black.withValues(alpha: 0.22),
-                        ),
-                      ),
-                      Container(
-                        height: 72.h,
-                        padding: EdgeInsets.symmetric(horizontal: 15.w),
-                        alignment: Alignment.centerLeft,
-                        // color: Colors.black.withValues(alpha: 0.2),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                trip.title,
-                                style: AppTextStyles.h8Bold.copyWith(
-                                  color: Colors.white,
-                                ),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 0, sigmaY: 4),
+                    child: Container(
+                      height: 72.h,
+                      width: double.infinity,
+                      padding: EdgeInsets.all(10.w),
+                      color: Colors.black.withValues(alpha: 0.22),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              trip.title,
+                              style: AppTextStyles.h8Bold.copyWith(
+                                color: Colors.white,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 8.h),
-                            Expanded(
-                              child: Text(
-                                trip.destination,
-                                style: AppTextStyles.h9Bold.copyWith(
-                                  fontSize: 14.sp,
-                                  color: AppColors.primaryLightGray,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 8.h),
+                          Expanded(
+                            child: Text(
+                              trip.destination,
+                              style: AppTextStyles.h9Bold.copyWith(
+                                fontSize: 14.sp,
+                                color: AppColors.primaryLightGray,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),

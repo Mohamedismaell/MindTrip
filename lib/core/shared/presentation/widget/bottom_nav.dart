@@ -26,7 +26,7 @@ class BottomNav extends StatelessWidget {
     final activeIcons = [
       BottomNavAssets.homefilled,
       //Todo: Edit heart icon later
-      HomeAssets.blackHeartIcon,
+      BottomNavAssets.heartFilled,
       BottomNavAssets.exploreFilled,
       BottomNavAssets.aiStarFilled,
       BottomNavAssets.personFilled,
@@ -36,7 +36,7 @@ class BottomNav extends StatelessWidget {
       animationCurve: Curves.easeInOut,
       iconPadding: 17,
       index: currentIndex,
-      buttonBackgroundColor: Colors.blueAccent,
+      buttonBackgroundColor: context.colorTheme.primary,
       color: AppColors.primaryLightGray,
       backgroundColor: Colors.transparent,
       animationDuration: const Duration(milliseconds: 400),
@@ -44,6 +44,12 @@ class BottomNav extends StatelessWidget {
         return CurvedNavigationBarItem(
           child: SvgPicture.asset(
             i == currentIndex ? activeIcons[i] : inActiveIcons[i],
+            colorFilter: ColorFilter.mode(
+              i == currentIndex
+                  ? AppColors.primaryLightGray
+                  : context.colorTheme.outline,
+              BlendMode.srcIn,
+            ),
           ),
           label: i == currentIndex ? labels[i] : '',
 

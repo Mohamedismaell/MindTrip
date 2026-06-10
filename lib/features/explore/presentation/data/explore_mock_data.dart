@@ -161,7 +161,7 @@ class ExploreMockData {
   //  Other Places (grid)
   static const otherPlaces = [
     PlaceEntity(
-      id: 't1',
+      id: 'op_t1',
       name: 'Nile Cafe',
       location: LocationEntity(
         address: 'Cairo',
@@ -177,7 +177,7 @@ class ExploreMockData {
       ],
     ),
     PlaceEntity(
-      id: 't2',
+      id: 'op_t2',
       name: 'Sokhna Beach',
       location: LocationEntity(
         address: 'Ain Sokhna',
@@ -193,7 +193,7 @@ class ExploreMockData {
       ],
     ),
     PlaceEntity(
-      id: 't3',
+      id: 'op_t3',
       name: 'Siwa Oasis',
       location: LocationEntity(
         address: 'Siwa',
@@ -209,7 +209,7 @@ class ExploreMockData {
       ],
     ),
     PlaceEntity(
-      id: 't4',
+      id: 'op_t4',
       name: 'Dahab Coast',
       location: LocationEntity(
         address: 'Dahab',
@@ -225,7 +225,7 @@ class ExploreMockData {
       ],
     ),
     PlaceEntity(
-      id: 't5',
+      id: 'op_t5',
       name: 'Aswan Nile',
       location: LocationEntity(
         address: 'Aswan',
@@ -241,7 +241,7 @@ class ExploreMockData {
       ],
     ),
     PlaceEntity(
-      id: 't6',
+      id: 'op_t6',
       name: 'Fayoum Lake',
       location: LocationEntity(
         address: 'Fayoum',
@@ -257,7 +257,7 @@ class ExploreMockData {
       ],
     ),
     PlaceEntity(
-      id: 't7',
+      id: 'op_t7',
       name: 'Luxor Sunset',
       location: LocationEntity(
         address: 'Luxor',
@@ -273,7 +273,7 @@ class ExploreMockData {
       ],
     ),
     PlaceEntity(
-      id: 't8',
+      id: 'op_t8',
       name: 'Marsa Alam',
       location: LocationEntity(
         address: 'Marsa Alam',

@@ -34,6 +34,13 @@ class ExploreScreen extends StatelessWidget {
               //  Search Bar
               const ExploreSearchBar(),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+
+              //  Trending Now
+              const ExploreSectionHeader(title: 'What Trending now'),
+              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+              const ExploreTrendingList(),
+              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+
               //Todo: edit Ui later
               //!No funcaitonality right now
               //  Category Chips
@@ -41,28 +48,24 @@ class ExploreScreen extends StatelessWidget {
               SliverToBoxAdapter(child: SizedBox(height: 18.h)),
 
               //  Tab Bar
-              ExploreTabBar(tabs: ExploreMockData.tabs),
-              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              // ExploreTabBar(tabs: ExploreMockData.tabs),
+              // SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
               //  Results Bar
-              ExploreResultsBar(
-                resultCount: 48,
-                onFilterTap: () => ExploreFilterSheet.show(context),
-                onSortTap: () {},
-              ),
-              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-
-              //  Trending Now
-              const ExploreSectionHeader(
-                title: 'Trending now',
-                count: 8, // This should probably also come from Cubit if needed
-              ),
-              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-              const ExploreTrendingList(),
-              SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+              // ExploreResultsBar(
+              //   resultCount: 48,
+              //   onFilterTap: () => ExploreFilterSheet.show(context),
+              //   onSortTap: () {},
+              // ),
+              // SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
               //  Other Places
-              const ExploreSectionHeader(title: 'Other Places', count: 40),
+              //Todo change it to respnd to the category type
+              ExploreSectionHeader(
+                title: 'Other Places',
+                isActionButton: true,
+                onFilterTap: () => ExploreFilterSheet.show(context),
+              ),
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
               const ExplorePlacesGrid(),
               SliverToBoxAdapter(child: SizedBox(height: 24.h)),
