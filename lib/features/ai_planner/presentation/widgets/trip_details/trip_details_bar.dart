@@ -18,24 +18,22 @@ class TripDetailsTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(14.w, 14.h, 14.w, 8.h),
-        child: SizedBox(
-          height: 58.h,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: onBack,
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: context.colorTheme.onSurfaceVariant,
-                    size: 28.sp,
-                  ),
+      child: SizedBox(
+        height: 58.h,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                onPressed: onBack,
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: context.colorTheme.onSurfaceVariant,
+                  size: 28.sp,
                 ),
               ),
+<<<<<<< Updated upstream:lib/features/ai_planner/presentation/widgets/trip_details/trip_details_bar.dart
               CustomHeadLine(
                 firstTitle: 'Trip ',
                 secondTitle: 'Details',
@@ -60,10 +58,34 @@ class TripDetailsTopBar extends StatelessWidget {
                     color: context.colorTheme.onSurfaceVariant,
                     size: 20.sp,
                   ),
+=======
+            ),
+            CustomHeadLine(
+              firstTitle: 'Trip ',
+              secondTitle: 'Details',
+              firstStyle: AppTextStyles.h5Bold.copyWith(
+                color: context.colorTheme.primary,
+              ),
+              secondStyle: AppTextStyles.h5Bold,
+            ),
+            //Todo Chcek the share
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                onPressed: onShare,
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.primaryLightGray,
+                  fixedSize: Size(40.w, 40.w),
+                ),
+                icon: Icon(
+                  Icons.share_outlined,
+                  color: context.colorTheme.onSurfaceVariant,
+                  size: 20.sp,
+>>>>>>> Stashed changes:lib/features/itinerary/presentation/widgets/trip_details_bar.dart
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

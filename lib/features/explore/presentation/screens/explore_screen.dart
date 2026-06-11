@@ -6,10 +6,8 @@ import 'package:mindtrip/features/explore/presentation/widgets/explore_category_
 import 'package:mindtrip/features/explore/presentation/widgets/explore_filter_sheet.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_header.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_places_grid.dart';
-import 'package:mindtrip/features/explore/presentation/widgets/explore_results_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_search_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_section_header.dart';
-import 'package:mindtrip/features/explore/presentation/widgets/explore_tab_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_trending_list.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/float_map_button.dart';
 
