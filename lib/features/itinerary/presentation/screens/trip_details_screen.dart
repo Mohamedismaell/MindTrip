@@ -78,7 +78,9 @@ class TripDetailsScreen extends StatelessWidget {
               final itinerary = isLoading ? _dummyItinerary : state.itinerary;
 
               if (!isLoading &&
-                  (trip == null || itinerary == null || itinerary.days.isEmpty)) {
+                  (trip == null ||
+                      itinerary == null ||
+                      itinerary.days.isEmpty)) {
                 return const _MessageState(message: 'Trip not found');
               }
 
@@ -86,36 +88,36 @@ class TripDetailsScreen extends StatelessWidget {
 
               return Skeletonizer(
                 enabled: isLoading,
-                child: CustomScrollView(
-                  slivers: [
-                    TripDetailsTopBar(
-                      onBack: () => context.go(AppRoutes.myTrips),
-                      onShare: () {
-                        if (isLoading || trip == null || itinerary == null) {
-                          return;
-                        }
-                        final RenderBox? box =
-                            context.findRenderObject() as RenderBox?;
-                        final sharePositionOrigin = box != null
-                            ? box.localToGlobal(Offset.zero) & box.size
-                            : null;
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: 14.w,
+                    right: 14.w,
+                    bottom: 55.h,
+                  ),
+                  child: CustomScrollView(
+                    slivers: [
+                      TripDetailsTopBar(
+                        onBack: () => context.go(AppRoutes.myTrips),
+                        onShare: () {
+                          if (isLoading || trip == null || itinerary == null) {
+                            return;
+                          }
+                          final RenderBox? box =
+                              context.findRenderObject() as RenderBox?;
+                          final sharePositionOrigin = box != null
+                              ? box.localToGlobal(Offset.zero) & box.size
+                              : null;
 
-                        context.read<TripShareCubit>().shareTrip(
-                          context: context,
-                          trip: trip,
-                          itinerary: itinerary,
-                          sharePositionOrigin: sharePositionOrigin,
-                        );
-                      },
-                    ),
-                    SliverToBoxAdapter(child: SizedBox(height: 52.h)),
-                    SliverPadding(
-                      padding: EdgeInsets.only(
-                        left: 14.w,
-                        right: 14.w,
-                        bottom: 55.h,
+                          context.read<TripShareCubit>().shareTrip(
+                            context: context,
+                            trip: trip,
+                            itinerary: itinerary,
+                            sharePositionOrigin: sharePositionOrigin,
+                          );
+                        },
                       ),
-                      sliver: SliverList.separated(
+                      SliverToBoxAdapter(child: SizedBox(height: 52.h)),
+                      SliverList.separated(
                         itemCount: itinerary?.days.length ?? 0 + 3,
                         separatorBuilder: (_, index) {
                           return SizedBox(height: 42.h);
@@ -131,9 +133,7 @@ class TripDetailsScreen extends StatelessWidget {
                               onToggle: () {
                                 context
                                     .read<TripDetailsCubit>()
-                                    .toggleActiveDay(
-                                      day.dayNumber,
-                                    );
+                                    .toggleActiveDay(day.dayNumber);
                               },
                               onRefine: () => AiRefinementSheet.show(
                                 context,
@@ -141,46 +141,46 @@ class TripDetailsScreen extends StatelessWidget {
                                 const [],
                               ),
                             );
+                          } else {
+                            return SizedBox.shrink();
                           }
-
-                          final dayCount = itinerary?.days.length ?? 0;
-
-                          if (index == dayCount) {
-                            return TripMapPreviewCard(
-                              days: itinerary?.days ?? [],
-                              onViewMap: itinerary?.days.isEmpty ?? true
-                                  ? null
-                                  : () => context.push(
-                                      AppRoutes.map,
-                                      extra: MapTripExtra(
-                                        days: itinerary?.days ?? [],
-                                      ),
-                                    ),
-                            );
-                          }
-
-                          if (index == dayCount + 1) {
-                            return _EstimateNote(
-                              estimatedTotalCost:
-                                  itinerary?.estimatedTotalCost ?? 0,
-                            );
-                          }
-
-                          return (trip?.status ?? TripStatus.draft) ==
-                                  TripStatus.completed
-                              ? const SizedBox.shrink()
-                              : _SaveTripButton(
-                                  trip: trip ?? _dummyTrip,
-                                  onSave: () {
-                                    if (trip != null) {
-                                      _saveTrip(context, trip);
-                                    }
-                                  },
-                                );
                         },
                       ),
-                    ),
-                  ],
+                      SliverToBoxAdapter(
+                        child: TripMapPreviewCard(
+                          days: itinerary?.days ?? [],
+                          onViewMap: itinerary?.days.isEmpty ?? true
+                              ? null
+                              : () => context.push(
+                                  AppRoutes.map,
+                                  extra: MapTripExtra(
+                                    days: itinerary?.days ?? [],
+                                  ),
+                                ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: _EstimateNote(
+                          estimatedTotalCost:
+                              itinerary?.estimatedTotalCost ?? 0,
+                        ),
+                      ),
+                      if ((trip?.status ?? TripStatus.draft) ==
+                          TripStatus.completed)
+                        const SliverToBoxAdapter(child: SizedBox.shrink())
+                      else
+                        SliverToBoxAdapter(
+                          child: _SaveTripButton(
+                            trip: trip ?? _dummyTrip,
+                            onSave: () {
+                              if (trip != null) {
+                                _saveTrip(context, trip);
+                              }
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               );
             },

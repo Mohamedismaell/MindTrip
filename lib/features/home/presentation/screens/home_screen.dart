@@ -14,39 +14,43 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      child: CustomScrollView(
-        slivers: [
-          HomeHeader(),
-          SliverToBoxAdapter(child: SizedBox(height: 40.h)),
-          // //! Not working right now
-          const HomeSearchBar(),
-          SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-          // //! there is no functionallity for this right now
-          const HomeBannerCarousel(),
-          SliverToBoxAdapter(child: SizedBox(height: 28.h)),
-          const HomeSectionHeader(title: 'Popular Destinations'),
-          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          // //! there is no functionallity for this right now
-          const HomePopularDestinations(),
-          SliverToBoxAdapter(child: SizedBox(height: 28.h)),
-          const HomeSectionHeader(
-            title: 'Recommended',
-            subtitle: 'Based on your interests',
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          child: CustomScrollView(
+            slivers: [
+              HomeHeader(),
+              SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+              // //! Not working right now
+              const HomeSearchBar(),
+              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+              // //! there is no functionallity for this right now
+              const HomeBannerCarousel(),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              const HomeSectionHeader(title: 'Popular Destinations'),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              // //! there is no functionallity for this right now
+              const HomePopularDestinations(),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              const HomeSectionHeader(
+                title: 'Recommended',
+                subtitle: 'Based on your interests',
+              ),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              const HomeRecommendedGrid(),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              const HomeSectionHeader(title: 'Tour Packages'),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              const HomeTourPackages(),
+              SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+              const HomeSectionHeader(title: 'AI Planner', actionLabel: 'Try'),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              const HomeAiPlannerSection(),
+              SliverToBoxAdapter(child: SizedBox(height: 50.h)),
+            ],
           ),
-          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          const HomeRecommendedGrid(),
-          SliverToBoxAdapter(child: SizedBox(height: 28.h)),
-          const HomeSectionHeader(title: 'Tour Packages'),
-          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          const HomeTourPackages(),
-          SliverToBoxAdapter(child: SizedBox(height: 28.h)),
-          const HomeSectionHeader(title: 'AI Planner', actionLabel: 'Try'),
-          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          const HomeAiPlannerSection(),
-          SliverToBoxAdapter(child: SizedBox(height: 50.h)),
-        ],
+        ),
       ),
     );
   }
