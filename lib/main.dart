@@ -15,7 +15,7 @@ import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_bloc.dart';
 import 'package:mindtrip/core/shared/presentation/widget/connection_listener.dart';
 import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
@@ -53,7 +53,7 @@ Future<void> main() async {
   final googlePlacesKey = AppEnv.googlePlacesKey;
   final googleWebClientId = AppEnv.googleWebClientId;
 
-  print('MAP_TOKEN => $mapToken');
+  print('MAP_BOX_API => $mapToken');
   print('GOOGLE_PLACES_KEY => $googlePlacesKey');
   print('GOOGLE_WEB_CLIENT_ID => $googleWebClientId');
 
@@ -71,9 +71,9 @@ class AppBootstrap extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AppConnectionCubit>(
+        BlocProvider<AppConnectionBloc>(
           create: (_) =>
-              AppConnectionCubit(sl<InternetConnection>(), sl<RetryRunner>()),
+              AppConnectionBloc(sl<InternetConnection>(), sl<RetryRunner>()),
         ),
         BlocProvider<ThemeCubit>(create: (_) => sl<ThemeCubit>()),
         BlocProvider<AppGateCubit>(create: (_) => sl<AppGateCubit>()),

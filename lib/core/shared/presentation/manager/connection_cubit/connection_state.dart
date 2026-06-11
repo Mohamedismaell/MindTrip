@@ -1,4 +1,4 @@
-part of 'connection_cubit.dart';
+part of 'connection_bloc.dart';
 
 sealed class AppConnectionState extends Equatable {
   const AppConnectionState();

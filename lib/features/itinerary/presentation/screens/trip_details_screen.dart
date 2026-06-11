@@ -146,6 +146,7 @@ class TripDetailsScreen extends StatelessWidget {
                           }
                         },
                       ),
+                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
                       SliverToBoxAdapter(
                         child: TripMapPreviewCard(
                           days: itinerary?.days ?? [],
@@ -159,12 +160,16 @@ class TripDetailsScreen extends StatelessWidget {
                                 ),
                         ),
                       ),
+                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+
                       SliverToBoxAdapter(
                         child: _EstimateNote(
                           estimatedTotalCost:
                               itinerary?.estimatedTotalCost ?? 0,
                         ),
                       ),
+                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+
                       if ((trip?.status ?? TripStatus.draft) ==
                           TripStatus.completed)
                         const SliverToBoxAdapter(child: SizedBox.shrink())
@@ -179,6 +184,7 @@ class TripDetailsScreen extends StatelessWidget {
                             },
                           ),
                         ),
+                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
                     ],
                   ),
                 ),

@@ -26,7 +26,7 @@ import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.da
 import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_bloc.dart';
 import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/user/data/datasources/user_remote_data_source.dart';
 import 'package:mindtrip/core/shared/user/data/repositories/user_repository_impl.dart';
@@ -191,7 +191,7 @@ class CommonDi {
 
     //  App-Level Cubits
     sl.registerLazySingleton(
-      () => AppConnectionCubit(sl<InternetConnection>(), sl<RetryRunner>()),
+      () => AppConnectionBloc(sl<InternetConnection>(), sl<RetryRunner>()),
     );
 
     sl.registerLazySingleton(() => GoogleAuthProvider());
