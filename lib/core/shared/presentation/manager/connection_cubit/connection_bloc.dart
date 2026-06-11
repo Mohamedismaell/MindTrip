@@ -43,7 +43,7 @@ class AppConnectionBloc extends Bloc<AppConnectionEvent, AppConnectionState> {
 
     on<ConnectionStatusDisconnected>(
       _onDisconnected,
-      transformer: _debounceTransformer(const Duration(milliseconds: 500)),
+      transformer: _debounceTransformer(const Duration(milliseconds: 1500)),
     );
 
     _init();
@@ -67,6 +67,7 @@ class AppConnectionBloc extends Bloc<AppConnectionEvent, AppConnectionState> {
     ConnectionStatusConnected event,
     Emitter<AppConnectionState> emit,
   ) {
+    if (state is Connected) return;
     emit(Connected());
     retryRunner.retryAll();
   }
@@ -75,6 +76,7 @@ class AppConnectionBloc extends Bloc<AppConnectionEvent, AppConnectionState> {
     ConnectionStatusDisconnected event,
     Emitter<AppConnectionState> emit,
   ) {
+    if (state is Disconnected) return;
     emit(Disconnected());
   }
 

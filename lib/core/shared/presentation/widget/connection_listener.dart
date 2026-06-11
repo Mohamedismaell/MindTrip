@@ -6,16 +6,12 @@ import 'package:mindtrip/core/shared/routes/app_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/widget/app_snackbar.dart';
 
-/// The set of routes where the connection banner should NOT appear.
 const _suppressedRoutes = {
   AppRoutes.splash,
   AppRoutes.onBoarding,
   AppRoutes.welcomeAuth,
 };
 
-/// Wraps the app shell and shows auto-dismissing snackbars
-/// when connectivity changes (offline → online).
-/// Banners are suppressed on splash, onboarding, and welcome screens.
 class ConnectionListener extends StatelessWidget {
   final Widget child;
 
