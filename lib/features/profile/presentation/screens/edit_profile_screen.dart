@@ -19,7 +19,6 @@ import 'package:mindtrip/features/profile/presentation/widgets/edit/editable_inf
 import 'package:mindtrip/features/profile/presentation/widgets/edit/image_source_bottom_sheet.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/info_card.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/edit/profile_info_row.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -61,6 +60,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+  Future<void> _handleBack(BuildContext context, EditProfileState state) async {
+    if (context.canPop()) {
+      if (state.hasChanges && state.saveStatus != EditSaveStatus.saving) {
+        await AppDialog.show(
+          context: context,
+          title: "Save",
+          description: "You have unsaved changes. Do you want to save them?",
+          primaryText: "Save Changes",
+          onPrimary: () {
+            FocusScope.of(context).unfocus();
+            if (_formKey.currentState?.validate() ?? false) {
+              context.read<EditProfileCubit>().saveChanges();
+              context.pop();
+            } else {
+              //! If validation fails, close the dialog so the user can see the error
+              context.pop();
+            }
+          },
+          secondaryText: "Discard changes",
+          onSecondary: () {
+            context.pop();
+          },
+          iconColor: AppColors.errorRed.withValues(alpha: 0.9),
+        );
+      } else if (!state.hasChanges) {
+        context.pop();
+      }
+    } else {
+      context.go(AppRoutes.profile);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.user;
@@ -90,125 +121,106 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             final isSaving = state.saveStatus == EditSaveStatus.saving;
             final isDeleting =
                 state.deleteStatus == DeleteAccountStatus.deleting;
-            return ProfileFlowScaffold(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 16.h),
-                  EditTopBar(
-                    onBackTap: () async {
-                      if (context.canPop()) {
-                        if (state.hasChanges && !isSaving) {
-                          await AppDialog.show(
-                            context: context,
-                            title: "Save",
-                            description:
-                                "You have unsaved changes. Do you want to save them?",
-                            primaryText: "Save Changes",
-                            onPrimary: () {
-                              FocusScope.of(context).unfocus();
-                              if (_formKey.currentState?.validate() ?? false) {
-                                context.read<EditProfileCubit>().saveChanges();
-                                context.pop();
-                              } else {
-                                //! If validation fails, close the dialog so the user can see the error
-                                context.pop();
-                              }
-                            },
-                            secondaryText: "Discard changes",
-                            iconColor: AppColors.errorRed.withValues(
-                              alpha: 0.9,
-                            ),
-                            onSecondary: () {
-                              context.pop();
-                            },
-                          );
-                        }
-                        if (context.mounted && !state.hasChanges) {
-                          context.pop();
-                        }
-                        return;
-                      } else {
-                        context.go(AppRoutes.profile);
-                      }
-                    },
-                  ),
-                  SizedBox(height: 38.h),
+            return PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) async {
+                if (didPop) return;
+                await _handleBack(context, state);
+              },
+              child: Scaffold(
+                backgroundColor: context.colorTheme.surface,
+                body: SafeArea(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 16.h),
+                        EditTopBar(
+                          onBackTap: () => _handleBack(context, state),
+                        ),
+                        SizedBox(height: 38.h),
 
-                  // Avatar
-                  Center(
-                    child: EditAvatar(
-                      imageUrl: photoUrl,
-                      pendingPhotoPath: state.pendingPhotoPath,
-                      onCameraTap: () => _handleCameraTap(context),
+                        // Avatar
+                        Center(
+                          child: EditAvatar(
+                            imageUrl: photoUrl,
+                            pendingPhotoPath: state.pendingPhotoPath,
+                            onCameraTap: () => _handleCameraTap(context),
+                          ),
+                        ),
+                        SizedBox(height: 38.h),
+
+                        // Editable Fields
+                        Form(
+                          key: _formKey,
+                          child: _EditableInfoCard(
+                            nameController: _nameController,
+                            phoneController: _phoneController,
+                            email: email,
+                          ),
+                        ),
+                        SizedBox(height: 38.h),
+
+                        // Save Button
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40.w),
+                          child: CustomOtlinedButton(
+                            onPressed: (isSaving || !state.hasChanges)
+                                ? null
+                                : () {
+                                    FocusScope.of(context).unfocus();
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
+                                      context
+                                          .read<EditProfileCubit>()
+                                          .saveChanges();
+                                    }
+                                  },
+                            text: "Save Changes",
+                            color: context.colorTheme.primary,
+                            isLoading: isSaving,
+                          ),
+                        ),
+
+                        SizedBox(height: 32.h),
+
+                        // Delete Account
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40.w),
+                          child: CustomOtlinedButton(
+                            text: "Delete Account",
+                            isLoading: isDeleting,
+                            onPressed: isDeleting
+                                ? null
+                                : () async {
+                                    await AppDialog.show(
+                                      context: context,
+                                      title: "Permanently Delete Account",
+                                      description:
+                                          "This action is permanent and cannot be undone.",
+                                      primaryText: "Cancel",
+                                      onPrimary: () {
+                                        context.pop();
+                                      },
+                                      secondaryText: "Delete",
+                                      onSecondary: () async {
+                                        await context
+                                            .read<EditProfileCubit>()
+                                            .deleteAccount();
+                                      },
+                                      iconColor: AppColors.errorRed.withValues(
+                                        alpha: 0.9,
+                                      ),
+                                    );
+                                  },
+                          ),
+                        ),
+                        SizedBox(height: 24.h),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 38.h),
-
-                  // Editable Fields
-                  Form(
-                    key: _formKey,
-                    child: _EditableInfoCard(
-                      nameController: _nameController,
-                      phoneController: _phoneController,
-                      email: email,
-                    ),
-                  ),
-                  SizedBox(height: 38.h),
-
-                  // Save Button
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40.w),
-                    child: CustomOtlinedButton(
-                      onPressed: (isSaving || !state.hasChanges)
-                          ? null
-                          : () {
-                              FocusScope.of(context).unfocus();
-                              if (_formKey.currentState?.validate() ?? false) {
-                                context.read<EditProfileCubit>().saveChanges();
-                              }
-                            },
-                      text: "Save Changes",
-                      color: context.colorTheme.primary,
-                      isLoading: isSaving,
-                    ),
-                  ),
-
-                  SizedBox(height: 32.h),
-
-                  // Delete Account
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40.w),
-                    child: CustomOtlinedButton(
-                      text: "Delete Account",
-                      isLoading: isDeleting,
-                      onPressed: isDeleting
-                          ? null
-                          : () async {
-                              await AppDialog.show(
-                                context: context,
-                                title: "Permanently Delete Account",
-                                description:
-                                    "This action is permanent and cannot be undone.",
-                                primaryText: "Cancel",
-                                onPrimary: () {
-                                  context.pop();
-                                },
-                                secondaryText: "Delete",
-                                onSecondary: () async {
-                                  await context
-                                      .read<EditProfileCubit>()
-                                      .deleteAccount();
-                                },
-                                iconColor: AppColors.errorRed.withValues(
-                                  alpha: 0.9,
-                                ),
-                              );
-                            },
-                    ),
-                  ),
-                  SizedBox(height: 24.h),
-                ],
+                ),
               ),
             );
           },

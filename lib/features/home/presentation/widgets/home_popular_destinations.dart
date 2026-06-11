@@ -67,8 +67,8 @@ class HomePopularDestinations extends StatelessWidget {
                             fit: StackFit.expand,
                             children: [
                               //! Handle no image later
-                              Hero(
-                                tag: destination.id,
+                               Hero(
+                                tag: 'pop_${destination.id}',
                                 child: AppCachedImage(
                                   imagePath: destination.imageUrls?.first ?? '',
                                 ),
@@ -179,7 +179,7 @@ class HomePopularDestinations extends StatelessWidget {
                                     onTap: () {
                                       if (isLoading) return;
                                       context.push(
-                                        '${AppRoutes.placeDetails}?placeId=${destination.id}',
+                                        '${AppRoutes.placeDetails}?placeId=${destination.id}&heroTag=pop_${destination.id}',
                                         extra: destination,
                                       );
                                     },

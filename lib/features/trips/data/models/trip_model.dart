@@ -34,23 +34,19 @@ class TripModel extends HiveObject {
 
   @HiveField(9)
   final int children;
-
   @HiveField(10)
-  final int pets;
-
-  @HiveField(11)
   final String? budgetTier;
 
-  @HiveField(12)
+  @HiveField(11)
   final String customBudget;
 
-  @HiveField(13)
+  @HiveField(12)
   final List<String> interests;
 
-  @HiveField(16)
+  @HiveField(13)
   final String? itineraryCoverUrl;
 
-  @HiveField(17)
+  @HiveField(16)
   final String placePreviewsJson;
 
   TripModel({
@@ -64,7 +60,6 @@ class TripModel extends HiveObject {
     this.tripEnd,
     required this.adults,
     required this.children,
-    required this.pets,
     this.budgetTier,
     required this.customBudget,
     required this.interests,
@@ -84,7 +79,6 @@ class TripModel extends HiveObject {
       tripEnd: trip.tripEnd,
       adults: trip.adults,
       children: trip.children,
-      pets: trip.pets,
       budgetTier: trip.budgetTier,
       customBudget: trip.customBudget,
       interests: trip.interests,
@@ -108,7 +102,6 @@ class TripModel extends HiveObject {
       tripEnd: tripEnd,
       adults: adults,
       children: children,
-      pets: pets,
       budgetTier: budgetTier,
       customBudget: customBudget,
       interests: interests,

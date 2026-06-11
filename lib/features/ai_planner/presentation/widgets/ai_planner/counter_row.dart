@@ -68,7 +68,7 @@ class CounterRow extends StatelessWidget {
             Divider(
               height: 1.h,
               thickness: 1.h,
-              color: context.colorTheme.outline.withOpacity(0.45),
+              color: context.colorTheme.outline.withValues(alpha: 0.45),
             ),
           ],
         ],

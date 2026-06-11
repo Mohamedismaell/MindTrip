@@ -194,7 +194,6 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
       destination: destination,
       adults: int.tryParse(metadata?['adults']?.toString() ?? '1') ?? 1,
       children: int.tryParse(metadata?['children']?.toString() ?? '0') ?? 0,
-      pets: 0,
       customBudget: metadata?['budget'] as String? ?? '',
       interests: (metadata?['interests'] as List?)?.cast<String>() ?? const [],
       // currentPage: 5,

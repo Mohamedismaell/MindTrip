@@ -34,7 +34,8 @@ const _skeletalPlace = PlaceEntity(
 );
 
 class PlaceDetailsScreen extends StatelessWidget {
-  const PlaceDetailsScreen({super.key});
+  final String? heroTag;
+  const PlaceDetailsScreen({super.key, this.heroTag});
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +53,7 @@ class PlaceDetailsScreen extends StatelessWidget {
           return _PlaceDetailsBody(
             place: place,
             placeDetailsStatus: state.placeDetailsStatus,
+            heroTag: heroTag,
           );
         },
       ),
@@ -62,9 +64,11 @@ class PlaceDetailsScreen extends StatelessWidget {
 class _PlaceDetailsBody extends StatelessWidget {
   final PlaceEntity place;
   final PlaceDetailsStatus placeDetailsStatus;
+  final String? heroTag;
   const _PlaceDetailsBody({
     required this.place,
     required this.placeDetailsStatus,
+    this.heroTag,
   });
 
   @override
@@ -91,6 +95,7 @@ class _PlaceDetailsBody extends StatelessWidget {
                 PlaceDetailsImageCover(
                   imageUrls: place.imageUrls,
                   placeId: place.id,
+                  heroTag: heroTag,
                 ),
                 Positioned(
                   left: 0,

@@ -15,6 +15,7 @@ class PlaceDetailsRoutes {
         if (placeId == null) {
           throw Exception('placeId is required for place details route');
         }
+        final heroTag = state.uri.queryParameters['heroTag'];
 
         final preview = state.extra as PlaceEntity?;
 
@@ -26,7 +27,7 @@ class PlaceDetailsRoutes {
               lat: preview?.location.latitude,
               lng: preview?.location.longitude,
             ),
-          child: const PlaceDetailsScreen(),
+          child: PlaceDetailsScreen(heroTag: heroTag),
         );
       },
     ),

@@ -44,77 +44,90 @@ class _TripsScreenState extends State<TripsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colorTheme.surface,
-      floatingActionButton: StartPlanningButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 16.h),
-              // Header
-              _CustomHeader(),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go(AppRoutes.profile);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.colorTheme.surface,
+        floatingActionButton: StartPlanningButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 16.h),
+                // Header
+                _CustomHeader(),
 
-              SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
 
-              // Search bar
-              CustomSearchBar(controller: _searchController, handleSend: () {}),
+                // Search bar
+                CustomSearchBar(
+                  controller: _searchController,
+                  handleSend: () {},
+                ),
 
-              SizedBox(height: 33.h),
+                SizedBox(height: 33.h),
 
-              // Filter tabs
-              BlocBuilder<TripsCubit, TripsState>(
-                builder: (context, state) {
-                  return TripFilterTabs(
-                    selected: state.selectedTab,
-                    onSelect: (tab) {
-                      context.read<TripsCubit>().updateSelectedTab(tab);
-                    },
-                  );
-                },
-              ),
-
-              SizedBox(height: 28.h),
-
-              // Trip list
-              Expanded(
-                child: BlocBuilder<TripsCubit, TripsState>(
-                  buildWhen: (previous, current) =>
-                      previous.trips != current.trips ||
-                      previous.searchQuery != current.searchQuery ||
-                      previous.tripsStatus != current.tripsStatus ||
-                      previous.selectedTab != current.selectedTab,
+                // Filter tabs
+                BlocBuilder<TripsCubit, TripsState>(
                   builder: (context, state) {
-                    if (state.tripsStatus == TripsStatus.loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    final trips = state.filterTrips;
-
-                    if (trips.isEmpty) {
-                      return _EmptyState(tab: state.selectedTab);
-                    }
-
-                    return ListView.separated(
-                      padding: EdgeInsets.only(bottom: 80.h),
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 31.h),
-                      itemCount: trips.length,
-                      itemBuilder: (context, index) {
-                        final trip = trips[index];
-                        return TripCard(
-                          trip: trip,
-                          tripStatus: trip.status,
-                          onContinue: () => _resumeTrip(context, trip),
-                        );
+                    return TripFilterTabs(
+                      selected: state.selectedTab,
+                      onSelect: (tab) {
+                        context.read<TripsCubit>().updateSelectedTab(tab);
                       },
                     );
                   },
                 ),
-              ),
-            ],
+
+                SizedBox(height: 28.h),
+
+                // Trip list
+                Expanded(
+                  child: BlocBuilder<TripsCubit, TripsState>(
+                    buildWhen: (previous, current) =>
+                        previous.trips != current.trips ||
+                        previous.searchQuery != current.searchQuery ||
+                        previous.tripsStatus != current.tripsStatus ||
+                        previous.selectedTab != current.selectedTab,
+                    builder: (context, state) {
+                      if (state.tripsStatus == TripsStatus.loading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      final trips = state.filterTrips;
+
+                      if (trips.isEmpty) {
+                        return _EmptyState(tab: state.selectedTab);
+                      }
+
+                      return ListView.separated(
+                        padding: EdgeInsets.only(bottom: 80.h),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 31.h),
+                        itemCount: trips.length,
+                        itemBuilder: (context, index) {
+                          final trip = trips[index];
+                          return TripCard(
+                            trip: trip,
+                            tripStatus: trip.status,
+                            onContinue: () => _resumeTrip(context, trip),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

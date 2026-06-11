@@ -107,7 +107,6 @@ void main() {
       destination: 'Test Destination',
       adults: 1,
       children: 0,
-      pets: 0,
       budgetTier: 'Cheap',
       customBudget: '',
       interests: const [],

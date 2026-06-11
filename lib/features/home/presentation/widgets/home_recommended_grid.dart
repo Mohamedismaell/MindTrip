@@ -66,7 +66,7 @@ class HomeRecommendedGrid extends StatelessWidget {
                 onTap: () {
                   if (isLoading) return;
                   context.push(
-                    '${AppRoutes.placeDetails}?placeId=${destination.id}',
+                    '${AppRoutes.placeDetails}?placeId=${destination.id}&heroTag=rec_${destination.id}',
                     extra: destination,
                   );
                 },
@@ -81,7 +81,7 @@ class HomeRecommendedGrid extends StatelessWidget {
                           children: [
                             //! Handle no image later
                             Hero(
-                              tag: destination.id,
+                              tag: 'rec_${destination.id}',
                               child: AppCachedImage(
                                 imagePath: destination.imageUrls?.first ?? '',
                               ),
@@ -96,8 +96,8 @@ class HomeRecommendedGrid extends StatelessWidget {
                                     vertical: 4.h,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.pureWhite.withOpacity(
-                                      0.92,
+                                    color: AppColors.pureWhite.withValues(
+                                      alpha: 0.92,
                                     ),
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),

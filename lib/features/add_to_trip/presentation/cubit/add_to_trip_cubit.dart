@@ -414,7 +414,6 @@ class AddToTripCubit extends Cubit<AddToTripState> {
       tripEnd: state.endDate!,
       adults: state.numberOfPeople,
       children: 0,
-      pets: 0,
       budgetTier: state.selectedBudget ?? 'Economic',
       customBudget: '',
       interests: const [],

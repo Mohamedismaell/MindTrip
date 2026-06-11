@@ -27,19 +27,18 @@ class TripModelAdapter extends TypeAdapter<TripModel> {
       tripEnd: fields[7] as DateTime?,
       adults: (fields[8] as num).toInt(),
       children: (fields[9] as num).toInt(),
-      pets: (fields[10] as num).toInt(),
-      budgetTier: fields[11] as String?,
-      customBudget: fields[12] as String,
-      interests: (fields[13] as List).cast<String>(),
-      itineraryCoverUrl: fields[16] as String?,
-      placePreviewsJson: fields[17] == null ? '[]' : fields[17] as String,
+      budgetTier: fields[10] as String?,
+      customBudget: fields[11] as String,
+      interests: (fields[12] as List).cast<String>(),
+      itineraryCoverUrl: fields[13] as String?,
+      placePreviewsJson: fields[16] == null ? '[]' : fields[16] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, TripModel obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -61,16 +60,14 @@ class TripModelAdapter extends TypeAdapter<TripModel> {
       ..writeByte(9)
       ..write(obj.children)
       ..writeByte(10)
-      ..write(obj.pets)
-      ..writeByte(11)
       ..write(obj.budgetTier)
-      ..writeByte(12)
+      ..writeByte(11)
       ..write(obj.customBudget)
-      ..writeByte(13)
+      ..writeByte(12)
       ..write(obj.interests)
-      ..writeByte(16)
+      ..writeByte(13)
       ..write(obj.itineraryCoverUrl)
-      ..writeByte(17)
+      ..writeByte(16)
       ..write(obj.placePreviewsJson);
   }
 

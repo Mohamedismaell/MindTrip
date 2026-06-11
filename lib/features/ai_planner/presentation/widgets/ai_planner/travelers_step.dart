@@ -17,7 +17,6 @@ class TravelersStep extends StatelessWidget {
     final cubit = context.read<AiPlannerCubit>();
     final adults = context.select((AiPlannerCubit c) => c.state.adults);
     final children = context.select((AiPlannerCubit c) => c.state.children);
-    final pets = context.select((AiPlannerCubit c) => c.state.pets);
     return ListView(
       padding: EdgeInsets.only(top: 6.h, bottom: 24.h),
       children: [
@@ -41,13 +40,6 @@ class TravelersStep extends StatelessWidget {
           onIncrease: () => cubit.changeChildren(1),
           showDivider: true,
         ),
-        CounterRow(
-          label: 'Pets',
-          value: pets,
-          onDecrease: () => cubit.changePets(-1),
-          onIncrease: () => cubit.changePets(1),
-        ),
-        SizedBox(height: 34.h),
         AiFlowActionButton(text: 'Continue', onTap: onContinue),
         SizedBox(height: 24.h),
         Center(

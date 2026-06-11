@@ -16,7 +16,6 @@ class Trip extends Equatable {
   final DateTime? tripEnd;
   final int adults;
   final int children;
-  final int pets;
   final String? budgetTier;
   final String customBudget;
   final List<String> interests;
@@ -35,7 +34,6 @@ class Trip extends Equatable {
     this.tripEnd,
     required this.adults,
     required this.children,
-    required this.pets,
     this.budgetTier,
     required this.customBudget,
     required this.interests,
@@ -54,7 +52,6 @@ class Trip extends Equatable {
     DateTime? tripEnd,
     int? adults,
     int? children,
-    int? pets,
     String? budgetTier,
     String? customBudget,
     List<String>? interests,
@@ -72,7 +69,6 @@ class Trip extends Equatable {
       tripEnd: tripEnd ?? this.tripEnd,
       adults: adults ?? this.adults,
       children: children ?? this.children,
-      pets: pets ?? this.pets,
       budgetTier: budgetTier ?? this.budgetTier,
       customBudget: customBudget ?? this.customBudget,
       interests: interests ?? this.interests,
@@ -87,7 +83,7 @@ class Trip extends Equatable {
     // Calculate progress based on presence of data steps
     double progress = 0.2; // Step 0: Destination (always present for a draft)
     if (tripStart != null) progress = 0.4; // Step 1: Dates
-    if (adults > 0 || children > 0 || pets > 0) {
+    if (adults > 0 || children > 0) {
       progress = 0.6; // Step 2: Travelers
     }
     if ((budgetTier != null && budgetTier!.isNotEmpty) ||
@@ -131,7 +127,6 @@ class Trip extends Equatable {
     tripEnd,
     adults,
     children,
-    pets,
     budgetTier,
     customBudget,
     interests,

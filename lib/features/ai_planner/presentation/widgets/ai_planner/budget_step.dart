@@ -33,7 +33,7 @@ class BudgetStep extends StatelessWidget {
       children: [
         StepHeading(
           title: 'What is your budget?',
-          subtitle: 'This is your budget per person.',
+          subtitle: 'this is the total budget for the entire group',
           icon: Icons.paid_rounded,
         ),
         SizedBox(height: 24.h),

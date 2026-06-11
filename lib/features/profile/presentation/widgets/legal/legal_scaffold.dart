@@ -13,16 +13,26 @@ class LegalScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colorTheme.surface,
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 30.h),
-            _ProfileLegalTopBar(title: title),
-            SizedBox(height: 28.h),
-            Expanded(child: child),
-          ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go(AppRoutes.profileSettings);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.colorTheme.surface,
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 30.h),
+              _ProfileLegalTopBar(title: title),
+              SizedBox(height: 28.h),
+              Expanded(child: child),
+            ],
+          ),
         ),
       ),
     );

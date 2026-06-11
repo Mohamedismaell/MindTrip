@@ -11,7 +11,6 @@ class AiPlannerState extends Equatable {
   final DateTime? tripEnd;
   final int adults;
   final int children;
-  final int pets;
   final BudgetTierModel? selectedBudget;
   final String customBudget;
   final DateTime visibleMonth;
@@ -27,7 +26,6 @@ class AiPlannerState extends Equatable {
     this.tripEnd,
     this.adults = 0,
     this.children = 0,
-    this.pets = 0,
     this.selectedBudget,
     this.customBudget = '',
     DateTime? visibleMonth,
@@ -69,7 +67,6 @@ class AiPlannerState extends Equatable {
       tripEnd: clearTripEnd ? null : tripEnd ?? this.tripEnd,
       adults: adults ?? this.adults,
       children: children ?? this.children,
-      pets: pets ?? this.pets,
       selectedBudget: clearSelectedBudget
           ? null
           : selectedBudget ?? this.selectedBudget,
@@ -87,7 +84,7 @@ class AiPlannerState extends Equatable {
       case 1:
         return tripStart != null && tripEnd != null;
       case 2:
-        return adults + children + pets > 0;
+        return adults + children > 0;
       case 3:
         return selectedBudget != null || customBudget.isNotEmpty;
       case 4:
@@ -127,7 +124,6 @@ class AiPlannerState extends Equatable {
     tripEnd,
     adults,
     children,
-    pets,
     selectedBudget,
     customBudget,
     visibleMonth,

@@ -77,7 +77,6 @@ class TripsCubit extends Cubit<TripsState> {
       destination: destination,
       adults: 1,
       children: 0,
-      pets: 0,
       customBudget: '',
       interests: const [],
     );

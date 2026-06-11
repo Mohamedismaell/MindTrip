@@ -36,3 +36,6 @@
 ## 2 check calender 
 ## 3 edit the cards view in the profile screen if needed 
 ## 4 check not draft cards adjust logic of Recent/Edited filter with a specific time 
+
+
+edit profile doesn't lestion to the native os navigation check

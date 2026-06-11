@@ -13,10 +13,12 @@ import 'package:skeletonizer/skeletonizer.dart';
 class PlaceDetailsImageCover extends StatelessWidget {
   final List<String>? imageUrls;
   final String placeId;
+  final String? heroTag;
   const PlaceDetailsImageCover({
     super.key,
     this.imageUrls,
     required this.placeId,
+    this.heroTag,
   });
 
   @override
@@ -36,7 +38,7 @@ class PlaceDetailsImageCover extends StatelessWidget {
             ),
             child: Skeleton.ignore(
               child: Hero(
-                tag: placeId,
+                tag: heroTag ?? placeId,
                 child: AppCachedImage(
                   imagePath:
                       imageUrls?.first ??

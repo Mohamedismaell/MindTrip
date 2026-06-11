@@ -85,7 +85,6 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
         tripEnd: trip.tripEnd,
         adults: trip.adults,
         children: trip.children,
-        pets: trip.pets,
         selectedBudget: trip.budgetTier != null ? matchingBudget : null,
         customBudget: trip.customBudget,
         selectedInterests: trip.interests,
@@ -109,7 +108,6 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
       tripEnd: state.tripEnd,
       adults: state.adults,
       children: state.children,
-      pets: state.pets,
       budgetTier: state.selectedBudget?.title,
       customBudget: state.customBudget,
       interests: state.selectedInterests,
@@ -219,10 +217,6 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
 
   void changeChildren(int delta) {
     emit(state.copyWith(children: (state.children + delta).clamp(0, 12)));
-  }
-
-  void changePets(int delta) {
-    emit(state.copyWith(pets: (state.pets + delta).clamp(0, 6)));
   }
 
   // Budget

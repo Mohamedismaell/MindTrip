@@ -5,14 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
-import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile_flow_scaffold.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -22,158 +19,178 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _pauseNotifications = true;
+  // bool _pauseNotifications = true;
 
-  void _showPlaceholder(String title) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('$title is coming soon.')));
-  }
+  // void _showPlaceholder(String title) {
+  //   ScaffoldMessenger.of(
+  //     context,
+  //   ).showSnackBar(SnackBar(content: Text('$title is coming soon.')));
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserCubit>().state.user;
-    final displayName = user?.displayName ?? 'Traveler';
-    final photoUrl = user?.profilePhotoUrl;
-    final language = user?.languagePreference ?? 'English';
+    // final user = context.watch<UserCubit>().state.user;
+    // final displayName = user?.displayName ?? 'Traveler';
+    // final photoUrl = user?.profilePhotoUrl;
+    // final language = user?.languagePreference ?? 'English';
 
-    return ProfileFlowScaffold(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 6.h),
-          _SettingsTopBar(
-            onBackTap: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-                return;
-              }
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go(AppRoutes.profile);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.colorTheme.surface,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 6.h),
+                _SettingsTopBar(
+                  onBackTap: () {
+                    if (context.canPop()) {
+                      context.pop();
+                      return;
+                    }
 
-              context.go(AppRoutes.profile);
-            },
-          ),
-          SizedBox(height: 27.h),
-          _UserSummaryCard(
-            displayName: displayName,
-            photoUrl: photoUrl,
-            onTap: () => _showPlaceholder('Profile details'),
-          ),
-          SizedBox(height: 22.h),
-          _SettingsGroupCard(
-            children: [
-              _SettingsRow(
-                icon: Icons.notifications_off_outlined,
-                title: 'Pause notifications',
-                trailing: _FigmaSwitch(
-                  value: _pauseNotifications,
-                  onTap: () {
-                    setState(() {
-                      _pauseNotifications = !_pauseNotifications;
-                    });
+                    context.go(AppRoutes.profile);
                   },
                 ),
-              ),
-              _SettingsDivider(),
-              _SettingsRow(
-                icon: Icons.tune_rounded,
-                title: 'General Settings',
-                trailing: const _ChevronArrow(),
-                onTap: () => _showPlaceholder('General Settings'),
-              ),
-              _SettingsDivider(),
-              _SettingsRow(
-                icon: Icons.account_balance_wallet_outlined,
-                title: 'Wallet',
-                trailing: const _ChevronArrow(),
-                onTap: () => _showPlaceholder('Wallet'),
-              ),
-            ],
-          ),
-          SizedBox(height: 20.h),
-          _SettingsGroupCard(
-            children: [
-              _SettingsRow(
-                icon: Icons.dark_mode_outlined,
-                title: 'Dark Mode',
-                trailing: _FigmaSwitch(
-                  key: const Key('settings-dark-mode-switch'),
-                  value: context.isDark,
-                  isActiveBlue: false,
-                  onTap: () => context.read<ThemeCubit>().toggleTheme(),
-                ),
-              ),
-              _SettingsDivider(),
-              _SettingsRow(
-                icon: Icons.language,
-                title: 'Language',
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
+                // SizedBox(height: 27.h),
+                // _UserSummaryCard(
+                //   displayName: displayName,
+                //   photoUrl: photoUrl,
+                //   onTap: () => _showPlaceholder('Profile details'),
+                // ),
+
+                // SizedBox(height: 22.h),
+                // _SettingsGroupCard(
+                //   children: [
+                //     _SettingsRow(
+                //       icon: Icons.notifications_off_outlined,
+                //       title: 'Pause notifications',
+                //       trailing: _FigmaSwitch(
+                //         value: _pauseNotifications,
+                //         onTap: () {
+                //           setState(() {
+                //             _pauseNotifications = !_pauseNotifications;
+                //           });
+                //         },
+                //       ),
+                //     ),
+                //     _SettingsDivider(),
+                //     _SettingsRow(
+                //       icon: Icons.tune_rounded,
+                //       title: 'General Settings',
+                //       trailing: const _ChevronArrow(),
+                //       onTap: () => _showPlaceholder('General Settings'),
+                //     ),
+                //     _SettingsDivider(),
+                //     _SettingsRow(
+                //       icon: Icons.account_balance_wallet_outlined,
+                //       title: 'Wallet',
+                //       trailing: const _ChevronArrow(),
+                //       onTap: () => _showPlaceholder('Wallet'),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: 20.h),
+
+                // _SettingsGroupCard(
+                //   children: [
+                //     _SettingsRow(
+                //       icon: Icons.dark_mode_outlined,
+                //       title: 'Dark Mode',
+                //       trailing: _FigmaSwitch(
+                //         key: const Key('settings-dark-mode-switch'),
+                //         value: context.isDark,
+                //         isActiveBlue: false,
+                //         onTap: () => context.read<ThemeCubit>().toggleTheme(),
+                //       ),
+                //     ),
+                //     _SettingsDivider(),
+                //     _SettingsRow(
+                //       icon: Icons.language,
+                //       title: 'Language',
+                //       trailing: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           Text(
+                //             language,
+                //             style: context.textTheme.bodyMedium?.copyWith(
+                //               fontSize: 16.sp,
+                //               color: context.colorTheme.onSurfaceVariant,
+                //             ),
+                //           ),
+                //           SizedBox(width: 9.w),
+                //           const _ChevronArrow(),
+                //         ],
+                //       ),
+                //       onTap: () => _showPlaceholder('Language'),
+                //     ),
+                //   ],
+                // ),
+                SizedBox(height: 20.h),
+                _SettingsGroupCard(
                   children: [
-                    Text(
-                      language,
-                      style: context.textTheme.bodyMedium?.copyWith(
-                        fontSize: 16.sp,
-                        color: context.colorTheme.onSurfaceVariant,
-                      ),
+                    _SettingsRow(
+                      icon: Icons.help_outline_rounded,
+                      title: 'FAQ',
+                      trailing: const _ChevronArrow(),
+                      onTap: () => context.go(AppRoutes.profileFaq),
                     ),
-                    SizedBox(width: 9.w),
-                    const _ChevronArrow(),
+                    _SettingsDivider(),
+                    _SettingsRow(
+                      icon: Icons.info_outline_rounded,
+                      title: 'Terms of service',
+                      trailing: const _ChevronArrow(),
+                      onTap: () => context.go(AppRoutes.profileTerms),
+                    ),
+                    _SettingsDivider(),
+                    _SettingsRow(
+                      icon: Icons.policy_outlined,
+                      title: 'User Policy',
+                      trailing: const _ChevronArrow(),
+                      onTap: () => context.go(AppRoutes.profilePolicy),
+                    ),
                   ],
                 ),
-                onTap: () => _showPlaceholder('Language'),
-              ),
-            ],
-          ),
-          SizedBox(height: 20.h),
-          _SettingsGroupCard(
-            children: [
-              _SettingsRow(
-                icon: Icons.help_outline_rounded,
-                title: 'FAQ',
-                trailing: const _ChevronArrow(),
-                onTap: () => context.go(AppRoutes.profileFaq),
-              ),
-              _SettingsDivider(),
-              _SettingsRow(
-                icon: Icons.info_outline_rounded,
-                title: 'Terms of service',
-                trailing: const _ChevronArrow(),
-                onTap: () => context.go(AppRoutes.profileTerms),
-              ),
-              _SettingsDivider(),
-              _SettingsRow(
-                icon: Icons.policy_outlined,
-                title: 'User Policy',
-                trailing: const _ChevronArrow(),
-                onTap: () => context.go(AppRoutes.profilePolicy),
-              ),
-            ],
-          ),
-          SizedBox(height: 32.h),
-          Center(
-            child: SizedBox(
-              width: 259.w,
-              height: 55.h,
-              child: CustomOtlinedButton(
-                key: const Key('settings-logout-button'),
-                onPressed: () {
-                  AppDialog.show(
-                    context: context,
-                    title: 'Are you sure you want to log out?',
-                    primaryText: 'Cancel',
-                    onPrimary: () {},
-                    secondaryText: 'Log Out',
-                    onSecondary: () => context.read<AppGateCubit>().logout(),
-                  );
-                },
-                icon: Icons.logout_rounded,
-                color: context.colorTheme.error,
-                text: 'Log Out',
-              ),
+                SizedBox(height: 32.h),
+                Center(
+                  child: SizedBox(
+                    width: 259.w,
+                    height: 55.h,
+                    child: CustomOtlinedButton(
+                      key: const Key('settings-logout-button'),
+                      onPressed: () {
+                        AppDialog.show(
+                          context: context,
+                          title: 'Are you sure you want to log out?',
+                          primaryText: 'Cancel',
+                          onPrimary: () {},
+                          secondaryText: 'Log Out',
+                          onSecondary: () =>
+                              context.read<AppGateCubit>().logout(),
+                        );
+                      },
+                      icon: Icons.logout_rounded,
+                      color: context.colorTheme.error,
+                      text: 'Log Out',
+                    ),
+                  ),
+                ),
+                SizedBox(height: 50.h),
+              ],
             ),
           ),
-          SizedBox(height: 50.h),
-        ],
+        ),
       ),
     );
   }

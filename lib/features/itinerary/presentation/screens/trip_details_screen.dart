@@ -61,135 +61,144 @@ class TripDetailsScreen extends StatelessWidget {
           AppSnackBar.showError(context: context, message: state.message);
         }
       },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
-            builder: (context, state) {
-              final isLoading = state.status == TripDetailsStatus.loading;
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          context.go(AppRoutes.myTrips);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
+              builder: (context, state) {
+                final isLoading = state.status == TripDetailsStatus.loading;
 
-              if (state.status == TripDetailsStatus.error) {
-                return _MessageState(
-                  message: state.errorMessage ?? 'Error loading trip',
-                );
-              }
+                if (state.status == TripDetailsStatus.error) {
+                  return _MessageState(
+                    message: state.errorMessage ?? 'Error loading trip',
+                  );
+                }
 
-              final trip = isLoading ? _dummyTrip : state.trip;
-              final itinerary = isLoading ? _dummyItinerary : state.itinerary;
+                final trip = isLoading ? _dummyTrip : state.trip;
+                final itinerary = isLoading ? _dummyItinerary : state.itinerary;
 
-              if (!isLoading &&
-                  (trip == null ||
-                      itinerary == null ||
-                      itinerary.days.isEmpty)) {
-                return const _MessageState(message: 'Trip not found');
-              }
+                if (!isLoading &&
+                    (trip == null ||
+                        itinerary == null ||
+                        itinerary.days.isEmpty)) {
+                  return const _MessageState(message: 'Trip not found');
+                }
 
-              final expandedDay = state.activeDay;
+                final expandedDay = state.activeDay;
 
-              return Skeletonizer(
-                enabled: isLoading,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 14.w,
-                    right: 14.w,
-                    bottom: 55.h,
-                  ),
-                  child: CustomScrollView(
-                    slivers: [
-                      TripDetailsTopBar(
-                        onBack: () => context.go(AppRoutes.myTrips),
-                        onShare: () {
-                          if (isLoading || trip == null || itinerary == null) {
-                            return;
-                          }
-                          final RenderBox? box =
-                              context.findRenderObject() as RenderBox?;
-                          final sharePositionOrigin = box != null
-                              ? box.localToGlobal(Offset.zero) & box.size
-                              : null;
+                return Skeletonizer(
+                  enabled: isLoading,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 14.w,
+                      right: 14.w,
+                      bottom: 55.h,
+                    ),
+                    child: CustomScrollView(
+                      slivers: [
+                        TripDetailsTopBar(
+                          onBack: () => context.go(AppRoutes.myTrips),
+                          onShare: () {
+                            if (isLoading ||
+                                trip == null ||
+                                itinerary == null) {
+                              return;
+                            }
+                            final RenderBox? box =
+                                context.findRenderObject() as RenderBox?;
+                            final sharePositionOrigin = box != null
+                                ? box.localToGlobal(Offset.zero) & box.size
+                                : null;
 
-                          context.read<TripShareCubit>().shareTrip(
-                            context: context,
-                            trip: trip,
-                            itinerary: itinerary,
-                            sharePositionOrigin: sharePositionOrigin,
-                          );
-                        },
-                      ),
-                      SliverToBoxAdapter(child: SizedBox(height: 52.h)),
-                      SliverList.separated(
-                        itemCount: itinerary?.days.length ?? 0 + 3,
-                        separatorBuilder: (_, index) {
-                          return SizedBox(height: 42.h);
-                        },
-                        itemBuilder: (context, index) {
-                          if (itinerary != null &&
-                              index < itinerary.days.length) {
-                            final day = itinerary.days[index];
-                            return TripDayOverviewCard(
-                              day: day,
-                              tripCoverAsset: trip?.coverAsset ?? '',
-                              isExpanded: day.dayNumber == expandedDay,
-                              onToggle: () {
-                                context
-                                    .read<TripDetailsCubit>()
-                                    .toggleActiveDay(day.dayNumber);
-                              },
-                              onRefine: () => AiRefinementSheet.show(
-                                context,
-                                trip?.id ?? '',
-                                const [],
-                              ),
+                            context.read<TripShareCubit>().shareTrip(
+                              context: context,
+                              trip: trip,
+                              itinerary: itinerary,
+                              sharePositionOrigin: sharePositionOrigin,
                             );
-                          } else {
-                            return SizedBox.shrink();
-                          }
-                        },
-                      ),
-                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-                      SliverToBoxAdapter(
-                        child: TripMapPreviewCard(
-                          days: itinerary?.days ?? [],
-                          onViewMap: itinerary?.days.isEmpty ?? true
-                              ? null
-                              : () => context.push(
-                                  AppRoutes.map,
-                                  extra: MapTripExtra(
-                                    days: itinerary?.days ?? [],
-                                  ),
+                          },
+                        ),
+                        SliverToBoxAdapter(child: SizedBox(height: 52.h)),
+                        SliverList.separated(
+                          itemCount: itinerary?.days.length ?? 0 + 3,
+                          separatorBuilder: (_, index) {
+                            return SizedBox(height: 42.h);
+                          },
+                          itemBuilder: (context, index) {
+                            if (itinerary != null &&
+                                index < itinerary.days.length) {
+                              final day = itinerary.days[index];
+                              return TripDayOverviewCard(
+                                day: day,
+                                tripCoverAsset: trip?.coverAsset ?? '',
+                                isExpanded: day.dayNumber == expandedDay,
+                                onToggle: () {
+                                  context
+                                      .read<TripDetailsCubit>()
+                                      .toggleActiveDay(day.dayNumber);
+                                },
+                                onRefine: () => AiRefinementSheet.show(
+                                  context,
+                                  trip?.id ?? '',
+                                  const [],
                                 ),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
                         ),
-                      ),
-                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-
-                      SliverToBoxAdapter(
-                        child: _EstimateNote(
-                          estimatedTotalCost:
-                              itinerary?.estimatedTotalCost ?? 0,
-                        ),
-                      ),
-                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-
-                      if ((trip?.status ?? TripStatus.draft) ==
-                          TripStatus.completed)
-                        const SliverToBoxAdapter(child: SizedBox.shrink())
-                      else
+                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
                         SliverToBoxAdapter(
-                          child: _SaveTripButton(
-                            trip: trip ?? _dummyTrip,
-                            onSave: () {
-                              if (trip != null) {
-                                _saveTrip(context, trip);
-                              }
-                            },
+                          child: TripMapPreviewCard(
+                            days: itinerary?.days ?? [],
+                            onViewMap: itinerary?.days.isEmpty ?? true
+                                ? null
+                                : () => context.push(
+                                    AppRoutes.map,
+                                    extra: MapTripExtra(
+                                      days: itinerary?.days ?? [],
+                                    ),
+                                  ),
                           ),
                         ),
-                      SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-                    ],
+                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+
+                        SliverToBoxAdapter(
+                          child: _EstimateNote(
+                            estimatedTotalCost:
+                                itinerary?.estimatedTotalCost ?? 0,
+                          ),
+                        ),
+                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+
+                        if ((trip?.status ?? TripStatus.draft) ==
+                            TripStatus.completed)
+                          const SliverToBoxAdapter(child: SizedBox.shrink())
+                        else
+                          SliverToBoxAdapter(
+                            child: _SaveTripButton(
+                              trip: trip ?? _dummyTrip,
+                              onSave: () {
+                                if (trip != null) {
+                                  _saveTrip(context, trip);
+                                }
+                              },
+                            ),
+                          ),
+                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -270,7 +279,6 @@ final _dummyTrip = Trip(
   destination: 'Loading Destination',
   adults: 2,
   children: 0,
-  pets: 0,
   customBudget: '',
   interests: const [],
 );
