@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
@@ -11,7 +10,6 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
-import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -243,74 +241,74 @@ class _SettingsTopBar extends StatelessWidget {
   }
 }
 
-class _UserSummaryCard extends StatelessWidget {
-  const _UserSummaryCard({
-    required this.displayName,
-    this.photoUrl,
-    required this.onTap,
-  });
+// class _UserSummaryCard extends StatelessWidget {
+//   const _UserSummaryCard({
+//     required this.displayName,
+//     this.photoUrl,
+//     required this.onTap,
+//   });
 
-  final String displayName;
-  final String? photoUrl;
-  final VoidCallback onTap;
+//   final String displayName;
+//   final String? photoUrl;
+//   final VoidCallback onTap;
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20.r),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 13.h),
-        decoration: BoxDecoration(
-          color: AppColors.primaryLightGray,
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Row(
-          children: [
-            ClipOval(
-              child: SizedBox(
-                width: 54.w,
-                height: 54.w,
-                child: photoUrl != null
-                    ? AppCachedImage(imagePath: photoUrl!)
-                    : Image.asset(
-                        'assets/images/profile/deafult_user_cover.webp',
-                      ),
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    displayName,
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w700,
-                      color: context.colorTheme.onSurface,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    ProfileMockData.username,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: context.colorTheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const _ChevronArrow(),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkWell(
+//       onTap: onTap,
+//       borderRadius: BorderRadius.circular(20.r),
+//       child: Container(
+//         width: double.infinity,
+//         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 13.h),
+//         decoration: BoxDecoration(
+//           color: AppColors.primaryLightGray,
+//           borderRadius: BorderRadius.circular(20.r),
+//         ),
+//         child: Row(
+//           children: [
+//             ClipOval(
+//               child: SizedBox(
+//                 width: 54.w,
+//                 height: 54.w,
+//                 child: photoUrl != null
+//                     ? AppCachedImage(imagePath: photoUrl!)
+//                     : Image.asset(
+//                         'assets/images/profile/deafult_user_cover.webp',
+//                       ),
+//               ),
+//             ),
+//             SizedBox(width: 12.w),
+//             Expanded(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     displayName,
+//                     style: context.textTheme.titleMedium?.copyWith(
+//                       fontSize: 18.sp,
+//                       fontWeight: FontWeight.w700,
+//                       color: context.colorTheme.onSurface,
+//                     ),
+//                   ),
+//                   SizedBox(height: 8.h),
+//                   Text(
+//                     ProfileMockData.username,
+//                     style: context.textTheme.bodyMedium?.copyWith(
+//                       fontSize: 16.sp,
+//                       fontWeight: FontWeight.w500,
+//                       color: context.colorTheme.onSurfaceVariant,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             const _ChevronArrow(),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class _SettingsGroupCard extends StatelessWidget {
   const _SettingsGroupCard({required this.children});
@@ -395,49 +393,49 @@ class _ChevronArrow extends StatelessWidget {
   }
 }
 
-class _FigmaSwitch extends StatelessWidget {
-  const _FigmaSwitch({
-    super.key,
-    required this.value,
-    required this.onTap,
-    this.isActiveBlue = true,
-  });
+// class _FigmaSwitch extends StatelessWidget {
+//   const _FigmaSwitch({
+//     super.key,
+//     required this.value,
+//     required this.onTap,
+//     this.isActiveBlue = true,
+//   });
 
-  final bool value;
-  final VoidCallback onTap;
-  final bool isActiveBlue;
+//   final bool value;
+//   final VoidCallback onTap;
+//   final bool isActiveBlue;
 
-  @override
-  Widget build(BuildContext context) {
-    final activeColor = isActiveBlue
-        ? context.colorTheme.primary
-        : AppColors.mediumLightGray;
+//   @override
+//   Widget build(BuildContext context) {
+//     final activeColor = isActiveBlue
+//         ? context.colorTheme.primary
+//         : AppColors.mediumLightGray;
 
-    return InkWell(
-      key: key,
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(70.r),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 52.w,
-        height: 30.h,
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
-        decoration: BoxDecoration(
-          color: value ? activeColor : AppColors.mediumLightGray,
-          borderRadius: BorderRadius.circular(70.r),
-        ),
-        child: Align(
-          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            width: 24.w,
-            height: 24.w,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//     return InkWell(
+//       key: key,
+//       onTap: onTap,
+//       borderRadius: BorderRadius.circular(70.r),
+//       child: AnimatedContainer(
+//         duration: const Duration(milliseconds: 200),
+//         width: 52.w,
+//         height: 30.h,
+//         padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
+//         decoration: BoxDecoration(
+//           color: value ? activeColor : AppColors.mediumLightGray,
+//           borderRadius: BorderRadius.circular(70.r),
+//         ),
+//         child: Align(
+//           alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+//           child: Container(
+//             width: 24.w,
+//             height: 24.w,
+//             decoration: const BoxDecoration(
+//               color: Colors.white,
+//               shape: BoxShape.circle,
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

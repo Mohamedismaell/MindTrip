@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
+import 'package:mindtrip/core/shared/auth/token_manager.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
@@ -14,6 +15,7 @@ class AppGateCubit extends Cubit<AppGateState> {
   final OnboardingRepository onboardingRepository;
   final LogoutUseCase logoutUseCase;
   final AuthLocalDataSource authLocal;
+  final TokenManager tokenManager;
   final GoogleAuthProvider googleAuthProvider;
   final FacebookAuthProvider facebookAuthProvider;
   final UserCubit userCubit;
@@ -24,6 +26,7 @@ class AppGateCubit extends Cubit<AppGateState> {
     required this.onboardingRepository,
     required this.logoutUseCase,
     required this.authLocal,
+    required this.tokenManager,
     required this.googleAuthProvider,
     required this.facebookAuthProvider,
     required this.userCubit,
@@ -39,24 +42,52 @@ class AppGateCubit extends Cubit<AppGateState> {
       return;
     }
 
-    final token = await authLocal.getAccessToken();
+    // Check if we have either token — a refresh token is enough to restore a session.
+    final accessToken = await authLocal.getAccessToken();
+    final refreshToken = await authLocal.getRefreshToken();
 
-    if (token != null && token.isNotEmpty) {
-      await userCubit.loadUser();
-
-      if (userCubit.state.userStatus == UserStatus.loaded) {
-        if (userCubit.state.user?.interests == null ||
-            userCubit.state.user!.interests!.isEmpty) {
-          emit(AppGateInterestsRequired());
-        } else {
-          emit(AppGateAuthenticated());
-        }
-      } else {
-        await authLocal.clear();
-        emit(AppGateUnauthenticated());
-      }
-    } else {
+    if ((accessToken == null || accessToken.isEmpty) &&
+        (refreshToken == null || refreshToken.isEmpty)) {
       emit(AppGateUnauthenticated());
+      return;
+    }
+
+    // Try loading the user. The AuthInterceptor will transparently handle a
+    // 401 by refreshing the access token and retrying the request.
+    await userCubit.loadUser();
+
+    if (userCubit.state.userStatus == UserStatus.loaded) {
+      _navigateAfterLoad();
+      return;
+    }
+
+    // loadUser() failed (e.g. the interceptor refresh also failed, or there
+    // was no access token at all). Try an explicit token refresh as a last
+    // resort before giving up.
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      final newTokens = await tokenManager.refreshIfNeeded();
+      if (newTokens != null) {
+        // Refresh succeeded — retry loading the user with the new tokens.
+        await userCubit.loadUser();
+        if (userCubit.state.userStatus == UserStatus.loaded) {
+          _navigateAfterLoad();
+          return;
+        }
+      }
+    }
+
+    // Both attempts failed — the session is truly expired. Clear credentials
+    // and send the user to the auth screen.
+    await authLocal.clear();
+    emit(AppGateUnauthenticated());
+  }
+
+  void _navigateAfterLoad() {
+    if (userCubit.state.user?.interests == null ||
+        userCubit.state.user!.interests!.isEmpty) {
+      emit(AppGateInterestsRequired());
+    } else {
+      emit(AppGateAuthenticated());
     }
   }
 

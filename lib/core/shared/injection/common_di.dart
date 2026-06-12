@@ -202,6 +202,7 @@ class CommonDi {
         onboardingRepository: sl<OnboardingRepository>(),
         logoutUseCase: sl<LogoutUseCase>(),
         authLocal: sl<AuthLocalDataSource>(),
+        tokenManager: sl<TokenManager>(),
         googleAuthProvider: sl<GoogleAuthProvider>(),
         facebookAuthProvider: sl<FacebookAuthProvider>(),
         userCubit: sl<UserCubit>(),

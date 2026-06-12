@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
@@ -38,7 +39,6 @@ class TokenManager {
     return newTokens;
   }
 
-  //! catch may get error ?
   Future<AuthResponseModel?> _refresh({required String refreshToken}) async {
     try {
       final newTokens = await authRemoteDataSource.refreshToken(
@@ -50,8 +50,17 @@ class TokenManager {
         refreshToken: newTokens.refreshToken,
       );
       return newTokens;
+    } on DioException catch (e) {
+      // Only wipe credentials when the server explicitly rejects the refresh
+      // token (401/403). Transient errors (timeout, no network, 5xx) should
+      // NOT clear the tokens — the user's session is still valid.
+      final status = e.response?.statusCode;
+      if (status == 401 || status == 403) {
+        await authLocalDataSource.clear();
+      }
+      return null;
     } catch (_) {
-      await authLocalDataSource.clear();
+      // Non-Dio errors (e.g. parse failures) — don't clear tokens.
       return null;
     }
   }

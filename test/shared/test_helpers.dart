@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +17,7 @@ import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dar
 import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
 import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
+import 'package:mindtrip/core/shared/auth/token_manager.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
@@ -26,7 +28,10 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/core/theme/theme_data_/dark_theme_data.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
+import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
+import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
+import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/authetication/domain/entities/verify_password_otp_entity.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
@@ -132,6 +137,7 @@ class TestHarness {
       onboardingRepository: onBoardingRepo,
       logoutUseCase: LogoutUseCase(repository: authRepo),
       authLocal: AuthLocalDataSource(storage: storage),
+      tokenManager: FakeTokenManager(),
       googleAuthProvider: FakeGoogleAuthProvider(),
       facebookAuthProvider: FakeFacebookAuthProvider(),
       userCubit: userCubit,
@@ -821,6 +827,63 @@ class FakeSecureTokenStorage extends SecureTokenStorage {
   Future<void> saveRefreshToken(String token) async {
     _tokens['refresh_token'] = token;
   }
+}
+
+/// A [TokenManager] stand-in for tests that always fails to refresh.
+class FakeTokenManager extends TokenManager {
+  FakeTokenManager()
+    : super(
+        authRemoteDataSource: AuthRemoteDataSource(api: _NullApiConsumer()),
+        authLocalDataSource: AuthLocalDataSource(
+          storage: FakeSecureTokenStorage(),
+        ),
+      );
+
+  @override
+  Future<AuthResponseModel?> refreshIfNeeded() async => null;
+}
+
+/// Minimal no-op [ApiConsumer] so [FakeTokenManager] compiles without a real Dio.
+class _NullApiConsumer implements ApiConsumer {
+  @override
+  Future<dynamic> get(String path,
+          {Object? data,
+          Map<String, dynamic>? queryParameters,
+          bool isFormData = false,
+          CancelToken? cancelToken}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<dynamic> post(String path,
+          {Object? data,
+          Map<String, dynamic>? queryParameters,
+          bool isFormData = false,
+          CancelToken? cancelToken}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<dynamic> patch(String path,
+          {Object? data,
+          Map<String, dynamic>? queryParameters,
+          bool isFormData = false,
+          CancelToken? cancelToken}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<dynamic> put(String path,
+          {Object? data,
+          Map<String, dynamic>? queryParameters,
+          bool isFormData = false,
+          CancelToken? cancelToken}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<dynamic> delete(String path,
+          {Object? data,
+          Map<String, dynamic>? queryParameters,
+          bool isFormData = false,
+          CancelToken? cancelToken}) =>
+      throw UnimplementedError();
 }
 
 class FakeGoogleAuthProvider extends GoogleAuthProvider {
