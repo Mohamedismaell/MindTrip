@@ -41,7 +41,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         status: FavoritesStatus.syncing,
       ),
     );
-
+    print('favoriteIds ===> ${state.favoriteIds}');
     final result = await _toggleFavoriteUseCase.call(
       placeId: placeId,
       isFavorite: isFavorite,

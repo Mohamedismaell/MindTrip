@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
@@ -28,78 +29,85 @@ class BudgetStep extends StatelessWidget {
     final selectedBudget = context.select(
       (AiPlannerCubit c) => c.state.selectedBudget,
     );
-    return ListView(
-      padding: EdgeInsets.only(top: 6.h, bottom: 24.h),
-      children: [
-        StepHeading(
-          title: 'What is your budget?',
-          subtitle: 'this is the total budget for the entire group',
-          icon: Icons.paid_rounded,
-        ),
-        SizedBox(height: 24.h),
-        ...AiPlannerMockData.budgetTiers.map(
-          (budget) => Padding(
-            padding: EdgeInsets.only(bottom: 18.h),
-            child: _BudgetTile(
-              budget: budget,
-              selected: selectedBudget == budget,
-              onTap: () => cubit.selectBudget(budget),
+    return Scaffold(
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.only(top: 6.h, bottom: 24.h),
+          children: [
+            StepHeading(
+              title: 'What is your budget?',
+              subtitle: 'this is the total budget for the entire group',
+              icon: Icons.paid_rounded,
             ),
-          ),
-        ),
-        SizedBox(height: 6.h),
-        Text(
-          'OR',
-          style: AppTextStyles.h7Bold.copyWith(
-            color: context.colorTheme.onSurface,
-          ),
-        ),
-        SizedBox(height: 12.h),
-        TextField(
-          controller: customBudgetController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          onChanged: cubit.updateCustomBudget,
-          style: context.textTheme.bodyLarge?.copyWith(
-            color: context.colorTheme.onSurface,
-          ),
-          decoration: InputDecoration(
-            hintText: 'Enter your custom amount',
-            hintStyle: context.textTheme.bodyLarge?.copyWith(
-              color: context.colorTheme.outline,
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: 20.w,
-              vertical: 14.h,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide(color: context.colorTheme.outline),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide(color: context.colorTheme.outline),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide(
-                color: context.colorTheme.primary,
-                width: 1.5,
+            SizedBox(height: 24.h),
+            ...AiPlannerMockData.budgetTiers.map(
+              (budget) => Padding(
+                padding: EdgeInsets.only(bottom: 18.h),
+                child: _BudgetTile(
+                  budget: budget,
+                  selected: selectedBudget == budget,
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    cubit.selectBudget(budget);
+                  },
+                ),
               ),
             ),
-          ),
+            SizedBox(height: 6.h),
+            Text(
+              'OR',
+              style: AppTextStyles.h7Bold.copyWith(
+                color: context.colorTheme.onSurface,
+              ),
+            ),
+            SizedBox(height: 12.h),
+            TextField(
+              controller: customBudgetController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              onChanged: cubit.updateCustomBudget,
+              style: context.textTheme.bodyLarge?.copyWith(
+                color: context.colorTheme.onSurface,
+              ),
+              decoration: InputDecoration(
+                hintText: 'Enter your custom amount',
+                hintStyle: context.textTheme.bodyLarge?.copyWith(
+                  color: context.colorTheme.outline,
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 14.h,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.r),
+                  borderSide: BorderSide(color: context.colorTheme.outline),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.r),
+                  borderSide: BorderSide(color: context.colorTheme.outline),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.r),
+                  borderSide: BorderSide(
+                    color: context.colorTheme.primary,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 24.h),
+            AiFlowActionButton(text: 'Continue', onTap: onContinue),
+            SizedBox(height: 24.h),
+            Center(
+              child: AiHint(
+                message: 'Need help estimating your budget?',
+                actionMessage: ' Ask AI',
+              ),
+            ),
+            SizedBox(height: 60.h),
+          ],
         ),
-        SizedBox(height: 24.h),
-        AiFlowActionButton(text: 'Continue', onTap: onContinue),
-        SizedBox(height: 24.h),
-        Center(
-          child: AiHint(
-            message: 'Need help estimating your budget?',
-            actionMessage: ' Ask AI',
-          ),
-        ),
-        SizedBox(height: 60.h),
-      ],
+      ),
     );
   }
 }
@@ -120,7 +128,7 @@ class _BudgetTile extends StatelessWidget {
     final color = selected
         ? context.colorTheme.primary
         : context.colorTheme.outline.withValues(alpha: 0.7);
-    return InkWell(
+    return TapScaleEffect(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10.r),
       child: AnimatedContainer(

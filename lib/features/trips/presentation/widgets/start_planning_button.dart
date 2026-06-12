@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 
@@ -13,7 +14,7 @@ class StartPlanningButton extends StatelessWidget {
   const StartPlanningButton({super.key});
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return TapScaleEffect(
       onTap: () {
         context.read<AiPlannerCubit>().reset();
         context.read<ChatCubit>().clearChat();

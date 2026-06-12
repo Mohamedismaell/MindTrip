@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class ExploreCategoryChips extends StatefulWidget {
   const ExploreCategoryChips({super.key, required this.categories});
@@ -29,14 +30,14 @@ class _ExploreCategoryChipsState extends State<ExploreCategoryChips> {
             final category = widget.categories[index];
             final isSelected = index == _selectedIndex;
 
-            return GestureDetector(
+            return TapScaleEffect(
               onTap: () => setState(() => _selectedIndex = index),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
                 padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.primaryBlue
+                      ? context.colorTheme.primary
                       : context.colorTheme.surface,
                   borderRadius: BorderRadius.circular(24.r),
                   border: isSelected

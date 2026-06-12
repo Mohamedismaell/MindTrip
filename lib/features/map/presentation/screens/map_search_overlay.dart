@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/app_snackbar.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
 
@@ -44,58 +47,87 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
           children: [
             // Search Bar header
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      color: context.colorTheme.onSurface,
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: Hero(
+                tag: 'map_search_bar',
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    decoration: BoxDecoration(
+                      boxShadow: [AppShadows.mainElevationButton],
+                      color: context.colorTheme.surface.withValues(alpha: 0.9),
+                      borderRadius: BorderRadius.circular(30.r),
                     ),
-                    onTap: () {
-                      context.read<MapSearchCubit>().clearSearch();
-                      context.pop();
-                    },
-                  ),
-                  SizedBox(width: 10.w),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: 'Looking for a place...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.r),
-                          borderSide: BorderSide.none,
+                    child: Row(
+                      children: [
+                        TapScaleEffect(
+                          onTap: () {
+                            context.read<MapSearchCubit>().clearSearch();
+                            context.pop();
+                          },
+                          child: Container(
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.primaryLightGray,
+                            ),
+                            child: Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              size: 24.sp,
+                              color: context.colorTheme.onSurfaceVariant,
+                            ),
+                          ),
                         ),
-                        filled: true,
-                        fillColor: context.colorTheme.surfaceContainerHighest
-                            .withValues(alpha: 0.5),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20.w,
-                          vertical: 10.h,
+                        SizedBox(width: 5.w),
+                        Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            autofocus: true,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText: 'Looking for a place...',
+                              hintStyle: context.textTheme.bodyMedium?.copyWith(
+                                color: context.colorTheme.outline,
+                              ),
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              focusedErrorBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.zero,
+                              prefixIcon: Icon(
+                                Icons.search_rounded,
+                                color: context.colorTheme.outline,
+                                size: 24.sp,
+                              ),
+                              // suffixIcon: _searchController.text.isNotEmpty
+                              //     ? TapScaleEffect(
+                              //         onTap: () {
+                              //           _searchController.clear();
+                              //           context
+                              //               .read<MapSearchCubit>()
+                              //               .clearSearch();
+                              //         },
+                              //         child: Icon(
+                              //           Icons.clear,
+                              //           color: context.colorTheme.outline,
+                              //           size: 20.sp,
+                              //         ),
+                              //       )
+                              //     : null,
+                            ),
+                            style: context.textTheme.bodyLarge?.copyWith(
+                              color: context.colorTheme.onSurface,
+                            ),
+                          ),
                         ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: context.colorTheme.outline,
-                        ),
-                        suffixIcon: _searchController.text.isNotEmpty
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.clear,
-                                  color: context.colorTheme.outline,
-                                ),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  context.read<MapSearchCubit>().clearSearch();
-                                },
-                              )
-                            : null,
-                      ),
-                      style: context.textTheme.bodyLarge,
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
 

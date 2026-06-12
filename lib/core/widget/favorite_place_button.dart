@@ -5,29 +5,39 @@ import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class FavoriteButton extends StatelessWidget {
-  const FavoriteButton({super.key, required this.placeId});
+  const FavoriteButton({
+    super.key,
+    required this.placeId,
+    this.backgroundColor,
+    this.showShadow = true,
+  });
+
   final String placeId;
+  final Color? backgroundColor;
+  final bool showShadow;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FavoriteCubit, FavoriteState>(
       builder: (context, state) {
         final isFavorite = context.read<FavoriteCubit>().isFavorite(placeId);
-        return GestureDetector(
+        return TapScaleEffect(
           onTap: () {
             context.read<FavoriteCubit>().toggleFavorite(
-              placeId: placeId,
-              isFavorite: !isFavorite,
-            );
+                  placeId: placeId,
+                  isFavorite: !isFavorite,
+                );
           },
           child: Container(
             width: 40.w,
             height: 40.w,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.pureWhite,
-              boxShadow: [AppShadows.favoritePlaceButtonShadow],
+              color: backgroundColor ?? AppColors.pureWhite,
+              boxShadow: showShadow ? [AppShadows.favoritePlaceButtonShadow] : [],
             ),
             child: TweenAnimationBuilder<Color?>(
               tween: ColorTween(

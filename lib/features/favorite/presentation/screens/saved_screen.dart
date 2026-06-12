@@ -135,7 +135,11 @@ class _PlacesGrid extends StatelessWidget {
       itemCount: places.length,
       itemBuilder: (context, index) {
         final place = places[index];
-        return ExplorePlaceCard(place: place, hasBadge: false);
+        return ExplorePlaceCard(
+          place: place,
+          hasBadge: false,
+          heroPrefix: 'saved',
+        );
       },
     );
   }
@@ -174,7 +178,6 @@ class _EmptyView extends StatelessWidget {
   }
 }
 
-/// Shown when a specific category filter has no matching places.
 class _EmptyCategoryView extends StatelessWidget {
   const _EmptyCategoryView({required this.categoryName});
 

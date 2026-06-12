@@ -6,7 +6,9 @@ import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gat
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/core/widget/appp_dialog.dart';
 import 'package:mindtrip/core/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
@@ -208,14 +210,22 @@ class _SettingsTopBar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBackTap,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                size: 30.sp,
-                color: context.colorTheme.onSurfaceVariant,
+          TapScaleEffect(
+            onTap: onBackTap,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 40.w,
+                height: 40.h,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryLightGray,
+                ),
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  size: 28.sp,
+                  color: context.colorTheme.onSurfaceVariant,
+                ),
               ),
             ),
           ),
@@ -336,7 +346,7 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return TapScaleEffect(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12.r),
       child: SizedBox(
@@ -348,9 +358,7 @@ class _SettingsRow extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: context.textTheme.bodyMedium?.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
+                style: AppTextStyles.h9SemiBold.copyWith(
                   color: context.colorTheme.onSurfaceVariant,
                 ),
               ),

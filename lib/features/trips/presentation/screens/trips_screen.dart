@@ -8,6 +8,7 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/core/widget/custom_search_bar.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
@@ -157,7 +158,7 @@ class _CustomHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            GestureDetector(
+            TapScaleEffect(
               onTap: () {
                 if (context.canPop()) {
                   context.pop();
@@ -165,10 +166,18 @@ class _CustomHeader extends StatelessWidget {
                   context.go(AppRoutes.profile);
                 }
               },
-              child: Icon(
-                Icons.arrow_back_rounded,
-                size: 30.sp,
-                color: context.colorTheme.onSurfaceVariant,
+              child: Container(
+                width: 40.w,
+                height: 40.h,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryLightGray,
+                ),
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  size: 28.sp,
+                  color: context.colorTheme.onSurfaceVariant,
+                ),
               ),
             ),
             SizedBox(width: 12.w),
@@ -184,7 +193,7 @@ class _CustomHeader extends StatelessWidget {
                 ),
               ),
             ),
-            GestureDetector(
+            TapScaleEffect(
               onTap: () => context.push(AppRoutes.tripCalendar),
               child: Container(
                 padding: EdgeInsets.all(8.r),

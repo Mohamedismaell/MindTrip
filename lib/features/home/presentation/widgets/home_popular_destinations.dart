@@ -2,13 +2,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/widget/favorite_place_button.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
@@ -67,12 +67,18 @@ class HomePopularDestinations extends StatelessWidget {
                             fit: StackFit.expand,
                             children: [
                               //! Handle no image later
-                               Hero(
-                                tag: 'pop_${destination.id}',
-                                child: AppCachedImage(
-                                  imagePath: destination.imageUrls?.first ?? '',
-                                ),
-                              ),
+                              Skeletonizer.maybeOf(context)?.enabled ?? false
+                                  ? AppCachedImage(
+                                      imagePath:
+                                          destination.imageUrls?.first ?? '',
+                                    )
+                                  : Hero(
+                                      tag: 'pop_${destination.id}',
+                                      child: AppCachedImage(
+                                        imagePath:
+                                            destination.imageUrls?.first ?? '',
+                                      ),
+                                    ),
 
                               DecoratedBox(
                                 decoration: BoxDecoration(
@@ -159,30 +165,33 @@ class HomePopularDestinations extends StatelessWidget {
                               Positioned(
                                 top: 20.h,
                                 right: 20.w,
-                                child: _FavoriteButton(
-                                  destinationId: destination.id,
+                                child: FavoriteButton(
+                                  placeId: destination.id,
+                                  backgroundColor: AppColors.pureWhite
+                                      .withValues(alpha: 0.3),
+                                  showShadow: false,
                                 ),
                               ),
 
                               Positioned(
                                 bottom: 20.h,
                                 right: 20.w,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.pureWhite.withValues(
-                                      alpha: 0.3,
+                                child: TapScaleEffect(
+                                  onTap: () {
+                                    if (isLoading) return;
+                                    context.push(
+                                      '${AppRoutes.placeDetails}?placeId=${destination.id}&heroTag=pop_${destination.id}',
+                                      extra: destination,
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.pureWhite.withValues(
+                                        alpha: 0.3,
+                                      ),
                                     ),
-                                  ),
-                                  padding: EdgeInsets.all(12.r),
-                                  child: TapScaleEffect(
-                                    onTap: () {
-                                      if (isLoading) return;
-                                      context.push(
-                                        '${AppRoutes.placeDetails}?placeId=${destination.id}&heroTag=pop_${destination.id}',
-                                        extra: destination,
-                                      );
-                                    },
+                                    padding: EdgeInsets.all(12.r),
                                     child: SizedBox(
                                       width: 20.sp,
                                       height: 20.sp,
@@ -211,60 +220,7 @@ class HomePopularDestinations extends StatelessWidget {
   }
 }
 
-class _FavoriteButton extends StatelessWidget {
-  const _FavoriteButton({required this.destinationId});
-  final String destinationId;
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<FavoriteCubit, FavoriteState>(
-      builder: (context, state) {
-        final isFavorite = context.read<FavoriteCubit>().isFavorite(
-          destinationId,
-        );
-        return GestureDetector(
-          onTap: () {
-            context.read<FavoriteCubit>().toggleFavorite(
-              placeId: destinationId,
-              isFavorite: !isFavorite,
-            );
-          },
-          child: Container(
-            width: 40.w,
-            height: 40.w,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.pureWhite.withValues(alpha: 0.3),
-            ),
-            child: TweenAnimationBuilder<Color?>(
-              tween: ColorTween(
-                begin: context.colorTheme.onSurface,
-                end: isFavorite
-                    ? context.colorTheme.error
-                    : context.colorTheme.outline,
-              ),
-              duration: const Duration(milliseconds: 250),
-              builder: (context, color, _) {
-                return TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 1, end: isFavorite ? 1.2 : 0.8),
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOutBack,
-                  builder: (context, scale, child) {
-                    return Transform.scale(
-                      scale: scale,
-                      child: Center(
-                        child: Icon(Icons.favorite_rounded, color: color),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
+
 
 class _PreviewImageTile extends StatelessWidget {
   const _PreviewImageTile({required this.imageUrl});

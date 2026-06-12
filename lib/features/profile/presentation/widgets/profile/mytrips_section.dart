@@ -9,6 +9,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
@@ -93,7 +94,7 @@ class _MyTripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return TapScaleEffect(
       onTap: onTap,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30.r),

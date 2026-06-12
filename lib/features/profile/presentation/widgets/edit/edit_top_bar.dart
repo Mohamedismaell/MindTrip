@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class EditTopBar extends StatelessWidget {
   const EditTopBar({super.key, required this.onBackTap});
@@ -16,12 +18,20 @@ class EditTopBar extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBackTap,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                size: 30.sp,
-                color: context.colorTheme.onSurfaceVariant,
+            child: TapScaleEffect(
+              onTap: onBackTap,
+              child: Container(
+                width: 40.w,
+                height: 40.h,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryLightGray,
+                ),
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  size: 28.sp,
+                  color: context.colorTheme.onSurfaceVariant,
+                ),
               ),
             ),
           ),

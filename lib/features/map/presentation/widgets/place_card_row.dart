@@ -222,7 +222,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                       isSearchResult: entry.isSearchResult,
                                       heroTag: (isSelected && isExpanded)
                                           ? null
-                                          : place.id,
+                                          : 'map_${place.id}',
                                       onAdd: () {
                                         setState(() {
                                           _removingPlaceIds.add(place.id);
@@ -247,7 +247,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                                       googlePlace: googlePlace,
                                       photoUrls: finalPhotoUrls,
                                       heroTag: (isSelected && isExpanded)
-                                          ? place.id
+                                          ? 'map_${place.id}'
                                           : null,
                                     ),
                                   ),

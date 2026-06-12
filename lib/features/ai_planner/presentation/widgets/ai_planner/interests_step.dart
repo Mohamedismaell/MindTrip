@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_flow_action_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/step_heading.dart';
@@ -68,26 +69,34 @@ class Interestes extends StatelessWidget {
             runSpacing: 14.h,
             children: categories.map((category) {
               final bool isSelected = selectedCategories.contains(category);
-              return OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 10.h,
-                  ),
-                  side: BorderSide(color: context.colorTheme.outline, width: 1),
-                  backgroundColor: isSelected
-                      ? context.colorTheme.primary
-                      : AppColors.pureWhite,
-                ),
-                onPressed: () {
+              return TapScaleEffect(
+                onTap: () {
                   context.read<AiPlannerCubit>().toggleInterest(category);
                 },
-                child: Text(
-                  category,
-                  style: context.textTheme.bodyLarge!.copyWith(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.w,
+                    vertical: 10.h,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24.r),
+                    border: Border.all(
+                      color: isSelected
+                          ? context.colorTheme.primary
+                          : context.colorTheme.outline,
+                      width: 1,
+                    ),
                     color: isSelected
-                        ? AppColors.pureWhite
-                        : context.colorTheme.onSurfaceVariant,
+                        ? context.colorTheme.primary
+                        : AppColors.pureWhite,
+                  ),
+                  child: Text(
+                    category,
+                    style: context.textTheme.bodyLarge!.copyWith(
+                      color: isSelected
+                          ? AppColors.pureWhite
+                          : context.colorTheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               );

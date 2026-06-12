@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class SectionHeading extends StatelessWidget {
   const SectionHeading({
@@ -30,7 +31,7 @@ class SectionHeading extends StatelessWidget {
         if (trailing != null) ...[SizedBox(width: 8.w), trailing!],
         const Spacer(),
         if (actionText != null)
-          InkWell(
+          TapScaleEffect(
             onTap: onActionTap,
             child: Text(
               actionText!,

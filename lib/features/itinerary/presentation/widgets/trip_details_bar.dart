@@ -4,6 +4,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class TripDetailsTopBar extends StatelessWidget {
   const TripDetailsTopBar({
@@ -27,12 +28,20 @@ class TripDetailsTopBar extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: onBack,
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: context.colorTheme.onSurfaceVariant,
-                    size: 28.sp,
+                child: TapScaleEffect(
+                  onTap: onBack,
+                  child: Container(
+                    width: 40.w,
+                    height: 40.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primaryLightGray,
+                    ),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: context.colorTheme.onSurfaceVariant,
+                      size: 28.sp,
+                    ),
                   ),
                 ),
               ),
@@ -47,16 +56,20 @@ class TripDetailsTopBar extends StatelessWidget {
               //Todo Chcek the share
               Align(
                 alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: onShare,
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.primaryLightGray,
-                    fixedSize: Size(40.w, 40.w),
-                  ),
-                  icon: Icon(
-                    Icons.share_outlined,
-                    color: context.colorTheme.onSurfaceVariant,
-                    size: 20.sp,
+                child: TapScaleEffect(
+                  onTap: onShare,
+                  child: Container(
+                    width: 40.w,
+                    height: 40.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primaryLightGray,
+                    ),
+                    child: Icon(
+                      Icons.share_outlined,
+                      color: context.colorTheme.onSurfaceVariant,
+                      size: 20.sp,
+                    ),
                   ),
                 ),
               ),

@@ -160,7 +160,7 @@ class _NearbyPlaceCard extends StatelessWidget {
                         //Todo replace it with real data
                         Expanded(
                           child: Text(
-                            '0.4 km0.4 km0.4 km0.4 km0.4 km0.4 km',
+                            '0.4 km',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: context.textTheme.bodyMedium?.copyWith(

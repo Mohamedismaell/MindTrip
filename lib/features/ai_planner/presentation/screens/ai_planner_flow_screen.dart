@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
@@ -127,7 +128,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
 
   Future<void> _onStepCompleted() async {
     if (_plannerCubit.isClosed) return;
-
+    FocusScope.of(context).unfocus();
     if (_plannerCubit.state.currentPage < 4) {
       _plannerCubit.nextPage();
       await _autoSave();
@@ -196,8 +197,10 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     final showFab = !isKeyboardOpen && (currentPage != 4);
 
     return PopScope(
+      canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
-        if (didPop) await _autoSave();
+        if (didPop) return;
+        await _handleBack(false);
       },
       child: Scaffold(
         backgroundColor: context.colorTheme.surface,
@@ -239,9 +242,16 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                           shape: BoxShape.circle,
                         ),
                         //Todo change the icon into X Icon
-                        child: IconButton(
-                          onPressed: () => _handleBack(true),
-                          icon: Icon(Icons.close, size: 30.sp),
+                        child: TapScaleEffect(
+                          onTap: () => _handleBack(true),
+                          child: Padding(
+                            padding: EdgeInsets.all(10.r),
+                            child: Icon(
+                              Icons.close,
+                              // size: 30.sp,
+                              color: context.colorTheme.onSurfaceVariant,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -291,12 +301,16 @@ class _HeaderIconButton extends StatelessWidget {
   final IconData icon;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return TapScaleEffect(
       onTap: onTap,
       borderRadius: BorderRadius.circular(25.r),
-      child: SizedBox(
-        width: 50.w,
-        height: 50.h,
+      child: Container(
+        width: 40.w,
+        height: 40.h,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.primaryLightGray,
+        ),
         child: Icon(
           icon,
           size: 32.sp,

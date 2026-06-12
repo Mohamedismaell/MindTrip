@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class LegalScaffold extends StatelessWidget {
   const LegalScaffold({super.key, required this.title, required this.child});
@@ -55,19 +56,27 @@ class _ProfileLegalTopBar extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: EdgeInsets.only(left: 16.w),
-              child: IconButton(
+              child: TapScaleEffect(
                 key: Key('${title.toLowerCase().replaceAll(' ', '-')}-back'),
-                onPressed: () {
+                onTap: () {
                   if (context.canPop()) {
                     context.pop();
                   } else {
                     context.go(AppRoutes.profileSettings);
                   }
                 },
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  size: 32.sp,
-                  color: context.colorTheme.onSurfaceVariant,
+                child: Container(
+                  width: 40.w,
+                  height: 40.h,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.primaryLightGray,
+                  ),
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    size: 32.sp,
+                    color: context.colorTheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ),

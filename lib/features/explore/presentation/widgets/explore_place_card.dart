@@ -27,16 +27,18 @@ class ExplorePlaceCard extends StatelessWidget {
     super.key,
     required this.place,
     required this.hasBadge,
+    this.heroPrefix = 'explore',
   });
 
   final PlaceEntity place;
   final bool hasBadge;
+  final String heroPrefix;
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
       onTap: () {
         context.push(
-          '${AppRoutes.placeDetails}?placeId=${place.id}',
+          '${AppRoutes.placeDetails}?placeId=${place.id}&heroTag=${heroPrefix}_${place.id}',
           extra: place,
         );
       },
@@ -67,12 +69,16 @@ class ExplorePlaceCard extends StatelessWidget {
                         bottomLeft: Radius.circular(12.r),
                         bottomRight: Radius.circular(12.r),
                       ),
-                      child: Hero(
-                        tag: place.id,
-                        child: AppCachedImage(
-                          imagePath: place.imageUrls?.first ?? '',
-                        ),
-                      ),
+                      child: Skeletonizer.maybeOf(context)?.enabled ?? false
+                          ? AppCachedImage(
+                              imagePath: place.imageUrls?.first ?? '',
+                            )
+                          : Hero(
+                              tag: '${heroPrefix}_${place.id}',
+                              child: AppCachedImage(
+                                imagePath: place.imageUrls?.first ?? '',
+                              ),
+                            ),
                     ),
 
                     // Badge

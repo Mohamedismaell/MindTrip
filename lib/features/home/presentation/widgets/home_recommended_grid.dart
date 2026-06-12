@@ -9,6 +9,7 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/widget/favorite_place_button.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,11 +81,22 @@ class HomeRecommendedGrid extends StatelessWidget {
                           fit: StackFit.expand,
                           children: [
                             //! Handle no image later
-                            Hero(
-                              tag: 'rec_${destination.id}',
-                              child: AppCachedImage(
-                                imagePath: destination.imageUrls?.first ?? '',
-                              ),
+                            Skeletonizer.maybeOf(context)?.enabled ?? false
+                                ? AppCachedImage(
+                                    imagePath:
+                                        destination.imageUrls?.first ?? '',
+                                  )
+                                : Hero(
+                                    tag: 'rec_${destination.id}',
+                                    child: AppCachedImage(
+                                      imagePath:
+                                          destination.imageUrls?.first ?? '',
+                                    ),
+                                  ),
+                            Positioned(
+                              top: 10.h,
+                              left: 10.w,
+                              child: FavoriteButton(placeId: destination.id),
                             ),
                             if (destination.price != null)
                               Positioned(

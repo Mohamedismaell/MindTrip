@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class AuthHeadline extends StatelessWidget {
   const AuthHeadline({
@@ -21,10 +24,21 @@ class AuthHeadline extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
+        TapScaleEffect(
           onTap: () => context.pop(),
-          //Todo : Export Back arrow icon
-          child: Icon(Icons.arrow_back_ios_new_rounded),
+          child: Container(
+            width: 40.w,
+            height: 40.h,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.primaryLightGray,
+            ),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 20.sp,
+              color: context.colorTheme.onSurface,
+            ),
+          ),
         ),
         // SizedBox(width: 10.w),
         Expanded(

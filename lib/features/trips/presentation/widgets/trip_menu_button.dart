@@ -20,7 +20,9 @@ class TripMenuButton extends StatelessWidget {
         size: 20.sp,
         color: context.colorTheme.onSurface,
       ),
-
+      elevation: 2,
+      position: PopupMenuPosition.under,
+      offset: const Offset(-25, 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       onSelected: (value) {
         if (value == rename) {

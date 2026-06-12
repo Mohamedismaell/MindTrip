@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class ExploreSectionHeader extends StatelessWidget {
   const ExploreSectionHeader({
@@ -67,7 +68,7 @@ class _ActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return TapScaleEffect(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.h),

@@ -6,10 +6,8 @@ import 'package:mindtrip/features/explore/presentation/widgets/explore_category_
 import 'package:mindtrip/features/explore/presentation/widgets/explore_filter_sheet.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_header.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_places_grid.dart';
-import 'package:mindtrip/features/explore/presentation/widgets/explore_results_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_search_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_section_header.dart';
-import 'package:mindtrip/features/explore/presentation/widgets/explore_tab_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_trending_list.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/float_map_button.dart';
 
@@ -23,7 +21,7 @@ class ExploreScreen extends StatelessWidget {
       backgroundColor: context.colorTheme.surface,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
           child: CustomScrollView(
             slivers: [
               //  Header

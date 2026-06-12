@@ -116,7 +116,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       } else {
         await _placesLocal.cachePlaces(result);
       }
-      
+
       return Result.ok(result.map((m) => m.toEntity()).toList());
     } catch (e) {
       final localResult = await _placesLocal.getPlaces(placeIds.toList());

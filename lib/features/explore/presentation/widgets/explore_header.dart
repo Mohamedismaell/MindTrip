@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/custom_head_line.dart';
 
 class ExploreHeader extends StatelessWidget {
   const ExploreHeader({super.key});
@@ -25,18 +26,15 @@ class ExploreHeader extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 12.h),
-              RichText(
-                text: TextSpan(
-                  style: context.textTheme.headlineMedium,
-                  children: [
-                    const TextSpan(text: 'Where do you\nwant to '),
-                    TextSpan(
-                      text: 'explore?',
-                      style: AppTextStyles.h5Bold.copyWith(
-                        color: context.colorTheme.primary,
-                      ),
-                    ),
-                  ],
+              CustomHeadLine(
+                textAlign: TextAlign.left,
+                firstTitle: 'Where do you\nwant to ',
+                secondTitle: 'explore?',
+                firstStyle: AppTextStyles.h5Bold.copyWith(
+                  color: context.colorTheme.onSurface,
+                ),
+                secondStyle: AppTextStyles.h5Bold.copyWith(
+                  color: context.colorTheme.primary,
                 ),
               ),
             ],

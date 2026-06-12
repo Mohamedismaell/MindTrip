@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class CounterRow extends StatelessWidget {
   const CounterRow({
@@ -49,10 +50,27 @@ class CounterRow extends StatelessWidget {
                     _CounterAction(label: '-', onTap: onDecrease),
                     Expanded(
                       child: Center(
-                        child: Text(
-                          '$value',
-                          style: AppTextStyles.h8Medium.copyWith(
-                            color: context.colorTheme.onSurface,
+                        child: AnimatedSwitcher(
+                          transitionBuilder: (child, animation) {
+                            return ScaleTransition(
+                              scale: animation,
+                              child: FadeTransition(
+                                opacity: animation,
+                                // position: Tween<Offset>(
+                                //   begin: const Offset(-1, 0),
+                                //   end: Offset.zero,
+                                // ).animate(animation),
+                                child: child,
+                              ),
+                            );
+                          },
+                          duration: const Duration(milliseconds: 200),
+                          child: Text(
+                            key: ValueKey(value),
+                            '$value',
+                            style: AppTextStyles.h8Medium.copyWith(
+                              color: context.colorTheme.onSurface,
+                            ),
                           ),
                         ),
                       ),
@@ -85,12 +103,12 @@ class _CounterAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return TapScaleEffect(
       onTap: onTap,
       borderRadius: BorderRadius.circular(30.r),
       child: SizedBox(
-        width: 34.w,
         height: 45.h,
+        width: 34.w,
         child: Center(
           child: Text(
             label,

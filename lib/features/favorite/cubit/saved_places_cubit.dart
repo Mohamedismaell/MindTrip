@@ -27,6 +27,7 @@ class SavedPlacesCubit extends Cubit<FavoritesScreenState> {
     final favoriteIds = _favoriteCubit.state.favoriteIds;
 
     if (favoriteIds.isEmpty) {
+      print('favoriteIds isEmpty');
       emit(state.copyWith(places: [], placesStatus: FavoritesTabStatus.empty));
       return;
     }

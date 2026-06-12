@@ -26,33 +26,38 @@ class DestinationStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<AiPlannerCubit>();
 
-    return Column(
-      children: [
-        StepHeading(
-          title: 'Where do you want to go?',
-          subtitle:
-              'Pick a destination or type your dream place or chat with AI.',
-          icon: Icons.location_on_rounded,
-        ),
-        SizedBox(height: 24.h),
-        _SearchBar(
-          controller: controller,
-          onChanged: cubit.updateDestinationQuery,
-        ),
-        SizedBox(height: 37.h),
-        _DestinationsList(onDestinationTap: onDestinationTap),
-        // SizedBox(height: 12.h),
-        Padding(
-          padding: EdgeInsets.only(top: 32.h, bottom: 24),
-          child: AiFlowActionButton(text: 'Continue', onTap: onContinue),
-        ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Column(
+          children: [
+            StepHeading(
+              title: 'Where do you want to go?',
+              subtitle:
+                  'Pick a destination or type your dream place or chat with AI.',
+              icon: Icons.location_on_rounded,
+            ),
+            SizedBox(height: 24.h),
+            _SearchBar(
+              controller: controller,
+              onChanged: cubit.updateDestinationQuery,
+            ),
+            SizedBox(height: 37.h),
+            _DestinationsList(onDestinationTap: onDestinationTap),
+            // SizedBox(height: 12.h),
+            Padding(
+              padding: EdgeInsets.only(top: 32.h, bottom: 24),
+              child: AiFlowActionButton(text: 'Continue', onTap: onContinue),
+            ),
 
-        AiHint(
-          message: 'Tap the bot if you need some inspiration.',
-          actionMessage: ' Ask AI',
+            AiHint(
+              message: 'Tap the bot if you need some inspiration.',
+              actionMessage: ' Ask AI',
+            ),
+            SizedBox(height: 90.h),
+          ],
         ),
-        SizedBox(height: 90.h),
-      ],
+      ),
     );
   }
 }
@@ -113,6 +118,7 @@ class _DestinationsListState extends State<_DestinationsList> {
                     label: destination,
                     selected: selectedDestination == destination,
                     onTap: () {
+                      FocusScope.of(context).unfocus();
                       widget._onDestinationTap(destination);
                       cubit.selectDestination(destination);
                     },
@@ -175,6 +181,7 @@ class _SearchBarState extends State<_SearchBar> {
                   focusNode: _focusNode,
                   controller: widget.controller,
                   onChanged: widget.onChanged,
+
                   style: AppTextStyles.h10Regular.copyWith(
                     color: context.colorTheme.onSurface,
                   ),

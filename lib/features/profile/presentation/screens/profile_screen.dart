@@ -5,26 +5,27 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/interest_chip.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/mytrips_section.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_identity.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/section_heading.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/stats_card.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile/top_actions_row.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  void _showPlaceholder(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('This action is coming soon.')),
-    );
-  }
+  // void _showPlaceholder(BuildContext context) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text('This action is coming soon.')),
+  //   );
+  // }
 
   //! there is no trips - reviews - saved
   //! there is no saved Trips
@@ -55,10 +56,22 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TopActionsRow(
-                      onSettingsTap: () =>
-                          context.push(AppRoutes.profileSettings),
-                      onMenuTap: () => _showPlaceholder(context),
+                    TapScaleEffect(
+                      onTap: () => context.push(AppRoutes.profileSettings),
+                      borderRadius: BorderRadius.circular(25.r),
+                      child: Container(
+                        width: 50.w,
+                        height: 50.w,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primaryLightGray,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.settings,
+                          size: 28.sp,
+                          color: context.colorTheme.onSurfaceVariant,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 18.h),
                     ProfileIdentity(
@@ -74,7 +87,7 @@ class ProfileScreen extends StatelessWidget {
                       title: 'My interests',
                       trailing: SizedBox(
                         width: 20.w,
-                        child: InkWell(
+                        child: TapScaleEffect(
                           onTap: () {
                             context.push(AppRoutes.interests, extra: true);
                           },
