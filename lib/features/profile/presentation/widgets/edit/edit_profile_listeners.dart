@@ -30,7 +30,9 @@ class EditProfileListeners extends StatelessWidget {
             } else if (state.saveStatus == EditSaveStatus.failed) {
               AppSnackBar.showError(
                 context: context,
-                message: 'Failed to save changes. Please try again.',
+                message:
+                    state.editErrorMessage ??
+                    'Failed to save changes. Please try again.',
               );
               context.read<EditProfileCubit>().dismissError();
             }

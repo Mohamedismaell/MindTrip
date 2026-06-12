@@ -38,7 +38,9 @@ class InterestsScreen extends StatelessWidget {
         } else if (state.interestStatus == InterestStatus.failed) {
           AppSnackBar.showError(
             context: context,
-            message: 'Failed to save interests. Please try again.',
+            message:
+                state.interestErrorMessage ??
+                'Failed to save interests. Please try again.',
           );
           context.read<UserCubit>().dismissInterestError();
         }
