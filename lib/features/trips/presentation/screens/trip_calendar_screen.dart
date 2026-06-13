@@ -168,7 +168,8 @@ class TripCalendarScreen extends StatelessWidget {
                                   return CalendarDayCell(
                                     day: day,
                                     trips: state.trips,
-                                    isToday: true,
+                                    isOutside: true,
+                                    isToday: isSameDay(day, DateTime.now()),
                                   );
                                 },
 
@@ -184,7 +185,8 @@ class TripCalendarScreen extends StatelessWidget {
                                   return CalendarDayCell(
                                     day: day,
                                     trips: state.trips,
-                                    isToday: true,
+                                    isSelected: true,
+                                    isToday: isSameDay(day, DateTime.now()),
                                   );
                                 },
 

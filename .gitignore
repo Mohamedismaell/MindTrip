@@ -45,3 +45,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .env.dev
+back_end_guide/MindTrip_Frontend_API_Reference (1).md
