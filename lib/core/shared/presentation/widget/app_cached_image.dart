@@ -46,7 +46,6 @@ class AppCachedImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!_isNetworkImage) {
-      //Todo add place holder image or random asset images
       return Image.asset(
         imagePath ?? 'assets/images/onboarding/Pyramids.webp',
         width: width,
@@ -56,60 +55,63 @@ class AppCachedImage extends StatelessWidget {
       );
     }
 
-    final double pixelRatio = MediaQuery.devicePixelRatioOf(context);
-    final cacheWidth =
-        this.cacheWidth ??
-        (width != null && width!.isFinite
-            ? (width! * pixelRatio).round()
-            : null);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final pixelRatio = MediaQuery.devicePixelRatioOf(context);
 
-    final cacheHeight =
-        this.cacheHeight ??
-        (height != null && height!.isFinite
-            ? (height! * pixelRatio).round()
-            : null);
-    return CachedNetworkImage(
-      imageUrl: imagePath!,
-      cacheKey: cacheKey,
-      cacheManager: AppCacheManager.instance,
-      httpHeaders: const {
-        'User-Agent':
-            'Mozilla/5.0 (Linux; Android 13; Mobile; rv:120.0) Gecko/120.0 Firefox/120.0',
-        'Accept': 'image/avif,image/webp,image/*,*/*;q=0.8',
-      },
-      width: width,
-      height: height,
-      fit: fit,
-      memCacheWidth: cacheWidth,
-      memCacheHeight: cacheHeight,
-      // fadeInDuration: Duration.zero,
-      // fadeOutDuration: Duration.zero,
-      placeholder: (_, _) => Skeletonizer(
-        enabled: true,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.r),
-          child: Image.asset(
-            'assets/images/onboarding/Pyramids.webp',
+        final resolvedWidth = width ?? constraints.maxWidth;
+        final resolvedHeight = height ?? constraints.maxHeight;
+
+        final memCacheWidth =
+            cacheWidth ??
+            (resolvedWidth.isFinite
+                ? (resolvedWidth * pixelRatio).round()
+                : null);
+
+        final memCacheHeight =
+            cacheHeight ??
+            (resolvedHeight.isFinite
+                ? (resolvedHeight * pixelRatio).round()
+                : null);
+
+        return CachedNetworkImage(
+          imageUrl: imagePath!,
+          cacheKey: cacheKey,
+          cacheManager: AppCacheManager.instance,
+          httpHeaders: const {
+            'User-Agent':
+                'Mozilla/5.0 (Linux; Android 13; Mobile; rv:120.0) Gecko/120.0 Firefox/120.0',
+            'Accept': 'image/avif,image/webp,image/*,*/*;q=0.8',
+          },
+
+          width: width,
+          height: height,
+          fit: fit,
+
+          memCacheWidth: memCacheWidth,
+          memCacheHeight: memCacheHeight,
+
+          fadeInDuration: Duration.zero,
+          fadeOutDuration: Duration.zero,
+
+          placeholder: (_, _) => const SizedBox.shrink(),
+
+          errorWidget: (_, _, _) => Container(
             width: width,
             height: height,
-            fit: fit,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.image_not_supported_outlined,
+              color: Colors.grey.shade400,
+              size: 28.r,
+            ),
           ),
-        ),
-      ),
-      errorWidget: (_, _, _) => Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        alignment: Alignment.center,
-        child: Icon(
-          Icons.image_not_supported_outlined,
-          color: Colors.grey.shade400,
-          size: 28.r,
-        ),
-      ),
+        );
+      },
     );
   }
 

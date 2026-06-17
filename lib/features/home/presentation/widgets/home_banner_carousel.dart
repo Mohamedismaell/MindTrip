@@ -6,8 +6,8 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_state.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
@@ -68,8 +68,7 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
           previous.bannersStatus != current.bannersStatus ||
           previous.banners != current.banners,
       builder: (context, state) {
-        if (state.bannersStatus == HomeDataStatus.loading ||
-            state.bannersStatus == HomeDataStatus.initial) {
+        if (state.bannersStatus.isLoading || state.bannersStatus.isInitial) {
           return SliverToBoxAdapter(
             child: Skeletonizer(
               enabled: true,
@@ -78,7 +77,7 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
           );
         }
 
-        if (state.bannersStatus == HomeDataStatus.failure) {
+        if (state.bannersStatus.isFailure) {
           return SliverToBoxAdapter(
             child: AppErrorWidget(
               message: state.bannersError,

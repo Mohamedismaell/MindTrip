@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_ai_planner_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_banner_carousel.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_header.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_popular_destinations.dart';
-import 'package:mindtrip/features/home/presentation/widgets/home_recommended_grid.dart';
+import 'package:mindtrip/features/home/presentation/widgets/home_recommended_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_search_bar.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_section_header.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_tour_packages.dart';
@@ -26,6 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final interests = context.read<UserCubit>().state.interests;
 
     context.read<HomeCubit>().loadAllData(selectedCategories: interests);
+  }
+
+  void _navigateToRecommended() {
+    context.push(AppRoutes.recommendedPlaces);
   }
 
   @override
@@ -49,12 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
               // //! there is no functionallity for this right now
               const HomePopularDestinations(),
               SliverToBoxAdapter(child: SizedBox(height: 28.h)),
-              const HomeSectionHeader(
+              HomeSectionHeader(
                 title: 'Recommended',
                 subtitle: 'Based on your interests',
+                showSeeMore: true,
+                onSeeMore: _navigateToRecommended,
               ),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-              const HomeRecommendedGrid(),
+              const HomeRecommendedSection(),
               SliverToBoxAdapter(child: SizedBox(height: 28.h)),
               const HomeSectionHeader(title: 'Tour Packages'),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),

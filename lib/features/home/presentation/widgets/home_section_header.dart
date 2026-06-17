@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 
 class HomeSectionHeader extends StatelessWidget {
   const HomeSectionHeader({
@@ -8,11 +9,15 @@ class HomeSectionHeader extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.actionLabel = 'See More',
+    this.showSeeMore = false,
+    this.onSeeMore,
   });
 
   final String title;
   final String? subtitle;
+  final bool showSeeMore;
   final String actionLabel;
+  final VoidCallback? onSeeMore;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +30,28 @@ class HomeSectionHeader extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(title, style: context.textTheme.headlineSmall),
+                  child: Hero(
+                    tag: 'section_$title',
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        title,
+                        style: context.textTheme.headlineSmall,
+                      ),
+                    ),
+                  ),
                 ),
-                // Text(
-                //   actionLabel,
-                //   style: context.textTheme.bodyMedium!.copyWith(
-                //     color: context.colorTheme.onSurfaceVariant,
-                //   ),
-                // ),
+                showSeeMore
+                    ? TapScaleEffect(
+                        onTap: onSeeMore ?? () {},
+                        child: Text(
+                          actionLabel,
+                          style: context.textTheme.bodyMedium!.copyWith(
+                            color: context.colorTheme.onSurfaceVariant,
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ],
             ),
             if (subtitle != null) ...[

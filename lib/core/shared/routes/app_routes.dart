@@ -16,6 +16,7 @@ class AppRoutes {
 
   //! home
   static const String home = '/home';
+  static const String recommendedPlaces = '/recommendedPlaces';
 
   //! favorites
   static const String favorites = '/favorites';

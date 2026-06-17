@@ -15,6 +15,8 @@ class DummyData {
     address: 'Dummy Address, City, Country',
     latitude: 0.0,
     longitude: 0.0,
+    city: '',
+    cityEn: '',
   );
 
   static const place = PlaceEntity(

@@ -34,7 +34,7 @@ import 'package:mindtrip/features/authetication/data/datasources/auth_remote_dat
 import 'package:mindtrip/features/authetication/data/models/auth_response_model.dart';
 import 'package:mindtrip/features/authetication/domain/repositories/auth_repository.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
-import 'package:mindtrip/features/home/routes/home_routes.dart';
+import 'package:mindtrip/features/places/routes/recommended_places_routes.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
@@ -552,42 +552,47 @@ class _FakeTokenManager extends TokenManager {
 
 class _NullApiConsumer implements ApiConsumer {
   @override
-  Future<dynamic> get(String path,
-          {Object? data,
-          Map<String, dynamic>? queryParameters,
-          bool isFormData = false,
-          CancelToken? cancelToken}) =>
-      throw UnimplementedError();
+  Future<dynamic> get(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFormData = false,
+    CancelToken? cancelToken,
+  }) => throw UnimplementedError();
 
   @override
-  Future<dynamic> post(String path,
-          {Object? data,
-          Map<String, dynamic>? queryParameters,
-          bool isFormData = false,
-          CancelToken? cancelToken}) =>
-      throw UnimplementedError();
+  Future<dynamic> post(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFormData = false,
+    CancelToken? cancelToken,
+  }) => throw UnimplementedError();
 
   @override
-  Future<dynamic> patch(String path,
-          {Object? data,
-          Map<String, dynamic>? queryParameters,
-          bool isFormData = false,
-          CancelToken? cancelToken}) =>
-      throw UnimplementedError();
+  Future<dynamic> patch(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFormData = false,
+    CancelToken? cancelToken,
+  }) => throw UnimplementedError();
 
   @override
-  Future<dynamic> put(String path,
-          {Object? data,
-          Map<String, dynamic>? queryParameters,
-          bool isFormData = false,
-          CancelToken? cancelToken}) =>
-      throw UnimplementedError();
+  Future<dynamic> put(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFormData = false,
+    CancelToken? cancelToken,
+  }) => throw UnimplementedError();
 
   @override
-  Future<dynamic> delete(String path,
-          {Object? data,
-          Map<String, dynamic>? queryParameters,
-          bool isFormData = false,
-          CancelToken? cancelToken}) =>
-      throw UnimplementedError();
+  Future<dynamic> delete(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFormData = false,
+    CancelToken? cancelToken,
+  }) => throw UnimplementedError();
 }

@@ -17,6 +17,8 @@ import 'package:mindtrip/features/map/routes/map_routes.dart';
 import 'package:mindtrip/features/interests/routes/interests_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
 import 'package:mindtrip/features/explore/routes/explore_routes.dart';
+import 'package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart';
+import 'package:mindtrip/features/places/routes/recommended_places_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
 import 'package:mindtrip/features/place_details/routes/place_details_routes.dart';
 
@@ -54,6 +56,7 @@ class AppRouter {
               StatefulShellBranch(routes: [ProfileRoutes.profileRoute]),
             ],
           ),
+          ...RecommendedPlacesRoutes.recommendedRoute,
           ...AiPlannerRoutes.aiPlannerFlowRoutes,
           ...ProfileRoutes.routes,
           ...MapRoutes.routes,

@@ -11,8 +11,8 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/widget/favorite_place_button.dart';
 import 'package:mindtrip/core/widget/tap_scale_effect.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_state.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
@@ -27,7 +27,7 @@ class HomePopularDestinations extends StatelessWidget {
           previous.popularPlacesStatus != current.popularPlacesStatus ||
           previous.popularPlaces != current.popularPlaces,
       builder: (context, state) {
-        if (state.popularPlacesStatus == HomeDataStatus.failure) {
+        if (state.popularPlacesStatus.isFailure) {
           return SliverToBoxAdapter(
             child: AppErrorWidget(
               message: state.popularPlacesError,
@@ -37,8 +37,8 @@ class HomePopularDestinations extends StatelessWidget {
           );
         }
         final isLoading =
-            state.popularPlacesStatus == HomeDataStatus.loading ||
-            state.popularPlacesStatus == HomeDataStatus.initial;
+            state.popularPlacesStatus.isLoading ||
+            state.popularPlacesStatus.isInitial;
         final destinations = isLoading
             ? DummyData.popularPlaces
             : state.popularPlaces;

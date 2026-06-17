@@ -12,8 +12,8 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/features/home/presentation/widgets/custom_circle_icon.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_state.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -28,7 +28,7 @@ class HomeTourPackages extends StatelessWidget {
           previous.tourPackagesStatus != current.tourPackagesStatus ||
           previous.tourPackages != current.tourPackages,
       builder: (context, state) {
-        if (state.tourPackagesStatus == HomeDataStatus.failure) {
+        if (state.tourPackagesStatus.isFailure) {
           return SliverToBoxAdapter(
             child: AppErrorWidget(
               message: state.tourPackagesError,
@@ -39,8 +39,8 @@ class HomeTourPackages extends StatelessWidget {
         }
 
         final isLoading =
-            state.tourPackagesStatus == HomeDataStatus.loading ||
-            state.tourPackagesStatus == HomeDataStatus.initial;
+            state.tourPackagesStatus.isLoading ||
+            state.tourPackagesStatus.isInitial;
         final packages = isLoading
             ? DummyData.tourPackages
             : state.tourPackages;

@@ -15,7 +15,7 @@ import 'package:mindtrip/features/profile/presentation/screens/profile_screen.da
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/terms_of_service_screen.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
-import 'package:mindtrip/features/home/routes/home_routes.dart';
+import 'package:mindtrip/features/places/routes/recommended_places_routes.dart';
 import '../../shared/test_helpers.dart';
 
 void main() {

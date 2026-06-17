@@ -10,8 +10,8 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/widget/planner_timeline.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_state.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -26,7 +26,7 @@ class HomeAiPlannerSection extends StatelessWidget {
           previous.plannerPreviewsStatus != current.plannerPreviewsStatus ||
           previous.plannerPreviews != current.plannerPreviews,
       builder: (context, state) {
-        if (state.plannerPreviewsStatus == HomeDataStatus.failure) {
+        if (state.plannerPreviewsStatus.isFailure) {
           return SliverToBoxAdapter(
             child: AppErrorWidget(
               message: state.plannerPreviewsError,
@@ -37,8 +37,8 @@ class HomeAiPlannerSection extends StatelessWidget {
         }
 
         final isLoading =
-            state.plannerPreviewsStatus == HomeDataStatus.loading ||
-            state.plannerPreviewsStatus == HomeDataStatus.initial;
+            state.plannerPreviewsStatus.isLoading ||
+            state.plannerPreviewsStatus.isInitial;
         final plans = isLoading
             ? DummyData.plannerPreviews
             : state.plannerPreviews;

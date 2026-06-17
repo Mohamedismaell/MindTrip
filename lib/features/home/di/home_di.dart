@@ -5,7 +5,7 @@ import 'package:mindtrip/features/home/data/datasources/home_local_data_source.d
 import 'package:mindtrip/features/home/data/repositories/home_repository_impl.dart';
 import 'package:mindtrip/features/home/domain/repositories/home_repository.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart';
-import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
 
