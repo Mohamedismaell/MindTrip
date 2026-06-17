@@ -9,7 +9,9 @@ class GetRecommendedPlacesUseCase {
 
   GetRecommendedPlacesUseCase({required this.repository});
 
-  Future<Result<PaginatedResponse<PlaceEntity>>> call(RecommendationRequestModel request) async {
+  Future<Result<PaginatedResponse<PlaceEntity>>> call({
+    required RecommendationRequestModel request,
+  }) async {
     return await repository.getRecommendedPlaces(request);
   }
 }

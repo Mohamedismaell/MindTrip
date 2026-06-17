@@ -32,7 +32,8 @@ class HomePopularDestinations extends StatelessWidget {
             child: AppErrorWidget(
               message: state.popularPlacesError,
               imageSize: 80,
-              onPressed: () => context.read<HomeCubit>().loadPopularPlaces(),
+              onPressed: () =>
+                  context.read<HomeCubit>().loadFirstPagePopularPlaces(),
             ),
           );
         }

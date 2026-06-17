@@ -12,7 +12,8 @@ extension RecommendedPlacesStatusX on RecommendedPlacesStatus {
 @freezed
 abstract class RecommendedPlacesState with _$RecommendedPlacesState {
   const factory RecommendedPlacesState({
-    @Default(RecommendedPlacesStatus.initial) RecommendedPlacesStatus status,
+    @Default(RecommendedPlacesStatus.initial)
+    RecommendedPlacesStatus recommendedPlacesStatus,
     @Default([]) List<PlaceEntity> places,
     @Default('') String error,
     @Default(1) int currentPage,

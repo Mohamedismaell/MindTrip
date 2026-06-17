@@ -120,7 +120,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
   }
 
   Widget _buildGrid(RecommendedPlacesState state) {
-    if (state.status.isFailure) {
+    if (state.recommendedPlacesStatus.isFailure) {
       return SliverToBoxAdapter(
         child: AppErrorWidget(
           message: state.error,
@@ -135,7 +135,9 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
       );
     }
 
-    final isLoading = state.status.isLoading || state.status.isInitial;
+    final isLoading =
+        state.recommendedPlacesStatus.isLoading ||
+        state.recommendedPlacesStatus.isInitial;
     final destinations = isLoading ? DummyData.recommendedPlaces : state.places;
 
     if (!isLoading && destinations.isEmpty) {

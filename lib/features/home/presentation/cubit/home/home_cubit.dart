@@ -22,10 +22,9 @@ class HomeCubit extends Cubit<HomeState> {
     required this.getAIPlannerPreviewsUseCase,
   }) : super(const HomeState());
 
-  Future<void> loadAllData({required List<String> selectedCategories}) async {
+  Future<void> loadAllData() async {
     loadBanners();
-    loadPopularPlaces();
-    loadRecommendedPlaces(selectedCategories: selectedCategories);
+    loadFirstPagePopularPlaces();
     loadTourPackages();
     loadPlannerPreviews();
   }
@@ -47,7 +46,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> loadPopularPlaces() async {
+  Future<void> loadFirstPagePopularPlaces() async {
     emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
     final result = await getPopularPlacesUseCase();
     if (isClosed) return;
@@ -67,25 +66,21 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> loadRecommendedPlaces({
-    required List<String> selectedCategories,
-  }) async {
-    emit(state.copyWith(recommendedPlacesStatus: HomeDataStatus.loading));
-    final result = await getRecommendedPlacesUseCase(
-      RecommendationRequestModel(selectedCategories: selectedCategories),
-    );
+  Future<void> loadMorePopularPlaces() async {
+    emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
+    final result = await getPopularPlacesUseCase();
     if (isClosed) return;
     result.when(
       success: (paginatedResponse) => emit(
         state.copyWith(
-          recommendedPlacesStatus: HomeDataStatus.success,
-          recommendedPlaces: paginatedResponse.results,
+          popularPlacesStatus: HomeDataStatus.success,
+          popularPlaces: paginatedResponse.results,
         ),
       ),
       failure: (error) => emit(
         state.copyWith(
-          recommendedPlacesStatus: HomeDataStatus.failure,
-          recommendedPlacesError: error.message,
+          popularPlacesStatus: HomeDataStatus.failure,
+          popularPlacesError: error.message,
         ),
       ),
     );

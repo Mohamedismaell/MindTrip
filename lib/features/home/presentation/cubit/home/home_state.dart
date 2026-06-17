@@ -8,6 +8,15 @@ part 'home_state.freezed.dart';
 
 enum HomeDataStatus { initial, loading, success, failure }
 
+extension HomeDataStatusX on HomeDataStatus {
+  bool get isInitial => this == HomeDataStatus.initial;
+  bool get isLoading => this == HomeDataStatus.loading;
+  bool get isSuccess => this == HomeDataStatus.success;
+  bool get isFailure => this == HomeDataStatus.failure;
+  bool get isFinished =>
+      this == HomeDataStatus.success || this == HomeDataStatus.failure;
+}
+
 @freezed
 abstract class HomeState with _$HomeState {
   const factory HomeState({
@@ -18,6 +27,9 @@ abstract class HomeState with _$HomeState {
     @Default(HomeDataStatus.initial) HomeDataStatus popularPlacesStatus,
     @Default([]) List<PlaceEntity> popularPlaces,
     @Default('') String popularPlacesError,
+    @Default(1) int popularPlacesCurrentPage,
+    @Default(false) bool popularPlacesIsLoadingMore,
+    @Default(true) bool popularPlacesHasMore,
 
     @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
     @Default([]) List<PlaceEntity> recommendedPlaces,
@@ -31,17 +43,4 @@ abstract class HomeState with _$HomeState {
     @Default([]) List<PlannerPreviewEntity> plannerPreviews,
     @Default('') String plannerPreviewsError,
   }) = _HomeState;
-}
-
-extension HomeDataStatusX on HomeDataStatus {
-  bool get isInitial => this == HomeDataStatus.initial;
-
-  bool get isLoading => this == HomeDataStatus.loading;
-
-  bool get isSuccess => this == HomeDataStatus.success;
-
-  bool get isFailure => this == HomeDataStatus.failure;
-
-  bool get isFinished =>
-      this == HomeDataStatus.success || this == HomeDataStatus.failure;
 }

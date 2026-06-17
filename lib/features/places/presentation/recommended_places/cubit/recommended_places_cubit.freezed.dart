@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RecommendedPlacesState {
 
- RecommendedPlacesStatus get status; List<PlaceEntity> get places; String get error; int get currentPage; bool get hasMore; bool get isMoreLoading; int? get seed;
+ RecommendedPlacesStatus get recommendedPlacesStatus; List<PlaceEntity> get places; String get error; int get currentPage; bool get hasMore; bool get isMoreLoading; int? get seed;
 /// Create a copy of RecommendedPlacesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $RecommendedPlacesStateCopyWith<RecommendedPlacesState> get copyWith => _$Recomm
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecommendedPlacesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.places, places)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isMoreLoading, isMoreLoading) || other.isMoreLoading == isMoreLoading)&&(identical(other.seed, seed) || other.seed == seed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecommendedPlacesState&&(identical(other.recommendedPlacesStatus, recommendedPlacesStatus) || other.recommendedPlacesStatus == recommendedPlacesStatus)&&const DeepCollectionEquality().equals(other.places, places)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isMoreLoading, isMoreLoading) || other.isMoreLoading == isMoreLoading)&&(identical(other.seed, seed) || other.seed == seed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(places),error,currentPage,hasMore,isMoreLoading,seed);
+int get hashCode => Object.hash(runtimeType,recommendedPlacesStatus,const DeepCollectionEquality().hash(places),error,currentPage,hasMore,isMoreLoading,seed);
 
 @override
 String toString() {
-  return 'RecommendedPlacesState(status: $status, places: $places, error: $error, currentPage: $currentPage, hasMore: $hasMore, isMoreLoading: $isMoreLoading, seed: $seed)';
+  return 'RecommendedPlacesState(recommendedPlacesStatus: $recommendedPlacesStatus, places: $places, error: $error, currentPage: $currentPage, hasMore: $hasMore, isMoreLoading: $isMoreLoading, seed: $seed)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $RecommendedPlacesStateCopyWith<$Res>  {
   factory $RecommendedPlacesStateCopyWith(RecommendedPlacesState value, $Res Function(RecommendedPlacesState) _then) = _$RecommendedPlacesStateCopyWithImpl;
 @useResult
 $Res call({
- RecommendedPlacesStatus status, List<PlaceEntity> places, String error, int currentPage, bool hasMore, bool isMoreLoading, int? seed
+ RecommendedPlacesStatus recommendedPlacesStatus, List<PlaceEntity> places, String error, int currentPage, bool hasMore, bool isMoreLoading, int? seed
 });
 
 
@@ -62,9 +62,9 @@ class _$RecommendedPlacesStateCopyWithImpl<$Res>
 
 /// Create a copy of RecommendedPlacesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? places = null,Object? error = null,Object? currentPage = null,Object? hasMore = null,Object? isMoreLoading = null,Object? seed = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? recommendedPlacesStatus = null,Object? places = null,Object? error = null,Object? currentPage = null,Object? hasMore = null,Object? isMoreLoading = null,Object? seed = freezed,}) {
   return _then(_self.copyWith(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+recommendedPlacesStatus: null == recommendedPlacesStatus ? _self.recommendedPlacesStatus : recommendedPlacesStatus // ignore: cast_nullable_to_non_nullable
 as RecommendedPlacesStatus,places: null == places ? _self.places : places // ignore: cast_nullable_to_non_nullable
 as List<PlaceEntity>,error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
@@ -156,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( RecommendedPlacesStatus status,  List<PlaceEntity> places,  String error,  int currentPage,  bool hasMore,  bool isMoreLoading,  int? seed)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( RecommendedPlacesStatus recommendedPlacesStatus,  List<PlaceEntity> places,  String error,  int currentPage,  bool hasMore,  bool isMoreLoading,  int? seed)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RecommendedPlacesState() when $default != null:
-return $default(_that.status,_that.places,_that.error,_that.currentPage,_that.hasMore,_that.isMoreLoading,_that.seed);case _:
+return $default(_that.recommendedPlacesStatus,_that.places,_that.error,_that.currentPage,_that.hasMore,_that.isMoreLoading,_that.seed);case _:
   return orElse();
 
 }
@@ -177,10 +177,10 @@ return $default(_that.status,_that.places,_that.error,_that.currentPage,_that.ha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( RecommendedPlacesStatus status,  List<PlaceEntity> places,  String error,  int currentPage,  bool hasMore,  bool isMoreLoading,  int? seed)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( RecommendedPlacesStatus recommendedPlacesStatus,  List<PlaceEntity> places,  String error,  int currentPage,  bool hasMore,  bool isMoreLoading,  int? seed)  $default,) {final _that = this;
 switch (_that) {
 case _RecommendedPlacesState():
-return $default(_that.status,_that.places,_that.error,_that.currentPage,_that.hasMore,_that.isMoreLoading,_that.seed);case _:
+return $default(_that.recommendedPlacesStatus,_that.places,_that.error,_that.currentPage,_that.hasMore,_that.isMoreLoading,_that.seed);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +197,10 @@ return $default(_that.status,_that.places,_that.error,_that.currentPage,_that.ha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( RecommendedPlacesStatus status,  List<PlaceEntity> places,  String error,  int currentPage,  bool hasMore,  bool isMoreLoading,  int? seed)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( RecommendedPlacesStatus recommendedPlacesStatus,  List<PlaceEntity> places,  String error,  int currentPage,  bool hasMore,  bool isMoreLoading,  int? seed)?  $default,) {final _that = this;
 switch (_that) {
 case _RecommendedPlacesState() when $default != null:
-return $default(_that.status,_that.places,_that.error,_that.currentPage,_that.hasMore,_that.isMoreLoading,_that.seed);case _:
+return $default(_that.recommendedPlacesStatus,_that.places,_that.error,_that.currentPage,_that.hasMore,_that.isMoreLoading,_that.seed);case _:
   return null;
 
 }
@@ -212,10 +212,10 @@ return $default(_that.status,_that.places,_that.error,_that.currentPage,_that.ha
 
 
 class _RecommendedPlacesState implements RecommendedPlacesState {
-  const _RecommendedPlacesState({this.status = RecommendedPlacesStatus.initial, final  List<PlaceEntity> places = const [], this.error = '', this.currentPage = 1, this.hasMore = true, this.isMoreLoading = false, this.seed = null}): _places = places;
+  const _RecommendedPlacesState({this.recommendedPlacesStatus = RecommendedPlacesStatus.initial, final  List<PlaceEntity> places = const [], this.error = '', this.currentPage = 1, this.hasMore = true, this.isMoreLoading = false, this.seed = null}): _places = places;
   
 
-@override@JsonKey() final  RecommendedPlacesStatus status;
+@override@JsonKey() final  RecommendedPlacesStatus recommendedPlacesStatus;
  final  List<PlaceEntity> _places;
 @override@JsonKey() List<PlaceEntity> get places {
   if (_places is EqualUnmodifiableListView) return _places;
@@ -239,16 +239,16 @@ _$RecommendedPlacesStateCopyWith<_RecommendedPlacesState> get copyWith => __$Rec
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RecommendedPlacesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._places, _places)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isMoreLoading, isMoreLoading) || other.isMoreLoading == isMoreLoading)&&(identical(other.seed, seed) || other.seed == seed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RecommendedPlacesState&&(identical(other.recommendedPlacesStatus, recommendedPlacesStatus) || other.recommendedPlacesStatus == recommendedPlacesStatus)&&const DeepCollectionEquality().equals(other._places, _places)&&(identical(other.error, error) || other.error == error)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isMoreLoading, isMoreLoading) || other.isMoreLoading == isMoreLoading)&&(identical(other.seed, seed) || other.seed == seed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_places),error,currentPage,hasMore,isMoreLoading,seed);
+int get hashCode => Object.hash(runtimeType,recommendedPlacesStatus,const DeepCollectionEquality().hash(_places),error,currentPage,hasMore,isMoreLoading,seed);
 
 @override
 String toString() {
-  return 'RecommendedPlacesState(status: $status, places: $places, error: $error, currentPage: $currentPage, hasMore: $hasMore, isMoreLoading: $isMoreLoading, seed: $seed)';
+  return 'RecommendedPlacesState(recommendedPlacesStatus: $recommendedPlacesStatus, places: $places, error: $error, currentPage: $currentPage, hasMore: $hasMore, isMoreLoading: $isMoreLoading, seed: $seed)';
 }
 
 
@@ -259,7 +259,7 @@ abstract mixin class _$RecommendedPlacesStateCopyWith<$Res> implements $Recommen
   factory _$RecommendedPlacesStateCopyWith(_RecommendedPlacesState value, $Res Function(_RecommendedPlacesState) _then) = __$RecommendedPlacesStateCopyWithImpl;
 @override @useResult
 $Res call({
- RecommendedPlacesStatus status, List<PlaceEntity> places, String error, int currentPage, bool hasMore, bool isMoreLoading, int? seed
+ RecommendedPlacesStatus recommendedPlacesStatus, List<PlaceEntity> places, String error, int currentPage, bool hasMore, bool isMoreLoading, int? seed
 });
 
 
@@ -276,9 +276,9 @@ class __$RecommendedPlacesStateCopyWithImpl<$Res>
 
 /// Create a copy of RecommendedPlacesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? places = null,Object? error = null,Object? currentPage = null,Object? hasMore = null,Object? isMoreLoading = null,Object? seed = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? recommendedPlacesStatus = null,Object? places = null,Object? error = null,Object? currentPage = null,Object? hasMore = null,Object? isMoreLoading = null,Object? seed = freezed,}) {
   return _then(_RecommendedPlacesState(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+recommendedPlacesStatus: null == recommendedPlacesStatus ? _self.recommendedPlacesStatus : recommendedPlacesStatus // ignore: cast_nullable_to_non_nullable
 as RecommendedPlacesStatus,places: null == places ? _self._places : places // ignore: cast_nullable_to_non_nullable
 as List<PlaceEntity>,error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable

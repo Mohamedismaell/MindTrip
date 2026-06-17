@@ -111,6 +111,9 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
   }
 
   Widget _buildBanner(List<BannerEntity> banners) {
+    if (banners.isEmpty) return const SizedBox.shrink();
+    final index = _currentPage >= banners.length ? 0 : _currentPage;
+
     return SizedBox(
       height: 174.h,
       width: double.infinity,
@@ -128,10 +131,8 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               },
               child: SizedBox.expand(
                 child: AppCachedImage(
-                  key: ValueKey(_currentPage),
-                  imagePath: banners.isNotEmpty
-                      ? banners[_currentPage].imageUrl
-                      : '',
+                  key: ValueKey(index),
+                  imagePath: banners[index].imageUrl,
                 ),
               ),
             ),
@@ -161,9 +162,9 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Center(
                         child: Text(
-                          banners.isNotEmpty ? banners[_currentPage].title : '',
+                          banners[index].title,
                           textAlign: TextAlign.center,
-                          key: ValueKey(_currentPage),
+                          key: ValueKey(index),
                           style: AppTextStyles.h6SemiBold.copyWith(
                             color: AppColors.pureWhite,
                           ),
@@ -174,8 +175,8 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                   SizedBox(height: 24.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(banners.length, (index) {
-                      final isActive = _currentPage == index;
+                    children: List.generate(banners.length, (i) {
+                      final isActive = index == i;
 
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 180),

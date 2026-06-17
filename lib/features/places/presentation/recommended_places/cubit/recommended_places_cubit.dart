@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
@@ -16,10 +14,12 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
     : super(RecommendedPlacesState.initial());
 
   Future<void> loadFirstPage({required List<String> selectedCategories}) async {
-    emit(state.copyWith(status: RecommendedPlacesStatus.loading));
-    final seed = Random().nextInt(999999);
+    emit(
+      state.copyWith(recommendedPlacesStatus: RecommendedPlacesStatus.loading),
+    );
+
     final result = await getRecommendedPlacesUseCase(
-      RecommendationRequestModel(
+      request: RecommendationRequestModel(
         selectedCategories: selectedCategories,
         page: 1,
       ),
@@ -31,11 +31,10 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
       success: (response) {
         emit(
           state.copyWith(
-            status: RecommendedPlacesStatus.success,
+            recommendedPlacesStatus: RecommendedPlacesStatus.success,
             places: response.results,
             currentPage: response.page,
             hasMore: response.page < response.totalPages,
-            seed: seed,
             error: '',
           ),
         );
@@ -43,7 +42,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
       failure: (error) {
         emit(
           state.copyWith(
-            status: RecommendedPlacesStatus.failure,
+            recommendedPlacesStatus: RecommendedPlacesStatus.failure,
             error: error.message,
           ),
         );
@@ -55,7 +54,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
     required List<String> selectedCategories,
   }) async {
     if (state.isMoreLoading ||
-        state.status == RecommendedPlacesStatus.loading ||
+        state.recommendedPlacesStatus == RecommendedPlacesStatus.loading ||
         !state.hasMore) {
       return;
     }
@@ -64,7 +63,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
 
     final nextPage = state.currentPage + 1;
     final result = await getRecommendedPlacesUseCase(
-      RecommendationRequestModel(
+      request: RecommendationRequestModel(
         selectedCategories: selectedCategories,
         page: nextPage,
       ),
@@ -80,7 +79,6 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
             places: [...state.places, ...response.results],
             currentPage: response.page,
             hasMore: response.page < response.totalPages,
-            seed: state.seed,
             error: '',
           ),
         );
