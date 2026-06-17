@@ -6,62 +6,90 @@ part of 'place_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PlaceModelAdapter extends TypeAdapter<_PlaceModel> {
+class PlaceModelAdapter extends TypeAdapter<PlaceModel> {
   @override
-  final typeId = 1;
+  final typeId = 6;
 
   @override
-  _PlaceModel read(BinaryReader reader) {
+  PlaceModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _PlaceModel(
-      id: fields[0] == null ? '' : fields[0] as String,
-      name: fields[1] == null ? '' : fields[1] as String,
-      description: fields[2] as String?,
-      location: fields[3] as LocationModel,
-      coverImage: (fields[4] as List?)?.cast<String>(),
-      imageUrls: (fields[5] as List?)?.cast<String>(),
-      category: fields[6] == null
-          ? PlaceCategory.other
-          : fields[6] as PlaceCategory,
-      rating: (fields[7] as num?)?.toDouble(),
-      reviewCount: (fields[8] as num?)?.toInt(),
-      price: (fields[9] as num?)?.toDouble(),
-      isFavorite: fields[10] == null ? false : fields[10] as bool,
-      badge: fields[11] == null ? PlaceBadge.none : fields[11] as PlaceBadge,
+    return PlaceModel(
+      placeId: fields[0] as String,
+      name: fields[1] as String,
+      city: fields[2] as String?,
+      cityEn: fields[3] as String?,
+      interests: (fields[4] as List?)?.cast<String>(),
+      category: fields[5] as String?,
+      price: (fields[6] as num?)?.toDouble(),
+      cost: (fields[7] as num?)?.toDouble(),
+      rating: (fields[8] as num?)?.toDouble(),
+      reviewsCount: (fields[9] as num?)?.toInt(),
+      address: fields[10] as String?,
+      description: fields[11] as String?,
+      photoUrl: fields[12] as String?,
+      imageUrls: (fields[13] as List?)?.cast<String>(),
+      openingHours: fields[14] as String?,
+      lat: fields[15] == null ? 0.0 : (fields[15] as num).toDouble(),
+      lng: fields[16] == null ? 0.0 : (fields[16] as num).toDouble(),
+      isHiddenGem: fields[17] == null ? false : fields[17] as bool,
+      mapsUrl: fields[18] as String?,
+      day: fields[19] as String?,
+      isOpened: fields[20] as String?,
+      type: fields[21] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, _PlaceModel obj) {
+  void write(BinaryWriter writer, PlaceModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(22)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.placeId)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.description)
+      ..write(obj.city)
       ..writeByte(3)
-      ..write(obj.location)
+      ..write(obj.cityEn)
       ..writeByte(4)
-      ..write(obj.coverImage)
+      ..write(obj.interests)
       ..writeByte(5)
-      ..write(obj.imageUrls)
-      ..writeByte(6)
       ..write(obj.category)
-      ..writeByte(7)
-      ..write(obj.rating)
-      ..writeByte(8)
-      ..write(obj.reviewCount)
-      ..writeByte(9)
+      ..writeByte(6)
       ..write(obj.price)
+      ..writeByte(7)
+      ..write(obj.cost)
+      ..writeByte(8)
+      ..write(obj.rating)
+      ..writeByte(9)
+      ..write(obj.reviewsCount)
       ..writeByte(10)
-      ..write(obj.isFavorite)
+      ..write(obj.address)
       ..writeByte(11)
-      ..write(obj.badge);
+      ..write(obj.description)
+      ..writeByte(12)
+      ..write(obj.photoUrl)
+      ..writeByte(13)
+      ..write(obj.imageUrls)
+      ..writeByte(14)
+      ..write(obj.openingHours)
+      ..writeByte(15)
+      ..write(obj.lat)
+      ..writeByte(16)
+      ..write(obj.lng)
+      ..writeByte(17)
+      ..write(obj.isHiddenGem)
+      ..writeByte(18)
+      ..write(obj.mapsUrl)
+      ..writeByte(19)
+      ..write(obj.day)
+      ..writeByte(20)
+      ..write(obj.isOpened)
+      ..writeByte(21)
+      ..write(obj.type);
   }
 
   @override
@@ -80,69 +108,56 @@ class PlaceModelAdapter extends TypeAdapter<_PlaceModel> {
 // **************************************************************************
 
 _PlaceModel _$PlaceModelFromJson(Map<String, dynamic> json) => _PlaceModel(
-  id: json['id'] as String? ?? '',
-  name: json['name'] as String? ?? '',
+  placeId: json['place_id'] as String,
+  name: json['name'] as String,
+  city: json['city'] as String?,
+  cityEn: json['city_en'] as String?,
+  interests: (json['interests'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  category: json['category'] as String?,
+  price: _toDouble(json['price']),
+  cost: _toDouble(json['cost']),
+  rating: _toDouble(json['rating']),
+  reviewsCount: (json['reviews_count'] as num?)?.toInt(),
+  address: json['address'] as String?,
   description: json['description'] as String?,
-  location: LocationModel.fromJson(json['location'] as Map<String, dynamic>),
-  coverImage: (json['coverImage'] as List<dynamic>?)
+  photoUrl: json['photo_url'] as String?,
+  imageUrls: (json['image_urls'] as List<dynamic>?)
       ?.map((e) => e as String)
       .toList(),
-  imageUrls: (json['imageUrls'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  category:
-      $enumDecodeNullable(_$PlaceCategoryEnumMap, json['category']) ??
-      PlaceCategory.other,
-  rating: (json['rating'] as num?)?.toDouble(),
-  reviewCount: (json['reviewCount'] as num?)?.toInt(),
-  price: (json['price'] as num?)?.toDouble(),
-  isFavorite: json['isFavorite'] as bool? ?? false,
-  badge:
-      $enumDecodeNullable(_$PlaceBadgeEnumMap, json['badge']) ??
-      PlaceBadge.none,
+  openingHours: json['opening_hours'] as String?,
+  lat: json['lat'] == null ? 0.0 : _toDoubleNonNullable(json['lat']),
+  lng: json['lng'] == null ? 0.0 : _toDoubleNonNullable(json['lng']),
+  isHiddenGem: json['is_hidden_gem'] as bool? ?? false,
+  mapsUrl: json['maps_url'] as String?,
+  day: json['day'] as String?,
+  isOpened: json['is_opened'] as String?,
+  type: json['type'] as String?,
 );
 
 Map<String, dynamic> _$PlaceModelToJson(_PlaceModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'place_id': instance.placeId,
       'name': instance.name,
-      'description': instance.description,
-      'location': instance.location,
-      'coverImage': instance.coverImage,
-      'imageUrls': instance.imageUrls,
-      'category': _$PlaceCategoryEnumMap[instance.category]!,
-      'rating': instance.rating,
-      'reviewCount': instance.reviewCount,
+      'city': instance.city,
+      'city_en': instance.cityEn,
+      'interests': instance.interests,
+      'category': instance.category,
       'price': instance.price,
-      'isFavorite': instance.isFavorite,
-      'badge': _$PlaceBadgeEnumMap[instance.badge]!,
+      'cost': instance.cost,
+      'rating': instance.rating,
+      'reviews_count': instance.reviewsCount,
+      'address': instance.address,
+      'description': instance.description,
+      'photo_url': instance.photoUrl,
+      'image_urls': instance.imageUrls,
+      'opening_hours': instance.openingHours,
+      'lat': instance.lat,
+      'lng': instance.lng,
+      'is_hidden_gem': instance.isHiddenGem,
+      'maps_url': instance.mapsUrl,
+      'day': instance.day,
+      'is_opened': instance.isOpened,
+      'type': instance.type,
     };
-
-const _$PlaceCategoryEnumMap = {
-  PlaceCategory.all: 'all',
-  PlaceCategory.hotel: 'hotel',
-  PlaceCategory.restaurant: 'restaurant',
-  PlaceCategory.beach: 'beach',
-  PlaceCategory.mountain: 'mountain',
-  PlaceCategory.desert: 'desert',
-  PlaceCategory.diving: 'diving',
-  PlaceCategory.trip: 'trip',
-  PlaceCategory.activity: 'activity',
-  PlaceCategory.park: 'park',
-  PlaceCategory.museum: 'museum',
-  PlaceCategory.shopping: 'shopping',
-  PlaceCategory.entertainment: 'entertainment',
-  PlaceCategory.heritage: 'heritage',
-  PlaceCategory.camping: 'camping',
-  PlaceCategory.wellness: 'wellness',
-  PlaceCategory.cafe: 'cafe',
-  PlaceCategory.other: 'other',
-};
-
-const _$PlaceBadgeEnumMap = {
-  PlaceBadge.topRated: 'topRated',
-  PlaceBadge.popular: 'popular',
-  PlaceBadge.trending: 'trending',
-  PlaceBadge.aiCrafted: 'aiCrafted',
-  PlaceBadge.none: 'none',
-};

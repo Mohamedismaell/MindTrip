@@ -22,9 +22,14 @@ class EndPoints {
   static String insertInterests = 'api/v1/users/me/interests';
   static String uploadPhoto = 'api/v1/users/me/photo';
 
-  // //! Places (placeholder)
-  // static String placeDetails(String id) => 'api/v1/places/$id';
-  // static String nearbyPlaces(String id) => 'api/v1/places/$id/nearby';
+  // Places
+  static String getRecommendedPlaces = 'api/v1/ai/places/recommend';
+
+  //! Would be with hidden gems
+  static String getPopularPlaces = 'api/v1/ai/places/top-rated';
+  static String searchPlaces = 'api/v1/ai/places/search';
+  static String getPlaces = 'api/v1/ai/places/getplaces';
+  static String placeDetails(String id) => 'api/v1/ai/places/$id';
 
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';

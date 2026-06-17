@@ -7,100 +7,88 @@ part 'place_category.g.dart';
 enum PlaceCategory {
   @HiveField(0)
   all,
+
   @HiveField(1)
-  hotel,
+  foodCafes,
+
   @HiveField(2)
-  restaurant,
+  historicalSites,
+
   @HiveField(3)
-  beach,
+  religiousSites,
+
   @HiveField(4)
-  mountain,
+  beaches,
+
   @HiveField(5)
-  desert,
+  nature,
+
   @HiveField(6)
-  diving,
-  @HiveField(7)
-  trip,
-  @HiveField(8)
-  activity,
-  @HiveField(9)
-  park,
-  @HiveField(10)
-  museum,
-  @HiveField(11)
-  shopping,
-  @HiveField(12)
   entertainment,
-  @HiveField(13)
-  heritage,
-  @HiveField(14)
-  camping,
-  @HiveField(15)
-  wellness,
-  @HiveField(16)
-  cafe,
-  @HiveField(17)
+
+  @HiveField(7)
+  shopping,
+
+  @HiveField(8)
+  artsCulture,
+
+  @HiveField(9)
   other;
 
+  // food_cafes
+  // historical_sites
+  // religious_sites
+  // beaches
+  // nature
+  // entertainment
+  // shopping
+  // arts_culture
+  String get category => switch (this) {
+    PlaceCategory.all => 'all',
+    PlaceCategory.foodCafes => 'food_cafes',
+    PlaceCategory.historicalSites => 'historical_sites',
+    PlaceCategory.religiousSites => 'religious_sites',
+    PlaceCategory.beaches => 'beaches',
+    PlaceCategory.nature => 'nature',
+    PlaceCategory.entertainment => 'entertainment',
+    PlaceCategory.shopping => 'shopping',
+    PlaceCategory.artsCulture => 'arts_culture',
+    PlaceCategory.other => 'other',
+  };
   String get displayName => switch (this) {
     PlaceCategory.all => 'All',
-    PlaceCategory.hotel => 'Hotels',
-    PlaceCategory.restaurant => 'Restaurants',
-    PlaceCategory.beach => 'Beach',
-    PlaceCategory.mountain => 'Mountain',
-    PlaceCategory.desert => 'Desert',
-    PlaceCategory.diving => 'Diving',
-    PlaceCategory.trip => 'Trips',
-    PlaceCategory.activity => 'Activities',
-    PlaceCategory.park => 'Parks',
-    PlaceCategory.museum => 'Museums',
-    PlaceCategory.shopping => 'Shopping',
+    PlaceCategory.foodCafes => 'Food & Cafes',
+    PlaceCategory.historicalSites => 'Historical Sites',
+    PlaceCategory.religiousSites => 'Mosques & Churches',
+    PlaceCategory.beaches => 'Beaches & Water',
+    PlaceCategory.nature => 'Nature',
     PlaceCategory.entertainment => 'Entertainment',
-    PlaceCategory.heritage => 'Heritage',
-    PlaceCategory.camping => 'Camping',
-    PlaceCategory.wellness => 'Wellness',
-    PlaceCategory.cafe => 'Cafe',
+    PlaceCategory.shopping => 'Shopping',
+    PlaceCategory.artsCulture => 'Arts & Culture',
     PlaceCategory.other => 'Other',
   };
 
   String get emoji => switch (this) {
     PlaceCategory.all => '✨',
-    PlaceCategory.hotel => '🏨',
-    PlaceCategory.restaurant => '🍽️',
-    PlaceCategory.beach => '🏖️',
-    PlaceCategory.mountain => '⛰️',
-    PlaceCategory.desert => '🏜️',
-    PlaceCategory.diving => '🤿',
-    PlaceCategory.trip => '✈️',
-    PlaceCategory.activity => '🎯',
-    PlaceCategory.park => '🌳',
-    PlaceCategory.museum => '🏛️',
-    PlaceCategory.shopping => '🛍️',
+    PlaceCategory.foodCafes => '🍽️',
+    PlaceCategory.historicalSites => '🏺',
+    PlaceCategory.religiousSites => '🏛️',
+    PlaceCategory.beaches => '🏖️',
+    PlaceCategory.nature => '🌿',
     PlaceCategory.entertainment => '🎭',
-    PlaceCategory.heritage => '🏛️',
-    PlaceCategory.camping => '🏕️',
-    PlaceCategory.wellness => '🧘',
-    PlaceCategory.cafe => '☕',
+    PlaceCategory.shopping => '🛍️',
+    PlaceCategory.artsCulture => '🎨',
     PlaceCategory.other => '📍',
   };
-
   IconData get iconData => switch (this) {
-    PlaceCategory.hotel => Icons.hotel_rounded,
-    PlaceCategory.restaurant => Icons.restaurant_rounded,
-    PlaceCategory.beach => Icons.beach_access_rounded,
-    PlaceCategory.mountain => Icons.landscape_rounded,
-    PlaceCategory.desert => Icons.wb_sunny_rounded,
-    PlaceCategory.diving => Icons.scuba_diving_rounded,
-    PlaceCategory.trip => Icons.flight_rounded,
-    PlaceCategory.activity => Icons.directions_bike_rounded,
-    PlaceCategory.park => Icons.park_rounded,
-    PlaceCategory.museum => Icons.museum_rounded,
-    PlaceCategory.shopping => Icons.shopping_bag_rounded,
+    PlaceCategory.foodCafes => Icons.restaurant_rounded,
+    PlaceCategory.historicalSites => Icons.account_balance_rounded,
+    PlaceCategory.religiousSites => Icons.church_rounded,
+    PlaceCategory.beaches => Icons.beach_access_rounded,
+    PlaceCategory.nature => Icons.park_rounded,
     PlaceCategory.entertainment => Icons.attractions_rounded,
-    PlaceCategory.heritage => Icons.account_balance_rounded,
-    PlaceCategory.camping => Icons.holiday_village_rounded,
-    PlaceCategory.wellness => Icons.spa_rounded,
-    PlaceCategory.cafe => Icons.local_cafe_rounded,
+    PlaceCategory.shopping => Icons.shopping_bag_rounded,
+    PlaceCategory.artsCulture => Icons.palette_rounded,
     _ => Icons.location_on_rounded,
   };
 
@@ -110,8 +98,9 @@ enum PlaceCategory {
 
   static PlaceCategory fromCategory(String? category) {
     if (category == null) return PlaceCategory.other;
+
     return PlaceCategory.values.firstWhere(
-      (e) => e.name.toLowerCase().trim() == category.toLowerCase().trim(),
+      (e) => e.category == category.trim().toLowerCase(),
       orElse: () => PlaceCategory.other,
     );
   }

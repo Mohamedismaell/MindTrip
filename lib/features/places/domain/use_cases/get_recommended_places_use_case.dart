@@ -1,5 +1,7 @@
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/core/shared/models/paginated_response.dart';
+import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 
 class GetRecommendedPlacesUseCase {
@@ -7,7 +9,7 @@ class GetRecommendedPlacesUseCase {
 
   GetRecommendedPlacesUseCase({required this.repository});
 
-  Future<Result<List<PlaceEntity>>> call() async {
-    return await repository.getRecommendedPlaces();
+  Future<Result<PaginatedResponse<PlaceEntity>>> call(RecommendationRequestModel request) async {
+    return await repository.getRecommendedPlaces(request);
   }
 }

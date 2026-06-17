@@ -22,9 +22,9 @@ class ExploreCubit extends Cubit<ExploreState> {
     final result = await getTrendingPlacesUseCase();
     if (isClosed) return;
     result.when(
-      success: (places) => emit(state.copyWith(
+      success: (response) => emit(state.copyWith(
         trendingPlacesStatus: ExploreDataStatus.success,
-        trendingPlaces: places,
+        trendingPlaces: response.results,
       )),
       failure: (error) => emit(state.copyWith(
         trendingPlacesStatus: ExploreDataStatus.failure,
@@ -38,9 +38,9 @@ class ExploreCubit extends Cubit<ExploreState> {
     final result = await getOtherPlacesUseCase();
     if (isClosed) return;
     result.when(
-      success: (places) => emit(state.copyWith(
+      success: (response) => emit(state.copyWith(
         otherPlacesStatus: ExploreDataStatus.success,
-        otherPlaces: places,
+        otherPlaces: response.results,
       )),
       failure: (error) => emit(state.copyWith(
         otherPlacesStatus: ExploreDataStatus.failure,

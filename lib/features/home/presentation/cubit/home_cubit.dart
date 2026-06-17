@@ -5,6 +5,7 @@ import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dar
 import 'package:mindtrip/features/home/presentation/cubit/home_state.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
+import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final GetBannersUseCase getBannersUseCase;
@@ -51,10 +52,10 @@ class HomeCubit extends Cubit<HomeState> {
     final result = await getPopularPlacesUseCase();
     if (isClosed) return;
     result.when(
-      success: (places) => emit(
+      success: (paginatedResponse) => emit(
         state.copyWith(
           popularPlacesStatus: HomeDataStatus.success,
-          popularPlaces: places,
+          popularPlaces: paginatedResponse.results,
         ),
       ),
       failure: (error) => emit(
@@ -68,13 +69,16 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> loadRecommendedPlaces() async {
     emit(state.copyWith(recommendedPlacesStatus: HomeDataStatus.loading));
-    final result = await getRecommendedPlacesUseCase();
+    // Provide a default empty request; normally this comes from user preferences
+    final result = await getRecommendedPlacesUseCase(
+      RecommendationRequestModel(selectedCategories: []),
+    );
     if (isClosed) return;
     result.when(
-      success: (places) => emit(
+      success: (paginatedResponse) => emit(
         state.copyWith(
           recommendedPlacesStatus: HomeDataStatus.success,
-          recommendedPlaces: places,
+          recommendedPlaces: paginatedResponse.results,
         ),
       ),
       failure: (error) => emit(
