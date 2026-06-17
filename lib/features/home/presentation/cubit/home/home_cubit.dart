@@ -3,9 +3,9 @@ import 'package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_
 import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
+import 'package:mindtrip/features/places/data/models/popular_request_model.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
-import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final GetBannersUseCase getBannersUseCase;
@@ -48,13 +48,23 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> loadFirstPagePopularPlaces() async {
     emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
-    final result = await getPopularPlacesUseCase();
+    final result = await getPopularPlacesUseCase(
+      request: PopularRequestModel(
+        filters: {'is_hidden_gem': false},
+        page: 1,
+        limit: 10,
+      ),
+    );
     if (isClosed) return;
     result.when(
       success: (paginatedResponse) => emit(
         state.copyWith(
           popularPlacesStatus: HomeDataStatus.success,
           popularPlaces: paginatedResponse.results,
+          popularPlacesCurrentPage: paginatedResponse.page,
+          popularPlacesHasMore:
+              paginatedResponse.page < paginatedResponse.totalPages,
+          popularPlacesError: '',
         ),
       ),
       failure: (error) => emit(
@@ -67,19 +77,35 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> loadMorePopularPlaces() async {
-    emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
-    final result = await getPopularPlacesUseCase();
+    if (state.popularPlacesStatus.isLoading ||
+        state.popularPlacesIsMoreLoading ||
+        !state.popularPlacesHasMore) {
+      return;
+    }
+    emit(state.copyWith(popularPlacesIsMoreLoading: true));
+    final nextPage = state.popularPlacesCurrentPage + 1;
+    final result = await getPopularPlacesUseCase(
+      request: PopularRequestModel(
+        filters: {'is_hidden_gem': false},
+        page: nextPage,
+        limit: 10,
+      ),
+    );
     if (isClosed) return;
     result.when(
       success: (paginatedResponse) => emit(
         state.copyWith(
-          popularPlacesStatus: HomeDataStatus.success,
-          popularPlaces: paginatedResponse.results,
+          popularPlacesIsMoreLoading: false,
+          popularPlaces: [...state.popularPlaces, ...paginatedResponse.results],
+          popularPlacesCurrentPage: paginatedResponse.page,
+          popularPlacesHasMore:
+              paginatedResponse.page < paginatedResponse.totalPages,
+          popularPlacesError: '',
         ),
       ),
       failure: (error) => emit(
         state.copyWith(
-          popularPlacesStatus: HomeDataStatus.failure,
+          popularPlacesIsMoreLoading: false,
           popularPlacesError: error.message,
         ),
       ),

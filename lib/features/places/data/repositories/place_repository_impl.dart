@@ -4,6 +4,7 @@ import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/data/datasources/place_remote_data_source.dart';
 import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
+import 'package:mindtrip/features/places/data/models/popular_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 
@@ -14,7 +15,8 @@ class PlaceRepositoryImpl implements PlaceRepository {
 
   @override
   Future<Result<PaginatedResponse<PlaceEntity>>> getRecommendedPlaces(
-      RecommendationRequestModel request) async {
+    RecommendationRequestModel request,
+  ) async {
     try {
       final response = await remoteDataSource.getRecommendedPlaces(request);
       return Result.ok(response.map((e) => e.toEntity()));
@@ -24,14 +26,11 @@ class PlaceRepositoryImpl implements PlaceRepository {
   }
 
   @override
-  Future<Result<PaginatedResponse<PlaceEntity>>> getPopularPlaces({
-    Map<String, dynamic>? filters,
-    int page = 1,
-    int limit = 10,
-  }) async {
+  Future<Result<PaginatedResponse<PlaceEntity>>> getPopularPlaces(
+    PopularRequestModel request,
+  ) async {
     try {
-      final response = await remoteDataSource.getPopularPlaces(
-          filters: filters, page: page, limit: limit);
+      final response = await remoteDataSource.getPopularPlaces(request);
       return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -47,7 +46,11 @@ class PlaceRepositoryImpl implements PlaceRepository {
   }) async {
     try {
       final response = await remoteDataSource.searchPlaces(
-          query: query, filters: filters, page: page, limit: limit);
+        query: query,
+        filters: filters,
+        page: page,
+        limit: limit,
+      );
       return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));

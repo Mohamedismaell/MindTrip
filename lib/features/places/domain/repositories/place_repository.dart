@@ -1,17 +1,17 @@
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
+import 'package:mindtrip/features/places/data/models/popular_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
 
 abstract class PlaceRepository {
   Future<Result<PaginatedResponse<PlaceEntity>>> getRecommendedPlaces(
-      RecommendationRequestModel request);
+    RecommendationRequestModel request,
+  );
 
-  Future<Result<PaginatedResponse<PlaceEntity>>> getPopularPlaces({
-    Map<String, dynamic>? filters,
-    int page = 1,
-    int limit = 10,
-  });
+  Future<Result<PaginatedResponse<PlaceEntity>>> getPopularPlaces(
+    PopularRequestModel request,
+  );
 
   Future<Result<PaginatedResponse<PlaceEntity>>> searchPlaces({
     String? query,

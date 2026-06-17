@@ -5,6 +5,7 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
+import 'package:mindtrip/core/widget/app_refresh_indicator.dart';
 import 'package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart';
 import 'package:mindtrip/features/places/presentation/widgets/recommended_grid.dart';
 
@@ -53,12 +54,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: context.colorTheme.primary,
-      backgroundColor: Colors.white,
-      strokeWidth: 3,
-      displacement: 20,
-      edgeOffset: 10,
+    return AppRefreshIndicator(
       onRefresh: () async {
         await context.read<RecommendedPlacesCubit>().loadFirstPage(
           selectedCategories: context.read<UserCubit>().state.interests,
@@ -95,7 +91,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20.h),
+                          SizedBox(height: 30.h),
                         ],
                       ),
                     ),

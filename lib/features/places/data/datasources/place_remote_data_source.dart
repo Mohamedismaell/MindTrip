@@ -2,6 +2,7 @@ import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/features/places/data/models/popular_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
 
 abstract class PlaceRemoteDataSource {
@@ -9,11 +10,9 @@ abstract class PlaceRemoteDataSource {
     RecommendationRequestModel request,
   );
 
-  Future<PaginatedResponse<PlaceModel>> getPopularPlaces({
-    Map<String, dynamic>? filters,
-    int page = 1,
-    int limit = 10,
-  });
+  Future<PaginatedResponse<PlaceModel>> getPopularPlaces(
+    PopularRequestModel request,
+  );
 
   Future<PaginatedResponse<PlaceModel>> searchPlaces({
     String? query,
@@ -60,20 +59,12 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
   }
 
   @override
-  Future<PaginatedResponse<PlaceModel>> getPopularPlaces({
-    Map<String, dynamic>? filters,
-    int page = 1,
-    int limit = 10,
-  }) async {
-    final requestBody = {
-      if (filters != null && filters.isNotEmpty) 'filters': filters,
-      'page': page,
-      'limit': limit,
-    };
-
+  Future<PaginatedResponse<PlaceModel>> getPopularPlaces(
+    PopularRequestModel request,
+  ) async {
     final response = await _api.post(
       EndPoints.getPopularPlaces,
-      data: requestBody,
+      data: request.toJson(),
     );
 
     return PaginatedResponse<PlaceModel>.fromJson(

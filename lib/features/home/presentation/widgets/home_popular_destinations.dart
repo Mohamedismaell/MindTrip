@@ -17,15 +17,51 @@ import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
 
-class HomePopularDestinations extends StatelessWidget {
+class HomePopularDestinations extends StatefulWidget {
   const HomePopularDestinations({super.key});
+
+  @override
+  State<HomePopularDestinations> createState() =>
+      _HomePopularDestinationsState();
+}
+
+class _HomePopularDestinationsState extends State<HomePopularDestinations> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<HomeCubit>().loadMorePopularPlaces();
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    return currentScroll >= maxScroll - 400;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (previous, current) =>
           previous.popularPlacesStatus != current.popularPlacesStatus ||
-          previous.popularPlaces != current.popularPlaces,
+          previous.popularPlaces != current.popularPlaces ||
+          previous.popularPlacesIsMoreLoading !=
+              current.popularPlacesIsMoreLoading,
+
       builder: (context, state) {
         if (state.popularPlacesStatus.isFailure) {
           return SliverToBoxAdapter(
@@ -54,9 +90,18 @@ class HomePopularDestinations extends StatelessWidget {
             child: SizedBox(
               height: 198.h,
               child: ListView.builder(
+                controller: _scrollController,
                 scrollDirection: Axis.horizontal,
-                itemCount: destinations.length,
+                itemCount:
+                    destinations.length +
+                    (state.popularPlacesIsMoreLoading ? 1 : 0),
                 itemBuilder: (context, index) {
+                  if (index == destinations.length) {
+                    return SizedBox(
+                      width: 100.w,
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  }
                   final destination = destinations[index];
                   return Row(
                     children: [
@@ -123,6 +168,8 @@ class HomePopularDestinations extends StatelessWidget {
                                               .copyWith(
                                                 color: AppColors.pureWhite,
                                               ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         SizedBox(height: 6.h),
                                         Text(
@@ -208,7 +255,7 @@ class HomePopularDestinations extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 24.w),
+                      SizedBox(width: 20.w),
                     ],
                   );
                 },

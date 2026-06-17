@@ -28,8 +28,8 @@ abstract class HomeState with _$HomeState {
     @Default([]) List<PlaceEntity> popularPlaces,
     @Default('') String popularPlacesError,
     @Default(1) int popularPlacesCurrentPage,
-    @Default(false) bool popularPlacesIsLoadingMore,
     @Default(true) bool popularPlacesHasMore,
+    @Default(false) bool popularPlacesIsMoreLoading,
 
     @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
     @Default([]) List<PlaceEntity> recommendedPlaces,
