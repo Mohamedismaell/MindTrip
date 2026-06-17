@@ -21,17 +21,19 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
     await Future.delayed(const Duration(seconds: 1));
 
     return HomeMockData.plannerPreviews
-        .map((preview) => PlannerPreviewEntity(
-              title: preview.title,
-              imageUrl: preview.imageUrl,
-              badge: preview.badge,
-              stops: preview.stops
-                  .map((stop) => PlannerStopEntity(
-                        time: stop.time,
-                        label: stop.label,
-                      ))
-                  .toList(),
-            ))
+        .map(
+          (preview) => PlannerPreviewEntity(
+            title: preview.title,
+            imageUrl: preview.imageUrl,
+            badge: preview.badge,
+            stops: preview.stops
+                .map(
+                  (stop) =>
+                      PlannerStopEntity(time: stop.time, label: stop.label),
+                )
+                .toList(),
+          ),
+        )
         .toList();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/features/itinerary/data/datasources/mock_itinerary_datasource.dart';
+import 'package:mindtrip/features/itinerary/data/datasources/itinerary_data_source.dart';
 import 'package:mindtrip/features/itinerary/data/repositories/itinerary_repository_impl.dart';
 import 'package:mindtrip/features/itinerary/domain/repositories/itinerary_repository.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/generate_itinerary_use_case.dart';

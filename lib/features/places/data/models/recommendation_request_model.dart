@@ -4,7 +4,7 @@ class RecommendationRequestModel {
   final int page;
   final int limit;
   final int? seed;
-  final int poolSize;
+  // final int poolSize;
 
   RecommendationRequestModel({
     required this.selectedCategories,
@@ -12,7 +12,7 @@ class RecommendationRequestModel {
     this.page = 1,
     this.limit = 10,
     this.seed,
-    this.poolSize = 150,
+    // this.poolSize = 150,
   });
 
   Map<String, dynamic> toJson() {
@@ -22,7 +22,7 @@ class RecommendationRequestModel {
       'page': page,
       'limit': limit,
       if (seed != null) 'seed': seed,
-      'pool_size': poolSize,
+      // 'pool_size': poolSize,
     };
   }
 }

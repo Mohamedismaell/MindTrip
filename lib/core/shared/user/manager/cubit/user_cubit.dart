@@ -49,7 +49,7 @@ class UserCubit extends Cubit<UserState> {
   }
 
   void editSelectedCategory(String category) {
-    final currentSelected = List<String>.from(state.interests ?? []);
+    final currentSelected = List<String>.from(state.interests);
 
     if (currentSelected.contains(category)) {
       currentSelected.remove(category);
@@ -62,7 +62,7 @@ class UserCubit extends Cubit<UserState> {
   Future<void> updateUserInterests() async {
     emit(state.copyWith(interestStatus: InterestStatus.saving));
 
-    final result = await _updateUserInterests(state.interests!);
+    final result = await _updateUserInterests(state.interests);
     result.when(
       success: (_) {
         if (state.user != null) {

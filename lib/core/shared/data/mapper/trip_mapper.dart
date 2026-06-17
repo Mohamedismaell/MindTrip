@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/shared/data/models/trip_model.dart';
 import 'package:mindtrip/core/shared/domain/entities/trip_entity.dart';
-import 'place_mapper.dart';
+import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 
 extension TripMapper on TripModel {
   TripEntity toEntity() {

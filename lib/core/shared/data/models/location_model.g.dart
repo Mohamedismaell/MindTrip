@@ -20,19 +20,25 @@ class LocationModelAdapter extends TypeAdapter<_LocationModel> {
       address: fields[0] == null ? '' : fields[0] as String,
       latitude: fields[1] == null ? 0.0 : (fields[1] as num).toDouble(),
       longitude: fields[2] == null ? 0.0 : (fields[2] as num).toDouble(),
+      city: fields[3] == null ? '' : fields[3] as String,
+      cityEn: fields[4] == null ? '' : fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, _LocationModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.address)
       ..writeByte(1)
       ..write(obj.latitude)
       ..writeByte(2)
-      ..write(obj.longitude);
+      ..write(obj.longitude)
+      ..writeByte(3)
+      ..write(obj.city)
+      ..writeByte(4)
+      ..write(obj.cityEn);
   }
 
   @override
@@ -55,6 +61,8 @@ _LocationModel _$LocationModelFromJson(Map<String, dynamic> json) =>
       address: json['location'] as String? ?? '',
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+      city: json['city'] as String? ?? '',
+      cityEn: json['cityEn'] as String? ?? '',
     );
 
 Map<String, dynamic> _$LocationModelToJson(_LocationModel instance) =>
@@ -62,4 +70,6 @@ Map<String, dynamic> _$LocationModelToJson(_LocationModel instance) =>
       'location': instance.address,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'city': instance.city,
+      'cityEn': instance.cityEn,
     };

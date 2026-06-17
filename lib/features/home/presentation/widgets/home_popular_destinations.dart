@@ -125,7 +125,7 @@ class HomePopularDestinations extends StatelessWidget {
                                         ),
                                         SizedBox(height: 6.h),
                                         Text(
-                                          destination.location.address,
+                                          destination.location.cityEn,
                                           style: context.textTheme.bodyMedium!
                                               .copyWith(
                                                 color:
@@ -219,8 +219,6 @@ class HomePopularDestinations extends StatelessWidget {
     );
   }
 }
-
-
 
 class _PreviewImageTile extends StatelessWidget {
   const _PreviewImageTile({required this.imageUrl});

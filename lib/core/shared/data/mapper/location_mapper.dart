@@ -7,6 +7,8 @@ extension LocationMapper on LocationModel {
       address: address,
       latitude: latitude,
       longitude: longitude,
+      city: city,
+      cityEn: cityEn,
     );
   }
 }

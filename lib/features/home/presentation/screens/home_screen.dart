@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/home/presentation/cubit/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_ai_planner_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_banner_carousel.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_header.dart';
@@ -9,8 +12,21 @@ import 'package:mindtrip/features/home/presentation/widgets/home_search_bar.dart
 import 'package:mindtrip/features/home/presentation/widgets/home_section_header.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_tour_packages.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final interests = context.read<UserCubit>().state.interests;
+
+    context.read<HomeCubit>().loadAllData(selectedCategories: interests);
+  }
 
   @override
   Widget build(BuildContext context) {

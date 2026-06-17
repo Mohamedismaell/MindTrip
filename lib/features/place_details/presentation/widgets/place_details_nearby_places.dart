@@ -41,6 +41,8 @@ class PlaceDetailsNearbyPlaces extends StatelessWidget {
                     address: '',
                     latitude: 0,
                     longitude: 0,
+                    city: '',
+                    cityEn: '',
                   ),
                 ),
                 PlaceEntity(
@@ -50,6 +52,8 @@ class PlaceDetailsNearbyPlaces extends StatelessWidget {
                     address: '',
                     latitude: 0,
                     longitude: 0,
+                    city: '',
+                    cityEn: '',
                   ),
                 ),
                 PlaceEntity(
@@ -59,6 +63,8 @@ class PlaceDetailsNearbyPlaces extends StatelessWidget {
                     address: '',
                     latitude: 0,
                     longitude: 0,
+                    city: '',
+                    cityEn: '',
                   ),
                 ),
               ]

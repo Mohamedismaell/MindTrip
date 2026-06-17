@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LocationModel {
 
-@JsonKey(name: 'location')@HiveField(0) String get address;@HiveField(1) double get latitude;@HiveField(2) double get longitude;
+@JsonKey(name: 'location')@HiveField(0) String get address;@HiveField(1) double get latitude;@HiveField(2) double get longitude;@HiveField(3) String get city;@HiveField(4) String get cityEn;
 /// Create a copy of LocationModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $LocationModelCopyWith<LocationModel> get copyWith => _$LocationModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LocationModel&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LocationModel&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.city, city) || other.city == city)&&(identical(other.cityEn, cityEn) || other.cityEn == cityEn));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,address,latitude,longitude);
+int get hashCode => Object.hash(runtimeType,address,latitude,longitude,city,cityEn);
 
 @override
 String toString() {
-  return 'LocationModel(address: $address, latitude: $latitude, longitude: $longitude)';
+  return 'LocationModel(address: $address, latitude: $latitude, longitude: $longitude, city: $city, cityEn: $cityEn)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $LocationModelCopyWith<$Res>  {
   factory $LocationModelCopyWith(LocationModel value, $Res Function(LocationModel) _then) = _$LocationModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'location')@HiveField(0) String address,@HiveField(1) double latitude,@HiveField(2) double longitude
+@JsonKey(name: 'location')@HiveField(0) String address,@HiveField(1) double latitude,@HiveField(2) double longitude,@HiveField(3) String city,@HiveField(4) String cityEn
 });
 
 
@@ -65,12 +65,14 @@ class _$LocationModelCopyWithImpl<$Res>
 
 /// Create a copy of LocationModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? address = null,Object? latitude = null,Object? longitude = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? address = null,Object? latitude = null,Object? longitude = null,Object? city = null,Object? cityEn = null,}) {
   return _then(_self.copyWith(
 address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double,
+as double,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,cityEn: null == cityEn ? _self.cityEn : cityEn // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -155,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'location')@HiveField(0)  String address, @HiveField(1)  double latitude, @HiveField(2)  double longitude)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'location')@HiveField(0)  String address, @HiveField(1)  double latitude, @HiveField(2)  double longitude, @HiveField(3)  String city, @HiveField(4)  String cityEn)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LocationModel() when $default != null:
-return $default(_that.address,_that.latitude,_that.longitude);case _:
+return $default(_that.address,_that.latitude,_that.longitude,_that.city,_that.cityEn);case _:
   return orElse();
 
 }
@@ -176,10 +178,10 @@ return $default(_that.address,_that.latitude,_that.longitude);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'location')@HiveField(0)  String address, @HiveField(1)  double latitude, @HiveField(2)  double longitude)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'location')@HiveField(0)  String address, @HiveField(1)  double latitude, @HiveField(2)  double longitude, @HiveField(3)  String city, @HiveField(4)  String cityEn)  $default,) {final _that = this;
 switch (_that) {
 case _LocationModel():
-return $default(_that.address,_that.latitude,_that.longitude);case _:
+return $default(_that.address,_that.latitude,_that.longitude,_that.city,_that.cityEn);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +198,10 @@ return $default(_that.address,_that.latitude,_that.longitude);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'location')@HiveField(0)  String address, @HiveField(1)  double latitude, @HiveField(2)  double longitude)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'location')@HiveField(0)  String address, @HiveField(1)  double latitude, @HiveField(2)  double longitude, @HiveField(3)  String city, @HiveField(4)  String cityEn)?  $default,) {final _that = this;
 switch (_that) {
 case _LocationModel() when $default != null:
-return $default(_that.address,_that.latitude,_that.longitude);case _:
+return $default(_that.address,_that.latitude,_that.longitude,_that.city,_that.cityEn);case _:
   return null;
 
 }
@@ -211,12 +213,14 @@ return $default(_that.address,_that.latitude,_that.longitude);case _:
 @JsonSerializable()
 @HiveType(typeId: 2, adapterName: 'LocationModelAdapter')
 class _LocationModel extends LocationModel {
-  const _LocationModel({@JsonKey(name: 'location')@HiveField(0) this.address = '', @HiveField(1) this.latitude = 0.0, @HiveField(2) this.longitude = 0.0}): super._();
+  const _LocationModel({@JsonKey(name: 'location')@HiveField(0) this.address = '', @HiveField(1) this.latitude = 0.0, @HiveField(2) this.longitude = 0.0, @HiveField(3) this.city = '', @HiveField(4) this.cityEn = ''}): super._();
   factory _LocationModel.fromJson(Map<String, dynamic> json) => _$LocationModelFromJson(json);
 
 @override@JsonKey(name: 'location')@HiveField(0) final  String address;
 @override@JsonKey()@HiveField(1) final  double latitude;
 @override@JsonKey()@HiveField(2) final  double longitude;
+@override@JsonKey()@HiveField(3) final  String city;
+@override@JsonKey()@HiveField(4) final  String cityEn;
 
 /// Create a copy of LocationModel
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LocationModel&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LocationModel&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.city, city) || other.city == city)&&(identical(other.cityEn, cityEn) || other.cityEn == cityEn));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,address,latitude,longitude);
+int get hashCode => Object.hash(runtimeType,address,latitude,longitude,city,cityEn);
 
 @override
 String toString() {
-  return 'LocationModel(address: $address, latitude: $latitude, longitude: $longitude)';
+  return 'LocationModel(address: $address, latitude: $latitude, longitude: $longitude, city: $city, cityEn: $cityEn)';
 }
 
 
@@ -251,7 +255,7 @@ abstract mixin class _$LocationModelCopyWith<$Res> implements $LocationModelCopy
   factory _$LocationModelCopyWith(_LocationModel value, $Res Function(_LocationModel) _then) = __$LocationModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'location')@HiveField(0) String address,@HiveField(1) double latitude,@HiveField(2) double longitude
+@JsonKey(name: 'location')@HiveField(0) String address,@HiveField(1) double latitude,@HiveField(2) double longitude,@HiveField(3) String city,@HiveField(4) String cityEn
 });
 
 
@@ -268,12 +272,14 @@ class __$LocationModelCopyWithImpl<$Res>
 
 /// Create a copy of LocationModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? address = null,Object? latitude = null,Object? longitude = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? address = null,Object? latitude = null,Object? longitude = null,Object? city = null,Object? cityEn = null,}) {
   return _then(_LocationModel(
 address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double,
+as double,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,cityEn: null == cityEn ? _self.cityEn : cityEn // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

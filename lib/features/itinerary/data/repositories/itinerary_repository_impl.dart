@@ -2,7 +2,7 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/features/itinerary/data/datasources/mock_itinerary_datasource.dart';
+import 'package:mindtrip/features/itinerary/data/datasources/itinerary_data_source.dart';
 import 'package:mindtrip/features/itinerary/data/models/trip_itinerary_model.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';

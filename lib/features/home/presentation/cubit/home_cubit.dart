@@ -22,10 +22,10 @@ class HomeCubit extends Cubit<HomeState> {
     required this.getAIPlannerPreviewsUseCase,
   }) : super(const HomeState());
 
-  Future<void> loadAllData() async {
+  Future<void> loadAllData({required List<String> selectedCategories}) async {
     loadBanners();
     loadPopularPlaces();
-    loadRecommendedPlaces();
+    loadRecommendedPlaces(selectedCategories: selectedCategories);
     loadTourPackages();
     loadPlannerPreviews();
   }
@@ -67,11 +67,13 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> loadRecommendedPlaces() async {
+  Future<void> loadRecommendedPlaces({
+    required List<String> selectedCategories,
+  }) async {
     emit(state.copyWith(recommendedPlacesStatus: HomeDataStatus.loading));
-    // Provide a default empty request; normally this comes from user preferences
+    // Provide a default empty request;normally this comes from user preferences
     final result = await getRecommendedPlacesUseCase(
-      RecommendationRequestModel(selectedCategories: []),
+      RecommendationRequestModel(selectedCategories: selectedCategories),
     );
     if (isClosed) return;
     result.when(

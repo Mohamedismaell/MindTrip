@@ -3,6 +3,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:mindtrip/core/connections/network_info.dart';
 import 'package:mindtrip/core/connections/retry_queue.dart';
 import 'package:mindtrip/core/connections/retry_runner.dart';
+import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/dio_consumer.dart';
 import 'package:mindtrip/core/database/api/interceptors/api_interceptor.dart';
 import 'package:mindtrip/core/database/api/interceptors/auth_interceptor.dart';
@@ -88,7 +89,7 @@ class CommonDi {
     sl.registerLazySingleton(
       () => RetryInterceptor(dio: sl<Dio>(), retryQueue: sl<RetryQueue>()),
     );
-    sl.registerLazySingleton(
+    sl.registerLazySingleton<ApiConsumer>(
       () => DioConsumer(
         sl<Dio>(),
         sl<ApiInterceptor>(),
@@ -99,7 +100,7 @@ class CommonDi {
     );
 
     sl.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSource(api: sl<DioConsumer>()),
+      () => AuthRemoteDataSource(api: sl<ApiConsumer>()),
     );
 
     sl.registerLazySingleton(
@@ -111,7 +112,7 @@ class CommonDi {
 
     //  User
     sl.registerLazySingleton<UserRemoteDataSource>(
-      () => UserRemoteDataSource(api: sl<DioConsumer>()),
+      () => UserRemoteDataSource(api: sl<ApiConsumer>()),
     );
     sl.registerLazySingleton<UserRepository>(
       () => UserRepositoryImpl(remoteDataSource: sl<UserRemoteDataSource>()),
@@ -148,7 +149,7 @@ class CommonDi {
       () => PlacesLocalDataSourceImpl(),
     );
     sl.registerLazySingleton<FavoritesRemoteDataSource>(
-      () => FavoritesRemoteDataSource(api: sl<DioConsumer>()),
+      () => FavoritesRemoteDataSource(api: sl<ApiConsumer>()),
     );
     sl.registerLazySingleton<FavoritesRepository>(
       () => FavoritesRepositoryImpl(

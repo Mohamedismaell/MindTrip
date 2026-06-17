@@ -10,7 +10,7 @@ class HomeRoutes {
   static final homeRoute = GoRoute(
     path: AppRoutes.home,
     builder: (context, state) => BlocProvider<HomeCubit>(
-      create: (context) => sl<HomeCubit>()..loadAllData(),
+      create: (context) => sl<HomeCubit>(),
       child: const HomeScreen(),
     ),
   );

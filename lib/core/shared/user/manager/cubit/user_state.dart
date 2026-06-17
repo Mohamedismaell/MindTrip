@@ -12,7 +12,7 @@ class UserState extends Equatable {
   final String? userErrorMessage;
   final PhotoUploadStatus photoUploadStatus;
   final String? localPhotoPath;
-  final List<String>? interests;
+  final List<String> interests;
   final InterestStatus interestStatus;
   final String? interestErrorMessage;
   final String? photoUploadErrorMessage;
@@ -31,7 +31,7 @@ class UserState extends Equatable {
   bool get hasChanges {
     if (user == null) return false;
     final original = List<String>.from(user!.interests ?? [])..sort();
-    final current = List<String>.from(interests ?? [])..sort();
+    final current = List<String>.from(interests)..sort();
     if (original.length != current.length) return true;
     for (int i = 0; i < original.length; i++) {
       if (original[i] != current[i]) return true;

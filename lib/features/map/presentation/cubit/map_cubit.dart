@@ -156,6 +156,8 @@ class MapCubit extends Cubit<MapState> {
         address: place.formattedAddress ?? '',
         latitude: place.latitude ?? 0.0,
         longitude: place.longitude ?? 0.0,
+        city: '',
+        cityEn: '',
       ),
       description: place.editorialSummary,
       rating: place.rating,

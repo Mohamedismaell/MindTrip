@@ -2,9 +2,8 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
-import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/features/places/data/datasources/place_remote_data_source.dart';
-import 'package:mindtrip/features/places/data/mappers/ai_place_mapper.dart';
+import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 
@@ -18,7 +17,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
       RecommendationRequestModel request) async {
     try {
       final response = await remoteDataSource.getRecommendedPlaces(request);
-      return Result.ok(_mapPaginatedResponse(response));
+      return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -33,7 +32,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
     try {
       final response = await remoteDataSource.getPopularPlaces(
           filters: filters, page: page, limit: limit);
-      return Result.ok(_mapPaginatedResponse(response));
+      return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -49,7 +48,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
     try {
       final response = await remoteDataSource.searchPlaces(
           query: query, filters: filters, page: page, limit: limit);
-      return Result.ok(_mapPaginatedResponse(response));
+      return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -87,20 +86,9 @@ class PlaceRepositoryImpl implements PlaceRepository {
         page: page,
         limit: limit,
       );
-      return Result.ok(_mapPaginatedResponse(response));
+      return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
-  }
-
-  PaginatedResponse<PlaceEntity> _mapPaginatedResponse(
-      PaginatedResponse<PlaceModel> response) {
-    return PaginatedResponse<PlaceEntity>(
-      total: response.total,
-      page: response.page,
-      limit: response.limit,
-      totalPages: response.totalPages,
-      results: response.results.map<PlaceEntity>((e) => e.toEntity()).toList(),
-    );
   }
 }

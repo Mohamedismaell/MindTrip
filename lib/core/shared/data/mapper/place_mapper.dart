@@ -6,25 +6,32 @@ import 'package:mindtrip/core/enums/place_badge.dart';
 
 extension PlaceMapper on PlaceModel {
   PlaceEntity toEntity() {
+    final images = {
+      if (photoUrl != null && photoUrl!.isNotEmpty) photoUrl!,
+      ...?imageUrls,
+    }.toList();
+
     return PlaceEntity(
       id: placeId,
       name: name,
       description: description,
       location: LocationEntity(
-        address: address ?? cityEn ?? city ?? '',
+        address: address ?? 'Egypt',
         latitude: lat,
         longitude: lng,
+        city: city ?? 'Egypt',
+        cityEn: cityEn ?? 'Egypt',
       ),
-      imageUrls: imageUrls,
+      imageUrls: images,
       category: PlaceCategory.fromCategory(category),
       rating: rating,
       reviewCount: reviewsCount,
       price: price ?? cost,
-      isFavorite: false, // Default for new models from API
       badge: isHiddenGem ? PlaceBadge.popular : PlaceBadge.none,
     );
   }
 }
+//Todo check to model do we need it later
 
 extension PlaceEntityMapper on PlaceEntity {
   PlaceModel toModel() {
@@ -33,8 +40,8 @@ extension PlaceEntityMapper on PlaceEntity {
       name: name,
       description: description,
       address: location.address,
-      lat: location.latitude ?? 0.0,
-      lng: location.longitude ?? 0.0,
+      lat: location.latitude,
+      lng: location.longitude,
       imageUrls: imageUrls,
       category: category.name,
       rating: rating,

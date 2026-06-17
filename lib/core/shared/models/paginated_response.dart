@@ -30,3 +30,15 @@ class PaginatedResponse<T> {
     );
   }
 }
+
+extension PaginatedResponseExtension<T> on PaginatedResponse<T> {
+  PaginatedResponse<R> map<R>(R Function(T) mapper) {
+    return PaginatedResponse<R>(
+      total: total,
+      page: page,
+      limit: limit,
+      totalPages: totalPages,
+      results: results.map(mapper).toList(),
+    );
+  }
+}

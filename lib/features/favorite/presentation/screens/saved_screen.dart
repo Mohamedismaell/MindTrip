@@ -25,14 +25,21 @@ class SavedScreen extends StatelessWidget {
 }
 
 const _savedCategories = [
+  //  PlaceCategory.hotel,
+  // PlaceCategory.trip,
+  // PlaceCategory.activity,
+  // PlaceCategory.restaurant,
+  // PlaceCategory.beach,
+  // PlaceCategory.diving,
+  // PlaceCategory.heritage,
   PlaceCategory.all,
-  PlaceCategory.hotel,
-  PlaceCategory.trip,
-  PlaceCategory.activity,
-  PlaceCategory.restaurant,
-  PlaceCategory.beach,
-  PlaceCategory.diving,
-  PlaceCategory.heritage,
+  PlaceCategory.foodCafes,
+  PlaceCategory.historicalSites,
+  PlaceCategory.beaches,
+  PlaceCategory.nature,
+  PlaceCategory.entertainment,
+  PlaceCategory.shopping,
+  PlaceCategory.artsCulture,
 ];
 
 class _FavoritesView extends StatelessWidget {

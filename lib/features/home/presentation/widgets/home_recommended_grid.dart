@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
@@ -24,144 +25,160 @@ class HomeRecommendedGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-      buildWhen: (previous, current) =>
-          previous.recommendedPlacesStatus != current.recommendedPlacesStatus ||
-          previous.recommendedPlaces != current.recommendedPlaces,
-      builder: (context, state) {
-        if (state.recommendedPlacesStatus == HomeDataStatus.failure) {
-          return SliverToBoxAdapter(
-            child: AppErrorWidget(
-              message: state.recommendedPlacesError,
-              imageSize: 80,
-              onPressed: () =>
-                  context.read<HomeCubit>().loadRecommendedPlaces(),
-            ),
-          );
-        }
+    return BlocListener<UserCubit, UserState>(
+      listenWhen: (previous, current) =>
+          previous.interests != current.interests,
+      listener: (context, userState) {
+        context.read<HomeCubit>().loadRecommendedPlaces(
+          selectedCategories: userState.interests,
+        );
+      },
 
-        final isLoading =
-            state.recommendedPlacesStatus == HomeDataStatus.loading ||
-            state.recommendedPlacesStatus == HomeDataStatus.initial;
-        final destinations = isLoading
-            ? DummyData.recommendedPlaces
-            : state.recommendedPlaces;
+      child: BlocBuilder<HomeCubit, HomeState>(
+        buildWhen: (previous, current) =>
+            previous.recommendedPlacesStatus !=
+                current.recommendedPlacesStatus ||
+            previous.recommendedPlaces != current.recommendedPlaces,
+        builder: (context, homeState) {
+          if (homeState.recommendedPlacesStatus == HomeDataStatus.failure) {
+            return SliverToBoxAdapter(
+              child: AppErrorWidget(
+                message: homeState.recommendedPlacesError,
+                imageSize: 80,
+                onPressed: () {
+                  final interests = context.read<UserCubit>().state.interests;
 
-        if (!isLoading && destinations.isEmpty) {
-          return const SliverToBoxAdapter(child: SizedBox.shrink());
-        }
-
-        return SliverGrid.builder(
-          itemCount: destinations.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 28.h,
-            crossAxisSpacing: 37.w,
-            childAspectRatio: 0.82,
-          ),
-          itemBuilder: (context, index) {
-            final destination = destinations[index];
-            return Skeletonizer(
-              enabled: isLoading,
-              child: TapScaleEffect(
-                onTap: () {
-                  if (isLoading) return;
-                  context.push(
-                    '${AppRoutes.placeDetails}?placeId=${destination.id}&heroTag=rec_${destination.id}',
-                    extra: destination,
+                  context.read<HomeCubit>().loadRecommendedPlaces(
+                    selectedCategories: interests,
                   );
                 },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20.r),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            //! Handle no image later
-                            Skeletonizer.maybeOf(context)?.enabled ?? false
-                                ? AppCachedImage(
-                                    imagePath:
-                                        destination.imageUrls?.first ?? '',
-                                  )
-                                : Hero(
-                                    tag: 'rec_${destination.id}',
-                                    child: AppCachedImage(
+              ),
+            );
+          }
+
+          final isLoading =
+              homeState.recommendedPlacesStatus == HomeDataStatus.loading ||
+              homeState.recommendedPlacesStatus == HomeDataStatus.initial;
+          final destinations = isLoading
+              ? DummyData.recommendedPlaces
+              : homeState.recommendedPlaces;
+
+          if (!isLoading && destinations.isEmpty) {
+            return const SliverToBoxAdapter(child: SizedBox.shrink());
+          }
+
+          return SliverGrid.builder(
+            itemCount: destinations.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 28.h,
+              crossAxisSpacing: 37.w,
+              childAspectRatio: 0.82,
+            ),
+            itemBuilder: (context, index) {
+              final destination = destinations[index];
+              return Skeletonizer(
+                enabled: isLoading,
+                child: TapScaleEffect(
+                  onTap: () {
+                    if (isLoading) return;
+                    context.push(
+                      '${AppRoutes.placeDetails}?placeId=${destination.id}&heroTag=rec_${destination.id}',
+                      extra: destination,
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.r),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              //! Handle no image later
+                              Skeletonizer.maybeOf(context)?.enabled ?? false
+                                  ? AppCachedImage(
                                       imagePath:
                                           destination.imageUrls?.first ?? '',
+                                    )
+                                  : Hero(
+                                      tag: 'rec_${destination.id}',
+                                      child: AppCachedImage(
+                                        imagePath:
+                                            destination.imageUrls?.first ?? '',
+                                      ),
                                     ),
-                                  ),
-                            Positioned(
-                              top: 10.h,
-                              left: 10.w,
-                              child: FavoriteButton(placeId: destination.id),
-                            ),
-                            if (destination.price != null)
                               Positioned(
-                                top: 6.h,
-                                right: 10.w,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 4.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.pureWhite.withValues(
-                                      alpha: 0.92,
+                                top: 10.h,
+                                left: 10.w,
+                                child: FavoriteButton(placeId: destination.id),
+                              ),
+                              if (destination.price != null)
+                                Positioned(
+                                  top: 6.h,
+                                  right: 10.w,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w,
+                                      vertical: 4.h,
                                     ),
-                                    borderRadius: BorderRadius.circular(20.r),
-                                  ),
-                                  child: Text(
-                                    destination.price.toString(),
-                                    style: context.textTheme.labelLarge,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.pureWhite.withValues(
+                                        alpha: 0.92,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20.r),
+                                    ),
+                                    child: Text(
+                                      destination.price.toString(),
+                                      style: context.textTheme.labelLarge,
+                                    ),
                                   ),
                                 ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6.w),
+                        child: Text(
+                          destination.name,
+                          style: AppTextStyles.h9Bold.copyWith(
+                            color: context.colorTheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6.w),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(HomeAssets.locationIcon),
+                            SizedBox(width: 6.w),
+                            Expanded(
+                              child: Text(
+                                destination.location.address,
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  color: context.colorTheme.outline,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 6.w),
-                      child: Text(
-                        destination.name,
-                        style: AppTextStyles.h9Bold.copyWith(
-                          color: context.colorTheme.onSurface,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 6.w),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(HomeAssets.locationIcon),
-                          SizedBox(width: 6.w),
-                          Expanded(
-                            child: Text(
-                              destination.location.address,
-                              style: context.textTheme.bodyMedium?.copyWith(
-                                color: context.colorTheme.outline,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

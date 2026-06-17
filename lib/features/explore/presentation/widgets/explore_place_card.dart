@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -14,7 +12,6 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/widget/custom_head_line.dart';
 import 'package:mindtrip/core/widget/favorite_place_button.dart';
 
 import 'package:go_router/go_router.dart';
@@ -139,83 +136,6 @@ class _BadgeChip extends StatelessWidget {
   }
 }
 
-Widget _buildHotelInfo(BuildContext context, PlaceEntity place) {
-  return Expanded(
-    flex: 4,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title
-        Text(
-          place.name,
-          style: AppTextStyles.h8SemiBold.copyWith(
-            color: context.colorTheme.onSurface,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        SizedBox(height: 4.h),
-
-        // Location + price
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                place.location.address,
-                style: AppTextStyles.h9Medium.copyWith(
-                  color: context.colorTheme.outline,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              child: BlocBuilder<LocationCubit, LocationState>(
-                builder: (context, state) {
-                  final distance = context
-                      .read<LocationCubit>()
-                      .getDistanceBetween(
-                        placeLat: place.location.latitude,
-                        placeLng: place.location.longitude,
-                      );
-                  return Text(
-                    state.formatDistance(distance),
-                    style: AppTextStyles.h9Medium.copyWith(
-                      color: context.colorTheme.outline,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 10.h),
-        place.price != null
-            ? CustomHeadLine(
-                firstTitle: '\$${place.price!.toStringAsFixed(0)}',
-                secondTitle: '  /night',
-
-                firstStyle: AppTextStyles.h9Medium.copyWith(
-                  color: context.colorTheme.onSurface,
-                ),
-                secondStyle: AppTextStyles.h9Medium.copyWith(
-                  color: context.colorTheme.outline,
-                ),
-              )
-            : RatingStars(
-                rating: place.rating,
-                size: 18.sp,
-                showText: true,
-                style: AppTextStyles.h9Medium.copyWith(
-                  color: context.colorTheme.onSurfaceVariant,
-                ),
-              ),
-      ],
-    ),
-  );
-}
-
 //restaurant and cafe and activities
 Widget _buildRestaurantInfo(BuildContext context, PlaceEntity place) {
   return Expanded(
@@ -279,13 +199,13 @@ Widget _buildRestaurantInfo(BuildContext context, PlaceEntity place) {
 
 Widget _buildCardInfo(BuildContext context, PlaceEntity place) {
   switch (place.category) {
-    case PlaceCategory.hotel:
-      return _buildHotelInfo(context, place);
-    case PlaceCategory.restaurant || PlaceCategory.cafe:
+    case PlaceCategory.foodCafes:
       return _buildRestaurantInfo(context, place);
-    case PlaceCategory.activity:
+    case PlaceCategory.entertainment:
       return _buildRestaurantInfo(context, place);
     default:
+      // We don't have a specific hotel category in the new API-aligned enum yet,
+      // but 'other' or a default rendering works for now.
       return _buildRestaurantInfo(context, place);
   }
 }
