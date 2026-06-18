@@ -32,5 +32,6 @@ const _$PlaceCategoryEnumMap = {
   PlaceCategory.entertainment: 'entertainment',
   PlaceCategory.shopping: 'shopping',
   PlaceCategory.artsCulture: 'artsCulture',
+  PlaceCategory.hotels: 'hotels',
   PlaceCategory.other: 'other',
 };

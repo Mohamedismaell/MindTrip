@@ -29,9 +29,7 @@ class ExploreDi {
 
     //! Cubit
     sl.registerFactory<ExploreCubit>(
-      () => ExploreCubit(
-        getTrendingPlacesUseCase: sl<GetTrendingPlacesUseCase>(),
-      ),
+      () => ExploreCubit(getTrendingPlacesUseCase: sl<GetPlacesUseCase>()),
     );
   }
 }

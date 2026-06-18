@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_state.dart';
-import 'package:mindtrip/features/places/data/models/trending_places_request.dart';
+import 'package:mindtrip/features/places/data/models/trending_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
 class ExploreCubit extends Cubit<ExploreState> {
-  final GetTrendingPlacesUseCase getTrendingPlacesUseCase;
+  final GetPlacesUseCase getTrendingPlacesUseCase;
 
   ExploreCubit({required this.getTrendingPlacesUseCase})
     : super(const ExploreState());
@@ -23,7 +23,7 @@ class ExploreCubit extends Cubit<ExploreState> {
     _trendingPlacesFirstPageToken = CancelToken();
     emit(state.copyWith(trendingPlacesStatus: ExploreDataStatus.loading));
     final result = await getTrendingPlacesUseCase(
-      request: TrendingPlacesRequest(
+      request: GetPlacesRequestModel(
         sortBy: "rating",
         order: "desc",
         page: 1,
@@ -72,7 +72,7 @@ class ExploreCubit extends Cubit<ExploreState> {
 
     final nextPage = state.trendingPlaces.currentPage + 1;
     final result = await getTrendingPlacesUseCase(
-      request: TrendingPlacesRequest(
+      request: GetPlacesRequestModel(
         sortBy: "rating",
         order: "desc",
         page: nextPage,

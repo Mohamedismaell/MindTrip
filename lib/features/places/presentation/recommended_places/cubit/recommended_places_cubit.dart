@@ -27,6 +27,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
       request: RecommendationPlacesRequestModel(
         selectedCategories: selectedCategories,
         page: 1,
+        limit: 4,
       ),
       cancelToken: _firstPageToken,
     );

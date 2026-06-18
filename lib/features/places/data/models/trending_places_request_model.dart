@@ -1,4 +1,4 @@
-class TrendingPlacesRequest {
+class GetPlacesRequestModel {
   final List<String>? city;
   final List<String>? category;
   final List<String>? interests;
@@ -17,7 +17,7 @@ class TrendingPlacesRequest {
   final int page;
   final int limit;
 
-  const TrendingPlacesRequest({
+  const GetPlacesRequestModel({
     this.city,
     this.category,
     this.interests,

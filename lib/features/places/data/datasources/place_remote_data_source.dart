@@ -5,7 +5,7 @@ import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
-import 'package:mindtrip/features/places/data/models/trending_places_request.dart';
+import 'package:mindtrip/features/places/data/models/trending_places_request_model.dart';
 
 abstract class PlaceRemoteDataSource {
   Future<PaginatedResponse<PlaceModel>> getRecommendedPlaces(
@@ -26,8 +26,8 @@ abstract class PlaceRemoteDataSource {
     CancelToken? cancelToken,
   });
 
-  Future<PaginatedResponse<PlaceModel>> getTrindingPlaces({
-    required TrendingPlacesRequest request,
+  Future<PaginatedResponse<PlaceModel>> getPlaces({
+    required GetPlacesRequestModel request,
     CancelToken? cancelToken,
   });
 }
@@ -101,8 +101,8 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
   }
 
   @override
-  Future<PaginatedResponse<PlaceModel>> getTrindingPlaces({
-    required TrendingPlacesRequest request,
+  Future<PaginatedResponse<PlaceModel>> getPlaces({
+    required GetPlacesRequestModel request,
     CancelToken? cancelToken,
   }) async {
     final requestBody = request.toJson();

@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/shared/models/pagination_state.dart';
 import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
 import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
 
@@ -25,16 +26,21 @@ abstract class HomeState with _$HomeState {
     @Default([]) List<BannerEntity> banners,
     @Default('') String bannersError,
 
+    //popular
     @Default(HomeDataStatus.initial) HomeDataStatus popularPlacesStatus,
     @Default(PaginationState<PlaceEntity>())
     PaginationState<PlaceEntity> popularPlaces,
-
     @Default('') String popularPlacesError,
+    //category
+    @Default(HomeDataStatus.initial) HomeDataStatus categoryPlacesStatus,
+    @Default(PaginationState<PlaceEntity>())
+    PaginationState<PlaceEntity> categoryPlaces,
+    @Default('food_cafes') String selectedCategory,
+    @Default('') String categoryPlacesError,
 
-    @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
-    @Default([]) List<PlaceEntity> recommendedPlaces,
-    @Default('') String recommendedPlacesError,
-
+    // @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
+    // @Default([]) List<PlaceEntity> recommendedPlaces,
+    // @Default('') String recommendedPlacesError,
     @Default(HomeDataStatus.initial) HomeDataStatus tourPackagesStatus,
     @Default([]) List<TourPackageEntity> tourPackages,
     @Default('') String tourPackagesError,
@@ -42,5 +48,11 @@ abstract class HomeState with _$HomeState {
     @Default(HomeDataStatus.initial) HomeDataStatus plannerPreviewsStatus,
     @Default([]) List<PlannerPreviewEntity> plannerPreviews,
     @Default('') String plannerPreviewsError,
+    @Default([
+      PlaceCategory.foodCafes,
+      PlaceCategory.hotels,
+      PlaceCategory.beaches,
+    ])
+    List<PlaceCategory> homeCategories,
   }) = _HomeState;
 }

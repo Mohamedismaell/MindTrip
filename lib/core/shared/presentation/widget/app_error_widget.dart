@@ -90,7 +90,6 @@ class AppErrorWidget extends StatelessWidget {
               width: imageSize.w,
               height: imageSize.w,
             ),
-            SizedBox(height: 12.h),
 
             if (title != null)
               Text(

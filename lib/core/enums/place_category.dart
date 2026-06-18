@@ -33,6 +33,9 @@ enum PlaceCategory {
   artsCulture,
 
   @HiveField(9)
+  hotels,
+
+  @HiveField(10)
   other;
 
   // food_cafes
@@ -53,6 +56,7 @@ enum PlaceCategory {
     PlaceCategory.entertainment => 'entertainment',
     PlaceCategory.shopping => 'shopping',
     PlaceCategory.artsCulture => 'arts_culture',
+    PlaceCategory.hotels => 'hotels',
     PlaceCategory.other => 'other',
   };
   String get displayName => switch (this) {
@@ -65,6 +69,7 @@ enum PlaceCategory {
     PlaceCategory.entertainment => 'Entertainment',
     PlaceCategory.shopping => 'Shopping',
     PlaceCategory.artsCulture => 'Arts & Culture',
+    PlaceCategory.hotels => 'Hotels',
     PlaceCategory.other => 'Other',
   };
 
@@ -78,6 +83,7 @@ enum PlaceCategory {
     PlaceCategory.entertainment => '🎭',
     PlaceCategory.shopping => '🛍️',
     PlaceCategory.artsCulture => '🎨',
+    PlaceCategory.hotels => '🏨',
     PlaceCategory.other => '📍',
   };
   IconData get iconData => switch (this) {
@@ -89,6 +95,7 @@ enum PlaceCategory {
     PlaceCategory.entertainment => Icons.attractions_rounded,
     PlaceCategory.shopping => Icons.shopping_bag_rounded,
     PlaceCategory.artsCulture => Icons.palette_rounded,
+    PlaceCategory.hotels => Icons.hotel_rounded,
     _ => Icons.location_on_rounded,
   };
 

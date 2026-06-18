@@ -15,8 +15,8 @@ class DummyData {
     address: 'Dummy Address, City, Country',
     latitude: 0.0,
     longitude: 0.0,
-    city: '',
-    cityEn: '',
+    city: 'Egypt',
+    cityEn: 'Egypt',
   );
 
   static const place = PlaceEntity(
@@ -80,7 +80,15 @@ class DummyData {
       imageUrls: place.imageUrls,
     ),
   );
-
+  static final categoryPlaces = List.generate(
+    6,
+    (index) => PlaceEntity(
+      id: 'recommended_place_$index',
+      name: place.name,
+      location: place.location,
+      imageUrls: place.imageUrls,
+    ),
+  );
   static final tourPackages = List.generate(
     3,
     (index) => TourPackageEntity(

@@ -33,8 +33,8 @@ class PlacesDi {
     sl.registerLazySingleton<GetRecommendedPlacesUseCase>(
       () => GetRecommendedPlacesUseCase(repository: sl<PlaceRepository>()),
     );
-    sl.registerLazySingleton<GetTrendingPlacesUseCase>(
-      () => GetTrendingPlacesUseCase(repository: sl<PlaceRepository>()),
+    sl.registerLazySingleton<GetPlacesUseCase>(
+      () => GetPlacesUseCase(repository: sl<PlaceRepository>()),
     );
 
     //! Cubit

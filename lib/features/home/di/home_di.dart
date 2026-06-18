@@ -8,6 +8,7 @@ import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dar
 import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
+import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
 class HomeDi {
   HomeDi._();
@@ -38,6 +39,7 @@ class HomeDi {
         getRecommendedPlacesUseCase: sl<GetRecommendedPlacesUseCase>(),
         getTourPackagesUseCase: sl<GetTourPackagesUseCase>(),
         getAIPlannerPreviewsUseCase: sl<GetAIPlannerPreviewsUseCase>(),
+        getPlacesUseCase: sl<GetPlacesUseCase>(),
       ),
     );
   }
