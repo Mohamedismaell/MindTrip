@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
+import 'package:mindtrip/core/shared/presentation/manager/location_cubit/location_state.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 
 class LocationCubit extends Cubit<LocationState> {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_state.dart';
+import 'package:mindtrip/core/shared/presentation/manager/location_cubit/location_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/location_cubit/location_state.dart';
 
 class AppShell extends StatefulWidget {
   final Widget child;

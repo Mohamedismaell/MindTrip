@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/itinerary/domain/repositories/itinerary_repository.dart';

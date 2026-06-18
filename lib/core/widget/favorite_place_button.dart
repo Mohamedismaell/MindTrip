@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
@@ -27,9 +27,9 @@ class FavoriteButton extends StatelessWidget {
         return TapScaleEffect(
           onTap: () {
             context.read<FavoriteCubit>().toggleFavorite(
-                  placeId: placeId,
-                  isFavorite: !isFavorite,
-                );
+              placeId: placeId,
+              isFavorite: !isFavorite,
+            );
           },
           child: Container(
             width: 40.w,
@@ -37,7 +37,9 @@ class FavoriteButton extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: backgroundColor ?? AppColors.pureWhite,
-              boxShadow: showShadow ? [AppShadows.favoritePlaceButtonShadow] : [],
+              boxShadow: showShadow
+                  ? [AppShadows.favoritePlaceButtonShadow]
+                  : [],
             ),
             child: TweenAnimationBuilder<Color?>(
               tween: ColorTween(

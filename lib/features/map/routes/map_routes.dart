@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/app_transition_route.dart';

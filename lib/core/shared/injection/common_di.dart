@@ -24,7 +24,7 @@ import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_use_cas
 import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
-import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_bloc.dart';

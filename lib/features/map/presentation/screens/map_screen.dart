@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';

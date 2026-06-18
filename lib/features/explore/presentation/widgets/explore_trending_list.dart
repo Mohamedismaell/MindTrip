@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
@@ -12,8 +11,40 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_state.dart';
 
-class ExploreTrendingList extends StatelessWidget {
+class ExploreTrendingList extends StatefulWidget {
   const ExploreTrendingList({super.key});
+
+  @override
+  State<ExploreTrendingList> createState() => _ExploreTrendingListState();
+}
+
+class _ExploreTrendingListState extends State<ExploreTrendingList> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<ExploreCubit>().loadMoreTrendingPlaces();
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    return currentScroll >= maxScroll - 200;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +53,27 @@ class ExploreTrendingList extends StatelessWidget {
           previous.trendingPlacesStatus != current.trendingPlacesStatus ||
           previous.trendingPlaces != current.trendingPlaces,
       builder: (context, state) {
-        if (state.trendingPlacesStatus == ExploreDataStatus.failure) {
+        final trendingPlacesStatus = state.trendingPlacesStatus;
+        if (trendingPlacesStatus.isFailure) {
           return SliverToBoxAdapter(
             child: AppErrorWidget(
               message: state.trendingPlacesError,
               imageSize: 60,
               onPressed: () =>
-                  context.read<ExploreCubit>().loadTrendingPlaces(),
+                  context.read<ExploreCubit>().loadMoreTrendingPlaces(),
             ),
           );
         }
 
         final isLoading =
-            state.trendingPlacesStatus == ExploreDataStatus.loading ||
-            state.trendingPlacesStatus == ExploreDataStatus.initial;
-        final items = isLoading
+            trendingPlacesStatus.isLoading || trendingPlacesStatus.isInitial;
+        final trendingPlaces = isLoading
             ? DummyData.popularPlaces
-            : state.trendingPlaces;
+            : state.trendingPlaces.items;
 
-        if (!isLoading && items.isEmpty) {
-          return const SliverToBoxAdapter(child: SizedBox.shrink());
-        }
+        // if (!isLoading && trendingPlaces.isEmpty) {
+        //   return const SliverToBoxAdapter(child: SizedBox.shrink());
+        // }
 
         return SliverToBoxAdapter(
           child: Skeletonizer(
@@ -50,11 +81,20 @@ class ExploreTrendingList extends StatelessWidget {
             child: SizedBox(
               height: 110.h,
               child: ListView.separated(
+                controller: _scrollController,
                 scrollDirection: Axis.horizontal,
-                itemCount: items.length,
+                itemCount:
+                    trendingPlaces.length +
+                    (state.trendingPlaces.isMoreLoading ? 1 : 0),
                 separatorBuilder: (_, _) => SizedBox(width: 17.w),
                 itemBuilder: (context, index) {
-                  final item = items[index];
+                  if (index == trendingPlaces.length) {
+                    return SizedBox(
+                      width: 100.w,
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  final item = trendingPlaces[index];
                   return _TrendingCard(item: item);
                 },
               ),

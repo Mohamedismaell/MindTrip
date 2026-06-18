@@ -59,8 +59,8 @@ class _HomePopularDestinationsState extends State<HomePopularDestinations> {
       buildWhen: (previous, current) =>
           previous.popularPlacesStatus != current.popularPlacesStatus ||
           previous.popularPlaces != current.popularPlaces ||
-          previous.popularPlacesIsMoreLoading !=
-              current.popularPlacesIsMoreLoading,
+          previous.popularPlaces.isMoreLoading !=
+              current.popularPlaces.isMoreLoading,
 
       builder: (context, state) {
         if (state.popularPlacesStatus.isFailure) {
@@ -76,11 +76,11 @@ class _HomePopularDestinationsState extends State<HomePopularDestinations> {
         final isLoading =
             state.popularPlacesStatus.isLoading ||
             state.popularPlacesStatus.isInitial;
-        final destinations = isLoading
+        final popularPlaces = isLoading
             ? DummyData.popularPlaces
-            : state.popularPlaces;
+            : state.popularPlaces.items;
 
-        if (!isLoading && destinations.isEmpty) {
+        if (!isLoading && popularPlaces.isEmpty) {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
         }
 
@@ -93,16 +93,16 @@ class _HomePopularDestinationsState extends State<HomePopularDestinations> {
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount:
-                    destinations.length +
-                    (state.popularPlacesIsMoreLoading ? 1 : 0),
+                    popularPlaces.length +
+                    (state.popularPlaces.isMoreLoading ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == destinations.length) {
+                  if (index == popularPlaces.length) {
                     return SizedBox(
                       width: 100.w,
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   }
-                  final destination = destinations[index];
+                  final destination = popularPlaces[index];
                   return Row(
                     children: [
                       SizedBox(

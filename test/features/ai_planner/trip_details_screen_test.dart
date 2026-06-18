@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';

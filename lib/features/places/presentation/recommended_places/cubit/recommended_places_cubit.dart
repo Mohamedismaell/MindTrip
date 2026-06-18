@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
+import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
 
 part 'recommended_places_state.dart';
@@ -24,7 +24,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
     );
 
     final result = await getRecommendedPlacesUseCase(
-      request: RecommendationRequestModel(
+      request: RecommendationPlacesRequestModel(
         selectedCategories: selectedCategories,
         page: 1,
       ),
@@ -59,20 +59,19 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
   Future<void> loadMorePlaces({
     required List<String> selectedCategories,
   }) async {
-    _loadMoreToken?.cancel();
-    _loadMoreToken = CancelToken();
-
     if (state.isMoreLoading ||
         state.recommendedPlacesStatus == RecommendedPlacesStatus.loading ||
         !state.hasMore) {
       return;
     }
+    _loadMoreToken?.cancel();
+    _loadMoreToken = CancelToken();
 
     emit(state.copyWith(isMoreLoading: true));
 
     final nextPage = state.currentPage + 1;
     final result = await getRecommendedPlacesUseCase(
-      request: RecommendationRequestModel(
+      request: RecommendationPlacesRequestModel(
         selectedCategories: selectedCategories,
         page: nextPage,
       ),

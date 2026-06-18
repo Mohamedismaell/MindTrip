@@ -3,10 +3,9 @@ import 'package:mindtrip/features/explore/data/datasources/explore_local_data_so
 import 'package:mindtrip/features/explore/data/repositories/explore_repository_impl.dart';
 import 'package:mindtrip/features/explore/domain/repositories/explore_repository.dart';
 import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
-import 'package:mindtrip/features/explore/domain/use_cases/get_trending_places_use_case.dart';
-import 'package:mindtrip/features/explore/domain/use_cases/get_other_places_use_case.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
+import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
 class ExploreDi {
   ExploreDi._();
@@ -27,18 +26,11 @@ class ExploreDi {
     sl.registerLazySingleton<GetTourPackagesUseCase>(
       () => GetTourPackagesUseCase(repository: sl<ExploreRepository>()),
     );
-    sl.registerLazySingleton<GetTrendingPlacesUseCase>(
-      () => GetTrendingPlacesUseCase(sl<PlaceRepository>()),
-    );
-    sl.registerLazySingleton<GetOtherPlacesUseCase>(
-      () => GetOtherPlacesUseCase(sl<PlaceRepository>()),
-    );
 
     //! Cubit
     sl.registerFactory<ExploreCubit>(
       () => ExploreCubit(
         getTrendingPlacesUseCase: sl<GetTrendingPlacesUseCase>(),
-        getOtherPlacesUseCase: sl<GetOtherPlacesUseCase>(),
       ),
     );
   }

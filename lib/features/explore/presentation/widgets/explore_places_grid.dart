@@ -25,14 +25,18 @@ class ExplorePlacesGrid extends StatelessWidget {
             child: AppErrorWidget(
               message: state.otherPlacesError,
               imageSize: 80,
-              onPressed: () => context.read<ExploreCubit>().loadOtherPlaces(),
+              onPressed: () =>
+                  context.read<ExploreCubit>().loadMoreTrendingPlaces(),
             ),
           );
         }
 
-        final isLoading = state.otherPlacesStatus == ExploreDataStatus.loading ||
+        final isLoading =
+            state.otherPlacesStatus == ExploreDataStatus.loading ||
             state.otherPlacesStatus == ExploreDataStatus.initial;
-        final places = isLoading ? DummyData.recommendedPlaces : state.otherPlaces;
+        final places = isLoading
+            ? DummyData.recommendedPlaces
+            : state.otherPlaces.items;
 
         if (!isLoading && places.isEmpty) {
           return const SliverToBoxAdapter(child: SizedBox.shrink());

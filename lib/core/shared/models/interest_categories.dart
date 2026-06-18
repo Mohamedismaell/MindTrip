@@ -21,7 +21,7 @@ class InterestCategories {
     "🛍️ Shopping",
     "🎨 Arts & Crafts",
   ];
-
+  //Todo check it
   static String stripEmoji(String interest) {
     return interest
         .replaceAll(

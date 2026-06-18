@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/explore/presentation/models/explore_models.dart';
 
 class ExploreMockData {

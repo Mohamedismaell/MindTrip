@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
-import '../../../../core/shared/domain/entities/place_entity.dart';
+import '../../../places/domain/entity/place_entity.dart';
 import '../../../../core/shared/domain/entities/location_entity.dart';
 import '../../../ai_planner/presentation/utils/trip_color_palette.dart';
 import '../../domain/entities/map_annotation_entry.dart';

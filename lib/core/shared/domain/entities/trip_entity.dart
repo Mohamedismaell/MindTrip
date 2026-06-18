@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'place_entity.dart';
+import '../../../../features/places/domain/entity/place_entity.dart';
 
 class TripEntity extends Equatable {
   final String id;

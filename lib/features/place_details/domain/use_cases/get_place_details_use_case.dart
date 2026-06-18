@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart';
 
 class GetPlaceDetailsUseCase {

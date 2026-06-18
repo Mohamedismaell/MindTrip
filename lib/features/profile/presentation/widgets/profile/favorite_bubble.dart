@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
 
 class FavoriteBubble extends StatelessWidget {
   const FavoriteBubble({super.key, required this.placeId, this.small = false});

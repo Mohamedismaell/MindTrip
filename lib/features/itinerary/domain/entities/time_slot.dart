@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 
 enum PlaceDayPeriod { morning, afternoon, evening }
 

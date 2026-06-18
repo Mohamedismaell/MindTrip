@@ -1,7 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
+import 'package:mindtrip/core/shared/models/pagination_state.dart';
+import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
 
 part 'home_state.freezed.dart';
@@ -25,11 +26,10 @@ abstract class HomeState with _$HomeState {
     @Default('') String bannersError,
 
     @Default(HomeDataStatus.initial) HomeDataStatus popularPlacesStatus,
-    @Default([]) List<PlaceEntity> popularPlaces,
+    @Default(PaginationState<PlaceEntity>())
+    PaginationState<PlaceEntity> popularPlaces,
+
     @Default('') String popularPlacesError,
-    @Default(1) int popularPlacesCurrentPage,
-    @Default(true) bool popularPlacesHasMore,
-    @Default(false) bool popularPlacesIsMoreLoading,
 
     @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
     @Default([]) List<PlaceEntity> recommendedPlaces,

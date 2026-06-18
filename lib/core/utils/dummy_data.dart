@@ -1,7 +1,7 @@
-import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
 
 class DummyData {

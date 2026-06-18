@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';

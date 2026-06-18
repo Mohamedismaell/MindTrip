@@ -7,7 +7,7 @@ import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
-import 'package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 part 'app_gate_state.dart';
 

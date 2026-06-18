@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/shared/data/mapper/location_mapper.dart';
 import 'package:mindtrip/core/shared/data/models/tour_package_model.dart';
-import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
 
 extension TourPackageMapper on TourPackageModel {
   TourPackageEntity toEntity() {

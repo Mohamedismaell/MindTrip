@@ -1,3 +1,0 @@
-00:00 +0: loading D:/GitHub/MindTrip/test/features/ai_planner/trip_details_screen_test.dart
-No tests ran.
-No tests match regular expression " TripDetailsScreen renders error state".

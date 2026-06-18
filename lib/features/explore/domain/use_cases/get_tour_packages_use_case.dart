@@ -1,6 +1,6 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
 import 'package:mindtrip/features/explore/domain/repositories/explore_repository.dart';
+import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
 
 class GetTourPackagesUseCase {
   final ExploreRepository repository;

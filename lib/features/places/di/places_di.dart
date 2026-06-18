@@ -5,6 +5,7 @@ import 'package:mindtrip/features/places/data/repositories/place_repository_impl
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
+import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
 import 'package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart';
 
@@ -31,6 +32,9 @@ class PlacesDi {
     );
     sl.registerLazySingleton<GetRecommendedPlacesUseCase>(
       () => GetRecommendedPlacesUseCase(repository: sl<PlaceRepository>()),
+    );
+    sl.registerLazySingleton<GetTrendingPlacesUseCase>(
+      () => GetTrendingPlacesUseCase(repository: sl<PlaceRepository>()),
     );
 
     //! Cubit

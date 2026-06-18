@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/core/shared/location/cubit/location_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/location_cubit/location_cubit.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_details_use_case.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';

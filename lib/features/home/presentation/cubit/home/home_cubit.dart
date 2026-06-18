@@ -4,7 +4,7 @@ import 'package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_
 import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
-import 'package:mindtrip/features/places/data/models/popular_request_model.dart';
+import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
 
@@ -57,7 +57,7 @@ class HomeCubit extends Cubit<HomeState> {
     _popularPlacesFirstToken = CancelToken();
     emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
     final result = await getPopularPlacesUseCase(
-      request: PopularRequestModel(
+      request: PopularPlacesRequestModel(
         filters: {'is_hidden_gem': false},
         page: 1,
         limit: 10,
@@ -69,10 +69,11 @@ class HomeCubit extends Cubit<HomeState> {
       success: (paginatedResponse) => emit(
         state.copyWith(
           popularPlacesStatus: HomeDataStatus.success,
-          popularPlaces: paginatedResponse.results,
-          popularPlacesCurrentPage: paginatedResponse.page,
-          popularPlacesHasMore:
-              paginatedResponse.page < paginatedResponse.totalPages,
+          popularPlaces: state.popularPlaces.copyWith(
+            items: paginatedResponse.results,
+            currentPage: paginatedResponse.page,
+            hasMore: paginatedResponse.page < paginatedResponse.totalPages,
+          ),
           popularPlacesError: '',
         ),
       ),
@@ -86,17 +87,21 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> loadMorePopularPlaces() async {
-    _popularPlacesMoreToken?.cancel;
-    _popularPlacesMoreToken = CancelToken();
     if (state.popularPlacesStatus.isLoading ||
-        state.popularPlacesIsMoreLoading ||
-        !state.popularPlacesHasMore) {
+        state.popularPlaces.isMoreLoading ||
+        !state.popularPlaces.hasMore) {
       return;
     }
-    emit(state.copyWith(popularPlacesIsMoreLoading: true));
-    final nextPage = state.popularPlacesCurrentPage + 1;
+    _popularPlacesMoreToken?.cancel();
+    _popularPlacesMoreToken = CancelToken();
+    emit(
+      state.copyWith(
+        popularPlaces: state.popularPlaces.copyWith(isMoreLoading: true),
+      ),
+    );
+    final nextPage = state.popularPlaces.currentPage + 1;
     final result = await getPopularPlacesUseCase(
-      request: PopularRequestModel(
+      request: PopularPlacesRequestModel(
         filters: {'is_hidden_gem': false},
         page: nextPage,
         limit: 10,
@@ -107,17 +112,18 @@ class HomeCubit extends Cubit<HomeState> {
     result.when(
       success: (paginatedResponse) => emit(
         state.copyWith(
-          popularPlacesIsMoreLoading: false,
-          popularPlaces: [...state.popularPlaces, ...paginatedResponse.results],
-          popularPlacesCurrentPage: paginatedResponse.page,
-          popularPlacesHasMore:
-              paginatedResponse.page < paginatedResponse.totalPages,
+          popularPlaces: state.popularPlaces.copyWith(
+            items: [...state.popularPlaces.items, ...paginatedResponse.results],
+            currentPage: paginatedResponse.page,
+            hasMore: paginatedResponse.page < paginatedResponse.totalPages,
+            isMoreLoading: false,
+          ),
           popularPlacesError: '',
         ),
       ),
       failure: (error) => emit(
         state.copyWith(
-          popularPlacesIsMoreLoading: false,
+          popularPlaces: state.popularPlaces.copyWith(isMoreLoading: false),
           popularPlacesError: error.message,
         ),
       ),

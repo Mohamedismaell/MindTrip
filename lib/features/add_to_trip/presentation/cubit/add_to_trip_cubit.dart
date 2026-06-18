@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/add_place_to_trip_use_case.dart';

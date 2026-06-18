@@ -1,8 +1,8 @@
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
-import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
 import 'package:mindtrip/features/home/data/datasources/home_local_data_source.dart';
+import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
 import 'package:mindtrip/features/home/domain/repositories/home_repository.dart';
 
 class HomeRepositoryImpl implements HomeRepository {

@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
 import 'package:mindtrip/features/home/domain/repositories/home_repository.dart';
 
 class GetBannersUseCase {

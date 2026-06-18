@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/data/datasources/place_remote_data_source.dart';
 import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
-import 'package:mindtrip/features/places/data/models/popular_request_model.dart';
-import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
+import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/trending_places_request.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 
 class PlaceRepositoryImpl implements PlaceRepository {
@@ -16,7 +17,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
 
   @override
   Future<Result<PaginatedResponse<PlaceEntity>>> getRecommendedPlaces(
-    RecommendationRequestModel request,
+    RecommendationPlacesRequestModel request,
     CancelToken? cancelToken,
   ) async {
     try {
@@ -32,7 +33,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
 
   @override
   Future<Result<PaginatedResponse<PlaceEntity>>> getPopularPlaces(
-    PopularRequestModel request,
+    PopularPlacesRequestModel request,
     CancelToken? cancelToken,
   ) async {
     try {
@@ -69,37 +70,13 @@ class PlaceRepositoryImpl implements PlaceRepository {
   }
 
   @override
-  Future<Result<PaginatedResponse<PlaceEntity>>> getPlaces({
-    Map<String, dynamic>? filters,
-    List<String>? city,
-    List<String>? category,
-    List<String>? interests,
-    double? minRating,
-    double? maxRating,
-    double? minPrice,
-    double? maxPrice,
-    bool? hiddenGem,
-    String? sortBy,
-    String? order,
-    int page = 1,
-    int limit = 10,
+  Future<Result<PaginatedResponse<PlaceEntity>>> getTrindingPlaces({
+    required TrendingPlacesRequest request,
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await remoteDataSource.getPlaces(
-        filters: filters,
-        city: city,
-        category: category,
-        interests: interests,
-        minRating: minRating,
-        maxRating: maxRating,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        hiddenGem: hiddenGem,
-        sortBy: sortBy,
-        order: order,
-        page: page,
-        limit: limit,
+      final response = await remoteDataSource.getTrindingPlaces(
+        request: request,
         cancelToken: cancelToken,
       );
       return Result.ok(response.map((e) => e.toEntity()));

@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/validators/auth_validator.dart';
+import 'package:mindtrip/core/utils/validators/auth_validator.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/widget/app_text_field.dart';
 import 'package:mindtrip/core/widget/custom_gradient_button.dart';

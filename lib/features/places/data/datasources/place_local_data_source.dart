@@ -1,4 +1,4 @@
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 
 abstract class PlaceLocalDataSource {
   Future<List<PlaceEntity>> getPopularPlaces();

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
-import '../../../../core/shared/domain/entities/place_entity.dart';
+import '../../../places/domain/entity/place_entity.dart';
 
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 

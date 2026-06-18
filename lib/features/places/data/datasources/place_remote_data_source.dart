@@ -3,17 +3,18 @@ import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
-import 'package:mindtrip/features/places/data/models/popular_request_model.dart';
-import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
+import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/trending_places_request.dart';
 
 abstract class PlaceRemoteDataSource {
   Future<PaginatedResponse<PlaceModel>> getRecommendedPlaces(
-    RecommendationRequestModel request,
+    RecommendationPlacesRequestModel request,
     CancelToken? cancelToken,
   );
 
   Future<PaginatedResponse<PlaceModel>> getPopularPlaces(
-    PopularRequestModel request,
+    PopularPlacesRequestModel request,
     CancelToken? cancelToken,
   );
 
@@ -25,20 +26,8 @@ abstract class PlaceRemoteDataSource {
     CancelToken? cancelToken,
   });
 
-  Future<PaginatedResponse<PlaceModel>> getPlaces({
-    Map<String, dynamic>? filters,
-    List<String>? city,
-    List<String>? category,
-    List<String>? interests,
-    double? minRating,
-    double? maxRating,
-    double? minPrice,
-    double? maxPrice,
-    bool? hiddenGem,
-    String? sortBy,
-    String? order,
-    int page = 1,
-    int limit = 10,
+  Future<PaginatedResponse<PlaceModel>> getTrindingPlaces({
+    required TrendingPlacesRequest request,
     CancelToken? cancelToken,
   });
 }
@@ -50,7 +39,7 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
 
   @override
   Future<PaginatedResponse<PlaceModel>> getRecommendedPlaces(
-    RecommendationRequestModel request,
+    RecommendationPlacesRequestModel request,
     CancelToken? cancelToken,
   ) async {
     final response = await _api.post(
@@ -67,7 +56,7 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
 
   @override
   Future<PaginatedResponse<PlaceModel>> getPopularPlaces(
-    PopularRequestModel request,
+    PopularPlacesRequestModel request,
     CancelToken? cancelToken,
   ) async {
     final response = await _api.post(
@@ -112,36 +101,11 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
   }
 
   @override
-  Future<PaginatedResponse<PlaceModel>> getPlaces({
-    Map<String, dynamic>? filters,
-    List<String>? city,
-    List<String>? category,
-    List<String>? interests,
-    double? minRating,
-    double? maxRating,
-    double? minPrice,
-    double? maxPrice,
-    bool? hiddenGem,
-    String? sortBy,
-    String? order,
-    int page = 1,
-    int limit = 10,
+  Future<PaginatedResponse<PlaceModel>> getTrindingPlaces({
+    required TrendingPlacesRequest request,
     CancelToken? cancelToken,
   }) async {
-    final requestBody = {
-      'city': ?city,
-      'category': ?category,
-      'interests': ?interests,
-      'min_rating': ?minRating,
-      'max_rating': ?maxRating,
-      'min_price': ?minPrice,
-      'max_price': ?maxPrice,
-      'hidden_gem': ?hiddenGem,
-      'sort_by': ?sortBy,
-      'order': ?order,
-      'page': page,
-      'limit': limit,
-    };
+    final requestBody = request.toJson();
 
     final response = await _api.post(
       EndPoints.getPlaces,

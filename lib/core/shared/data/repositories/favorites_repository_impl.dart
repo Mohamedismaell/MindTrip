@@ -4,7 +4,7 @@ import 'package:mindtrip/core/shared/data/datasources/favorites_local_data_sourc
 import 'package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart';
 import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
 import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 
 class FavoritesRepositoryImpl implements FavoritesRepository {

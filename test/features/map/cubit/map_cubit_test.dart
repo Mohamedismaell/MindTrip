@@ -3,7 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/map/domain/repositories/google_places_repository.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';

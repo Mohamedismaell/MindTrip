@@ -2,18 +2,21 @@ import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
-import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/trending_places_request.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 
-class GetPopularPlacesUseCase {
+class GetTrendingPlacesUseCase {
   final PlaceRepository repository;
 
-  GetPopularPlacesUseCase({required this.repository});
+  GetTrendingPlacesUseCase({required this.repository});
 
   Future<Result<PaginatedResponse<PlaceEntity>>> call({
-    required PopularPlacesRequestModel request,
+    required TrendingPlacesRequest request,
     CancelToken? cancelToken,
   }) async {
-    return await repository.getPopularPlaces(request, cancelToken);
+    return await repository.getTrindingPlaces(
+      request: request,
+      cancelToken: cancelToken,
+    );
   }
 }

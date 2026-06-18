@@ -1,4 +1,4 @@
-import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
 import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
 
 abstract class ExploreLocalDataSource {

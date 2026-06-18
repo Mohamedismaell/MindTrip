@@ -1,6 +1,6 @@
-import 'package:mindtrip/core/shared/domain/entities/banner_entity.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
-import 'package:mindtrip/core/shared/domain/entities/tour_package_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
+import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
 import 'package:mindtrip/features/home/presentation/models/home_models.dart';
 
 //!Dummy data for the home screen **Not working right now**
