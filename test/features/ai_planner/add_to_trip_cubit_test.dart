@@ -98,7 +98,13 @@ void main() {
     testPlace = const PlaceEntity(
       id: 'place1',
       name: 'Test Place',
-      location: LocationEntity(address: 'Test', latitude: 0, longitude: 0),
+      location: LocationEntity(
+        address: 'Test',
+        latitude: 0,
+        longitude: 0,
+        city: '',
+        cityEn: 'Egypt',
+      ),
       category: PlaceCategory.activity,
     );
     testTrip = Trip(

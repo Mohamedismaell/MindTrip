@@ -5,6 +5,7 @@
 import 'package:hive_ce/hive_ce.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
+import 'package:mindtrip/core/enums/place_city.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_model.dart';
@@ -14,6 +15,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(LocationModelAdapter());
     registerAdapter(PlaceBadgeAdapter());
     registerAdapter(PlaceCategoryAdapter());
+    registerAdapter(PlaceCityAdapter());
     registerAdapter(PlaceModelAdapter());
     registerAdapter(TripModelAdapter());
   }
@@ -24,6 +26,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(LocationModelAdapter());
     registerAdapter(PlaceBadgeAdapter());
     registerAdapter(PlaceCategoryAdapter());
+    registerAdapter(PlaceCityAdapter());
     registerAdapter(PlaceModelAdapter());
     registerAdapter(TripModelAdapter());
   }

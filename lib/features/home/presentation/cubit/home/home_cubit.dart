@@ -4,22 +4,22 @@ import 'package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_
 import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
-import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
-import 'package:mindtrip/features/places/data/models/trending_places_request_model.dart';
-import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
+// import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
+// import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final GetBannersUseCase getBannersUseCase;
-  final GetPopularPlacesUseCase getPopularPlacesUseCase;
+  // final GetPopularPlacesUseCase getPopularPlacesUseCase;
   final GetRecommendedPlacesUseCase getRecommendedPlacesUseCase;
   final GetTourPackagesUseCase getTourPackagesUseCase;
   final GetAIPlannerPreviewsUseCase getAIPlannerPreviewsUseCase;
   final GetPlacesUseCase getPlacesUseCase;
   HomeCubit({
     required this.getBannersUseCase,
-    required this.getPopularPlacesUseCase,
+    // required this.getPopularPlacesUseCase,
     required this.getRecommendedPlacesUseCase,
     required this.getTourPackagesUseCase,
     required this.getAIPlannerPreviewsUseCase,
@@ -28,7 +28,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> loadAllData() async {
     loadBanners();
-    loadFirstPagePopularPlaces();
+    // loadFirstPagePopularPlaces();
     loadTourPackages();
     loadPlannerPreviews();
     loadFirstPageCategoryPlaces(state.selectedCategory);
@@ -39,6 +39,7 @@ class HomeCubit extends Cubit<HomeState> {
   CancelToken? _popularPlacesMoreToken;
   CancelToken? _categoryPlacesFirstToken;
   CancelToken? _categoryPlacesMoreToken;
+
   void onCategoryChanged(String category) {
     if (state.selectedCategory == category) return;
     emit(state.copyWith(selectedCategory: category));
@@ -64,83 +65,83 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> loadFirstPagePopularPlaces() async {
-    _popularPlacesFirstToken?.cancel();
-    _popularPlacesFirstToken = CancelToken();
-    emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
-    final result = await getPopularPlacesUseCase(
-      request: PopularPlacesRequestModel(
-        filters: {'is_hidden_gem': false},
-        page: 1,
-        limit: 10,
-      ),
-      cancelToken: _popularPlacesFirstToken,
-    );
-    if (isClosed) return;
-    result.when(
-      success: (paginatedResponse) => emit(
-        state.copyWith(
-          popularPlacesStatus: HomeDataStatus.success,
-          popularPlaces: state.popularPlaces.copyWith(
-            items: paginatedResponse.results,
-            currentPage: paginatedResponse.page,
-            hasMore: paginatedResponse.page < paginatedResponse.totalPages,
-          ),
-          popularPlacesError: '',
-        ),
-      ),
-      failure: (error) => emit(
-        state.copyWith(
-          popularPlacesStatus: HomeDataStatus.failure,
-          popularPlacesError: error.message,
-        ),
-      ),
-    );
-  }
+  // Future<void> loadFirstPagePopularPlaces() async {
+  //   _popularPlacesFirstToken?.cancel();
+  //   _popularPlacesFirstToken = CancelToken();
+  //   emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
+  //   final result = await getPopularPlacesUseCase(
+  //     request: PopularPlacesRequestModel(
+  //       filters: {'is_hidden_gem': false},
+  //       page: 1,
+  //       limit: 10,
+  //     ),
+  //     cancelToken: _popularPlacesFirstToken,
+  //   );
+  //   if (isClosed) return;
+  //   result.when(
+  //     success: (paginatedResponse) => emit(
+  //       state.copyWith(
+  //         popularPlacesStatus: HomeDataStatus.success,
+  //         popularPlaces: state.popularPlaces.copyWith(
+  //           items: paginatedResponse.results,
+  //           currentPage: paginatedResponse.page,
+  //           hasMore: paginatedResponse.page < paginatedResponse.totalPages,
+  //         ),
+  //         popularPlacesError: '',
+  //       ),
+  //     ),
+  //     failure: (error) => emit(
+  //       state.copyWith(
+  //         popularPlacesStatus: HomeDataStatus.failure,
+  //         popularPlacesError: error.message,
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Future<void> loadMorePopularPlaces() async {
-    if (state.popularPlacesStatus.isLoading ||
-        state.popularPlaces.isMoreLoading ||
-        !state.popularPlaces.hasMore) {
-      return;
-    }
-    _popularPlacesMoreToken?.cancel();
-    _popularPlacesMoreToken = CancelToken();
-    emit(
-      state.copyWith(
-        popularPlaces: state.popularPlaces.copyWith(isMoreLoading: true),
-      ),
-    );
-    final nextPage = state.popularPlaces.currentPage + 1;
-    final result = await getPopularPlacesUseCase(
-      request: PopularPlacesRequestModel(
-        filters: {'is_hidden_gem': false},
-        page: nextPage,
-        limit: 10,
-      ),
-      cancelToken: _popularPlacesMoreToken,
-    );
-    if (isClosed) return;
-    result.when(
-      success: (paginatedResponse) => emit(
-        state.copyWith(
-          popularPlaces: state.popularPlaces.copyWith(
-            items: [...state.popularPlaces.items, ...paginatedResponse.results],
-            currentPage: paginatedResponse.page,
-            hasMore: paginatedResponse.page < paginatedResponse.totalPages,
-            isMoreLoading: false,
-          ),
-          popularPlacesError: '',
-        ),
-      ),
-      failure: (error) => emit(
-        state.copyWith(
-          popularPlaces: state.popularPlaces.copyWith(isMoreLoading: false),
-          popularPlacesError: error.message,
-        ),
-      ),
-    );
-  }
+  // Future<void> loadMorePopularPlaces() async {
+  //   if (state.popularPlacesStatus.isLoading ||
+  //       state.popularPlaces.isMoreLoading ||
+  //       !state.popularPlaces.hasMore) {
+  //     return;
+  //   }
+  //   _popularPlacesMoreToken?.cancel();
+  //   _popularPlacesMoreToken = CancelToken();
+  //   emit(
+  //     state.copyWith(
+  //       popularPlaces: state.popularPlaces.copyWith(isMoreLoading: true),
+  //     ),
+  //   );
+  //   final nextPage = state.popularPlaces.currentPage + 1;
+  //   final result = await getPopularPlacesUseCase(
+  //     request: PopularPlacesRequestModel(
+  //       filters: {'is_hidden_gem': false},
+  //       page: nextPage,
+  //       limit: 10,
+  //     ),
+  //     cancelToken: _popularPlacesMoreToken,
+  //   );
+  //   if (isClosed) return;
+  //   result.when(
+  //     success: (paginatedResponse) => emit(
+  //       state.copyWith(
+  //         popularPlaces: state.popularPlaces.copyWith(
+  //           items: [...state.popularPlaces.items, ...paginatedResponse.results],
+  //           currentPage: paginatedResponse.page,
+  //           hasMore: paginatedResponse.page < paginatedResponse.totalPages,
+  //           isMoreLoading: false,
+  //         ),
+  //         popularPlacesError: '',
+  //       ),
+  //     ),
+  //     failure: (error) => emit(
+  //       state.copyWith(
+  //         popularPlaces: state.popularPlaces.copyWith(isMoreLoading: false),
+  //         popularPlacesError: error.message,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future<void> loadFirstPageCategoryPlaces(String? category) async {
     _categoryPlacesFirstToken?.cancel();

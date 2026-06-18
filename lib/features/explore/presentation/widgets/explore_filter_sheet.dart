@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
+import 'package:mindtrip/core/enums/place_city.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
+import 'package:mindtrip/features/explore/presentation/widgets/cusotm_city_expanded_card.dart';
+import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
 
 class ExploreFilterSheet extends StatefulWidget {
   const ExploreFilterSheet({super.key});
@@ -14,8 +20,10 @@ class ExploreFilterSheet extends StatefulWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       isDismissible: true,
-      // barrierColor: Colors.black.withOpacity(0.4),
-      builder: (_) => const ExploreFilterSheet(),
+      builder: (_) => BlocProvider.value(
+        value: context.read<ExploreCubit>(),
+        child: const ExploreFilterSheet(),
+      ),
       useRootNavigator: true,
     );
   }
@@ -25,44 +33,79 @@ class ExploreFilterSheet extends StatefulWidget {
 }
 
 class _ExploreFilterSheetState extends State<ExploreFilterSheet> {
-  //! Dummy models
-  // States
-  RangeValues _priceRange = const RangeValues(100, 600);
-  int _selectedRating = 1; // 0 = 2+,  1 = 3+
-  int _selectedDuration = 1; // index
-  Set<int> _selectedTripTypes = {0, 2}; // Beach, Adventure
-  Set<int> _selectedLocations = {0, 1}; // South Sinai, Cairo
+  // Filters local state
+  late Set<String> _selectedCities;
+  late Set<String> _selectedCategories;
+  late Set<String> _selectedInterests;
+  late RangeValues _ratingRange;
+  late RangeValues _priceRange;
+  late bool _hiddenGem;
+  late String _sortBy;
+  late String _order;
 
-  static const _ratings = ['1+', '2+', '3+', '4+', '5+'];
-  static const _durations = ['1 day', '2-3 days', '4-7 days', '1 week+'];
-  static const _tripTypes = [
-    ('🏖️', 'Beach'),
-    ('⛰️', 'Mountain'),
-    ('🏕️', 'Adventure'),
-    ('🏙️', 'City break'),
-    ('💎', 'Luxury'),
-    ('💰', 'Budget'),
-  ];
-  static const _locations = [
-    'South Sinai',
-    'Cairo',
-    'Dahab',
-    'Alexandria',
-    'Luxor',
-    'Aswan',
-    'Hurghada',
-    'Fayoum',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    final currentFilters = context.read<ExploreCubit>().state.advancedFilters;
+    _selectedCities = Set.from(currentFilters?.city ?? []);
+    _selectedCategories = Set.from(currentFilters?.category ?? []);
+    _selectedInterests = Set.from(currentFilters?.interests ?? []);
+    _ratingRange = RangeValues(
+      currentFilters?.minRating ?? 0.0,
+      currentFilters?.maxRating ?? 5.0,
+    );
+    _priceRange = RangeValues(
+      (currentFilters?.minPrice ?? 0).toDouble(),
+      (currentFilters?.maxPrice ?? 1000).toDouble(),
+    );
+    _hiddenGem = currentFilters?.hiddenGem ?? false;
+    _sortBy = currentFilters?.sortBy ?? 'rating';
+    _order = currentFilters?.order ?? 'desc';
+  }
 
   void _resetAll() {
     setState(() {
+      _selectedCities = {};
+      _selectedCategories = {};
+      _selectedInterests = {};
+      _ratingRange = const RangeValues(0, 5);
       _priceRange = const RangeValues(0, 1000);
-      _selectedRating = -1;
-      _selectedDuration = -1;
-      _selectedTripTypes = {};
-      _selectedLocations = {};
+      _hiddenGem = false;
+      _sortBy = 'rating';
+      _order = 'desc';
     });
   }
+
+  void _applyFilters() {
+    final filters = GetPlacesRequestModel(
+      city: _selectedCities.isEmpty ? null : _selectedCities.toList(),
+      category: _selectedCategories.isEmpty
+          ? null
+          : _selectedCategories.toList(),
+      interests: _selectedInterests.isEmpty
+          ? null
+          : _selectedInterests.toList(),
+      minRating: _ratingRange.start == 0 ? null : _ratingRange.start,
+      maxRating: _ratingRange.end == 5 ? null : _ratingRange.end,
+      minPrice: _priceRange.start == 0 ? null : _priceRange.start.round(),
+      maxPrice: _priceRange.end == 1000 ? null : _priceRange.end.round(),
+      hiddenGem: _hiddenGem ? true : null,
+      sortBy: _sortBy,
+      order: _order,
+    );
+    context.read<ExploreCubit>().applyAdvancedFilters(filters);
+    context.pop();
+  }
+
+  static const _interests = [
+    'Cafe',
+    'Seafood',
+    'Museum',
+    'Beach',
+    'Park',
+    'Shopping',
+  ];
+  static const _sortOptions = ['rating', 'reviews', 'price', 'name'];
 
   @override
   Widget build(BuildContext context) {
@@ -96,16 +139,11 @@ class _ExploreFilterSheetState extends State<ExploreFilterSheet> {
                     ),
                   ),
 
-                  //  Header
+                  // Header
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Filters',
-                        style: AppTextStyles.h6SemiBold.copyWith(
-                          // fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Text('Filters', style: AppTextStyles.h6SemiBold),
                       GestureDetector(
                         onTap: _resetAll,
                         child: Text(
@@ -117,273 +155,187 @@ class _ExploreFilterSheetState extends State<ExploreFilterSheet> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 28.h),
+                  SizedBox(height: 20.h),
 
-                  // content
                   Expanded(
-                    child: Scrollbar(
+                    child: ListView(
                       controller: scrollController,
-                      thumbVisibility: true,
-                      interactive: true,
-                      trackVisibility: false,
-                      radius: Radius.circular(12.r),
-                      thickness: 4.w,
-                      child: ListView(
-                        controller: scrollController,
-                        children: [
-                          SizedBox(height: 12.h),
+                      padding: EdgeInsets.only(bottom: 20.h),
+                      children: [
+                        // Cities
+                        _SectionLabel(label: 'Locaiotn'),
+                        CusotmCityExpandedCard(),
+                        SizedBox(height: 28.h),
+                        // Categories
+                        _SectionLabel(label: 'Categories'),
+                        SizedBox(height: 10.h),
+                        Wrap(
+                          spacing: 10.w,
+                          runSpacing: 10.h,
+                          children: PlaceCategory.values
+                              .where((c) => c != PlaceCategory.all)
+                              .map((cat) {
+                                final isSelected = _selectedCategories.contains(
+                                  cat.category,
+                                );
+                                return _SelectableChip(
+                                  label: cat.displayName,
+                                  isSelected: isSelected,
+                                  onTap: () => setState(
+                                    () => isSelected
+                                        ? _selectedCategories.remove(
+                                            cat.category,
+                                          )
+                                        : _selectedCategories.add(cat.category),
+                                  ),
+                                );
+                              })
+                              .toList(),
+                        ),
+                        SizedBox(height: 25.h),
 
-                          // Price Range
-                          _SectionLabel(label: 'Price Range'),
-                          SizedBox(height: 8.h),
-                          _PriceDisplay(range: _priceRange),
-                          SizedBox(height: 4.h),
-                          SliderTheme(
-                            data: SliderTheme.of(context).copyWith(
-                              padding: EdgeInsets.zero,
-                              trackHeight: 10.h,
-                              activeTrackColor: context.colorTheme.primary,
-                              inactiveTrackColor: AppColors.primaryShadow,
-                              thumbColor: context.colorTheme.primary,
-                              overlayColor: context.colorTheme.primary,
-                              rangeThumbShape: RoundRangeSliderThumbShape(
-                                enabledThumbRadius: 10.r,
+                        // Interests
+                        _SectionLabel(label: 'Interests'),
+                        SizedBox(height: 10.h),
+                        Wrap(
+                          spacing: 10.w,
+                          runSpacing: 10.h,
+                          children: _interests.map((interest) {
+                            final isSelected = _selectedInterests.contains(
+                              interest,
+                            );
+                            return _SelectableChip(
+                              label: interest,
+                              isSelected: isSelected,
+                              onTap: () => setState(
+                                () => isSelected
+                                    ? _selectedInterests.remove(interest)
+                                    : _selectedInterests.add(interest),
                               ),
-                              tickMarkShape: SliderTickMarkShape.noTickMark,
+                            );
+                          }).toList(),
+                        ),
+                        SizedBox(height: 25.h),
+
+                        // Rating Range
+                        _SectionLabel(label: 'Rating Range'),
+                        SizedBox(height: 8.h),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.star_rounded,
+                              color: AppColors.customYellow,
                             ),
-                            child: RangeSlider(
-                              values: _priceRange,
-                              min: 0,
-                              max: 1000,
-                              divisions: 20,
-                              onChanged: (v) => setState(() => _priceRange = v),
+                            SizedBox(width: 8.w),
+                            Text(
+                              '${_ratingRange.start.toStringAsFixed(1)} - ${_ratingRange.end.toStringAsFixed(1)}',
+                              style: AppTextStyles.h8SemiBold,
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 14.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '0\$',
-                                  style: AppTextStyles.h8SemiBold.copyWith(
-                                    color: context.colorTheme.outline,
-                                  ),
-                                ),
-                                Text(
-                                  '500\$',
-                                  style: AppTextStyles.h8SemiBold.copyWith(
-                                    color: context.colorTheme.outline,
-                                  ),
-                                ),
-                                Text(
-                                  '1000\$',
-                                  style: AppTextStyles.h8SemiBold.copyWith(
-                                    color: context.colorTheme.outline,
-                                  ),
-                                ),
-                              ],
+                          ],
+                        ),
+                        RangeSlider(
+                          values: _ratingRange,
+                          min: 0,
+                          max: 5,
+                          divisions: 50,
+                          onChanged: (v) => setState(() => _ratingRange = v),
+                        ),
+                        SizedBox(height: 15.h),
+
+                        // Price Range
+                        _SectionLabel(label: 'Price Range'),
+                        SizedBox(height: 8.h),
+                        _PriceDisplay(range: _priceRange),
+                        RangeSlider(
+                          values: _priceRange,
+                          min: 0,
+                          max: 1000,
+                          divisions: 20,
+                          onChanged: (v) => setState(() => _priceRange = v),
+                        ),
+                        SizedBox(height: 25.h),
+
+                        // Hidden Gems
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _SectionLabel(label: 'Hidden Gems Only'),
+                            Switch.adaptive(
+                              value: _hiddenGem,
+                              onChanged: (v) => setState(() => _hiddenGem = v),
+                              activeColor: context.colorTheme.primary,
                             ),
-                          ),
-                          SizedBox(height: 28.h),
-                          // Minimum Rating
-                          _SectionLabel(label: 'Minimum Rating'),
-                          SizedBox(height: 12.h),
-                          //! needs to be editing as ui
-                          Wrap(
-                            spacing: 14.w,
-                            runSpacing: 10.h,
-                            children: List.generate(_ratings.length, (i) {
-                              final isActive = _selectedRating == i;
-                              return GestureDetector(
-                                onTap: () =>
-                                    setState(() => _selectedRating = i),
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 12.w,
-                                    vertical: 8.h,
+                          ],
+                        ),
+                        SizedBox(height: 25.h),
+
+                        // Sorting
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _SectionLabel(label: 'Sort By'),
+                                  DropdownButton<String>(
+                                    value: _sortBy,
+                                    isExpanded: true,
+                                    items: _sortOptions
+                                        .map(
+                                          (opt) => DropdownMenuItem(
+                                            value: opt,
+                                            child: Text(opt.capitalize()),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (v) =>
+                                        setState(() => _sortBy = v!),
                                   ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    color: isActive
-                                        ? AppColors.primaryLightBlue1
-                                              .withValues(alpha: 0.35)
-                                        : context.colorTheme.surface,
-                                    border: Border.all(
-                                      color: isActive
-                                          ? AppColors.primaryBlue.withValues(
-                                              alpha: 0.5,
-                                            )
-                                          : context.colorTheme.outline
-                                                .withValues(alpha: 0.3),
-                                      width: isActive ? 1.2 : 0.8,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.star_rounded,
-                                        color: AppColors.customYellow,
-                                        size: 18.sp,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Text(
-                                        _ratings[i],
-                                        style: context.textTheme.bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w500,
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 20.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _SectionLabel(label: 'Order'),
+                                  DropdownButton<String>(
+                                    value: _order,
+                                    isExpanded: true,
+                                    items: ['asc', 'desc']
+                                        .map(
+                                          (opt) => DropdownMenuItem(
+                                            value: opt,
+                                            child: Text(
+                                              opt == 'asc'
+                                                  ? 'Ascending'
+                                                  : 'Descending',
                                             ),
-                                      ),
-                                    ],
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (v) =>
+                                        setState(() => _order = v!),
                                   ),
-                                ),
-                              );
-                            }),
-                          ),
-                          SizedBox(height: 24.h),
-
-                          // Duration
-                          _SectionLabel(label: 'Duration'),
-                          SizedBox(height: 12.h),
-                          //! edit to real data
-                          Wrap(
-                            spacing: 10.w,
-                            runSpacing: 10.h,
-                            children: List.generate(_durations.length, (i) {
-                              return _SelectableChip(
-                                label: _durations[i],
-                                isSelected: _selectedDuration == i,
-                                onTap: () =>
-                                    setState(() => _selectedDuration = i),
-                              );
-                            }),
-                          ),
-                          SizedBox(height: 24.h),
-
-                          // Trip Type
-                          _SectionLabel(label: 'Trip Type'),
-                          SizedBox(height: 12.h),
-                          //! edit to real data
-                          Wrap(
-                            spacing: 10.w,
-                            runSpacing: 10.h,
-                            children: List.generate(_tripTypes.length, (i) {
-                              final isActive = _selectedTripTypes.contains(i);
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (isActive) {
-                                      _selectedTripTypes.remove(i);
-                                    } else {
-                                      _selectedTripTypes.add(i);
-                                    }
-                                  });
-                                },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 14.w,
-                                    vertical: 10.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(24.r),
-                                    color: isActive
-                                        ? AppColors.primaryLightBlue1
-                                              .withValues(alpha: 0.25)
-                                        : context.colorTheme.surface,
-                                    border: Border.all(
-                                      color: isActive
-                                          ? context.colorTheme.primary
-                                                .withValues(alpha: 0.45)
-                                          : context.colorTheme.outline
-                                                .withValues(alpha: 0.3),
-                                      width: isActive ? 1.2 : 0.8,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        _tripTypes[i].$1,
-                                        style: TextStyle(fontSize: 16.sp),
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Text(
-                                        _tripTypes[i].$2,
-                                        style: AppTextStyles.h8SemiBold,
-                                      ),
-                                      SizedBox(width: 8.w),
-                                      Icon(
-                                        isActive
-                                            ? Icons.radio_button_checked
-                                            : Icons.radio_button_off,
-                                        size: 16.sp,
-                                        color: isActive
-                                            ? context.colorTheme.primary
-                                            : context.colorTheme.outline,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                          SizedBox(height: 24.h),
-
-                          // Location
-                          _SectionLabel(label: 'Location'),
-                          SizedBox(height: 12.h),
-                          Wrap(
-                            spacing: 10.w,
-                            runSpacing: 10.h,
-                            children: List.generate(_locations.length, (i) {
-                              final isActive = _selectedLocations.contains(i);
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (isActive) {
-                                      _selectedLocations.remove(i);
-                                    } else {
-                                      _selectedLocations.add(i);
-                                    }
-                                  });
-                                },
-                                child: _SelectableChip(
-                                  label: _locations[i],
-                                  isSelected: isActive,
-                                  onTap: () {
-                                    setState(() {
-                                      if (isActive) {
-                                        _selectedLocations.remove(i);
-                                      } else {
-                                        _selectedLocations.add(i);
-                                      }
-                                    });
-                                  },
-                                ),
-                              );
-                            }),
-                          ),
-                          SizedBox(height: 30.h),
-                        ],
-                      ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 30.h),
+                      ],
                     ),
                   ),
 
-                  // Bottom bar
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 40.w,
-                      vertical: 40.h,
-                    ),
-                    child: GestureDetector(
-                      //Todo add funcitonality
-                      onTap: () => context.pop(),
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: Text('Show Results'),
+                  // Apply Button
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _applyFilters,
+                        child: const Text('Show Results'),
                       ),
                     ),
                   ),
@@ -418,33 +370,9 @@ class _PriceDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = context.textTheme.labelMedium!;
-    return RichText(
-      text: TextSpan(
-        style: context.textTheme.bodyLarge?.copyWith(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w600,
-          color: context.colorTheme.onSurface,
-        ),
-        children: [
-          TextSpan(
-            text: 'From ',
-            style: textStyle.copyWith(color: context.colorTheme.onSurface),
-          ),
-          TextSpan(
-            text: '${range.start.round()}\$',
-            style: textStyle.copyWith(color: context.colorTheme.primary),
-          ),
-          TextSpan(
-            text: ' to ',
-            style: textStyle.copyWith(color: context.colorTheme.onSurface),
-          ),
-          TextSpan(
-            text: '${range.end.round()}\$',
-            style: textStyle.copyWith(color: context.colorTheme.primary),
-          ),
-        ],
-      ),
+    return Text(
+      '${range.start.round()}\$ - ${range.end.round()}\$',
+      style: AppTextStyles.h8SemiBold,
     );
   }
 }

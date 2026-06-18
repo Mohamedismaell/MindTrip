@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/models/pagination_state.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
+import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
 
 part 'explore_state.freezed.dart';
 
@@ -17,18 +19,15 @@ extension ExploreDataStatusX on ExploreDataStatus {
 abstract class ExploreState with _$ExploreState {
   const factory ExploreState({
     @Default(ExploreDataStatus.initial) ExploreDataStatus trendingPlacesStatus,
-
     @Default(PaginationState<PlaceEntity>())
     PaginationState<PlaceEntity> trendingPlaces,
-
     @Default('') String trendingPlacesError,
-
-    @Default(ExploreDataStatus.initial) ExploreDataStatus otherPlacesStatus,
-
+    @Default(ExploreDataStatus.initial) ExploreDataStatus filteredPlacesStatus,
     @Default(PaginationState<PlaceEntity>())
-    PaginationState<PlaceEntity> otherPlaces,
-
-    @Default('') String otherPlacesError,
+    PaginationState<PlaceEntity> filteredPlaces,
+    @Default('') String filteredPlacesError,
+    @Default(PlaceCategory.all) PlaceCategory selectedCategory,
+    GetPlacesRequestModel? advancedFilters,
   }) = _ExploreState;
 
   factory ExploreState.initial() => const ExploreState();

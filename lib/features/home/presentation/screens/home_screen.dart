@@ -10,7 +10,6 @@ import 'package:mindtrip/features/home/presentation/widgets/home_banner_carousel
 import 'package:mindtrip/features/home/presentation/widgets/home_category_chips.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_category_places_list.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_header.dart';
-import 'package:mindtrip/features/home/presentation/widgets/home_popular_destinations.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_recommended_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_search_bar.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_section_header.dart';
@@ -61,11 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 // //! there is no functionallity for this right now
                 const HomeBannerCarousel(),
                 SliverToBoxAdapter(child: SizedBox(height: 28.h)),
-                const HomeSectionHeader(title: 'Popular Destinations'),
-                SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-                // //! there is no functionallity for this right now
-                const HomePopularDestinations(),
-                SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+                // const HomeSectionHeader(title: 'Popular Destinations'),
+                // SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+                // const HomePopularDestinations(),
+                // SliverToBoxAdapter(child: SizedBox(height: 28.h)),
                 HomeSectionHeader(
                   title: 'Recommended',
                   subtitle: 'Based on your interests',

@@ -81,5 +81,11 @@ ThemeData getLightTheme() {
         foregroundColor: lightColorScheme.primary,
       ),
     ),
+
+    scrollbarTheme: ScrollbarThemeData(
+      thumbColor: WidgetStatePropertyAll(lightColorScheme.outline),
+      thickness: WidgetStatePropertyAll(3),
+      radius: const Radius.circular(100),
+    ),
   );
 }

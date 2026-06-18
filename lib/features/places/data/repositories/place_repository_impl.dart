@@ -7,7 +7,7 @@ import 'package:mindtrip/features/places/data/datasources/place_remote_data_sour
 import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
-import 'package:mindtrip/features/places/data/models/trending_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 
 class PlaceRepositoryImpl implements PlaceRepository {

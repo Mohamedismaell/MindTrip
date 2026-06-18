@@ -40,16 +40,10 @@ class ExploreScreen extends StatelessWidget {
                 const ExploreSearchBar(),
                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
-                //  Trending Now
-                const ExploreSectionHeader(title: 'What Trending now'),
-                SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-                const ExploreTrendingList(),
-                SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-
                 //Todo: edit Ui later
                 //!No funcaitonality right now
                 //  Category Chips
-                ExploreCategoryChips(categories: ExploreMockData.categories),
+                ExploreCategoryChips(),
                 SliverToBoxAdapter(child: SizedBox(height: 18.h)),
 
                 //  Tab Bar
@@ -75,6 +69,11 @@ class ExploreScreen extends StatelessWidget {
                 const ExplorePlacesGrid(),
                 SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
+                //  Trending Now
+                const ExploreSectionHeader(title: 'What Trending now'),
+                SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+                const ExploreTrendingList(),
+                SliverToBoxAdapter(child: SizedBox(height: 20.h)),
                 //  Show More + Map
                 // const ExploreShowMoreButton(),
                 SliverToBoxAdapter(child: SizedBox(height: 50.h)),

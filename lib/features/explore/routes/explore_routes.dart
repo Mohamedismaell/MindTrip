@@ -12,5 +12,14 @@ class ExploreRoutes {
       create: (context) => sl<ExploreCubit>()..loadAllData(),
       child: const ExploreScreen(),
     ),
+    // routes: [
+    //   GoRoute(
+    //     path: 'all-places',
+    //     builder: (context, state) => BlocProvider(
+    //       create: (context) => sl<ExploreAllPlacesCubit>()..loadFirstPage(),
+    //       child: const ExploreAllPlacesScreen(),
+    //     ),
+    //   ),
+    // ],
   );
 }

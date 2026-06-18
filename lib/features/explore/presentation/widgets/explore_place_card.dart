@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
@@ -78,13 +77,13 @@ class ExplorePlaceCard extends StatelessWidget {
                             ),
                     ),
 
-                    // Badge
-                    if (place.badge != PlaceBadge.none && hasBadge)
-                      Positioned(
-                        top: 10.h,
-                        right: 10.w,
-                        child: _BadgeChip(badge: place.badge),
-                      ),
+                    // // Badge
+                    // if (place.badge != PlaceBadge.none && hasBadge)
+                    //   Positioned(
+                    //     top: 10.h,
+                    //     right: 10.w,
+                    //     child: _BadgeChip(badge: place.badge),
+                    //   ),
                     Positioned(
                       top: 0.h,
                       right: 0.w,

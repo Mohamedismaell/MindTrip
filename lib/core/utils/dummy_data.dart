@@ -23,9 +23,21 @@ class DummyData {
     id: 'dummy',
     name: 'Dummy Place Name',
     location: location,
-    imageUrls: ['', ''],
+    imageUrls: [
+      'assets/images/authentication/center_vec.webp',
+      'assets/images/authentication/center_vec.webp',
+    ],
   );
 
+  static final exploreCardPlaces = List.generate(
+    6,
+    (index) => PlaceEntity(
+      id: 'recommended_place_$index',
+      name: place.name,
+      location: place.location,
+      imageUrls: place.imageUrls,
+    ),
+  );
   static const tourPackage = TourPackageEntity(
     id: 'dummy',
     title: 'Dummy Tour Package Title',

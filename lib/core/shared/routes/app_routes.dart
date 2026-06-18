@@ -23,6 +23,7 @@ class AppRoutes {
 
   //! explore
   static const String explore = '/explore';
+  static const String exploreAllPlaces = '/explore/all-places';
 
   //! aiPlanner
   static const String aiPlannerIntro = '/ai-planner';

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExploreState {
 
- ExploreDataStatus get trendingPlacesStatus; PaginationState<PlaceEntity> get trendingPlaces; String get trendingPlacesError; ExploreDataStatus get otherPlacesStatus; PaginationState<PlaceEntity> get otherPlaces; String get otherPlacesError;
+ ExploreDataStatus get trendingPlacesStatus; PaginationState<PlaceEntity> get trendingPlaces; String get trendingPlacesError; ExploreDataStatus get filteredPlacesStatus; PaginationState<PlaceEntity> get filteredPlaces; String get filteredPlacesError; PlaceCategory get selectedCategory; GetPlacesRequestModel? get advancedFilters;
 /// Create a copy of ExploreState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ExploreStateCopyWith<ExploreState> get copyWith => _$ExploreStateCopyWithImpl<E
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.otherPlacesStatus, otherPlacesStatus) || other.otherPlacesStatus == otherPlacesStatus)&&(identical(other.otherPlaces, otherPlaces) || other.otherPlaces == otherPlaces)&&(identical(other.otherPlacesError, otherPlacesError) || other.otherPlacesError == otherPlacesError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.filteredPlacesStatus, filteredPlacesStatus) || other.filteredPlacesStatus == filteredPlacesStatus)&&(identical(other.filteredPlaces, filteredPlaces) || other.filteredPlaces == filteredPlaces)&&(identical(other.filteredPlacesError, filteredPlacesError) || other.filteredPlacesError == filteredPlacesError)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.advancedFilters, advancedFilters) || other.advancedFilters == advancedFilters));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,otherPlacesStatus,otherPlaces,otherPlacesError);
+int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,filteredPlacesStatus,filteredPlaces,filteredPlacesError,selectedCategory,advancedFilters);
 
 @override
 String toString() {
-  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, otherPlacesStatus: $otherPlacesStatus, otherPlaces: $otherPlaces, otherPlacesError: $otherPlacesError)';
+  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, filteredPlacesStatus: $filteredPlacesStatus, filteredPlaces: $filteredPlaces, filteredPlacesError: $filteredPlacesError, selectedCategory: $selectedCategory, advancedFilters: $advancedFilters)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $ExploreStateCopyWith<$Res>  {
   factory $ExploreStateCopyWith(ExploreState value, $Res Function(ExploreState) _then) = _$ExploreStateCopyWithImpl;
 @useResult
 $Res call({
- ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus otherPlacesStatus, PaginationState<PlaceEntity> otherPlaces, String otherPlacesError
+ ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus filteredPlacesStatus, PaginationState<PlaceEntity> filteredPlaces, String filteredPlacesError, PlaceCategory selectedCategory, GetPlacesRequestModel? advancedFilters
 });
 
 
-$PaginationStateCopyWith<PlaceEntity, $Res> get trendingPlaces;$PaginationStateCopyWith<PlaceEntity, $Res> get otherPlaces;
+$PaginationStateCopyWith<PlaceEntity, $Res> get trendingPlaces;$PaginationStateCopyWith<PlaceEntity, $Res> get filteredPlaces;
 
 }
 /// @nodoc
@@ -62,15 +62,17 @@ class _$ExploreStateCopyWithImpl<$Res>
 
 /// Create a copy of ExploreState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? otherPlacesStatus = null,Object? otherPlaces = null,Object? otherPlacesError = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? filteredPlacesStatus = null,Object? filteredPlaces = null,Object? filteredPlacesError = null,Object? selectedCategory = null,Object? advancedFilters = freezed,}) {
   return _then(_self.copyWith(
 trendingPlacesStatus: null == trendingPlacesStatus ? _self.trendingPlacesStatus : trendingPlacesStatus // ignore: cast_nullable_to_non_nullable
 as ExploreDataStatus,trendingPlaces: null == trendingPlaces ? _self.trendingPlaces : trendingPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,trendingPlacesError: null == trendingPlacesError ? _self.trendingPlacesError : trendingPlacesError // ignore: cast_nullable_to_non_nullable
-as String,otherPlacesStatus: null == otherPlacesStatus ? _self.otherPlacesStatus : otherPlacesStatus // ignore: cast_nullable_to_non_nullable
-as ExploreDataStatus,otherPlaces: null == otherPlaces ? _self.otherPlaces : otherPlaces // ignore: cast_nullable_to_non_nullable
-as PaginationState<PlaceEntity>,otherPlacesError: null == otherPlacesError ? _self.otherPlacesError : otherPlacesError // ignore: cast_nullable_to_non_nullable
-as String,
+as String,filteredPlacesStatus: null == filteredPlacesStatus ? _self.filteredPlacesStatus : filteredPlacesStatus // ignore: cast_nullable_to_non_nullable
+as ExploreDataStatus,filteredPlaces: null == filteredPlaces ? _self.filteredPlaces : filteredPlaces // ignore: cast_nullable_to_non_nullable
+as PaginationState<PlaceEntity>,filteredPlacesError: null == filteredPlacesError ? _self.filteredPlacesError : filteredPlacesError // ignore: cast_nullable_to_non_nullable
+as String,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
+as PlaceCategory,advancedFilters: freezed == advancedFilters ? _self.advancedFilters : advancedFilters // ignore: cast_nullable_to_non_nullable
+as GetPlacesRequestModel?,
   ));
 }
 /// Create a copy of ExploreState
@@ -86,10 +88,10 @@ $PaginationStateCopyWith<PlaceEntity, $Res> get trendingPlaces {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PaginationStateCopyWith<PlaceEntity, $Res> get otherPlaces {
+$PaginationStateCopyWith<PlaceEntity, $Res> get filteredPlaces {
   
-  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.otherPlaces, (value) {
-    return _then(_self.copyWith(otherPlaces: value));
+  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.filteredPlaces, (value) {
+    return _then(_self.copyWith(filteredPlaces: value));
   });
 }
 }
@@ -173,10 +175,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus otherPlacesStatus,  PaginationState<PlaceEntity> otherPlaces,  String otherPlacesError)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  PlaceCategory selectedCategory,  GetPlacesRequestModel? advancedFilters)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExploreState() when $default != null:
-return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.otherPlacesStatus,_that.otherPlaces,_that.otherPlacesError);case _:
+return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategory,_that.advancedFilters);case _:
   return orElse();
 
 }
@@ -194,10 +196,10 @@ return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPl
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus otherPlacesStatus,  PaginationState<PlaceEntity> otherPlaces,  String otherPlacesError)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  PlaceCategory selectedCategory,  GetPlacesRequestModel? advancedFilters)  $default,) {final _that = this;
 switch (_that) {
 case _ExploreState():
-return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.otherPlacesStatus,_that.otherPlaces,_that.otherPlacesError);case _:
+return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategory,_that.advancedFilters);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -214,10 +216,10 @@ return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPl
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus otherPlacesStatus,  PaginationState<PlaceEntity> otherPlaces,  String otherPlacesError)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  PlaceCategory selectedCategory,  GetPlacesRequestModel? advancedFilters)?  $default,) {final _that = this;
 switch (_that) {
 case _ExploreState() when $default != null:
-return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.otherPlacesStatus,_that.otherPlaces,_that.otherPlacesError);case _:
+return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategory,_that.advancedFilters);case _:
   return null;
 
 }
@@ -229,15 +231,17 @@ return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPl
 
 
 class _ExploreState implements ExploreState {
-  const _ExploreState({this.trendingPlacesStatus = ExploreDataStatus.initial, this.trendingPlaces = const PaginationState<PlaceEntity>(), this.trendingPlacesError = '', this.otherPlacesStatus = ExploreDataStatus.initial, this.otherPlaces = const PaginationState<PlaceEntity>(), this.otherPlacesError = ''});
+  const _ExploreState({this.trendingPlacesStatus = ExploreDataStatus.initial, this.trendingPlaces = const PaginationState<PlaceEntity>(), this.trendingPlacesError = '', this.filteredPlacesStatus = ExploreDataStatus.initial, this.filteredPlaces = const PaginationState<PlaceEntity>(), this.filteredPlacesError = '', this.selectedCategory = PlaceCategory.all, this.advancedFilters});
   
 
 @override@JsonKey() final  ExploreDataStatus trendingPlacesStatus;
 @override@JsonKey() final  PaginationState<PlaceEntity> trendingPlaces;
 @override@JsonKey() final  String trendingPlacesError;
-@override@JsonKey() final  ExploreDataStatus otherPlacesStatus;
-@override@JsonKey() final  PaginationState<PlaceEntity> otherPlaces;
-@override@JsonKey() final  String otherPlacesError;
+@override@JsonKey() final  ExploreDataStatus filteredPlacesStatus;
+@override@JsonKey() final  PaginationState<PlaceEntity> filteredPlaces;
+@override@JsonKey() final  String filteredPlacesError;
+@override@JsonKey() final  PlaceCategory selectedCategory;
+@override final  GetPlacesRequestModel? advancedFilters;
 
 /// Create a copy of ExploreState
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +253,16 @@ _$ExploreStateCopyWith<_ExploreState> get copyWith => __$ExploreStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.otherPlacesStatus, otherPlacesStatus) || other.otherPlacesStatus == otherPlacesStatus)&&(identical(other.otherPlaces, otherPlaces) || other.otherPlaces == otherPlaces)&&(identical(other.otherPlacesError, otherPlacesError) || other.otherPlacesError == otherPlacesError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.filteredPlacesStatus, filteredPlacesStatus) || other.filteredPlacesStatus == filteredPlacesStatus)&&(identical(other.filteredPlaces, filteredPlaces) || other.filteredPlaces == filteredPlaces)&&(identical(other.filteredPlacesError, filteredPlacesError) || other.filteredPlacesError == filteredPlacesError)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.advancedFilters, advancedFilters) || other.advancedFilters == advancedFilters));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,otherPlacesStatus,otherPlaces,otherPlacesError);
+int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,filteredPlacesStatus,filteredPlaces,filteredPlacesError,selectedCategory,advancedFilters);
 
 @override
 String toString() {
-  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, otherPlacesStatus: $otherPlacesStatus, otherPlaces: $otherPlaces, otherPlacesError: $otherPlacesError)';
+  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, filteredPlacesStatus: $filteredPlacesStatus, filteredPlaces: $filteredPlaces, filteredPlacesError: $filteredPlacesError, selectedCategory: $selectedCategory, advancedFilters: $advancedFilters)';
 }
 
 
@@ -269,11 +273,11 @@ abstract mixin class _$ExploreStateCopyWith<$Res> implements $ExploreStateCopyWi
   factory _$ExploreStateCopyWith(_ExploreState value, $Res Function(_ExploreState) _then) = __$ExploreStateCopyWithImpl;
 @override @useResult
 $Res call({
- ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus otherPlacesStatus, PaginationState<PlaceEntity> otherPlaces, String otherPlacesError
+ ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus filteredPlacesStatus, PaginationState<PlaceEntity> filteredPlaces, String filteredPlacesError, PlaceCategory selectedCategory, GetPlacesRequestModel? advancedFilters
 });
 
 
-@override $PaginationStateCopyWith<PlaceEntity, $Res> get trendingPlaces;@override $PaginationStateCopyWith<PlaceEntity, $Res> get otherPlaces;
+@override $PaginationStateCopyWith<PlaceEntity, $Res> get trendingPlaces;@override $PaginationStateCopyWith<PlaceEntity, $Res> get filteredPlaces;
 
 }
 /// @nodoc
@@ -286,15 +290,17 @@ class __$ExploreStateCopyWithImpl<$Res>
 
 /// Create a copy of ExploreState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? otherPlacesStatus = null,Object? otherPlaces = null,Object? otherPlacesError = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? filteredPlacesStatus = null,Object? filteredPlaces = null,Object? filteredPlacesError = null,Object? selectedCategory = null,Object? advancedFilters = freezed,}) {
   return _then(_ExploreState(
 trendingPlacesStatus: null == trendingPlacesStatus ? _self.trendingPlacesStatus : trendingPlacesStatus // ignore: cast_nullable_to_non_nullable
 as ExploreDataStatus,trendingPlaces: null == trendingPlaces ? _self.trendingPlaces : trendingPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,trendingPlacesError: null == trendingPlacesError ? _self.trendingPlacesError : trendingPlacesError // ignore: cast_nullable_to_non_nullable
-as String,otherPlacesStatus: null == otherPlacesStatus ? _self.otherPlacesStatus : otherPlacesStatus // ignore: cast_nullable_to_non_nullable
-as ExploreDataStatus,otherPlaces: null == otherPlaces ? _self.otherPlaces : otherPlaces // ignore: cast_nullable_to_non_nullable
-as PaginationState<PlaceEntity>,otherPlacesError: null == otherPlacesError ? _self.otherPlacesError : otherPlacesError // ignore: cast_nullable_to_non_nullable
-as String,
+as String,filteredPlacesStatus: null == filteredPlacesStatus ? _self.filteredPlacesStatus : filteredPlacesStatus // ignore: cast_nullable_to_non_nullable
+as ExploreDataStatus,filteredPlaces: null == filteredPlaces ? _self.filteredPlaces : filteredPlaces // ignore: cast_nullable_to_non_nullable
+as PaginationState<PlaceEntity>,filteredPlacesError: null == filteredPlacesError ? _self.filteredPlacesError : filteredPlacesError // ignore: cast_nullable_to_non_nullable
+as String,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
+as PlaceCategory,advancedFilters: freezed == advancedFilters ? _self.advancedFilters : advancedFilters // ignore: cast_nullable_to_non_nullable
+as GetPlacesRequestModel?,
   ));
 }
 
@@ -311,10 +317,10 @@ $PaginationStateCopyWith<PlaceEntity, $Res> get trendingPlaces {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PaginationStateCopyWith<PlaceEntity, $Res> get otherPlaces {
+$PaginationStateCopyWith<PlaceEntity, $Res> get filteredPlaces {
   
-  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.otherPlaces, (value) {
-    return _then(_self.copyWith(otherPlaces: value));
+  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.filteredPlaces, (value) {
+    return _then(_self.copyWith(filteredPlaces: value));
   });
 }
 }
