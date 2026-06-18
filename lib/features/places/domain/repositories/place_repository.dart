@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
@@ -7,10 +8,12 @@ import 'package:mindtrip/features/places/data/models/recommendation_request_mode
 abstract class PlaceRepository {
   Future<Result<PaginatedResponse<PlaceEntity>>> getRecommendedPlaces(
     RecommendationRequestModel request,
+    CancelToken? cancelToken,
   );
 
   Future<Result<PaginatedResponse<PlaceEntity>>> getPopularPlaces(
     PopularRequestModel request,
+    CancelToken? cancelToken,
   );
 
   Future<Result<PaginatedResponse<PlaceEntity>>> searchPlaces({
@@ -18,6 +21,7 @@ abstract class PlaceRepository {
     Map<String, dynamic>? filters,
     int page = 1,
     int limit = 10,
+    CancelToken? cancelToken,
   });
 
   Future<Result<PaginatedResponse<PlaceEntity>>> getPlaces({
@@ -34,5 +38,6 @@ abstract class PlaceRepository {
     String? order,
     int page = 1,
     int limit = 10,
+    CancelToken? cancelToken,
   });
 }

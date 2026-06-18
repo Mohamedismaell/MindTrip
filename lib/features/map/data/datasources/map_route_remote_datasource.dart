@@ -37,7 +37,7 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
       'access_token': _accessToken,
     };
 
-    //! Add congestion annotations only for driving-traffic
+    //Todo: Add congestion annotations only for driving-traffic
     if (profile.supportsCongestion) {
       queryParams['annotations'] = 'congestion,duration,distance';
     } else {
@@ -47,11 +47,7 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
     final response = await dio.get(
       'https://api.mapbox.com/directions/v5/mapbox/${profile.apiValue}/$coords',
       cancelToken: cancelToken,
-      options: Options(
-        extra: {
-          'logResponseData': false, // Prevents dumping thousands of coordinates
-        },
-      ),
+      options: Options(extra: {'logResponseData': false}),
       queryParameters: queryParams,
     );
 

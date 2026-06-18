@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
@@ -11,7 +12,8 @@ class GetRecommendedPlacesUseCase {
 
   Future<Result<PaginatedResponse<PlaceEntity>>> call({
     required RecommendationRequestModel request,
+    CancelToken? cancelToken,
   }) async {
-    return await repository.getRecommendedPlaces(request);
+    return await repository.getRecommendedPlaces(request, cancelToken);
   }
 }

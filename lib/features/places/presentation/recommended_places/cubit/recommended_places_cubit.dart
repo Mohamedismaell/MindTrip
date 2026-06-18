@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_request_model.dart';
@@ -13,7 +14,11 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
   RecommendedPlacesCubit({required this.getRecommendedPlacesUseCase})
     : super(RecommendedPlacesState.initial());
 
+  CancelToken? _firstPageToken;
+  CancelToken? _loadMoreToken;
   Future<void> loadFirstPage({required List<String> selectedCategories}) async {
+    _firstPageToken?.cancel();
+    _firstPageToken = CancelToken();
     emit(
       state.copyWith(recommendedPlacesStatus: RecommendedPlacesStatus.loading),
     );
@@ -23,6 +28,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
         selectedCategories: selectedCategories,
         page: 1,
       ),
+      cancelToken: _firstPageToken,
     );
 
     if (isClosed) return;
@@ -53,6 +59,9 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
   Future<void> loadMorePlaces({
     required List<String> selectedCategories,
   }) async {
+    _loadMoreToken?.cancel();
+    _loadMoreToken = CancelToken();
+
     if (state.isMoreLoading ||
         state.recommendedPlacesStatus == RecommendedPlacesStatus.loading ||
         !state.hasMore) {
@@ -67,6 +76,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
         selectedCategories: selectedCategories,
         page: nextPage,
       ),
+      cancelToken: _loadMoreToken,
     );
 
     if (isClosed) return;
@@ -87,5 +97,12 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
         emit(state.copyWith(isMoreLoading: false, error: error.message));
       },
     );
+  }
+
+  @override
+  Future<void> close() {
+    _firstPageToken?.cancel();
+    _loadMoreToken?.cancel();
+    return super.close();
   }
 }

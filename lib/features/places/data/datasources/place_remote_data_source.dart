@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
@@ -8,10 +9,12 @@ import 'package:mindtrip/features/places/data/models/recommendation_request_mode
 abstract class PlaceRemoteDataSource {
   Future<PaginatedResponse<PlaceModel>> getRecommendedPlaces(
     RecommendationRequestModel request,
+    CancelToken? cancelToken,
   );
 
   Future<PaginatedResponse<PlaceModel>> getPopularPlaces(
     PopularRequestModel request,
+    CancelToken? cancelToken,
   );
 
   Future<PaginatedResponse<PlaceModel>> searchPlaces({
@@ -19,6 +22,7 @@ abstract class PlaceRemoteDataSource {
     Map<String, dynamic>? filters,
     int page = 1,
     int limit = 10,
+    CancelToken? cancelToken,
   });
 
   Future<PaginatedResponse<PlaceModel>> getPlaces({
@@ -35,6 +39,7 @@ abstract class PlaceRemoteDataSource {
     String? order,
     int page = 1,
     int limit = 10,
+    CancelToken? cancelToken,
   });
 }
 
@@ -46,10 +51,12 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
   @override
   Future<PaginatedResponse<PlaceModel>> getRecommendedPlaces(
     RecommendationRequestModel request,
+    CancelToken? cancelToken,
   ) async {
     final response = await _api.post(
       EndPoints.getRecommendedPlaces,
       data: request.toJson(),
+      cancelToken: cancelToken,
     );
 
     return PaginatedResponse<PlaceModel>.fromJson(
@@ -61,10 +68,12 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
   @override
   Future<PaginatedResponse<PlaceModel>> getPopularPlaces(
     PopularRequestModel request,
+    CancelToken? cancelToken,
   ) async {
     final response = await _api.post(
       EndPoints.getPopularPlaces,
       data: request.toJson(),
+      cancelToken: cancelToken,
     );
 
     return PaginatedResponse<PlaceModel>.fromJson(
@@ -79,6 +88,8 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
     Map<String, dynamic>? filters,
     int page = 1,
     int limit = 10,
+
+    CancelToken? cancelToken,
   }) async {
     final requestBody = {
       if (query != null && query.isNotEmpty) 'query': query,
@@ -87,7 +98,12 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
       'limit': limit,
     };
 
-    final response = await _api.post(EndPoints.searchPlaces, data: requestBody);
+    final response = await _api.post(
+      EndPoints.searchPlaces,
+      data: requestBody,
+
+      cancelToken: cancelToken,
+    );
 
     return PaginatedResponse<PlaceModel>.fromJson(
       response,
@@ -110,23 +126,28 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
     String? order,
     int page = 1,
     int limit = 10,
+    CancelToken? cancelToken,
   }) async {
     final requestBody = {
-      if (city != null) 'city': city,
-      if (category != null) 'category': category,
-      if (interests != null) 'interests': interests,
-      if (minRating != null) 'min_rating': minRating,
-      if (maxRating != null) 'max_rating': maxRating,
-      if (minPrice != null) 'min_price': minPrice,
-      if (maxPrice != null) 'max_price': maxPrice,
-      if (hiddenGem != null) 'hidden_gem': hiddenGem,
-      if (sortBy != null) 'sort_by': sortBy,
-      if (order != null) 'order': order,
+      'city': ?city,
+      'category': ?category,
+      'interests': ?interests,
+      'min_rating': ?minRating,
+      'max_rating': ?maxRating,
+      'min_price': ?minPrice,
+      'max_price': ?maxPrice,
+      'hidden_gem': ?hiddenGem,
+      'sort_by': ?sortBy,
+      'order': ?order,
       'page': page,
       'limit': limit,
     };
 
-    final response = await _api.post(EndPoints.getPlaces, data: requestBody);
+    final response = await _api.post(
+      EndPoints.getPlaces,
+      data: requestBody,
+      cancelToken: cancelToken,
+    );
 
     return PaginatedResponse<PlaceModel>.fromJson(
       response,

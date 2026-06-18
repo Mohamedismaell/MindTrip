@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/domain/entities/place_entity.dart';
@@ -16,9 +17,13 @@ class PlaceRepositoryImpl implements PlaceRepository {
   @override
   Future<Result<PaginatedResponse<PlaceEntity>>> getRecommendedPlaces(
     RecommendationRequestModel request,
+    CancelToken? cancelToken,
   ) async {
     try {
-      final response = await remoteDataSource.getRecommendedPlaces(request);
+      final response = await remoteDataSource.getRecommendedPlaces(
+        request,
+        cancelToken,
+      );
       return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -28,9 +33,13 @@ class PlaceRepositoryImpl implements PlaceRepository {
   @override
   Future<Result<PaginatedResponse<PlaceEntity>>> getPopularPlaces(
     PopularRequestModel request,
+    CancelToken? cancelToken,
   ) async {
     try {
-      final response = await remoteDataSource.getPopularPlaces(request);
+      final response = await remoteDataSource.getPopularPlaces(
+        request,
+        cancelToken,
+      );
       return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -43,6 +52,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
     Map<String, dynamic>? filters,
     int page = 1,
     int limit = 10,
+    CancelToken? cancelToken,
   }) async {
     try {
       final response = await remoteDataSource.searchPlaces(
@@ -50,6 +60,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
         filters: filters,
         page: page,
         limit: limit,
+        cancelToken: cancelToken,
       );
       return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {
@@ -72,6 +83,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
     String? order,
     int page = 1,
     int limit = 10,
+    CancelToken? cancelToken,
   }) async {
     try {
       final response = await remoteDataSource.getPlaces(
@@ -88,6 +100,7 @@ class PlaceRepositoryImpl implements PlaceRepository {
         order: order,
         page: page,
         limit: limit,
+        cancelToken: cancelToken,
       );
       return Result.ok(response.map((e) => e.toEntity()));
     } catch (e) {

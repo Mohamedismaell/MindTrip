@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_use_case.dart';
 import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
@@ -29,6 +30,11 @@ class HomeCubit extends Cubit<HomeState> {
     loadPlannerPreviews();
   }
 
+  // CancelToken? _bannersToken;
+  CancelToken? _popularPlacesFirstToken;
+  CancelToken? _popularPlacesMoreToken;
+  // CancelToken? _tourPackagesToken;
+  // CancelToken? _plannerPreviewsToken;
   Future<void> loadBanners() async {
     emit(state.copyWith(bannersStatus: HomeDataStatus.loading));
     final result = await getBannersUseCase();
@@ -47,6 +53,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> loadFirstPagePopularPlaces() async {
+    _popularPlacesFirstToken?.cancel();
+    _popularPlacesFirstToken = CancelToken();
     emit(state.copyWith(popularPlacesStatus: HomeDataStatus.loading));
     final result = await getPopularPlacesUseCase(
       request: PopularRequestModel(
@@ -54,6 +62,7 @@ class HomeCubit extends Cubit<HomeState> {
         page: 1,
         limit: 10,
       ),
+      cancelToken: _popularPlacesFirstToken,
     );
     if (isClosed) return;
     result.when(
@@ -77,6 +86,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> loadMorePopularPlaces() async {
+    _popularPlacesMoreToken?.cancel;
+    _popularPlacesMoreToken = CancelToken();
     if (state.popularPlacesStatus.isLoading ||
         state.popularPlacesIsMoreLoading ||
         !state.popularPlacesHasMore) {
@@ -90,6 +101,7 @@ class HomeCubit extends Cubit<HomeState> {
         page: nextPage,
         limit: 10,
       ),
+      cancelToken: _popularPlacesMoreToken,
     );
     if (isClosed) return;
     result.when(
@@ -150,5 +162,12 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> close() {
+    _popularPlacesFirstToken?.cancel();
+    _popularPlacesMoreToken?.cancel();
+    return super.close();
   }
 }

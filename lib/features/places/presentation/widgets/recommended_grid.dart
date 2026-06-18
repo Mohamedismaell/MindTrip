@@ -115,6 +115,8 @@ class RecommendedplacesGrid extends StatelessWidget {
                           style: context.textTheme.bodyMedium?.copyWith(
                             color: context.colorTheme.outline,
                           ),
+
+                          textAlign: TextAlign.start,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
