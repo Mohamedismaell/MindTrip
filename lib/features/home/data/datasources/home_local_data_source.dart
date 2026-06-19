@@ -1,39 +1,44 @@
-import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
-import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
-import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
+import 'package:hive_ce_flutter/adapters.dart';
+import 'package:mindtrip/core/shared/data/models/banner_model.dart';
+import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
 
 abstract class HomeLocalDataSource {
-  Future<List<BannerEntity>> getBanners();
-  Future<List<PlannerPreviewEntity>> getPlannerPreviews();
+  Future<List<BannerModel>> getBanners();
+  Future<void> cacheBanners(List<BannerModel> banners);
+  
+  Future<List<PlannerPreviewModel>> getPlannerPreviews();
+  Future<void> cachePlannerPreviews(List<PlannerPreviewModel> previews);
 }
 
 class HomeLocalDataSourceImpl implements HomeLocalDataSource {
+  final Box<BannerModel> _bannersBox;
+  final Box<PlannerPreviewModel> _plannerPreviewsBox;
+
+  HomeLocalDataSourceImpl({
+    required Box<BannerModel> bannersBox,
+    required Box<PlannerPreviewModel> plannerPreviewsBox,
+  })  : _bannersBox = bannersBox,
+        _plannerPreviewsBox = plannerPreviewsBox;
+
   @override
-  Future<List<BannerEntity>> getBanners() async {
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 1));
-    return HomeMockData.banners;
+  Future<List<BannerModel>> getBanners() async {
+    return _bannersBox.values.toList();
   }
 
   @override
-  Future<List<PlannerPreviewEntity>> getPlannerPreviews() async {
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 1));
+  Future<void> cacheBanners(List<BannerModel> banners) async {
+    await _bannersBox.clear();
+    await _bannersBox.addAll(banners);
+  }
 
-    return HomeMockData.plannerPreviews
-        .map(
-          (preview) => PlannerPreviewEntity(
-            title: preview.title,
-            imageUrl: preview.imageUrl,
-            badge: preview.badge,
-            stops: preview.stops
-                .map(
-                  (stop) =>
-                      PlannerStopEntity(time: stop.time, label: stop.label),
-                )
-                .toList(),
-          ),
-        )
-        .toList();
+  @override
+  Future<List<PlannerPreviewModel>> getPlannerPreviews() async {
+    return _plannerPreviewsBox.values.toList();
+  }
+
+  @override
+  Future<void> cachePlannerPreviews(List<PlannerPreviewModel> previews) async {
+    await _plannerPreviewsBox.clear();
+    await _plannerPreviewsBox.addAll(previews);
   }
 }

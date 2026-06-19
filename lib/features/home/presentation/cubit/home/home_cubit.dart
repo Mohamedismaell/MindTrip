@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_use_case.dart';
-import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
@@ -13,14 +12,12 @@ class HomeCubit extends Cubit<HomeState> {
   final GetBannersUseCase getBannersUseCase;
   // final GetPopularPlacesUseCase getPopularPlacesUseCase;
   final GetRecommendedPlacesUseCase getRecommendedPlacesUseCase;
-  final GetTourPackagesUseCase getTourPackagesUseCase;
   final GetAIPlannerPreviewsUseCase getAIPlannerPreviewsUseCase;
   final GetPlacesUseCase getPlacesUseCase;
   HomeCubit({
     required this.getBannersUseCase,
     // required this.getPopularPlacesUseCase,
     required this.getRecommendedPlacesUseCase,
-    required this.getTourPackagesUseCase,
     required this.getAIPlannerPreviewsUseCase,
     required this.getPlacesUseCase,
   }) : super(const HomeState());
@@ -28,7 +25,6 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> loadAllData() async {
     loadBanners();
     // loadFirstPagePopularPlaces();
-    loadTourPackages();
     loadPlannerPreviews();
     loadFirstPageCategoryPlaces(state.selectedCategory.category);
     loadFirstPageHiddenGems();
@@ -228,37 +224,12 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  //! not active
-  Future<void> loadTourPackages() async {
-    emit(state.copyWith(tourPackagesStatus: HomeDataStatus.loading));
-    final result = await getTourPackagesUseCase();
-    if (isClosed) return;
-    result.when(
-      success: (packages) => emit(
-        state.copyWith(
-          tourPackagesStatus: HomeDataStatus.success,
-          tourPackages: packages,
-        ),
-      ),
-      failure: (error) => emit(
-        state.copyWith(
-          tourPackagesStatus: HomeDataStatus.failure,
-          tourPackagesError: error.message,
-        ),
-      ),
-    );
-  }
-
   Future<void> loadFirstPageHiddenGems() async {
     _hiddenGemsFirstToken?.cancel();
     _hiddenGemsFirstToken = CancelToken();
     emit(state.copyWith(hiddenGemsStatus: HomeDataStatus.loading));
     final result = await getPlacesUseCase(
-      request: const GetPlacesRequestModel(
-        hiddenGem: true,
-        page: 1,
-        limit: 10,
-      ),
+      request: const GetPlacesRequestModel(hiddenGem: true, page: 1, limit: 10),
       cancelToken: _hiddenGemsFirstToken,
     );
     if (isClosed) return;

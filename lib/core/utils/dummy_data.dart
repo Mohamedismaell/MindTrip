@@ -1,5 +1,4 @@
 import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
-import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
@@ -53,16 +52,6 @@ class DummyData {
       imageUrls: place.imageUrls,
     ),
   );
-  static const tourPackage = TourPackageEntity(
-    id: 'dummy',
-    title: 'Dummy Tour Package Title',
-    location: location,
-    imageUrl: '',
-    price: 99.99,
-    rating: 4.5,
-    durationDays: 3,
-  );
-
   static final plannerPreview = PlannerPreviewEntity(
     title: 'Dummy Trip Title',
     imageUrl: '',
@@ -114,18 +103,6 @@ class DummyData {
       name: place.name,
       location: place.location,
       imageUrls: place.imageUrls,
-    ),
-  );
-  static final tourPackages = List.generate(
-    3,
-    (index) => TourPackageEntity(
-      id: 'package_$index',
-      title: tourPackage.title,
-      location: tourPackage.location,
-      imageUrl: tourPackage.imageUrl,
-      price: tourPackage.price,
-      rating: tourPackage.rating,
-      durationDays: tourPackage.durationDays,
     ),
   );
 

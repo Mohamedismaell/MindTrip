@@ -1,6 +1,4 @@
-import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
-import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
 import 'package:mindtrip/features/home/presentation/models/home_models.dart';
 
 //!Dummy data for the home screen **Not working right now**
@@ -25,103 +23,6 @@ class HomeMockData {
     ),
   ];
 
-  static const tourPackages = [
-    TourPackageEntity(
-      id: 'pkg1',
-      title: 'Magic Lake Escape',
-      location: LocationEntity(
-        address: 'Fayoum',
-        latitude: 29.2089,
-        longitude: 30.4474,
-        city: '',
-        cityEn: '',
-      ),
-      imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470',
-      price: 399,
-      rating: 4.8,
-      durationDays: 3,
-    ),
-
-    TourPackageEntity(
-      id: 'pkg2',
-      title: 'White Desert Adventure',
-      location: LocationEntity(
-        address: 'Farafra',
-        latitude: 27.0568,
-        longitude: 27.9698,
-        city: '',
-        cityEn: '',
-      ),
-      imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
-      price: 459,
-      rating: 4.9,
-      durationDays: 2,
-    ),
-
-    TourPackageEntity(
-      id: 'pkg3',
-      title: 'Aswan & Nubian Experience',
-      location: LocationEntity(
-        address: 'Aswan',
-        latitude: 24.0889,
-        longitude: 32.8998,
-        city: '',
-        cityEn: '',
-      ),
-      imageUrl: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b',
-      price: 599,
-      rating: 4.8,
-      durationDays: 4,
-    ),
-
-    TourPackageEntity(
-      id: 'pkg4',
-      title: 'Red Sea Diving Expedition',
-      location: LocationEntity(
-        address: 'Sharm El Sheikh',
-        latitude: 27.9158,
-        longitude: 34.3299,
-        city: '',
-        cityEn: '',
-      ),
-      imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5',
-      price: 649,
-      rating: 4.9,
-      durationDays: 5,
-    ),
-
-    TourPackageEntity(
-      id: 'pkg5',
-      title: 'Siwa Wellness Retreat',
-      location: LocationEntity(
-        address: 'Siwa',
-        latitude: 29.2032,
-        longitude: 25.5197,
-        city: '',
-        cityEn: '',
-      ),
-      imageUrl: 'https://images.unsplash.com/photo-1519046904884-53103b34b206',
-      price: 499,
-      rating: 4.7,
-      durationDays: 4,
-    ),
-
-    TourPackageEntity(
-      id: 'pkg6',
-      title: 'Alexandria Heritage Journey',
-      location: LocationEntity(
-        address: 'Alexandria',
-        latitude: 31.2001,
-        longitude: 29.9187,
-        city: '',
-        cityEn: '',
-      ),
-      imageUrl: 'https://images.unsplash.com/photo-1539768942893-daf53e448371',
-      price: 329,
-      rating: 4.6,
-      durationDays: 2,
-    ),
-  ];
   static const plannerPreviews = [
     PlannerPreview(
       title: 'A Perfect Day in Old Cairo',

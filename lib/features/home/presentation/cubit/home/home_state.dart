@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/shared/models/pagination_state.dart';
 import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
-import 'package:mindtrip/features/home/domain/entity/tour_package_entity.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
@@ -42,7 +41,6 @@ abstract class HomeState with _$HomeState {
     // @Default([]) List<PlaceEntity> recommendedPlaces,
     // @Default('') String recommendedPlacesError,
     @Default(HomeDataStatus.initial) HomeDataStatus tourPackagesStatus,
-    @Default([]) List<TourPackageEntity> tourPackages,
     @Default('') String tourPackagesError,
 
     @Default(HomeDataStatus.initial) HomeDataStatus plannerPreviewsStatus,

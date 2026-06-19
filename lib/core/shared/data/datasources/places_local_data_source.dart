@@ -7,6 +7,12 @@ abstract class PlacesLocalDataSource {
   Future<void> cachePlaces(List<PlaceModel> places);
   Future<PlaceModel?> getPlace(String id);
   Future<List<PlaceModel>> getPlaces(List<String> ids);
+
+  Future<void> cachePopularPlaces(List<PlaceModel> places);
+  Future<List<PlaceModel>> getPopularPlaces();
+
+  Future<void> cacheRecommendedPlaces(List<PlaceModel> places);
+  Future<List<PlaceModel>> getRecommendedPlaces();
 }
 
 class PlacesLocalDataSourceImpl implements PlacesLocalDataSource {
@@ -43,5 +49,31 @@ class PlacesLocalDataSourceImpl implements PlacesLocalDataSource {
       }
     }
     return places;
+  }
+
+  @override
+  Future<void> cachePopularPlaces(List<PlaceModel> places) async {
+    await cachePlaces(places);
+    await AppHive.metadataBox.put('popular_places', places.map((e) => e.id).toList());
+  }
+
+  @override
+  Future<List<PlaceModel>> getPopularPlaces() async {
+    final ids = AppHive.metadataBox.get('popular_places');
+    if (ids == null) return [];
+    return getPlaces(ids);
+  }
+
+  @override
+  Future<void> cacheRecommendedPlaces(List<PlaceModel> places) async {
+    await cachePlaces(places);
+    await AppHive.metadataBox.put('recommended_places', places.map((e) => e.id).toList());
+  }
+
+  @override
+  Future<List<PlaceModel>> getRecommendedPlaces() async {
+    final ids = AppHive.metadataBox.get('recommended_places');
+    if (ids == null) return [];
+    return getPlaces(ids);
   }
 }

@@ -1,8 +1,8 @@
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
+import 'package:mindtrip/features/explore/data/datasources/explore_remote_data_source.dart';
 import 'package:mindtrip/features/explore/data/datasources/explore_local_data_source.dart';
 import 'package:mindtrip/features/explore/data/repositories/explore_repository_impl.dart';
 import 'package:mindtrip/features/explore/domain/repositories/explore_repository.dart';
-import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/all_places/explore_all_places_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
@@ -17,15 +17,14 @@ class ExploreDi {
       () => ExploreLocalDataSourceImpl(),
     );
 
+    sl.registerLazySingleton<ExploreRemoteDataSource>(
+      () => ExploreRemoteDataSourceImpl(api: sl()),
+    );
+
     //! Repositories
     sl.registerLazySingleton<ExploreRepository>(
       () =>
-          ExploreRepositoryImpl(localDataSource: sl<ExploreLocalDataSource>()),
-    );
-
-    //! Use cases
-    sl.registerLazySingleton<GetTourPackagesUseCase>(
-      () => GetTourPackagesUseCase(repository: sl<ExploreRepository>()),
+          ExploreRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
     );
 
     //! Cubit

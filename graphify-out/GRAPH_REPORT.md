@@ -1,16 +1,16 @@
-# Graph Report - MindTrip  (2026-06-11)
+# Graph Report - MindTrip  (2026-06-19)
 
 ## Corpus Check
-- 622 files · ~442,927 words
+- 651 files · ~513,917 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6950 nodes · 6331 edges · 704 communities (608 shown, 96 thin omitted)
+- 8044 nodes · 7358 edges · 782 communities (673 shown, 109 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 42 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f54600f8`
+- Built from commit: `c8381ea2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -470,6 +470,7 @@
 - [[_COMMUNITY_Community 454|Community 454]]
 - [[_COMMUNITY_Community 455|Community 455]]
 - [[_COMMUNITY_Community 456|Community 456]]
+- [[_COMMUNITY_Community 472|Community 472]]
 - [[_COMMUNITY_Community 481|Community 481]]
 - [[_COMMUNITY_Community 482|Community 482]]
 - [[_COMMUNITY_Community 483|Community 483]]
@@ -640,6 +641,8 @@
 - [[_COMMUNITY_Community 648|Community 648]]
 - [[_COMMUNITY_Community 649|Community 649]]
 - [[_COMMUNITY_Community 650|Community 650]]
+- [[_COMMUNITY_Community 653|Community 653]]
+- [[_COMMUNITY_Community 656|Community 656]]
 - [[_COMMUNITY_Community 658|Community 658]]
 - [[_COMMUNITY_Community 661|Community 661]]
 - [[_COMMUNITY_Community 662|Community 662]]
@@ -684,18 +687,93 @@
 - [[_COMMUNITY_Community 701|Community 701]]
 - [[_COMMUNITY_Community 702|Community 702]]
 - [[_COMMUNITY_Community 703|Community 703]]
+- [[_COMMUNITY_Community 704|Community 704]]
+- [[_COMMUNITY_Community 705|Community 705]]
+- [[_COMMUNITY_Community 706|Community 706]]
+- [[_COMMUNITY_Community 707|Community 707]]
+- [[_COMMUNITY_Community 708|Community 708]]
+- [[_COMMUNITY_Community 709|Community 709]]
+- [[_COMMUNITY_Community 710|Community 710]]
+- [[_COMMUNITY_Community 711|Community 711]]
+- [[_COMMUNITY_Community 712|Community 712]]
+- [[_COMMUNITY_Community 713|Community 713]]
+- [[_COMMUNITY_Community 714|Community 714]]
+- [[_COMMUNITY_Community 715|Community 715]]
+- [[_COMMUNITY_Community 716|Community 716]]
+- [[_COMMUNITY_Community 717|Community 717]]
+- [[_COMMUNITY_Community 718|Community 718]]
+- [[_COMMUNITY_Community 719|Community 719]]
+- [[_COMMUNITY_Community 720|Community 720]]
+- [[_COMMUNITY_Community 721|Community 721]]
+- [[_COMMUNITY_Community 722|Community 722]]
+- [[_COMMUNITY_Community 723|Community 723]]
+- [[_COMMUNITY_Community 724|Community 724]]
+- [[_COMMUNITY_Community 725|Community 725]]
+- [[_COMMUNITY_Community 726|Community 726]]
+- [[_COMMUNITY_Community 727|Community 727]]
+- [[_COMMUNITY_Community 728|Community 728]]
+- [[_COMMUNITY_Community 729|Community 729]]
+- [[_COMMUNITY_Community 730|Community 730]]
+- [[_COMMUNITY_Community 731|Community 731]]
+- [[_COMMUNITY_Community 732|Community 732]]
+- [[_COMMUNITY_Community 733|Community 733]]
+- [[_COMMUNITY_Community 734|Community 734]]
+- [[_COMMUNITY_Community 735|Community 735]]
+- [[_COMMUNITY_Community 736|Community 736]]
+- [[_COMMUNITY_Community 737|Community 737]]
+- [[_COMMUNITY_Community 738|Community 738]]
+- [[_COMMUNITY_Community 739|Community 739]]
+- [[_COMMUNITY_Community 740|Community 740]]
+- [[_COMMUNITY_Community 741|Community 741]]
+- [[_COMMUNITY_Community 742|Community 742]]
+- [[_COMMUNITY_Community 743|Community 743]]
+- [[_COMMUNITY_Community 744|Community 744]]
+- [[_COMMUNITY_Community 745|Community 745]]
+- [[_COMMUNITY_Community 746|Community 746]]
+- [[_COMMUNITY_Community 747|Community 747]]
+- [[_COMMUNITY_Community 748|Community 748]]
+- [[_COMMUNITY_Community 749|Community 749]]
+- [[_COMMUNITY_Community 750|Community 750]]
+- [[_COMMUNITY_Community 751|Community 751]]
+- [[_COMMUNITY_Community 752|Community 752]]
+- [[_COMMUNITY_Community 753|Community 753]]
+- [[_COMMUNITY_Community 754|Community 754]]
+- [[_COMMUNITY_Community 755|Community 755]]
+- [[_COMMUNITY_Community 756|Community 756]]
+- [[_COMMUNITY_Community 757|Community 757]]
+- [[_COMMUNITY_Community 758|Community 758]]
+- [[_COMMUNITY_Community 759|Community 759]]
+- [[_COMMUNITY_Community 760|Community 760]]
+- [[_COMMUNITY_Community 761|Community 761]]
+- [[_COMMUNITY_Community 762|Community 762]]
+- [[_COMMUNITY_Community 763|Community 763]]
+- [[_COMMUNITY_Community 764|Community 764]]
+- [[_COMMUNITY_Community 765|Community 765]]
+- [[_COMMUNITY_Community 766|Community 766]]
+- [[_COMMUNITY_Community 767|Community 767]]
+- [[_COMMUNITY_Community 768|Community 768]]
+- [[_COMMUNITY_Community 769|Community 769]]
+- [[_COMMUNITY_Community 770|Community 770]]
+- [[_COMMUNITY_Community 771|Community 771]]
+- [[_COMMUNITY_Community 772|Community 772]]
+- [[_COMMUNITY_Community 773|Community 773]]
+- [[_COMMUNITY_Community 774|Community 774]]
+- [[_COMMUNITY_Community 775|Community 775]]
+- [[_COMMUNITY_Community 776|Community 776]]
+- [[_COMMUNITY_Community 777|Community 777]]
+- [[_COMMUNITY_Community 778|Community 778]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Core Principles` - 13 edges
 2. `Tasks: [FEATURE NAME]` - 13 edges
-3. `MindTrip App` - 11 edges
-4. `files` - 10 edges
-5. `files` - 10 edges
-6. `_` - 10 edges
-7. `_` - 10 edges
-8. `_` - 9 edges
-9. `_` - 9 edges
-10. `_` - 9 edges
+3. `_` - 11 edges
+4. `_` - 11 edges
+5. `MindTrip App` - 11 edges
+6. `files` - 10 edges
+7. `files` - 10 edges
+8. `_` - 10 edges
+9. `_` - 10 edges
+10. `_` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Android Launcher Icon` --semantically_similar_to--> `iOS App Icon (All Sizes)`  [INFERRED] [semantically similar]
@@ -719,23 +797,23 @@
 - **Cross-Platform App Icons** — android_app_icon, ios_app_icon, macos_app_icon, web_favicon [INFERRED 0.95]
 - **Cross-Platform Splash Screens** — android_splash_screen, android_splash_android12, ios_launch_image, web_splash_light [INFERRED 0.95]
 
-## Communities (704 total, 96 thin omitted)
+## Communities (782 total, 109 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.02
-Nodes (81): build, _buildRouter, Column, dispose, FakeAuthRepository, FakeFacebookAuthProvider, FakeFavoritesRepository, FakeGoogleAuthProvider (+73 more)
+Nodes (96): build, _buildRouter, Column, dispose, FakeAuthRepository, FakeFacebookAuthProvider, FakeFavoritesRepository, FakeGoogleAuthProvider (+88 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.03
-Nodes (63): AppGateCubit, _buildAppGateCubit, _buildRouter, _buildUserCubit, dispose, _FakeAuthRepository, _FakeFacebookAuthProvider, _FakeFavoritesRepository (+55 more)
+Nodes (78): AppGateCubit, _buildAppGateCubit, _buildRouter, _buildUserCubit, dispose, _FakeAuthRepository, _FakeFacebookAuthProvider, _FakeFavoritesRepository (+70 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
 Nodes (48): Bloc/Cubit State Management Principle, Clean Architecture Principle, MapAnnotationEntry, MapRouteRepository (domain interface), MapSearchRepository (domain interface), MapSearchResult, MapState (Cubit state), PlaceModel (shared entity) (+40 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.04
-Nodes (48): CommonDi, package:dio/dio.dart, package:internet_connection_checker_plus/internet_connection_checker_plus.dart, package:mindtrip/core/connections/network_info.dart, package:mindtrip/core/connections/retry_queue.dart, package:mindtrip/core/connections/retry_runner.dart, package:mindtrip/core/database/api/dio_consumer.dart, package:mindtrip/core/database/api/interceptors/logging_interceptor.dart (+40 more)
+Cohesion: 0.03
+Nodes (58): CommonDi, package:dio/dio.dart, package:internet_connection_checker_plus/internet_connection_checker_plus.dart, package:mindtrip/core/connections/network_info.dart, package:mindtrip/core/connections/retry_queue.dart, package:mindtrip/core/connections/retry_runner.dart, package:mindtrip/core/database/api/api_consumer.dart, package:mindtrip/core/database/api/dio_consumer.dart (+50 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.07
@@ -743,7 +821,7 @@ Nodes (26): RegisterPlugins(), OnCreate(), wWinMain(), CreateAndAttachConsole(),
 
 ### Community 5 - "Community 5"
 Cohesion: 0.04
-Nodes (44): AiPlannerChatScreen, _AiPlannerChatScreenState, build, _ChatHeader, ChatInputBar, ChatTypingIndicator, Column, _confirmNewConversation (+36 more)
+Nodes (46): AiPlannerChatScreen, _AiPlannerChatScreenState, build, _ChatHeader, ChatInputBar, ChatTypingIndicator, Column, _confirmNewConversation (+38 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.06
@@ -755,19 +833,19 @@ Nodes (33): build, _buildBody, Center, CustomScrollView, _EstimateNote, _Message
 
 ### Community 8 - "Community 8"
 Cohesion: 0.05
-Nodes (37): ../cubit/map_navigation_cubit.dart, Align, AnimatedContainer, build, _buildCardOverview, BuildDriveCard, Column, dispose (+29 more)
+Nodes (38): ../cubit/map_navigation_cubit.dart, Align, AnimatedContainer, build, _buildCardOverview, BuildDriveCard, Column, dispose (+30 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.05
-Nodes (38): core/observers/app_bloc_observer.dart, core/theme/cubit/theme_cubit.dart, AppBootstrap, build, ConnectionListener, initializeDependencies, MultiBlocProvider, MyApp (+30 more)
+Nodes (42): core/observers/app_bloc_observer.dart, core/theme/cubit/theme_cubit.dart, AppBootstrap, build, ConnectionListener, initializeDependencies, MultiBlocProvider, MyApp (+34 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.06
-Nodes (32): build, Center, _EditprofileButoon, MyTripsSection, PopScope, ProfileFlowScaffold, ProfileScreen, SavedTripCard (+24 more)
+Cohesion: 0.05
+Nodes (36): build, Center, _EditprofileButoon, MyTripsSection, PopScope, ProfileFlowScaffold, ProfileScreen, SavedTripCard (+28 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.06
-Nodes (32): build, _ChevronArrow, Container, _FigmaSwitch, Icon, InkWell, PopScope, ProfileFlowScaffold (+24 more)
+Cohesion: 0.05
+Nodes (37): build, _ChevronArrow, Container, _FigmaSwitch, Icon, InkWell, PopScope, ProfileFlowScaffold (+29 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.06
@@ -775,11 +853,11 @@ Nodes (30): _ArrrowIcon, build, _buildDayCell, Center, Column, _CustomHeader, Ex
 
 ### Community 13 - "Community 13"
 Cohesion: 0.06
-Nodes (32): build, dispose, _EditableInfoCard, EditProfileScreen, _EditProfileScreenState, _handleBack, InfoCard, initState (+24 more)
+Nodes (35): build, dispose, _EditableInfoCard, EditProfileScreen, _EditProfileScreenState, _handleBack, InfoCard, initState (+27 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.06
-Nodes (30): AiPlannerFlowScreen, _AiPlannerFlowView, _AiPlannerFlowViewState, _autoSave, build, dispose, _HeaderIconButton, initState (+22 more)
+Nodes (33): AiPlannerFlowScreen, _AiPlannerFlowView, _AiPlannerFlowViewState, _autoSave, build, dispose, _handleBack, _HeaderIconButton (+25 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.07
@@ -787,19 +865,19 @@ Nodes (29): build, Center, Column, _CustomHeader, dispose, _EmptyState, initStat
 
 ### Community 16 - "Community 16"
 Cohesion: 0.06
-Nodes (31): _autoSelectNearestPlace, build, DaySelectorBar, dispose, _flyToUserLocation, initState, MapScreen, _MapScreenState (+23 more)
+Nodes (32): _autoSelectNearestPlace, build, DaySelectorBar, dispose, _flyToUserLocation, initState, MapScreen, _MapScreenState (+24 more)
 
 ### Community 17 - "Community 17"
 Cohesion: 0.07
-Nodes (28): AutofillGroup, build, _clearAll, didUpdateWidget, dispose, _emitOtp, Form, initState (+20 more)
+Nodes (29): AutofillGroup, build, _clearAll, didUpdateWidget, dispose, _emitOtp, Form, initState (+21 more)
 
 ### Community 18 - "Community 18"
-Cohesion: 0.06
-Nodes (33): _BadgeChip, build, _buildCardInfo, _buildHotelInfo, _buildRestaurantInfo, Container, Expanded, ExplorePlaceCard (+25 more)
+Cohesion: 0.05
+Nodes (36): _BadgeChip, build, _buildCardInfo, _buildHotelInfo, _buildRestaurantInfo, Container, Expanded, ExplorePlaceCard (+28 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.07
-Nodes (29): AppRouter, AppShell, build, ErrorScreen, Icon, Scaffold, SizedBox, TabsShell (+21 more)
+Cohesion: 0.06
+Nodes (34): AppRouter, AppShell, build, ErrorScreen, Icon, Scaffold, SizedBox, TabsShell (+26 more)
 
 ### Community 20 - "Community 20"
 Cohesion: 0.06
@@ -807,11 +885,11 @@ Nodes (34): ai_planner_state.dart, AiPlannerCubit, changeAdults, changeChildren,
 
 ### Community 21 - "Community 21"
 Cohesion: 0.06
-Nodes (32): ../../../ai_planner/domain/entities/time_slot.dart, ../../../ai_planner/presentation/utils/trip_color_palette.dart, ../../../../core/shared/data/models/location_model.dart, ../../../../core/shared/domain/entities/location_entity.dart, clearFlyToLocation, clearSelection, dismissBottomSheet, fetchPlacePhotoUrls (+24 more)
+Nodes (33): ../../../ai_planner/domain/entities/time_slot.dart, ../../../ai_planner/presentation/utils/trip_color_palette.dart, ../../../../core/shared/data/models/location_model.dart, ../../../../core/shared/domain/entities/location_entity.dart, clearFlyToLocation, clearSelection, dismissBottomSheet, fetchPlacePhotoUrls (+25 more)
 
 ### Community 22 - "Community 22"
 Cohesion: 0.05
-Nodes (38): _dragTripList, _FakeTripRepository, main, _pumpTripDetails, Scaffold, _slot, TimeSlot, UnimplementedError (+30 more)
+Nodes (39): _dragTripList, _FakeTripRepository, main, _pumpTripDetails, Scaffold, _slot, TimeSlot, UnimplementedError (+31 more)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.08
@@ -819,31 +897,31 @@ Nodes (25): AiRefinementSheet, _AiRefinementSheetState, Align, build, ChatMessag
 
 ### Community 24 - "Community 24"
 Cohesion: 0.07
-Nodes (26): BlocProvider, build, Center, _EmptyCategoryView, _EmptyView, _ErrorView, ExplorePlaceCard, _FavoritesView (+18 more)
+Nodes (28): BlocProvider, build, Center, _EmptyCategoryView, _EmptyView, _ErrorView, ExplorePlaceCard, _FavoritesView (+20 more)
 
 ### Community 25 - "Community 25"
 Cohesion: 0.08
-Nodes (24): build, _buildDriveError, _buildEmptyRoute, _buildProfileChips, Center, DriveTab, Padding, SingleChildScrollView (+16 more)
+Nodes (25): build, _buildDriveError, _buildEmptyRoute, _buildProfileChips, Center, DriveTab, Padding, SingleChildScrollView (+17 more)
 
 ### Community 26 - "Community 26"
-Cohesion: 0.06
-Nodes (32): build, _buildContent, BuildGooglePlaceContent, Center, Column, MapActionButton, PlaceContent, PlaceTab (+24 more)
+Cohesion: 0.05
+Nodes (36): build, _buildContent, BuildGooglePlaceContent, Center, Column, MapActionButton, PlaceContent, PlaceTab (+28 more)
 
 ### Community 27 - "Community 27"
-Cohesion: 0.08
-Nodes (23): build, dispose, Form, initState, SignInForm, _SignInFormState, Spacer, _submit (+15 more)
+Cohesion: 0.07
+Nodes (26): build, dispose, Form, initState, SignInForm, _SignInFormState, Spacer, _submit (+18 more)
 
 ### Community 28 - "Community 28"
-Cohesion: 0.09
-Nodes (22): build, Column, _DestinationsList, _DestinationsListState, DestinationStep, dispose, GestureDetector, _requestFocus (+14 more)
+Cohesion: 0.08
+Nodes (23): build, Column, _DestinationsList, _DestinationsListState, DestinationStep, dispose, GestureDetector, _requestFocus (+15 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.08
-Nodes (25): build, GestureDetector, initState, _MyTripCard, MyTripsSection, _MyTripsSectionState, Padding, SizedBox (+17 more)
+Cohesion: 0.07
+Nodes (27): build, GestureDetector, initState, _MyTripCard, MyTripsSection, _MyTripsSectionState, Padding, SizedBox (+19 more)
 
 ### Community 30 - "Community 30"
 Cohesion: 0.09
-Nodes (21): build, _buildAttachmentPreview, ChatInputBar, Container, FadeTransition, Function, _handleSend, Padding (+13 more)
+Nodes (22): build, _buildAttachmentPreview, ChatInputBar, Container, FadeTransition, Function, _handleSend, Padding (+14 more)
 
 ### Community 31 - "Community 31"
 Cohesion: 0.09
@@ -854,20 +932,20 @@ Cohesion: 0.09
 Nodes (21): AuthCubit, toggleConfirmPassword, togglePassword, toggleRememberMe, package:bloc/bloc.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/enums/auth_status.dart, package:mindtrip/core/enums/otp_flow.dart (+13 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.09
-Nodes (21): build, dispose, Form, initState, SignUpForm, _SignUpFormState, _submit, package:flutter_bloc/flutter_bloc.dart (+13 more)
+Cohesion: 0.08
+Nodes (24): build, dispose, Form, initState, SignUpForm, _SignUpFormState, _submit, package:flutter_bloc/flutter_bloc.dart (+16 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.09
-Nodes (21): main, pumpAppWithHarness, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_test/flutter_test.dart, package:go_router/go_router.dart, package:hydrated_bloc/hydrated_bloc.dart (+13 more)
+Cohesion: 0.08
+Nodes (23): main, pumpAppWithHarness, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_test/flutter_test.dart, package:go_router/go_router.dart, package:hydrated_bloc/hydrated_bloc.dart (+15 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.10
-Nodes (20): build, _HeaderAction, HomeHeader, InkWell, SliverToBoxAdapter, Text, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+12 more)
+Cohesion: 0.08
+Nodes (24): build, _HeaderAction, HomeHeader, InkWell, SliverToBoxAdapter, Text, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+16 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.10
-Nodes (20): init, MapDi, ../data/datasources/google_places_datasource.dart, ../data/datasources/map_route_remote_datasource.dart, ../data/repositories/google_places_repository_impl.dart, ../data/repositories/map_route_repository_impl.dart, ../domain/repositories/google_places_repository.dart, ../domain/repositories/map_route_repository.dart (+12 more)
+Cohesion: 0.09
+Nodes (21): init, MapDi, ../data/datasources/google_places_datasource.dart, ../data/datasources/map_route_remote_datasource.dart, ../data/repositories/google_places_repository_impl.dart, ../data/repositories/map_route_repository_impl.dart, ../domain/repositories/google_places_repository.dart, ../domain/repositories/map_route_repository.dart (+13 more)
 
 ### Community 37 - "Community 37"
 Cohesion: 0.08
@@ -882,20 +960,20 @@ Cohesion: 0.10
 Nodes (19): _buildCairoItinerary, _buildDahabItinerary, _buildGenericItinerary, _buildParisItinerary, _buildRomeItinerary, ItineraryDataSource, MockItineraryDataSource, _place (+11 more)
 
 ### Community 40 - "Community 40"
-Cohesion: 0.08
-Nodes (25): AiPlannerFlowScreen, AiPlannerRoutes, MultiBlocProvider, TripDetailsScreen, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart (+17 more)
+Cohesion: 0.07
+Nodes (26): AiPlannerFlowScreen, AiPlannerRoutes, MultiBlocProvider, TripDetailsScreen, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart (+18 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.09
-Nodes (22): build, ExploreHeader, ExplorePlacesGrid, ExploreScreen, ExploreSearchBar, ExploreSectionHeader, ExploreTrendingList, Scaffold (+14 more)
+Cohesion: 0.07
+Nodes (28): AppRefreshIndicator, build, ExploreHeader, ExplorePlacesGrid, ExploreScreen, ExploreSearchBar, ExploreSectionHeader, ExploreTrendingList (+20 more)
 
 ### Community 42 - "Community 42"
 Cohesion: 0.06
 Nodes (32): build, _CircleIcon, _CircleIconState, ClipRRect, Container, _ExtraPhotosTile, _FavoriteButton, GestureDetector (+24 more)
 
 ### Community 43 - "Community 43"
-Cohesion: 0.11
-Nodes (18): BudgetStep, _BudgetTile, build, InkWell, ListView, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+10 more)
+Cohesion: 0.09
+Nodes (21): BudgetStep, _BudgetTile, build, InkWell, ListView, Scaffold, TapScaleEffect, package:flutter_bloc/flutter_bloc.dart (+13 more)
 
 ### Community 44 - "Community 44"
 Cohesion: 0.11
@@ -906,8 +984,8 @@ Cohesion: 0.11
 Nodes (7): fl_register_plugins(), main(), my_application_activate(), my_application_new(), _MyApplication, dart_entrypoint_arguments, parent_instance
 
 ### Community 46 - "Community 46"
-Cohesion: 0.11
-Nodes (17): build, dispose, GestureDetector, _initSpeech, initState, _startListening, _stopListening, _toggleListening (+9 more)
+Cohesion: 0.06
+Nodes (33): build, dispose, GestureDetector, _initSpeech, initState, _startListening, _stopListening, _toggleListening (+25 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.08
@@ -927,23 +1005,23 @@ Nodes (17): build, _InProgressCoverImage, Padding, Spacer, TripCard, package:flu
 
 ### Community 51 - "Community 51"
 Cohesion: 0.11
-Nodes (17): build, OtpRequestStatusListener, OtpVerificationStatusListener, ResetPasswordStatusListener, _showSnackBar, SignInStatusListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+9 more)
+Nodes (18): build, OtpRequestStatusListener, OtpVerificationStatusListener, ResetPasswordStatusListener, _showSnackBar, SignInStatusListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+10 more)
 
 ### Community 52 - "Community 52"
-Cohesion: 0.11
-Nodes (17): build, Container, ExploreFilterSheet, _ExploreFilterSheetState, GestureDetector, _PriceDisplay, _resetAll, RichText (+9 more)
+Cohesion: 0.07
+Nodes (27): _applyFilters, build, Container, DraggableScrollableSheet, ExploreFilterSheet, _ExploreFilterSheetState, GestureDetector, Icon (+19 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.07
-Nodes (26): AnimatedContainer, build, _buildBanner, dispose, FadeTransition, HomeBannerCarousel, _HomeBannerCarouselState, initState (+18 more)
+Nodes (29): AnimatedContainer, build, _buildBanner, dispose, FadeTransition, HomeBannerCarousel, _HomeBannerCarouselState, initState (+21 more)
 
 ### Community 54 - "Community 54"
-Cohesion: 0.11
-Nodes (17): build, Center, Expanded, InterestsHeader, InterestsScreen, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+9 more)
+Cohesion: 0.10
+Nodes (20): build, Center, Expanded, InterestsHeader, InterestsScreen, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+12 more)
 
 ### Community 55 - "Community 55"
-Cohesion: 0.10
-Nodes (19): build, Center, dispose, initState, ListTile, MapSearchOverlay, _MapSearchOverlayState, _onSearchChanged (+11 more)
+Cohesion: 0.08
+Nodes (23): build, Center, dispose, initState, ListTile, MapSearchOverlay, _MapSearchOverlayState, _onSearchChanged (+15 more)
 
 ### Community 56 - "Community 56"
 Cohesion: 0.11
@@ -958,32 +1036,32 @@ Cohesion: 0.11
 Nodes (17): AppTransitionRoute, BottomSheetPage, CustomTransitionPage, fade, fadeSlide, fadeSlideBuilder, FadeTransition, Function (+9 more)
 
 ### Community 59 - "Community 59"
-Cohesion: 0.12
-Nodes (16): build, Column, Expanded, Interestes, InterestsStep, OutlinedButton, StepHeading, package:flutter_bloc/flutter_bloc.dart (+8 more)
+Cohesion: 0.11
+Nodes (18): build, Column, Expanded, Interestes, InterestsStep, OutlinedButton, StepHeading, TapScaleEffect (+10 more)
 
 ### Community 60 - "Community 60"
 Cohesion: 0.12
 Nodes (16): build, ClipRRect, _CoverImage, ScheduleTripTile, Stack, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+8 more)
 
 ### Community 61 - "Community 61"
-Cohesion: 0.09
-Nodes (22): build, HomeAiPlannerSection, HomeBannerCarousel, HomePopularDestinations, HomeRecommendedGrid, HomeScreen, HomeSearchBar, HomeSectionHeader (+14 more)
+Cohesion: 0.05
+Nodes (43): AppRefreshIndicator, build, HomeAiPlannerSection, HomeBannerCarousel, HomeCategoryChips, HomeCategoryPlacesList, HomeHeader, HomeHiddenGemsSection (+35 more)
 
 ### Community 62 - "Community 62"
 Cohesion: 0.08
-Nodes (23): build, Container, HomeTourPackages, SliverToBoxAdapter, dart:ui, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+15 more)
+Nodes (25): build, Container, HomeTourPackages, SliverToBoxAdapter, dart:ui, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+17 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.12
 Nodes (16): clearResolvedSearchResult, clearSearch, _getAutocompleteToken, MapSearchCubit, _nearbyToken, _resolveToken, search, dart:async (+8 more)
 
 ### Community 64 - "Community 64"
-Cohesion: 0.12
-Nodes (16): build, Column, OnboardingContent, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart (+8 more)
+Cohesion: 0.11
+Nodes (18): build, Column, OnboardingContent, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart (+10 more)
 
 ### Community 65 - "Community 65"
-Cohesion: 0.12
-Nodes (16): dismissError, EditProfileCubit, _getDeleteToken, _getEditToken, init, pickPhoto, updateDisplayName, updatePhoneNumber (+8 more)
+Cohesion: 0.10
+Nodes (19): dismissError, EditProfileCubit, _getDeleteToken, _getEditToken, init, pickPhoto, updateDisplayName, updatePhoneNumber (+11 more)
 
 ### Community 66 - "Community 66"
 Cohesion: 0.12
@@ -1007,15 +1085,15 @@ Nodes (15): build, Column, Container, _getTimeColor, _getTimeIcon, _PlaceActivit
 
 ### Community 71 - "Community 71"
 Cohesion: 0.12
-Nodes (15): AuthRepositoryImpl, _isEmailExistsButUnverified, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/errors/failure/failure.dart, package:mindtrip/core/shared/user/data/mapper/user_mapper.dart, package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart (+7 more)
+Nodes (16): AuthRepositoryImpl, _isEmailExistsButUnverified, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/errors/failure/failure.dart, package:mindtrip/core/shared/user/data/mapper/user_mapper.dart, package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart (+8 more)
 
 ### Community 72 - "Community 72"
-Cohesion: 0.12
-Nodes (15): build, FloatMapButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:geolocator/geolocator.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart (+7 more)
+Cohesion: 0.11
+Nodes (17): build, FloatMapButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:geolocator/geolocator.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart (+9 more)
 
 ### Community 73 - "Community 73"
-Cohesion: 0.09
-Nodes (21): build, HomeAiPlannerSection, Row, SliverToBoxAdapter, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+13 more)
+Cohesion: 0.08
+Nodes (24): build, HomeAiPlannerSection, Row, SliverToBoxAdapter, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+16 more)
 
 ### Community 74 - "Community 74"
 Cohesion: 0.12
@@ -1026,36 +1104,36 @@ Cohesion: 0.12
 Nodes (15): build, Container, GestureDetector, NavigationProfileSelector, _NavigationProfileSelectorState, Padding, _ProfileChip, package:flutter_bloc/flutter_bloc.dart (+7 more)
 
 ### Community 76 - "Community 76"
-Cohesion: 0.12
-Nodes (16): MapRoutes, MapScreen, MultiBlocProvider, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/injection/service_locator.dart (+8 more)
+Cohesion: 0.11
+Nodes (17): MapRoutes, MapScreen, MultiBlocProvider, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/injection/service_locator.dart (+9 more)
 
 ### Community 77 - "Community 77"
-Cohesion: 0.12
-Nodes (15): build, ProfileIdentity, SizedBox, Text, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+7 more)
+Cohesion: 0.11
+Nodes (17): build, ProfileIdentity, SizedBox, Text, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+9 more)
 
 ### Community 78 - "Community 78"
 Cohesion: 0.23
 Nodes (11): Find-FeatureDirByPrefix(), Find-SpecifyRoot(), Get-CurrentBranch(), Get-FeatureDirFromBranchPrefixOrExit(), Get-FeaturePathsEnv(), Get-Python3Command(), Get-RepoRoot(), Get-SpecKitEffectiveBranchName() (+3 more)
 
 ### Community 79 - "Community 79"
-Cohesion: 0.12
-Nodes (15): build, OtpRequestStatusListener, SignInForm, SignInScreen, SignInStatusListener, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart (+7 more)
+Cohesion: 0.11
+Nodes (17): build, OtpRequestStatusListener, SignInForm, SignInScreen, SignInStatusListener, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart (+9 more)
 
 ### Community 80 - "Community 80"
-Cohesion: 0.13
-Nodes (14): build, OtpRequestStatusListener, SignUpForm, SignUpScreen, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart (+6 more)
+Cohesion: 0.12
+Nodes (16): build, OtpRequestStatusListener, SignUpForm, SignUpScreen, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/app_background.dart (+8 more)
 
 ### Community 81 - "Community 81"
 Cohesion: 0.13
 Nodes (14): MapRoute, MapRouteRemoteDatasource, MapRouteRemoteDatasourceImpl, _parseLeg, _parseStep, RouteLeg, RouteStep, ../../domain/entities/route_leg.dart (+6 more)
 
 ### Community 82 - "Community 82"
-Cohesion: 0.13
-Nodes (14): build, Scaffold, WelcomeAuthScreen, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart (+6 more)
+Cohesion: 0.12
+Nodes (16): build, Scaffold, WelcomeAuthScreen, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart (+8 more)
 
 ### Community 83 - "Community 83"
-Cohesion: 0.12
-Nodes (16): main, MockGooglePlacesRepository, package:dio/dio.dart, package:flutter_test/flutter_test.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart (+8 more)
+Cohesion: 0.11
+Nodes (17): main, MockGooglePlacesRepository, package:dio/dio.dart, package:flutter_test/flutter_test.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart (+9 more)
 
 ### Community 84 - "Community 84"
 Cohesion: 0.13
@@ -1074,24 +1152,24 @@ Cohesion: 0.13
 Nodes (14): api_consumer.dart, delete, DioConsumer, get, _handleData, patch, post, put (+6 more)
 
 ### Community 88 - "Community 88"
-Cohesion: 0.14
-Nodes (13): AppGateCubit, interestsComplete, proceedToAuth, package:bloc/bloc.dart, package:equatable/equatable.dart, package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart, package:mindtrip/core/shared/auth/providers/google_auth_provider.dart, package:mindtrip/core/shared/domain/repositories/favorites_repository.dart (+5 more)
+Cohesion: 0.11
+Nodes (17): AppGateCubit, interestsComplete, _navigateAfterLoad, proceedToAuth, package:bloc/bloc.dart, package:equatable/equatable.dart, package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart, package:mindtrip/core/shared/auth/providers/google_auth_provider.dart (+9 more)
 
 ### Community 89 - "Community 89"
 Cohesion: 0.14
 Nodes (13): BottomNav, build, CurvedNavigationBar, CurvedNavigationBarItem, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:mindtrip/core/theme/app_colors.dart (+5 more)
 
 ### Community 90 - "Community 90"
-Cohesion: 0.12
-Nodes (16): AiPlannerFlowListnener, build, MultiBlocListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/widget/app_snackbar.dart (+8 more)
+Cohesion: 0.11
+Nodes (17): AiPlannerFlowListnener, build, MultiBlocListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/app_snackbar.dart, package:mindtrip/core/shared/routes/app_routes.dart (+9 more)
 
 ### Community 91 - "Community 91"
 Cohesion: 0.14
 Nodes (13): build, InkWell, StartPlanningButton, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart (+5 more)
 
 ### Community 92 - "Community 92"
-Cohesion: 0.14
-Nodes (13): AuthoptionsContent, build, Column, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/enums/auth_status.dart, package:mindtrip/core/utils/extension.dart (+5 more)
+Cohesion: 0.13
+Nodes (14): AuthoptionsContent, build, Column, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/enums/auth_status.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart (+6 more)
 
 ### Community 93 - "Community 93"
 Cohesion: 0.14
@@ -1102,12 +1180,12 @@ Cohesion: 0.14
 Nodes (13): files, .agents/skills/speckit-analyze/SKILL.md, .agents/skills/speckit-checklist/SKILL.md, .agents/skills/speckit-clarify/SKILL.md, .agents/skills/speckit-constitution/SKILL.md, .agents/skills/speckit-implement/SKILL.md, .agents/skills/speckit-plan/SKILL.md, .agents/skills/speckit-specify/SKILL.md (+5 more)
 
 ### Community 95 - "Community 95"
-Cohesion: 0.14
-Nodes (13): main, pumpAppWithHarness, package:flutter/material.dart, package:flutter_test/flutter_test.dart, package:mindtrip/core/enums/auth_status.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart (+5 more)
+Cohesion: 0.13
+Nodes (14): main, pumpAppWithHarness, package:flutter/material.dart, package:flutter_test/flutter_test.dart, package:mindtrip/core/enums/auth_status.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart (+6 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.15
-Nodes (12): AiPlannerIntroScreen, build, Scaffold, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart (+4 more)
+Cohesion: 0.14
+Nodes (13): AiPlannerIntroScreen, build, Scaffold, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart (+5 more)
 
 ### Community 97 - "Community 97"
 Cohesion: 0.15
@@ -1115,7 +1193,7 @@ Nodes (12): AnimatedBuilder, build, ChatTypingIndicator, _ChatTypingIndicatorSta
 
 ### Community 98 - "Community 98"
 Cohesion: 0.10
-Nodes (19): build, Column, CompleteSignUpScreen, Scaffold, SignInStatusListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+11 more)
+Nodes (20): build, Column, CompleteSignUpScreen, Scaffold, SignInStatusListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+12 more)
 
 ### Community 99 - "Community 99"
 Cohesion: 0.08
@@ -1134,8 +1212,8 @@ Cohesion: 0.13
 Nodes (14): build, _buildFewImages, _buildImageList, Column, Container, dispose, Expanded, Padding (+6 more)
 
 ### Community 103 - "Community 103"
-Cohesion: 0.15
-Nodes (12): init, ProfileDi, ../data/datasources/profile_remote_datasource.dart, ../data/repositories/profile_repository_impl.dart, package:mindtrip/core/database/api/dio_consumer.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/user/domain/usecases/update_profile_use_case.dart, package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart (+4 more)
+Cohesion: 0.12
+Nodes (15): init, ProfileDi, ../data/datasources/profile_remote_datasource.dart, ../data/repositories/profile_repository_impl.dart, package:mindtrip/core/database/api/dio_consumer.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/user/domain/usecases/update_profile_use_case.dart, package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart (+7 more)
 
 ### Community 104 - "Community 104"
 Cohesion: 0.15
@@ -1150,24 +1228,24 @@ Cohesion: 0.17
 Nodes (11): build, ExploreTabBar, _ExploreTabBarState, GestureDetector, initState, SliverToBoxAdapter, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+3 more)
 
 ### Community 107 - "Community 107"
-Cohesion: 0.11
-Nodes (18): build, Container, ExploreTrendingList, SliverToBoxAdapter, _TrendingCard, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+10 more)
+Cohesion: 0.08
+Nodes (24): build, Container, dispose, ExploreTrendingList, _ExploreTrendingListState, initState, _onScroll, Skeletonizer (+16 more)
 
 ### Community 108 - "Community 108"
-Cohesion: 0.15
-Nodes (12): build, Expanded, OnboardingPages, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart, package:mindtrip/core/utils/wavy_clipper.dart (+4 more)
+Cohesion: 0.14
+Nodes (13): build, Expanded, OnboardingPages, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/custom_head_line.dart, package:mindtrip/core/utils/extension.dart (+5 more)
 
 ### Community 109 - "Community 109"
-Cohesion: 0.15
-Nodes (12): AppCachedImage, AppCacheManager, build, CachedNetworkImage, Container, _errorWidget, package:cached_network_image/cached_network_image.dart, package:flutter/material.dart (+4 more)
+Cohesion: 0.14
+Nodes (13): AppCachedImage, AppCacheManager, build, CachedNetworkImage, Container, _errorWidget, LayoutBuilder, package:cached_network_image/cached_network_image.dart (+5 more)
 
 ### Community 110 - "Community 110"
 Cohesion: 0.17
 Nodes (11): clear, dismissInterestError, editSelectedCategory, setUser, UserCubit, package:bloc/bloc.dart, package:equatable/equatable.dart, package:mindtrip/core/shared/user/domain/usecases/get_current_user.dart (+3 more)
 
 ### Community 111 - "Community 111"
-Cohesion: 0.17
-Nodes (11): File, ImagePickCropService, openAppSettings, dart:io, package:flutter/material.dart, package:image_picker/image_picker.dart, package:mindtrip/core/widget/app_snackbar.dart, package:mindtrip/core/widget/appp_dialog.dart (+3 more)
+Cohesion: 0.14
+Nodes (13): File, ImagePickCropService, openAppSettings, dart:io, package:flutter/material.dart, package:image_picker/image_picker.dart, package:mindtrip/core/shared/presentation/widget/app_snackbar.dart, package:mindtrip/core/shared/presentation/widget/appp_dialog.dart (+5 more)
 
 ### Community 112 - "Community 112"
 Cohesion: 0.14
@@ -1210,8 +1288,8 @@ Cohesion: 0.17
 Nodes (11): AuthRoutes, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/shared/routes/app_transition_route.dart, package:mindtrip/features/authetication/presentation/screens/complete_reset_password.dart, package:mindtrip/features/authetication/presentation/screens/complete_signup_screen.dart, package:mindtrip/features/authetication/presentation/screens/forget_password_screen.dart, package:mindtrip/features/authetication/presentation/screens/otp_screen.dart (+3 more)
 
 ### Community 122 - "Community 122"
-Cohesion: 0.17
-Nodes (11): build, InterestsButtons, OutlinedButton, SingleChildScrollView, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/models/interest_categories.dart (+3 more)
+Cohesion: 0.15
+Nodes (12): build, InterestsButtons, OutlinedButton, SingleChildScrollView, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/models/interest_categories.dart (+4 more)
 
 ### Community 123 - "Community 123"
 Cohesion: 0.17
@@ -1226,12 +1304,12 @@ Cohesion: 0.17
 Nodes (11): _AnimatedPolicySection, build, LegalScaffold, Opacity, UserPolicyScreen, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart (+3 more)
 
 ### Community 126 - "Community 126"
-Cohesion: 0.17
-Nodes (11): build, EditProfileListeners, MultiBlocListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart, package:mindtrip/core/shared/routes/app_routes.dart (+3 more)
+Cohesion: 0.15
+Nodes (12): build, EditProfileListeners, MultiBlocListener, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart, package:mindtrip/core/shared/presentation/widget/app_snackbar.dart (+4 more)
 
 ### Community 127 - "Community 127"
-Cohesion: 0.15
-Nodes (12): build, LegalScaffold, PopScope, _ProfileLegalTopBar, Scaffold, SizedBox, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+4 more)
+Cohesion: 0.14
+Nodes (13): build, LegalScaffold, PopScope, _ProfileLegalTopBar, Scaffold, SizedBox, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+5 more)
 
 ### Community 128 - "Community 128"
 Cohesion: 0.17
@@ -1250,12 +1328,12 @@ Cohesion: 0.17
 Nodes (11): AppShell, _AppShellState, build, didChangeAppLifecycleState, dispose, initState, Scaffold, package:flutter_bloc/flutter_bloc.dart (+3 more)
 
 ### Community 132 - "Community 132"
-Cohesion: 0.18
-Nodes (10): AttachmentPickerService, _filterBySize, openAppSettings, dart:io, package:file_picker/file_picker.dart, package:flutter/material.dart, package:image_picker/image_picker.dart, package:mindtrip/core/widget/app_snackbar.dart (+2 more)
+Cohesion: 0.15
+Nodes (12): AttachmentPickerService, _filterBySize, openAppSettings, dart:io, package:file_picker/file_picker.dart, package:flutter/material.dart, package:image_picker/image_picker.dart, package:mindtrip/core/shared/presentation/widget/app_snackbar.dart (+4 more)
 
 ### Community 133 - "Community 133"
-Cohesion: 0.18
-Nodes (10): build, _CounterAction, CounterRow, InkWell, Padding, Spacer, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+2 more)
+Cohesion: 0.14
+Nodes (13): build, _CounterAction, CounterRow, InkWell, Padding, ScaleTransition, Spacer, TapScaleEffect (+5 more)
 
 ### Community 134 - "Community 134"
 Cohesion: 0.18
@@ -1266,8 +1344,8 @@ Cohesion: 0.17
 Nodes (11): build, ClipRRect, SavedTripCard, dart:ui, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/data/models/trip_model.dart, package:mindtrip/core/shared/domain/entities/trip_entity.dart (+3 more)
 
 ### Community 136 - "Community 136"
-Cohesion: 0.18
-Nodes (10): _formatData, LoggingInterceptor, onError, onRequest, onResponse, _pretty, _toCurl, dart:convert (+2 more)
+Cohesion: 0.17
+Nodes (11): _formatData, LoggingInterceptor, onError, onRequest, onResponse, _pretty, _toCurl, _truncate (+3 more)
 
 ### Community 137 - "Community 137"
 Cohesion: 0.18
@@ -1278,20 +1356,20 @@ Cohesion: 0.18
 Nodes (10): changeMonth, nextMonth, previouseMonth, selectDay, TripsCubit, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/features/ai_planner/domain/entities/trip.dart, package:mindtrip/features/ai_planner/domain/repositories/trip_repository.dart (+2 more)
 
 ### Community 139 - "Community 139"
-Cohesion: 0.18
-Nodes (10): build, ExploreCategoryChips, _ExploreCategoryChipsState, GestureDetector, SliverToBoxAdapter, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/enums/place_category.dart (+2 more)
+Cohesion: 0.12
+Nodes (16): build, ExploreCategoryChips, _ExploreCategoryChipsState, GestureDetector, SliverToBoxAdapter, TapScaleEffect, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+8 more)
 
 ### Community 140 - "Community 140"
-Cohesion: 0.18
-Nodes (10): build, ExploreHeader, SliverToBoxAdapter, TextSpan, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart (+2 more)
+Cohesion: 0.15
+Nodes (12): build, ExploreHeader, SliverToBoxAdapter, TextSpan, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/custom_head_line.dart (+4 more)
 
 ### Community 141 - "Community 141"
 Cohesion: 0.18
 Nodes (10): _ActionChip, build, ExploreResultsBar, GestureDetector, SliverToBoxAdapter, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+2 more)
 
 ### Community 142 - "Community 142"
-Cohesion: 0.17
-Nodes (11): _listenToFavoriteChanges, SavedPlacesCubit, selectCategory, dart:async, package:bloc/bloc.dart, package:equatable/equatable.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/place_model.dart (+3 more)
+Cohesion: 0.14
+Nodes (13): _listenToFavoriteChanges, SavedPlacesCubit, selectCategory, dart:async, package:bloc/bloc.dart, package:equatable/equatable.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/place_model.dart (+5 more)
 
 ### Community 143 - "Community 143"
 Cohesion: 0.18
@@ -1334,8 +1412,8 @@ Cohesion: 0.20
 Nodes (9): build, _buildImage, EditAvatar, Stack, dart:io, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart (+1 more)
 
 ### Community 153 - "Community 153"
-Cohesion: 0.18
-Nodes (10): AppHive, openBoxes, registerAdapters, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart (+2 more)
+Cohesion: 0.14
+Nodes (13): AppHive, openBoxes, registerAdapters, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/banner_model.dart, package:mindtrip/core/shared/data/models/location_model.dart (+5 more)
 
 ### Community 154 - "Community 154"
 Cohesion: 0.20
@@ -1382,8 +1460,8 @@ Cohesion: 0.20
 Nodes (9): GooglePlacesRepositoryImpl, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/features/map/data/models/place_prediction.dart, package:mindtrip/features/map/domain/entities/google_place.dart, package:mindtrip/features/map/domain/repositories/google_places_repository.dart, package:mindtrip/features/map/data/datasources/google_places_datasource.dart (+1 more)
 
 ### Community 165 - "Community 165"
-Cohesion: 0.20
-Nodes (9): build, MapSearchBar, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/theme/app_shadows.dart (+1 more)
+Cohesion: 0.17
+Nodes (11): build, MapSearchBar, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/shared/routes/app_routes.dart (+3 more)
 
 ### Community 166 - "Community 166"
 Cohesion: 0.18
@@ -1402,24 +1480,24 @@ Cohesion: 0.20
 Nodes (9): main, pumpAppWithHarness, package:flutter/material.dart, package:flutter_test/flutter_test.dart, package:mindtrip/core/enums/auth_status.dart, package:mindtrip/core/enums/otp_flow.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart (+1 more)
 
 ### Community 170 - "Community 170"
-Cohesion: 0.20
-Nodes (9): main, pumpAppWithHarness, package:flutter/material.dart, package:flutter_test/flutter_test.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart, package:mindtrip/core/theme/cubit/theme_cubit.dart (+1 more)
+Cohesion: 0.18
+Nodes (10): main, pumpAppWithHarness, package:flutter/material.dart, package:flutter_test/flutter_test.dart, package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart, package:mindtrip/core/theme/cubit/theme_cubit.dart (+2 more)
 
 ### Community 171 - "Community 171"
 Cohesion: 0.20
 Nodes (9): schema_version, description, installed_at, name, source, updated_at, version, workflows (+1 more)
 
 ### Community 172 - "Community 172"
-Cohesion: 0.22
-Nodes (8): AuthHeadline, build, Row, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart, package:mindtrip/core/widget/custom_head_line.dart
+Cohesion: 0.15
+Nodes (12): AuthHeadline, build, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/custom_head_line.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart (+4 more)
 
 ### Community 173 - "Community 173"
 Cohesion: 0.22
 Nodes (8): Error, failure, Function, Ok, Result, success, toString, package:mindtrip/core/errors/failure/failure.dart
 
 ### Community 174 - "Community 174"
-Cohesion: 0.18
-Nodes (10): FavoritesRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/data/datasources/favorites_local_data_source.dart, package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/data/models/place_model.dart (+2 more)
+Cohesion: 0.17
+Nodes (11): FavoritesRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/data/datasources/favorites_local_data_source.dart, package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/data/models/place_model.dart (+3 more)
 
 ### Community 175 - "Community 175"
 Cohesion: 0.22
@@ -1458,8 +1536,8 @@ Cohesion: 0.22
 Nodes (8): build, Row, TripDetailsHeader, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/widget/custom_head_line.dart, package:mindtrip/features/ai_planner/domain/entities/trip.dart
 
 ### Community 184 - "Community 184"
-Cohesion: 0.22
-Nodes (8): build, MapRelocateButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_shadows.dart, package:mindtrip/core/utils/extension.dart, package:mindtrip/core/widget/tap_scale_effect.dart
+Cohesion: 0.20
+Nodes (9): build, MapRelocateButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_shadows.dart, package:mindtrip/core/utils/extension.dart (+1 more)
 
 ### Community 185 - "Community 185"
 Cohesion: 0.22
@@ -1474,8 +1552,8 @@ Cohesion: 0.22
 Nodes (8): build, Column, Container, InfoCard, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 188 - "Community 188"
-Cohesion: 0.22
-Nodes (8): build, Row, SectionHeading, Spacer, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart
+Cohesion: 0.20
+Nodes (9): build, Row, SectionHeading, Spacer, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_text_styles.dart (+1 more)
 
 ### Community 189 - "Community 189"
 Cohesion: 0.39
@@ -1510,8 +1588,8 @@ Cohesion: 0.29
 Nodes (8): class, EqualUnmodifiableListView, identical, _MapNavigationState, orElse, _then, toString, _
 
 ### Community 197 - "Community 197"
-Cohesion: 0.25
-Nodes (7): build, MapActionButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/widget/tap_scale_effect.dart
+Cohesion: 0.22
+Nodes (8): build, MapActionButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/widget/tap_scale_effect.dart
 
 ### Community 198 - "Community 198"
 Cohesion: 0.25
@@ -1522,24 +1600,24 @@ Cohesion: 0.25
 Nodes (7): build, Column, ProfileInfoRow, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 200 - "Community 200"
-Cohesion: 0.22
-Nodes (8): registerAdapters, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/features/ai_planner/data/models/trip_model.dart, package:mindtrip/features/trips/data/models/trip_model.dart, package:hive_ce/hive_ce.dart
+Cohesion: 0.15
+Nodes (12): registerAdapters, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/enums/place_city.dart, package:mindtrip/core/shared/data/models/banner_model.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/data/models/planner_preview_model.dart (+4 more)
 
 ### Community 201 - "Community 201"
 Cohesion: 0.25
 Nodes (7): CacheFailure, CancelledFailure, Failure, NetworkFailure, ServerFailure, UnauthorizedFailure, UnknownFailure
 
 ### Community 202 - "Community 202"
-Cohesion: 0.22
-Nodes (8): PlaceEntity, PlaceModel, toEntity, toModel, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, location_mapper.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart
+Cohesion: 0.15
+Nodes (12): PlaceEntity, PlaceModel, toEntity, toModel, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart (+4 more)
 
 ### Community 203 - "Community 203"
-Cohesion: 0.20
-Nodes (9): toEntity, toModel, TourPackageEntity, TourPackageModel, package:mindtrip/core/shared/data/models/tour_package_model.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/core/shared/data/mapper/location_mapper.dart, package:mindtrip/core/shared/data/models/tour_package_model.dart (+1 more)
+Cohesion: 0.12
+Nodes (15): toEntity, toModel, TourPackageEntity, TourPackageModel, toEntity, toModel, TourPackageEntity, TourPackageModel (+7 more)
 
 ### Community 204 - "Community 204"
-Cohesion: 0.20
-Nodes (9): toEntity, toModel, TripEntity, TripModel, package:mindtrip/core/shared/data/models/trip_model.dart, package:mindtrip/core/shared/domain/entities/trip_entity.dart, package:mindtrip/core/shared/data/models/trip_model.dart, package:mindtrip/core/shared/domain/entities/trip_entity.dart (+1 more)
+Cohesion: 0.18
+Nodes (10): toEntity, toModel, TripEntity, TripModel, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/data/models/trip_model.dart, package:mindtrip/core/shared/domain/entities/trip_entity.dart, package:mindtrip/core/shared/data/models/trip_model.dart (+2 more)
 
 ### Community 205 - "Community 205"
 Cohesion: 0.14
@@ -1598,24 +1676,24 @@ Cohesion: 0.29
 Nodes (8): _AuthState, class, identical, orElse, StateError, _then, toString, _
 
 ### Community 219 - "Community 219"
-Cohesion: 0.12
-Nodes (16): build, ExplorePlaceCard, ExplorePlacesGrid, Skeletonizer, SliverToBoxAdapter, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+8 more)
+Cohesion: 0.09
+Nodes (21): build, dispose, ExplorePlaceCard, ExplorePlacesGrid, _ExplorePlacesGridState, initState, _onScroll, SizedBox (+13 more)
 
 ### Community 220 - "Community 220"
-Cohesion: 0.17
-Nodes (11): _ActionChip, build, ExploreSectionHeader, GestureDetector, SliverToBoxAdapter, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+3 more)
+Cohesion: 0.14
+Nodes (13): _ActionChip, build, ExploreSectionHeader, GestureDetector, SliverToBoxAdapter, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+5 more)
 
 ### Community 221 - "Community 221"
-Cohesion: 0.15
-Nodes (12): HomeMockData, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/banner_model.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/data/models/tour_package_model.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart (+4 more)
+Cohesion: 0.13
+Nodes (14): HomeMockData, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/banner_model.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/data/models/tour_package_model.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart (+6 more)
 
 ### Community 222 - "Community 222"
 Cohesion: 0.25
 Nodes (7): build, HomeSearchBar, _HomeSearchBarState, SliverToBoxAdapter, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 223 - "Community 223"
-Cohesion: 0.25
-Nodes (7): build, Column, InterestsHeader, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/utils/extension.dart
+Cohesion: 0.20
+Nodes (9): build, Column, InterestsHeader, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_colors.dart (+1 more)
 
 ### Community 224 - "Community 224"
 Cohesion: 0.29
@@ -1630,8 +1708,8 @@ Cohesion: 0.29
 Nodes (8): class, _EditProfileState, identical, orElse, StateError, _then, toString, _
 
 ### Community 227 - "Community 227"
-Cohesion: 0.25
-Nodes (7): build, FavoriteBubble, GestureDetector, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart
+Cohesion: 0.22
+Nodes (8): build, FavoriteBubble, GestureDetector, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/favorite/cubit/favorite_cubit.dart, package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart
 
 ### Community 228 - "Community 228"
 Cohesion: 0.25
@@ -1666,8 +1744,8 @@ Cohesion: 0.29
 Nodes (6): ProfileRepositoryImpl, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/features/profile/domain/repositories/profile_repository.dart, package:mindtrip/features/profile/data/datasources/profile_remote_datasource.dart
 
 ### Community 236 - "Community 236"
-Cohesion: 0.29
-Nodes (6): build, EditTopBar, SizedBox, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart
+Cohesion: 0.22
+Nodes (8): build, EditTopBar, SizedBox, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 237 - "Community 237"
 Cohesion: 0.29
@@ -1698,16 +1776,16 @@ Cohesion: 0.22
 Nodes (8): ReviewEntity, ReviewModel, toEntity, toModel, package:mindtrip/core/shared/data/models/review_model.dart, package:mindtrip/core/shared/domain/entities/review_entity.dart, package:mindtrip/core/shared/data/models/review_model.dart, package:mindtrip/core/shared/domain/entities/review_entity.dart
 
 ### Community 244 - "Community 244"
-Cohesion: 0.25
-Nodes (7): PlaceModel, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, location_model.dart
+Cohesion: 0.22
+Nodes (8): PlaceModel, _toDoubleNonNullable, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, location_model.dart
 
 ### Community 245 - "Community 245"
 Cohesion: 0.29
 Nodes (6): copyWith, PlaceEntity, package:equatable/equatable.dart, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart
 
 ### Community 246 - "Community 246"
-Cohesion: 0.29
-Nodes (6): build, Scaffold, TabsShell, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/bottom_nav.dart
+Cohesion: 0.15
+Nodes (11): build, Scaffold, TabsShell, build, Scaffold, TabsShell, package:flutter/material.dart, package:go_router/go_router.dart (+3 more)
 
 ### Community 247 - "Community 247"
 Cohesion: 0.29
@@ -1742,24 +1820,24 @@ Cohesion: 0.29
 Nodes (6): build, DividerRow, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 255 - "Community 255"
-Cohesion: 0.29
-Nodes (6): build, HomeSectionHeader, SliverToBoxAdapter, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart
+Cohesion: 0.25
+Nodes (7): build, HomeSectionHeader, SliverToBoxAdapter, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 256 - "Community 256"
 Cohesion: 0.29
 Nodes (6): InterestsRoutes, InterestsScreen, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/shared/routes/app_transition_route.dart, package:mindtrip/features/interests/presentation/screens/interests_screen.dart
 
 ### Community 257 - "Community 257"
-Cohesion: 0.25
-Nodes (7): copyWith, MapAnnotationEntry, ../../../../core/shared/data/models/place_model.dart, ../../../../core/shared/domain/entities/place_entity.dart, dart:ui, package:equatable/equatable.dart, package:mindtrip/features/map/domain/entities/google_place.dart
+Cohesion: 0.22
+Nodes (8): copyWith, MapAnnotationEntry, ../../../../core/shared/data/models/place_model.dart, ../../../../core/shared/domain/entities/place_entity.dart, dart:ui, package:equatable/equatable.dart, package:mindtrip/features/map/domain/entities/google_place.dart, ../../../places/domain/entity/place_entity.dart
 
 ### Community 258 - "Community 258"
 Cohesion: 0.29
 Nodes (6): MapRoute, package:equatable/equatable.dart, package:mapbox_maps_flutter/mapbox_maps_flutter.dart, navigation_profile.dart, package:mindtrip/features/map/domain/entities/route_step.dart, route_leg.dart
 
 ### Community 259 - "Community 259"
-Cohesion: 0.22
-Nodes (8): MapState, ../../../ai_planner/domain/entities/trip_day.dart, ../../../../core/shared/data/models/place_model.dart, ../../../../core/shared/domain/entities/place_entity.dart, ../../domain/entities/google_place.dart, ../../domain/entities/map_annotation_entry.dart, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/features/itinerary/domain/entities/trip_day.dart
+Cohesion: 0.20
+Nodes (9): MapState, ../../../ai_planner/domain/entities/trip_day.dart, ../../../../core/shared/data/models/place_model.dart, ../../../../core/shared/domain/entities/place_entity.dart, ../../domain/entities/google_place.dart, ../../domain/entities/map_annotation_entry.dart, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/features/itinerary/domain/entities/trip_day.dart (+1 more)
 
 ### Community 260 - "Community 260"
 Cohesion: 0.29
@@ -1794,12 +1872,12 @@ Cohesion: 0.33
 Nodes (5): AuthState, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/enums/auth_status.dart, package:mindtrip/core/enums/otp_flow.dart, package:mindtrip/features/authetication/domain/entities/user_entity.dart
 
 ### Community 268 - "Community 268"
-Cohesion: 0.25
-Nodes (7): ExploreMockData, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/explore/presentation/models/explore_models.dart
+Cohesion: 0.22
+Nodes (8): ExploreMockData, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/location_model.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/explore/presentation/models/explore_models.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 269 - "Community 269"
-Cohesion: 0.29
-Nodes (6): buildPhotoUrl, GooglePlacesRemoteDatasource, package:dio/dio.dart, package:mindtrip/core/app_env.dart, package:mindtrip/features/map/data/models/google_place_model.dart, package:mindtrip/features/map/data/models/place_prediction.dart
+Cohesion: 0.25
+Nodes (7): buildPhotoUrl, GooglePlacesRemoteDatasource, package:dio/dio.dart, package:mindtrip/core/app_env.dart, package:mindtrip/core/utils/app_env.dart, package:mindtrip/features/map/data/models/google_place_model.dart, package:mindtrip/features/map/data/models/place_prediction.dart
 
 ### Community 270 - "Community 270"
 Cohesion: 0.33
@@ -1826,8 +1904,8 @@ Cohesion: 0.33
 Nodes (5): handle_new_rx_page(), __lldb_init_module(), Intercept NOTIFY_DEBUGGER_ABOUT_RX_PAGES and touch the pages., SBDebugger, SBFrame
 
 ### Community 276 - "Community 276"
-Cohesion: 0.33
-Nodes (5): PlacesLocalDataSource, PlacesLocalDataSourceImpl, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/database/cache/app_hive.dart, package:mindtrip/core/shared/data/models/place_model.dart
+Cohesion: 0.25
+Nodes (7): cachePlaces, getPlaces, PlacesLocalDataSource, PlacesLocalDataSourceImpl, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/database/cache/app_hive.dart, package:mindtrip/core/shared/data/models/place_model.dart
 
 ### Community 277 - "Community 277"
 Cohesion: 0.33
@@ -1943,11 +2021,11 @@ Nodes (4): Exception, FacebookAuthProvider, package:mindtrip/core/shared/auth/pr
 
 ### Community 305 - "Community 305"
 Cohesion: 0.40
-Nodes (4): _PlaceModel, PlaceModelAdapter, read, write
+Nodes (4): PlaceModel, PlaceModelAdapter, read, write
 
 ### Community 306 - "Community 306"
-Cohesion: 0.33
-Nodes (5): GetFavoritePlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/domain/repositories/favorites_repository.dart
+Cohesion: 0.29
+Nodes (6): GetFavoritePlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/domain/repositories/favorites_repository.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 307 - "Community 307"
 Cohesion: 0.40
@@ -2002,8 +2080,8 @@ Cohesion: 0.25
 Nodes (7): ExploreRoutes, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart, package:mindtrip/features/explore/presentation/screens/explore_screen.dart
 
 ### Community 320 - "Community 320"
-Cohesion: 0.25
-Nodes (7): HomeRoutes, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/features/home/presentation/cubit/home_cubit.dart, package:mindtrip/features/home/presentation/screens/home_screen.dart
+Cohesion: 0.20
+Nodes (9): HomeRoutes, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/features/home/presentation/cubit/home_cubit.dart, package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart, package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart (+1 more)
 
 ### Community 321 - "Community 321"
 Cohesion: 0.40
@@ -2078,8 +2156,8 @@ Cohesion: 0.50
 Nodes (3): package:flutter/foundation.dart, package:hydrated_bloc/hydrated_bloc.dart, package:path_provider/path_provider.dart
 
 ### Community 341 - "Community 341"
-Cohesion: 0.40
-Nodes (4): GoogleAuthProvider, package:google_sign_in/google_sign_in.dart, package:mindtrip/core/app_env.dart, package:mindtrip/core/shared/auth/providers/social_auth_provider.dart
+Cohesion: 0.33
+Nodes (5): GoogleAuthProvider, package:google_sign_in/google_sign_in.dart, package:mindtrip/core/app_env.dart, package:mindtrip/core/shared/auth/providers/social_auth_provider.dart, package:mindtrip/core/utils/app_env.dart
 
 ### Community 342 - "Community 342"
 Cohesion: 0.50
@@ -2098,8 +2176,8 @@ Cohesion: 0.40
 Nodes (4): LocationModel, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:hive_ce_flutter/adapters.dart
 
 ### Community 346 - "Community 346"
-Cohesion: 0.40
-Nodes (4): TourPackageModel, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/shared/data/models/location_model.dart
+Cohesion: 0.33
+Nodes (5): TourPackageModel, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/shared/data/models/location_model.dart
 
 ### Community 347 - "Community 347"
 Cohesion: 0.40
@@ -2110,12 +2188,12 @@ Cohesion: 0.50
 Nodes (3): TourPackageEntity, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart
 
 ### Community 349 - "Community 349"
-Cohesion: 0.50
-Nodes (3): TripEntity, package:equatable/equatable.dart, place_entity.dart
+Cohesion: 0.40
+Nodes (4): TripEntity, ../../../../features/places/domain/entity/place_entity.dart, package:equatable/equatable.dart, place_entity.dart
 
 ### Community 350 - "Community 350"
-Cohesion: 0.40
-Nodes (4): FavoritesRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart
+Cohesion: 0.33
+Nodes (5): FavoritesRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 351 - "Community 351"
 Cohesion: 0.50
@@ -2182,8 +2260,8 @@ Cohesion: 0.50
 Nodes (3): SendMessageUseCase, package:mindtrip/features/ai_planner/domain/entities/chat_message.dart, package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart
 
 ### Community 367 - "Community 367"
-Cohesion: 0.50
-Nodes (3): AuthResponseModel, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/shared/user/data/models/user_model.dart
+Cohesion: 0.40
+Nodes (4): AuthResponseModel, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/shared/user/data/models/user_model.dart, package:mindtrip/features/user/data/models/user_model.dart
 
 ### Community 368 - "Community 368"
 Cohesion: 0.50
@@ -2249,9 +2327,13 @@ Nodes (3): Android Launcher Icon, iOS App Icon (All Sizes), macOS App Icon (All 
 Cohesion: 0.67
 Nodes (3): Android Splash Screen, iOS Launch Background, iOS Launch Screen Image
 
-### Community 398 - "Community 398"
+### Community 396 - "Community 396"
 Cohesion: 0.50
-Nodes (3): BannerModel, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart
+Nodes (3): ApiKeys, EndPoints, placeDetails
+
+### Community 398 - "Community 398"
+Cohesion: 0.40
+Nodes (4): BannerModel, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:hive_ce_flutter/adapters.dart
 
 ### Community 399 - "Community 399"
 Cohesion: 0.50
@@ -2265,13 +2347,17 @@ Nodes (3): MapTripExtra, package:mindtrip/features/ai_planner/domain/entities/tr
 Cohesion: 0.67
 Nodes (3): Web Favicon, PWA Maskable Icons, PWA App Icons (192/512px)
 
+### Community 472 - "Community 472"
+Cohesion: 0.22
+Nodes (8): build, Positioned, ThemeIcon, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart, ../../../theme/cubit/theme_cubit.dart
+
 ### Community 502 - "Community 502"
 Cohesion: 0.06
-Nodes (34): AnimatedSize, build, _buildCollapsed, _buildExpanded, Column, Container, _CostChip, _DayMetaRow (+26 more)
+Nodes (35): AnimatedSize, build, _buildCollapsed, _buildExpanded, Column, Container, _CostChip, _DayMetaRow (+27 more)
 
 ### Community 503 - "Community 503"
-Cohesion: 0.05
-Nodes (40): build, _buildBody, Center, CustomScrollView, _EstimateNote, _MessageState, Padding, _SaveTripButton (+32 more)
+Cohesion: 0.04
+Nodes (44): build, _buildBody, Center, CustomScrollView, _EstimateNote, _MessageState, Padding, _SaveTripButton (+36 more)
 
 ### Community 504 - "Community 504"
 Cohesion: 0.06
@@ -2286,12 +2372,12 @@ Cohesion: 0.07
 Nodes (28): code:block1 (PlaceModel (existing, shared)), code:dart (abstract class MapRouteRepository {), code:text (lib/features/map/), code:dart (enum PlaceCategory {), code:dart (class MapAnnotationEntry extends Equatable {), code:dart (class SearchSuggestion extends Equatable {), code:dart (class MapSearchResult extends Equatable {), code:dart (class MapRoute extends Equatable {) (+20 more)
 
 ### Community 507 - "Community 507"
-Cohesion: 0.07
-Nodes (28): build, _PlaceDetailsBody, PlaceDetailsScreen, RefreshIndicator, Scaffold, SliverToBoxAdapter, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+20 more)
+Cohesion: 0.06
+Nodes (30): build, _PlaceDetailsBody, PlaceDetailsScreen, RefreshIndicator, Scaffold, SliverToBoxAdapter, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+22 more)
 
 ### Community 508 - "Community 508"
 Cohesion: 0.07
-Nodes (29): build, Center, Column, _CustomHeader, dispose, _EmptyState, initState, PopScope (+21 more)
+Nodes (28): build, Center, Column, _CustomHeader, dispose, _EmptyState, initState, PopScope (+20 more)
 
 ### Community 509 - "Community 509"
 Cohesion: 0.07
@@ -2306,8 +2392,8 @@ Cohesion: 0.08
 Nodes (25): AiRefinementSheet, _AiRefinementSheetState, Align, build, ChatMessageBubble, Container, dispose, Divider (+17 more)
 
 ### Community 512 - "Community 512"
-Cohesion: 0.08
-Nodes (24): build, Column, Duration, MapActionButton, PlaceCardOverviewMap, Text, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+16 more)
+Cohesion: 0.07
+Nodes (27): build, Column, Duration, MapActionButton, PlaceCardOverviewMap, Text, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+19 more)
 
 ### Community 513 - "Community 513"
 Cohesion: 0.09
@@ -2331,15 +2417,15 @@ Nodes (19): AddToTripFlowWrapper, AddToTripSheet, build, _buildCurrentSheet, Cre
 
 ### Community 518 - "Community 518"
 Cohesion: 0.05
-Nodes (39): AddToTripCubit, buildCubit, main, MockAddPlaceToTripUseCase, MockGenerateItineraryUseCase, MockGetAllTripsUseCase, MockGetItineraryUseCase, MockGetTripByIdUseCase (+31 more)
+Nodes (40): AddToTripCubit, buildCubit, main, MockAddPlaceToTripUseCase, MockGenerateItineraryUseCase, MockGetAllTripsUseCase, MockGetItineraryUseCase, MockGetTripByIdUseCase (+32 more)
 
 ### Community 519 - "Community 519"
 Cohesion: 0.11
 Nodes (18): build, Container, _NearbyPlaceCard, PlaceDetailsNearbyPlaces, Skeletonizer, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+10 more)
 
 ### Community 520 - "Community 520"
-Cohesion: 0.11
-Nodes (17): build, GestureDetector, _HeroIconButton, PlaceDetailsImageCover, SizedBox, TapScaleEffect, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+9 more)
+Cohesion: 0.10
+Nodes (19): build, GestureDetector, _HeroIconButton, PlaceDetailsImageCover, SizedBox, TapScaleEffect, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+11 more)
 
 ### Community 521 - "Community 521"
 Cohesion: 0.11
@@ -2355,19 +2441,19 @@ Nodes (16): build, Column, InkWell, _ManageActionItem, ManagePlaceSheet, package
 
 ### Community 524 - "Community 524"
 Cohesion: 0.11
-Nodes (17): init, ItineraryDi, package:mindtrip/core/database/cache/app_hive.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/itinerary/data/datasources/mock_itinerary_datasource.dart, package:mindtrip/features/itinerary/domain/repositories/itinerary_repository.dart, package:mindtrip/features/itinerary/domain/use_cases/add_place_to_trip_use_case.dart, package:mindtrip/features/itinerary/domain/use_cases/generate_itinerary_use_case.dart (+9 more)
+Nodes (18): init, ItineraryDi, package:mindtrip/core/database/cache/app_hive.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/itinerary/data/datasources/itinerary_data_source.dart, package:mindtrip/features/itinerary/data/datasources/mock_itinerary_datasource.dart, package:mindtrip/features/itinerary/domain/repositories/itinerary_repository.dart, package:mindtrip/features/itinerary/domain/use_cases/add_place_to_trip_use_case.dart (+10 more)
 
 ### Community 525 - "Community 525"
-Cohesion: 0.10
-Nodes (19): BlocProvider, build, _handleOnTap, Padding, PlaceDetailsTripButton, showAddToTripSheet, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+11 more)
+Cohesion: 0.09
+Nodes (21): BlocProvider, build, _handleOnTap, Padding, PlaceDetailsTripButton, showAddToTripSheet, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+13 more)
 
 ### Community 526 - "Community 526"
 Cohesion: 0.12
 Nodes (16): build, ClipRRect, _CoverImage, ScheduleTripTile, Stack, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart (+8 more)
 
 ### Community 527 - "Community 527"
-Cohesion: 0.12
-Nodes (16): build, Padding, Spacer, TripCard, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart (+8 more)
+Cohesion: 0.11
+Nodes (17): build, Padding, Spacer, TripCard, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart (+9 more)
 
 ### Community 528 - "Community 528"
 Cohesion: 0.12
@@ -2375,7 +2461,7 @@ Nodes (15): code:text ($ARGUMENTS), code:block2 (## Extension Hooks), code:block
 
 ### Community 529 - "Community 529"
 Cohesion: 0.12
-Nodes (15): build, Column, Container, _getTimeColor, _getTimeIcon, _PlaceActivityTile, _PlaceActivityTileState, _PlaceholderImage (+7 more)
+Nodes (16): build, Column, Container, _getTimeColor, _getTimeIcon, _PlaceActivityTile, _PlaceActivityTileState, _PlaceholderImage (+8 more)
 
 ### Community 530 - "Community 530"
 Cohesion: 0.12
@@ -2398,16 +2484,16 @@ Cohesion: 0.13
 Nodes (14): Anti-Examples: What NOT To Do, Checklist Purpose: "Unit Tests for English", code:text ($ARGUMENTS), code:block2 (## Extension Hooks), code:block3 (## Extension Hooks), code:markdown (- [ ] CHK001 - Verify landing page displays 3 episode cards ), code:markdown (- [ ] CHK001 - Are the number and layout of featured episode), code:block6 (## Extension Hooks) (+6 more)
 
 ### Community 535 - "Community 535"
-Cohesion: 0.13
-Nodes (14): _containsPlace, ItineraryRepositoryImpl, _removePlaceFromItinerary, saveItinerary, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/errors/failure/failure.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart (+6 more)
+Cohesion: 0.12
+Nodes (16): _containsPlace, ItineraryRepositoryImpl, _removePlaceFromItinerary, saveItinerary, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/errors/failure/failure.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart (+8 more)
 
 ### Community 536 - "Community 536"
-Cohesion: 0.13
-Nodes (14): build, Column, PlaceDetailsReviews, _RatingBar, _RatingBars, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+6 more)
+Cohesion: 0.12
+Nodes (15): build, Column, PlaceDetailsReviews, _RatingBar, _RatingBars, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+7 more)
 
 ### Community 537 - "Community 537"
-Cohesion: 0.13
-Nodes (14): main, MockGetNearbyPlacesUseCase, MockGetPlaceDetailsUseCase, PlaceDetailsState, package:flutter_test/flutter_test.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/errors/failure/failure.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart (+6 more)
+Cohesion: 0.12
+Nodes (15): main, MockGetNearbyPlacesUseCase, MockGetPlaceDetailsUseCase, PlaceDetailsState, package:flutter_test/flutter_test.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/errors/failure/failure.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart (+7 more)
 
 ### Community 538 - "Community 538"
 Cohesion: 0.14
@@ -2418,24 +2504,24 @@ Cohesion: 0.14
 Nodes (13): Checklist Format (REQUIRED), code:text ($ARGUMENTS), code:block2 (## Extension Hooks), code:block3 (## Extension Hooks), code:block4 (## Extension Hooks), code:block5 (## Extension Hooks), code:text (- [ ] [TaskID] [P?] [Story?] Description with file path), Outline (+5 more)
 
 ### Community 540 - "Community 540"
-Cohesion: 0.11
-Nodes (18): build, Column, PlaceDetailsLocationSection, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:geolocator/geolocator.dart, package:go_router/go_router.dart (+10 more)
+Cohesion: 0.09
+Nodes (21): build, Column, PlaceDetailsLocationSection, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:geolocator/geolocator.dart, package:go_router/go_router.dart (+13 more)
 
 ### Community 541 - "Community 541"
-Cohesion: 0.14
-Nodes (13): build, InkWell, StartPlanningButton, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart (+5 more)
+Cohesion: 0.12
+Nodes (15): build, InkWell, StartPlanningButton, TapScaleEffect, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart (+7 more)
 
 ### Community 542 - "Community 542"
 Cohesion: 0.15
 Nodes (12): TimeSlot, TimeSlotModel, toEntity, TripDay, TripDayModel, TripItinerary, TripItineraryModel, package:mindtrip/core/shared/data/mapper/place_mapper.dart (+4 more)
 
 ### Community 543 - "Community 543"
-Cohesion: 0.15
-Nodes (12): build, Column, PlaceDetailsHeader, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/theme/app_colors.dart (+4 more)
+Cohesion: 0.14
+Nodes (13): build, Column, PlaceDetailsHeader, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/theme/app_colors.dart (+5 more)
 
 ### Community 544 - "Community 544"
-Cohesion: 0.15
-Nodes (12): build, Column, Container, Expanded, PlaceDetailsVisitInfo, _VisitInfoTile, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+4 more)
+Cohesion: 0.14
+Nodes (13): build, Column, Container, Expanded, PlaceDetailsVisitInfo, _VisitInfoTile, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+5 more)
 
 ### Community 545 - "Community 545"
 Cohesion: 0.15
@@ -2454,16 +2540,16 @@ Cohesion: 0.17
 Nodes (11): build, Column, Padding, TimePeriodSection, TripDayCard, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_text_styles.dart (+3 more)
 
 ### Community 549 - "Community 549"
-Cohesion: 0.17
-Nodes (11): build, Container, _OutlinedInfoChip, PlaceDetailsInfoChips, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart (+3 more)
+Cohesion: 0.15
+Nodes (12): build, Container, _OutlinedInfoChip, PlaceDetailsInfoChips, Row, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart (+4 more)
 
 ### Community 550 - "Community 550"
-Cohesion: 0.17
-Nodes (11): build, confirm, _RenameTripDialog, TextField, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_text_styles.dart (+3 more)
+Cohesion: 0.15
+Nodes (12): build, confirm, _RenameTripDialog, TextField, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/appp_dialog.dart (+4 more)
 
 ### Community 551 - "Community 551"
-Cohesion: 0.17
-Nodes (11): build, Padding, SingleChildScrollView, TripFilterTabs, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/theme/app_gradients.dart (+3 more)
+Cohesion: 0.15
+Nodes (12): build, Padding, SingleChildScrollView, TripFilterTabs, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_colors.dart (+4 more)
 
 ### Community 552 - "Community 552"
 Cohesion: 0.18
@@ -2478,24 +2564,24 @@ Cohesion: 0.18
 Nodes (10): code:text ($ARGUMENTS), code:block2 (## Extension Hooks), code:block3 (## Extension Hooks), code:bash (git config --get remote.origin.url), code:block5 (## Extension Hooks), code:block6 (## Extension Hooks), Outline, Post-Execution Checks (+2 more)
 
 ### Community 555 - "Community 555"
-Cohesion: 0.18
-Nodes (10): AppErrorWidget, build, Padding, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/app_assets.dart (+2 more)
+Cohesion: 0.17
+Nodes (11): AppErrorWidget, build, Padding, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_text_styles.dart (+3 more)
 
 ### Community 556 - "Community 556"
-Cohesion: 0.18
-Nodes (10): build, Container, TripMapPreviewCard, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart (+2 more)
+Cohesion: 0.17
+Nodes (11): build, Container, TripMapPreviewCard, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart, package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart, package:mindtrip/core/theme/app_text_styles.dart (+3 more)
 
 ### Community 557 - "Community 557"
-Cohesion: 0.18
-Nodes (10): init, PlaceDetailsDi, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart, package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart, package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart, package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart (+2 more)
+Cohesion: 0.15
+Nodes (12): init, PlaceDetailsDi, package:mindtrip/core/database/api/api_consumer.dart, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart, package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart, package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart (+4 more)
 
 ### Community 558 - "Community 558"
-Cohesion: 0.18
-Nodes (10): build, Column, PlaceDetailsOverview, _PlaceDetailsOverviewState, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/theme/app_colors.dart (+2 more)
+Cohesion: 0.17
+Nodes (11): build, Column, PlaceDetailsOverview, _PlaceDetailsOverviewState, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/theme/app_colors.dart (+3 more)
 
 ### Community 559 - "Community 559"
-Cohesion: 0.18
-Nodes (10): BlocProvider, Exception, PlaceDetailsRoutes, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart (+2 more)
+Cohesion: 0.17
+Nodes (11): BlocProvider, Exception, PlaceDetailsRoutes, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart (+3 more)
 
 ### Community 560 - "Community 560"
 Cohesion: 0.18
@@ -2534,16 +2620,16 @@ Cohesion: 0.20
 Nodes (9): Branch Numbering Mode, code:text ($ARGUMENTS), Create Feature Branch, Environment Variable Override, Execution, Graceful Degradation, Output, Prerequisites (+1 more)
 
 ### Community 569 - "Community 569"
-Cohesion: 0.20
-Nodes (9): build, SliverToBoxAdapter, TripDetailsTopBar, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart (+1 more)
+Cohesion: 0.17
+Nodes (11): build, SliverToBoxAdapter, TripDetailsTopBar, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/custom_head_line.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_colors.dart (+3 more)
 
 ### Community 570 - "Community 570"
 Cohesion: 0.20
 Nodes (9): build, ClipRRect, dispose, PlaceDetailsPhotoStrip, _PlaceDetailsPhotoStripState, Scrollbar, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart (+1 more)
 
 ### Community 571 - "Community 571"
-Cohesion: 0.20
-Nodes (9): build, Column, CustomCalenderHeader, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart (+1 more)
+Cohesion: 0.18
+Nodes (10): build, Column, CustomCalenderHeader, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/custom_head_line.dart, package:mindtrip/core/theme/app_text_styles.dart (+2 more)
 
 ### Community 572 - "Community 572"
 Cohesion: 0.20
@@ -2570,12 +2656,12 @@ Cohesion: 0.22
 Nodes (8): clear, nextMonth, previousMonth, RangeCalendarCubit, selectDate, setRange, package:bloc/bloc.dart, package:freezed_annotation/freezed_annotation.dart
 
 ### Community 578 - "Community 578"
-Cohesion: 0.22
-Nodes (8): build, Row, TripDetailsHeader, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/widget/custom_head_line.dart, package:mindtrip/features/trips/domain/entities/trip.dart
+Cohesion: 0.20
+Nodes (9): build, Row, TripDetailsHeader, package:flutter/material.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/custom_head_line.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/core/widget/custom_head_line.dart (+1 more)
 
 ### Community 579 - "Community 579"
-Cohesion: 0.22
-Nodes (8): PlaceDetailsRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart, package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart
+Cohesion: 0.18
+Nodes (10): PlaceDetailsRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart (+2 more)
 
 ### Community 580 - "Community 580"
 Cohesion: 0.22
@@ -2638,12 +2724,12 @@ Cohesion: 0.25
 Nodes (7): AddToTripState, copyWith, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/itinerary/domain/entities/time_slot.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/trips/domain/entities/trip.dart
 
 ### Community 595 - "Community 595"
-Cohesion: 0.25
-Nodes (7): build, CustomOtlinedButton, OutlinedActionButton, package:flutter/material.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart, package:mindtrip/core/widget/custom_otlined_button.dart
+Cohesion: 0.22
+Nodes (8): build, CustomOtlinedButton, OutlinedActionButton, package:flutter/material.dart, package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart, package:mindtrip/core/theme/app_text_styles.dart, package:mindtrip/core/utils/extension.dart, package:mindtrip/core/widget/custom_otlined_button.dart
 
 ### Community 596 - "Community 596"
-Cohesion: 0.25
-Nodes (7): canRefresh, PlaceDetailsCubit, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart, package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart, package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart
+Cohesion: 0.22
+Nodes (8): canRefresh, PlaceDetailsCubit, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart, package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart, package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 597 - "Community 597"
 Cohesion: 0.25
@@ -2670,20 +2756,20 @@ Cohesion: 0.29
 Nodes (6): build, Container, DragDivider, package:flutter_screenutil/flutter_screenutil.dart, package:flutter/widgets.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 603 - "Community 603"
-Cohesion: 0.29
-Nodes (6): ItineraryRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/itinerary/domain/entities/time_slot.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/trips/domain/entities/trip.dart
+Cohesion: 0.25
+Nodes (7): ItineraryRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/itinerary/domain/entities/time_slot.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/places/domain/entity/place_entity.dart, package:mindtrip/features/trips/domain/entities/trip.dart
 
 ### Community 604 - "Community 604"
-Cohesion: 0.29
-Nodes (6): AddPlaceToTripUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/itinerary/domain/entities/time_slot.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/itinerary/domain/repositories/itinerary_repository.dart
+Cohesion: 0.25
+Nodes (7): AddPlaceToTripUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/itinerary/domain/entities/time_slot.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/itinerary/domain/repositories/itinerary_repository.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 605 - "Community 605"
 Cohesion: 0.29
 Nodes (6): toggleActiveDay, TripDetailsCubit, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/features/itinerary/domain/use_cases/get_itinerary_use_case.dart, package:mindtrip/features/itinerary/presentation/cubit/trip_details_state.dart, package:mindtrip/features/trips/domain/use_cases/get_trip_by_id_use_case.dart
 
 ### Community 606 - "Community 606"
-Cohesion: 0.29
-Nodes (6): Exception, PlaceDetailsRemoteDataSource, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/features/explore/presentation/data/explore_mock_data.dart, package:mindtrip/features/home/presentation/data/home_mock_data.dart
+Cohesion: 0.18
+Nodes (10): Exception, PaginatedResponse, PlaceDetailsRemoteDataSource, package:mindtrip/core/database/api/api_consumer.dart, package:mindtrip/core/database/api/end_points.dart, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/models/paginated_response.dart (+2 more)
 
 ### Community 607 - "Community 607"
 Cohesion: 0.29
@@ -2750,8 +2836,8 @@ Cohesion: 0.40
 Nodes (4): SavePlanningSessionUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/features/ai_planner/domain/entities/planning_session.dart, package:mindtrip/features/ai_planner/domain/repositories/planning_session_repository.dart
 
 ### Community 623 - "Community 623"
-Cohesion: 0.40
-Nodes (4): copyWith, TimeSlot, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart
+Cohesion: 0.33
+Nodes (5): copyWith, TimeSlot, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 624 - "Community 624"
 Cohesion: 0.40
@@ -2774,16 +2860,16 @@ Cohesion: 0.40
 Nodes (4): SaveItineraryUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/itinerary/domain/repositories/itinerary_repository.dart
 
 ### Community 629 - "Community 629"
-Cohesion: 0.40
-Nodes (4): GetNearbyPlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart
+Cohesion: 0.29
+Nodes (6): GetNearbyPlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 630 - "Community 630"
-Cohesion: 0.40
-Nodes (4): GetPlaceDetailsUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart
+Cohesion: 0.33
+Nodes (5): GetPlaceDetailsUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 631 - "Community 631"
-Cohesion: 0.40
-Nodes (4): copyWith, PlaceDetailsState, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart
+Cohesion: 0.29
+Nodes (6): copyWith, PlaceDetailsState, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 632 - "Community 632"
 Cohesion: 0.40
@@ -2826,8 +2912,8 @@ Cohesion: 0.50
 Nodes (3): DeletePlanningSessionUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/features/ai_planner/domain/repositories/planning_session_repository.dart
 
 ### Community 642 - "Community 642"
-Cohesion: 0.50
-Nodes (3): PlaceDetailsRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart
+Cohesion: 0.33
+Nodes (5): PlaceDetailsRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 643 - "Community 643"
 Cohesion: 0.50
@@ -2845,9 +2931,17 @@ Nodes (3): DeleteTripUseCase, package:mindtrip/core/connections/result.dart, pac
 Cohesion: 0.12
 Nodes (15): 🤖 AI-Powered Planning, 🔄 Application Flow, code:text (lib/), code:mermaid (graph TD), code:bash (flutter pub get), code:bash (flutter run), 🚀 Features, 🛠️ Getting Started (+7 more)
 
+### Community 653 - "Community 653"
+Cohesion: 0.40
+Nodes (4): BannerModel, BannerModelAdapter, read, write
+
+### Community 656 - "Community 656"
+Cohesion: 0.40
+Nodes (4): read, TourPackageModel, TourPackageModelAdapter, write
+
 ### Community 658 - "Community 658"
-Cohesion: 0.22
-Nodes (8): build, SwipeCalenderArrrow, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/utils/extension.dart, package:mindtrip/core/widget/tap_scale_effect.dart
+Cohesion: 0.20
+Nodes (9): build, SwipeCalenderArrrow, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/utils/extension.dart (+1 more)
 
 ### Community 661 - "Community 661"
 Cohesion: 0.07
@@ -2855,27 +2949,27 @@ Nodes (27): AddToTripFlowWrapper, _AddToTripFlowWrapperState, build, _closeFlow,
 
 ### Community 662 - "Community 662"
 Cohesion: 0.07
-Nodes (26): AddToTripCubit, clearSelection, reset, selectPeriod, selectTrip, selectTripDate, updateBudget, updatePeople (+18 more)
+Nodes (27): AddToTripCubit, clearSelection, reset, selectPeriod, selectTrip, selectTripDate, updateBudget, updatePeople (+19 more)
 
 ### Community 663 - "Community 663"
-Cohesion: 0.07
-Nodes (26): build, Container, _CounterButton, CreateTripPlannerSheet, _DateField, DragDivider, _onGenerate, _SectionCard (+18 more)
+Cohesion: 0.06
+Nodes (30): build, Container, _CounterButton, CreateTripPlannerSheet, _DateField, DragDivider, _onGenerate, _SectionCard (+22 more)
 
 ### Community 664 - "Community 664"
-Cohesion: 0.09
-Nodes (22): AddToTripSheet, AppErrorWidget, build, Column, DragDivider, TapScaleEffect, _TripTile, package:flutter_bloc/flutter_bloc.dart (+14 more)
+Cohesion: 0.08
+Nodes (24): AddToTripSheet, AppErrorWidget, build, Column, DragDivider, TapScaleEffect, _TripTile, package:flutter_bloc/flutter_bloc.dart (+16 more)
 
 ### Community 665 - "Community 665"
-Cohesion: 0.09
-Nodes (22): build, Column, Container, DragDivider, Expanded, SelectDaySheet, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+14 more)
+Cohesion: 0.07
+Nodes (26): build, Column, Container, DragDivider, Expanded, SelectDaySheet, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+18 more)
 
 ### Community 666 - "Community 666"
 Cohesion: 0.10
 Nodes (19): build, Container, Expanded, TextSpan, TripShareCard, _TripShareInfoItem, _TripShareVerticalDivider, package:flutter/material.dart (+11 more)
 
 ### Community 667 - "Community 667"
-Cohesion: 0.11
-Nodes (17): build, Column, DragDivider, InkWell, _ManageActionItem, ManagePlaceSheet, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+9 more)
+Cohesion: 0.10
+Nodes (19): build, Column, DragDivider, InkWell, _ManageActionItem, ManagePlaceSheet, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart (+11 more)
 
 ### Community 668 - "Community 668"
 Cohesion: 0.14
@@ -2886,36 +2980,36 @@ Cohesion: 0.14
 Nodes (13): precacheImage, TripShareCubit, dart:typed_data, package:cached_network_image/cached_network_image.dart, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart (+5 more)
 
 ### Community 670 - "Community 670"
-Cohesion: 0.15
-Nodes (12): HomeDi, init, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart, package:mindtrip/features/home/data/datasources/home_local_data_source.dart, package:mindtrip/features/home/domain/repositories/home_repository.dart, package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_use_case.dart, package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart (+4 more)
+Cohesion: 0.12
+Nodes (16): HomeDi, init, package:mindtrip/core/database/cache/app_hive.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart, package:mindtrip/features/home/data/datasources/home_local_data_source.dart, package:mindtrip/features/home/data/datasources/home_remote_data_source.dart, package:mindtrip/features/home/domain/repositories/home_repository.dart (+8 more)
 
 ### Community 671 - "Community 671"
-Cohesion: 0.17
-Nodes (11): ExploreDi, init, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/explore/data/datasources/explore_local_data_source.dart, package:mindtrip/features/explore/domain/repositories/explore_repository.dart, package:mindtrip/features/explore/domain/use_cases/get_other_places_use_case.dart, package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart, package:mindtrip/features/explore/domain/use_cases/get_trending_places_use_case.dart (+3 more)
+Cohesion: 0.12
+Nodes (16): ExploreDi, init, package:mindtrip/core/database/cache/app_hive.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/explore/data/datasources/explore_local_data_source.dart, package:mindtrip/features/explore/data/datasources/explore_remote_data_source.dart, package:mindtrip/features/explore/domain/repositories/explore_repository.dart, package:mindtrip/features/explore/domain/use_cases/get_other_places_use_case.dart (+8 more)
 
 ### Community 672 - "Community 672"
 Cohesion: 0.20
 Nodes (9): AppConnectionBloc, _init, _onConnected, _onDisconnected, dart:async, package:bloc/bloc.dart, package:equatable/equatable.dart, package:internet_connection_checker_plus/internet_connection_checker_plus.dart (+1 more)
 
 ### Community 673 - "Community 673"
-Cohesion: 0.22
-Nodes (8): AddToTripState, copyWith, package:equatable/equatable.dart, package:intl/intl.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/itinerary/domain/entities/time_slot.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/trips/domain/entities/trip.dart
+Cohesion: 0.20
+Nodes (9): AddToTripState, copyWith, package:equatable/equatable.dart, package:intl/intl.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/itinerary/domain/entities/time_slot.dart, package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart, package:mindtrip/features/places/domain/entity/place_entity.dart (+1 more)
 
 ### Community 674 - "Community 674"
 Cohesion: 0.22
 Nodes (8): HomeCubit, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart, package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_use_case.dart, package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart, package:mindtrip/features/home/presentation/cubit/home_state.dart, package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart, package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart
 
 ### Community 675 - "Community 675"
-Cohesion: 0.22
-Nodes (8): init, PlacesDi, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/places/data/datasources/place_local_data_source.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart, package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart, package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart, package:mindtrip/features/places/data/repositories/place_repository_impl.dart
+Cohesion: 0.13
+Nodes (14): init, PlacesDi, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/features/places/data/datasources/place_local_data_source.dart, package:mindtrip/features/places/data/datasources/place_remote_data_source.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart, package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart (+6 more)
 
 ### Community 676 - "Community 676"
-Cohesion: 0.25
-Nodes (7): DummyData, PlannerStopEntity, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart
+Cohesion: 0.18
+Nodes (10): DummyData, PlannerStopEntity, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/domain/entity/banner_entity.dart (+2 more)
 
 ### Community 677 - "Community 677"
-Cohesion: 0.25
-Nodes (7): HomeRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/data/datasources/home_local_data_source.dart, package:mindtrip/features/home/domain/repositories/home_repository.dart
+Cohesion: 0.17
+Nodes (11): HomeRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/data/datasources/home_local_data_source.dart, package:mindtrip/features/home/data/datasources/home_remote_data_source.dart, package:mindtrip/features/home/domain/entity/banner_entity.dart (+3 more)
 
 ### Community 678 - "Community 678"
 Cohesion: 0.25
@@ -2926,20 +3020,20 @@ Cohesion: 0.29
 Nodes (6): build, Container, DragDivider, package:flutter_screenutil/flutter_screenutil.dart, package:flutter/widgets.dart, package:mindtrip/core/utils/extension.dart
 
 ### Community 680 - "Community 680"
-Cohesion: 0.29
-Nodes (6): ExploreRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/explore/data/datasources/explore_local_data_source.dart, package:mindtrip/features/explore/domain/repositories/explore_repository.dart
+Cohesion: 0.20
+Nodes (9): ExploreRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/explore/data/datasources/explore_local_data_source.dart, package:mindtrip/features/explore/data/datasources/explore_remote_data_source.dart, package:mindtrip/features/explore/domain/repositories/explore_repository.dart, package:mindtrip/features/home/domain/entity/tour_package_entity.dart (+1 more)
 
 ### Community 681 - "Community 681"
-Cohesion: 0.29
-Nodes (6): ExploreCubit, loadAllData, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/features/explore/domain/use_cases/get_other_places_use_case.dart, package:mindtrip/features/explore/domain/use_cases/get_trending_places_use_case.dart, package:mindtrip/features/explore/presentation/cubit/explore_state.dart
+Cohesion: 0.12
+Nodes (16): applyAdvancedFilters, _buildFilteredRequest, ExploreCubit, GetPlacesRequestModel, loadAllData, onCategoryToggled, resetAdvancedFilters, dart:async (+8 more)
 
 ### Community 682 - "Community 682"
 Cohesion: 0.29
 Nodes (6): TripShareError, TripShareInitial, TripShareLoading, TripShareState, TripShareSuccess, package:equatable/equatable.dart
 
 ### Community 683 - "Community 683"
-Cohesion: 0.29
-Nodes (6): PlaceRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/data/datasources/place_local_data_source.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
+Cohesion: 0.12
+Nodes (15): PlaceRepositoryImpl, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/core/shared/data/datasources/places_local_data_source.dart, package:mindtrip/core/shared/data/mapper/place_mapper.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/paginated_response.dart (+7 more)
 
 ### Community 684 - "Community 684"
 Cohesion: 0.33
@@ -2950,52 +3044,52 @@ Cohesion: 0.33
 Nodes (5): getClip, shouldReclip, SmoothWavyClipper, WavyClipper, package:flutter/material.dart
 
 ### Community 686 - "Community 686"
-Cohesion: 0.33
-Nodes (5): HomeLocalDataSource, HomeLocalDataSourceImpl, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/presentation/data/home_mock_data.dart
+Cohesion: 0.22
+Nodes (8): HomeLocalDataSource, HomeLocalDataSourceImpl, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/shared/data/models/banner_model.dart, package:mindtrip/core/shared/data/models/planner_preview_model.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/presentation/data/home_mock_data.dart
 
 ### Community 687 - "Community 687"
-Cohesion: 0.33
-Nodes (5): PlaceLocalDataSource, PlaceLocalDataSourceImpl, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/explore/presentation/data/explore_mock_data.dart, package:mindtrip/features/home/presentation/data/home_mock_data.dart
+Cohesion: 0.29
+Nodes (6): PlaceLocalDataSource, PlaceLocalDataSourceImpl, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/explore/presentation/data/explore_mock_data.dart, package:mindtrip/features/home/presentation/data/home_mock_data.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
 
 ### Community 688 - "Community 688"
-Cohesion: 0.40
-Nodes (4): ExploreLocalDataSource, ExploreLocalDataSourceImpl, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/home/presentation/data/home_mock_data.dart
+Cohesion: 0.29
+Nodes (6): ExploreLocalDataSource, ExploreLocalDataSourceImpl, package:hive_ce_flutter/adapters.dart, package:mindtrip/core/shared/data/models/tour_package_model.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/home/presentation/data/home_mock_data.dart
 
 ### Community 689 - "Community 689"
 Cohesion: 0.40
 Nodes (4): GetOtherPlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
 
 ### Community 690 - "Community 690"
-Cohesion: 0.40
-Nodes (4): GetTourPackagesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/explore/domain/repositories/explore_repository.dart
+Cohesion: 0.33
+Nodes (5): GetTourPackagesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/explore/domain/repositories/explore_repository.dart, package:mindtrip/features/home/domain/entity/tour_package_entity.dart
 
 ### Community 691 - "Community 691"
 Cohesion: 0.40
 Nodes (4): GetTrendingPlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
 
 ### Community 692 - "Community 692"
-Cohesion: 0.40
-Nodes (4): copyWith, ExploreState, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart
+Cohesion: 0.20
+Nodes (9): copyWith, ExploreState, package:equatable/equatable.dart, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/pagination_state.dart, package:mindtrip/features/places/data/models/get_places_request_model.dart (+1 more)
 
 ### Community 693 - "Community 693"
-Cohesion: 0.40
-Nodes (4): HomeRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart
+Cohesion: 0.33
+Nodes (5): HomeRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/domain/entity/banner_entity.dart
 
 ### Community 694 - "Community 694"
 Cohesion: 0.40
 Nodes (4): GetAIPlannerPreviewsUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/domain/repositories/home_repository.dart
 
 ### Community 695 - "Community 695"
-Cohesion: 0.40
-Nodes (4): GetBannersUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/home/domain/repositories/home_repository.dart
+Cohesion: 0.33
+Nodes (5): GetBannersUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/banner_entity.dart, package:mindtrip/features/home/domain/entity/banner_entity.dart, package:mindtrip/features/home/domain/repositories/home_repository.dart
 
 ### Community 696 - "Community 696"
-Cohesion: 0.40
-Nodes (4): GetPopularPlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
+Cohesion: 0.22
+Nodes (8): GetPopularPlacesUseCase, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/places/data/models/popular_places_request_model.dart, package:mindtrip/features/places/domain/entity/place_entity.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
 
 ### Community 697 - "Community 697"
-Cohesion: 0.40
-Nodes (4): GetRecommendedPlacesUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
+Cohesion: 0.22
+Nodes (8): GetRecommendedPlacesUseCase, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/places/data/models/recommendation_places_request_model.dart, package:mindtrip/features/places/domain/entity/place_entity.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
 
 ### Community 698 - "Community 698"
 Cohesion: 0.50
@@ -3006,32 +3100,276 @@ Cohesion: 0.50
 Nodes (3): AIPlannerPreviewRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart
 
 ### Community 700 - "Community 700"
-Cohesion: 0.50
-Nodes (3): ExploreRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart
+Cohesion: 0.40
+Nodes (4): ExploreRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/tour_package_entity.dart, package:mindtrip/features/home/domain/entity/tour_package_entity.dart
 
 ### Community 701 - "Community 701"
+Cohesion: 0.20
+Nodes (9): PlaceRepository, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/places/data/models/get_places_request_model.dart, package:mindtrip/features/places/data/models/popular_places_request_model.dart, package:mindtrip/features/places/data/models/recommendation_places_request_model.dart (+1 more)
+
+### Community 704 - "Community 704"
+Cohesion: 0.07
+Nodes (29): build, _CategoryPlaceCard, dispose, HomeCategoryPlacesList, _HomeCategoryPlacesListState, initState, _onScroll, Skeletonizer (+21 more)
+
+### Community 705 - "Community 705"
+Cohesion: 0.07
+Nodes (28): build, dispose, _HiddenGemCard, HomeHiddenGemsSection, _HomeHiddenGemsSectionState, initState, _onScroll, Skeletonizer (+20 more)
+
+### Community 706 - "Community 706"
+Cohesion: 0.07
+Nodes (28): build, Center, Column, _CustomHeader, dispose, _EmptyState, initState, MyTripsScreen (+20 more)
+
+### Community 707 - "Community 707"
+Cohesion: 0.09
+Nodes (21): AppRefreshIndicator, build, _buildGrid, CustomScrollView, dispose, initState, _onScroll, RecommendedplacesGrid (+13 more)
+
+### Community 708 - "Community 708"
+Cohesion: 0.11
+Nodes (17): build, RecommendedplacesGrid, Skeletonizer, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter_svg/svg.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/presentation/widget/app_cached_image.dart (+9 more)
+
+### Community 709 - "Community 709"
+Cohesion: 0.14
+Nodes (13): AppDialog, Center, Column, FadeTransition, Function, hideLoading, Row, showGeneralDialog (+5 more)
+
+### Community 710 - "Community 710"
+Cohesion: 0.14
+Nodes (13): build, Card, CusotmCityExpandedCard, _CusotmCityExpandedCardState, dispose, initState, Padding, package:flutter/material.dart (+5 more)
+
+### Community 711 - "Community 711"
+Cohesion: 0.14
+Nodes (13): build, HomeCategoryChips, SliverToBoxAdapter, TapScaleEffect, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart (+5 more)
+
+### Community 712 - "Community 712"
+Cohesion: 0.15
+Nodes (12): HomeCubit, onCategoryChanged, package:dio/dio.dart, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart, package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_use_case.dart, package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart (+4 more)
+
+### Community 713 - "Community 713"
+Cohesion: 0.17
+Nodes (11): build, CustomSearchBar, Expanded, FadeTransition, ValueListenableBuilder, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:flutter/services.dart (+3 more)
+
+### Community 714 - "Community 714"
+Cohesion: 0.17
+Nodes (11): build, FavoriteButton, TapScaleEffect, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart (+3 more)
+
+### Community 715 - "Community 715"
+Cohesion: 0.17
+Nodes (11): AppShell, _AppShellState, build, didChangeAppLifecycleState, dispose, initState, Scaffold, package:flutter_bloc/flutter_bloc.dart (+3 more)
+
+### Community 716 - "Community 716"
+Cohesion: 0.17
+Nodes (11): build, HomeRecommendedSection, RecommendedplacesGrid, SliverToBoxAdapter, package:flutter_bloc/flutter_bloc.dart, package:flutter/material.dart, package:mindtrip/core/shared/presentation/widget/app_error_widget.dart, package:mindtrip/core/utils/dummy_data.dart (+3 more)
+
+### Community 717 - "Community 717"
+Cohesion: 0.17
+Nodes (11): clear, dismissInterestError, editSelectedCategory, setUser, UserCubit, package:bloc/bloc.dart, package:equatable/equatable.dart, package:mindtrip/features/authetication/domain/entities/user_entity.dart (+3 more)
+
+### Community 718 - "Community 718"
+Cohesion: 0.18
+Nodes (10): PlaceRemoteDataSource, PlaceRemoteDataSourceImpl, package:dio/dio.dart, package:mindtrip/core/database/api/api_consumer.dart, package:mindtrip/core/database/api/end_points.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/places/data/models/get_places_request_model.dart (+2 more)
+
+### Community 719 - "Community 719"
+Cohesion: 0.22
+Nodes (10): class, EqualUnmodifiableListView, identical, orElse, _PlannerPreviewModel, _PlannerStopModel, StateError, _then (+2 more)
+
+### Community 720 - "Community 720"
+Cohesion: 0.20
+Nodes (9): AppSnackBar, show, showError, showSuccess, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/theme/app_text_styles.dart (+1 more)
+
+### Community 721 - "Community 721"
+Cohesion: 0.20
+Nodes (9): build, CustomGradientButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/theme/app_gradients.dart, package:mindtrip/core/theme/app_shadows.dart (+1 more)
+
+### Community 722 - "Community 722"
+Cohesion: 0.20
+Nodes (9): build, Column, Container, Expanded, PlannerTimeline, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart (+1 more)
+
+### Community 723 - "Community 723"
+Cohesion: 0.20
+Nodes (9): ExploreAllPlacesCubit, onCategoryChanged, onSearchChanged, dart:async, package:dio/dio.dart, package:flutter_bloc/flutter_bloc.dart, package:mindtrip/features/places/data/models/popular_places_request_model.dart, package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart (+1 more)
+
+### Community 724 - "Community 724"
+Cohesion: 0.22
+Nodes (10): class, EqualUnmodifiableListView, EqualUnmodifiableMapView, _ExploreAllPlacesState, identical, orElse, StateError, _then (+2 more)
+
+### Community 725 - "Community 725"
+Cohesion: 0.20
+Nodes (9): PlaceEntity, PlaceModel, toEntity, toModel, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/data/models/place_model.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart (+1 more)
+
+### Community 726 - "Community 726"
+Cohesion: 0.22
+Nodes (8): PlannerPreviewEntity, PlannerPreviewModel, PlannerStopEntity, PlannerStopModel, toEntity, toModel, package:mindtrip/core/shared/data/models/planner_preview_model.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart
+
+### Community 727 - "Community 727"
+Cohesion: 0.25
+Nodes (9): class, EqualUnmodifiableListView, identical, orElse, _PaginationState, StateError, _then, toString (+1 more)
+
+### Community 728 - "Community 728"
+Cohesion: 0.22
+Nodes (8): clear, FavoriteCubit, isFavorite, package:bloc/bloc.dart, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart, package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart, package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart
+
+### Community 729 - "Community 729"
+Cohesion: 0.22
+Nodes (8): HomeState, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/models/pagination_state.dart, package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart, package:mindtrip/features/home/domain/entity/banner_entity.dart, package:mindtrip/features/home/domain/entity/tour_package_entity.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
+
+### Community 730 - "Community 730"
+Cohesion: 0.25
+Nodes (9): class, EqualUnmodifiableListView, _HomeState, identical, orElse, StateError, _then, toString (+1 more)
+
+### Community 731 - "Community 731"
+Cohesion: 0.25
+Nodes (9): class, EqualUnmodifiableListView, identical, orElse, _RecommendedPlacesState, StateError, _then, toString (+1 more)
+
+### Community 732 - "Community 732"
+Cohesion: 0.25
+Nodes (7): AppSearchBar, build, GestureDetector, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/theme/app_colors.dart, package:mindtrip/core/utils/extension.dart
+
+### Community 733 - "Community 733"
+Cohesion: 0.25
+Nodes (7): AppTextField, _AppTextFieldState, build, TextFormField, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/utils/extension.dart
+
+### Community 734 - "Community 734"
+Cohesion: 0.25
+Nodes (7): build, CustomOtlinedButton, TapScaleEffect, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart, package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart, package:mindtrip/core/utils/extension.dart
+
+### Community 735 - "Community 735"
+Cohesion: 0.29
+Nodes (8): class, _ExploreState, identical, orElse, StateError, _then, toString, _
+
+### Community 736 - "Community 736"
+Cohesion: 0.25
+Nodes (7): ItineraryDataSource, MockItineraryDataSource, TripItineraryModel, dart:convert, package:hive_ce_flutter/adapters.dart, package:mindtrip/features/itinerary/data/models/trip_itinerary_model.dart, package:mindtrip/features/trips/domain/entities/trip.dart
+
+### Community 737 - "Community 737"
+Cohesion: 0.29
+Nodes (8): class, identical, orElse, _PlaceDetailsState, StateError, _then, toString, _
+
+### Community 738 - "Community 738"
+Cohesion: 0.25
+Nodes (7): GetPlacesUseCase, package:dio/dio.dart, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/models/paginated_response.dart, package:mindtrip/features/places/data/models/get_places_request_model.dart, package:mindtrip/features/places/domain/entity/place_entity.dart, package:mindtrip/features/places/domain/repositories/place_repository.dart
+
+### Community 739 - "Community 739"
+Cohesion: 0.25
+Nodes (7): RecommendedPlacesCubit, package:bloc/bloc.dart, package:dio/dio.dart, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/features/places/data/models/recommendation_places_request_model.dart, package:mindtrip/features/places/domain/entity/place_entity.dart, package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart
+
+### Community 740 - "Community 740"
+Cohesion: 0.25
+Nodes (7): RecommendedPlacesRoutes, package:flutter_bloc/flutter_bloc.dart, package:go_router/go_router.dart, package:mindtrip/core/shared/injection/service_locator.dart, package:mindtrip/core/shared/routes/app_routes.dart, package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart, package:mindtrip/features/places/presentation/screen/recommended_places_screen.dart
+
+### Community 741 - "Community 741"
+Cohesion: 0.29
+Nodes (8): class, EqualUnmodifiableListView, identical, orElse, _then, toString, _UserModel, _
+
+### Community 742 - "Community 742"
+Cohesion: 0.25
+Nodes (7): UserRepositoryImpl, package:mindtrip/core/connections/result.dart, package:mindtrip/core/database/api/api_error_mapper.dart, package:mindtrip/features/authetication/domain/entities/user_entity.dart, package:mindtrip/features/user/data/datasources/user_remote_data_source.dart, package:mindtrip/features/user/data/mapper/user_mapper.dart, package:mindtrip/features/user/domain/repositories/user_repository.dart
+
+### Community 743 - "Community 743"
+Cohesion: 0.29
+Nodes (6): _PlannerPreviewModel, PlannerPreviewModelAdapter, _PlannerStopModel, PlannerStopModelAdapter, read, write
+
+### Community 744 - "Community 744"
+Cohesion: 0.29
+Nodes (6): AnimatedScale, build, _setPressed, TapScaleEffect, _TapScaleEffectState, package:flutter/material.dart
+
+### Community 745 - "Community 745"
+Cohesion: 0.29
+Nodes (6): HomeRemoteDataSource, HomeRemoteDataSourceImpl, package:mindtrip/core/database/api/api_consumer.dart, package:mindtrip/core/database/api/end_points.dart, package:mindtrip/core/shared/data/models/banner_model.dart, package:mindtrip/core/shared/data/models/planner_preview_model.dart
+
+### Community 746 - "Community 746"
+Cohesion: 0.29
+Nodes (6): BannerEntity, BannerModel, toEntity, toModel, package:mindtrip/core/shared/data/models/banner_model.dart, package:mindtrip/features/home/domain/entity/banner_entity.dart
+
+### Community 747 - "Community 747"
+Cohesion: 0.29
+Nodes (6): copyWith, PlaceEntity, package:equatable/equatable.dart, package:mindtrip/core/enums/place_badge.dart, package:mindtrip/core/enums/place_category.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart
+
+### Community 748 - "Community 748"
+Cohesion: 0.29
+Nodes (6): UserRemoteDataSource, package:dio/dio.dart, package:mindtrip/core/database/api/api_consumer.dart, package:mindtrip/core/database/api/end_points.dart, package:mindtrip/features/user/data/models/user_model.dart, package:mindtrip/features/user/data/models/upload_photo_response.dart
+
+### Community 749 - "Community 749"
+Cohesion: 0.29
+Nodes (6): toEntity, toModel, UserEntity, UserModel, package:mindtrip/features/authetication/domain/entities/user_entity.dart, package:mindtrip/features/user/data/models/user_model.dart
+
+### Community 750 - "Community 750"
+Cohesion: 0.33
+Nodes (5): _fetchCurrentLocation, LocationCubit, package:bloc/bloc.dart, package:mindtrip/core/shared/presentation/manager/location_cubit/location_state.dart, package:mindtrip/features/map/Services/location_service/location_service_imp.dart
+
+### Community 751 - "Community 751"
+Cohesion: 0.33
+Nodes (5): copyWith, formatDistance, LocationState, package:equatable/equatable.dart, package:mindtrip/features/map/presentation/models/location_result.dart
+
+### Community 752 - "Community 752"
+Cohesion: 0.33
+Nodes (5): AppBackground, build, Scaffold, package:flutter/material.dart, package:flutter_screenutil/flutter_screenutil.dart
+
+### Community 753 - "Community 753"
+Cohesion: 0.33
+Nodes (5): AppRefreshIndicator, build, RefreshIndicator, package:flutter/material.dart, package:mindtrip/core/utils/extension.dart
+
+### Community 754 - "Community 754"
+Cohesion: 0.33
+Nodes (5): build, CustomHeadLine, RichText, package:flutter/material.dart, package:mindtrip/core/utils/extension.dart
+
+### Community 755 - "Community 755"
+Cohesion: 0.33
+Nodes (5): ExploreRemoteDataSource, ExploreRemoteDataSourceImpl, package:mindtrip/core/database/api/api_consumer.dart, package:mindtrip/core/database/api/end_points.dart, package:mindtrip/core/shared/data/models/tour_package_model.dart
+
+### Community 756 - "Community 756"
+Cohesion: 0.40
+Nodes (4): PlannerPreviewModel, PlannerStopModel, package:freezed_annotation/freezed_annotation.dart, package:hive_ce_flutter/adapters.dart
+
+### Community 757 - "Community 757"
+Cohesion: 0.40
+Nodes (4): ExploreAllPlacesState, package:freezed_annotation/freezed_annotation.dart, package:mindtrip/core/shared/models/pagination_state.dart, package:mindtrip/features/places/domain/entity/place_entity.dart
+
+### Community 758 - "Community 758"
+Cohesion: 0.40
+Nodes (4): GetCurrentUser, package:mindtrip/core/connections/result.dart, package:mindtrip/features/authetication/domain/entities/user_entity.dart, package:mindtrip/features/user/domain/repositories/user_repository.dart
+
+### Community 759 - "Community 759"
 Cohesion: 0.50
-Nodes (3): PlaceRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/core/shared/domain/entities/place_entity.dart
+Nodes (3): PlaceCityAdapter, read, write
+
+### Community 760 - "Community 760"
+Cohesion: 0.50
+Nodes (3): TourPackageEntity, package:equatable/equatable.dart, package:mindtrip/core/shared/domain/entities/location_entity.dart
+
+### Community 761 - "Community 761"
+Cohesion: 0.50
+Nodes (3): UserRepository, package:mindtrip/core/connections/result.dart, package:mindtrip/features/authetication/domain/entities/user_entity.dart
+
+### Community 762 - "Community 762"
+Cohesion: 0.50
+Nodes (3): UpdateProfileUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/features/user/domain/repositories/user_repository.dart
+
+### Community 763 - "Community 763"
+Cohesion: 0.50
+Nodes (3): UpdateUserInterestsUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/features/user/domain/repositories/user_repository.dart
+
+### Community 764 - "Community 764"
+Cohesion: 0.50
+Nodes (3): UploadProfilePhotoUseCase, package:mindtrip/core/connections/result.dart, package:mindtrip/features/user/domain/repositories/user_repository.dart
 
 ## Knowledge Gaps
-- **5938 isolated node(s):** `projectId`, `appId`, `fileOutput`, `projectId`, `android` (+5933 more)
+- **6945 isolated node(s):** `projectId`, `appId`, `fileOutput`, `projectId`, `android` (+6940 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **109 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `package:mindtrip/core/widget/custom_search_bar.dart` connect `Community 15` to `Community 508`?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `projectId`, `appId`, `fileOutput` to the rest of the system?**
-  _5942 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _6949 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.024390243902439025 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.020618556701030927 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.03125 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.02531645569620253 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.051418439716312055 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.04081632653061224 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03389830508474576 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
-- **Should `Community 5` be split into smaller, more focused modules?**
-  _Cohesion score 0.044444444444444446 - nodes in this community are weakly interconnected._

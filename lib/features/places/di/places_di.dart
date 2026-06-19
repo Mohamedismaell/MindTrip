@@ -1,5 +1,7 @@
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart';
+import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart'
+    as feature;
 import 'package:mindtrip/features/places/data/datasources/place_remote_data_source.dart';
 import 'package:mindtrip/features/places/data/repositories/place_repository_impl.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
@@ -14,8 +16,11 @@ class PlacesDi {
 
   static void init() {
     //! Data sources
-    sl.registerLazySingleton<PlaceLocalDataSource>(
-      () => PlaceLocalDataSourceImpl(),
+    sl.registerLazySingleton<feature.PlaceLocalDataSource>(
+      () => feature.PlaceLocalDataSourceImpl(),
+    );
+    sl.registerLazySingleton<PlacesLocalDataSource>(
+      () => PlacesLocalDataSourceImpl(),
     );
     sl.registerLazySingleton<PlaceRemoteDataSource>(
       () => PlaceRemoteDataSourceImpl(api: sl()),
@@ -23,7 +28,10 @@ class PlacesDi {
 
     //! Repositories
     sl.registerLazySingleton<PlaceRepository>(
-      () => PlaceRepositoryImpl(remoteDataSource: sl<PlaceRemoteDataSource>()),
+      () => PlaceRepositoryImpl(
+        remoteDataSource: sl<PlaceRemoteDataSource>(),
+        localDataSource: sl<PlacesLocalDataSource>(),
+      ),
     );
 
     //! Use cases

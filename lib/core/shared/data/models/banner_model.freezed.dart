@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BannerModel {
 
- String get id; String get title; String get imageUrl; String? get targetUrl;
+@HiveField(0) String get id;@HiveField(1) String get title;@HiveField(2) String get imageUrl;@HiveField(3) String? get targetUrl;
 /// Create a copy of BannerModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $BannerModelCopyWith<$Res>  {
   factory $BannerModelCopyWith(BannerModel value, $Res Function(BannerModel) _then) = _$BannerModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String imageUrl, String? targetUrl
+@HiveField(0) String id,@HiveField(1) String title,@HiveField(2) String imageUrl,@HiveField(3) String? targetUrl
 });
 
 
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String imageUrl,  String? targetUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@HiveField(0)  String id, @HiveField(1)  String title, @HiveField(2)  String imageUrl, @HiveField(3)  String? targetUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BannerModel() when $default != null:
 return $default(_that.id,_that.title,_that.imageUrl,_that.targetUrl);case _:
@@ -177,7 +177,7 @@ return $default(_that.id,_that.title,_that.imageUrl,_that.targetUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String imageUrl,  String? targetUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@HiveField(0)  String id, @HiveField(1)  String title, @HiveField(2)  String imageUrl, @HiveField(3)  String? targetUrl)  $default,) {final _that = this;
 switch (_that) {
 case _BannerModel():
 return $default(_that.id,_that.title,_that.imageUrl,_that.targetUrl);case _:
@@ -197,7 +197,7 @@ return $default(_that.id,_that.title,_that.imageUrl,_that.targetUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String imageUrl,  String? targetUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@HiveField(0)  String id, @HiveField(1)  String title, @HiveField(2)  String imageUrl, @HiveField(3)  String? targetUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _BannerModel() when $default != null:
 return $default(_that.id,_that.title,_that.imageUrl,_that.targetUrl);case _:
@@ -212,13 +212,13 @@ return $default(_that.id,_that.title,_that.imageUrl,_that.targetUrl);case _:
 @JsonSerializable()
 
 class _BannerModel extends BannerModel {
-  const _BannerModel({this.id = '', this.title = '', this.imageUrl = '', this.targetUrl}): super._();
+  const _BannerModel({@HiveField(0) this.id = '', @HiveField(1) this.title = '', @HiveField(2) this.imageUrl = '', @HiveField(3) this.targetUrl}): super._();
   factory _BannerModel.fromJson(Map<String, dynamic> json) => _$BannerModelFromJson(json);
 
-@override@JsonKey() final  String id;
-@override@JsonKey() final  String title;
-@override@JsonKey() final  String imageUrl;
-@override final  String? targetUrl;
+@override@JsonKey()@HiveField(0) final  String id;
+@override@JsonKey()@HiveField(1) final  String title;
+@override@JsonKey()@HiveField(2) final  String imageUrl;
+@override@HiveField(3) final  String? targetUrl;
 
 /// Create a copy of BannerModel
 /// with the given fields replaced by the non-null parameter values.
@@ -253,7 +253,7 @@ abstract mixin class _$BannerModelCopyWith<$Res> implements $BannerModelCopyWith
   factory _$BannerModelCopyWith(_BannerModel value, $Res Function(_BannerModel) _then) = __$BannerModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String imageUrl, String? targetUrl
+@HiveField(0) String id,@HiveField(1) String title,@HiveField(2) String imageUrl,@HiveField(3) String? targetUrl
 });
 
 

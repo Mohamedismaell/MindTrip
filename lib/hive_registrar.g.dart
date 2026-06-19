@@ -6,28 +6,36 @@ import 'package:hive_ce/hive_ce.dart';
 import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/enums/place_city.dart';
+import 'package:mindtrip/core/shared/data/models/banner_model.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
+    registerAdapter(BannerModelAdapter());
     registerAdapter(LocationModelAdapter());
     registerAdapter(PlaceBadgeAdapter());
     registerAdapter(PlaceCategoryAdapter());
     registerAdapter(PlaceCityAdapter());
     registerAdapter(PlaceModelAdapter());
+    registerAdapter(PlannerPreviewModelAdapter());
+    registerAdapter(PlannerStopModelAdapter());
     registerAdapter(TripModelAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
+    registerAdapter(BannerModelAdapter());
     registerAdapter(LocationModelAdapter());
     registerAdapter(PlaceBadgeAdapter());
     registerAdapter(PlaceCategoryAdapter());
     registerAdapter(PlaceCityAdapter());
     registerAdapter(PlaceModelAdapter());
+    registerAdapter(PlannerPreviewModelAdapter());
+    registerAdapter(PlannerStopModelAdapter());
     registerAdapter(TripModelAdapter());
   }
 }

@@ -20,11 +20,16 @@ class PlaceDetailsRepositoryImpl implements PlaceDetailsRepository {
   @override
   Future<Result<PlaceEntity>> getPlaceDetails(String placeId) async {
     try {
-      // For now, details are fetched fresh to ensure dynamic data
       final remote = await _remote.getPlaceDetails(placeId);
       await _local.cachePlace(remote);
       return Result.ok(remote.toEntity());
     } catch (e) {
+      try {
+        final local = await _local.getPlace(placeId);
+        if (local != null) {
+          return Result.ok(local.toEntity());
+        }
+      } catch (_) {}
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }

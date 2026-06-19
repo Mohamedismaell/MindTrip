@@ -31,6 +31,10 @@ class EndPoints {
   static String getPlaces = 'api/v1/ai/places/getplaces';
   static String placeDetails(String id) => 'api/v1/ai/places/$id';
 
+  // Home & Explore
+  static String getBanners = 'api/v1/home/banners';
+  static String getPlannerPreviews = 'api/v1/home/planner-previews';
+
   // static String formatCategoryQuery(String category) {
   //   return 'category:"$category"';
   // }

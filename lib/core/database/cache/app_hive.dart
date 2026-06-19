@@ -3,6 +3,8 @@ import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
+import 'package:mindtrip/core/shared/data/models/banner_model.dart';
+import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 
 class AppHive {
@@ -13,6 +15,9 @@ class AppHive {
   static late Box<TripModel> tripsBox;
   static late Box<String> itinerariesBox;
   static late Box planningSessionsBox;
+  static late Box<BannerModel> bannersBox;
+  static late Box<PlannerPreviewModel> plannerPreviewsBox;
+  static late Box<List<String>> metadataBox;
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -36,6 +41,15 @@ class AppHive {
     if (!Hive.isAdapterRegistered(TripModelAdapter().typeId)) {
       Hive.registerAdapter(TripModelAdapter());
     }
+    if (!Hive.isAdapterRegistered(BannerModelAdapter().typeId)) {
+      Hive.registerAdapter(BannerModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(PlannerStopModelAdapter().typeId)) {
+      Hive.registerAdapter(PlannerStopModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(PlannerPreviewModelAdapter().typeId)) {
+      Hive.registerAdapter(PlannerPreviewModelAdapter());
+    }
   }
 
   static Future<void> openBoxes() async {
@@ -46,15 +60,22 @@ class AppHive {
     tripsBox = await Hive.openBox('tripsBox');
     itinerariesBox = await Hive.openBox<String>('itinerariesBox');
     planningSessionsBox = await Hive.openBox('planning_sessions');
+    bannersBox = await Hive.openBox<BannerModel>('bannersBox');
+    plannerPreviewsBox = await Hive.openBox<PlannerPreviewModel>(
+      'plannerPreviewsBox',
+    );
+    metadataBox = await Hive.openBox<List<String>>('metadataBox');
   }
 
   static Future<void> clearBoxes() async {
-    await onboardingBox.clear();
     favoritesBox.clear();
     favoritesSyncQueueBox.clear();
     placesCacheBox.clear();
     tripsBox.clear();
     itinerariesBox.clear();
     planningSessionsBox.clear();
+    bannersBox.clear();
+    plannerPreviewsBox.clear();
+    metadataBox.clear();
   }
 }
