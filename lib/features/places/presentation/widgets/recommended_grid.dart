@@ -139,7 +139,9 @@ class _RecommendedCard extends StatelessWidget {
                 SizedBox(width: 6.w),
                 Expanded(
                   child: Text(
-                    destination.location.address,
+                    destination.location.cityEn == ''
+                        ? destination.location.address
+                        : destination.location.cityEn,
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: context.colorTheme.outline,
                     ),

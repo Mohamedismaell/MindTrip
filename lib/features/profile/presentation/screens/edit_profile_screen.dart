@@ -165,7 +165,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         // Save Button
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 40.w),
-                          child: CustomOtlinedButton(
+                          child: CustomOutlinedButton(
                             onPressed: (isSaving || !state.hasChanges)
                                 ? null
                                 : () {
@@ -188,7 +188,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         // Delete Account
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 40.w),
-                          child: CustomOtlinedButton(
+                          child: CustomOutlinedButton(
                             text: "Delete Account",
                             isLoading: isDeleting,
                             onPressed: isDeleting

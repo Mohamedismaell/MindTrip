@@ -56,7 +56,7 @@ class _ForgetPasswordFormState extends State<ForgetPasswordForm> {
           BlocBuilder<AuthCubit, AuthState>(
             builder: (context, state) {
               final isLoading = state.status == AuthStatus.loading;
-              return CustomOtlinedButton(
+              return CustomOutlinedButton(
                 onPressed: () => isLoading ? null : _submit(),
                 text: AppStrings.recoverPassword,
                 isLoading: isLoading,

@@ -100,7 +100,7 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
               //Todo: the tags should be the catgory of the places
               _TagWrap(tags: widget.day.tags.take(3).toList()),
               SizedBox(height: 12.h),
-              CustomOtlinedButton(
+              CustomOutlinedButton(
                 key: Key('trip-day-${widget.day.dayNumber}-view-button'),
                 text: 'View',
                 actionIcon: Icons.chevron_right,
@@ -176,7 +176,7 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: CustomOtlinedButton(
+                  child: CustomOutlinedButton(
                     key: Key(
                       'trip-day-${widget.day.dayNumber}-view-less-button',
                     ),

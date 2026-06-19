@@ -301,7 +301,7 @@ class _ExploreFilterSheetState extends State<ExploreFilterSheet> {
                       SizedBox(height: 28.h),
                       SizedBox(
                         width: double.infinity,
-                        child: CustomOtlinedButton(
+                        child: CustomOutlinedButton(
                           onPressed: _applyFilters,
                           text: 'Show Results',
                           color: context.colorTheme.primary,

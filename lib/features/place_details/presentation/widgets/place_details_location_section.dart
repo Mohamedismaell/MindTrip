@@ -87,7 +87,7 @@ class PlaceDetailsLocationSection extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 42.w),
           child: Skeleton.shade(
-            child: CustomOtlinedButton(
+            child: CustomOutlinedButton(
               onPressed: () => onPressed(context),
               icon: Icons.open_in_new_rounded,
               color: context.colorTheme.primary,

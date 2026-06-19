@@ -49,7 +49,7 @@ class TripMapPreviewCard extends StatelessWidget {
           SizedBox(height: 18.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 50.w),
-            child: CustomOtlinedButton(
+            child: CustomOutlinedButton(
               key: const Key('trip-map-button'),
               text: 'View full map',
               actionIcon: Icons.map_outlined,

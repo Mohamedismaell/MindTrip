@@ -8,18 +8,23 @@ class HomeMockData {
   static const banners = [
     BannerEntity(
       id: 'b1',
-      title: 'Dive Into the Red Sea',
-      imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5',
+      title: 'Your AI Travel Planner',
+      imageUrl: 'assets/images/banner/banner_1.webp',
     ),
     BannerEntity(
       id: 'b2',
-      title: 'Discover Egypt\'s Hidden Wonders',
-      imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
+      title: 'Build the Perfect Itinerary',
+      imageUrl: 'assets/images/banner/banner_2.webp',
     ),
     BannerEntity(
       id: 'b3',
-      title: 'Journey Through Ancient History',
-      imageUrl: 'https://images.unsplash.com/photo-1568322445389-f64ac2515020',
+      title: 'Relax While AI Plans Everything',
+      imageUrl: 'assets/images/banner/banner_3.webp',
+    ),
+    BannerEntity(
+      id: 'b4',
+      title: 'Discover Your Next Adventure',
+      imageUrl: 'assets/images/banner/banner_4.webp',
     ),
   ];
 

@@ -21,7 +21,7 @@ class OutlinedActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomOtlinedButton(
+    return CustomOutlinedButton(
       onPressed: onPressed,
       text: label,
       color: context.colorTheme.primary,

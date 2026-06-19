@@ -105,7 +105,7 @@ flutter:
     - assets/images/animation/
     - assets/images/profile/
     - assets/images/map/
-    # - assets/images/ai_planner/
+    - assets/images/banner/
     - assets/icons/
     - assets/icons/home/
     - assets/icons/profile/

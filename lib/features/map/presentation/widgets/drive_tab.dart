@@ -157,7 +157,7 @@ class DriveTab extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: CustomOtlinedButton(
+                            child: CustomOutlinedButton(
                               onPressed: () {
                                 context
                                     .read<MapNavigationCubit>()
@@ -178,7 +178,7 @@ class DriveTab extends StatelessWidget {
                           SizedBox(width: 12.w),
                           Expanded(
                             flex: 2,
-                            child: CustomOtlinedButton(
+                            child: CustomOutlinedButton(
                               onPressed: isLoading
                                   ? null
                                   : () => context

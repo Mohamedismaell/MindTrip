@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
@@ -151,7 +153,6 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                 ),
               ),
             ),
-
             IgnorePointer(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -161,18 +162,36 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Center(
-                        child: Text(
-                          banners[index].title,
-                          textAlign: TextAlign.center,
-                          key: ValueKey(index),
-                          style: AppTextStyles.h6SemiBold.copyWith(
-                            color: AppColors.pureWhite,
-                          ),
+                        child: Column(
+                          children: [
+                            Text(
+                              banners[index].title,
+                              textAlign: TextAlign.center,
+                              key: ValueKey(index),
+                              style: AppTextStyles.h7SemiBold.copyWith(
+                                color: AppColors.pureWhite,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 80.0),
+                              child: CustomOutlinedButton(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 12.r,
+                                  horizontal: 5.r,
+                                ),
+                                onPressed: () {},
+                                text: 'Start Now',
+                                color: context.colorTheme.primary,
+                                backGroundColor: AppColors.pureWhite,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 12.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(banners.length, (i) {

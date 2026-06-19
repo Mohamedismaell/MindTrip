@@ -36,7 +36,7 @@ class WelcomeAuthScreen extends StatelessWidget {
               SizedBox(height: 33.h),
               SizedBox(
                 width: double.infinity,
-                child: CustomOtlinedButton(
+                child: CustomOutlinedButton(
                   onPressed: () {
                     context.read<AppGateCubit>().proceedToAuth();
                     context.replace(AppRoutes.login);

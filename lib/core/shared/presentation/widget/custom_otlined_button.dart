@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
-class CustomOtlinedButton extends StatelessWidget {
-  const CustomOtlinedButton({
+class CustomOutlinedButton extends StatelessWidget {
+  const CustomOutlinedButton({
     super.key,
     this.onPressed,
     required this.text,
@@ -14,6 +14,7 @@ class CustomOtlinedButton extends StatelessWidget {
     this.textStyle,
     this.actionIcon,
     this.padding,
+    this.backGroundColor,
     // this.svgIcon,
   });
   final String text;
@@ -25,6 +26,7 @@ class CustomOtlinedButton extends StatelessWidget {
   final bool? isLoading;
   final TextStyle? textStyle;
   final EdgeInsetsGeometry? padding;
+  final Color? backGroundColor;
   @override
   Widget build(BuildContext context) {
     final buttonColor = color ?? context.colorTheme.error;
@@ -37,6 +39,7 @@ class CustomOtlinedButton extends StatelessWidget {
         padding:
             padding ?? EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
         decoration: BoxDecoration(
+          color: backGroundColor,
           borderRadius: BorderRadius.circular(30.r),
           border: Border.all(
             color: isLoading == true ? buttonColor : isDisabled,

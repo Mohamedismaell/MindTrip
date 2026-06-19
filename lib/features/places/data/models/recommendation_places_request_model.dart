@@ -14,13 +14,14 @@ class RecommendationPlacesRequestModel {
     this.page = 1,
     this.limit = 10,
     this.seed,
-    this.poolSize = 150,
+    this.poolSize = 50,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'selectedCategories':
-          selectedCategories.map((e) => InterestCategories.stripEmoji(e)).toList(),
+      'selectedCategories': selectedCategories
+          .map((e) => InterestCategories.stripEmoji(e))
+          .toList(),
       if (filters != null && filters!.isNotEmpty) 'filters': filters,
       'page': page,
       'limit': limit,

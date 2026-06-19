@@ -48,7 +48,7 @@ class CompleteSignUpScreen extends StatelessWidget {
                     SizedBox(height: 45.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 18.0),
-                      child: CustomOtlinedButton(
+                      child: CustomOutlinedButton(
                         onPressed: isLoading
                             ? null
                             : () => context.go(AppRoutes.login),

@@ -167,7 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: SizedBox(
                     width: 259.w,
                     height: 55.h,
-                    child: CustomOtlinedButton(
+                    child: CustomOutlinedButton(
                       key: const Key('settings-logout-button'),
                       onPressed: () {
                         AppDialog.show(
