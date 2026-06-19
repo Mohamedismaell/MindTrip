@@ -6,7 +6,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
 

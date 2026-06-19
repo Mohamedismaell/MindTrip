@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:mindtrip/core/shared/user/domain/usecases/update_profile_use_case.dart';
-import 'package:mindtrip/core/shared/user/domain/usecases/upload_profile_photo_use_case.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/user/domain/usecases/update_profile_use_case.dart';
+import 'package:mindtrip/features/user/domain/usecases/upload_profile_photo_use_case.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 import 'package:mindtrip/features/profile/domain/use_cases/delete_account.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_state.dart';

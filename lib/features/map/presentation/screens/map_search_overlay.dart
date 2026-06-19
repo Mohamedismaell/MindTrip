@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/app_snackbar.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
 

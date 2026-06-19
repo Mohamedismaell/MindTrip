@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/favorite_place_button.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/favorite_place_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PlaceDetailsImageCover extends StatelessWidget {

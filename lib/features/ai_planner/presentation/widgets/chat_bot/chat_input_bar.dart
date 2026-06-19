@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/voice_input_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/voice_input_button.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_attachment_button.dart';
 

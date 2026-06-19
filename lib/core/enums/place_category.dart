@@ -9,34 +9,34 @@ enum PlaceCategory {
   all,
 
   @HiveField(1)
-  foodCafes,
+  food,
 
   @HiveField(2)
-  historicalSites,
+  cafes,
 
   @HiveField(3)
-  religiousSites,
+  historicalSites,
 
   @HiveField(4)
-  beaches,
+  religiousSites,
 
   @HiveField(5)
-  nature,
+  beaches,
 
   @HiveField(6)
-  entertainment,
+  nature,
 
   @HiveField(7)
-  shopping,
+  entertainment,
 
   @HiveField(8)
-  artsCulture,
+  shopping,
 
   @HiveField(9)
-  hotels,
+  artsCulture,
 
   @HiveField(10)
-  other;
+  hotels;
 
   // food_cafes
   // historical_sites
@@ -48,7 +48,8 @@ enum PlaceCategory {
   // arts_culture
   String get category => switch (this) {
     PlaceCategory.all => 'all',
-    PlaceCategory.foodCafes => 'food_cafes',
+    PlaceCategory.food => 'food',
+    PlaceCategory.cafes => 'cafe',
     PlaceCategory.historicalSites => 'historical_sites',
     PlaceCategory.religiousSites => 'religious_sites',
     PlaceCategory.beaches => 'beaches',
@@ -57,11 +58,11 @@ enum PlaceCategory {
     PlaceCategory.shopping => 'shopping',
     PlaceCategory.artsCulture => 'arts_culture',
     PlaceCategory.hotels => 'hotels',
-    PlaceCategory.other => 'other',
   };
   String get displayName => switch (this) {
     PlaceCategory.all => 'All',
-    PlaceCategory.foodCafes => 'Food & Cafes',
+    PlaceCategory.food => 'Food',
+    PlaceCategory.cafes => 'Cafes',
     PlaceCategory.historicalSites => 'Historical Sites',
     PlaceCategory.religiousSites => 'Mosques & Churches',
     PlaceCategory.beaches => 'Beaches & Water',
@@ -70,12 +71,12 @@ enum PlaceCategory {
     PlaceCategory.shopping => 'Shopping',
     PlaceCategory.artsCulture => 'Arts & Culture',
     PlaceCategory.hotels => 'Hotels',
-    PlaceCategory.other => 'Other',
   };
 
   String get emoji => switch (this) {
     PlaceCategory.all => '✨',
-    PlaceCategory.foodCafes => '🍽️',
+    PlaceCategory.food => '🍽️',
+    PlaceCategory.cafes => '☕',
     PlaceCategory.historicalSites => '🏺',
     PlaceCategory.religiousSites => '🏛️',
     PlaceCategory.beaches => '🏖️',
@@ -84,10 +85,10 @@ enum PlaceCategory {
     PlaceCategory.shopping => '🛍️',
     PlaceCategory.artsCulture => '🎨',
     PlaceCategory.hotels => '🏨',
-    PlaceCategory.other => '📍',
   };
   IconData get iconData => switch (this) {
-    PlaceCategory.foodCafes => Icons.restaurant_rounded,
+    PlaceCategory.food => Icons.restaurant_rounded,
+    PlaceCategory.cafes => Icons.coffee_rounded,
     PlaceCategory.historicalSites => Icons.account_balance_rounded,
     PlaceCategory.religiousSites => Icons.church_rounded,
     PlaceCategory.beaches => Icons.beach_access_rounded,
@@ -104,11 +105,11 @@ enum PlaceCategory {
   static String get searchPinAssetPath => 'assets/images/map/location-pin.png';
 
   static PlaceCategory fromCategory(String? category) {
-    if (category == null) return PlaceCategory.other;
+    if (category == null) return PlaceCategory.all;
 
     return PlaceCategory.values.firstWhere(
       (e) => e.category == category.trim().toLowerCase(),
-      orElse: () => PlaceCategory.other,
+      orElse: () => PlaceCategory.all,
     );
   }
 }

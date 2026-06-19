@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/presentation/widgets/place_card_overview_map.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 import '../cubit/map_cubit.dart';

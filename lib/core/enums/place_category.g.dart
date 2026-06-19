@@ -16,25 +16,25 @@ class PlaceCategoryAdapter extends TypeAdapter<PlaceCategory> {
       case 0:
         return PlaceCategory.all;
       case 1:
-        return PlaceCategory.foodCafes;
+        return PlaceCategory.food;
       case 2:
-        return PlaceCategory.historicalSites;
+        return PlaceCategory.cafes;
       case 3:
-        return PlaceCategory.religiousSites;
+        return PlaceCategory.historicalSites;
       case 4:
-        return PlaceCategory.beaches;
+        return PlaceCategory.religiousSites;
       case 5:
-        return PlaceCategory.nature;
+        return PlaceCategory.beaches;
       case 6:
-        return PlaceCategory.entertainment;
+        return PlaceCategory.nature;
       case 7:
-        return PlaceCategory.shopping;
+        return PlaceCategory.entertainment;
       case 8:
-        return PlaceCategory.artsCulture;
+        return PlaceCategory.shopping;
       case 9:
-        return PlaceCategory.hotels;
+        return PlaceCategory.artsCulture;
       case 10:
-        return PlaceCategory.other;
+        return PlaceCategory.hotels;
       default:
         return PlaceCategory.all;
     }
@@ -45,25 +45,25 @@ class PlaceCategoryAdapter extends TypeAdapter<PlaceCategory> {
     switch (obj) {
       case PlaceCategory.all:
         writer.writeByte(0);
-      case PlaceCategory.foodCafes:
+      case PlaceCategory.food:
         writer.writeByte(1);
-      case PlaceCategory.historicalSites:
+      case PlaceCategory.cafes:
         writer.writeByte(2);
-      case PlaceCategory.religiousSites:
+      case PlaceCategory.historicalSites:
         writer.writeByte(3);
-      case PlaceCategory.beaches:
+      case PlaceCategory.religiousSites:
         writer.writeByte(4);
-      case PlaceCategory.nature:
+      case PlaceCategory.beaches:
         writer.writeByte(5);
-      case PlaceCategory.entertainment:
+      case PlaceCategory.nature:
         writer.writeByte(6);
-      case PlaceCategory.shopping:
+      case PlaceCategory.entertainment:
         writer.writeByte(7);
-      case PlaceCategory.artsCulture:
+      case PlaceCategory.shopping:
         writer.writeByte(8);
-      case PlaceCategory.hotels:
+      case PlaceCategory.artsCulture:
         writer.writeByte(9);
-      case PlaceCategory.other:
+      case PlaceCategory.hotels:
         writer.writeByte(10);
     }
   }

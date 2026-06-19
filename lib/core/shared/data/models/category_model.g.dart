@@ -12,7 +12,7 @@ _CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) =>
       isSelected: json['isSelected'] as bool? ?? false,
       type:
           $enumDecodeNullable(_$PlaceCategoryEnumMap, json['type']) ??
-          PlaceCategory.other,
+          PlaceCategory.all,
     );
 
 Map<String, dynamic> _$CategoryModelToJson(_CategoryModel instance) =>
@@ -24,7 +24,8 @@ Map<String, dynamic> _$CategoryModelToJson(_CategoryModel instance) =>
 
 const _$PlaceCategoryEnumMap = {
   PlaceCategory.all: 'all',
-  PlaceCategory.foodCafes: 'foodCafes',
+  PlaceCategory.food: 'food',
+  PlaceCategory.cafes: 'cafes',
   PlaceCategory.historicalSites: 'historicalSites',
   PlaceCategory.religiousSites: 'religiousSites',
   PlaceCategory.beaches: 'beaches',
@@ -33,5 +34,4 @@ const _$PlaceCategoryEnumMap = {
   PlaceCategory.shopping: 'shopping',
   PlaceCategory.artsCulture: 'artsCulture',
   PlaceCategory.hotels: 'hotels',
-  PlaceCategory.other: 'other',
 };

@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
 class ExploreSectionHeader extends StatelessWidget {
   const ExploreSectionHeader({

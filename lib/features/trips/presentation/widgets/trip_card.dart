@@ -7,7 +7,7 @@ import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_menu_button.dart';
 //Todo: Edit compeleted Trips Ui

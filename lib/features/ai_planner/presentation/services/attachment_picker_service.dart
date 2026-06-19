@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mindtrip/core/widget/app_snackbar.dart';
-import 'package:mindtrip/core/widget/appp_dialog.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AttachmentPickerService {

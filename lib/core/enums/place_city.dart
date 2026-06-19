@@ -35,10 +35,7 @@ enum PlaceCity {
   sharmElSheikh,
 
   @HiveField(10)
-  marsaMatrouh,
-
-  @HiveField(11)
-  other;
+  marsaMatrouh;
 
   String get category => switch (this) {
     PlaceCity.cairo => 'Cairo',
@@ -52,7 +49,6 @@ enum PlaceCity {
     PlaceCity.fayoum => 'Fayoum',
     PlaceCity.sharmElSheikh => 'Sharm El Sheikh',
     PlaceCity.marsaMatrouh => 'Marsa Matrouh',
-    PlaceCity.other => 'other',
   };
   String get displayName => switch (this) {
     PlaceCity.cairo => 'Cairo',
@@ -66,15 +62,14 @@ enum PlaceCity {
     PlaceCity.fayoum => 'Fayoum',
     PlaceCity.sharmElSheikh => 'Sharm El Sheikh',
     PlaceCity.marsaMatrouh => 'Marsa Matrouh',
-    PlaceCity.other => 'Other',
   };
 
   static PlaceCity fromCategory(String? category) {
-    if (category == null) return PlaceCity.other;
+    if (category == null) return PlaceCity.cairo;
 
     return PlaceCity.values.firstWhere(
       (e) => e.category == category.trim().toLowerCase(),
-      orElse: () => PlaceCity.other,
+      orElse: () => PlaceCity.cairo,
     );
   }
 }

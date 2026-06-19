@@ -211,7 +211,7 @@ return $default(_that.name,_that.isSelected,_that.type);case _:
 @JsonSerializable()
 
 class _CategoryModel extends CategoryModel {
-  const _CategoryModel({this.name = '', this.isSelected = false, this.type = PlaceCategory.other}): super._();
+  const _CategoryModel({this.name = '', this.isSelected = false, this.type = PlaceCategory.all}): super._();
   factory _CategoryModel.fromJson(Map<String, dynamic> json) => _$CategoryModelFromJson(json);
 
 @override@JsonKey() final  String name;

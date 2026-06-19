@@ -9,7 +9,7 @@ abstract class CategoryModel with _$CategoryModel {
   const factory CategoryModel({
     @Default('') String name,
     @Default(false) bool isSelected,
-    @Default(PlaceCategory.other) PlaceCategory type,
+    @Default(PlaceCategory.all) PlaceCategory type,
   }) = _CategoryModel;
 
   const CategoryModel._();

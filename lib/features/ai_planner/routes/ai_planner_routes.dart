@@ -6,7 +6,7 @@ import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
-import 'package:mindtrip/features/trips/presentation/screens/trips_screen.dart';
+import 'package:mindtrip/features/trips/presentation/screens/my_trips_screen.dart';
 import 'package:mindtrip/features/trips/presentation/screens/trip_calendar_screen.dart';
 import 'package:mindtrip/features/itinerary/presentation/screens/trip_details_screen.dart';
 import 'package:mindtrip/features/itinerary/presentation/cubit/trip_details_cubit.dart';
@@ -38,7 +38,7 @@ class AiPlannerRoutes {
       routes: [
         AppTransitionRoute.fadeSlide(
           path: AppRoutes.myTrips,
-          page: const TripsScreen(),
+          page: const MyTripsScreen(),
         ),
         GoRoute(
           path: AppRoutes.aiPlannerFlow,

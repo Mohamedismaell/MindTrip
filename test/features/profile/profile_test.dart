@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/fq_screen.dart';

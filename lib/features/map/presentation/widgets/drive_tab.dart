@@ -5,7 +5,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/entities/navigation_profile.dart';
 import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';

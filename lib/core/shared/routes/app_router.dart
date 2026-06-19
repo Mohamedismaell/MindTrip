@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/app_flow.dart';
-import 'package:mindtrip/core/shared/presentation/shell/tabs_shell.dart';
+import 'package:mindtrip/core/shared/presentation/widget/shell/tabs_shell.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:mindtrip/core/shared/presentation/shell/app_shell.dart';
+import 'package:mindtrip/core/shared/presentation/widget/shell/app_shell.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';

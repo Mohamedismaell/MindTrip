@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
 class HomeSectionHeader extends StatelessWidget {
   const HomeSectionHeader({

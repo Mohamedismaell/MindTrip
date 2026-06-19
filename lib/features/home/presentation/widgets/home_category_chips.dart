@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 
@@ -28,13 +28,11 @@ class HomeCategoryChips extends StatelessWidget {
               separatorBuilder: (_, _) => SizedBox(width: 12.w),
               itemBuilder: (context, index) {
                 final category = categories[index];
-                final isSelected = state.selectedCategory == category.category;
+                final isSelected = state.selectedCategory == category;
 
                 return TapScaleEffect(
                   onTap: () {
-                    context.read<HomeCubit>().onCategoryChanged(
-                      category.category,
-                    );
+                    context.read<HomeCubit>().onCategoryChanged(category);
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -57,15 +55,25 @@ class HomeCategoryChips extends StatelessWidget {
                             ),
                     ),
                     child: Center(
-                      child: Text(
-                        category.displayName,
-                        style: isSelected
-                            ? context.textTheme.bodyMedium?.copyWith(
-                                color: AppColors.pureWhite,
-                              )
-                            : AppTextStyles.h9SemiBold.copyWith(
-                                color: context.colorTheme.outline,
-                              ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            category.emoji,
+                            style: TextStyle(fontSize: 16.sp),
+                          ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            category.displayName,
+                            style: isSelected
+                                ? context.textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.pureWhite,
+                                  )
+                                : AppTextStyles.h9SemiBold.copyWith(
+                                    color: context.colorTheme.outline,
+                                  ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

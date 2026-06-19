@@ -5,7 +5,7 @@ import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_state.dart';
 
@@ -57,13 +57,8 @@ class ExploreCategoryChips extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (!isSelected) ...[
-                          Text(
-                            category.emoji,
-                            style: TextStyle(fontSize: 16.sp),
-                          ),
-                          SizedBox(width: 6.w),
-                        ],
+                        Text(category.emoji, style: TextStyle(fontSize: 16.sp)),
+                        SizedBox(width: 6.w),
                         Text(
                           category.displayName,
                           style: isSelected

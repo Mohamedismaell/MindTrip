@@ -7,7 +7,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/widget/planner_timeline.dart';
+import 'package:mindtrip/core/shared/presentation/widget/planner_timeline.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';

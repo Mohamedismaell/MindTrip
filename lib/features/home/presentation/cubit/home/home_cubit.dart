@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_ai_planner_previews_use_case.dart';
 import 'package:mindtrip/features/explore/domain/use_cases/get_tour_packages_use_case.dart';
 import 'package:mindtrip/features/home/domain/use_cases/get_banners_use_case.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
-// import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
-// import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
@@ -31,7 +30,8 @@ class HomeCubit extends Cubit<HomeState> {
     // loadFirstPagePopularPlaces();
     loadTourPackages();
     loadPlannerPreviews();
-    loadFirstPageCategoryPlaces(state.selectedCategory);
+    loadFirstPageCategoryPlaces(state.selectedCategory.category);
+    loadFirstPageHiddenGems();
   }
 
   // CancelToken? _bannersToken;
@@ -39,11 +39,13 @@ class HomeCubit extends Cubit<HomeState> {
   CancelToken? _popularPlacesMoreToken;
   CancelToken? _categoryPlacesFirstToken;
   CancelToken? _categoryPlacesMoreToken;
+  CancelToken? _hiddenGemsFirstToken;
+  CancelToken? _hiddenGemsMoreToken;
 
-  void onCategoryChanged(String category) {
+  void onCategoryChanged(PlaceCategory category) {
     if (state.selectedCategory == category) return;
     emit(state.copyWith(selectedCategory: category));
-    loadFirstPageCategoryPlaces(category);
+    loadFirstPageCategoryPlaces(category.category);
   }
 
   // CancelToken? _tourPackagesToken;
@@ -149,7 +151,9 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(categoryPlacesStatus: HomeDataStatus.loading));
     final result = await getPlacesUseCase(
       request: GetPlacesRequestModel(
-        category: category != null ? [category] : [state.selectedCategory],
+        category: category != null
+            ? [category]
+            : [state.selectedCategory.category],
         page: 1,
         limit: 10,
       ),
@@ -193,7 +197,7 @@ class HomeCubit extends Cubit<HomeState> {
     final nextPage = state.categoryPlaces.currentPage + 1;
     final result = await getPlacesUseCase(
       request: GetPlacesRequestModel(
-        category: [state.selectedCategory],
+        category: [state.selectedCategory.category],
         page: nextPage,
         limit: 10,
       ),
@@ -245,6 +249,84 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  Future<void> loadFirstPageHiddenGems() async {
+    _hiddenGemsFirstToken?.cancel();
+    _hiddenGemsFirstToken = CancelToken();
+    emit(state.copyWith(hiddenGemsStatus: HomeDataStatus.loading));
+    final result = await getPlacesUseCase(
+      request: const GetPlacesRequestModel(
+        hiddenGem: true,
+        page: 1,
+        limit: 10,
+      ),
+      cancelToken: _hiddenGemsFirstToken,
+    );
+    if (isClosed) return;
+    result.when(
+      success: (paginatedResponse) => emit(
+        state.copyWith(
+          hiddenGemsStatus: HomeDataStatus.success,
+          hiddenGems: state.hiddenGems.copyWith(
+            items: paginatedResponse.results,
+            currentPage: paginatedResponse.page,
+            hasMore: paginatedResponse.page < paginatedResponse.totalPages,
+          ),
+          hiddenGemsError: '',
+        ),
+      ),
+      failure: (error) => emit(
+        state.copyWith(
+          hiddenGemsStatus: HomeDataStatus.failure,
+          hiddenGemsError: error.message,
+        ),
+      ),
+    );
+  }
+
+  Future<void> loadMoreHiddenGems() async {
+    if (state.hiddenGemsStatus.isLoading ||
+        state.hiddenGems.isMoreLoading ||
+        !state.hiddenGems.hasMore) {
+      return;
+    }
+    _hiddenGemsMoreToken?.cancel();
+    _hiddenGemsMoreToken = CancelToken();
+    emit(
+      state.copyWith(
+        hiddenGems: state.hiddenGems.copyWith(isMoreLoading: true),
+      ),
+    );
+    final nextPage = state.hiddenGems.currentPage + 1;
+    final result = await getPlacesUseCase(
+      request: GetPlacesRequestModel(
+        hiddenGem: true,
+        page: nextPage,
+        limit: 10,
+      ),
+      cancelToken: _hiddenGemsMoreToken,
+    );
+    if (isClosed) return;
+    result.when(
+      success: (paginatedResponse) => emit(
+        state.copyWith(
+          hiddenGems: state.hiddenGems.copyWith(
+            items: [...state.hiddenGems.items, ...paginatedResponse.results],
+            currentPage: paginatedResponse.page,
+            hasMore: paginatedResponse.page < paginatedResponse.totalPages,
+            isMoreLoading: false,
+          ),
+          hiddenGemsError: '',
+        ),
+      ),
+      failure: (error) => emit(
+        state.copyWith(
+          hiddenGems: state.hiddenGems.copyWith(isMoreLoading: false),
+          hiddenGemsError: error.message,
+        ),
+      ),
+    );
+  }
+
   Future<void> loadPlannerPreviews() async {
     emit(state.copyWith(plannerPreviewsStatus: HomeDataStatus.loading));
     final result = await getAIPlannerPreviewsUseCase();
@@ -271,6 +353,8 @@ class HomeCubit extends Cubit<HomeState> {
     _popularPlacesMoreToken?.cancel();
     _categoryPlacesMoreToken?.cancel();
     _categoryPlacesFirstToken?.cancel();
+    _hiddenGemsFirstToken?.cancel();
+    _hiddenGemsMoreToken?.cancel();
     return super.close();
   }
 }

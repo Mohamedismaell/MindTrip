@@ -8,14 +8,13 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/widget/favorite_place_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/favorite_place_button.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ExplorePlaceCard extends StatelessWidget {
@@ -102,38 +101,38 @@ class ExplorePlaceCard extends StatelessWidget {
   }
 }
 
-//  Badge Chip
-class _BadgeChip extends StatelessWidget {
-  const _BadgeChip({required this.badge});
+// //  Badge Chip
+// class _BadgeChip extends StatelessWidget {
+//   const _BadgeChip({required this.badge});
 
-  final PlaceBadge badge;
+//   final PlaceBadge badge;
 
-  @override
-  Widget build(BuildContext context) {
-    final (String label, Color color) = switch (badge) {
-      //! change the colors later
-      PlaceBadge.topRated => ('Top Rated', AppColors.customgreeen),
-      PlaceBadge.popular => ('Popular', AppColors.customYellow),
-      PlaceBadge.trending => ('Trending', AppColors.primaryBlue),
-      PlaceBadge.aiCrafted => ('AI Crafted', AppColors.primaryLightBlue1),
-      PlaceBadge.none => ('', Colors.transparent),
-    };
+//   @override
+//   Widget build(BuildContext context) {
+//     final (String label, Color color) = switch (badge) {
+//       //! change the colors later
+//       PlaceBadge.topRated => ('Top Rated', AppColors.customgreeen),
+//       PlaceBadge.popular => ('Popular', AppColors.customYellow),
+//       PlaceBadge.trending => ('Trending', AppColors.primaryBlue),
+//       PlaceBadge.aiCrafted => ('AI Crafted', AppColors.primaryLightBlue1),
+//       PlaceBadge.none => ('', Colors.transparent),
+//     };
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.88),
-        borderRadius: BorderRadius.circular(24.r),
-      ),
-      child: Text(
-        label,
-        style: context.textTheme.labelSmall?.copyWith(
-          color: AppColors.pureWhite,
-        ),
-      ),
-    );
-  }
-}
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+//       decoration: BoxDecoration(
+//         color: color.withValues(alpha: 0.88),
+//         borderRadius: BorderRadius.circular(24.r),
+//       ),
+//       child: Text(
+//         label,
+//         style: context.textTheme.labelSmall?.copyWith(
+//           color: AppColors.pureWhite,
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 // Widget _buildHotelInfo(BuildContext context, PlaceEntity place) {
 //   return Expanded(
@@ -275,7 +274,9 @@ Widget _buildRestaurantInfo(BuildContext context, PlaceEntity place) {
 
 Widget _buildCardInfo(BuildContext context, PlaceEntity place) {
   switch (place.category) {
-    case PlaceCategory.foodCafes:
+    case PlaceCategory.food:
+      return _buildRestaurantInfo(context, place);
+    case PlaceCategory.cafes:
       return _buildRestaurantInfo(context, place);
     case PlaceCategory.entertainment:
       return _buildRestaurantInfo(context, place);

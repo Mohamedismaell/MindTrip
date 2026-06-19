@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/appp_dialog.dart';
+import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 
 Future<void> showRenameTripDialog(

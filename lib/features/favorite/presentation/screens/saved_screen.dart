@@ -6,7 +6,7 @@ import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_place_card.dart';
 import 'package:mindtrip/features/favorite/cubit/saved_places_cubit.dart';
 import 'package:mindtrip/features/favorite/presentation/widgets/saved_category_filter_bar.dart';
@@ -33,7 +33,8 @@ const _savedCategories = [
   // PlaceCategory.diving,
   // PlaceCategory.heritage,
   PlaceCategory.all,
-  PlaceCategory.foodCafes,
+  PlaceCategory.food,
+  PlaceCategory.cafes,
   PlaceCategory.historicalSites,
   PlaceCategory.beaches,
   PlaceCategory.nature,

@@ -7,8 +7,8 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
-import 'package:mindtrip/core/widget/custom_gradient_button.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

@@ -90,10 +90,32 @@ $yellow└───────────────────────�
 
   String _pretty(dynamic data) {
     try {
-      return const JsonEncoder.withIndent('  ').convert(data);
+      return const JsonEncoder.withIndent('  ').convert(_truncate(data));
     } catch (_) {
       return data.toString();
     }
+  }
+
+  dynamic _truncate(dynamic value) {
+    if (value is List) {
+      const maxItems = 1;
+
+      if (value.length <= maxItems) {
+        return value.map(_truncate).toList();
+      }
+
+      return {
+        'count': value.length,
+        'showing': maxItems,
+        'items': value.take(maxItems).map(_truncate).toList(),
+      };
+    }
+
+    if (value is Map) {
+      return value.map((key, value) => MapEntry(key, _truncate(value)));
+    }
+
+    return value;
   }
 
   String _toCurl(RequestOptions options) {

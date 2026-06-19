@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/models/interest_categories.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 

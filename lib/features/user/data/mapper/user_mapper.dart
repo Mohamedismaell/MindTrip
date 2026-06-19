@@ -1,4 +1,4 @@
-import 'package:mindtrip/core/shared/user/data/models/user_model.dart';
+import 'package:mindtrip/features/user/data/models/user_model.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 
 extension UserMapper on UserModel {

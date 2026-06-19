@@ -10,8 +10,8 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/widget/favorite_place_button.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/favorite_place_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
@@ -94,13 +94,13 @@ class _HomeCategoryPlacesListState extends State<HomeCategoryPlacesList> {
                   clipBehavior: Clip.none,
                   itemCount:
                       places.length +
-                      (state.categoryPlaces.isMoreLoading ? 1 : 0),
+                      (state.categoryPlaces.isMoreLoading ? 2 : 0),
                   separatorBuilder: (_, _) => SizedBox(width: 20.w),
                   itemBuilder: (context, index) {
                     if (index >= places.length) {
-                      return SizedBox(
-                        width: 100.w,
-                        child: const Center(child: CircularProgressIndicator()),
+                      return const Skeletonizer(
+                        enabled: true,
+                        child: _CategoryPlaceCard(place: DummyData.place),
                       );
                     }
 

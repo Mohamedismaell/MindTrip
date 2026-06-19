@@ -35,8 +35,6 @@ class PlaceCityAdapter extends TypeAdapter<PlaceCity> {
         return PlaceCity.sharmElSheikh;
       case 10:
         return PlaceCity.marsaMatrouh;
-      case 11:
-        return PlaceCity.other;
       default:
         return PlaceCity.cairo;
     }
@@ -67,8 +65,6 @@ class PlaceCityAdapter extends TypeAdapter<PlaceCity> {
         writer.writeByte(9);
       case PlaceCity.marsaMatrouh:
         writer.writeByte(10);
-      case PlaceCity.other:
-        writer.writeByte(11);
     }
   }
 

@@ -198,35 +198,40 @@ class ExploreCubit extends Cubit<ExploreState> {
   }
 
   GetPlacesRequestModel _buildFilteredRequest({required int page}) {
-    final base = state.advancedFilters ?? const GetPlacesRequestModel();
-
-    // Combine the category from the chip bar with any categories from the filter sheet
-    final List<String> categories = [];
-    if (state.selectedCategory != PlaceCategory.all) {
-      categories.add(state.selectedCategory.category);
+    // If we have advanced filters, ignore the category chip
+    if (state.advancedFilters != null) {
+      final base = state.advancedFilters!;
+      return GetPlacesRequestModel(
+        category: base.category,
+        city: base.city,
+        interests: base.interests,
+        minRating: base.minRating,
+        maxRating: base.maxRating,
+        minPrice: base.minPrice,
+        maxPrice: base.maxPrice,
+        hiddenGem: base.hiddenGem,
+        sortBy: base.sortBy,
+        order: base.order,
+        page: page,
+        limit: 12,
+      );
     }
-    if (base.category != null) {
-      categories.addAll(base.category!);
-    }
 
+    // Otherwise use only the category chip
     return GetPlacesRequestModel(
-      category: categories.isEmpty ? null : categories.toSet().toList(),
-      city: base.city,
-      interests: base.interests,
-      minRating: base.minRating,
-      maxRating: base.maxRating,
-      minPrice: base.minPrice,
-      maxPrice: base.maxPrice,
-      hiddenGem: base.hiddenGem,
-      sortBy: base.sortBy,
-      order: base.order,
+      category: state.selectedCategory == PlaceCategory.all
+          ? null
+          : [state.selectedCategory.category],
       page: page,
       limit: 12,
     );
   }
 
   void applyAdvancedFilters(GetPlacesRequestModel filters) {
-    emit(state.copyWith(advancedFilters: filters));
+    emit(state.copyWith(
+      advancedFilters: filters,
+      selectedCategory: PlaceCategory.all, // Reset chips UI when filters are active
+    ));
     loadFilteredPlacesFirstPage();
   }
 
@@ -237,7 +242,10 @@ class ExploreCubit extends Cubit<ExploreState> {
 
   void onCategoryToggled(PlaceCategory category) {
     if (state.selectedCategory == category) return;
-    emit(state.copyWith(selectedCategory: category));
+    emit(state.copyWith(
+      selectedCategory: category,
+      advancedFilters: null, // Reset filters when using chips
+    ));
     loadFilteredPlacesFirstPage();
   }
 

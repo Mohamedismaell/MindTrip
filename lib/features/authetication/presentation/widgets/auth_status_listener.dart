@@ -6,7 +6,7 @@ import 'package:mindtrip/core/enums/otp_flow.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
-import 'package:mindtrip/core/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 

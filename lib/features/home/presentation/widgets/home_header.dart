@@ -7,12 +7,12 @@ import 'package:mindtrip/core/shared/presentation/manager/location_cubit/locatio
 import 'package:mindtrip/core/shared/presentation/manager/location_cubit/location_state.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});

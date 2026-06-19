@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_head_line.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
 class AuthHeadline extends StatelessWidget {
   const AuthHeadline({

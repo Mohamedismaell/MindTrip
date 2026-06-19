@@ -105,7 +105,7 @@ void main() {
         city: '',
         cityEn: 'Egypt',
       ),
-      category: PlaceCategory.activity,
+      category: PlaceCategory.all,
     );
     testTrip = Trip(
       id: 'trip1',

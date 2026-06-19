@@ -10,7 +10,7 @@ import 'package:mindtrip/core/shared/presentation/widget/rating_stars.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/entities/google_place.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';

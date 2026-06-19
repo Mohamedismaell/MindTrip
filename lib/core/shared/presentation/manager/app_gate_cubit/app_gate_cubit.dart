@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/token_manager.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mindtrip/core/app_env.dart';
+import 'package:mindtrip/core/utils/app_env.dart';
 import 'package:mindtrip/features/map/data/models/google_place_model.dart';
 import 'package:mindtrip/features/map/data/models/place_prediction.dart';
 

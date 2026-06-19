@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
-import 'package:mindtrip/core/app_env.dart';
+import 'package:mindtrip/core/utils/app_env.dart';
 import 'package:mindtrip/core/connections/retry_runner.dart';
 import 'package:mindtrip/core/database/cache/app_hive.dart';
 import 'package:mindtrip/core/helper/hydrated_storage.dart';
@@ -17,7 +17,7 @@ import 'package:mindtrip/core/shared/presentation/manager/location_cubit/locatio
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/manager/connection_cubit/connection_bloc.dart';
 import 'package:mindtrip/core/shared/routes/app_router.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'core/observers/app_bloc_observer.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/wavy_clipper.dart';
-import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
 import 'package:mindtrip/features/onboarding/presentation/models/onboarding_model.dart';
 

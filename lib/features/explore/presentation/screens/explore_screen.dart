@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_search_bar.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/app_refresh_indicator.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_refresh_indicator.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
-import 'package:mindtrip/features/explore/presentation/data/explore_mock_data.dart';
+import 'package:mindtrip/features/explore/presentation/cubit/explore_state.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_category_chips.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_filter_sheet.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_header.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_places_grid.dart';
-import 'package:mindtrip/features/explore/presentation/widgets/explore_search_bar.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_section_header.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/explore_trending_list.dart';
 import 'package:mindtrip/features/explore/presentation/widgets/float_map_button.dart';
@@ -34,14 +34,16 @@ class ExploreScreen extends StatelessWidget {
                 //  Header
                 const ExploreHeader(),
                 SliverToBoxAdapter(child: SizedBox(height: 24.h)),
-                //Todo: is there 2 search bars in the app home and explore screens ?
                 //! Dummy search
+
                 //  Search Bar
-                const ExploreSearchBar(),
+                AppSearchBar(
+                  hintText: 'Destinations, trips, activities...',
+                  onTap: () {},
+                  onVoiceTap: () {},
+                ),
                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
-                //Todo: edit Ui later
-                //!No funcaitonality right now
                 //  Category Chips
                 ExploreCategoryChips(),
                 SliverToBoxAdapter(child: SizedBox(height: 18.h)),
@@ -60,10 +62,14 @@ class ExploreScreen extends StatelessWidget {
 
                 //  Other Places
                 //Todo change it to respnd to the category type
-                ExploreSectionHeader(
-                  title: 'Other Places',
-                  isActionButton: true,
-                  onFilterTap: () => ExploreFilterSheet.show(context),
+                BlocBuilder<ExploreCubit, ExploreState>(
+                  builder: (context, state) {
+                    return ExploreSectionHeader(
+                      title: 'Popular',
+                      isActionButton: true,
+                      onFilterTap: () => ExploreFilterSheet.show(context),
+                    );
+                  },
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 12.h)),
                 const ExplorePlacesGrid(),

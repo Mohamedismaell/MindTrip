@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_state.dart';
 

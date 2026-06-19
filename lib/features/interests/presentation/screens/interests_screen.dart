@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/user/manager/cubit/user_cubit.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
-import 'package:mindtrip/core/widget/custom_gradient_button.dart';
-import 'package:mindtrip/core/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
 import 'package:mindtrip/features/interests/presentation/widgets/interests_buttons.dart';
 import 'package:mindtrip/features/interests/presentation/widgets/interests_header.dart';
 

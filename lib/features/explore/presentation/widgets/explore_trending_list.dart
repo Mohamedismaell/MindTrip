@@ -85,13 +85,13 @@ class _ExploreTrendingListState extends State<ExploreTrendingList> {
                 scrollDirection: Axis.horizontal,
                 itemCount:
                     trendingPlaces.length +
-                    (state.trendingPlaces.isMoreLoading ? 1 : 0),
+                    (state.trendingPlaces.isMoreLoading ? 2 : 0),
                 separatorBuilder: (_, _) => SizedBox(width: 17.w),
                 itemBuilder: (context, index) {
                   if (index == trendingPlaces.length) {
-                    return SizedBox(
-                      width: 100.w,
-                      child: const Center(child: CircularProgressIndicator()),
+                    return const Skeletonizer(
+                      enabled: true,
+                      child: _TrendingCard(item: DummyData.place),
                     );
                   }
                   final item = trendingPlaces[index];

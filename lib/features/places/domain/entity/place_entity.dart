@@ -23,7 +23,7 @@ class PlaceEntity extends Equatable {
     required this.location,
     this.imageUrls,
     this.description,
-    this.category = PlaceCategory.other,
+    this.category = PlaceCategory.all,
     this.rating = 0.0,
     this.reviewCount = 0,
     this.price,

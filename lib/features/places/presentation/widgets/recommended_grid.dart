@@ -9,8 +9,8 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/widget/favorite_place_button.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/favorite_place_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class RecommendedplacesGrid extends StatelessWidget {

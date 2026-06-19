@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 import 'package:mindtrip/features/authetication/presentation/widgets/auth_options_button.dart';

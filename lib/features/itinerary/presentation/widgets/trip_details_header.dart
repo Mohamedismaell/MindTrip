@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/widget/custom_head_line.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 class TripDetailsHeader extends StatelessWidget {

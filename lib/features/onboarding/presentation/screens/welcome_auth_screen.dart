@@ -6,8 +6,8 @@ import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gat
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/custom_gradient_button.dart';
-import 'package:mindtrip/core/widget/custom_otlined_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/onboarding/presentation/widgets/welcome_image.dart';
 
 class WelcomeAuthScreen extends StatelessWidget {

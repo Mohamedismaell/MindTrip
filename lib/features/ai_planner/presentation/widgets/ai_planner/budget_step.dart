@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';

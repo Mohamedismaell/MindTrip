@@ -4,7 +4,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_gradients.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
 class TripFilterTabs extends StatelessWidget {

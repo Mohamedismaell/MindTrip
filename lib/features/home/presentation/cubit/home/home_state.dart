@@ -35,7 +35,7 @@ abstract class HomeState with _$HomeState {
     @Default(HomeDataStatus.initial) HomeDataStatus categoryPlacesStatus,
     @Default(PaginationState<PlaceEntity>())
     PaginationState<PlaceEntity> categoryPlaces,
-    @Default('food_cafes') String selectedCategory,
+    @Default(PlaceCategory.food) PlaceCategory selectedCategory,
     @Default('') String categoryPlacesError,
 
     // @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
@@ -48,11 +48,14 @@ abstract class HomeState with _$HomeState {
     @Default(HomeDataStatus.initial) HomeDataStatus plannerPreviewsStatus,
     @Default([]) List<PlannerPreviewEntity> plannerPreviews,
     @Default('') String plannerPreviewsError,
-    @Default([
-      PlaceCategory.foodCafes,
-      PlaceCategory.hotels,
-      PlaceCategory.beaches,
-    ])
+
+    //hidden gems
+    @Default(HomeDataStatus.initial) HomeDataStatus hiddenGemsStatus,
+    @Default(PaginationState<PlaceEntity>())
+    PaginationState<PlaceEntity> hiddenGems,
+    @Default('') String hiddenGemsError,
+
+    @Default([PlaceCategory.food, PlaceCategory.cafes, PlaceCategory.hotels])
     List<PlaceCategory> homeCategories,
   }) = _HomeState;
 }

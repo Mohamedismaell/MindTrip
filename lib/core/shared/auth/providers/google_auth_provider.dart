@@ -1,5 +1,5 @@
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mindtrip/core/app_env.dart';
+import 'package:mindtrip/core/utils/app_env.dart';
 import 'package:mindtrip/core/shared/auth/providers/social_auth_provider.dart';
 
 class GoogleAuthProvider implements SocialAuthProvider {

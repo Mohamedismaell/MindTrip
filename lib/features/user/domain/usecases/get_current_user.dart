@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/shared/user/domain/repositories/user_repository.dart';
+import 'package:mindtrip/features/user/domain/repositories/user_repository.dart';
 import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart';
 
 class GetCurrentUser {
