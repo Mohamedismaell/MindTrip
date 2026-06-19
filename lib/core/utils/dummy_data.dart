@@ -28,6 +28,21 @@ class DummyData {
       'assets/images/authentication/center_vec.webp',
     ],
   );
+  static const placeDetails = PlaceEntity(
+    id: '',
+    name: 'Place Name Placeholder',
+    description:
+        'This is a long description placeholder that will be skeletonized. It should span multiple lines to show the effect properly.',
+    location: LocationEntity(
+      address: 'City, Country',
+      latitude: 0,
+      longitude: 0,
+      city: '',
+      cityEn: '',
+    ),
+    rating: 5.0,
+    reviewCount: 0,
+  );
 
   static final exploreCardPlaces = List.generate(
     6,

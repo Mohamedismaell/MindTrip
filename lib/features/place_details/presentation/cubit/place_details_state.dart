@@ -1,52 +1,26 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
+
+part 'place_details_state.freezed.dart';
 
 enum PlaceDetailsStatus { initial, loading, loaded, error }
 
-enum NearbyStatus { initial, loading, loaded, error }
+extension PlaceDetailsStatusX on PlaceDetailsStatus {
+  bool get isInitial => this == PlaceDetailsStatus.initial;
 
-class PlaceDetailsState extends Equatable {
-  final PlaceDetailsStatus placeDetailsStatus;
-  final PlaceEntity? place;
-  final PlaceEntity? preview;
-  final List<PlaceEntity> nearbyPlaces;
-  final NearbyStatus nearbyStatus;
-  final String? errorMessage;
+  bool get isLoading => this == PlaceDetailsStatus.loading;
 
-  const PlaceDetailsState({
-    this.placeDetailsStatus = PlaceDetailsStatus.initial,
-    this.place,
-    this.preview,
-    this.nearbyPlaces = const [],
-    this.nearbyStatus = NearbyStatus.initial,
-    this.errorMessage,
-  });
+  bool get isLoaded => this == PlaceDetailsStatus.loaded;
 
-  PlaceDetailsState copyWith({
-    PlaceDetailsStatus? placeDetailsStatus,
+  bool get isError => this == PlaceDetailsStatus.error;
+}
+
+@freezed
+abstract class PlaceDetailsState with _$PlaceDetailsState {
+  const factory PlaceDetailsState({
+    @Default(PlaceDetailsStatus.initial) PlaceDetailsStatus placeDetailsStatus,
     PlaceEntity? place,
     PlaceEntity? preview,
-    List<PlaceEntity>? nearbyPlaces,
-    NearbyStatus? nearbyStatus,
     String? errorMessage,
-  }) {
-    return PlaceDetailsState(
-      placeDetailsStatus: placeDetailsStatus ?? this.placeDetailsStatus,
-      place: place ?? this.place,
-      preview: preview ?? this.preview,
-      nearbyPlaces: nearbyPlaces ?? this.nearbyPlaces,
-      nearbyStatus: nearbyStatus ?? this.nearbyStatus,
-      errorMessage: errorMessage ?? this.errorMessage,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-    placeDetailsStatus,
-    place,
-    preview,
-    nearbyPlaces,
-    nearbyStatus,
-    errorMessage,
-  ];
+  }) = _PlaceDetailsState;
 }

@@ -3,7 +3,6 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
-import 'package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart';
 import 'package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
@@ -12,13 +11,9 @@ import 'package:mocktail/mocktail.dart';
 class MockGetPlaceDetailsUseCase extends Mock
     implements GetPlaceDetailsUseCase {}
 
-class MockGetNearbyPlacesUseCase extends Mock
-    implements GetNearbyPlacesUseCase {}
-
 void main() {
   late PlaceDetailsCubit cubit;
   late MockGetPlaceDetailsUseCase mockGetDetails;
-  late MockGetNearbyPlacesUseCase mockGetNearby;
 
   final tPlace = PlaceEntity(
     id: '1',
@@ -27,6 +22,8 @@ void main() {
       address: '123 Test St',
       latitude: 0.0,
       longitude: 0.0,
+      city: 'Egypt',
+      cityEn: 'Egypt',
     ),
   );
 
@@ -37,16 +34,14 @@ void main() {
       address: '123 Test St',
       latitude: 0.0,
       longitude: 0.0,
+      city: 'Egypt',
+      cityEn: 'Egypt',
     ),
   );
 
   setUp(() {
     mockGetDetails = MockGetPlaceDetailsUseCase();
-    mockGetNearby = MockGetNearbyPlacesUseCase();
-    cubit = PlaceDetailsCubit(
-      getDetails: mockGetDetails,
-      getNearby: mockGetNearby,
-    );
+    cubit = PlaceDetailsCubit(getDetails: mockGetDetails);
   });
 
   tearDown(() {
@@ -54,7 +49,7 @@ void main() {
   });
 
   group('loadPlaceDetails', () {
-    test('emits [loading, loaded] when okful', () async {
+    test('emits [loading, loaded] when successful', () async {
       when(
         () => mockGetDetails('1'),
       ).thenAnswer((_) async => Result.ok(tPlace));
@@ -99,10 +94,10 @@ void main() {
       },
     );
 
-    test('emits [loading, error] when unokful', () async {
-      when(
-        () => mockGetDetails('1'),
-      ).thenAnswer((_) async => Result.error(ServerFailure('Server Error')));
+    test('emits [loading, error] when unsuccessful', () async {
+      when(() => mockGetDetails('1')).thenAnswer(
+        (_) async => Result.error(const ServerFailure('Server Error')),
+      );
 
       final expectedStates = [
         const PlaceDetailsState(placeDetailsStatus: PlaceDetailsStatus.loading),
@@ -115,43 +110,6 @@ void main() {
       expectLater(cubit.stream, emitsInOrder(expectedStates));
 
       await cubit.loadPlaceDetails('1');
-    });
-  });
-
-  group('loadNearbyPlaces', () {
-    final tPlacesList = [tPlace];
-
-    test('emits loading and then loaded state with nearby places', () async {
-      when(
-        () => mockGetNearby('1', lat: null, lng: null),
-      ).thenAnswer((_) async => Result.ok(tPlacesList));
-
-      final expectedStates = [
-        const PlaceDetailsState(nearbyStatus: true),
-        PlaceDetailsState(nearbyStatus: false, nearbyPlaces: tPlacesList),
-      ];
-
-      expectLater(cubit.stream, emitsInOrder(expectedStates));
-
-      await cubit.loadNearbyPlaces('1');
-    });
-
-    test('emits loading and then error state', () async {
-      when(
-        () => mockGetNearby('1', lat: null, lng: null),
-      ).thenAnswer((_) async => Result.error(ServerFailure('Nearby Error')));
-
-      final expectedStates = [
-        const PlaceDetailsState(nearbyStatus: true),
-        const PlaceDetailsState(
-          nearbyStatus: false,
-          errorMessage: 'Nearby Error',
-        ),
-      ];
-
-      expectLater(cubit.stream, emitsInOrder(expectedStates));
-
-      await cubit.loadNearbyPlaces('1');
     });
   });
 }

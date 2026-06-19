@@ -1,23 +1,31 @@
+import 'package:mindtrip/core/database/api/api_consumer.dart';
+import 'package:mindtrip/core/database/api/end_points.dart';
+import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
 class PlaceDetailsRemoteDataSource {
-  PlaceDetailsRemoteDataSource();
+  final ApiConsumer _consumer;
+  PlaceDetailsRemoteDataSource(this._consumer);
 
   Future<PlaceModel> getPlaceDetails(String placeId) async {
-    // Returning a dummy PlaceModel until real API is implemented
-    return PlaceModel(
-      placeId: placeId,
-      name: 'Loading...',
-      lat: 0.0,
-      lng: 0.0,
-    );
+    final response = await _consumer.get(EndPoints.placeDetails(placeId));
+    return PlaceModel.fromJson(response['data'] ?? response);
   }
 
-  Future<List<PlaceModel>> getNearbyPlaces(
+  Future<PaginatedResponse<PlaceModel>> getNearbyPlaces(
     String placeId, {
+    int page = 1,
+    int limit = 10,
     double? lat,
     double? lng,
   }) async {
-    return [];
+    // No endpoint for nearby yet
+    return PaginatedResponse(
+      results: [],
+      page: page,
+      limit: limit,
+      total: 0,
+      totalPages: 0,
+    );
   }
 }

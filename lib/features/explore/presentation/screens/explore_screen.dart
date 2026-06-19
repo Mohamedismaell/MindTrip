@@ -37,10 +37,12 @@ class ExploreScreen extends StatelessWidget {
                 //! Dummy search
 
                 //  Search Bar
-                AppSearchBar(
-                  hintText: 'Destinations, trips, activities...',
-                  onTap: () {},
-                  onVoiceTap: () {},
+                SliverToBoxAdapter(
+                  child: AppSearchBar(
+                    hintText: 'Destinations, trips, activities...',
+                    onTap: () {},
+                    onVoiceTap: () {},
+                  ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 

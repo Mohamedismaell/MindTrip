@@ -2,6 +2,7 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
 import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
+import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart';
 import 'package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart';
@@ -19,11 +20,7 @@ class PlaceDetailsRepositoryImpl implements PlaceDetailsRepository {
   @override
   Future<Result<PlaceEntity>> getPlaceDetails(String placeId) async {
     try {
-      final cached = await _local.getPlace(placeId);
-      if (cached != null) {
-        return Result.ok(cached.toEntity());
-      }
-
+      // For now, details are fetched fresh to ensure dynamic data
       final remote = await _remote.getPlaceDetails(placeId);
       await _local.cachePlace(remote);
       return Result.ok(remote.toEntity());
@@ -33,16 +30,22 @@ class PlaceDetailsRepositoryImpl implements PlaceDetailsRepository {
   }
 
   @override
-  Future<Result<List<PlaceEntity>>> getNearbyPlaces(
+  Future<Result<PaginatedResponse<PlaceEntity>>> getNearbyPlaces(
     String placeId, {
+    int page = 1,
+    int limit = 10,
     double? lat,
     double? lng,
   }) async {
     try {
-      final remote = await _remote.getNearbyPlaces(placeId, lat: lat, lng: lng);
-      //! maybe cache nearby places if we want
-      // await _local.cachePlaces(remote);
-      return Result.ok(remote.map((m) => m.toEntity()).toList());
+      final remote = await _remote.getNearbyPlaces(
+        placeId,
+        page: page,
+        limit: limit,
+        lat: lat,
+        lng: lng,
+      );
+      return Result.ok(remote.map((m) => m.toEntity()));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

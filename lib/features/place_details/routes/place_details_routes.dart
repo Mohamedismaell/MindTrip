@@ -21,12 +21,7 @@ class PlaceDetailsRoutes {
 
         return BlocProvider(
           create: (_) => sl<PlaceDetailsCubit>()
-            ..loadPlaceDetails(placeId, preview: preview)
-            ..loadNearbyPlaces(
-              placeId,
-              lat: preview?.location.latitude,
-              lng: preview?.location.longitude,
-            ),
+            ..loadPlaceDetails(placeId, preview: preview),
           child: PlaceDetailsScreen(heroTag: heroTag),
         );
       },

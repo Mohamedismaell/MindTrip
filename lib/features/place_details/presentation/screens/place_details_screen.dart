@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
+import 'package:mindtrip/core/utils/dummy_data.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -14,30 +13,12 @@ import 'package:mindtrip/features/place_details/presentation/widgets/place_detai
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_image_cover.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_info_chips.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_location_section.dart';
-import 'package:mindtrip/features/place_details/presentation/widgets/place_details_nearby_places.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_overview.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_photo_strip.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_reviews.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_trip_button.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_visit_info.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
-// Minimal skeletal entity to build the structure without fake data strings
-const _skeletalPlace = PlaceEntity(
-  id: '',
-  name: 'Place Name Placeholder',
-  description:
-      'This is a long description placeholder that will be skeletonized. It should span multiple lines to show the effect properly.',
-  location: LocationEntity(
-    address: 'City, Country',
-    latitude: 0,
-    longitude: 0,
-    city: '',
-    cityEn: '',
-  ),
-  rating: 5.0,
-  reviewCount: 0,
-);
 
 class PlaceDetailsScreen extends StatelessWidget {
   final String? heroTag;
@@ -54,7 +35,7 @@ class PlaceDetailsScreen extends StatelessWidget {
             previous.preview != current.preview ||
             previous.errorMessage != current.errorMessage,
         builder: (context, state) {
-          final place = state.place ?? state.preview ?? _skeletalPlace;
+          final place = state.place ?? state.preview ?? DummyData.placeDetails;
 
           return _PlaceDetailsBody(
             place: place,
@@ -172,9 +153,8 @@ class _PlaceDetailsBody extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: 30.h),
-
-                      PlaceDetailsNearbyPlaces(placeId: place.id),
+                      // SizedBox(height: 30.h),
+                      // PlaceDetailsNearbyPlaces(placeId: place.id),
                       SizedBox(height: 30.h),
                       Skeletonizer(
                         enabled: isMainLoading,
