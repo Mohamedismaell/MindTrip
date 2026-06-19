@@ -7,31 +7,24 @@ class InterestCategories {
     "🥐 Bakery",
     "🦞 Seafood",
     "🌮 Street Food",
-    "🏺 History & Antiquities",
-    "🏛️ Mosques & Churches",
     "🧳 Tourism",
-    "🏖️ Beaches & Water",
     "🌊 Waterfront",
     "🌿 Nature",
-    "🎭 Entertainment",
     "🌃 Nightlife",
     "🎵 Music",
     "🚶 Outdoor",
     "🌳 Park",
     "🛍️ Shopping",
+    "🎭 Entertainment",
+    "🏖️ Beaches & Water",
     "🎨 Arts & Crafts",
+    "🏺 History & Antiquities",
+    "🏛️ Mosques & Churches",
   ];
   //Todo check it
   static String stripEmoji(String interest) {
-    return interest
-        .replaceAll(
-          RegExp(
-            r'[\p{Emoji_Presentation}\p{Emoji}\uFE0F\u200D]+',
-            unicode: true,
-          ),
-          '',
-        )
-        .trim();
+    // Strips any non-alphanumeric characters from the start of the string (like emojis and spaces)
+    return interest.replaceFirst(RegExp(r'^[^a-zA-Z0-9]+'), '').trim();
   }
 
   static List<String> get apiCategories => categories.map(stripEmoji).toList();

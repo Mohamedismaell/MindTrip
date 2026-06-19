@@ -16,7 +16,10 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
 
   CancelToken? _firstPageToken;
   CancelToken? _loadMoreToken;
-  Future<void> loadFirstPage({required List<String> selectedCategories}) async {
+  Future<void> loadFirstPage({
+    required List<String> selectedCategories,
+    int? limit,
+  }) async {
     _firstPageToken?.cancel();
     _firstPageToken = CancelToken();
     emit(
@@ -27,7 +30,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
       request: RecommendationPlacesRequestModel(
         selectedCategories: selectedCategories,
         page: 1,
-        limit: 4,
+        limit: limit ?? 4,
       ),
       cancelToken: _firstPageToken,
     );

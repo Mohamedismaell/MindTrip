@@ -1,3 +1,5 @@
+import 'package:mindtrip/core/shared/models/interest_categories.dart';
+
 class GetPlacesRequestModel {
   final List<String>? city;
   final List<String>? category;
@@ -36,17 +38,19 @@ class GetPlacesRequestModel {
     return {
       if (city != null && city!.isNotEmpty) 'city': city,
       if (category != null && category!.isNotEmpty) 'category': category,
-      if (interests != null && interests!.isNotEmpty) 'interests': interests,
+      if (interests != null && interests!.isNotEmpty)
+        'interests':
+            interests!.map((e) => InterestCategories.stripEmoji(e)).toList(),
 
-      if (minRating != null) 'min_rating': minRating,
-      if (maxRating != null) 'max_rating': maxRating,
+      if (minRating != null) 'minRating': minRating,
+      if (maxRating != null) 'maxRating': maxRating,
 
-      if (minPrice != null) 'min_price': minPrice,
-      if (maxPrice != null) 'max_price': maxPrice,
+      if (minPrice != null) 'minPrice': minPrice,
+      if (maxPrice != null) 'maxPrice': maxPrice,
 
-      if (hiddenGem != null) 'hidden_gem': hiddenGem,
+      if (hiddenGem != null) 'hiddenGem': hiddenGem,
 
-      if (sortBy != null) 'sort_by': sortBy,
+      if (sortBy != null) 'sortBy': sortBy,
       if (order != null) 'order': order,
 
       'page': page,

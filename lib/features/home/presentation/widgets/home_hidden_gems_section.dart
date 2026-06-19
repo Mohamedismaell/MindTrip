@@ -15,6 +15,7 @@ import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeHiddenGemsSection extends StatefulWidget {
@@ -67,8 +68,36 @@ class _HomeHiddenGemsSectionState extends State<HomeHiddenGemsSection> {
             ? DummyData.exploreCardPlaces
             : state.hiddenGems.items;
 
+        if (state.hiddenGemsStatus.isFailure) {
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: AppErrorWidget(
+                imageSize: 100,
+                message: state.hiddenGemsError.isNotEmpty 
+                    ? state.hiddenGemsError 
+                    : 'Failed to load hidden gems',
+                onPressed: () {
+                  context.read<HomeCubit>().loadFirstPageHiddenGems();
+                },
+              ),
+            ),
+          );
+        }
+
         if (!isLoading && places.isEmpty) {
-          return const SliverToBoxAdapter(child: SizedBox.shrink());
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: AppErrorWidget.noInfo(
+                imageSize: 100,
+                message: 'No hidden gems found at the moment.',
+                onRetry: () {
+                  context.read<HomeCubit>().loadFirstPageHiddenGems();
+                },
+              ),
+            ),
+          );
         }
 
         return SliverToBoxAdapter(

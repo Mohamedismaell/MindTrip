@@ -98,6 +98,14 @@ $yellow└───────────────────────�
 
   dynamic _truncate(dynamic value) {
     if (value is List) {
+      // Don't truncate primitive lists
+      if (value.isEmpty ||
+          value.first is String ||
+          value.first is num ||
+          value.first is bool) {
+        return value;
+      }
+
       const maxItems = 1;
 
       if (value.length <= maxItems) {

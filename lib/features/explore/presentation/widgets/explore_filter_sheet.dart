@@ -164,27 +164,26 @@ class _ExploreFilterSheetState extends State<ExploreFilterSheet> {
                       Wrap(
                         spacing: 5.w,
                         runSpacing: 10.h,
-                        children: PlaceCategory.values
-                            .where((c) => c != PlaceCategory.all)
-                            .map((category) {
-                              final isSelected = _selectedCategories.contains(
-                                category.category,
-                              );
-                              return _SelectableChip(
-                                label: category,
-                                isSelected: isSelected,
-                                onTap: () => setState(
-                                  () => isSelected
-                                      ? _selectedCategories.remove(
-                                          category.category,
-                                        )
-                                      : _selectedCategories.add(
-                                          category.category,
-                                        ),
-                                ),
-                              );
-                            })
-                            .toList(),
+                        children: PlaceCategory.values.map((category) {
+                          final isSelected = category == PlaceCategory.all
+                              ? _selectedCategories.isEmpty
+                              : _selectedCategories.contains(category.category);
+                          return _SelectableChip(
+                            label: category,
+                            isSelected: isSelected,
+                            onTap: () => setState(() {
+                              if (category == PlaceCategory.all) {
+                                _selectedCategories = {};
+                              } else {
+                                if (isSelected) {
+                                  _selectedCategories.remove(category.category);
+                                } else {
+                                  _selectedCategories.add(category.category);
+                                }
+                              }
+                            }),
+                          );
+                        }).toList(),
                       ),
                       SizedBox(height: 25.h),
 

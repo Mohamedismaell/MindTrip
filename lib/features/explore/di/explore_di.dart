@@ -3,7 +3,6 @@ import 'package:mindtrip/features/explore/data/datasources/explore_remote_data_s
 import 'package:mindtrip/features/explore/data/datasources/explore_local_data_source.dart';
 import 'package:mindtrip/features/explore/data/repositories/explore_repository_impl.dart';
 import 'package:mindtrip/features/explore/domain/repositories/explore_repository.dart';
-import 'package:mindtrip/features/explore/presentation/cubit/all_places/explore_all_places_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
@@ -30,12 +29,6 @@ class ExploreDi {
     //! Cubit
     sl.registerFactory<ExploreCubit>(
       () => ExploreCubit(getPlacesUseCase: sl<GetPlacesUseCase>()),
-    );
-
-    sl.registerFactory<ExploreAllPlacesCubit>(
-      () => ExploreAllPlacesCubit(
-        getPopularPlacesUseCase: sl<GetPopularPlacesUseCase>(),
-      ),
     );
   }
 }

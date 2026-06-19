@@ -10,13 +10,13 @@ class ExploreSectionHeader extends StatelessWidget {
   const ExploreSectionHeader({
     super.key,
     required this.title,
-    // this.count,
+    this.filterCount = 0,
     this.isActionButton,
     this.onFilterTap,
   });
 
   final String title;
-  // final int? count;
+  final int filterCount;
   final VoidCallback? onFilterTap;
   final bool? isActionButton;
   @override
@@ -30,23 +30,44 @@ class ExploreSectionHeader extends StatelessWidget {
               color: context.colorTheme.onSurface,
             ),
           ),
-          // if (count != null) ...[
-          //   SizedBox(width: 6.w),
-          //   Text(
-          //     '($count)',
-          //     style: AppTextStyles.h8SemiBold.copyWith(
-          //       color: context.colorTheme.outline,
-          //     ),
-          //   ),
-          // ],
-          Spacer(),
+          const Spacer(),
           isActionButton != null
-              ? _ActionChip(
-                  svgIcon: SvgPicture.asset(ExploreAssets.filterIcon),
-                  label: 'Filter',
-                  onTap: onFilterTap ?? () {},
+              ? Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    _ActionChip(
+                      svgIcon: SvgPicture.asset(ExploreAssets.filterIcon),
+                      label: 'Filter',
+                      onTap: onFilterTap ?? () {},
+                    ),
+                    if (filterCount > 0)
+                      Positioned(
+                        right: 0,
+                        top: -5,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: context.colorTheme.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 14,
+                            minHeight: 14,
+                          ),
+                          child: Text(
+                            '$filterCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
         ],
       ),
     );

@@ -56,11 +56,16 @@ class _ExploreTrendingListState extends State<ExploreTrendingList> {
         final trendingPlacesStatus = state.trendingPlacesStatus;
         if (trendingPlacesStatus.isFailure) {
           return SliverToBoxAdapter(
-            child: AppErrorWidget(
-              message: state.trendingPlacesError,
-              imageSize: 60,
-              onPressed: () =>
-                  context.read<ExploreCubit>().loadMoreTrendingPlaces(),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: AppErrorWidget(
+                message: state.trendingPlacesError.isNotEmpty 
+                    ? state.trendingPlacesError 
+                    : 'Failed to load trending places',
+                imageSize: 80,
+                onPressed: () =>
+                    context.read<ExploreCubit>().loadTrendingPlacesFirstPage(),
+              ),
             ),
           );
         }
@@ -71,9 +76,19 @@ class _ExploreTrendingListState extends State<ExploreTrendingList> {
             ? DummyData.popularPlaces
             : state.trendingPlaces.items;
 
-        // if (!isLoading && trendingPlaces.isEmpty) {
-        //   return const SliverToBoxAdapter(child: SizedBox.shrink());
-        // }
+        if (!isLoading && trendingPlaces.isEmpty) {
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: AppErrorWidget.noInfo(
+                message: 'No trending places found at the moment.',
+                imageSize: 80,
+                onRetry: () =>
+                    context.read<ExploreCubit>().loadTrendingPlacesFirstPage(),
+              ),
+            ),
+          );
+        }
 
         return SliverToBoxAdapter(
           child: Skeletonizer(
@@ -88,7 +103,7 @@ class _ExploreTrendingListState extends State<ExploreTrendingList> {
                     (state.trendingPlaces.isMoreLoading ? 2 : 0),
                 separatorBuilder: (_, _) => SizedBox(width: 17.w),
                 itemBuilder: (context, index) {
-                  if (index == trendingPlaces.length) {
+                  if (index >= trendingPlaces.length) {
                     return const Skeletonizer(
                       enabled: true,
                       child: _TrendingCard(item: DummyData.place),

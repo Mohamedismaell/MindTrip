@@ -1,7 +1,5 @@
 import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/core/database/api/api_error_mapper.dart';
-import 'package:mindtrip/features/home/data/mapper/banner_mapper.dart';
-import 'package:mindtrip/core/shared/data/mapper/planner_preview_mapper.dart';
+import 'package:mindtrip/features/home/presentation/data/home_mock_data.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/planner_preview_entity.dart';
 import 'package:mindtrip/features/home/data/datasources/home_local_data_source.dart';
 import 'package:mindtrip/features/home/data/datasources/home_remote_data_source.dart';
@@ -19,39 +17,55 @@ class HomeRepositoryImpl implements HomeRepository {
 
   @override
   Future<Result<List<BannerEntity>>> getBanners() async {
-    try {
-      final remoteBanners = await remoteDataSource.getBanners();
-      await localDataSource.cacheBanners(remoteBanners);
-      return Result.ok(remoteBanners.map((m) => m.toEntity()).toList());
-    } catch (e) {
-      try {
-        final localBanners = await localDataSource.getBanners();
-        if (localBanners.isNotEmpty) {
-          return Result.ok(localBanners.map((m) => m.toEntity()).toList());
-        }
-      } catch (_) {
-        // Fallback to original remote error if local fails too
-      }
-      return Result.error(ApiErrorMapper.fromException(e));
-    }
+    // try {
+    //   final remoteBanners = await remoteDataSource.getBanners();
+    //   await localDataSource.cacheBanners(remoteBanners);
+    //   return Result.ok(remoteBanners.map((m) => m.toEntity()).toList());
+    // } catch (e) {
+    //   try {
+    //     final localBanners = await localDataSource.getBanners();
+    //     if (localBanners.isNotEmpty) {
+    //       return Result.ok(localBanners.map((m) => m.toEntity()).toList());
+    //     }
+    //   } catch (_) {
+    //     // Fallback to original remote error if local fails too
+    //   }
+    //   return Result.error(ApiErrorMapper.fromException(e));
+    // }
+    return Result.ok(HomeMockData.banners);
   }
 
   @override
   Future<Result<List<PlannerPreviewEntity>>> getPlannerPreviews() async {
-    try {
-      final remotePreviews = await remoteDataSource.getPlannerPreviews();
-      await localDataSource.cachePlannerPreviews(remotePreviews);
-      return Result.ok(remotePreviews.map((m) => m.toEntity()).toList());
-    } catch (e) {
-      try {
-        final localPreviews = await localDataSource.getPlannerPreviews();
-        if (localPreviews.isNotEmpty) {
-          return Result.ok(localPreviews.map((m) => m.toEntity()).toList());
-        }
-      } catch (_) {
-        // Fallback to original remote error if local fails too
-      }
-      return Result.error(ApiErrorMapper.fromException(e));
-    }
+    // try {
+    //   final remotePreviews = await remoteDataSource.getPlannerPreviews();
+    //   await localDataSource.cachePlannerPreviews(remotePreviews);
+    //   return Result.ok(remotePreviews.map((m) => m.toEntity()).toList());
+    // } catch (e) {
+    //   try {
+    //     final localPreviews = await localDataSource.getPlannerPreviews();
+    //     if (localPreviews.isNotEmpty) {
+    //       return Result.ok(localPreviews.map((m) => m.toEntity()).toList());
+    //     }
+    //   } catch (_) {
+    //     // Fallback to original remote error if local fails too
+    //   }
+    //   return Result.error(ApiErrorMapper.fromException(e));
+    // }
+    return Result.ok(
+      HomeMockData.plannerPreviews
+          .map(
+            (p) => PlannerPreviewEntity(
+              title: p.title,
+              imageUrl: p.imageUrl,
+              badge: p.badge,
+              stops:
+                  p.stops
+                      .map((s) => PlannerStopEntity(time: s.time, label: s.label))
+                      .toList(),
+            ),
+          )
+          .toList(),
+    );
   }
 }

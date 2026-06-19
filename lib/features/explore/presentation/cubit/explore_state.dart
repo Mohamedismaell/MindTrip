@@ -17,6 +17,7 @@ extension ExploreDataStatusX on ExploreDataStatus {
 
 @freezed
 abstract class ExploreState with _$ExploreState {
+  const ExploreState._();
   const factory ExploreState({
     @Default(ExploreDataStatus.initial) ExploreDataStatus trendingPlacesStatus,
     @Default(PaginationState<PlaceEntity>())
@@ -26,9 +27,41 @@ abstract class ExploreState with _$ExploreState {
     @Default(PaginationState<PlaceEntity>())
     PaginationState<PlaceEntity> filteredPlaces,
     @Default('') String filteredPlacesError,
-    @Default(PlaceCategory.all) PlaceCategory selectedCategory,
+    @Default({PlaceCategory.all}) Set<PlaceCategory> selectedCategories,
     GetPlacesRequestModel? advancedFilters,
   }) = _ExploreState;
 
   factory ExploreState.initial() => const ExploreState();
+
+  int get filterCount {
+    int count = 0;
+    if (advancedFilters != null) {
+      if (advancedFilters!.city != null && advancedFilters!.city!.isNotEmpty) {
+        count++;
+      }
+      if (advancedFilters!.category != null &&
+          advancedFilters!.category!.isNotEmpty) {
+        count++;
+      }
+      if (advancedFilters!.interests != null &&
+          advancedFilters!.interests!.isNotEmpty) {
+        count++;
+      }
+      if (advancedFilters!.minRating != null ||
+          advancedFilters!.maxRating != null) {
+        count++;
+      }
+      if (advancedFilters!.minPrice != null ||
+          advancedFilters!.maxPrice != null) {
+        count++;
+      }
+      if (advancedFilters!.hiddenGem == true) count++;
+    } else {
+      if (!selectedCategories.contains(PlaceCategory.all) &&
+          selectedCategories.isNotEmpty) {
+        count++;
+      }
+    }
+    return count;
+  }
 }

@@ -52,11 +52,16 @@ class _ExplorePlacesGridState extends State<ExplorePlacesGrid> {
       builder: (context, state) {
         if (state.filteredPlacesStatus.isFailure) {
           return SliverToBoxAdapter(
-            child: AppErrorWidget(
-              message: state.filteredPlacesError,
-              imageSize: 80,
-              onPressed: () =>
-                  context.read<ExploreCubit>().loadFilteredPlacesFirstPage(),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40.h),
+              child: AppErrorWidget(
+                message: state.filteredPlacesError.isNotEmpty
+                    ? state.filteredPlacesError
+                    : 'Failed to load places',
+                imageSize: 100,
+                onPressed: () =>
+                    context.read<ExploreCubit>().loadFilteredPlacesFirstPage(),
+              ),
             ),
           );
         }
@@ -69,7 +74,17 @@ class _ExplorePlacesGridState extends State<ExplorePlacesGrid> {
             : state.filteredPlaces.items;
 
         if (!isLoading && places.isEmpty) {
-          return const SliverToBoxAdapter(child: SizedBox.shrink());
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40.h),
+              child: AppErrorWidget(
+                message: 'No places found matching your criteria.',
+                imageSize: 100,
+                onPressed: () =>
+                    context.read<ExploreCubit>().loadFilteredPlacesFirstPage(),
+              ),
+            ),
+          );
         }
 
         return SliverToBoxAdapter(

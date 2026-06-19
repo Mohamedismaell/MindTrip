@@ -11,7 +11,7 @@ class InterestsButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> categories = InterestCategories.categories;
+    final List<String> interests = InterestCategories.categories;
     return BlocBuilder<UserCubit, UserState>(
       buildWhen: (prev, curr) => prev.interests != curr.interests,
       builder: (context, state) {
@@ -19,9 +19,8 @@ class InterestsButtons extends StatelessWidget {
           child: Wrap(
             spacing: 19.w,
             runSpacing: 14.h,
-            children: categories.map((category) {
-              final bool isSelected =
-                  state.interests?.contains(category) ?? false;
+            children: interests.map((interest) {
+              final bool isSelected = state.interests.contains(interest);
               return OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
@@ -34,10 +33,10 @@ class InterestsButtons extends StatelessWidget {
                       : AppColors.pureWhite,
                 ),
                 onPressed: () {
-                  context.read<UserCubit>().editSelectedCategory(category);
+                  context.read<UserCubit>().editSelectedCategory(interest);
                 },
                 child: Text(
-                  category,
+                  interest,
                   style: context.textTheme.bodyLarge!.copyWith(
                     color: isSelected
                         ? AppColors.pureWhite

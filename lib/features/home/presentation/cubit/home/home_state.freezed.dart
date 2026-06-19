@@ -16,10 +16,7 @@ mixin _$HomeState {
 
  HomeDataStatus get bannersStatus; List<BannerEntity> get banners; String get bannersError;//popular
  HomeDataStatus get popularPlacesStatus; PaginationState<PlaceEntity> get popularPlaces; String get popularPlacesError;//category
- HomeDataStatus get categoryPlacesStatus; PaginationState<PlaceEntity> get categoryPlaces; PlaceCategory get selectedCategory; String get categoryPlacesError;// @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
-// @Default([]) List<PlaceEntity> recommendedPlaces,
-// @Default('') String recommendedPlacesError,
- HomeDataStatus get tourPackagesStatus; String get tourPackagesError; HomeDataStatus get plannerPreviewsStatus; List<PlannerPreviewEntity> get plannerPreviews; String get plannerPreviewsError;//hidden gems
+ HomeDataStatus get categoryPlacesStatus; PaginationState<PlaceEntity> get categoryPlaces; PlaceCategory get selectedCategory; String get categoryPlacesError; HomeDataStatus get plannerPreviewsStatus; List<PlannerPreviewEntity> get plannerPreviews; String get plannerPreviewsError;//hidden gems
  HomeDataStatus get hiddenGemsStatus; PaginationState<PlaceEntity> get hiddenGems; String get hiddenGemsError; List<PlaceCategory> get homeCategories;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -31,16 +28,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.bannersStatus, bannersStatus) || other.bannersStatus == bannersStatus)&&const DeepCollectionEquality().equals(other.banners, banners)&&(identical(other.bannersError, bannersError) || other.bannersError == bannersError)&&(identical(other.popularPlacesStatus, popularPlacesStatus) || other.popularPlacesStatus == popularPlacesStatus)&&(identical(other.popularPlaces, popularPlaces) || other.popularPlaces == popularPlaces)&&(identical(other.popularPlacesError, popularPlacesError) || other.popularPlacesError == popularPlacesError)&&(identical(other.categoryPlacesStatus, categoryPlacesStatus) || other.categoryPlacesStatus == categoryPlacesStatus)&&(identical(other.categoryPlaces, categoryPlaces) || other.categoryPlaces == categoryPlaces)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.categoryPlacesError, categoryPlacesError) || other.categoryPlacesError == categoryPlacesError)&&(identical(other.tourPackagesStatus, tourPackagesStatus) || other.tourPackagesStatus == tourPackagesStatus)&&(identical(other.tourPackagesError, tourPackagesError) || other.tourPackagesError == tourPackagesError)&&(identical(other.plannerPreviewsStatus, plannerPreviewsStatus) || other.plannerPreviewsStatus == plannerPreviewsStatus)&&const DeepCollectionEquality().equals(other.plannerPreviews, plannerPreviews)&&(identical(other.plannerPreviewsError, plannerPreviewsError) || other.plannerPreviewsError == plannerPreviewsError)&&(identical(other.hiddenGemsStatus, hiddenGemsStatus) || other.hiddenGemsStatus == hiddenGemsStatus)&&(identical(other.hiddenGems, hiddenGems) || other.hiddenGems == hiddenGems)&&(identical(other.hiddenGemsError, hiddenGemsError) || other.hiddenGemsError == hiddenGemsError)&&const DeepCollectionEquality().equals(other.homeCategories, homeCategories));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.bannersStatus, bannersStatus) || other.bannersStatus == bannersStatus)&&const DeepCollectionEquality().equals(other.banners, banners)&&(identical(other.bannersError, bannersError) || other.bannersError == bannersError)&&(identical(other.popularPlacesStatus, popularPlacesStatus) || other.popularPlacesStatus == popularPlacesStatus)&&(identical(other.popularPlaces, popularPlaces) || other.popularPlaces == popularPlaces)&&(identical(other.popularPlacesError, popularPlacesError) || other.popularPlacesError == popularPlacesError)&&(identical(other.categoryPlacesStatus, categoryPlacesStatus) || other.categoryPlacesStatus == categoryPlacesStatus)&&(identical(other.categoryPlaces, categoryPlaces) || other.categoryPlaces == categoryPlaces)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.categoryPlacesError, categoryPlacesError) || other.categoryPlacesError == categoryPlacesError)&&(identical(other.plannerPreviewsStatus, plannerPreviewsStatus) || other.plannerPreviewsStatus == plannerPreviewsStatus)&&const DeepCollectionEquality().equals(other.plannerPreviews, plannerPreviews)&&(identical(other.plannerPreviewsError, plannerPreviewsError) || other.plannerPreviewsError == plannerPreviewsError)&&(identical(other.hiddenGemsStatus, hiddenGemsStatus) || other.hiddenGemsStatus == hiddenGemsStatus)&&(identical(other.hiddenGems, hiddenGems) || other.hiddenGems == hiddenGems)&&(identical(other.hiddenGemsError, hiddenGemsError) || other.hiddenGemsError == hiddenGemsError)&&const DeepCollectionEquality().equals(other.homeCategories, homeCategories));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,bannersStatus,const DeepCollectionEquality().hash(banners),bannersError,popularPlacesStatus,popularPlaces,popularPlacesError,categoryPlacesStatus,categoryPlaces,selectedCategory,categoryPlacesError,tourPackagesStatus,tourPackagesError,plannerPreviewsStatus,const DeepCollectionEquality().hash(plannerPreviews),plannerPreviewsError,hiddenGemsStatus,hiddenGems,hiddenGemsError,const DeepCollectionEquality().hash(homeCategories)]);
+int get hashCode => Object.hash(runtimeType,bannersStatus,const DeepCollectionEquality().hash(banners),bannersError,popularPlacesStatus,popularPlaces,popularPlacesError,categoryPlacesStatus,categoryPlaces,selectedCategory,categoryPlacesError,plannerPreviewsStatus,const DeepCollectionEquality().hash(plannerPreviews),plannerPreviewsError,hiddenGemsStatus,hiddenGems,hiddenGemsError,const DeepCollectionEquality().hash(homeCategories));
 
 @override
 String toString() {
-  return 'HomeState(bannersStatus: $bannersStatus, banners: $banners, bannersError: $bannersError, popularPlacesStatus: $popularPlacesStatus, popularPlaces: $popularPlaces, popularPlacesError: $popularPlacesError, categoryPlacesStatus: $categoryPlacesStatus, categoryPlaces: $categoryPlaces, selectedCategory: $selectedCategory, categoryPlacesError: $categoryPlacesError, tourPackagesStatus: $tourPackagesStatus, tourPackagesError: $tourPackagesError, plannerPreviewsStatus: $plannerPreviewsStatus, plannerPreviews: $plannerPreviews, plannerPreviewsError: $plannerPreviewsError, hiddenGemsStatus: $hiddenGemsStatus, hiddenGems: $hiddenGems, hiddenGemsError: $hiddenGemsError, homeCategories: $homeCategories)';
+  return 'HomeState(bannersStatus: $bannersStatus, banners: $banners, bannersError: $bannersError, popularPlacesStatus: $popularPlacesStatus, popularPlaces: $popularPlaces, popularPlacesError: $popularPlacesError, categoryPlacesStatus: $categoryPlacesStatus, categoryPlaces: $categoryPlaces, selectedCategory: $selectedCategory, categoryPlacesError: $categoryPlacesError, plannerPreviewsStatus: $plannerPreviewsStatus, plannerPreviews: $plannerPreviews, plannerPreviewsError: $plannerPreviewsError, hiddenGemsStatus: $hiddenGemsStatus, hiddenGems: $hiddenGems, hiddenGemsError: $hiddenGemsError, homeCategories: $homeCategories)';
 }
 
 
@@ -51,7 +48,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- HomeDataStatus bannersStatus, List<BannerEntity> banners, String bannersError, HomeDataStatus popularPlacesStatus, PaginationState<PlaceEntity> popularPlaces, String popularPlacesError, HomeDataStatus categoryPlacesStatus, PaginationState<PlaceEntity> categoryPlaces, PlaceCategory selectedCategory, String categoryPlacesError, HomeDataStatus tourPackagesStatus, String tourPackagesError, HomeDataStatus plannerPreviewsStatus, List<PlannerPreviewEntity> plannerPreviews, String plannerPreviewsError, HomeDataStatus hiddenGemsStatus, PaginationState<PlaceEntity> hiddenGems, String hiddenGemsError, List<PlaceCategory> homeCategories
+ HomeDataStatus bannersStatus, List<BannerEntity> banners, String bannersError, HomeDataStatus popularPlacesStatus, PaginationState<PlaceEntity> popularPlaces, String popularPlacesError, HomeDataStatus categoryPlacesStatus, PaginationState<PlaceEntity> categoryPlaces, PlaceCategory selectedCategory, String categoryPlacesError, HomeDataStatus plannerPreviewsStatus, List<PlannerPreviewEntity> plannerPreviews, String plannerPreviewsError, HomeDataStatus hiddenGemsStatus, PaginationState<PlaceEntity> hiddenGems, String hiddenGemsError, List<PlaceCategory> homeCategories
 });
 
 
@@ -68,7 +65,7 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bannersStatus = null,Object? banners = null,Object? bannersError = null,Object? popularPlacesStatus = null,Object? popularPlaces = null,Object? popularPlacesError = null,Object? categoryPlacesStatus = null,Object? categoryPlaces = null,Object? selectedCategory = null,Object? categoryPlacesError = null,Object? tourPackagesStatus = null,Object? tourPackagesError = null,Object? plannerPreviewsStatus = null,Object? plannerPreviews = null,Object? plannerPreviewsError = null,Object? hiddenGemsStatus = null,Object? hiddenGems = null,Object? hiddenGemsError = null,Object? homeCategories = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bannersStatus = null,Object? banners = null,Object? bannersError = null,Object? popularPlacesStatus = null,Object? popularPlaces = null,Object? popularPlacesError = null,Object? categoryPlacesStatus = null,Object? categoryPlaces = null,Object? selectedCategory = null,Object? categoryPlacesError = null,Object? plannerPreviewsStatus = null,Object? plannerPreviews = null,Object? plannerPreviewsError = null,Object? hiddenGemsStatus = null,Object? hiddenGems = null,Object? hiddenGemsError = null,Object? homeCategories = null,}) {
   return _then(_self.copyWith(
 bannersStatus: null == bannersStatus ? _self.bannersStatus : bannersStatus // ignore: cast_nullable_to_non_nullable
 as HomeDataStatus,banners: null == banners ? _self.banners : banners // ignore: cast_nullable_to_non_nullable
@@ -80,8 +77,6 @@ as String,categoryPlacesStatus: null == categoryPlacesStatus ? _self.categoryPla
 as HomeDataStatus,categoryPlaces: null == categoryPlaces ? _self.categoryPlaces : categoryPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
 as PlaceCategory,categoryPlacesError: null == categoryPlacesError ? _self.categoryPlacesError : categoryPlacesError // ignore: cast_nullable_to_non_nullable
-as String,tourPackagesStatus: null == tourPackagesStatus ? _self.tourPackagesStatus : tourPackagesStatus // ignore: cast_nullable_to_non_nullable
-as HomeDataStatus,tourPackagesError: null == tourPackagesError ? _self.tourPackagesError : tourPackagesError // ignore: cast_nullable_to_non_nullable
 as String,plannerPreviewsStatus: null == plannerPreviewsStatus ? _self.plannerPreviewsStatus : plannerPreviewsStatus // ignore: cast_nullable_to_non_nullable
 as HomeDataStatus,plannerPreviews: null == plannerPreviews ? _self.plannerPreviews : plannerPreviews // ignore: cast_nullable_to_non_nullable
 as List<PlannerPreviewEntity>,plannerPreviewsError: null == plannerPreviewsError ? _self.plannerPreviewsError : plannerPreviewsError // ignore: cast_nullable_to_non_nullable
@@ -201,10 +196,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( HomeDataStatus bannersStatus,  List<BannerEntity> banners,  String bannersError,  HomeDataStatus popularPlacesStatus,  PaginationState<PlaceEntity> popularPlaces,  String popularPlacesError,  HomeDataStatus categoryPlacesStatus,  PaginationState<PlaceEntity> categoryPlaces,  PlaceCategory selectedCategory,  String categoryPlacesError,  HomeDataStatus tourPackagesStatus,  String tourPackagesError,  HomeDataStatus plannerPreviewsStatus,  List<PlannerPreviewEntity> plannerPreviews,  String plannerPreviewsError,  HomeDataStatus hiddenGemsStatus,  PaginationState<PlaceEntity> hiddenGems,  String hiddenGemsError,  List<PlaceCategory> homeCategories)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( HomeDataStatus bannersStatus,  List<BannerEntity> banners,  String bannersError,  HomeDataStatus popularPlacesStatus,  PaginationState<PlaceEntity> popularPlaces,  String popularPlacesError,  HomeDataStatus categoryPlacesStatus,  PaginationState<PlaceEntity> categoryPlaces,  PlaceCategory selectedCategory,  String categoryPlacesError,  HomeDataStatus plannerPreviewsStatus,  List<PlannerPreviewEntity> plannerPreviews,  String plannerPreviewsError,  HomeDataStatus hiddenGemsStatus,  PaginationState<PlaceEntity> hiddenGems,  String hiddenGemsError,  List<PlaceCategory> homeCategories)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popularPlacesStatus,_that.popularPlaces,_that.popularPlacesError,_that.categoryPlacesStatus,_that.categoryPlaces,_that.selectedCategory,_that.categoryPlacesError,_that.tourPackagesStatus,_that.tourPackagesError,_that.plannerPreviewsStatus,_that.plannerPreviews,_that.plannerPreviewsError,_that.hiddenGemsStatus,_that.hiddenGems,_that.hiddenGemsError,_that.homeCategories);case _:
+return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popularPlacesStatus,_that.popularPlaces,_that.popularPlacesError,_that.categoryPlacesStatus,_that.categoryPlaces,_that.selectedCategory,_that.categoryPlacesError,_that.plannerPreviewsStatus,_that.plannerPreviews,_that.plannerPreviewsError,_that.hiddenGemsStatus,_that.hiddenGems,_that.hiddenGemsError,_that.homeCategories);case _:
   return orElse();
 
 }
@@ -222,10 +217,10 @@ return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popul
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( HomeDataStatus bannersStatus,  List<BannerEntity> banners,  String bannersError,  HomeDataStatus popularPlacesStatus,  PaginationState<PlaceEntity> popularPlaces,  String popularPlacesError,  HomeDataStatus categoryPlacesStatus,  PaginationState<PlaceEntity> categoryPlaces,  PlaceCategory selectedCategory,  String categoryPlacesError,  HomeDataStatus tourPackagesStatus,  String tourPackagesError,  HomeDataStatus plannerPreviewsStatus,  List<PlannerPreviewEntity> plannerPreviews,  String plannerPreviewsError,  HomeDataStatus hiddenGemsStatus,  PaginationState<PlaceEntity> hiddenGems,  String hiddenGemsError,  List<PlaceCategory> homeCategories)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( HomeDataStatus bannersStatus,  List<BannerEntity> banners,  String bannersError,  HomeDataStatus popularPlacesStatus,  PaginationState<PlaceEntity> popularPlaces,  String popularPlacesError,  HomeDataStatus categoryPlacesStatus,  PaginationState<PlaceEntity> categoryPlaces,  PlaceCategory selectedCategory,  String categoryPlacesError,  HomeDataStatus plannerPreviewsStatus,  List<PlannerPreviewEntity> plannerPreviews,  String plannerPreviewsError,  HomeDataStatus hiddenGemsStatus,  PaginationState<PlaceEntity> hiddenGems,  String hiddenGemsError,  List<PlaceCategory> homeCategories)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popularPlacesStatus,_that.popularPlaces,_that.popularPlacesError,_that.categoryPlacesStatus,_that.categoryPlaces,_that.selectedCategory,_that.categoryPlacesError,_that.tourPackagesStatus,_that.tourPackagesError,_that.plannerPreviewsStatus,_that.plannerPreviews,_that.plannerPreviewsError,_that.hiddenGemsStatus,_that.hiddenGems,_that.hiddenGemsError,_that.homeCategories);case _:
+return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popularPlacesStatus,_that.popularPlaces,_that.popularPlacesError,_that.categoryPlacesStatus,_that.categoryPlaces,_that.selectedCategory,_that.categoryPlacesError,_that.plannerPreviewsStatus,_that.plannerPreviews,_that.plannerPreviewsError,_that.hiddenGemsStatus,_that.hiddenGems,_that.hiddenGemsError,_that.homeCategories);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -242,10 +237,10 @@ return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popul
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( HomeDataStatus bannersStatus,  List<BannerEntity> banners,  String bannersError,  HomeDataStatus popularPlacesStatus,  PaginationState<PlaceEntity> popularPlaces,  String popularPlacesError,  HomeDataStatus categoryPlacesStatus,  PaginationState<PlaceEntity> categoryPlaces,  PlaceCategory selectedCategory,  String categoryPlacesError,  HomeDataStatus tourPackagesStatus,  String tourPackagesError,  HomeDataStatus plannerPreviewsStatus,  List<PlannerPreviewEntity> plannerPreviews,  String plannerPreviewsError,  HomeDataStatus hiddenGemsStatus,  PaginationState<PlaceEntity> hiddenGems,  String hiddenGemsError,  List<PlaceCategory> homeCategories)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( HomeDataStatus bannersStatus,  List<BannerEntity> banners,  String bannersError,  HomeDataStatus popularPlacesStatus,  PaginationState<PlaceEntity> popularPlaces,  String popularPlacesError,  HomeDataStatus categoryPlacesStatus,  PaginationState<PlaceEntity> categoryPlaces,  PlaceCategory selectedCategory,  String categoryPlacesError,  HomeDataStatus plannerPreviewsStatus,  List<PlannerPreviewEntity> plannerPreviews,  String plannerPreviewsError,  HomeDataStatus hiddenGemsStatus,  PaginationState<PlaceEntity> hiddenGems,  String hiddenGemsError,  List<PlaceCategory> homeCategories)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popularPlacesStatus,_that.popularPlaces,_that.popularPlacesError,_that.categoryPlacesStatus,_that.categoryPlaces,_that.selectedCategory,_that.categoryPlacesError,_that.tourPackagesStatus,_that.tourPackagesError,_that.plannerPreviewsStatus,_that.plannerPreviews,_that.plannerPreviewsError,_that.hiddenGemsStatus,_that.hiddenGems,_that.hiddenGemsError,_that.homeCategories);case _:
+return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popularPlacesStatus,_that.popularPlaces,_that.popularPlacesError,_that.categoryPlacesStatus,_that.categoryPlaces,_that.selectedCategory,_that.categoryPlacesError,_that.plannerPreviewsStatus,_that.plannerPreviews,_that.plannerPreviewsError,_that.hiddenGemsStatus,_that.hiddenGems,_that.hiddenGemsError,_that.homeCategories);case _:
   return null;
 
 }
@@ -257,7 +252,7 @@ return $default(_that.bannersStatus,_that.banners,_that.bannersError,_that.popul
 
 
 class _HomeState implements HomeState {
-  const _HomeState({this.bannersStatus = HomeDataStatus.initial, final  List<BannerEntity> banners = const [], this.bannersError = '', this.popularPlacesStatus = HomeDataStatus.initial, this.popularPlaces = const PaginationState<PlaceEntity>(), this.popularPlacesError = '', this.categoryPlacesStatus = HomeDataStatus.initial, this.categoryPlaces = const PaginationState<PlaceEntity>(), this.selectedCategory = PlaceCategory.food, this.categoryPlacesError = '', this.tourPackagesStatus = HomeDataStatus.initial, this.tourPackagesError = '', this.plannerPreviewsStatus = HomeDataStatus.initial, final  List<PlannerPreviewEntity> plannerPreviews = const [], this.plannerPreviewsError = '', this.hiddenGemsStatus = HomeDataStatus.initial, this.hiddenGems = const PaginationState<PlaceEntity>(), this.hiddenGemsError = '', final  List<PlaceCategory> homeCategories = const [PlaceCategory.food, PlaceCategory.cafes, PlaceCategory.hotels]}): _banners = banners,_plannerPreviews = plannerPreviews,_homeCategories = homeCategories;
+  const _HomeState({this.bannersStatus = HomeDataStatus.initial, final  List<BannerEntity> banners = const [], this.bannersError = '', this.popularPlacesStatus = HomeDataStatus.initial, this.popularPlaces = const PaginationState<PlaceEntity>(), this.popularPlacesError = '', this.categoryPlacesStatus = HomeDataStatus.initial, this.categoryPlaces = const PaginationState<PlaceEntity>(), this.selectedCategory = PlaceCategory.food, this.categoryPlacesError = '', this.plannerPreviewsStatus = HomeDataStatus.initial, final  List<PlannerPreviewEntity> plannerPreviews = const [], this.plannerPreviewsError = '', this.hiddenGemsStatus = HomeDataStatus.initial, this.hiddenGems = const PaginationState<PlaceEntity>(), this.hiddenGemsError = '', final  List<PlaceCategory> homeCategories = const [PlaceCategory.food, PlaceCategory.cafes, PlaceCategory.hotels]}): _banners = banners,_plannerPreviews = plannerPreviews,_homeCategories = homeCategories;
   
 
 @override@JsonKey() final  HomeDataStatus bannersStatus;
@@ -278,11 +273,6 @@ class _HomeState implements HomeState {
 @override@JsonKey() final  PaginationState<PlaceEntity> categoryPlaces;
 @override@JsonKey() final  PlaceCategory selectedCategory;
 @override@JsonKey() final  String categoryPlacesError;
-// @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
-// @Default([]) List<PlaceEntity> recommendedPlaces,
-// @Default('') String recommendedPlacesError,
-@override@JsonKey() final  HomeDataStatus tourPackagesStatus;
-@override@JsonKey() final  String tourPackagesError;
 @override@JsonKey() final  HomeDataStatus plannerPreviewsStatus;
  final  List<PlannerPreviewEntity> _plannerPreviews;
 @override@JsonKey() List<PlannerPreviewEntity> get plannerPreviews {
@@ -314,16 +304,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.bannersStatus, bannersStatus) || other.bannersStatus == bannersStatus)&&const DeepCollectionEquality().equals(other._banners, _banners)&&(identical(other.bannersError, bannersError) || other.bannersError == bannersError)&&(identical(other.popularPlacesStatus, popularPlacesStatus) || other.popularPlacesStatus == popularPlacesStatus)&&(identical(other.popularPlaces, popularPlaces) || other.popularPlaces == popularPlaces)&&(identical(other.popularPlacesError, popularPlacesError) || other.popularPlacesError == popularPlacesError)&&(identical(other.categoryPlacesStatus, categoryPlacesStatus) || other.categoryPlacesStatus == categoryPlacesStatus)&&(identical(other.categoryPlaces, categoryPlaces) || other.categoryPlaces == categoryPlaces)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.categoryPlacesError, categoryPlacesError) || other.categoryPlacesError == categoryPlacesError)&&(identical(other.tourPackagesStatus, tourPackagesStatus) || other.tourPackagesStatus == tourPackagesStatus)&&(identical(other.tourPackagesError, tourPackagesError) || other.tourPackagesError == tourPackagesError)&&(identical(other.plannerPreviewsStatus, plannerPreviewsStatus) || other.plannerPreviewsStatus == plannerPreviewsStatus)&&const DeepCollectionEquality().equals(other._plannerPreviews, _plannerPreviews)&&(identical(other.plannerPreviewsError, plannerPreviewsError) || other.plannerPreviewsError == plannerPreviewsError)&&(identical(other.hiddenGemsStatus, hiddenGemsStatus) || other.hiddenGemsStatus == hiddenGemsStatus)&&(identical(other.hiddenGems, hiddenGems) || other.hiddenGems == hiddenGems)&&(identical(other.hiddenGemsError, hiddenGemsError) || other.hiddenGemsError == hiddenGemsError)&&const DeepCollectionEquality().equals(other._homeCategories, _homeCategories));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.bannersStatus, bannersStatus) || other.bannersStatus == bannersStatus)&&const DeepCollectionEquality().equals(other._banners, _banners)&&(identical(other.bannersError, bannersError) || other.bannersError == bannersError)&&(identical(other.popularPlacesStatus, popularPlacesStatus) || other.popularPlacesStatus == popularPlacesStatus)&&(identical(other.popularPlaces, popularPlaces) || other.popularPlaces == popularPlaces)&&(identical(other.popularPlacesError, popularPlacesError) || other.popularPlacesError == popularPlacesError)&&(identical(other.categoryPlacesStatus, categoryPlacesStatus) || other.categoryPlacesStatus == categoryPlacesStatus)&&(identical(other.categoryPlaces, categoryPlaces) || other.categoryPlaces == categoryPlaces)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.categoryPlacesError, categoryPlacesError) || other.categoryPlacesError == categoryPlacesError)&&(identical(other.plannerPreviewsStatus, plannerPreviewsStatus) || other.plannerPreviewsStatus == plannerPreviewsStatus)&&const DeepCollectionEquality().equals(other._plannerPreviews, _plannerPreviews)&&(identical(other.plannerPreviewsError, plannerPreviewsError) || other.plannerPreviewsError == plannerPreviewsError)&&(identical(other.hiddenGemsStatus, hiddenGemsStatus) || other.hiddenGemsStatus == hiddenGemsStatus)&&(identical(other.hiddenGems, hiddenGems) || other.hiddenGems == hiddenGems)&&(identical(other.hiddenGemsError, hiddenGemsError) || other.hiddenGemsError == hiddenGemsError)&&const DeepCollectionEquality().equals(other._homeCategories, _homeCategories));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,bannersStatus,const DeepCollectionEquality().hash(_banners),bannersError,popularPlacesStatus,popularPlaces,popularPlacesError,categoryPlacesStatus,categoryPlaces,selectedCategory,categoryPlacesError,tourPackagesStatus,tourPackagesError,plannerPreviewsStatus,const DeepCollectionEquality().hash(_plannerPreviews),plannerPreviewsError,hiddenGemsStatus,hiddenGems,hiddenGemsError,const DeepCollectionEquality().hash(_homeCategories)]);
+int get hashCode => Object.hash(runtimeType,bannersStatus,const DeepCollectionEquality().hash(_banners),bannersError,popularPlacesStatus,popularPlaces,popularPlacesError,categoryPlacesStatus,categoryPlaces,selectedCategory,categoryPlacesError,plannerPreviewsStatus,const DeepCollectionEquality().hash(_plannerPreviews),plannerPreviewsError,hiddenGemsStatus,hiddenGems,hiddenGemsError,const DeepCollectionEquality().hash(_homeCategories));
 
 @override
 String toString() {
-  return 'HomeState(bannersStatus: $bannersStatus, banners: $banners, bannersError: $bannersError, popularPlacesStatus: $popularPlacesStatus, popularPlaces: $popularPlaces, popularPlacesError: $popularPlacesError, categoryPlacesStatus: $categoryPlacesStatus, categoryPlaces: $categoryPlaces, selectedCategory: $selectedCategory, categoryPlacesError: $categoryPlacesError, tourPackagesStatus: $tourPackagesStatus, tourPackagesError: $tourPackagesError, plannerPreviewsStatus: $plannerPreviewsStatus, plannerPreviews: $plannerPreviews, plannerPreviewsError: $plannerPreviewsError, hiddenGemsStatus: $hiddenGemsStatus, hiddenGems: $hiddenGems, hiddenGemsError: $hiddenGemsError, homeCategories: $homeCategories)';
+  return 'HomeState(bannersStatus: $bannersStatus, banners: $banners, bannersError: $bannersError, popularPlacesStatus: $popularPlacesStatus, popularPlaces: $popularPlaces, popularPlacesError: $popularPlacesError, categoryPlacesStatus: $categoryPlacesStatus, categoryPlaces: $categoryPlaces, selectedCategory: $selectedCategory, categoryPlacesError: $categoryPlacesError, plannerPreviewsStatus: $plannerPreviewsStatus, plannerPreviews: $plannerPreviews, plannerPreviewsError: $plannerPreviewsError, hiddenGemsStatus: $hiddenGemsStatus, hiddenGems: $hiddenGems, hiddenGemsError: $hiddenGemsError, homeCategories: $homeCategories)';
 }
 
 
@@ -334,7 +324,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- HomeDataStatus bannersStatus, List<BannerEntity> banners, String bannersError, HomeDataStatus popularPlacesStatus, PaginationState<PlaceEntity> popularPlaces, String popularPlacesError, HomeDataStatus categoryPlacesStatus, PaginationState<PlaceEntity> categoryPlaces, PlaceCategory selectedCategory, String categoryPlacesError, HomeDataStatus tourPackagesStatus, String tourPackagesError, HomeDataStatus plannerPreviewsStatus, List<PlannerPreviewEntity> plannerPreviews, String plannerPreviewsError, HomeDataStatus hiddenGemsStatus, PaginationState<PlaceEntity> hiddenGems, String hiddenGemsError, List<PlaceCategory> homeCategories
+ HomeDataStatus bannersStatus, List<BannerEntity> banners, String bannersError, HomeDataStatus popularPlacesStatus, PaginationState<PlaceEntity> popularPlaces, String popularPlacesError, HomeDataStatus categoryPlacesStatus, PaginationState<PlaceEntity> categoryPlaces, PlaceCategory selectedCategory, String categoryPlacesError, HomeDataStatus plannerPreviewsStatus, List<PlannerPreviewEntity> plannerPreviews, String plannerPreviewsError, HomeDataStatus hiddenGemsStatus, PaginationState<PlaceEntity> hiddenGems, String hiddenGemsError, List<PlaceCategory> homeCategories
 });
 
 
@@ -351,7 +341,7 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? bannersStatus = null,Object? banners = null,Object? bannersError = null,Object? popularPlacesStatus = null,Object? popularPlaces = null,Object? popularPlacesError = null,Object? categoryPlacesStatus = null,Object? categoryPlaces = null,Object? selectedCategory = null,Object? categoryPlacesError = null,Object? tourPackagesStatus = null,Object? tourPackagesError = null,Object? plannerPreviewsStatus = null,Object? plannerPreviews = null,Object? plannerPreviewsError = null,Object? hiddenGemsStatus = null,Object? hiddenGems = null,Object? hiddenGemsError = null,Object? homeCategories = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? bannersStatus = null,Object? banners = null,Object? bannersError = null,Object? popularPlacesStatus = null,Object? popularPlaces = null,Object? popularPlacesError = null,Object? categoryPlacesStatus = null,Object? categoryPlaces = null,Object? selectedCategory = null,Object? categoryPlacesError = null,Object? plannerPreviewsStatus = null,Object? plannerPreviews = null,Object? plannerPreviewsError = null,Object? hiddenGemsStatus = null,Object? hiddenGems = null,Object? hiddenGemsError = null,Object? homeCategories = null,}) {
   return _then(_HomeState(
 bannersStatus: null == bannersStatus ? _self.bannersStatus : bannersStatus // ignore: cast_nullable_to_non_nullable
 as HomeDataStatus,banners: null == banners ? _self._banners : banners // ignore: cast_nullable_to_non_nullable
@@ -363,8 +353,6 @@ as String,categoryPlacesStatus: null == categoryPlacesStatus ? _self.categoryPla
 as HomeDataStatus,categoryPlaces: null == categoryPlaces ? _self.categoryPlaces : categoryPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
 as PlaceCategory,categoryPlacesError: null == categoryPlacesError ? _self.categoryPlacesError : categoryPlacesError // ignore: cast_nullable_to_non_nullable
-as String,tourPackagesStatus: null == tourPackagesStatus ? _self.tourPackagesStatus : tourPackagesStatus // ignore: cast_nullable_to_non_nullable
-as HomeDataStatus,tourPackagesError: null == tourPackagesError ? _self.tourPackagesError : tourPackagesError // ignore: cast_nullable_to_non_nullable
 as String,plannerPreviewsStatus: null == plannerPreviewsStatus ? _self.plannerPreviewsStatus : plannerPreviewsStatus // ignore: cast_nullable_to_non_nullable
 as HomeDataStatus,plannerPreviews: null == plannerPreviews ? _self._plannerPreviews : plannerPreviews // ignore: cast_nullable_to_non_nullable
 as List<PlannerPreviewEntity>,plannerPreviewsError: null == plannerPreviewsError ? _self.plannerPreviewsError : plannerPreviewsError // ignore: cast_nullable_to_non_nullable

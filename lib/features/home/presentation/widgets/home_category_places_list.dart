@@ -67,14 +67,32 @@ class _HomeCategoryPlacesListState extends State<HomeCategoryPlacesList> {
             ? DummyData.categoryPlaces
             : state.categoryPlaces.items;
 
+        if (state.categoryPlacesStatus.isFailure) {
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: AppErrorWidget(
+                imageSize: 100,
+                message: state.categoryPlacesError.isNotEmpty 
+                    ? state.categoryPlacesError 
+                    : 'Failed to load places for this category',
+                onPressed: () {
+                  context.read<HomeCubit>().loadFirstPageCategoryPlaces(state.selectedCategory.category);
+                },
+              ),
+            ),
+          );
+        }
+
         if (!isLoading && places.isEmpty) {
           return SliverToBoxAdapter(
-            child: Center(
-              child: AppErrorWidget(
-                imageSize: 130,
-                message: 'No places found for this category',
-                onPressed: () {
-                  context.read<HomeCubit>().loadMoreCategoryPlaces();
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: AppErrorWidget.noInfo(
+                imageSize: 100,
+                message: 'No places found for ${state.selectedCategory.category}',
+                onRetry: () {
+                   context.read<HomeCubit>().loadFirstPageCategoryPlaces(state.selectedCategory.category);
                 },
               ),
             ),

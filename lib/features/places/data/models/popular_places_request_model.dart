@@ -19,7 +19,7 @@ class PopularPlacesRequestModel {
       'page': page,
       'limit': limit,
       if (seed != null) 'seed': seed,
-      // 'pool_size': poolSize,
+      // 'poolSize': poolSize,
     };
   }
 }

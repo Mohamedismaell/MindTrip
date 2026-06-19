@@ -16,7 +16,7 @@ class ExploreCategoryChips extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ExploreCubit, ExploreState>(
       buildWhen: (previous, current) =>
-          previous.selectedCategory != current.selectedCategory,
+          previous.selectedCategories != current.selectedCategories,
       builder: (context, state) {
         final categories = PlaceCategory.values;
         return SliverToBoxAdapter(
@@ -28,7 +28,7 @@ class ExploreCategoryChips extends StatelessWidget {
               separatorBuilder: (_, _) => SizedBox(width: 10.w),
               itemBuilder: (context, index) {
                 final category = categories[index];
-                final isSelected = state.selectedCategory == category;
+                final isSelected = state.selectedCategories.contains(category);
 
                 return TapScaleEffect(
                   onTap: () {

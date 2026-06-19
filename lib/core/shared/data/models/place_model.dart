@@ -5,7 +5,7 @@ part 'place_model.freezed.dart';
 part 'place_model.g.dart';
 
 @freezed
-@HiveType(typeId: 6) // Changed from 5 to 6 to avoid collision with TripModel
+@HiveType(typeId: 6)
 abstract class PlaceModel with _$PlaceModel {
   const PlaceModel._();
 
@@ -14,7 +14,7 @@ abstract class PlaceModel with _$PlaceModel {
     @HiveField(1) required String name,
     @HiveField(2) String? city,
     @HiveField(3) @JsonKey(name: 'city_en') String? cityEn,
-    @HiveField(4) List<String>? interests,
+    @HiveField(4) @JsonKey(fromJson: _toListOfStrings) List<String>? interests,
     @HiveField(5) String? category,
 
     /// Price per person
@@ -28,11 +28,22 @@ abstract class PlaceModel with _$PlaceModel {
     @HiveField(10) String? address,
     @HiveField(11) String? description,
     @HiveField(12) @JsonKey(name: 'photo_url') String? photoUrl,
-    @HiveField(13) @JsonKey(name: 'image_urls') List<String>? imageUrls,
+    @HiveField(13)
+    @JsonKey(name: 'image_urls', fromJson: _toListOfStrings)
+    List<String>? imageUrls,
     @HiveField(14) @JsonKey(name: 'opening_hours') String? openingHours,
-    @HiveField(15) @JsonKey(fromJson: _toDoubleNonNullable) @Default(0.0) double lat,
-    @HiveField(16) @JsonKey(fromJson: _toDoubleNonNullable) @Default(0.0) double lng,
-    @HiveField(17) @JsonKey(name: 'is_hidden_gem') @Default(false) bool isHiddenGem,
+    @HiveField(15)
+    @JsonKey(fromJson: _toDoubleNonNullable)
+    @Default(0.0)
+    double lat,
+    @HiveField(16)
+    @JsonKey(fromJson: _toDoubleNonNullable)
+    @Default(0.0)
+    double lng,
+    @HiveField(17)
+    @JsonKey(name: 'is_hidden_gem')
+    @Default(false)
+    bool isHiddenGem,
     @HiveField(18) @JsonKey(name: 'maps_url') String? mapsUrl,
 
     // New fields from sample
@@ -52,3 +63,14 @@ double? _toDouble(Object? value) => (value as num?)?.toDouble();
 
 double _toDoubleNonNullable(Object? value) =>
     (value as num?)?.toDouble() ?? 0.0;
+
+List<String>? _toListOfStrings(Object? value) {
+  if (value == null) return null;
+  if (value is List) {
+    return value.map((e) => e.toString()).toList();
+  }
+  if (value is Map && value['items'] is List) {
+    return (value['items'] as List).map((e) => e.toString()).toList();
+  }
+  return null;
+}

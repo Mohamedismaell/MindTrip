@@ -27,6 +27,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
     final interests = context.read<UserCubit>().state.interests;
     context.read<RecommendedPlacesCubit>().loadFirstPage(
       selectedCategories: interests,
+      limit: 10,
     );
   }
 
@@ -96,15 +97,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
                       ),
                     ),
                     _buildGrid(state),
-                    if (state.isMoreLoading)
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20.h),
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      ),
+                    SliverToBoxAdapter(child: SizedBox(height: 30.h)),
                   ],
                 );
               },
@@ -143,6 +136,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
     return RecommendedplacesGrid(
       destinations: destinations,
       isLoading: isLoading,
+      isMoreLoading: state.isMoreLoading,
     );
   }
 }

@@ -198,7 +198,7 @@ class ExploreCubit extends Cubit<ExploreState> {
   }
 
   GetPlacesRequestModel _buildFilteredRequest({required int page}) {
-    // If we have advanced filters, ignore the category chip
+    // If we have advanced filters ===> ignore the category chip
     if (state.advancedFilters != null) {
       final base = state.advancedFilters!;
       return GetPlacesRequestModel(
@@ -217,21 +217,40 @@ class ExploreCubit extends Cubit<ExploreState> {
       );
     }
 
-    // Otherwise use only the category chip
+    //  only the category chip
     return GetPlacesRequestModel(
-      category: state.selectedCategory == PlaceCategory.all
+      category: state.selectedCategories.contains(PlaceCategory.all)
           ? null
-          : [state.selectedCategory.category],
+          : state.selectedCategories.map((e) => e.category).toList(),
       page: page,
       limit: 12,
     );
   }
 
   void applyAdvancedFilters(GetPlacesRequestModel filters) {
-    emit(state.copyWith(
-      advancedFilters: filters,
-      selectedCategory: PlaceCategory.all, // Reset chips UI when filters are active
-    ));
+    // Sync chip categories from advanced filters
+    Set<PlaceCategory> chipCategories = {};
+    if (filters.category != null && filters.category!.isNotEmpty) {
+      for (final String selectedCategorySlug in filters.category!) {
+        try {
+          final category = PlaceCategory.values.firstWhere(
+            (c) => c.category == selectedCategorySlug,
+          );
+          chipCategories.add(category);
+        } catch (_) {}
+      }
+    }
+
+    if (chipCategories.isEmpty) {
+      chipCategories = {PlaceCategory.all};
+    }
+
+    emit(
+      state.copyWith(
+        advancedFilters: filters,
+        selectedCategories: chipCategories,
+      ),
+    );
     loadFilteredPlacesFirstPage();
   }
 
@@ -241,11 +260,29 @@ class ExploreCubit extends Cubit<ExploreState> {
   }
 
   void onCategoryToggled(PlaceCategory category) {
-    if (state.selectedCategory == category) return;
-    emit(state.copyWith(
-      selectedCategory: category,
-      advancedFilters: null, // Reset filters when using chips
-    ));
+    Set<PlaceCategory> newCategories = Set.from(state.selectedCategories);
+
+    if (category == PlaceCategory.all) {
+      newCategories = {PlaceCategory.all};
+    } else {
+      newCategories.remove(PlaceCategory.all);
+      if (newCategories.contains(category)) {
+        newCategories.remove(category);
+      } else {
+        newCategories.add(category);
+      }
+
+      if (newCategories.isEmpty) {
+        newCategories = {PlaceCategory.all};
+      }
+    }
+
+    emit(
+      state.copyWith(
+        selectedCategories: newCategories,
+        advancedFilters: null, // Reset filters when using chips
+      ),
+    );
     loadFilteredPlacesFirstPage();
   }
 

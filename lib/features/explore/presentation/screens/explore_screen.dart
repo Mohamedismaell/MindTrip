@@ -68,6 +68,7 @@ class ExploreScreen extends StatelessWidget {
                   builder: (context, state) {
                     return ExploreSectionHeader(
                       title: 'Popular',
+                      filterCount: state.filterCount,
                       isActionButton: true,
                       onFilterTap: () => ExploreFilterSheet.show(context),
                     );

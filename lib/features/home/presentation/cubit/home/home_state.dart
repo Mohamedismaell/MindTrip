@@ -37,12 +37,6 @@ abstract class HomeState with _$HomeState {
     @Default(PlaceCategory.food) PlaceCategory selectedCategory,
     @Default('') String categoryPlacesError,
 
-    // @Default(HomeDataStatus.initial) HomeDataStatus recommendedPlacesStatus,
-    // @Default([]) List<PlaceEntity> recommendedPlaces,
-    // @Default('') String recommendedPlacesError,
-    @Default(HomeDataStatus.initial) HomeDataStatus tourPackagesStatus,
-    @Default('') String tourPackagesError,
-
     @Default(HomeDataStatus.initial) HomeDataStatus plannerPreviewsStatus,
     @Default([]) List<PlannerPreviewEntity> plannerPreviews,
     @Default('') String plannerPreviewsError,

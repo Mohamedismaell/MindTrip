@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExploreState {
 
- ExploreDataStatus get trendingPlacesStatus; PaginationState<PlaceEntity> get trendingPlaces; String get trendingPlacesError; ExploreDataStatus get filteredPlacesStatus; PaginationState<PlaceEntity> get filteredPlaces; String get filteredPlacesError; PlaceCategory get selectedCategory; GetPlacesRequestModel? get advancedFilters;
+ ExploreDataStatus get trendingPlacesStatus; PaginationState<PlaceEntity> get trendingPlaces; String get trendingPlacesError; ExploreDataStatus get filteredPlacesStatus; PaginationState<PlaceEntity> get filteredPlaces; String get filteredPlacesError; Set<PlaceCategory> get selectedCategories; GetPlacesRequestModel? get advancedFilters;
 /// Create a copy of ExploreState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ExploreStateCopyWith<ExploreState> get copyWith => _$ExploreStateCopyWithImpl<E
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.filteredPlacesStatus, filteredPlacesStatus) || other.filteredPlacesStatus == filteredPlacesStatus)&&(identical(other.filteredPlaces, filteredPlaces) || other.filteredPlaces == filteredPlaces)&&(identical(other.filteredPlacesError, filteredPlacesError) || other.filteredPlacesError == filteredPlacesError)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.advancedFilters, advancedFilters) || other.advancedFilters == advancedFilters));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.filteredPlacesStatus, filteredPlacesStatus) || other.filteredPlacesStatus == filteredPlacesStatus)&&(identical(other.filteredPlaces, filteredPlaces) || other.filteredPlaces == filteredPlaces)&&(identical(other.filteredPlacesError, filteredPlacesError) || other.filteredPlacesError == filteredPlacesError)&&const DeepCollectionEquality().equals(other.selectedCategories, selectedCategories)&&(identical(other.advancedFilters, advancedFilters) || other.advancedFilters == advancedFilters));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,filteredPlacesStatus,filteredPlaces,filteredPlacesError,selectedCategory,advancedFilters);
+int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,filteredPlacesStatus,filteredPlaces,filteredPlacesError,const DeepCollectionEquality().hash(selectedCategories),advancedFilters);
 
 @override
 String toString() {
-  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, filteredPlacesStatus: $filteredPlacesStatus, filteredPlaces: $filteredPlaces, filteredPlacesError: $filteredPlacesError, selectedCategory: $selectedCategory, advancedFilters: $advancedFilters)';
+  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, filteredPlacesStatus: $filteredPlacesStatus, filteredPlaces: $filteredPlaces, filteredPlacesError: $filteredPlacesError, selectedCategories: $selectedCategories, advancedFilters: $advancedFilters)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ExploreStateCopyWith<$Res>  {
   factory $ExploreStateCopyWith(ExploreState value, $Res Function(ExploreState) _then) = _$ExploreStateCopyWithImpl;
 @useResult
 $Res call({
- ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus filteredPlacesStatus, PaginationState<PlaceEntity> filteredPlaces, String filteredPlacesError, PlaceCategory selectedCategory, GetPlacesRequestModel? advancedFilters
+ ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus filteredPlacesStatus, PaginationState<PlaceEntity> filteredPlaces, String filteredPlacesError, Set<PlaceCategory> selectedCategories, GetPlacesRequestModel? advancedFilters
 });
 
 
@@ -62,7 +62,7 @@ class _$ExploreStateCopyWithImpl<$Res>
 
 /// Create a copy of ExploreState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? filteredPlacesStatus = null,Object? filteredPlaces = null,Object? filteredPlacesError = null,Object? selectedCategory = null,Object? advancedFilters = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? filteredPlacesStatus = null,Object? filteredPlaces = null,Object? filteredPlacesError = null,Object? selectedCategories = null,Object? advancedFilters = freezed,}) {
   return _then(_self.copyWith(
 trendingPlacesStatus: null == trendingPlacesStatus ? _self.trendingPlacesStatus : trendingPlacesStatus // ignore: cast_nullable_to_non_nullable
 as ExploreDataStatus,trendingPlaces: null == trendingPlaces ? _self.trendingPlaces : trendingPlaces // ignore: cast_nullable_to_non_nullable
@@ -70,8 +70,8 @@ as PaginationState<PlaceEntity>,trendingPlacesError: null == trendingPlacesError
 as String,filteredPlacesStatus: null == filteredPlacesStatus ? _self.filteredPlacesStatus : filteredPlacesStatus // ignore: cast_nullable_to_non_nullable
 as ExploreDataStatus,filteredPlaces: null == filteredPlaces ? _self.filteredPlaces : filteredPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,filteredPlacesError: null == filteredPlacesError ? _self.filteredPlacesError : filteredPlacesError // ignore: cast_nullable_to_non_nullable
-as String,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
-as PlaceCategory,advancedFilters: freezed == advancedFilters ? _self.advancedFilters : advancedFilters // ignore: cast_nullable_to_non_nullable
+as String,selectedCategories: null == selectedCategories ? _self.selectedCategories : selectedCategories // ignore: cast_nullable_to_non_nullable
+as Set<PlaceCategory>,advancedFilters: freezed == advancedFilters ? _self.advancedFilters : advancedFilters // ignore: cast_nullable_to_non_nullable
 as GetPlacesRequestModel?,
   ));
 }
@@ -175,10 +175,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  PlaceCategory selectedCategory,  GetPlacesRequestModel? advancedFilters)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  Set<PlaceCategory> selectedCategories,  GetPlacesRequestModel? advancedFilters)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExploreState() when $default != null:
-return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategory,_that.advancedFilters);case _:
+return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategories,_that.advancedFilters);case _:
   return orElse();
 
 }
@@ -196,10 +196,10 @@ return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPl
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  PlaceCategory selectedCategory,  GetPlacesRequestModel? advancedFilters)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  Set<PlaceCategory> selectedCategories,  GetPlacesRequestModel? advancedFilters)  $default,) {final _that = this;
 switch (_that) {
 case _ExploreState():
-return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategory,_that.advancedFilters);case _:
+return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategories,_that.advancedFilters);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -216,10 +216,10 @@ return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPl
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  PlaceCategory selectedCategory,  GetPlacesRequestModel? advancedFilters)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExploreDataStatus trendingPlacesStatus,  PaginationState<PlaceEntity> trendingPlaces,  String trendingPlacesError,  ExploreDataStatus filteredPlacesStatus,  PaginationState<PlaceEntity> filteredPlaces,  String filteredPlacesError,  Set<PlaceCategory> selectedCategories,  GetPlacesRequestModel? advancedFilters)?  $default,) {final _that = this;
 switch (_that) {
 case _ExploreState() when $default != null:
-return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategory,_that.advancedFilters);case _:
+return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPlacesError,_that.filteredPlacesStatus,_that.filteredPlaces,_that.filteredPlacesError,_that.selectedCategories,_that.advancedFilters);case _:
   return null;
 
 }
@@ -230,8 +230,8 @@ return $default(_that.trendingPlacesStatus,_that.trendingPlaces,_that.trendingPl
 /// @nodoc
 
 
-class _ExploreState implements ExploreState {
-  const _ExploreState({this.trendingPlacesStatus = ExploreDataStatus.initial, this.trendingPlaces = const PaginationState<PlaceEntity>(), this.trendingPlacesError = '', this.filteredPlacesStatus = ExploreDataStatus.initial, this.filteredPlaces = const PaginationState<PlaceEntity>(), this.filteredPlacesError = '', this.selectedCategory = PlaceCategory.all, this.advancedFilters});
+class _ExploreState extends ExploreState {
+  const _ExploreState({this.trendingPlacesStatus = ExploreDataStatus.initial, this.trendingPlaces = const PaginationState<PlaceEntity>(), this.trendingPlacesError = '', this.filteredPlacesStatus = ExploreDataStatus.initial, this.filteredPlaces = const PaginationState<PlaceEntity>(), this.filteredPlacesError = '', final  Set<PlaceCategory> selectedCategories = const {PlaceCategory.all}, this.advancedFilters}): _selectedCategories = selectedCategories,super._();
   
 
 @override@JsonKey() final  ExploreDataStatus trendingPlacesStatus;
@@ -240,7 +240,13 @@ class _ExploreState implements ExploreState {
 @override@JsonKey() final  ExploreDataStatus filteredPlacesStatus;
 @override@JsonKey() final  PaginationState<PlaceEntity> filteredPlaces;
 @override@JsonKey() final  String filteredPlacesError;
-@override@JsonKey() final  PlaceCategory selectedCategory;
+ final  Set<PlaceCategory> _selectedCategories;
+@override@JsonKey() Set<PlaceCategory> get selectedCategories {
+  if (_selectedCategories is EqualUnmodifiableSetView) return _selectedCategories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(_selectedCategories);
+}
+
 @override final  GetPlacesRequestModel? advancedFilters;
 
 /// Create a copy of ExploreState
@@ -253,16 +259,16 @@ _$ExploreStateCopyWith<_ExploreState> get copyWith => __$ExploreStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.filteredPlacesStatus, filteredPlacesStatus) || other.filteredPlacesStatus == filteredPlacesStatus)&&(identical(other.filteredPlaces, filteredPlaces) || other.filteredPlaces == filteredPlaces)&&(identical(other.filteredPlacesError, filteredPlacesError) || other.filteredPlacesError == filteredPlacesError)&&(identical(other.selectedCategory, selectedCategory) || other.selectedCategory == selectedCategory)&&(identical(other.advancedFilters, advancedFilters) || other.advancedFilters == advancedFilters));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExploreState&&(identical(other.trendingPlacesStatus, trendingPlacesStatus) || other.trendingPlacesStatus == trendingPlacesStatus)&&(identical(other.trendingPlaces, trendingPlaces) || other.trendingPlaces == trendingPlaces)&&(identical(other.trendingPlacesError, trendingPlacesError) || other.trendingPlacesError == trendingPlacesError)&&(identical(other.filteredPlacesStatus, filteredPlacesStatus) || other.filteredPlacesStatus == filteredPlacesStatus)&&(identical(other.filteredPlaces, filteredPlaces) || other.filteredPlaces == filteredPlaces)&&(identical(other.filteredPlacesError, filteredPlacesError) || other.filteredPlacesError == filteredPlacesError)&&const DeepCollectionEquality().equals(other._selectedCategories, _selectedCategories)&&(identical(other.advancedFilters, advancedFilters) || other.advancedFilters == advancedFilters));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,filteredPlacesStatus,filteredPlaces,filteredPlacesError,selectedCategory,advancedFilters);
+int get hashCode => Object.hash(runtimeType,trendingPlacesStatus,trendingPlaces,trendingPlacesError,filteredPlacesStatus,filteredPlaces,filteredPlacesError,const DeepCollectionEquality().hash(_selectedCategories),advancedFilters);
 
 @override
 String toString() {
-  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, filteredPlacesStatus: $filteredPlacesStatus, filteredPlaces: $filteredPlaces, filteredPlacesError: $filteredPlacesError, selectedCategory: $selectedCategory, advancedFilters: $advancedFilters)';
+  return 'ExploreState(trendingPlacesStatus: $trendingPlacesStatus, trendingPlaces: $trendingPlaces, trendingPlacesError: $trendingPlacesError, filteredPlacesStatus: $filteredPlacesStatus, filteredPlaces: $filteredPlaces, filteredPlacesError: $filteredPlacesError, selectedCategories: $selectedCategories, advancedFilters: $advancedFilters)';
 }
 
 
@@ -273,7 +279,7 @@ abstract mixin class _$ExploreStateCopyWith<$Res> implements $ExploreStateCopyWi
   factory _$ExploreStateCopyWith(_ExploreState value, $Res Function(_ExploreState) _then) = __$ExploreStateCopyWithImpl;
 @override @useResult
 $Res call({
- ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus filteredPlacesStatus, PaginationState<PlaceEntity> filteredPlaces, String filteredPlacesError, PlaceCategory selectedCategory, GetPlacesRequestModel? advancedFilters
+ ExploreDataStatus trendingPlacesStatus, PaginationState<PlaceEntity> trendingPlaces, String trendingPlacesError, ExploreDataStatus filteredPlacesStatus, PaginationState<PlaceEntity> filteredPlaces, String filteredPlacesError, Set<PlaceCategory> selectedCategories, GetPlacesRequestModel? advancedFilters
 });
 
 
@@ -290,7 +296,7 @@ class __$ExploreStateCopyWithImpl<$Res>
 
 /// Create a copy of ExploreState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? filteredPlacesStatus = null,Object? filteredPlaces = null,Object? filteredPlacesError = null,Object? selectedCategory = null,Object? advancedFilters = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? trendingPlacesStatus = null,Object? trendingPlaces = null,Object? trendingPlacesError = null,Object? filteredPlacesStatus = null,Object? filteredPlaces = null,Object? filteredPlacesError = null,Object? selectedCategories = null,Object? advancedFilters = freezed,}) {
   return _then(_ExploreState(
 trendingPlacesStatus: null == trendingPlacesStatus ? _self.trendingPlacesStatus : trendingPlacesStatus // ignore: cast_nullable_to_non_nullable
 as ExploreDataStatus,trendingPlaces: null == trendingPlaces ? _self.trendingPlaces : trendingPlaces // ignore: cast_nullable_to_non_nullable
@@ -298,8 +304,8 @@ as PaginationState<PlaceEntity>,trendingPlacesError: null == trendingPlacesError
 as String,filteredPlacesStatus: null == filteredPlacesStatus ? _self.filteredPlacesStatus : filteredPlacesStatus // ignore: cast_nullable_to_non_nullable
 as ExploreDataStatus,filteredPlaces: null == filteredPlaces ? _self.filteredPlaces : filteredPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,filteredPlacesError: null == filteredPlacesError ? _self.filteredPlacesError : filteredPlacesError // ignore: cast_nullable_to_non_nullable
-as String,selectedCategory: null == selectedCategory ? _self.selectedCategory : selectedCategory // ignore: cast_nullable_to_non_nullable
-as PlaceCategory,advancedFilters: freezed == advancedFilters ? _self.advancedFilters : advancedFilters // ignore: cast_nullable_to_non_nullable
+as String,selectedCategories: null == selectedCategories ? _self._selectedCategories : selectedCategories // ignore: cast_nullable_to_non_nullable
+as Set<PlaceCategory>,advancedFilters: freezed == advancedFilters ? _self.advancedFilters : advancedFilters // ignore: cast_nullable_to_non_nullable
 as GetPlacesRequestModel?,
   ));
 }

@@ -112,9 +112,7 @@ _PlaceModel _$PlaceModelFromJson(Map<String, dynamic> json) => _PlaceModel(
   name: json['name'] as String,
   city: json['city'] as String?,
   cityEn: json['city_en'] as String?,
-  interests: (json['interests'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  interests: _toListOfStrings(json['interests']),
   category: json['category'] as String?,
   price: _toDouble(json['price']),
   cost: _toDouble(json['cost']),
@@ -123,9 +121,7 @@ _PlaceModel _$PlaceModelFromJson(Map<String, dynamic> json) => _PlaceModel(
   address: json['address'] as String?,
   description: json['description'] as String?,
   photoUrl: json['photo_url'] as String?,
-  imageUrls: (json['image_urls'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  imageUrls: _toListOfStrings(json['image_urls']),
   openingHours: json['opening_hours'] as String?,
   lat: json['lat'] == null ? 0.0 : _toDoubleNonNullable(json['lat']),
   lng: json['lng'] == null ? 0.0 : _toDoubleNonNullable(json['lng']),

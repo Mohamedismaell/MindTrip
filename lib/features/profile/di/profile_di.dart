@@ -1,4 +1,4 @@
-import 'package:mindtrip/core/database/api/dio_consumer.dart';
+import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/user/domain/usecases/update_profile_use_case.dart';
 import 'package:mindtrip/features/user/domain/usecases/upload_profile_photo_use_case.dart';
@@ -16,7 +16,7 @@ class ProfileDi {
   static void init() {
     // Data sources
     sl.registerLazySingleton<ProfileRemoteDatasource>(
-      () => ProfileRemoteDatasource(apiConsumer: sl<DioConsumer>()),
+      () => ProfileRemoteDatasource(apiConsumer: sl<ApiConsumer>()),
     );
 
     // Repositories

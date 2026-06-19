@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
@@ -6,7 +7,7 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
-class AppErrorWidget extends StatelessWidget {
+class AppErrorWidget extends StatefulWidget {
   final String? title;
   final String? message;
   final String? imagePath;
@@ -74,10 +75,57 @@ class AppErrorWidget extends StatelessWidget {
     );
   }
 
+  factory AppErrorWidget.noInfo({
+    Key? key,
+    VoidCallback? onRetry,
+    String? message,
+    double imageSize = 140,
+  }) {
+    return AppErrorWidget(
+      key: key,
+      title: 'No information found',
+      message: message ?? 'There is no data available at the moment.',
+      onPressed: onRetry,
+      imageSize: imageSize,
+    );
+  }
+
+  @override
+  State<AppErrorWidget> createState() => _AppErrorWidgetState();
+}
+
+class _AppErrorWidgetState extends State<AppErrorWidget> {
+  int _retryCountdown = 0;
+  Timer? _timer;
+
+  void _startTimer() {
+    setState(() {
+      _retryCountdown = 5;
+    });
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_retryCountdown == 0) {
+        timer.cancel();
+      } else {
+        setState(() {
+          _retryCountdown--;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final hasButton = action != null || onPressed != null;
-    final image = imagePath ?? AppAssets.errorBotMap;
+    final isCooldown = _retryCountdown > 0;
+    final hasButton = widget.action != null || widget.onPressed != null;
+    final image = widget.imagePath ?? AppAssets.errorBotMap;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Center(
@@ -87,38 +135,49 @@ class AppErrorWidget extends StatelessWidget {
           children: [
             AppCachedImage(
               imagePath: image,
-              width: imageSize.w,
-              height: imageSize.w,
+              width: widget.imageSize.w,
+              height: widget.imageSize.w,
             ),
-
-            if (title != null)
+            if (widget.title != null)
               Text(
-                title!,
+                widget.title!,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.h7SemiBold,
               ),
-
-            if (message != null) ...[
+            if (widget.message != null) ...[
               SizedBox(height: 8.h),
               Text(
-                message!,
+                widget.message!,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.h9Regular.copyWith(
                   color: context.colorTheme.outline,
                 ),
               ),
             ],
-
             if (hasButton) ...[
               SizedBox(height: 20.h),
               TapScaleEffect(
-                onTap: onPressed,
+                onTap: isCooldown
+                    ? null
+                    : () {
+                        widget.onPressed?.call();
+                        _startTimer();
+                      },
                 child:
-                    action ??
+                    widget.action ??
                     FilledButton.icon(
-                      onPressed: onPressed,
+                      onPressed: isCooldown
+                          ? null
+                          : () {
+                              widget.onPressed?.call();
+                              _startTimer();
+                            },
                       icon: const Icon(Icons.refresh_rounded),
-                      label: Text(buttonText ?? 'Try Again'),
+                      label: Text(
+                        isCooldown
+                            ? 'Wait ${_retryCountdown}s'
+                            : (widget.buttonText ?? 'Try Again'),
+                      ),
                     ),
               ),
             ],
