@@ -112,8 +112,10 @@ class _VoiceInputButtonState extends State<VoiceInputButton>
       onResult: (result) {
         _recognizedWords = result.recognizedWords;
       },
-      listenFor: const Duration(seconds: 30),
-      pauseFor: const Duration(seconds: 5),
+      listenOptions: SpeechListenOptions(
+        listenFor: const Duration(seconds: 30),
+        pauseFor: const Duration(seconds: 5),
+      ),
     );
   }
 

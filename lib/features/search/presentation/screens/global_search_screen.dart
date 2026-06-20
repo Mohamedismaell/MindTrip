@@ -33,7 +33,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
 
-    Future.delayed(const Duration(milliseconds: 450), () {
+    Future.delayed(const Duration(milliseconds: 650), () {
       if (mounted) {
         _focusNode.requestFocus();
       }
@@ -176,8 +176,37 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                             children: [
                               12.horizontalSpace,
                               GestureDetector(
-                                onTap: () {
-                                  // Handle voice search if needed
+                                onTap: () async {
+                                  // Unfocus keyboard before showing overlay
+                                  _focusNode.unfocus();
+
+                                  final result = await context.push<String>(
+                                    AppRoutes.voiceSearch,
+                                  );
+
+                                  if (result != null && result.isNotEmpty) {
+                                    _searchController.text = result;
+                                    _searchController
+                                        .selection = TextSelection.fromPosition(
+                                      TextPosition(
+                                        offset: _searchController.text.length,
+                                      ),
+                                    );
+                                    if (mounted) {
+                                      context.read<GlobalSearchBloc>().add(
+                                        SearchQueryChanged(result),
+                                      );
+                                      setState(() {});
+
+                                      // Optional: Refocus field if desired
+                                      // _focusNode.requestFocus();
+                                    }
+                                  } else {
+                                    // Refocus field if null/empty returned
+                                    if (mounted) {
+                                      _focusNode.requestFocus();
+                                    }
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8.sp),

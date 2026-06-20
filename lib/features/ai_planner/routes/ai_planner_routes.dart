@@ -36,9 +36,12 @@ class AiPlannerRoutes {
         );
       },
       routes: [
-        AppTransitionRoute.fadeSlide(
+        AppTransitionRoute.custom(
           path: AppRoutes.myTrips,
-          page: const MyTripsScreen(),
+          builder: (context, state) {
+            return const MyTripsScreen();
+          },
+          transition: AppTransitionRoute.fadeSlide,
         ),
         GoRoute(
           path: AppRoutes.aiPlannerFlow,
@@ -47,9 +50,12 @@ class AiPlannerRoutes {
             return AiPlannerFlowScreen(tripId: tripId);
           },
           routes: [
-            AppTransitionRoute.slideBottom(
+            AppTransitionRoute.custom(
               path: 'chat',
-              page: const AiPlannerChatScreen(),
+              builder: (context, state) {
+                return const AiPlannerChatScreen();
+              },
+              transition: AppTransitionRoute.slideBottom,
             ),
           ],
         ),
@@ -59,13 +65,14 @@ class AiPlannerRoutes {
           builder: (context, state) => const TripCalendarScreen(),
         ),
         //Todo should it be sub of my trips ?
-        AppTransitionRoute.fadeSlideBuilder(
+        AppTransitionRoute.custom(
           path: AppRoutes.tripDetails,
           builder: (context, state) {
             final tripId = state.uri.queryParameters['tripId'] ?? '';
             context.read<TripDetailsCubit>().loadTripDetails(tripId);
             return TripDetailsScreen(tripId: tripId);
           },
+          transition: AppTransitionRoute.fadeSlide,
         ),
       ],
     ),

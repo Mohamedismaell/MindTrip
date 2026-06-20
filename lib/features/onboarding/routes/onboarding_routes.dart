@@ -10,23 +10,32 @@ import 'package:mindtrip/features/onboarding/presentation/screens/welcome_auth_s
 
 class OnBoardingRoutes {
   static List<RouteBase> routes = [
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.splash,
-      page: const SplashScreen(),
+      builder: (context, state) {
+        return const SplashScreen();
+      },
+      transition: AppTransitionRoute.fadeSlide,
     ),
     ShellRoute(
       builder: (context, state, child) {
         return BlocProvider(create: (_) => sl<OnboardingCubit>(), child: child);
       },
       routes: [
-        AppTransitionRoute.fadeSlide(
+        AppTransitionRoute.custom(
           path: AppRoutes.onBoarding,
-          page: const OnboardingScreen(),
+          builder: (context, state) {
+            return const OnboardingScreen();
+          },
+          transition: AppTransitionRoute.fadeSlide,
         ),
 
-        AppTransitionRoute.fadeSlide(
+        AppTransitionRoute.custom(
           path: AppRoutes.welcomeAuth,
-          page: const WelcomeAuthScreen(),
+          builder: (context, state) {
+            return const WelcomeAuthScreen();
+          },
+          transition: AppTransitionRoute.fadeSlide,
         ),
       ],
     ),

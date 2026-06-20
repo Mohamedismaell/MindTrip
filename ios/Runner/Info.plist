@@ -61,6 +61,8 @@
 		<string>We need access to your camera to let you take photos for your profile and chat.</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>We need access to your microphone for recording videos and voice messages.</string>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>We need speech recognition to search for places by voice.</string>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>

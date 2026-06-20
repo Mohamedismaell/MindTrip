@@ -145,12 +145,12 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\ios\\Flutter\\flutter_export_environment.sh": {
-    "mtime": 1781129942.226592,
+    "mtime": 1781933015.685639,
     "ast_hash": "8cadec4994253e8d11b5f459f3dc7de6",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\ios\\Flutter\\ephemeral\\flutter_lldb_helper.py": {
-    "mtime": 1781129942.2200756,
+    "mtime": 1781933015.6759362,
     "ast_hash": "98fc75412162af387e2e3461e4e58094",
     "semantic_hash": ""
   },
@@ -195,8 +195,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\hive_registrar.g.dart": {
-    "mtime": 1781890046.1353424,
-    "ast_hash": "f1834b2d7f3c5c43542b18c83b96c605",
+    "mtime": 1781916705.2236266,
+    "ast_hash": "aed0a2b4c8971753d58a3dd7a92f2b5c",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\main.dart": {
@@ -235,8 +235,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\api\\api_error_mapper.dart": {
-    "mtime": 1781215302.9177547,
-    "ast_hash": "94344fb7dd7b84bfe0b04aaf90c19ba2",
+    "mtime": 1781917759.1824708,
+    "ast_hash": "31b6351d8cc0289dc189b364c35eeafd",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\api\\dio_consumer.dart": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\api\\end_points.dart": {
-    "mtime": 1781890291.534418,
-    "ast_hash": "56fcf2acb75ce4e53f66f888f944f5bf",
+    "mtime": 1781894745.8576236,
+    "ast_hash": "468a5fe1c2cfbea04c27f3f6e20e8e34",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\api\\interceptors\\api_interceptor.dart": {
@@ -260,8 +260,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\api\\interceptors\\logging_interceptor.dart": {
-    "mtime": 1781832094.9750404,
-    "ast_hash": "2a6c549447667f95b03d2196d0daa94c",
+    "mtime": 1781900811.7649362,
+    "ast_hash": "6a2348cc846aa5020a5d2e44695e308a",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\api\\interceptors\\retry_interceptor.dart": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\cache\\app_hive.dart": {
-    "mtime": 1781890688.581141,
-    "ast_hash": "29ad83e623b4652972f3f93c645da4fc",
+    "mtime": 1781918241.6270761,
+    "ast_hash": "ec63211d1b4f5cfd008c46be5a323993",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\database\\cache\\cache_helper.dart": {
@@ -305,7 +305,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\enums\\place_badge.g.dart": {
-    "mtime": 1781730275.2637713,
+    "mtime": 1781909422.3819942,
     "ast_hash": "55ce76139b766aad0e02fa233672403a",
     "semantic_hash": ""
   },
@@ -315,7 +315,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\enums\\place_category.g.dart": {
-    "mtime": 1781830041.9503632,
+    "mtime": 1781909422.3830018,
     "ast_hash": "10e85d3958256cab5294341f8b1bc7c5",
     "semantic_hash": ""
   },
@@ -335,8 +335,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\errors\\failure\\failure.dart": {
-    "mtime": 1781126154.250074,
-    "ast_hash": "f5a031714f9104fd555f4dc204c194ce",
+    "mtime": 1781917730.8823302,
+    "ast_hash": "f61a13d69cc1859ccbe808f7ff712494",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\helper\\hero_dialog.dart": {
@@ -420,12 +420,12 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\banner_model.freezed.dart": {
-    "mtime": 1781890046.117985,
+    "mtime": 1781909422.350898,
     "ast_hash": "d4cecb32c58f13e709b48721b2368534",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\banner_model.g.dart": {
-    "mtime": 1781890046.128247,
+    "mtime": 1781909422.3840027,
     "ast_hash": "4d5782a2e51bb7dc991e50d6539de097",
     "semantic_hash": ""
   },
@@ -435,12 +435,12 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\category_model.freezed.dart": {
-    "mtime": 1781830041.9416447,
+    "mtime": 1781909422.3519025,
     "ast_hash": "29ae13bc5cb8e4fd94de5fbeca06b172",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\category_model.g.dart": {
-    "mtime": 1781830041.950868,
+    "mtime": 1781909422.385004,
     "ast_hash": "ac0fb17eac2927ecfd0a076321981446",
     "semantic_hash": ""
   },
@@ -450,28 +450,28 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\location_model.freezed.dart": {
-    "mtime": 1781730275.2010133,
+    "mtime": 1781909422.3519025,
     "ast_hash": "f6b03f875391efd87b65109bba4f4811",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\location_model.g.dart": {
-    "mtime": 1781730275.26781,
+    "mtime": 1781909422.385004,
     "ast_hash": "32ec3f4ebb9f9fcf539f805475ae306b",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\place_model.dart": {
-    "mtime": 1781718638.4094217,
-    "ast_hash": "70fd06478a4e2f34ec1a5ae72c73b04b",
+    "mtime": 1781896965.8887062,
+    "ast_hash": "553445dabb34cdac31b2a68660229305",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\place_model.freezed.dart": {
-    "mtime": 1781730275.2031329,
-    "ast_hash": "5c3010e6d982f539bc18456d1130b91b",
+    "mtime": 1781909422.3529034,
+    "ast_hash": "64b581317eb1ca3a1bd3cefa2c3d49c6",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\place_model.g.dart": {
-    "mtime": 1781730275.2698195,
-    "ast_hash": "b2acb8bf67dbe45b43786d910ae60b11",
+    "mtime": 1781909422.386511,
+    "ast_hash": "b906c2ac5e3bd1914f1a8b4bb97b6a8d",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\review_model.dart": {
@@ -480,28 +480,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\review_model.freezed.dart": {
-    "mtime": 1781730275.2037222,
+    "mtime": 1781909422.354415,
     "ast_hash": "ec3a53bd1776c80c1242724615f37850",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\review_model.g.dart": {
-    "mtime": 1781730275.2758527,
+    "mtime": 1781909422.3880439,
     "ast_hash": "59425ca894ecec38426f1b097c563233",
-    "semantic_hash": ""
-  },
-  "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\tour_package_model.dart": {
-    "mtime": 1781889960.0218637,
-    "ast_hash": "8123bf07d37d1784bfc703cb6e3fde9f",
-    "semantic_hash": ""
-  },
-  "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\tour_package_model.freezed.dart": {
-    "mtime": 1781890046.1194992,
-    "ast_hash": "2ab1b94be56eb02402669d19bfa7c763",
-    "semantic_hash": ""
-  },
-  "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\tour_package_model.g.dart": {
-    "mtime": 1781890046.1323433,
-    "ast_hash": "9d25d3a3b8d9bc123151706d88642729",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\trip_model.dart": {
@@ -510,12 +495,12 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\trip_model.freezed.dart": {
-    "mtime": 1781730275.2053013,
+    "mtime": 1781909422.354415,
     "ast_hash": "7bb36de1cff93cd953241ab68a7f4b0e",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\trip_model.g.dart": {
-    "mtime": 1781730275.277861,
+    "mtime": 1781909422.3880439,
     "ast_hash": "4d6adb3a9011a50eaa193f233feaacae",
     "semantic_hash": ""
   },
@@ -570,13 +555,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\injection\\service_locator.dart": {
-    "mtime": 1781215303.3695402,
-    "ast_hash": "60e89ef788d6c23b408baeaa3ce1db16",
+    "mtime": 1781915269.9967303,
+    "ast_hash": "61c7033f3e78df6d71bfc1aa78cd167f",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\models\\interest_categories.dart": {
-    "mtime": 1781761665.9562325,
-    "ast_hash": "c136637a31052f3da3152909f7b2e6b2",
+    "mtime": 1781896197.0224028,
+    "ast_hash": "928285f00529f109489a07b6531bee34",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\presentation\\manager\\app_gate_cubit\\app_gate_cubit.dart": {
@@ -600,8 +585,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\presentation\\widget\\app_error_widget.dart": {
-    "mtime": 1781831353.9035487,
-    "ast_hash": "bc5c5d8d8b8b3a0ead208c5662ac3f6a",
+    "mtime": 1781893611.7726758,
+    "ast_hash": "c9853d24525b6ca0ea22212d1885b476",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\presentation\\widget\\bottom_nav.dart": {
@@ -625,13 +610,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\routes\\app_router.dart": {
-    "mtime": 1781831353.853985,
-    "ast_hash": "69f17d55ed38973866084d367965587e",
+    "mtime": 1781934349.19855,
+    "ast_hash": "bf3e9954054168f6616305fe27b288d5",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\routes\\app_routes.dart": {
-    "mtime": 1781801785.2249913,
-    "ast_hash": "c92594d9c003b099ecfb7c294fb0d60f",
+    "mtime": 1781932431.2726283,
+    "ast_hash": "9e93fee44d81f63d56f8ea0cb56ca869",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\routes\\app_route_config.dart": {
@@ -640,8 +625,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\routes\\app_transition_route.dart": {
-    "mtime": 1781215303.5147784,
-    "ast_hash": "a8e71f603d12a65e567261e81c2bfe72",
+    "mtime": 1781934238.843959,
+    "ast_hash": "a9b9ad52feb8b196d59e4f300d1ab5d9",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\routes\\go_router_refresh_stream.dart": {
@@ -650,8 +635,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\routes\\route_register.dart": {
-    "mtime": 1781728821.9869595,
-    "ast_hash": "84e14279928a84cc453f89abd542343e",
+    "mtime": 1781915820.451723,
+    "ast_hash": "ff715aab5ab27c13cbde21803757a775",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\theme\\app_colors.dart": {
@@ -990,8 +975,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\ai_planner\\routes\\ai_planner_routes.dart": {
-    "mtime": 1781831354.1941805,
-    "ast_hash": "1498c0f074e9055f8ef08514e3099a87",
+    "mtime": 1781934474.706782,
+    "ast_hash": "244b64f73d56d82be1b10ab3ca29a477",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\authetication\\data\\datasources\\auth_local_data_source.dart": {
@@ -1015,7 +1000,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\authetication\\data\\models\\auth_response_model.freezed.dart": {
-    "mtime": 1781835752.4799302,
+    "mtime": 1781909422.3559203,
     "ast_hash": "e98b83198eec944e7dcc15af79a1f214",
     "semantic_hash": ""
   },
@@ -1045,7 +1030,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\authetication\\domain\\entities\\user_entity.freezed.dart": {
-    "mtime": 1781730275.2084184,
+    "mtime": 1781909422.3569262,
     "ast_hash": "f53710fb48a1b887cdf3c8c2349b5638",
     "semantic_hash": ""
   },
@@ -1100,13 +1085,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\authetication\\presentation\\cubit\\auth_state.freezed.dart": {
-    "mtime": 1781730275.2091463,
+    "mtime": 1781909422.357926,
     "ast_hash": "78ac6516accf5e80433716d4ff23c85e",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\authetication\\presentation\\screens\\complete_signup_screen.dart": {
-    "mtime": 1781831354.0744476,
-    "ast_hash": "414ecadaddff1289e4b84122db1889c9",
+    "mtime": 1781902627.061169,
+    "ast_hash": "bc59d8469ba2c427daf0c2b8eea41d7e",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\authetication\\presentation\\screens\\otp_screen.dart": {
@@ -1165,8 +1150,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\authetication\\routes\\auth_routes.dart": {
-    "mtime": 1781126154.9196188,
-    "ast_hash": "7ac19356e4e633df579d08a04d0aef46",
+    "mtime": 1781934478.6549623,
+    "ast_hash": "9cd475f8fdeb048281354d4c5b0c3ff2",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\data\\explore_mock_data.dart": {
@@ -1180,18 +1165,18 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\screens\\explore_screen.dart": {
-    "mtime": 1781834739.169441,
-    "ast_hash": "0df00470333388d6d20ecc0bfcabda88",
+    "mtime": 1781920353.0557404,
+    "ast_hash": "ec1649ccf3097cff5a37bfffc449a812",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_category_chips.dart": {
-    "mtime": 1781831353.9657652,
-    "ast_hash": "383952845791d9ace66f299136c63960",
+    "mtime": 1781899230.938229,
+    "ast_hash": "cbe2a2b5c92ccc6d58100b09386d25a0",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_filter_sheet.dart": {
-    "mtime": 1781831354.0643873,
-    "ast_hash": "3d6bc78e059b56d9eb41d7b4c51d0a70",
+    "mtime": 1781902627.061169,
+    "ast_hash": "ea3c1cf63071ab4c62d8685de440c8fc",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_header.dart": {
@@ -1200,8 +1185,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_places_grid.dart": {
-    "mtime": 1781811918.3288217,
-    "ast_hash": "f40e9de3845fef0ea8144130e087f969",
+    "mtime": 1781919510.7766676,
+    "ast_hash": "04b486bd7fadd510b54c3513bedb37c8",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_place_card.dart": {
@@ -1215,8 +1200,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_section_header.dart": {
-    "mtime": 1781831354.0596485,
-    "ast_hash": "87d03df4ff6bbb5646c8dfa07a604a06",
+    "mtime": 1781899795.5261464,
+    "ast_hash": "2fc0cfe3979ebb1fc8a39a3de8d66e53",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_show_more_button.dart": {
@@ -1230,8 +1215,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\explore_trending_list.dart": {
-    "mtime": 1781830337.8676796,
-    "ast_hash": "9287bcd5a48c00a77db36e2a88295665",
+    "mtime": 1781896696.0411408,
+    "ast_hash": "dec6f78eb58c5a83590560dcc6a1e7b0",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\float_map_button.dart": {
@@ -1270,8 +1255,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\data\\home_mock_data.dart": {
-    "mtime": 1781762269.1256645,
-    "ast_hash": "b1a4791eaf4dfeeb1d584f8145fa6e05",
+    "mtime": 1781904326.2320273,
+    "ast_hash": "2d42ca23d7d901c292cd9deda58984a1",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\models\\home_models.dart": {
@@ -1280,8 +1265,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\screens\\home_screen.dart": {
-    "mtime": 1781832327.5097473,
-    "ast_hash": "9f48e2394179f248edbba5b6a98fb226",
+    "mtime": 1781920365.1828651,
+    "ast_hash": "54bae3d39430b57bbb7a38f822ff3035",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\custom_circle_icon.dart": {
@@ -1295,8 +1280,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_banner_carousel.dart": {
-    "mtime": 1781762322.3464482,
-    "ast_hash": "fb93707dc07a27a5363fd0b1839fa4c2",
+    "mtime": 1781908019.0499084,
+    "ast_hash": "9092a564ce81842e705e4c8fd6bb13e1",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_category_list.dart": {
@@ -1315,8 +1300,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_search_bar.dart": {
-    "mtime": 1781126154.9940016,
-    "ast_hash": "4cc4f0a91ee938fb986641e66bc3fb15",
+    "mtime": 1781915991.5644662,
+    "ast_hash": "1fd97ff4afdb16e9bc79ab93a9c84b69",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_section_header.dart": {
@@ -1325,8 +1310,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_tour_packages.dart": {
-    "mtime": 1781729152.1880689,
-    "ast_hash": "d077d70800cbbd372db472a8e0627d1c",
+    "mtime": 1781891995.6327484,
+    "ast_hash": "fb4ad72758d662725bff4b7be8dfe4af",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\routes\\home_routes.dart": {
@@ -1340,8 +1325,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\interests\\presentation\\widgets\\interests_buttons.dart": {
-    "mtime": 1781831353.8714585,
-    "ast_hash": "a72b4e6e6df4c0a8d100cf0ed071deae",
+    "mtime": 1781900456.2001393,
+    "ast_hash": "f0e2432c0e824c603e1d9576a0a87875",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\interests\\presentation\\widgets\\interests_header.dart": {
@@ -1350,8 +1335,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\interests\\routes\\interests_routes.dart": {
-    "mtime": 1781126154.9983776,
-    "ast_hash": "6eb166a71951440110f03117358080bb",
+    "mtime": 1781934430.69244,
+    "ast_hash": "492c0bbd003599b955a3bffc7a76d573",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\itinerary\\data\\datasources\\mock_itinerary_datasource.dart": {
@@ -1450,8 +1435,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\itinerary\\presentation\\widgets\\outlined_action_button.dart": {
-    "mtime": 1781831353.8529854,
-    "ast_hash": "87e5b2153ac7728edbe3c9a6c0fd7523",
+    "mtime": 1781902627.061169,
+    "ast_hash": "e7a355f6c63bb60f86be44003c039ad6",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\itinerary\\presentation\\widgets\\time_period_section.dart": {
@@ -1465,8 +1450,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\itinerary\\presentation\\widgets\\trip_day_overview_card.dart": {
-    "mtime": 1781831354.0760362,
-    "ast_hash": "9e810d3f3ef783611762a34d2d09f253",
+    "mtime": 1781902626.970124,
+    "ast_hash": "2d28880f8133b6ca2177e728cecb7591",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\itinerary\\presentation\\widgets\\trip_details_bar.dart": {
@@ -1480,8 +1465,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\itinerary\\presentation\\widgets\\trip_map_preview_card.dart": {
-    "mtime": 1781831354.0760362,
-    "ast_hash": "ffb491e32ba03164ae8a0c0a0ba5d0c3",
+    "mtime": 1781902627.0460541,
+    "ast_hash": "95db53b7823a25df583dff6deccd38f3",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\data\\datasources\\google_places_datasource.dart": {
@@ -1540,8 +1525,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\di\\map_di.dart": {
-    "mtime": 1781761789.095533,
-    "ast_hash": "9483de01da0e0db989db962ac5870861",
+    "mtime": 1781909241.9547024,
+    "ast_hash": "32d64410e7193ac324b8a46d305e0829",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\domain\\entities\\google_place.dart": {
@@ -1640,23 +1625,18 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\cubit\\map_navigation_state.freezed.dart": {
-    "mtime": 1781730275.2112906,
+    "mtime": 1781909422.359935,
     "ast_hash": "7ed1c62dc7caf6c2f832a4cdb19f1363",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\cubit\\map_search_cubit.dart": {
-    "mtime": 1781215304.906193,
-    "ast_hash": "1e357497fa26fa171c7ef4244b2cea24",
+    "mtime": 1781912857.6435099,
+    "ast_hash": "ad3ea986be09671b40a7c413faa0823e",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\cubit\\map_search_state.dart": {
-    "mtime": 1781215304.913144,
-    "ast_hash": "0d6031649e3f70d207b5460d466b08e8",
-    "semantic_hash": ""
-  },
-  "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\cubit\\map_search_state.freezed.dart": {
-    "mtime": 1781730275.2117958,
-    "ast_hash": "51e39ebaf07c9cf8241551715586017c",
+    "mtime": 1781912838.2077863,
+    "ast_hash": "0693adb74e0d635d47be023313fd0f2b",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\cubit\\map_state.dart": {
@@ -1665,7 +1645,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\cubit\\map_state.freezed.dart": {
-    "mtime": 1781830041.9446468,
+    "mtime": 1781909422.3609424,
     "ast_hash": "293e16845e8129f146ade0c1e00e285b",
     "semantic_hash": ""
   },
@@ -1680,8 +1660,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\screens\\map_search_overlay.dart": {
-    "mtime": 1781831353.9657652,
-    "ast_hash": "67b9229dfd82cddf9917eb5f06f49590",
+    "mtime": 1781915612.5641782,
+    "ast_hash": "d23fde58f78d6a62fa572287750361da",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\widgets\\custom_map_pin.dart": {
@@ -1695,8 +1675,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\widgets\\drive_tab.dart": {
-    "mtime": 1781831354.0744476,
-    "ast_hash": "7f62abd857b17d16351d69d51d978794",
+    "mtime": 1781902627.061169,
+    "ast_hash": "51d49e0359873c0fa1c2cc4340e4ca18",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\widgets\\map_action_button.dart": {
@@ -1705,8 +1685,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\widgets\\map_listener.dart": {
-    "mtime": 1781126155.330102,
-    "ast_hash": "e827459669a0d5335a76d2e74b8db83f",
+    "mtime": 1781909223.4503295,
+    "ast_hash": "6acd6cf1923bda604ac32fa077ce274b",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\widgets\\map_navigation_bar.dart": {
@@ -1760,8 +1740,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\routes\\map_routes.dart": {
-    "mtime": 1781762116.6543922,
-    "ast_hash": "7458e4f71b3a505f9b828abaaf296eee",
+    "mtime": 1781934380.9653194,
+    "ast_hash": "c464795f3584c480c7a15d75f99082a8",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\map\\Services\\location_service\\location_service_imp.dart": {
@@ -1830,8 +1810,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\onboarding\\presentation\\screens\\welcome_auth_screen.dart": {
-    "mtime": 1781831354.18514,
-    "ast_hash": "c314195704a5945e318ad157003e8857",
+    "mtime": 1781902627.061169,
+    "ast_hash": "ca6fd20e08ad8dff72e3365584a3e146",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\onboarding\\presentation\\widgets\\onboarding_content.dart": {
@@ -1850,8 +1830,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\onboarding\\routes\\onboarding_routes.dart": {
-    "mtime": 1781126155.3526933,
-    "ast_hash": "8b398af8ea562b8dafe7c44273b51bc6",
+    "mtime": 1781934365.6067965,
+    "ast_hash": "6f841df7b1ddf01d15574247765a9999",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\place_details\\data\\datasources\\place_details_remote_data_source.dart": {
@@ -1915,8 +1895,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\place_details\\presentation\\widgets\\place_details_location_section.dart": {
-    "mtime": 1781831354.0633893,
-    "ast_hash": "03fac91ca425ae87d359bed6831b5b40",
+    "mtime": 1781902627.0460541,
+    "ast_hash": "fd093a31f46d46e0a38dee4a9d3c8bc0",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\place_details\\presentation\\widgets\\place_details_nearby_places.dart": {
@@ -1965,8 +1945,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\di\\profile_di.dart": {
-    "mtime": 1781831353.872416,
-    "ast_hash": "4433cf60acff26a03c11d1c1a734c972",
+    "mtime": 1781900637.9675791,
+    "ast_hash": "fb67c8070539f286113a666f3c10a43e",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\domain\\repositories\\profile_repository.dart": {
@@ -2000,13 +1980,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\presentation\\manager\\edit_profile_state.freezed.dart": {
-    "mtime": 1781730275.21408,
+    "mtime": 1781909422.3619416,
     "ast_hash": "37d770530def36227bf068cf846e1d27",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\presentation\\screens\\edit_profile_screen.dart": {
-    "mtime": 1781831354.0643873,
-    "ast_hash": "049c1fde9f8d756067de48bb90153e41",
+    "mtime": 1781902627.0425355,
+    "ast_hash": "cee578a8a5085606d9511a0212c2a44d",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\presentation\\screens\\fq_screen.dart": {
@@ -2020,8 +2000,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\presentation\\screens\\settings_screen.dart": {
-    "mtime": 1781831354.0643873,
-    "ast_hash": "8d334c745517b04f97d04074f10da556",
+    "mtime": 1781902627.0460541,
+    "ast_hash": "b518630ceea559d8a0136d331650308c",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\presentation\\screens\\terms_of_service_screen.dart": {
@@ -2125,8 +2105,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\profile\\routes\\profile_routes.dart": {
-    "mtime": 1781126155.6290944,
-    "ast_hash": "5dcfa2e234394463bd2320049e546ded",
+    "mtime": 1781934347.8081758,
+    "ast_hash": "b8d153e99698d9445bad1cbc32594cc8",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\trips\\data\\datasources\\trip_local_datasource.dart": {
@@ -2140,7 +2120,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\trips\\data\\models\\trip_model.g.dart": {
-    "mtime": 1781730275.2803755,
+    "mtime": 1781909422.3890417,
     "ast_hash": "7a3d8db043d5b62d61e4150a2aa78e4a",
     "semantic_hash": ""
   },
@@ -2285,7 +2265,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\macos\\Flutter\\ephemeral\\flutter_export_environment.sh": {
-    "mtime": 1781129942.228717,
+    "mtime": 1781933015.6907587,
     "ast_hash": "0141bc9b15e81b31d0f3bce5ff0396f4",
     "semantic_hash": ""
   },
@@ -2470,8 +2450,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\pubspec.yaml": {
-    "mtime": 1781730036.211365,
-    "ast_hash": "ce9dd4942646e0713a9ab742f40b27c6",
+    "mtime": 1781931769.852827,
+    "ast_hash": "34819e4f3ee979f5f190c0613762dc05",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\README.md": {
@@ -3475,8 +3455,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\utils\\dummy_data.dart": {
-    "mtime": 1781835315.4192383,
-    "ast_hash": "6b22a93d294046075aac35bc70b04662",
+    "mtime": 1781892020.0696907,
+    "ast_hash": "95d271904bcd9a81b59e33b6096c8221",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\utils\\screenshot_utils.dart": {
@@ -3545,23 +3525,23 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\data\\datasources\\explore_local_data_source.dart": {
-    "mtime": 1781890475.5579326,
-    "ast_hash": "bce2a76b718970b4430898e08bf118ff",
+    "mtime": 1781892031.6409988,
+    "ast_hash": "33a42afdbbc8cf59e39355a6289fdc81",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\data\\repositories\\explore_repository_impl.dart": {
-    "mtime": 1781890505.5110416,
-    "ast_hash": "ac69ba09443ed7cbc3851d0559f783de",
+    "mtime": 1781892031.6409988,
+    "ast_hash": "0ad4dae41b33be1825ab7880cf111ba3",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\di\\explore_di.dart": {
-    "mtime": 1781890545.7589862,
-    "ast_hash": "41fb3bd902fe2d078f58ed551c145d93",
+    "mtime": 1781896656.3317523,
+    "ast_hash": "7464fc033882419fedf6281e033d6f77",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\domain\\repositories\\explore_repository.dart": {
-    "mtime": 1781762322.341934,
-    "ast_hash": "7bb7649a17258dca2edc3edcee5ac9ed",
+    "mtime": 1781892029.4108133,
+    "ast_hash": "a11b42ac3a24161d188e620da3264975",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\domain\\use_cases\\get_other_places_use_case.dart": {
@@ -3569,19 +3549,14 @@
     "ast_hash": "5a52171fca27ef6350e5223f9797f179",
     "semantic_hash": ""
   },
-  "D:\\GitHub\\MindTrip\\lib\\features\\explore\\domain\\use_cases\\get_tour_packages_use_case.dart": {
-    "mtime": 1781762322.278152,
-    "ast_hash": "0c49ebfe4a3bdf70d8b0f506190e95d7",
-    "semantic_hash": ""
-  },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\cubit\\explore_cubit.dart": {
-    "mtime": 1781829460.8879554,
-    "ast_hash": "b0b02983f40fb0c972ccbad73cca6e66",
+    "mtime": 1781899989.3288014,
+    "ast_hash": "a8862f4700fbf9524ea58290b7909882",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\cubit\\explore_state.dart": {
-    "mtime": 1781815037.239794,
-    "ast_hash": "7711e7fbbd509c77289076b48562adab",
+    "mtime": 1781899419.54314,
+    "ast_hash": "cf1bee844df008dd0e3a3ea030e69f34",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\data\\datasources\\home_local_data_source.dart": {
@@ -3590,13 +3565,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\data\\repositories\\home_repository_impl.dart": {
-    "mtime": 1781890412.2124195,
-    "ast_hash": "d793864a1a21aeb40fb21473948225a0",
+    "mtime": 1781893010.8134215,
+    "ast_hash": "54ae2482e047f6b4b1faa536f371706b",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\di\\home_di.dart": {
-    "mtime": 1781890386.9846795,
-    "ast_hash": "d7008df06adf92f52ccfde6aee21ee65",
+    "mtime": 1781892028.4685955,
+    "ast_hash": "99385faab79c5fc0f4bb1263a081c521",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\domain\\repositories\\home_repository.dart": {
@@ -3640,13 +3615,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\di\\places_di.dart": {
-    "mtime": 1781890845.5973723,
-    "ast_hash": "5749832e48c07f5cf1747c06d20cc181",
+    "mtime": 1781916648.6610775,
+    "ast_hash": "b9aaf7578a82dc9ea8688e90afcdf95a",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\domain\\repositories\\place_repository.dart": {
-    "mtime": 1781815033.540619,
-    "ast_hash": "fd8602235c8550e6e252111b4dd21932",
+    "mtime": 1781918150.931594,
+    "ast_hash": "4f97fe399e8499e5c8ecd537f59f5376",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\domain\\use_cases\\get_popular_places_use_case.dart": {
@@ -3680,7 +3655,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\enums\\place_city.g.dart": {
-    "mtime": 1781816910.861032,
+    "mtime": 1781909422.3840027,
     "ast_hash": "8087e9ea14a53d69ebfb0d2c56e5a530",
     "semantic_hash": ""
   },
@@ -3695,18 +3670,18 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\planner_preview_model.freezed.dart": {
-    "mtime": 1781890046.1189935,
+    "mtime": 1781909422.3534095,
     "ast_hash": "263d1622aae9fc05cd1f302f45ab4839",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\data\\models\\planner_preview_model.g.dart": {
-    "mtime": 1781890046.1293125,
+    "mtime": 1781909422.3870351,
     "ast_hash": "3b4656970823708f19b02e168b845a36",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\models\\paginated_response.dart": {
-    "mtime": 1781722629.5434134,
-    "ast_hash": "21967d5aa693ae662beb04a24d7411c1",
+    "mtime": 1781896733.4041352,
+    "ast_hash": "6a42c06ad9af4a13b2950ac1925bf18a",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\models\\pagination_state.dart": {
@@ -3715,7 +3690,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\models\\pagination_state.freezed.dart": {
-    "mtime": 1781762281.0300894,
+    "mtime": 1781909422.3554156,
     "ast_hash": "79f09adb476e28e752958803e97c5d97",
     "semantic_hash": ""
   },
@@ -3755,8 +3730,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\presentation\\widget\\app_search_bar.dart": {
-    "mtime": 1781832177.496108,
-    "ast_hash": "af5aae6f37e0fde587055cb8c95ee859",
+    "mtime": 1781922306.220819,
+    "ast_hash": "c25092254de4d5f2d5772196942d4a46",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\presentation\\widget\\app_snackbar.dart": {
@@ -3780,8 +3755,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\presentation\\widget\\custom_otlined_button.dart": {
-    "mtime": 1781831354.0581343,
-    "ast_hash": "22d24bf307f24c6df56cfbd6696dff26",
+    "mtime": 1781907727.232947,
+    "ast_hash": "9f5bbb62a8a14d363e66731d27458550",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\core\\shared\\presentation\\widget\\custom_search_bar.dart": {
@@ -3830,28 +3805,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\data\\datasources\\explore_remote_data_source.dart": {
-    "mtime": 1781890488.1038146,
-    "ast_hash": "a6ea73ef3a8f0ab2b1a118c8503d484d",
+    "mtime": 1781891848.2060733,
+    "ast_hash": "e1dd42dc130a709d200dbc55ef6378b7",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\cubit\\explore_state.freezed.dart": {
-    "mtime": 1781830041.9436455,
-    "ast_hash": "61f34a85c3c56eff36cab993fd03cdb3",
-    "semantic_hash": ""
-  },
-  "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\cubit\\all_places\\explore_all_places_cubit.dart": {
-    "mtime": 1781802380.8573647,
-    "ast_hash": "8cc17c3940a68e027866323e5b0cdf36",
-    "semantic_hash": ""
-  },
-  "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\cubit\\all_places\\explore_all_places_state.dart": {
-    "mtime": 1781803958.3852906,
-    "ast_hash": "1e1bef7780f386e62225ed53ee368871",
-    "semantic_hash": ""
-  },
-  "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\cubit\\all_places\\explore_all_places_state.freezed.dart": {
-    "mtime": 1781830041.9426448,
-    "ast_hash": "a9f0dbda92dcb6f06949db3ef12b760b",
+    "mtime": 1781909422.3584301,
+    "ast_hash": "13f63e4382ce4d78eb8c037d980cd8c9",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\explore\\presentation\\widgets\\cusotm_city_expanded_card.dart": {
@@ -3869,34 +3829,24 @@
     "ast_hash": "18d2051685fd8a8c0d52c4e4f30d09a4",
     "semantic_hash": ""
   },
-  "D:\\GitHub\\MindTrip\\lib\\features\\home\\data\\mapper\\tour_package_mapper.dart": {
-    "mtime": 1781762322.3464482,
-    "ast_hash": "a54da3d2b4edde8536f1540ffb5a39bf",
-    "semantic_hash": ""
-  },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\domain\\entity\\banner_entity.dart": {
     "mtime": 1781126154.4813516,
     "ast_hash": "a9d8af5cc7b11c008099433199cc0814",
     "semantic_hash": ""
   },
-  "D:\\GitHub\\MindTrip\\lib\\features\\home\\domain\\entity\\tour_package_entity.dart": {
-    "mtime": 1781126154.4927979,
-    "ast_hash": "2f905f9811820092c707273a1ee25778",
-    "semantic_hash": ""
-  },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\cubit\\home\\home_cubit.dart": {
-    "mtime": 1781830692.2243674,
-    "ast_hash": "6507f6e357893293855bf962cdd47b74",
+    "mtime": 1781892027.738872,
+    "ast_hash": "075d1e7a50325b99ab220a15b918fe0b",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\cubit\\home\\home_state.dart": {
-    "mtime": 1781830676.9206517,
-    "ast_hash": "86b8b1124f7bf6d0c38c797c8fe696d7",
+    "mtime": 1781892883.913005,
+    "ast_hash": "e8173732fc257b1af1ca8e11858671c0",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\cubit\\home\\home_state.freezed.dart": {
-    "mtime": 1781830719.501472,
-    "ast_hash": "cac04416a30cfcc689cb0c00e05647e1",
+    "mtime": 1781909422.3584301,
+    "ast_hash": "497b3d82cf4b4863da24d5d4f26c468c",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_category_chips.dart": {
@@ -3905,18 +3855,18 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_category_places_list.dart": {
-    "mtime": 1781831354.0633893,
-    "ast_hash": "8243c781b5b98edb7207704b535131f6",
+    "mtime": 1781892892.9803007,
+    "ast_hash": "4e0bc81b34bf8eaa94f6dbd7faa44837",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_hidden_gems_section.dart": {
-    "mtime": 1781831666.7850032,
-    "ast_hash": "4906e5903ffeb96129b724ad905fa223",
+    "mtime": 1781892930.1186526,
+    "ast_hash": "87c2d36021b5b0f7bfc0b08b24c08e6b",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\home\\presentation\\widgets\\home_recommended_section.dart": {
-    "mtime": 1781831353.8729844,
-    "ast_hash": "e95909fddc9295ca1e869c3ca6a75d21",
+    "mtime": 1781901008.2660894,
+    "ast_hash": "1091f7fd5bee546489b86b9e1a48a9cf",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\itinerary\\data\\datasources\\itinerary_data_source.dart": {
@@ -3935,18 +3885,18 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\data\\models\\get_places_request_model.dart": {
-    "mtime": 1781814742.6837678,
-    "ast_hash": "08c81798350cd4715046b32402b72f8f",
+    "mtime": 1781895794.5259686,
+    "ast_hash": "7aec617213d6c71663c5e9fc23cac62c",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\data\\models\\popular_places_request_model.dart": {
-    "mtime": 1781759795.8774755,
-    "ast_hash": "436dc9331e82f47ef6ce398f6e842f96",
+    "mtime": 1781895418.506397,
+    "ast_hash": "9a493d1eb52ee731156a1031e892b6d1",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\data\\models\\recommendation_places_request_model.dart": {
-    "mtime": 1781759802.329553,
-    "ast_hash": "9a1f15b1836c9f5f692c0479566c7449",
+    "mtime": 1781901772.386114,
+    "ast_hash": "75b33c1aa89250c9fe61e52f7622faa8",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\domain\\entity\\place_entity.dart": {
@@ -3960,12 +3910,12 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\presentation\\recommended_places\\cubit\\recommended_places_cubit.dart": {
-    "mtime": 1781797190.9671748,
-    "ast_hash": "d5328ff1146fe18a23c7d14a484ec9d1",
+    "mtime": 1781897980.8424184,
+    "ast_hash": "67e914f28fd7da0ff38b4bdd3f96c273",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\presentation\\recommended_places\\cubit\\recommended_places_cubit.freezed.dart": {
-    "mtime": 1781830041.9461586,
+    "mtime": 1781909422.3619416,
     "ast_hash": "1d481b83211006d4ab01f62b80c96904",
     "semantic_hash": ""
   },
@@ -3975,13 +3925,13 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\presentation\\screen\\recommended_places_screen.dart": {
-    "mtime": 1781831354.1941805,
-    "ast_hash": "8855d944884dc02613cd33b3bd98cda8",
+    "mtime": 1781898412.867592,
+    "ast_hash": "e3a3e3571b5919c71f7b95a1763ba07d",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\presentation\\widgets\\recommended_grid.dart": {
-    "mtime": 1781831354.062389,
-    "ast_hash": "1d701f410b4d577aecb17726cc425365",
+    "mtime": 1781901880.932942,
+    "ast_hash": "115e8ac19515cf003a10236986646526",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\places\\routes\\recommended_places_routes.dart": {
@@ -3990,7 +3940,7 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\place_details\\presentation\\cubit\\place_details_state.freezed.dart": {
-    "mtime": 1781890046.120505,
+    "mtime": 1781909422.3609424,
     "ast_hash": "6dd1e67b59522fca056b3dc9d819e898",
     "semantic_hash": ""
   },
@@ -4010,8 +3960,8 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\user\\data\\datasources\\user_remote_data_source.dart": {
-    "mtime": 1781831353.8642285,
-    "ast_hash": "ceb9646837b6679342e88a28266f3c4b",
+    "mtime": 1781901039.1508334,
+    "ast_hash": "e5ae3bb36869ebfe1c6a97a9063fd178",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\user\\data\\mapper\\user_mapper.dart": {
@@ -4030,12 +3980,12 @@
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\user\\data\\models\\user_model.freezed.dart": {
-    "mtime": 1781835752.4820056,
+    "mtime": 1781909422.3619416,
     "ast_hash": "6c4958dd1a4417491edcb8368918116d",
     "semantic_hash": ""
   },
   "D:\\GitHub\\MindTrip\\lib\\features\\user\\data\\models\\user_model.g.dart": {
-    "mtime": 1781835752.484093,
+    "mtime": 1781909422.3890417,
     "ast_hash": "aa7b85f00b84f36044345cff192ae270",
     "semantic_hash": ""
   },
@@ -4197,6 +4147,166 @@
   "D:\\GitHub\\MindTrip\\errors.txt": {
     "mtime": 1781716894.2520213,
     "ast_hash": "545be5f19ea14cfab3e460644de4389c",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\core\\utils\\bloc_transformers.dart": {
+    "mtime": 1781918150.931594,
+    "ast_hash": "c1e97b091bb77975a095405f602116f2",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\bloc\\debounce_restartable.dart": {
+    "mtime": 1781912822.577033,
+    "ast_hash": "c1e97b091bb77975a095405f602116f2",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\bloc\\map_search_bloc.dart": {
+    "mtime": 1781932164.2260482,
+    "ast_hash": "5822edb905741aa95e7c657ddb670d9f",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\bloc\\map_search_event.dart": {
+    "mtime": 1781912841.9770167,
+    "ast_hash": "fb85ec31a0dde9c13e3b5322604fcf92",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\bloc\\map_search_state.dart": {
+    "mtime": 1781911299.876974,
+    "ast_hash": "007496541157825ef6e6d62207430913",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\map\\presentation\\bloc\\map_search_state.freezed.dart": {
+    "mtime": 1781911358.0089798,
+    "ast_hash": "554d47a16b660a061693de4b4d7cd751",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\data\\datasources\\search_local_data_source.dart": {
+    "mtime": 1781918995.9242685,
+    "ast_hash": "c62e8271a7a4749f1c10809031a8be1a",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\data\\datasources\\search_remote_data_source.dart": {
+    "mtime": 1781917952.5110621,
+    "ast_hash": "b45bdae4ccb97a7e8286737f15669af0",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\data\\mapper\\search_mapper.dart": {
+    "mtime": 1781918150.935105,
+    "ast_hash": "81051bcc2cf1bedf378224b0a93e2877",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\data\\models\\recent_search_model.dart": {
+    "mtime": 1781917194.2202964,
+    "ast_hash": "9eace37d6ecadc5e5f21b32ca2758e18",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\data\\models\\recent_search_model.g.dart": {
+    "mtime": 1781917233.874046,
+    "ast_hash": "4101a88b9018b0642ff215348a9d04e1",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\data\\models\\search_places_request_model.dart": {
+    "mtime": 1781919290.9571662,
+    "ast_hash": "1980a4f868992fee6f82f328e24a9a3c",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\data\\repositories\\search_repository_impl.dart": {
+    "mtime": 1781919364.3737905,
+    "ast_hash": "85f4bd4058c0ba0418e24acc8e74b188",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\di\\search_di.dart": {
+    "mtime": 1781919372.73949,
+    "ast_hash": "2b0c34472c7ed52742fed7e044375ecf",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\domain\\entity\\recent_search_entity.dart": {
+    "mtime": 1781916433.0556586,
+    "ast_hash": "1f3148d645eeee48987b30972260d871",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\domain\\repositories\\search_repository.dart": {
+    "mtime": 1781917943.3958678,
+    "ast_hash": "e35601e0e31e7c52a37170ec423c42b1",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\domain\\use_cases\\clear_recent_searches_use_case.dart": {
+    "mtime": 1781919051.7939107,
+    "ast_hash": "89259431c11712aeb6973dadb08144a8",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\domain\\use_cases\\get_recent_searches_use_case.dart": {
+    "mtime": 1781919026.1737409,
+    "ast_hash": "c31ba3c070cf94eb58549de60c195d27",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\domain\\use_cases\\save_recent_search_use_case.dart": {
+    "mtime": 1781919038.8760421,
+    "ast_hash": "8f51136f591874c98ff2b46c94760a04",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\domain\\use_cases\\search_places_use_case.dart": {
+    "mtime": 1781919328.747548,
+    "ast_hash": "05d4bc22c61a48acc920d0fa0d896883",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\presentation\\bloc\\global_search_bloc.dart": {
+    "mtime": 1781923511.9761982,
+    "ast_hash": "da9d7fe8422e3c73ccda244d9e08989d",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\presentation\\bloc\\global_search_event.dart": {
+    "mtime": 1781916734.7990758,
+    "ast_hash": "f1a789c4138c5d776250ada3952ef760",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\presentation\\bloc\\global_search_state.dart": {
+    "mtime": 1781916966.5678666,
+    "ast_hash": "543bdca75a35134280069c683da203d9",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\presentation\\bloc\\global_search_state.freezed.dart": {
+    "mtime": 1781917233.874046,
+    "ast_hash": "2ec488a21c188084595e1bf1f493baef",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\presentation\\screens\\global_search_screen.dart": {
+    "mtime": 1781933302.0686407,
+    "ast_hash": "d259fb94abeb0e74c6f95ae334451cb6",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\presentation\\screens\\voice_search_screen.dart": {
+    "mtime": 1781934695.7153745,
+    "ast_hash": "ecf91a67bc3fe4b7731f170f2382d804",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\presentation\\widgets\\search_place_card.dart": {
+    "mtime": 1781916656.027694,
+    "ast_hash": "7bd5af2774964c9ecd78ef2d210402d6",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\lib\\features\\search\\routes\\search_routes.dart": {
+    "mtime": 1781934713.6330197,
+    "ast_hash": "ecea599958259f7b9cb1ff35f51b3a94",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\assets\\images\\banner\\banner_1.webp": {
+    "mtime": 1781902282.7647963,
+    "ast_hash": "ee37c9fa8cf0dd6f5a2a68c338a0b7a9",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\assets\\images\\banner\\banner_2.webp": {
+    "mtime": 1781902282.7723289,
+    "ast_hash": "fff1b1319edc31ada319a45a35661443",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\assets\\images\\banner\\banner_3.webp": {
+    "mtime": 1781902282.779911,
+    "ast_hash": "55824a79402db4283f2bebfd1bdc6f9c",
+    "semantic_hash": ""
+  },
+  "D:\\GitHub\\MindTrip\\assets\\images\\banner\\banner_4.webp": {
+    "mtime": 1781902282.7496715,
+    "ast_hash": "69881860f43b4948085f71813d09ca39",
     "semantic_hash": ""
   }
 }

@@ -11,6 +11,12 @@
 
     <!-- Android 12 and lower -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    
+    <!-- Speech Recognition -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 
 
     <!-- Facebook queries -->
@@ -26,6 +32,14 @@
     <intent>
         <action android:name="android.intent.action.VIEW" />
         <data android:scheme="https" />
+    </intent>
+
+    <!-- Required for Speech Recognition -->
+    <intent>
+        <action android:name="android.intent.action.RECOGNIZE_SPEECH" />
+    </intent>
+    <intent>
+        <action android:name="android.speech.RecognitionService" />
     </intent>
 
 </queries>

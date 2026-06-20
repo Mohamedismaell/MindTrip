@@ -11,33 +11,54 @@ import 'package:mindtrip/features/authetication/presentation/screens/sign_up_scr
 
 class AuthRoutes {
   static List<RouteBase> routes = [
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.login,
-      page: const SignInScreen(),
+      builder: (context, state) {
+        return const SignInScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.signup,
-      page: const SignUpScreen(),
+      builder: (context, state) {
+        return const SignUpScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.forgetPassword,
-      page: const ForgetPasswordScreen(),
+      builder: (context, state) {
+        return const ForgetPasswordScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.otpVerification,
-      page: const OtpScreen(),
+      builder: (context, state) {
+        return const OtpScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.resetPassword,
-      page: const ResetPasswordScreen(),
+      builder: (context, state) {
+        return const ResetPasswordScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.completeSignUpScreen,
-      page: const CompleteSignUpScreen(),
+      builder: (context, state) {
+        return const CompleteSignUpScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.completeResetPasswordScreen,
-      page: const CompleteResetPassword(),
+      builder: (context, state) {
+        return const CompleteResetPassword();
+      },
+      transition: AppTransitionRoute.fade,
     ),
   ];
 }

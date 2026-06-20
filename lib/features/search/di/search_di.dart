@@ -8,6 +8,8 @@ import 'package:mindtrip/features/search/domain/use_cases/save_recent_search_use
 import 'package:mindtrip/features/search/domain/use_cases/clear_recent_searches_use_case.dart';
 import 'package:mindtrip/features/search/domain/use_cases/search_places_use_case.dart';
 import 'package:mindtrip/features/search/presentation/bloc/global_search_bloc.dart';
+import 'package:mindtrip/features/search/presentation/cubit/voice_search_cubit.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class SearchDi {
   SearchDi._();
@@ -40,7 +42,6 @@ class SearchDi {
       () => ClearRecentSearchesUseCase(sl()),
     );
 
-    //! Bloc
     sl.registerFactory<GlobalSearchBloc>(
       () => GlobalSearchBloc(
         searchPlacesUseCase: sl(),
@@ -49,5 +50,8 @@ class SearchDi {
         clearRecentSearchesUseCase: sl(),
       ),
     );
+
+    sl.registerLazySingleton<SpeechToText>(() => SpeechToText());
+    sl.registerFactory<VoiceSearchCubit>(() => VoiceSearchCubit(sl()));
   }
 }

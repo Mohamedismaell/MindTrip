@@ -9,30 +9,48 @@ import 'package:mindtrip/features/profile/presentation/screens/settings_screen.d
 import 'package:mindtrip/features/profile/presentation/screens/terms_of_service_screen.dart';
 
 class ProfileRoutes {
-  static final profileRoute = AppTransitionRoute.fadeSlide(
+  static final profileRoute = AppTransitionRoute.custom(
     path: AppRoutes.profile,
-    page: const ProfileScreen(),
+    builder: (context, state) {
+      return const ProfileScreen();
+    },
+    transition: AppTransitionRoute.fade,
   );
   static List<RouteBase> routes = [
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.editProfile,
-      page: const EditProfileScreen(),
+      builder: (context, state) {
+        return const EditProfileScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.profileSettings,
-      page: const SettingsScreen(),
+      builder: (context, state) {
+        return const SettingsScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.profileTerms,
-      page: const TermsOfServiceScreen(),
+      builder: (context, state) {
+        return const TermsOfServiceScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.profilePolicy,
-      page: const UserPolicyScreen(),
+      builder: (context, state) {
+        return const UserPolicyScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
-    AppTransitionRoute.fadeSlide(
+    AppTransitionRoute.custom(
       path: AppRoutes.profileFaq,
-      page: const FaqScreen(),
+      builder: (context, state) {
+        return const FaqScreen();
+      },
+      transition: AppTransitionRoute.fade,
     ),
   ];
 }

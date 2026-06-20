@@ -25,7 +25,7 @@ class MapRoutes {
         );
       },
       routes: [
-        AppTransitionRoute.fadeSlideBuilder(
+        AppTransitionRoute.custom(
           path: AppRoutes.map,
           builder: (context, state) {
             final extra = state.extra;
@@ -39,10 +39,12 @@ class MapRoutes {
               return const MapScreen();
             }
           },
+          transition: AppTransitionRoute.fadeSlide,
           routes: [
-            AppTransitionRoute.slideTopBuilder(
+            AppTransitionRoute.custom(
               path: "search",
               builder: (_, _) => const MapSearchOverlay(),
+              transition: AppTransitionRoute.slideTop,
             ),
           ],
         ),

@@ -16,8 +16,6 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
   CancelToken? _autocompleteToken;
   CancelToken? _detailsToken;
 
-
-
   MapSearchBloc({
     required FindAutocompletePredictionsUseCase
     findAutocompletePredictionsUseCase,
@@ -72,7 +70,6 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
         ),
       );
     }
-
 
     final token = _replaceAutocompleteToken();
 
