@@ -6,7 +6,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/map/data/models/map_trip_extra.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
+import 'package:mindtrip/features/map/presentation/bloc/map_search_bloc.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/screens/map_screen.dart';
 import 'package:mindtrip/features/map/presentation/screens/map_search_overlay.dart';
@@ -18,7 +18,7 @@ class MapRoutes {
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => sl<MapCubit>()),
-            BlocProvider(create: (context) => sl<MapSearchCubit>()),
+            BlocProvider(create: (context) => sl<MapSearchBloc>()),
             BlocProvider(create: (context) => sl<MapNavigationCubit>()),
           ],
           child: child,

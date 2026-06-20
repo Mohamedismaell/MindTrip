@@ -7,8 +7,9 @@ import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
+import 'package:mindtrip/features/map/presentation/bloc/map_search_bloc.dart';
+import 'package:mindtrip/features/map/presentation/bloc/map_search_event.dart';
+import 'package:mindtrip/features/map/presentation/bloc/map_search_state.dart';
 
 class MapSearchOverlay extends StatefulWidget {
   const MapSearchOverlay({super.key});
@@ -28,7 +29,9 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
   }
 
   void _onSearchChanged() {
-    context.read<MapSearchCubit>().search(_searchController.text);
+    context.read<MapSearchBloc>().add(
+      SearchQueryChanged(_searchController.text),
+    );
   }
 
   @override
@@ -63,7 +66,9 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                       children: [
                         TapScaleEffect(
                           onTap: () {
-                            context.read<MapSearchCubit>().clearSearch();
+                            context.read<MapSearchBloc>().add(
+                              const SearchCleared(),
+                            );
                             context.pop();
                           },
                           child: Container(
@@ -133,24 +138,34 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
 
             // Search Results
             Expanded(
-              child: BlocConsumer<MapSearchCubit, MapSearchState>(
-                // buildWhen: (previous, current) =>
-                //     previous.autocompletePredictions !=
-                //         current.autocompletePredictions ||
-                //     previous.isSearchLoading != current.isSearchLoading ||
-                //     previous.searchError != current.searchError,
+              child: BlocConsumer<MapSearchBloc, MapSearchState>(
                 listenWhen: (previous, current) =>
-                    previous.searchStatus != current.searchStatus,
-                listener: (BuildContext context, MapSearchState state) {
-                  if (state.searchStatus == MapSearchStatus.error) {
+                    previous.autocompleteStatus != current.autocompleteStatus ||
+                    previous.placeDetailsStatus != current.placeDetailsStatus,
+                listener: (context, state) {
+                  if (state.autocompleteStatus == MapSearchStatus.error) {
                     AppSnackBar.showError(
                       context: context,
-                      message: state.searchErrorMessage!,
+                      message: state.autocompleteErrorMessage!,
                     );
                   }
+                  if (state.placeDetailsStatus == MapSearchStatus.error) {
+                    AppSnackBar.showError(
+                      context: context,
+                      message: state.placeDetailsErrorMessage!,
+                    );
+                  }
+                  // Dismiss overlay when a place has been resolved
+                  if (state.placeDetailsStatus == MapSearchStatus.success &&
+                      state.resolvedSearchPlace != null) {
+                    context.pop();
+                  }
+                  // if (state.resolvedSearchPlace != null) {
+                  //   context.pop();
+                  // }
                 },
                 builder: (context, state) {
-                  if (state.searchStatus == MapSearchStatus.loading &&
+                  if (state.isAutocompletLoading &&
                       state.autocompletePredictions.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
@@ -215,15 +230,10 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                                 overflow: TextOverflow.ellipsis,
                               )
                             : null,
-                        onTap: () async {
-                          final cubit = context.read<MapSearchCubit>();
-                          final place = await cubit.resolveAutocompleteResult(
-                            suggestion.placeId,
+                        onTap: () {
+                          context.read<MapSearchBloc>().add(
+                            PredictionSelected(suggestion.placeId),
                           );
-
-                          if (place != null && context.mounted) {
-                            context.pop(); // close overlay
-                          }
                         },
                       );
                     },

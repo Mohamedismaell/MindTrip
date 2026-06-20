@@ -14,7 +14,7 @@ import '../data/repositories/google_places_repository_impl.dart';
 import '../domain/repositories/map_route_repository.dart';
 import '../domain/repositories/google_places_repository.dart';
 import '../presentation/cubit/map_cubit.dart';
-import '../presentation/cubit/map_search_cubit.dart';
+import '../presentation/bloc/map_search_bloc.dart';
 import '../presentation/cubit/map_navigation_cubit.dart';
 
 class MapDi {
@@ -64,8 +64,8 @@ class MapDi {
         fetchPlacePhotoUrlsUseCase: sl<FetchPlacePhotoUrlsUseCase>(),
       ),
     );
-    sl.registerFactory<MapSearchCubit>(
-      () => MapSearchCubit(
+    sl.registerFactory<MapSearchBloc>(
+      () => MapSearchBloc(
         findAutocompletePredictionsUseCase:
             sl<FindAutocompletePredictionsUseCase>(),
         fetchPlaceDetailsUseCase: sl<FetchPlaceDetailsUseCase>(),

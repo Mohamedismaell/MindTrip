@@ -4,8 +4,9 @@ import 'package:mindtrip/features/map/presentation/controllers/map_controller.da
 import 'package:mindtrip/features/map/presentation/cubit/map_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_cubit.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_navigation_state.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_search_cubit.dart';
-import 'package:mindtrip/features/map/presentation/cubit/map_search_state.dart';
+import 'package:mindtrip/features/map/presentation/bloc/map_search_bloc.dart';
+import 'package:mindtrip/features/map/presentation/bloc/map_search_event.dart';
+import 'package:mindtrip/features/map/presentation/bloc/map_search_state.dart';
 import 'package:mindtrip/features/map/presentation/cubit/map_state.dart';
 
 class MapListener extends StatelessWidget {
@@ -38,7 +39,7 @@ class MapListener extends StatelessWidget {
         ),
 
         //  Search result resolved → show on map
-        BlocListener<MapSearchCubit, MapSearchState>(
+        BlocListener<MapSearchBloc, MapSearchState>(
           listenWhen: (prev, curr) =>
               prev.resolvedSearchPlace != curr.resolvedSearchPlace &&
               curr.resolvedSearchPlace != null,
@@ -46,7 +47,9 @@ class MapListener extends StatelessWidget {
             final result = state.resolvedSearchPlace!;
             if (context.mounted) {
               context.read<MapCubit>().showGooglePlaceDetails(result);
-              context.read<MapSearchCubit>().clearResolvedSearchResult();
+              context
+                  .read<MapSearchBloc>()
+                  .add(const ClearResolvedPlace());
             }
           },
         ),
@@ -65,7 +68,7 @@ class MapListener extends StatelessWidget {
         ),
 
         //  Nearby places pins
-        BlocListener<MapSearchCubit, MapSearchState>(
+        BlocListener<MapSearchBloc, MapSearchState>(
           listenWhen: (prev, curr) => prev.nearbyPlaces != curr.nearbyPlaces,
           listener: (context, state) async {
             if (state.nearbyPlaces.isNotEmpty) {
