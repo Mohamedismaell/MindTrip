@@ -27,6 +27,8 @@ class RouteRegister {
     AppRouteConfig(path: AppRoutes.home, flow: AppFlow.app),
     //! recommended
     AppRouteConfig(path: AppRoutes.recommendedPlaces, flow: AppFlow.app),
+    //! search
+    AppRouteConfig(path: AppRoutes.globalSearch, flow: AppFlow.app),
     //! favorites
     AppRouteConfig(path: AppRoutes.favorites, flow: AppFlow.app),
     //! explore

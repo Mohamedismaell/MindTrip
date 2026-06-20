@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/data/models/banner_model.dart';
 import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_model.dart';
+import 'package:mindtrip/features/search/data/models/recent_search_model.dart';
 
 class AppHive {
   static late Box onboardingBox;
@@ -18,6 +19,7 @@ class AppHive {
   static late Box<BannerModel> bannersBox;
   static late Box<PlannerPreviewModel> plannerPreviewsBox;
   static late Box<List<String>> metadataBox;
+  static late Box<RecentSearchModel> recentSearchBox;
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -50,6 +52,9 @@ class AppHive {
     if (!Hive.isAdapterRegistered(PlannerPreviewModelAdapter().typeId)) {
       Hive.registerAdapter(PlannerPreviewModelAdapter());
     }
+    if (!Hive.isAdapterRegistered(RecentSearchModelAdapter().typeId)) {
+      Hive.registerAdapter(RecentSearchModelAdapter());
+    }
   }
 
   static Future<void> openBoxes() async {
@@ -65,6 +70,7 @@ class AppHive {
       'plannerPreviewsBox',
     );
     metadataBox = await Hive.openBox<List<String>>('metadataBox');
+    recentSearchBox = await Hive.openBox<RecentSearchModel>('recentSearchBox');
   }
 
   static Future<void> clearBoxes() async {
@@ -77,5 +83,6 @@ class AppHive {
     bannersBox.clear();
     plannerPreviewsBox.clear();
     metadataBox.clear();
+    recentSearchBox.clear();
   }
 }

@@ -50,7 +50,8 @@ class _ExplorePlacesGridState extends State<ExplorePlacesGrid> {
           previous.filteredPlacesStatus != current.filteredPlacesStatus ||
           previous.filteredPlaces != current.filteredPlaces,
       builder: (context, state) {
-        if (state.filteredPlacesStatus.isFailure) {
+        if (state.filteredPlacesStatus.isFailure &&
+            state.filteredPlacesStatus != ExploreDataStatus.loading) {
           return SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 40.h),

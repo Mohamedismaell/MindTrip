@@ -5,7 +5,7 @@ import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_details_use_case.dart';
 import 'package:mindtrip/features/map/domain/use_cases/find_autocomplete_predictions_use_case.dart';
 
-import 'debounce_restartable.dart';
+import 'package:mindtrip/core/utils/bloc_transformers.dart';
 import 'map_search_event.dart';
 import 'map_search_state.dart';
 

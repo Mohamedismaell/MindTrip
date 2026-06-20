@@ -17,14 +17,6 @@ abstract class PlaceRepository {
     CancelToken? cancelToken,
   );
 
-  Future<Result<PaginatedResponse<PlaceEntity>>> searchPlaces({
-    String? query,
-    Map<String, dynamic>? filters,
-    int page = 1,
-    int limit = 10,
-    CancelToken? cancelToken,
-  });
-
   Future<Result<PaginatedResponse<PlaceEntity>>> getPlaces({
     required GetPlacesRequestModel request,
     CancelToken? cancelToken,

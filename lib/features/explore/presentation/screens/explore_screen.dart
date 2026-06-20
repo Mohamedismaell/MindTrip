@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_search_bar.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_refresh_indicator.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
@@ -40,7 +42,11 @@ class ExploreScreen extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: AppSearchBar(
                     hintText: 'Destinations, trips, activities...',
-                    onTap: () {},
+                    heroTag: 'explore_search_bar_hero',
+                    onTap: () => context.push(
+                      AppRoutes.globalSearch,
+                      extra: 'explore_search_bar_hero',
+                    ),
                     onVoiceTap: () {},
                   ),
                 ),

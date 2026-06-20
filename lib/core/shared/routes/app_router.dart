@@ -21,6 +21,7 @@ import 'package:mindtrip/features/places/presentation/recommended_places/cubit/r
 import 'package:mindtrip/features/places/routes/recommended_places_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
 import 'package:mindtrip/features/place_details/routes/place_details_routes.dart';
+import 'package:mindtrip/features/search/routes/search_routes.dart';
 
 class AppRouter {
   final AppGateCubit appGateCubit;
@@ -61,6 +62,7 @@ class AppRouter {
           ...ProfileRoutes.routes,
           ...MapRoutes.routes,
           ...PlaceDetailsRoutes.routes,
+          ...SearchRoutes.routes,
 
           // ...CategoriesRoutes.extraRoutes,
           // ...PostDetailsRoutes.routes,

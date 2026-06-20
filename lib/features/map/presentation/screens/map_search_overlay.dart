@@ -160,9 +160,6 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                       state.resolvedSearchPlace != null) {
                     context.pop();
                   }
-                  // if (state.resolvedSearchPlace != null) {
-                  //   context.pop();
-                  // }
                 },
                 builder: (context, state) {
                   if (state.isAutocompletLoading &&

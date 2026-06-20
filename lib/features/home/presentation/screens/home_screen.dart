@@ -59,7 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverToBoxAdapter(
                   child: AppSearchBar(
                     hintText: 'Destinations, trips, activities...',
-                    onTap: () {},
+                    heroTag: 'home_search_bar_hero',
+                    onTap: () => context.push(
+                      AppRoutes.globalSearch,
+                      extra: 'home_search_bar_hero',
+                    ),
                     onVoiceTap: () {},
                   ),
                 ),

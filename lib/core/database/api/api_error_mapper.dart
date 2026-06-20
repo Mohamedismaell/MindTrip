@@ -33,7 +33,9 @@ class ApiErrorMapper {
 
       return ServerFailure(e.description ?? 'Google sign in failed');
     }
-
+    if (e is CacheFailure) {
+      return CacheFailure(message: 'Failed to access local cache');
+    }
     if (e is SocketException) {
       return NetworkFailure(message: 'No internet connection');
     }

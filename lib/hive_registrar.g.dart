@@ -10,6 +10,7 @@ import 'package:mindtrip/core/shared/data/models/banner_model.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
+import 'package:mindtrip/features/search/data/models/recent_search_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 
 extension HiveRegistrar on HiveInterface {
@@ -22,6 +23,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(PlaceModelAdapter());
     registerAdapter(PlannerPreviewModelAdapter());
     registerAdapter(PlannerStopModelAdapter());
+    registerAdapter(RecentSearchModelAdapter());
     registerAdapter(TripModelAdapter());
   }
 }
@@ -36,6 +38,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(PlaceModelAdapter());
     registerAdapter(PlannerPreviewModelAdapter());
     registerAdapter(PlannerStopModelAdapter());
+    registerAdapter(RecentSearchModelAdapter());
     registerAdapter(TripModelAdapter());
   }
 }
