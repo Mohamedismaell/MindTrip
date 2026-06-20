@@ -47,7 +47,6 @@ class ExploreScreen extends StatelessWidget {
                       AppRoutes.globalSearch,
                       extra: 'explore_search_bar_hero',
                     ),
-                    onVoiceTap: () {},
                   ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),

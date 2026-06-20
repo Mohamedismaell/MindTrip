@@ -1,8 +1,8 @@
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
-import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
+import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart';
 import 'package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart';

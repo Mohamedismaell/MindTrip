@@ -162,6 +162,7 @@ class MapCubit extends Cubit<MapState> {
       description: place.editorialSummary,
       rating: place.rating,
       reviewCount: place.userRatingCount,
+      isHiddenGem: false,
     );
 
     final newEntry = MapAnnotationEntry(

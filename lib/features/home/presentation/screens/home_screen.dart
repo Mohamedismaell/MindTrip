@@ -13,7 +13,6 @@ import 'package:mindtrip/features/home/presentation/widgets/home_category_places
 import 'package:mindtrip/features/home/presentation/widgets/home_header.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_recommended_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_hidden_gems_section.dart';
-import 'package:mindtrip/features/home/presentation/widgets/home_search_bar.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_section_header.dart';
 import 'package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart';
 
@@ -64,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       AppRoutes.globalSearch,
                       extra: 'home_search_bar_hero',
                     ),
-                    onVoiceTap: () {},
                   ),
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 20.h)),

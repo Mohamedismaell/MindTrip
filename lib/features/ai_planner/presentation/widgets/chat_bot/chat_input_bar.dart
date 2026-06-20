@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/voice_input_button.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_attachment_button.dart';
 
@@ -243,16 +244,29 @@ class ChatInputBar extends StatelessWidget {
                                       ),
                                     ),
                                   )
-                                : VoiceInputButton(
+                                : GestureDetector(
                                     key: const ValueKey('voice_button'),
-
-                                    onResult: (result) {
-                                      controller.text = result;
-
-                                      _handleSend();
+                                    onTap: () async {
+                                      final result = await context.push<String>(
+                                        AppRoutes.voiceSearch,
+                                      );
+                                      if (result != null && result.isNotEmpty) {
+                                        controller.text = result;
+                                        _handleSend();
+                                      }
                                     },
-
-                                    activeColor: context.colorTheme.primary,
+                                    child: Container(
+                                      padding: EdgeInsets.all(8.r),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: AppColors.blueLightGradient,
+                                      ),
+                                      child: Icon(
+                                        Icons.mic_rounded,
+                                        size: 24.sp,
+                                        color: AppColors.pureWhite,
+                                      ),
+                                    ),
                                   ),
                           ),
                         ],

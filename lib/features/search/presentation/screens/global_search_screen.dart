@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_search_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
+import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/search/presentation/bloc/global_search_bloc.dart';
 import 'package:mindtrip/features/search/presentation/bloc/global_search_event.dart';
@@ -76,7 +78,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                   TapScaleEffect(
                     onTap: () => context.pop(),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColors.pureWhite,
                         shape: BoxShape.circle,
                       ),
@@ -91,140 +93,24 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                   ),
                   8.horizontalSpace,
                   Expanded(
-                    child: Hero(
-                      tag: widget.heroTag,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Container(
-                          height: 50.h,
-                          padding: EdgeInsets.symmetric(horizontal: 14.w),
-                          decoration: BoxDecoration(
-                            color: context.colorTheme.surface,
-                            borderRadius: BorderRadius.circular(30.r),
-                            border: Border.all(
-                              color: context.colorTheme.outline.withValues(
-                                alpha: 0.45,
-                              ),
-                              width: 0.8,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.search_rounded,
-                                size: 20.sp,
-                                color: context.colorTheme.outline,
-                              ),
-                              10.horizontalSpace,
-                              Expanded(
-                                child: TextField(
-                                  controller: _searchController,
-                                  focusNode: _focusNode,
-                                  onChanged: (query) {
-                                    context.read<GlobalSearchBloc>().add(
-                                      SearchQueryChanged(query),
-                                    );
-                                    setState(() {});
-                                  },
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        'Destinations, trips, activities...',
-                                    hintStyle: context.textTheme.bodyMedium
-                                        ?.copyWith(
-                                          fontSize: 13.sp,
-                                          color: context.colorTheme.outline,
-                                        ),
-                                    border: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    disabledBorder: InputBorder.none,
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.zero,
-                                  ),
-                                  style: context.textTheme.bodyMedium?.copyWith(
-                                    fontSize: 13.sp,
-                                  ),
-                                ),
-                              ),
-                              8.horizontalSpace,
-                              if (_searchController.text.isNotEmpty)
-                                GestureDetector(
-                                  onTap: () {
-                                    _searchController.clear();
-                                    context.read<GlobalSearchBloc>().add(
-                                      const ClearSearch(),
-                                    );
-                                    setState(() {});
-                                  },
-                                  child: Icon(
-                                    Icons.close_rounded,
-                                    size: 20.sp,
-                                    color: context.colorTheme.outline,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    child: AppSearchBar(
+                      controller: _searchController,
+                      focusNode: _focusNode,
+                      autofocus: false,
+                      heroTag: widget.heroTag,
+                      hintText: 'Destinations, trips, activities...',
+                      onChanged: (query) {
+                        context.read<GlobalSearchBloc>().add(
+                          SearchQueryChanged(query),
+                        );
+                        setState(() {});
+                      },
+                      onClear: () {
+                        context.read<GlobalSearchBloc>().add(
+                          const ClearSearch(),
+                        );
+                      },
                     ),
-                  ),
-                  AnimatedSize(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: _searchController.text.isEmpty
-                        ? Row(
-                            children: [
-                              12.horizontalSpace,
-                              GestureDetector(
-                                onTap: () async {
-                                  // Unfocus keyboard before showing overlay
-                                  _focusNode.unfocus();
-
-                                  final result = await context.push<String>(
-                                    AppRoutes.voiceSearch,
-                                  );
-
-                                  if (result != null && result.isNotEmpty) {
-                                    _searchController.text = result;
-                                    _searchController
-                                        .selection = TextSelection.fromPosition(
-                                      TextPosition(
-                                        offset: _searchController.text.length,
-                                      ),
-                                    );
-                                    if (mounted) {
-                                      context.read<GlobalSearchBloc>().add(
-                                        SearchQueryChanged(result),
-                                      );
-                                      setState(() {});
-
-                                      // Optional: Refocus field if desired
-                                      // _focusNode.requestFocus();
-                                    }
-                                  } else {
-                                    // Refocus field if null/empty returned
-                                    if (mounted) {
-                                      _focusNode.requestFocus();
-                                    }
-                                  }
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(8.sp),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: AppColors.blueLightGradient,
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.mic_rounded,
-                                    color: AppColors.pureWhite,
-                                    size: 22.sp,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
                   ),
                 ],
               ),
@@ -306,7 +192,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                                 );
                                 //Todo maybe change to gos
                                 context.push(
-                                  AppRoutes.placeDetails,
+                                  '${AppRoutes.placeDetails}?placeId=${place.id}&heroTag=rec_${place.id}',
                                   extra: place,
                                 );
                               },
@@ -332,13 +218,13 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
           return _buildPlaceholder();
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 26.w, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Recent Searches',
@@ -346,64 +232,74 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
+                  Spacer(),
+                  TapScaleEffect(
+                    onTap: () {
                       context.read<GlobalSearchBloc>().add(
                         const ClearRecentSearches(),
                       );
                     },
                     child: Text(
                       'Clear',
-                      style: context.textTheme.bodySmall?.copyWith(
+                      style: AppTextStyles.h9SemiBold.copyWith(
                         color: context.colorTheme.primary,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                itemCount: state.recentSearches.length,
-                separatorBuilder: (context, index) => Divider(
-                  height: 1.h,
-                  color: context.colorTheme.outline.withValues(alpha: 0.1),
-                ),
-                itemBuilder: (context, index) {
-                  final search = state.recentSearches[index];
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.history_rounded,
-                      size: 20.sp,
-                      color: context.colorTheme.outline,
+              12.verticalSpace,
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+
+                  child: ListView.separated(
+                    itemCount: state.recentSearches.length,
+                    separatorBuilder: (context, index) => Divider(
+                      height: 1.h,
+                      color: context.colorTheme.outline.withValues(alpha: 0.1),
                     ),
-                    title: Text(
-                      search.query,
-                      style: context.textTheme.bodyMedium,
-                    ),
-                    onTap: () {
-                      _searchController.text = search.query;
-                      _searchController.selection = TextSelection.fromPosition(
-                        TextPosition(offset: _searchController.text.length),
+                    itemBuilder: (context, index) {
+                      final search = state.recentSearches[index];
+                      return TapScaleEffect(
+                        onTap: () {
+                          _searchController.text = search.query;
+                          _searchController
+                              .selection = TextSelection.fromPosition(
+                            TextPosition(offset: _searchController.text.length),
+                          );
+                          context.read<GlobalSearchBloc>().add(
+                            SearchQueryChanged(search.query),
+                          );
+                          _focusNode.unfocus();
+                        },
+                        child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(
+                            Icons.history_rounded,
+                            size: 20.sp,
+                            color: context.colorTheme.outline,
+                          ),
+                          title: Text(
+                            search.query,
+                            style: context.textTheme.bodyMedium,
+                          ),
+
+                          trailing: Icon(
+                            Icons.north_west_rounded,
+                            size: 24.sp,
+                            color: context.colorTheme.outline.withValues(
+                              alpha: 0.5,
+                            ),
+                          ),
+                        ),
                       );
-                      context.read<GlobalSearchBloc>().add(
-                        SearchQueryChanged(search.query),
-                      );
-                      setState(() {});
                     },
-                    trailing: Icon(
-                      Icons.north_west_rounded,
-                      size: 16.sp,
-                      color: context.colorTheme.outline.withValues(alpha: 0.5),
-                    ),
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

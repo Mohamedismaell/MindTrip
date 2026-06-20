@@ -13,7 +13,10 @@ class PlaceEntity extends Equatable {
   final double? rating;
   final int? reviewCount;
   final double? price;
-  final PlaceBadge badge;
+  final String? openingHours;
+  final String? isOpened;
+  // final PlaceBadge badge;
+  final bool? isHiddenGem;
   //* ========= Ui Helper =========
   final bool isFavorite;
 
@@ -27,8 +30,11 @@ class PlaceEntity extends Equatable {
     this.rating = 0.0,
     this.reviewCount = 0,
     this.price,
-    this.badge = PlaceBadge.none,
+    // this.badge = PlaceBadge.none,
     this.isFavorite = false,
+    this.isHiddenGem,
+    this.openingHours,
+    this.isOpened,
   });
 
   PlaceEntity copyWith({
@@ -43,6 +49,9 @@ class PlaceEntity extends Equatable {
     double? price,
     PlaceBadge? badge,
     bool? isFavorite,
+    bool? isHiddenGem,
+    String? openingHours,
+    String? isOpened,
   }) {
     return PlaceEntity(
       id: id ?? this.id,
@@ -54,8 +63,11 @@ class PlaceEntity extends Equatable {
       rating: rating ?? this.rating,
       reviewCount: reviewCount ?? this.reviewCount,
       price: price ?? this.price,
-      badge: badge ?? this.badge,
+      // badge: badge ?? this.badge,
       isFavorite: isFavorite ?? this.isFavorite,
+      isHiddenGem: isHiddenGem ?? this.isHiddenGem,
+      openingHours: openingHours ?? this.openingHours,
+      isOpened: isOpened ?? this.isOpened,
     );
   }
 
@@ -70,7 +82,10 @@ class PlaceEntity extends Equatable {
     rating,
     reviewCount,
     price,
-    badge,
+    // badge,
     isFavorite,
+    isHiddenGem,
+    openingHours,
+    isOpened,
   ];
 }

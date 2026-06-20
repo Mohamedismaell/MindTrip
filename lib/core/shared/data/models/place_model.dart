@@ -47,9 +47,9 @@ abstract class PlaceModel with _$PlaceModel {
     @HiveField(18) @JsonKey(name: 'maps_url') String? mapsUrl,
 
     // New fields from sample
-    @HiveField(19) String? day,
-    @HiveField(20) @JsonKey(name: 'is_opened') String? isOpened,
-    @HiveField(21) String? type,
+    @HiveField(19) @JsonKey(fromJson: _toString) String? day,
+    @HiveField(20) @JsonKey(name: 'is_opened', fromJson: _toString) String? isOpened,
+    @HiveField(21) @JsonKey(fromJson: _toString) String? type,
   }) = _PlaceModel;
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) =>
@@ -63,6 +63,8 @@ double? _toDouble(Object? value) => (value as num?)?.toDouble();
 
 double _toDoubleNonNullable(Object? value) =>
     (value as num?)?.toDouble() ?? 0.0;
+
+String? _toString(Object? value) => value?.toString();
 
 List<String>? _toListOfStrings(Object? value) {
   if (value == null) return null;

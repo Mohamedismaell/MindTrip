@@ -54,7 +54,7 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
       return;
     }
 
-    if (query.length < 2 || query == state.lastQuery) return;
+    if (query.length <= 2 || query == state.lastQuery) return;
 
     emit(
       state.copyWith(

@@ -118,7 +118,7 @@ class _ExplorePlacesGridState extends State<ExplorePlacesGrid> {
                         scrollDirection: Axis.horizontal,
                         itemCount:
                             places.length +
-                            (state.filteredPlaces.isMoreLoading ? 4 : 0),
+                            (state.filteredPlaces.isMoreLoading ? 2 : 0),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: rows,
                           mainAxisSpacing: 24.w,

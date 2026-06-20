@@ -1,8 +1,8 @@
-import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
+import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
 
 class TimeSlotModel extends TimeSlot {
   const TimeSlotModel({

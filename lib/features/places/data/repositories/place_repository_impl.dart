@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
+import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/data/datasources/place_remote_data_source.dart';
-import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
 import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
@@ -39,13 +39,15 @@ class PlaceRepositoryImpl implements PlaceRepository {
         try {
           final local = await localDataSource.getRecommendedPlaces();
           if (local.isNotEmpty) {
-            return Result.ok(PaginatedResponse(
-              results: local.map((e) => e.toEntity()).toList(),
-              total: local.length,
-              page: 1,
-              limit: local.length,
-              totalPages: 1,
-            ));
+            return Result.ok(
+              PaginatedResponse(
+                results: local.map((e) => e.toEntity()).toList(),
+                total: local.length,
+                page: 1,
+                limit: local.length,
+                totalPages: 1,
+              ),
+            );
           }
         } catch (_) {}
       }
@@ -72,13 +74,15 @@ class PlaceRepositoryImpl implements PlaceRepository {
         try {
           final local = await localDataSource.getPopularPlaces();
           if (local.isNotEmpty) {
-            return Result.ok(PaginatedResponse(
-              results: local.map((e) => e.toEntity()).toList(),
-              total: local.length,
-              page: 1,
-              limit: local.length,
-              totalPages: 1,
-            ));
+            return Result.ok(
+              PaginatedResponse(
+                results: local.map((e) => e.toEntity()).toList(),
+                total: local.length,
+                page: 1,
+                limit: local.length,
+                totalPages: 1,
+              ),
+            );
           }
         } catch (_) {}
       }

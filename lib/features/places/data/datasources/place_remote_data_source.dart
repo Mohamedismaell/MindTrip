@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
@@ -113,9 +114,21 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
       cancelToken: cancelToken,
     );
 
-    return PaginatedResponse<PlaceModel>.fromJson(
-      response,
-      (json) => PlaceModel.fromJson(json),
-    );
+    try {
+      return PaginatedResponse<PlaceModel>.fromJson(response, (json) {
+        try {
+          return PlaceModel.fromJson(json);
+        } catch (e) {
+          debugPrint('❌ BAD PLACE JSON');
+          debugPrint(json.toString());
+          rethrow;
+        }
+      });
+    } catch (e, s) {
+      debugPrint('❌ PARSE ERROR');
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: s);
+      rethrow;
+    }
   }
 }

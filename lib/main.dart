@@ -40,7 +40,8 @@ Future<void> main() async {
   const envFile = String.fromEnvironment('ENV_FILE', defaultValue: '.env.dev');
   await dotenv.load(fileName: envFile);
   print('Step 6: Env Variables');
-
+  PaintingBinding.instance.imageCache.maximumSize = 300;
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 200 << 20;
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

@@ -114,7 +114,7 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
           listenMode: ListenMode.search,
           partialResults: true,
           cancelOnError: true,
-          pauseFor: const Duration(seconds: 3),
+          pauseFor: const Duration(seconds: 2),
         ),
       );
     } catch (e) {

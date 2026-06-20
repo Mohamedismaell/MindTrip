@@ -2,7 +2,6 @@ import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
-import 'package:mindtrip/core/enums/place_badge.dart';
 
 extension PlaceMapper on PlaceModel {
   PlaceEntity toEntity() {
@@ -27,7 +26,8 @@ extension PlaceMapper on PlaceModel {
       rating: rating,
       reviewCount: reviewsCount,
       price: price ?? cost,
-      badge: isHiddenGem ? PlaceBadge.popular : PlaceBadge.none,
+      isHiddenGem: isHiddenGem,
+      openingHours: openingHours,
     );
   }
 }
@@ -47,7 +47,8 @@ extension PlaceEntityMapper on PlaceEntity {
       rating: rating,
       reviewsCount: reviewCount,
       price: price,
-      isHiddenGem: badge != PlaceBadge.none,
+      isHiddenGem: isHiddenGem ?? false,
+      openingHours: openingHours,
     );
   }
 }

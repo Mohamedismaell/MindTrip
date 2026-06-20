@@ -127,9 +127,9 @@ _PlaceModel _$PlaceModelFromJson(Map<String, dynamic> json) => _PlaceModel(
   lng: json['lng'] == null ? 0.0 : _toDoubleNonNullable(json['lng']),
   isHiddenGem: json['is_hidden_gem'] as bool? ?? false,
   mapsUrl: json['maps_url'] as String?,
-  day: json['day'] as String?,
-  isOpened: json['is_opened'] as String?,
-  type: json['type'] as String?,
+  day: _toString(json['day']),
+  isOpened: _toString(json['is_opened']),
+  type: _toString(json['type']),
 );
 
 Map<String, dynamic> _$PlaceModelToJson(_PlaceModel instance) =>

@@ -81,6 +81,22 @@ class HomeHeader extends StatelessWidget {
               //   iconPath: HomeAssets.notificaitonIcon,
               //   onTap: () {},
               // ),
+
+              //   TapScaleEffect(
+              //   onTap: () => context.push(AppRoutes.tripCalendar),
+              //   child: Container(
+              //     padding: EdgeInsets.all(8.r),
+              //     decoration: BoxDecoration(
+              //       color: AppColors.primaryLightGray,
+              //       shape: BoxShape.circle,
+              //     ),
+              //     child: Icon(
+              //       Icons.calendar_month_rounded,
+              //       size: 28.sp,
+              //       color: context.colorTheme.primary,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         );

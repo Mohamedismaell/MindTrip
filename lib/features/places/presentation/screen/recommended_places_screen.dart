@@ -59,6 +59,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
       onRefresh: () async {
         await context.read<RecommendedPlacesCubit>().loadFirstPage(
           selectedCategories: context.read<UserCubit>().state.interests,
+          limit: 10,
         );
       },
       child: Scaffold(

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
+import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/search/data/datasources/search_local_data_source.dart';
 import 'package:mindtrip/features/search/data/datasources/search_remote_data_source.dart';
@@ -9,7 +10,6 @@ import 'package:mindtrip/features/search/data/models/search_places_request_model
 import 'package:mindtrip/features/search/domain/entity/recent_search_entity.dart';
 import 'package:mindtrip/features/search/domain/repositories/search_repository.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
-import 'package:mindtrip/core/shared/data/mapper/place_mapper.dart';
 
 class SearchRepositoryImpl implements SearchRepository {
   final SearchRemoteDataSource _remoteDataSource;

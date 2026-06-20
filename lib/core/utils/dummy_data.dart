@@ -26,6 +26,7 @@ class DummyData {
       'assets/images/authentication/center_vec.webp',
       'assets/images/authentication/center_vec.webp',
     ],
+    isHiddenGem: false,
   );
   static const placeDetails = PlaceEntity(
     id: '',
@@ -41,6 +42,7 @@ class DummyData {
     ),
     rating: 5.0,
     reviewCount: 0,
+    isHiddenGem: false,
   );
 
   static final exploreCardPlaces = List.generate(
@@ -50,6 +52,7 @@ class DummyData {
       name: place.name,
       location: place.location,
       imageUrls: place.imageUrls,
+      isHiddenGem: false,
     ),
   );
   static final plannerPreview = PlannerPreviewEntity(
@@ -84,6 +87,7 @@ class DummyData {
       name: place.name,
       location: place.location,
       imageUrls: place.imageUrls,
+      isHiddenGem: false,
     ),
   );
 
@@ -94,6 +98,7 @@ class DummyData {
       name: place.name,
       location: place.location,
       imageUrls: place.imageUrls,
+      isHiddenGem: false,
     ),
   );
   static final categoryPlaces = List.generate(
@@ -103,6 +108,7 @@ class DummyData {
       name: place.name,
       location: place.location,
       imageUrls: place.imageUrls,
+      isHiddenGem: false,
     ),
   );
 
