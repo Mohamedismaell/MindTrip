@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/core/shared/models/pagination_state.dart';
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
@@ -40,10 +41,12 @@ class RecommendedPlacesCubit extends SafeCubit<RecommendedPlacesState> {
         emitSafe(
           state.copyWith(
             recommendedPlacesStatus: RecommendedPlacesStatus.success,
-            places: response.results,
-            currentPage: response.page,
-            hasMore: response.page < response.totalPages,
-            error: '',
+            recommendedPlaces: PaginationState(
+              items: response.results,
+              currentPage: response.page,
+              hasMore: response.page < response.totalPages,
+            ),
+            recommededPlacesError: '',
           ),
         );
       },
@@ -51,7 +54,7 @@ class RecommendedPlacesCubit extends SafeCubit<RecommendedPlacesState> {
         emitSafe(
           state.copyWith(
             recommendedPlacesStatus: RecommendedPlacesStatus.failure,
-            error: error.message,
+            recommededPlacesError: error.message,
           ),
         );
       },
@@ -62,17 +65,23 @@ class RecommendedPlacesCubit extends SafeCubit<RecommendedPlacesState> {
   Future<void> loadMorePlaces({
     required List<String> selectedCategories,
   }) async {
-    if (state.isMoreLoading ||
+    if (state.recommendedPlaces.isMoreLoading ||
         state.recommendedPlacesStatus == RecommendedPlacesStatus.loading ||
-        !state.hasMore) {
+        !state.recommendedPlaces.hasMore) {
       return;
     }
     _loadMoreToken?.cancel();
     _loadMoreToken = CancelToken();
 
-    emitSafe(state.copyWith(isMoreLoading: true));
+    emitSafe(
+      state.copyWith(
+        recommendedPlaces: state.recommendedPlaces.copyWith(
+          isMoreLoading: true,
+        ),
+      ),
+    );
 
-    final nextPage = state.currentPage + 1;
+    final nextPage = state.recommendedPlaces.currentPage + 1;
     final result = await getRecommendedPlacesUseCase(
       request: RecommendationPlacesRequestModel(
         selectedCategories: selectedCategories,
@@ -85,16 +94,25 @@ class RecommendedPlacesCubit extends SafeCubit<RecommendedPlacesState> {
       success: (response) {
         emitSafe(
           state.copyWith(
-            isMoreLoading: false,
-            places: [...state.places, ...response.results],
-            currentPage: response.page,
-            hasMore: response.page < response.totalPages,
-            error: '',
+            recommendedPlaces: state.recommendedPlaces.copyWith(
+              items: [...state.recommendedPlaces.items, ...response.results],
+              currentPage: response.page,
+              hasMore: response.page < response.totalPages,
+              isMoreLoading: false,
+            ),
+            recommededPlacesError: '',
           ),
         );
       },
       failure: (error) {
-        emitSafe(state.copyWith(isMoreLoading: false, error: error.message));
+        emitSafe(
+          state.copyWith(
+            recommendedPlaces: state.recommendedPlaces.copyWith(
+              isMoreLoading: false,
+            ),
+            recommededPlacesError: error.message,
+          ),
+        );
       },
       cancelled: () {},
     );

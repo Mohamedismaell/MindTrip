@@ -7,6 +7,7 @@ import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/nearby_places_request_model.dart';
 
 abstract class PlaceRemoteDataSource {
   Future<PaginatedResponse<PlaceModel>> getRecommendedPlaces(
@@ -29,6 +30,11 @@ abstract class PlaceRemoteDataSource {
 
   Future<PaginatedResponse<PlaceModel>> getPlaces({
     required GetPlacesRequestModel request,
+    CancelToken? cancelToken,
+  });
+
+  Future<PaginatedResponse<PlaceModel>> getNearbyPlaces({
+    required NearbyPlacesRequestModel request,
     CancelToken? cancelToken,
   });
 }
@@ -130,5 +136,22 @@ class PlaceRemoteDataSourceImpl implements PlaceRemoteDataSource {
       debugPrintStack(stackTrace: s);
       rethrow;
     }
+  }
+
+  @override
+  Future<PaginatedResponse<PlaceModel>> getNearbyPlaces({
+    required NearbyPlacesRequestModel request,
+    CancelToken? cancelToken,
+  }) async {
+    final response = await _api.post(
+      EndPoints.getNearbyPlaces,
+      data: request.toJson(),
+      cancelToken: cancelToken,
+    );
+
+    return PaginatedResponse<PlaceModel>.fromJson(
+      response,
+      (json) => PlaceModel.fromJson(json),
+    );
   }
 }

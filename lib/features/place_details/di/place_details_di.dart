@@ -33,7 +33,10 @@ class PlaceDetailsDi {
 
     // Cubits
     sl.registerFactory<PlaceDetailsCubit>(
-      () => PlaceDetailsCubit(getDetails: sl<GetPlaceDetailsUseCase>()),
+      () => PlaceDetailsCubit(
+        getDetails: sl<GetPlaceDetailsUseCase>(),
+        getNearby: sl<GetNearbyPlacesUseCase>(),
+      ),
     );
   }
 }

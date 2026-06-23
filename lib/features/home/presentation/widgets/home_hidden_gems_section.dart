@@ -75,8 +75,8 @@ class _HomeHiddenGemsSectionState extends State<HomeHiddenGemsSection> {
               padding: EdgeInsets.symmetric(vertical: 20.h),
               child: AppErrorWidget(
                 imageSize: 100,
-                message: state.hiddenGemsError.isNotEmpty 
-                    ? state.hiddenGemsError 
+                message: state.hiddenGemsError.isNotEmpty
+                    ? state.hiddenGemsError
                     : 'Failed to load hidden gems',
                 onPressed: () {
                   context.read<HomeCubit>().loadFirstPageHiddenGems();
@@ -164,7 +164,9 @@ class _HiddenGemCard extends StatelessWidget {
                         top: 10.h,
                         left: 10.w,
                         child: FavoriteButton(
-                          isFavorite: context.watch<FavoriteCubit>().isFavorite(place.id),
+                          isFavorite: context.watch<FavoriteCubit>().isFavorite(
+                            place.id,
+                          ),
                           onTap: () {
                             final cubit = context.read<FavoriteCubit>();
                             cubit.toggleFavorite(

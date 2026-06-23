@@ -111,7 +111,16 @@ class DummyData {
       isHiddenGem: false,
     ),
   );
-
+  static final nearbyPlaces = List.generate(
+    6,
+    (index) => PlaceEntity(
+      id: 'recommended_place_$index',
+      name: place.name,
+      location: place.location,
+      imageUrls: place.imageUrls,
+      isHiddenGem: false,
+    ),
+  );
   static final plannerPreviews = List.generate(
     2,
     (index) => PlannerPreviewEntity(

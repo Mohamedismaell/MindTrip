@@ -9,6 +9,7 @@ import 'package:mindtrip/features/places/data/datasources/place_local_data_sourc
 import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/nearby_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/repositories/place_repository.dart';
 
 class PlaceRepositoryImpl implements PlaceRepository {
@@ -160,5 +161,59 @@ class PlaceRepositoryImpl implements PlaceRepository {
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
+  }
+
+  @override
+  Future<Result<PaginatedResponse<PlaceEntity>>> getNearbyPlaces({
+    required NearbyPlacesRequestModel request,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await remoteDataSource.getNearbyPlaces(
+        request: request,
+        cancelToken: cancelToken,
+      );
+      if (request.page == 1) {
+        await localDataSource.cacheNearbyPlaces(
+          response.results,
+          request.userLat,
+          request.userLng,
+        );
+      }
+      return Result.ok(response.map((e) => e.toEntity()));
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return _getNearbyLocalFallback(request, e);
+    } catch (e) {
+      return _getNearbyLocalFallback(request, e);
+    }
+  }
+
+  Future<Result<PaginatedResponse<PlaceEntity>>> _getNearbyLocalFallback(
+    NearbyPlacesRequestModel request,
+    Object e,
+  ) async {
+    if (request.page == 1) {
+      try {
+        final local = await localDataSource.getNearbyPlaces(
+          request.userLat,
+          request.userLng,
+        );
+        if (local.isNotEmpty) {
+          return Result.ok(
+            PaginatedResponse(
+              results: local.map((e) => e.toEntity()).toList(),
+              total: local.length,
+              page: 1,
+              limit: local.length,
+              totalPages: 1,
+            ),
+          );
+        }
+      } catch (_) {}
+    }
+    return Result.error(ApiErrorMapper.fromException(e));
   }
 }

@@ -13,6 +13,13 @@ abstract class PlaceLocalDataSource {
 
   Future<void> cacheRecommendedPlaces(List<PlaceModel> places);
   Future<List<PlaceModel>> getRecommendedPlaces();
+
+  Future<void> cacheNearbyPlaces(
+    List<PlaceModel> places,
+    double userLat,
+    double userLng,
+  );
+  Future<List<PlaceModel>> getNearbyPlaces(double userLat, double userLng);
 }
 
 class PlacesLocalDataSourceImpl implements PlaceLocalDataSource {
@@ -79,6 +86,29 @@ class PlacesLocalDataSourceImpl implements PlaceLocalDataSource {
   @override
   Future<List<PlaceModel>> getRecommendedPlaces() async {
     final ids = AppHive.metadataBox.get('recommended_places');
+    if (ids == null) return [];
+    return getPlaces(ids);
+  }
+
+  @override
+  Future<void> cacheNearbyPlaces(
+    List<PlaceModel> places,
+    double userLat,
+    double userLng,
+  ) async {
+    await cachePlaces(places);
+    await AppHive.metadataBox.put(
+      'nearby_places_$userLat$userLng',
+      places.map((e) => e.id).toList(),
+    );
+  }
+
+  @override
+  Future<List<PlaceModel>> getNearbyPlaces(
+    double userLat,
+    double userLng,
+  ) async {
+    final ids = AppHive.metadataBox.get('nearby_places_$userLat$userLng');
     if (ids == null) return [];
     return getPlaces(ids);
   }

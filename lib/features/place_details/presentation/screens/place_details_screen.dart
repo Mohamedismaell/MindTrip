@@ -14,6 +14,7 @@ import 'package:mindtrip/features/place_details/presentation/widgets/place_detai
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_info_chips.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_location_section.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_overview.dart';
+import 'package:mindtrip/features/place_details/presentation/widgets/place_details_nearby_places.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_photo_strip.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_reviews.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_trip_button.dart';
@@ -28,12 +29,24 @@ class PlaceDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pureWhite,
-      body: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+      body: BlocConsumer<PlaceDetailsCubit, PlaceDetailsState>(
+        listenWhen: (previous, current) =>
+            previous.placeDetailsStatus != current.placeDetailsStatus &&
+            current.placeDetailsStatus == PlaceDetailsStatus.loaded,
+        listener: (context, state) {
+          if (state.place != null) {
+            context.read<PlaceDetailsCubit>().loadFirstPageNearbyPlaces(
+              state.place!.id,
+              lat: state.place!.location.latitude,
+              lng: state.place!.location.longitude,
+            );
+          }
+        },
         buildWhen: (previous, current) =>
             previous.placeDetailsStatus != current.placeDetailsStatus ||
             previous.place != current.place ||
             previous.preview != current.preview ||
-            previous.errorMessage != current.errorMessage,
+            previous.nearbyError != current.nearbyError,
         builder: (context, state) {
           final place = state.place ?? state.preview ?? DummyData.placeDetails;
 
@@ -154,8 +167,8 @@ class _PlaceDetailsBody extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // SizedBox(height: 30.h),
-                      // PlaceDetailsNearbyPlaces(placeId: place.id),
+                      SizedBox(height: 30.h),
+                      PlaceDetailsNearbyPlaces(currentPlace: place),
                       SizedBox(height: 30.h),
                       Skeletonizer(
                         enabled: isMainLoading,

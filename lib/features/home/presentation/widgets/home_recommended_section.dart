@@ -35,12 +35,12 @@ class HomeRecommendedSection extends StatelessWidget {
         buildWhen: (previous, current) =>
             previous.recommendedPlacesStatus !=
                 current.recommendedPlacesStatus ||
-            previous.places != current.places,
+            previous.recommendedPlaces.items != current.recommendedPlaces.items,
         builder: (context, state) {
           if (state.recommendedPlacesStatus.isFailure) {
             return SliverToBoxAdapter(
               child: AppErrorWidget(
-                message: state.error,
+                message: state.recommededPlacesError,
                 imageSize: 80,
                 onPressed: () {
                   final interests = context.read<UserCubit>().state.interests;
@@ -62,7 +62,7 @@ class HomeRecommendedSection extends StatelessWidget {
               state.recommendedPlacesStatus.isInitial;
           final destinations = isLoading
               ? DummyData.recommendedPlaces
-              : state.places;
+              : state.recommendedPlaces.items;
 
           if (!isLoading && destinations.isEmpty) {
             return const SliverToBoxAdapter(child: SizedBox.shrink());

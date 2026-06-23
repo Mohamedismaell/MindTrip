@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_state.dart';
 
 class FavoriteBubble extends StatelessWidget {
   const FavoriteBubble({super.key, required this.placeId, this.small = false});
@@ -28,7 +29,7 @@ class FavoriteBubble extends StatelessWidget {
             width: size,
             height: size,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.35),
+              color: Colors.white.withValues(alpha: 0.35),
               shape: BoxShape.circle,
             ),
             child: Icon(

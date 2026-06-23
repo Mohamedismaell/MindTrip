@@ -113,7 +113,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
     if (state.recommendedPlacesStatus.isFailure) {
       return SliverToBoxAdapter(
         child: AppErrorWidget(
-          message: state.error,
+          message: state.recommededPlacesError,
           imageSize: 80,
           onPressed: () {
             final interests = context.read<UserCubit>().state.interests;
@@ -128,7 +128,9 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
     final isLoading =
         state.recommendedPlacesStatus.isLoading ||
         state.recommendedPlacesStatus.isInitial;
-    final destinations = isLoading ? DummyData.recommendedPlaces : state.places;
+    final destinations = isLoading
+        ? DummyData.recommendedPlaces
+        : state.recommendedPlaces.items;
 
     if (!isLoading && destinations.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -137,7 +139,7 @@ class _RecommendedPlacesScreenState extends State<RecommendedPlacesScreen> {
     return RecommendedplacesGrid(
       destinations: destinations,
       isLoading: isLoading,
-      isMoreLoading: state.isMoreLoading,
+      isMoreLoading: state.recommendedPlaces.isMoreLoading,
     );
   }
 }

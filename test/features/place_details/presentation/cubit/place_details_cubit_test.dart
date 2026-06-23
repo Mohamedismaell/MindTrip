@@ -3,6 +3,7 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
+import 'package:mindtrip/features/place_details/domain/use_cases/get_nearby_places_use_case.dart';
 import 'package:mindtrip/features/place_details/domain/use_cases/get_place_details_use_case.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
@@ -11,9 +12,13 @@ import 'package:mocktail/mocktail.dart';
 class MockGetPlaceDetailsUseCase extends Mock
     implements GetPlaceDetailsUseCase {}
 
+class MockGetNearbyPlacesUseCase extends Mock
+    implements GetNearbyPlacesUseCase {}
+
 void main() {
   late PlaceDetailsCubit cubit;
   late MockGetPlaceDetailsUseCase mockGetDetails;
+  late MockGetNearbyPlacesUseCase mockGetNearby;
 
   final tPlace = PlaceEntity(
     id: '1',
@@ -41,7 +46,11 @@ void main() {
 
   setUp(() {
     mockGetDetails = MockGetPlaceDetailsUseCase();
-    cubit = PlaceDetailsCubit(getDetails: mockGetDetails);
+    mockGetNearby = MockGetNearbyPlacesUseCase();
+    cubit = PlaceDetailsCubit(
+      getDetails: mockGetDetails,
+      getNearby: mockGetNearby,
+    );
   });
 
   tearDown(() {
@@ -103,7 +112,7 @@ void main() {
         const PlaceDetailsState(placeDetailsStatus: PlaceDetailsStatus.loading),
         const PlaceDetailsState(
           placeDetailsStatus: PlaceDetailsStatus.error,
-          errorMessage: 'Server Error',
+          placeDetailsError: 'Server Error',
         ),
       ];
 

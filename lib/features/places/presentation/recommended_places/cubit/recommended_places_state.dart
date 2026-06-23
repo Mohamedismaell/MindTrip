@@ -14,11 +14,9 @@ abstract class RecommendedPlacesState with _$RecommendedPlacesState {
   const factory RecommendedPlacesState({
     @Default(RecommendedPlacesStatus.initial)
     RecommendedPlacesStatus recommendedPlacesStatus,
-    @Default([]) List<PlaceEntity> places,
-    @Default('') String error,
-    @Default(1) int currentPage,
-    @Default(true) bool hasMore,
-    @Default(false) bool isMoreLoading,
+    @Default(PaginationState<PlaceEntity>())
+    PaginationState<PlaceEntity> recommendedPlaces,
+    @Default('') String recommededPlacesError,
     @Default(null) int? seed,
   }) = _RecommendedPlacesState;
 

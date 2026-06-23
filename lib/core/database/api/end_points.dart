@@ -29,6 +29,7 @@ class EndPoints {
   static String getPopularPlaces = 'api/v1/ai/places/top-rated';
   static String searchPlaces = 'api/v1/ai/places/search';
   static String getPlaces = 'api/v1/ai/places/getplaces';
+  static String getNearbyPlaces = 'api/v1/ai/places/nearby';
   static String placeDetails(String id) => 'api/v1/ai/places/$id';
 
   // Home & Explore

@@ -5,6 +5,7 @@ import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
+import 'package:mindtrip/features/places/data/models/nearby_places_request_model.dart';
 
 abstract class PlaceRepository {
   Future<Result<PaginatedResponse<PlaceEntity>>> getRecommendedPlaces(
@@ -19,6 +20,11 @@ abstract class PlaceRepository {
 
   Future<Result<PaginatedResponse<PlaceEntity>>> getPlaces({
     required GetPlacesRequestModel request,
+    CancelToken? cancelToken,
+  });
+
+  Future<Result<PaginatedResponse<PlaceEntity>>> getNearbyPlaces({
+    required NearbyPlacesRequestModel request,
     CancelToken? cancelToken,
   });
 }

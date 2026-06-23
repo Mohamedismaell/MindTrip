@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PlaceDetailsState {
 
- PlaceDetailsStatus get placeDetailsStatus; PlaceEntity? get place; PlaceEntity? get preview; String? get errorMessage;
+ PlaceDetailsStatus get placeDetailsStatus; PlaceEntity? get place; PlaceEntity? get preview; String? get placeDetailsError; NearbyStatus get nearbyStatus; PaginationState<PlaceEntity> get nearbyPlaces; String? get nearbyError;
 /// Create a copy of PlaceDetailsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PlaceDetailsStateCopyWith<PlaceDetailsState> get copyWith => _$PlaceDetailsStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaceDetailsState&&(identical(other.placeDetailsStatus, placeDetailsStatus) || other.placeDetailsStatus == placeDetailsStatus)&&(identical(other.place, place) || other.place == place)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaceDetailsState&&(identical(other.placeDetailsStatus, placeDetailsStatus) || other.placeDetailsStatus == placeDetailsStatus)&&(identical(other.place, place) || other.place == place)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.placeDetailsError, placeDetailsError) || other.placeDetailsError == placeDetailsError)&&(identical(other.nearbyStatus, nearbyStatus) || other.nearbyStatus == nearbyStatus)&&(identical(other.nearbyPlaces, nearbyPlaces) || other.nearbyPlaces == nearbyPlaces)&&(identical(other.nearbyError, nearbyError) || other.nearbyError == nearbyError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,placeDetailsStatus,place,preview,errorMessage);
+int get hashCode => Object.hash(runtimeType,placeDetailsStatus,place,preview,placeDetailsError,nearbyStatus,nearbyPlaces,nearbyError);
 
 @override
 String toString() {
-  return 'PlaceDetailsState(placeDetailsStatus: $placeDetailsStatus, place: $place, preview: $preview, errorMessage: $errorMessage)';
+  return 'PlaceDetailsState(placeDetailsStatus: $placeDetailsStatus, place: $place, preview: $preview, placeDetailsError: $placeDetailsError, nearbyStatus: $nearbyStatus, nearbyPlaces: $nearbyPlaces, nearbyError: $nearbyError)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $PlaceDetailsStateCopyWith<$Res>  {
   factory $PlaceDetailsStateCopyWith(PlaceDetailsState value, $Res Function(PlaceDetailsState) _then) = _$PlaceDetailsStateCopyWithImpl;
 @useResult
 $Res call({
- PlaceDetailsStatus placeDetailsStatus, PlaceEntity? place, PlaceEntity? preview, String? errorMessage
+ PlaceDetailsStatus placeDetailsStatus, PlaceEntity? place, PlaceEntity? preview, String? placeDetailsError, NearbyStatus nearbyStatus, PaginationState<PlaceEntity> nearbyPlaces, String? nearbyError
 });
 
 
-
+$PaginationStateCopyWith<PlaceEntity, $Res> get nearbyPlaces;
 
 }
 /// @nodoc
@@ -62,16 +62,28 @@ class _$PlaceDetailsStateCopyWithImpl<$Res>
 
 /// Create a copy of PlaceDetailsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? placeDetailsStatus = null,Object? place = freezed,Object? preview = freezed,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? placeDetailsStatus = null,Object? place = freezed,Object? preview = freezed,Object? placeDetailsError = freezed,Object? nearbyStatus = null,Object? nearbyPlaces = null,Object? nearbyError = freezed,}) {
   return _then(_self.copyWith(
 placeDetailsStatus: null == placeDetailsStatus ? _self.placeDetailsStatus : placeDetailsStatus // ignore: cast_nullable_to_non_nullable
 as PlaceDetailsStatus,place: freezed == place ? _self.place : place // ignore: cast_nullable_to_non_nullable
 as PlaceEntity?,preview: freezed == preview ? _self.preview : preview // ignore: cast_nullable_to_non_nullable
-as PlaceEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as PlaceEntity?,placeDetailsError: freezed == placeDetailsError ? _self.placeDetailsError : placeDetailsError // ignore: cast_nullable_to_non_nullable
+as String?,nearbyStatus: null == nearbyStatus ? _self.nearbyStatus : nearbyStatus // ignore: cast_nullable_to_non_nullable
+as NearbyStatus,nearbyPlaces: null == nearbyPlaces ? _self.nearbyPlaces : nearbyPlaces // ignore: cast_nullable_to_non_nullable
+as PaginationState<PlaceEntity>,nearbyError: freezed == nearbyError ? _self.nearbyError : nearbyError // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
-
+/// Create a copy of PlaceDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PaginationStateCopyWith<PlaceEntity, $Res> get nearbyPlaces {
+  
+  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.nearbyPlaces, (value) {
+    return _then(_self.copyWith(nearbyPlaces: value));
+  });
+}
 }
 
 
@@ -153,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PlaceDetailsStatus placeDetailsStatus,  PlaceEntity? place,  PlaceEntity? preview,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PlaceDetailsStatus placeDetailsStatus,  PlaceEntity? place,  PlaceEntity? preview,  String? placeDetailsError,  NearbyStatus nearbyStatus,  PaginationState<PlaceEntity> nearbyPlaces,  String? nearbyError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PlaceDetailsState() when $default != null:
-return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.errorMessage);case _:
+return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.placeDetailsError,_that.nearbyStatus,_that.nearbyPlaces,_that.nearbyError);case _:
   return orElse();
 
 }
@@ -174,10 +186,10 @@ return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.errorMe
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PlaceDetailsStatus placeDetailsStatus,  PlaceEntity? place,  PlaceEntity? preview,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PlaceDetailsStatus placeDetailsStatus,  PlaceEntity? place,  PlaceEntity? preview,  String? placeDetailsError,  NearbyStatus nearbyStatus,  PaginationState<PlaceEntity> nearbyPlaces,  String? nearbyError)  $default,) {final _that = this;
 switch (_that) {
 case _PlaceDetailsState():
-return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.errorMessage);case _:
+return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.placeDetailsError,_that.nearbyStatus,_that.nearbyPlaces,_that.nearbyError);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +206,10 @@ return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.errorMe
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PlaceDetailsStatus placeDetailsStatus,  PlaceEntity? place,  PlaceEntity? preview,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PlaceDetailsStatus placeDetailsStatus,  PlaceEntity? place,  PlaceEntity? preview,  String? placeDetailsError,  NearbyStatus nearbyStatus,  PaginationState<PlaceEntity> nearbyPlaces,  String? nearbyError)?  $default,) {final _that = this;
 switch (_that) {
 case _PlaceDetailsState() when $default != null:
-return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.errorMessage);case _:
+return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.placeDetailsError,_that.nearbyStatus,_that.nearbyPlaces,_that.nearbyError);case _:
   return null;
 
 }
@@ -209,13 +221,16 @@ return $default(_that.placeDetailsStatus,_that.place,_that.preview,_that.errorMe
 
 
 class _PlaceDetailsState implements PlaceDetailsState {
-  const _PlaceDetailsState({this.placeDetailsStatus = PlaceDetailsStatus.initial, this.place, this.preview, this.errorMessage});
+  const _PlaceDetailsState({this.placeDetailsStatus = PlaceDetailsStatus.initial, this.place, this.preview, this.placeDetailsError, this.nearbyStatus = NearbyStatus.initial, this.nearbyPlaces = const PaginationState<PlaceEntity>(), this.nearbyError});
   
 
 @override@JsonKey() final  PlaceDetailsStatus placeDetailsStatus;
 @override final  PlaceEntity? place;
 @override final  PlaceEntity? preview;
-@override final  String? errorMessage;
+@override final  String? placeDetailsError;
+@override@JsonKey() final  NearbyStatus nearbyStatus;
+@override@JsonKey() final  PaginationState<PlaceEntity> nearbyPlaces;
+@override final  String? nearbyError;
 
 /// Create a copy of PlaceDetailsState
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +242,16 @@ _$PlaceDetailsStateCopyWith<_PlaceDetailsState> get copyWith => __$PlaceDetailsS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaceDetailsState&&(identical(other.placeDetailsStatus, placeDetailsStatus) || other.placeDetailsStatus == placeDetailsStatus)&&(identical(other.place, place) || other.place == place)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlaceDetailsState&&(identical(other.placeDetailsStatus, placeDetailsStatus) || other.placeDetailsStatus == placeDetailsStatus)&&(identical(other.place, place) || other.place == place)&&(identical(other.preview, preview) || other.preview == preview)&&(identical(other.placeDetailsError, placeDetailsError) || other.placeDetailsError == placeDetailsError)&&(identical(other.nearbyStatus, nearbyStatus) || other.nearbyStatus == nearbyStatus)&&(identical(other.nearbyPlaces, nearbyPlaces) || other.nearbyPlaces == nearbyPlaces)&&(identical(other.nearbyError, nearbyError) || other.nearbyError == nearbyError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,placeDetailsStatus,place,preview,errorMessage);
+int get hashCode => Object.hash(runtimeType,placeDetailsStatus,place,preview,placeDetailsError,nearbyStatus,nearbyPlaces,nearbyError);
 
 @override
 String toString() {
-  return 'PlaceDetailsState(placeDetailsStatus: $placeDetailsStatus, place: $place, preview: $preview, errorMessage: $errorMessage)';
+  return 'PlaceDetailsState(placeDetailsStatus: $placeDetailsStatus, place: $place, preview: $preview, placeDetailsError: $placeDetailsError, nearbyStatus: $nearbyStatus, nearbyPlaces: $nearbyPlaces, nearbyError: $nearbyError)';
 }
 
 
@@ -247,11 +262,11 @@ abstract mixin class _$PlaceDetailsStateCopyWith<$Res> implements $PlaceDetailsS
   factory _$PlaceDetailsStateCopyWith(_PlaceDetailsState value, $Res Function(_PlaceDetailsState) _then) = __$PlaceDetailsStateCopyWithImpl;
 @override @useResult
 $Res call({
- PlaceDetailsStatus placeDetailsStatus, PlaceEntity? place, PlaceEntity? preview, String? errorMessage
+ PlaceDetailsStatus placeDetailsStatus, PlaceEntity? place, PlaceEntity? preview, String? placeDetailsError, NearbyStatus nearbyStatus, PaginationState<PlaceEntity> nearbyPlaces, String? nearbyError
 });
 
 
-
+@override $PaginationStateCopyWith<PlaceEntity, $Res> get nearbyPlaces;
 
 }
 /// @nodoc
@@ -264,17 +279,29 @@ class __$PlaceDetailsStateCopyWithImpl<$Res>
 
 /// Create a copy of PlaceDetailsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? placeDetailsStatus = null,Object? place = freezed,Object? preview = freezed,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? placeDetailsStatus = null,Object? place = freezed,Object? preview = freezed,Object? placeDetailsError = freezed,Object? nearbyStatus = null,Object? nearbyPlaces = null,Object? nearbyError = freezed,}) {
   return _then(_PlaceDetailsState(
 placeDetailsStatus: null == placeDetailsStatus ? _self.placeDetailsStatus : placeDetailsStatus // ignore: cast_nullable_to_non_nullable
 as PlaceDetailsStatus,place: freezed == place ? _self.place : place // ignore: cast_nullable_to_non_nullable
 as PlaceEntity?,preview: freezed == preview ? _self.preview : preview // ignore: cast_nullable_to_non_nullable
-as PlaceEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as PlaceEntity?,placeDetailsError: freezed == placeDetailsError ? _self.placeDetailsError : placeDetailsError // ignore: cast_nullable_to_non_nullable
+as String?,nearbyStatus: null == nearbyStatus ? _self.nearbyStatus : nearbyStatus // ignore: cast_nullable_to_non_nullable
+as NearbyStatus,nearbyPlaces: null == nearbyPlaces ? _self.nearbyPlaces : nearbyPlaces // ignore: cast_nullable_to_non_nullable
+as PaginationState<PlaceEntity>,nearbyError: freezed == nearbyError ? _self.nearbyError : nearbyError // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
 
-
+/// Create a copy of PlaceDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PaginationStateCopyWith<PlaceEntity, $Res> get nearbyPlaces {
+  
+  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.nearbyPlaces, (value) {
+    return _then(_self.copyWith(nearbyPlaces: value));
+  });
+}
 }
 
 // dart format on

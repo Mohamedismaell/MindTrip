@@ -4,6 +4,7 @@ import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
+import 'package:mindtrip/features/places/data/models/nearby_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart';
 import 'package:mindtrip/features/place_details/domain/repositories/place_details_repository.dart';
@@ -48,21 +49,11 @@ class PlaceDetailsRepositoryImpl implements PlaceDetailsRepository {
   }
 
   @override
-  Future<Result<PaginatedResponse<PlaceEntity>>> getNearbyPlaces(
-    String placeId, {
-    int page = 1,
-    int limit = 10,
-    double? lat,
-    double? lng,
+  Future<Result<PaginatedResponse<PlaceEntity>>> getNearbyPlaces({
+    required NearbyPlacesRequestModel request,
   }) async {
     try {
-      final remote = await _remote.getNearbyPlaces(
-        placeId,
-        page: page,
-        limit: limit,
-        lat: lat,
-        lng: lng,
-      );
+      final remote = await _remote.getNearbyPlaces(request: request);
       return Result.ok(remote.map((m) => m.toEntity()));
     } on DioException catch (e) {
       if (CancelToken.isCancel(e)) {
