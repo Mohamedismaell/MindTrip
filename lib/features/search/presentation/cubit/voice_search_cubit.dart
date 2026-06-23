@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'voice_search_state.dart';
 
-class VoiceSearchCubit extends Cubit<VoiceSearchState> {
+class VoiceSearchCubit extends SafeCubit<VoiceSearchState> {
   final SpeechToText _speech;
 
   VoiceSearchCubit(this._speech) : super(const VoiceSearchState());
@@ -24,7 +24,7 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
   Future<void> _performInit() async {
     if (state.status == VoiceSearchStatus.initializing) return;
 
-    emit(
+    emitSafe(
       state.copyWith(status: VoiceSearchStatus.initializing, errorMessage: ""),
     );
 
@@ -43,7 +43,7 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
       if (initialized) {
         await startListening();
       } else {
-        emit(
+        emitSafe(
           state.copyWith(
             status: VoiceSearchStatus.error,
             errorMessage: "Voice system currently unavailable",
@@ -51,7 +51,7 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
         );
       }
     } catch (e) {
-      emit(
+      emitSafe(
         state.copyWith(
           status: VoiceSearchStatus.error,
           errorMessage: "Failed to start voice search",
@@ -61,27 +61,23 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
   }
 
   void _onStatus(String status) {
-    if (isClosed) return;
-
     if (status == "listening") {
-      emit(state.copyWith(status: VoiceSearchStatus.listening));
+      emitSafe(state.copyWith(status: VoiceSearchStatus.listening));
     } else if (status == "notListening" || status == "done") {
       if (state.status == VoiceSearchStatus.listening) {
-        emit(state.copyWith(status: VoiceSearchStatus.completed));
+        emitSafe(state.copyWith(status: VoiceSearchStatus.completed));
       }
     }
   }
 
   void _onError(SpeechRecognitionError error) {
-    if (isClosed) return;
-
     if (error.errorMsg == "error_no_match" ||
         error.errorMsg == "error_speech_timeout") {
-      emit(state.copyWith(status: VoiceSearchStatus.completed));
+      emitSafe(state.copyWith(status: VoiceSearchStatus.completed));
       return;
     }
 
-    emit(
+    emitSafe(
       state.copyWith(
         status: VoiceSearchStatus.error,
         errorMessage: error.errorMsg,
@@ -90,9 +86,7 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
   }
 
   void _onResult(SpeechRecognitionResult result) {
-    if (isClosed) return;
-
-    emit(
+    emitSafe(
       state.copyWith(
         transcript: result.recognizedWords,
         isFinalResult: result.finalResult,
@@ -100,7 +94,7 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
     );
 
     if (result.finalResult) {
-      emit(state.copyWith(status: VoiceSearchStatus.completed));
+      emitSafe(state.copyWith(status: VoiceSearchStatus.completed));
     }
   }
 
@@ -118,7 +112,7 @@ class VoiceSearchCubit extends Cubit<VoiceSearchState> {
         ),
       );
     } catch (e) {
-      emit(
+      emitSafe(
         state.copyWith(
           status: VoiceSearchStatus.error,
           errorMessage: "Microphone error",

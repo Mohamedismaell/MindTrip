@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
-import 'package:mindtrip/core/theme/cubit/theme_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/fq_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/user_policy_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/settings_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/terms_of_service_screen.dart';
-import 'package:mindtrip/features/profile/routes/profile_routes.dart';
-import 'package:mindtrip/features/places/routes/recommended_places_routes.dart';
 import '../../shared/test_helpers.dart';
 
 void main() {

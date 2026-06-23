@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/user/domain/usecases/update_profile_use_case.dart';
 import 'package:mindtrip/features/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
@@ -7,7 +7,7 @@ import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart
 import 'package:mindtrip/features/profile/domain/use_cases/delete_account.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_state.dart';
 
-class EditProfileCubit extends Cubit<EditProfileState> {
+class EditProfileCubit extends SafeCubit<EditProfileState> {
   final UploadProfilePhotoUseCase _uploadProfilePhoto;
   final UpdateProfileUseCase _updateProfile;
   final UserCubit _userCubit;
@@ -39,41 +39,31 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   }
 
   void init(UserEntity user) {
-    if (!isClosed) {
-      emit(
-        state.copyWith(
-          originalUser: user,
-          draftDisplayName: user.displayName,
-          draftPhoneNumber: user.phoneNumber ?? '',
-        ),
-      );
-    }
+    emitSafe(
+      state.copyWith(
+        originalUser: user,
+        draftDisplayName: user.displayName,
+        draftPhoneNumber: user.phoneNumber ?? '',
+      ),
+    );
   }
 
   void pickPhoto(String filePath) {
-    if (!isClosed) {
-      emit(state.copyWith(pendingPhotoPath: filePath));
-    }
+    emitSafe(state.copyWith(pendingPhotoPath: filePath));
   }
 
   void updateDisplayName(String value) {
-    if (!isClosed) {
-      emit(state.copyWith(draftDisplayName: value));
-    }
+    emitSafe(state.copyWith(draftDisplayName: value));
   }
 
   void updatePhoneNumber(String value) {
-    if (!isClosed) {
-      emit(state.copyWith(draftPhoneNumber: value));
-    }
+    emitSafe(state.copyWith(draftPhoneNumber: value));
   }
 
   Future<void> saveChanges() async {
     if (!state.hasChanges) return;
     _getEditToken();
-    if (!isClosed) {
-      emit(state.copyWith(saveStatus: EditSaveStatus.saving));
-    }
+    emitSafe(state.copyWith(saveStatus: EditSaveStatus.saving));
     String? newPhotoUrl;
 
     // Step 1
@@ -86,17 +76,16 @@ class EditProfileCubit extends Cubit<EditProfileState> {
           return false;
         },
         failure: (f) {
-          if (!isClosed) {
-            emit(
-              state.copyWith(
-                saveStatus: EditSaveStatus.failed,
-                editErrorMessage: f.message,
-              ),
-            );
-          }
+          emitSafe(
+            state.copyWith(
+              saveStatus: EditSaveStatus.failed,
+              editErrorMessage: f.message,
+            ),
+          );
 
           return true;
         },
+        cancelled: () => true,
       );
 
       if (failed) return;
@@ -117,16 +106,15 @@ class EditProfileCubit extends Cubit<EditProfileState> {
       final failed = profileResult.when(
         success: (_) => false,
         failure: (f) {
-          if (!isClosed) {
-            emit(
-              state.copyWith(
-                saveStatus: EditSaveStatus.failed,
-                editErrorMessage: f.message,
-              ),
-            );
-          }
+          emitSafe(
+            state.copyWith(
+              saveStatus: EditSaveStatus.failed,
+              editErrorMessage: f.message,
+            ),
+          );
           return true;
         },
+        cancelled: () => true,
       );
 
       if (failed) return;
@@ -141,49 +129,42 @@ class EditProfileCubit extends Cubit<EditProfileState> {
       );
       _userCubit.setUser(updated);
     }
-    if (!isClosed) {
-      emit(
-        state.copyWith(
-          saveStatus: EditSaveStatus.success,
-          // clearPendingPhoto: true,
-        ),
-      );
-    }
+    emitSafe(
+      state.copyWith(
+        saveStatus: EditSaveStatus.success,
+        // clearPendingPhoto: true,
+      ),
+    );
   }
 
   // reset and clean
   void dismissError() {
-    if (!isClosed) {
-      emit(
-        state.copyWith(
-          saveStatus: EditSaveStatus.idle,
-          deleteStatus: DeleteAccountStatus.idle,
-        ),
-      );
-    }
+    emitSafe(
+      state.copyWith(
+        saveStatus: EditSaveStatus.idle,
+        deleteStatus: DeleteAccountStatus.idle,
+      ),
+    );
   }
 
   Future<void> deleteAccount() async {
     _getDeleteToken();
-    emit(state.copyWith(deleteStatus: DeleteAccountStatus.deleting));
+    emitSafe(state.copyWith(deleteStatus: DeleteAccountStatus.deleting));
 
     final result = await _deleteAccountUseCase.call();
     result.when(
       success: (_) {
-        if (!isClosed) {
-          emit(state.copyWith(deleteStatus: DeleteAccountStatus.deleted));
-        }
+        emitSafe(state.copyWith(deleteStatus: DeleteAccountStatus.deleted));
       },
       failure: (f) {
-        if (!isClosed) {
-          emit(
-            state.copyWith(
-              deleteStatus: DeleteAccountStatus.failed,
-              deleteErrorMessage: f.message,
-            ),
-          );
-        }
+        emitSafe(
+          state.copyWith(
+            deleteStatus: DeleteAccountStatus.failed,
+            deleteErrorMessage: f.message,
+          ),
+        );
       },
+      cancelled: () {},
     );
   }
 

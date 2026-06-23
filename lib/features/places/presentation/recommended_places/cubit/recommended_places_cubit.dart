@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places_use_case.dart';
@@ -8,7 +8,7 @@ import 'package:mindtrip/features/places/domain/use_cases/get_recommended_places
 part 'recommended_places_state.dart';
 part 'recommended_places_cubit.freezed.dart';
 
-class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
+class RecommendedPlacesCubit extends SafeCubit<RecommendedPlacesState> {
   final GetRecommendedPlacesUseCase getRecommendedPlacesUseCase;
 
   RecommendedPlacesCubit({required this.getRecommendedPlacesUseCase})
@@ -22,7 +22,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
   }) async {
     _firstPageToken?.cancel();
     _firstPageToken = CancelToken();
-    emit(
+    emitSafe(
       state.copyWith(recommendedPlacesStatus: RecommendedPlacesStatus.loading),
     );
 
@@ -35,11 +35,9 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
       cancelToken: _firstPageToken,
     );
 
-    if (isClosed) return;
-
     result.when(
       success: (response) {
-        emit(
+        emitSafe(
           state.copyWith(
             recommendedPlacesStatus: RecommendedPlacesStatus.success,
             places: response.results,
@@ -50,13 +48,14 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             recommendedPlacesStatus: RecommendedPlacesStatus.failure,
             error: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -71,7 +70,7 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
     _loadMoreToken?.cancel();
     _loadMoreToken = CancelToken();
 
-    emit(state.copyWith(isMoreLoading: true));
+    emitSafe(state.copyWith(isMoreLoading: true));
 
     final nextPage = state.currentPage + 1;
     final result = await getRecommendedPlacesUseCase(
@@ -82,11 +81,9 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
       cancelToken: _loadMoreToken,
     );
 
-    if (isClosed) return;
-
     result.when(
       success: (response) {
-        emit(
+        emitSafe(
           state.copyWith(
             isMoreLoading: false,
             places: [...state.places, ...response.results],
@@ -97,8 +94,9 @@ class RecommendedPlacesCubit extends Cubit<RecommendedPlacesState> {
         );
       },
       failure: (error) {
-        emit(state.copyWith(isMoreLoading: false, error: error.message));
+        emitSafe(state.copyWith(isMoreLoading: false, error: error.message));
       },
+      cancelled: () {},
     );
   }
 

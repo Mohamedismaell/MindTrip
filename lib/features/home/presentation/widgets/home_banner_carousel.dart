@@ -132,10 +132,8 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                 return FadeTransition(opacity: animation, child: child);
               },
               child: SizedBox.expand(
-                child: AppCachedImage(
-                  key: ValueKey(index),
-                  imagePath: banners[index].imageUrl,
-                ),
+                key: ValueKey(banners[index].imageUrl),
+                child: AppCachedImage(imagePath: banners[index].imageUrl),
               ),
             ),
 
@@ -172,20 +170,20 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                                 color: AppColors.pureWhite,
                               ),
                             ),
-                            SizedBox(height: 20.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 80.0),
-                              child: CustomOutlinedButton(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 12.r,
-                                  horizontal: 5.r,
-                                ),
-                                onPressed: () {},
-                                text: 'Start Now',
-                                color: context.colorTheme.primary,
-                                backGroundColor: AppColors.pureWhite,
-                              ),
-                            ),
+                            // SizedBox(height: 20.h),
+                            // Padding(
+                            //   padding: EdgeInsets.symmetric(horizontal: 80.0),
+                            //   child: CustomOutlinedButton(
+                            //     padding: EdgeInsets.symmetric(
+                            //       vertical: 12.r,
+                            //       horizontal: 5.r,
+                            //     ),
+                            //     onPressed: () {},
+                            //     text: 'Start Now',
+                            //     color: context.colorTheme.primary,
+                            //     backGroundColor: AppColors.pureWhite,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

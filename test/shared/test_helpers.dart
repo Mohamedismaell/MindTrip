@@ -12,10 +12,13 @@ import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart'
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
-import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_localuse_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/bootstrap_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
+import 'package:mindtrip/features/home/routes/home_routes.dart';
+import 'package:mindtrip/features/explore/routes/explore_routes.dart';
 import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/shared/auth/token_manager.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
@@ -50,8 +53,6 @@ import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.da
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
 import 'package:mindtrip/features/onboarding/presentation/manager/cubit/on_boarding_cubit.dart';
-import 'package:mindtrip/features/places/routes/recommended_places_routes.dart';
-import 'package:mindtrip/features/explore/routes/explore_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
 
 const testUser = UserEntity(
@@ -128,8 +129,13 @@ class TestHarness {
       toggleFavoriteUseCase: ToggleFavoriteUseCase(
         repository: favoritesRepository,
       ),
-      getFavoritesUseCase: GetFavoritesUseCase(repository: favoritesRepository),
+      getFavoritePlacesUseCase: GetFavoritePlacesLocalUseCase(
+        repository: favoritesRepository,
+      ),
       syncFavoritesUseCase: SyncFavoritesUseCase(
+        repository: favoritesRepository,
+      ),
+      bootstrapFavoritesUseCase: BootstrapFavoritesUseCase(
         repository: favoritesRepository,
       ),
     );
@@ -770,18 +776,16 @@ class FakeFavoritesRepository implements FavoritesRepository {
   final Set<String> _favoriteIds = <String>{};
 
   @override
+  Future<Result<void>> bootstrapFromServer() async => const Result.ok(null);
+
+  @override
   Future<Result<void>> clearAll() async {
     _favoriteIds.clear();
     return Result.ok(null);
   }
 
   @override
-  Future<Result<Set<String>>> getFavoriteIds() async => Result.ok(_favoriteIds);
-
-  @override
-  Future<Result<List<PlaceEntity>>> getFavoritePlaces({
-    required Set<String> placeIds,
-  }) async {
+  Future<Result<List<PlaceEntity>>> getFavoritePlacesLocal() async {
     return const Result.ok([]);
   }
 
@@ -792,6 +796,7 @@ class FakeFavoritesRepository implements FavoritesRepository {
   Future<Result<void>> toggleFavorite({
     required String placeId,
     required bool isFavorite,
+    PlaceEntity? place,
   }) async {
     if (isFavorite) {
       _favoriteIds.add(placeId);

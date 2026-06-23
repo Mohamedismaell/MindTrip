@@ -5,7 +5,7 @@ import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_state.dart';
-import 'package:mindtrip/features/explore/presentation/widgets/explore_place_card.dart';
+import 'package:mindtrip/core/shared/presentation/widget/place_card_vartical_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ExplorePlacesGrid extends StatefulWidget {
@@ -129,13 +129,13 @@ class _ExplorePlacesGridState extends State<ExplorePlacesGrid> {
                           if (index >= places.length) {
                             return const Skeletonizer(
                               enabled: true,
-                              child: ExplorePlaceCard(
+                              child: PlaceCardVarticalGrid(
                                 place: DummyData.place,
                                 hasBadge: true,
                               ),
                             );
                           }
-                          return ExplorePlaceCard(
+                          return PlaceCardVarticalGrid(
                             place: places[index],
                             hasBadge: true,
                           );

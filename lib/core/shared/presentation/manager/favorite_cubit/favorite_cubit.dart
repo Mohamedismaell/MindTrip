@@ -1,101 +1,105 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
+import 'package:mindtrip/core/shared/domain/usecases/bootstrap_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_localuse_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_state.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 
-part 'favorite_state.dart';
-
-class FavoriteCubit extends Cubit<FavoriteState> {
+class FavoriteCubit extends SafeCubit<FavoriteState> {
   final ToggleFavoriteUseCase _toggleFavoriteUseCase;
-  final GetFavoritesUseCase _getFavoritesUseCase;
+  final GetFavoritePlacesLocalUseCase _getFavoritePlacesLocalUseCase;
   final SyncFavoritesUseCase _syncFavoritesUseCase;
+  final BootstrapFavoritesUseCase _bootstrapFavoritesUseCase;
 
   FavoriteCubit({
     required ToggleFavoriteUseCase toggleFavoriteUseCase,
-    required GetFavoritesUseCase getFavoritesUseCase,
+    required GetFavoritePlacesLocalUseCase getFavoritePlacesUseCase,
     required SyncFavoritesUseCase syncFavoritesUseCase,
+    required BootstrapFavoritesUseCase bootstrapFavoritesUseCase,
   }) : _toggleFavoriteUseCase = toggleFavoriteUseCase,
-       _getFavoritesUseCase = getFavoritesUseCase,
+       _getFavoritePlacesLocalUseCase = getFavoritePlacesUseCase,
        _syncFavoritesUseCase = syncFavoritesUseCase,
-       super(const FavoriteState()) {
-    loadFavorites();
+       _bootstrapFavoritesUseCase = bootstrapFavoritesUseCase,
+       super(const FavoriteState());
+
+  Future<void> loadFavorites() async {
+    emitSafe(state.copyWith(status: FavoritesStatus.loading));
+
+    await _bootstrapFavoritesUseCase.call();
+
+    final result = await _getFavoritePlacesLocalUseCase.call();
+    result.when(
+      success: (places) {
+        final ids = places.map((p) => p.id).toSet();
+        emitSafe(
+          state.copyWith(
+            favoriteIds: ids,
+            favoritePlaces: places,
+            status: places.isEmpty
+                ? FavoritesStatus.empty
+                : FavoritesStatus.loaded,
+          ),
+        );
+      },
+      failure: (_) {
+        emitSafe(state.copyWith(status: FavoritesStatus.error));
+      },
+      cancelled: () {},
+    );
   }
 
   Future<void> toggleFavorite({
     required String placeId,
     required bool isFavorite,
+    PlaceEntity? place,
   }) async {
-    final updatedFavorites = Set<String>.from(state.favoriteIds);
+    // Optimistic update
+    final updatedIds = Set<String>.from(state.favoriteIds);
+    List<PlaceEntity> updatedPlaces = List.from(state.favoritePlaces);
     if (isFavorite) {
-      updatedFavorites.add(placeId);
-      print('added $placeId');
+      updatedIds.add(placeId);
+      if (place != null && !updatedPlaces.any((p) => p.id == placeId)) {
+        updatedPlaces = [...updatedPlaces, place];
+      }
     } else {
-      updatedFavorites.remove(placeId);
-      print('removed $placeId');
+      updatedIds.remove(placeId);
+      updatedPlaces = updatedPlaces.where((p) => p.id != placeId).toList();
     }
 
-    emit(
+    emitSafe(
       state.copyWith(
-        favoriteIds: updatedFavorites,
+        favoriteIds: updatedIds,
+        favoritePlaces: updatedPlaces,
         status: FavoritesStatus.syncing,
       ),
     );
-    print('favoriteIds ===> ${state.favoriteIds}');
-    final result = await _toggleFavoriteUseCase.call(
+
+    await _toggleFavoriteUseCase.call(
       placeId: placeId,
       isFavorite: isFavorite,
+      place: place,
     );
 
-    result.when(
-      success: (_) {
-        emit(state.copyWith(status: FavoritesStatus.loaded));
-      },
-      failure: (error) {
-        emit(state.copyWith(status: FavoritesStatus.loaded));
-      },
+    emitSafe(
+      state.copyWith(
+        status: updatedIds.isEmpty
+            ? FavoritesStatus.empty
+            : FavoritesStatus.loaded,
+      ),
     );
   }
 
-  Future<void> loadFavorites() async {
-    print('fovorites loaded ===>');
-    final result = await _getFavoritesUseCase.call();
-    result.when(
-      success: (favoriteIds) {
-        print('fovorites loaded ===> $favoriteIds');
-        emit(
-          state.copyWith(
-            favoriteIds: favoriteIds,
-            status: FavoritesStatus.loaded,
-          ),
-        );
-      },
-      failure: (_) {
-        emit(state.copyWith(status: FavoritesStatus.error));
-      },
-    );
+  void selectCategory(PlaceCategory category) {
+    emitSafe(state.copyWith(selectedCategory: category));
   }
 
   Future<void> syncPendingFavorites() async {
-    emit(state.copyWith(status: FavoritesStatus.syncing));
-
-    final result = await _syncFavoritesUseCase.call();
-
-    result.when(
-      success: (_) {
-        emit(state.copyWith(status: FavoritesStatus.loaded));
-      },
-      failure: (_) {
-        emit(state.copyWith(status: FavoritesStatus.loaded));
-      },
-    );
+    await _syncFavoritesUseCase.call();
   }
 
-  bool isFavorite(String placeId) {
-    return state.favoriteIds.contains(placeId);
-  }
+  bool isFavorite(String placeId) => state.favoriteIds.contains(placeId);
 
-  void clear() {
-    emit(const FavoriteState());
-  }
+  void clear() => emitSafe(const FavoriteState());
 }

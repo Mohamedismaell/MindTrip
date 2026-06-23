@@ -1,21 +1,30 @@
-part of 'favorite_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 
-enum FavoritesStatus { initial, loaded, syncing, error }
+part 'favorite_state.freezed.dart';
 
-class FavoriteState extends Equatable {
-  final Set<String> favoriteIds;
-  final FavoritesStatus status;
+enum FavoritesStatus { initial, loading, loaded, empty, error, syncing }
 
-  const FavoriteState({
-    this.favoriteIds = const {},
-    this.status = FavoritesStatus.initial,
-  });
-  FavoriteState copyWith({Set<String>? favoriteIds, FavoritesStatus? status}) =>
-      FavoriteState(
-        favoriteIds: favoriteIds ?? this.favoriteIds,
-        status: status ?? this.status,
-      );
+@freezed
+abstract class FavoriteState with _$FavoriteState {
+  const FavoriteState._();
 
-  @override
-  List<Object> get props => [favoriteIds, status];
+  const factory FavoriteState({
+    @Default(<String>{}) Set<String> favoriteIds,
+    @Default(<PlaceEntity>[]) List<PlaceEntity> favoritePlaces,
+    @Default(FavoritesStatus.initial) FavoritesStatus status,
+    String? errorMessage,
+    @Default(PlaceCategory.all) PlaceCategory selectedCategory,
+  }) = _FavoriteState;
+
+  List<PlaceEntity> get filteredPlaces {
+    if (selectedCategory == PlaceCategory.all) {
+      return favoritePlaces;
+    }
+
+    return favoritePlaces
+        .where((place) => place.category == selectedCategory)
+        .toList();
+  }
 }

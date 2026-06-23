@@ -28,6 +28,11 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
         cancelToken: cancelToken,
       );
       return Result.ok(result);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -44,6 +49,11 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
         cancelToken: cancelToken,
       );
       return Result.ok(result.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -61,6 +71,11 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
         return _datasource.buildPhotoUrl(ref, maxWidth: maxWidth);
       }).toList();
       return Result.ok(urls);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -83,6 +98,11 @@ class GooglePlacesRepositoryImpl implements GooglePlacesRepository {
         cancelToken: cancelToken,
       );
       return Result.ok(result.map((m) => m.toEntity()).toList());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

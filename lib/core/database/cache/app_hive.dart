@@ -10,7 +10,7 @@ import 'package:mindtrip/features/search/data/models/recent_search_model.dart';
 
 class AppHive {
   static late Box onboardingBox;
-  static late Box<String> favoritesBox;
+  static late Box<PlaceModel> favoritesBox;
   static late Box<String> favoritesSyncQueueBox;
   static late Box<PlaceModel> placesCacheBox;
   static late Box<TripModel> tripsBox;
@@ -59,7 +59,7 @@ class AppHive {
 
   static Future<void> openBoxes() async {
     onboardingBox = await Hive.openBox('onboardingBox');
-    favoritesBox = await Hive.openBox('favoritesBox');
+    favoritesBox = await Hive.openBox<PlaceModel>('favoritesBox');
     favoritesSyncQueueBox = await Hive.openBox('favoritesSyncQueueBox');
     placesCacheBox = await Hive.openBox('placesCacheBox');
     tripsBox = await Hive.openBox('tripsBox');

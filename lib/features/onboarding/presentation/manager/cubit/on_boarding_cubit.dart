@@ -1,10 +1,10 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/onboarding/domain/usecases/complete_onboarding_use_case.dart';
 
 part 'on_boarding_state.dart';
 
-class OnboardingCubit extends Cubit<OnboardingState> {
+class OnboardingCubit extends SafeCubit<OnboardingState> {
   OnboardingCubit({required this.completeOnboarding})
     : super(const OnboardingState());
 
@@ -12,10 +12,10 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   void updateIndex(int index) {
     if (index == 3) {
-      emit(state.copyWith(currentIndex: index, isLastPage: true));
+      emitSafe(state.copyWith(currentIndex: index, isLastPage: true));
       return;
     }
-    emit(state.copyWith(currentIndex: index, isLastPage: false));
+    emitSafe(state.copyWith(currentIndex: index, isLastPage: false));
   }
 
   Future<void> finishOnboarding() async {

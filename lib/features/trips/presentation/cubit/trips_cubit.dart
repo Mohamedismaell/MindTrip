@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_all_trips_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/save_trip_use_case.dart';
@@ -10,7 +10,7 @@ import 'package:mindtrip/features/itinerary/domain/use_cases/save_itinerary_use_
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 import 'package:uuid/uuid.dart';
 
-class TripsCubit extends Cubit<TripsState> {
+class TripsCubit extends SafeCubit<TripsState> {
   final GetAllTripsUseCase _getAllTrips;
   final SaveTripUseCase _saveTrip;
   final DeleteTripUseCase _deleteTrip;
@@ -35,34 +35,31 @@ class TripsCubit extends Cubit<TripsState> {
        super(TripsState(focusedDay: DateTime.now()));
 
   Future<void> updateSearchQuary(String? searchQuary) async {
-    if (isClosed) return;
-    emit(state.copyWith(searchQuery: searchQuary));
+    emitSafe(state.copyWith(searchQuery: searchQuary));
   }
 
   Future<void> updateSelectedTab(TripFilterTab? selectedTap) async {
-    if (isClosed) return;
-    emit(state.copyWith(selectedTab: selectedTap));
+    emitSafe(state.copyWith(selectedTab: selectedTap));
   }
 
   Future<void> loadTrips() async {
-    if (isClosed) return;
-    emit(state.copyWith(tripsStatus: TripsStatus.loading));
+    emitSafe(state.copyWith(tripsStatus: TripsStatus.loading));
 
     final result = await _getAllTrips();
-    if (isClosed) return;
-
+    
     result.when(
       success: (trips) {
-        emit(state.copyWith(tripsStatus: TripsStatus.loaded, trips: trips));
+        emitSafe(state.copyWith(tripsStatus: TripsStatus.loaded, trips: trips));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsStatus.error,
             errorMessage: 'Failed to load trips: ${error.message}',
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -81,16 +78,14 @@ class TripsCubit extends Cubit<TripsState> {
       interests: const [],
     );
 
-    if (isClosed) return newTrip.id;
     final updatedTrips = List<Trip>.from(state.trips)..add(newTrip);
-    emit(state.copyWith(trips: updatedTrips));
+    emitSafe(state.copyWith(trips: updatedTrips));
     return newTrip.id;
   }
 
   Future<void> saveTripDraft(Trip trip) async {
     final result = await _saveTrip(trip);
-    if (isClosed) return;
-
+    
     result.when(
       success: (_) {
         final index = state.trips.indexWhere((t) => t.id == trip.id);
@@ -100,16 +95,17 @@ class TripsCubit extends Cubit<TripsState> {
         } else {
           updatedTrips.add(trip);
         }
-        emit(state.copyWith(trips: updatedTrips));
+        emitSafe(state.copyWith(trips: updatedTrips));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsStatus.error,
             errorMessage: 'Failed to save draft: ${error.message}',
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -123,22 +119,22 @@ class TripsCubit extends Cubit<TripsState> {
     );
 
     final result = await _saveTrip(trip);
-    if (isClosed) return;
-
+    
     result.when(
       success: (_) {
         final updatedTrips = List<Trip>.from(state.trips);
         updatedTrips[index] = trip;
-        emit(state.copyWith(trips: updatedTrips));
+        emitSafe(state.copyWith(trips: updatedTrips));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsStatus.error,
             errorMessage: 'Failed to complete trip: ${error.message}',
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -146,18 +142,16 @@ class TripsCubit extends Cubit<TripsState> {
     final index = state.getTripIndex(tripId);
     if (index == -1) return;
 
-    emit(state.copyWith(isGenerating: true, clearGeneratedTripId: true));
+    emitSafe(state.copyWith(isGenerating: true, clearGeneratedTripId: true));
 
     final trip = state.trips[index];
 
     final itineraryResult = await _generateItinerary(trip);
-    if (isClosed) return;
-
+    
     itineraryResult.when(
       success: (itinerary) async {
         final saveItineraryResult = await _saveItinerary(itinerary);
-        if (isClosed) return;
-
+        
         saveItineraryResult.when(
           success: (_) async {
             final allPlaces = itinerary.days
@@ -182,14 +176,13 @@ class TripsCubit extends Cubit<TripsState> {
             );
 
             final saveTripResult = await _saveTrip(updatedTrip);
-            if (isClosed) return;
-
+            
             saveTripResult.when(
               success: (_) {
                 final updatedTrips = List<Trip>.from(state.trips);
                 updatedTrips[index] = updatedTrip;
 
-                emit(
+                emitSafe(
                   state.copyWith(
                     trips: updatedTrips,
                     isGenerating: false,
@@ -198,7 +191,7 @@ class TripsCubit extends Cubit<TripsState> {
                 );
               },
               failure: (error) {
-                emit(
+                emitSafe(
                   state.copyWith(
                     tripsStatus: TripsStatus.error,
                     isGenerating: false,
@@ -207,10 +200,11 @@ class TripsCubit extends Cubit<TripsState> {
                   ),
                 );
               },
+              cancelled: () {},
             );
           },
           failure: (error) {
-            emit(
+            emitSafe(
               state.copyWith(
                 tripsStatus: TripsStatus.error,
                 isGenerating: false,
@@ -218,10 +212,11 @@ class TripsCubit extends Cubit<TripsState> {
               ),
             );
           },
+          cancelled: () {},
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsStatus.error,
             isGenerating: false,
@@ -229,26 +224,27 @@ class TripsCubit extends Cubit<TripsState> {
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
   Future<void> deleteTrip(String tripId) async {
     final result = await _deleteTrip(tripId);
-    if (isClosed) return;
-
+    
     result.when(
       success: (_) {
         final updatedTrips = state.trips.where((t) => t.id != tripId).toList();
-        emit(state.copyWith(trips: updatedTrips));
+        emitSafe(state.copyWith(trips: updatedTrips));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsStatus.error,
             errorMessage: 'Failed to delete trip: ${error.message}',
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -262,22 +258,22 @@ class TripsCubit extends Cubit<TripsState> {
     );
 
     final result = await _updateTrip(trip);
-    if (isClosed) return;
-
+    
     result.when(
       success: (_) {
         final updatedTrips = List<Trip>.from(state.trips);
         updatedTrips[index] = trip;
-        emit(state.copyWith(trips: updatedTrips));
+        emitSafe(state.copyWith(trips: updatedTrips));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsStatus.error,
             errorMessage: 'Failed to update title: ${error.message}',
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -313,7 +309,7 @@ class TripsCubit extends Cubit<TripsState> {
   }
 
   void nextMonth(DateTime focusedDay) {
-    emit(
+    emitSafe(
       state.copyWith(
         focusedDay: DateTime(focusedDay.year, focusedDay.month + 1),
       ),
@@ -321,7 +317,7 @@ class TripsCubit extends Cubit<TripsState> {
   }
 
   void previouseMonth(DateTime focusedDay) {
-    emit(
+    emitSafe(
       state.copyWith(
         focusedDay: DateTime(focusedDay.year, focusedDay.month - 1),
       ),
@@ -329,10 +325,10 @@ class TripsCubit extends Cubit<TripsState> {
   }
 
   void changeMonth(DateTime focusedDay) {
-    emit(state.copyWith(focusedDay: focusedDay));
+    emitSafe(state.copyWith(focusedDay: focusedDay));
   }
 
   void selectDay(DateTime selected, DateTime focused) {
-    emit(state.copyWith(selectedDay: selected, focusedDay: focused));
+    emitSafe(state.copyWith(selectedDay: selected, focusedDay: focused));
   }
 }

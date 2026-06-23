@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/features/user/data/datasources/user_remote_data_source.dart';
@@ -16,6 +17,11 @@ class UserRepositoryImpl extends UserRepository {
     try {
       final user = await _remoteDataSource.getCurrentUser();
       return Result.ok(user.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -26,6 +32,11 @@ class UserRepositoryImpl extends UserRepository {
     try {
       await _remoteDataSource.updateInterests(interests);
       return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -36,6 +47,11 @@ class UserRepositoryImpl extends UserRepository {
     try {
       final url = await _remoteDataSource.uploadProfilePhoto(filePath);
       return Result.ok(url);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -52,6 +68,11 @@ class UserRepositoryImpl extends UserRepository {
         phoneNumber: phoneNumber,
       );
       return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

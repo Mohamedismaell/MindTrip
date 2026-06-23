@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/features/itinerary/presentation/cubit/trp_share_state.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,7 +10,7 @@ import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/itinerary/presentation/widgets/trip_share_card.dart';
 
-class TripShareCubit extends Cubit<TripShareState> {
+class TripShareCubit extends SafeCubit<TripShareState> {
   TripShareCubit() : super(TripShareInitial());
 
   Future<void> shareTrip({
@@ -19,7 +19,7 @@ class TripShareCubit extends Cubit<TripShareState> {
     required TripItinerary? itinerary,
     Rect? sharePositionOrigin,
   }) async {
-    emit(TripShareLoading());
+    emitSafe(TripShareLoading());
 
     try {
       // Pre cache the image
@@ -70,9 +70,9 @@ class TripShareCubit extends Cubit<TripShareState> {
         );
       }
 
-      emit(TripShareSuccess());
+      emitSafe(TripShareSuccess());
     } catch (e) {
-      emit(TripShareError(e.toString()));
+      emitSafe(TripShareError(e.toString()));
     }
   }
 }

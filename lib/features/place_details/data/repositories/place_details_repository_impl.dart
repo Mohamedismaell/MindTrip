@@ -1,6 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
-import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
@@ -9,11 +10,11 @@ import 'package:mindtrip/features/place_details/domain/repositories/place_detail
 
 class PlaceDetailsRepositoryImpl implements PlaceDetailsRepository {
   final PlaceDetailsRemoteDataSource _remote;
-  final PlacesLocalDataSource _local;
+  final PlaceLocalDataSource _local;
 
   PlaceDetailsRepositoryImpl({
     required PlaceDetailsRemoteDataSource remote,
-    required PlacesLocalDataSource local,
+    required PlaceLocalDataSource local,
   }) : _remote = remote,
        _local = local;
 
@@ -23,15 +24,27 @@ class PlaceDetailsRepositoryImpl implements PlaceDetailsRepository {
       final remote = await _remote.getPlaceDetails(placeId);
       await _local.cachePlace(remote);
       return Result.ok(remote.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return _getPlaceDetailsLocalFallback(placeId, e);
     } catch (e) {
-      try {
-        final local = await _local.getPlace(placeId);
-        if (local != null) {
-          return Result.ok(local.toEntity());
-        }
-      } catch (_) {}
-      return Result.error(ApiErrorMapper.fromException(e));
+      return _getPlaceDetailsLocalFallback(placeId, e);
     }
+  }
+
+  Future<Result<PlaceEntity>> _getPlaceDetailsLocalFallback(
+    String placeId,
+    Object e,
+  ) async {
+    try {
+      final local = await _local.getPlace(placeId);
+      if (local != null) {
+        return Result.ok(local.toEntity());
+      }
+    } catch (_) {}
+    return Result.error(ApiErrorMapper.fromException(e));
   }
 
   @override
@@ -51,6 +64,11 @@ class PlaceDetailsRepositoryImpl implements PlaceDetailsRepository {
         lng: lng,
       );
       return Result.ok(remote.map((m) => m.toEntity()));
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

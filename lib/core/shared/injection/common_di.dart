@@ -17,13 +17,13 @@ import 'package:mindtrip/core/shared/auth/secure_token_storage.dart';
 import 'package:mindtrip/core/shared/auth/token_manager.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_local_data_source.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart';
-import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart';
 import 'package:mindtrip/core/shared/data/repositories/favorites_repository_impl.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
-import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_use_case.dart';
-import 'package:mindtrip/core/shared/domain/usecases/get_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_localuse_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/bootstrap_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
@@ -42,7 +42,7 @@ import 'package:mindtrip/core/utils/image_pick_crop_service.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_remote_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
-import 'package:mindtrip/features/favorite/cubit/saved_places_cubit.dart';
+
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 
 CacheHelper get cacheHelper => sl<CacheHelper>();
@@ -145,9 +145,7 @@ class CommonDi {
         syncQueueBox: AppHive.favoritesSyncQueueBox,
       ),
     );
-    sl.registerLazySingleton<PlacesLocalDataSource>(
-      () => PlacesLocalDataSourceImpl(),
-    );
+
     sl.registerLazySingleton<FavoritesRemoteDataSource>(
       () => FavoritesRemoteDataSource(api: sl<ApiConsumer>()),
     );
@@ -155,11 +153,12 @@ class CommonDi {
       () => FavoritesRepositoryImpl(
         local: sl<FavoritesLocalDataSource>(),
         remote: sl<FavoritesRemoteDataSource>(),
-        placesLocal: sl<PlacesLocalDataSource>(),
+        placesLocal: sl<PlaceLocalDataSource>(),
       ),
     );
     sl.registerLazySingleton(
-      () => GetFavoritesUseCase(repository: sl<FavoritesRepository>()),
+      () =>
+          GetFavoritePlacesLocalUseCase(repository: sl<FavoritesRepository>()),
     );
     sl.registerLazySingleton(
       () => ToggleFavoriteUseCase(repository: sl<FavoritesRepository>()),
@@ -168,20 +167,14 @@ class CommonDi {
       () => SyncFavoritesUseCase(repository: sl<FavoritesRepository>()),
     );
     sl.registerLazySingleton(
-      () => FavoriteCubit(
-        getFavoritesUseCase: sl<GetFavoritesUseCase>(),
-        toggleFavoriteUseCase: sl<ToggleFavoriteUseCase>(),
-        syncFavoritesUseCase: sl<SyncFavoritesUseCase>(),
-      ),
+      () => BootstrapFavoritesUseCase(repository: sl<FavoritesRepository>()),
     );
     sl.registerLazySingleton(
-      () => GetFavoritePlacesUseCase(repository: sl<FavoritesRepository>()),
-    );
-    // Factory — a fresh instance per FavoritesScreen entry.
-    sl.registerFactory(
-      () => SavedPlacesCubit(
-        getFavoritePlacesUseCase: sl<GetFavoritePlacesUseCase>(),
-        favoriteCubit: sl<FavoriteCubit>(),
+      () => FavoriteCubit(
+        getFavoritePlacesUseCase: sl<GetFavoritePlacesLocalUseCase>(),
+        toggleFavoriteUseCase: sl<ToggleFavoriteUseCase>(),
+        syncFavoritesUseCase: sl<SyncFavoritesUseCase>(),
+        bootstrapFavoritesUseCase: sl<BootstrapFavoritesUseCase>(),
       ),
     );
 

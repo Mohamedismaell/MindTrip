@@ -23,7 +23,7 @@ class UserRemoteDataSource {
   }
 
   Future<String> uploadProfilePhoto(String filePath) async {
-    print(' profile photo ******* ===>${filePath}}');
+    print(' profile photo ******* ===>$filePath}');
     final formDataMap = {
       'file': await MultipartFile.fromFile(
         filePath,

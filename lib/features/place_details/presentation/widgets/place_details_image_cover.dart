@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
@@ -6,16 +7,20 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/favorite_place_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PlaceDetailsImageCover extends StatelessWidget {
   final List<String>? imageUrls;
   final String placeId;
+  final PlaceEntity? place;
   final String? heroTag;
   const PlaceDetailsImageCover({
     super.key,
     this.imageUrls,
     required this.placeId,
+    this.place,
     this.heroTag,
   });
 
@@ -58,7 +63,17 @@ class PlaceDetailsImageCover extends StatelessWidget {
           Positioned(
             top: topPadding + 24.h,
             right: 22.w,
-            child: FavoriteButton(placeId: placeId),
+            child: FavoriteButton(
+              isFavorite: context.watch<FavoriteCubit>().isFavorite(placeId),
+              onTap: () {
+                final cubit = context.read<FavoriteCubit>();
+                cubit.toggleFavorite(
+                  placeId: placeId,
+                  isFavorite: !cubit.isFavorite(placeId),
+                  place: place,
+                );
+              },
+            ),
           ),
         ],
       ),

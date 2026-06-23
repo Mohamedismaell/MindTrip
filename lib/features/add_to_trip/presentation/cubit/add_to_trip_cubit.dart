@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
@@ -17,7 +17,7 @@ import 'package:mindtrip/features/trips/domain/use_cases/get_trip_containing_pla
 import 'package:mindtrip/features/trips/domain/use_cases/save_trip_use_case.dart';
 import 'package:uuid/uuid.dart';
 
-class AddToTripCubit extends Cubit<AddToTripState> {
+class AddToTripCubit extends SafeCubit<AddToTripState> {
   final GetTripContainingPlaceUseCase _getTripContainingPlace;
   final GetAllTripsUseCase _getAllTrips;
   final GetItineraryUseCase _getItinerary;
@@ -60,12 +60,11 @@ class AddToTripCubit extends Cubit<AddToTripState> {
 
   Future<void> init() async {
     final result = await _getTripContainingPlace(state.place.id);
-    if (isClosed) return;
-
+    
     result.when(
       success: (trip) {
         if (trip != null) {
-          emit(
+          emitSafe(
             state.copyWith(
               placeAlreadyInTrip: true,
               hostTripName: trip.title,
@@ -73,22 +72,23 @@ class AddToTripCubit extends Cubit<AddToTripState> {
             ),
           );
         } else {
-          emit(state.copyWith(placeAlreadyInTrip: false, clearHostTrip: true));
+          emitSafe(state.copyWith(placeAlreadyInTrip: false, clearHostTrip: true));
         }
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsLoadStatus.error,
             errorMessage: 'Initialization failed: ${error.message}',
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
   void reset() {
-    emit(
+    emitSafe(
       state.copyWith(
         addingStatus: ActionStatus.initial,
         creatingStatus: ActionStatus.initial,
@@ -97,7 +97,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
   }
 
   void clearSelection() {
-    emit(
+    emitSafe(
       state.copyWith(
         clearSelectedTrip: true,
         clearSelectedItinerary: true,
@@ -111,14 +111,14 @@ class AddToTripCubit extends Cubit<AddToTripState> {
   //  Trip List
 
   Future<void> loadTrips() async {
-    emit(state.copyWith(tripsStatus: TripsLoadStatus.loading));
+    emitSafe(state.copyWith(tripsStatus: TripsLoadStatus.loading));
 
     final result = await _getAllTrips();
-    if (isClosed) return;
+    
     await Future.delayed(const Duration(seconds: 2));
     result.when(
       success: (trips) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsLoadStatus.loaded,
             trips: trips
@@ -132,13 +132,14 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             tripsStatus: TripsLoadStatus.error,
             errorMessage: 'Failed to load trips: ${error.message}',
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -146,16 +147,16 @@ class AddToTripCubit extends Cubit<AddToTripState> {
 
   /// Loads the itinerary for [trip]. Returns `true` on success.
   Future<bool> selectTrip(Trip trip) async {
-    emit(state.copyWith(itineraryStatus: TripsLoadStatus.loading));
+    emitSafe(state.copyWith(itineraryStatus: TripsLoadStatus.loading));
 
     final result = await _getItinerary(trip.id);
-    if (isClosed) return false;
+    
     await Future.delayed(const Duration(seconds: 2));
 
     return result.when(
       success: (itinerary) {
         if (itinerary == null) {
-          emit(
+          emitSafe(
             state.copyWith(
               itineraryStatus: TripsLoadStatus.error,
               errorMessage: 'Itinerary not found',
@@ -163,7 +164,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
           );
           return false;
         }
-        emit(
+        emitSafe(
           state.copyWith(
             itineraryStatus: TripsLoadStatus.loaded,
             selectedTrip: trip,
@@ -174,7 +175,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         return true;
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             itineraryStatus: TripsLoadStatus.error,
             errorMessage: 'Failed to load itinerary: ${error.message}',
@@ -182,15 +183,16 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
         return false;
       },
+      cancelled: () => false,
     );
   }
 
   Future<bool> loadHostTripItinerary() async {
     if (state.hostTripId == null) return false;
-    emit(state.copyWith(itineraryStatus: TripsLoadStatus.loading));
+    emitSafe(state.copyWith(itineraryStatus: TripsLoadStatus.loading));
 
     final result = await _getTripById(state.hostTripId!);
-    if (isClosed) return false;
+    
     await Future.delayed(const Duration(seconds: 2));
 
     return result.when(
@@ -198,7 +200,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         if (trip != null) {
           return await selectTrip(trip);
         } else {
-          emit(
+          emitSafe(
             state.copyWith(
               itineraryStatus: TripsLoadStatus.error,
               errorMessage: 'Original trip could not be found.',
@@ -208,7 +210,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         }
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             itineraryStatus: TripsLoadStatus.error,
             errorMessage: 'Failed to load trip: ${error.message}',
@@ -216,18 +218,19 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
         return false;
       },
+      cancelled: () => false,
     );
   }
 
   void selectPeriod(int dayNumber, PlaceDayPeriod period) {
-    emit(state.copyWith(selectedDay: dayNumber, selectedPeriod: period));
+    emitSafe(state.copyWith(selectedDay: dayNumber, selectedPeriod: period));
   }
 
   //  Actions
 
   Future<bool> addToTrip({int? dayNumber, PlaceDayPeriod? period}) async {
     if (state.selectedTrip == null) return false;
-    emit(state.copyWith(addingStatus: ActionStatus.processing));
+    emitSafe(state.copyWith(addingStatus: ActionStatus.processing));
 
     final result = await _addPlaceUseCase(
       tripId: state.selectedTrip!.id,
@@ -236,11 +239,10 @@ class AddToTripCubit extends Cubit<AddToTripState> {
       period: period ?? state.selectedPeriod,
     );
     await Future.delayed(const Duration(seconds: 3));
-    if (isClosed) return false;
-
+    
     return result.when(
       success: (_) {
-        emit(
+        emitSafe(
           state.copyWith(
             addingStatus: ActionStatus.success,
             placeAlreadyInTrip: true,
@@ -251,7 +253,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         return true;
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             addingStatus: ActionStatus.error,
             errorMessage: 'Failed to add place: ${error.message}',
@@ -259,6 +261,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
         return false;
       },
+      cancelled: () => false,
     );
   }
 
@@ -267,7 +270,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     required PlaceDayPeriod toPeriod,
   }) async {
     if (state.hostTripId == null) return false;
-    emit(state.copyWith(addingStatus: ActionStatus.processing));
+    emitSafe(state.copyWith(addingStatus: ActionStatus.processing));
 
     final result = await _movePlaceInTripUseCase(
       tripId: state.hostTripId!,
@@ -276,15 +279,14 @@ class AddToTripCubit extends Cubit<AddToTripState> {
       toPeriod: toPeriod,
     );
     await Future.delayed(const Duration(seconds: 2));
-    if (isClosed) return false;
-
+    
     return result.when(
       success: (_) {
-        emit(state.copyWith(addingStatus: ActionStatus.success));
+        emitSafe(state.copyWith(addingStatus: ActionStatus.success));
         return true;
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             addingStatus: ActionStatus.error,
             errorMessage: error.message,
@@ -292,6 +294,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
         return false;
       },
+      cancelled: () => false,
     );
   }
 
@@ -301,7 +304,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     PlaceDayPeriod toPeriod,
   ) async {
     if (state.hostTripId == null) return false;
-    emit(state.copyWith(addingStatus: ActionStatus.processing));
+    emitSafe(state.copyWith(addingStatus: ActionStatus.processing));
 
     final result = await _movePlaceBetweenTripsUseCase(
       sourceTripId: state.hostTripId!,
@@ -311,11 +314,10 @@ class AddToTripCubit extends Cubit<AddToTripState> {
       toPeriod: toPeriod,
     );
     await Future.delayed(const Duration(seconds: 2));
-    if (isClosed) return false;
-
+    
     return result.when(
       success: (_) {
-        emit(
+        emitSafe(
           state.copyWith(
             addingStatus: ActionStatus.success,
             hostTripId: targetTrip.id,
@@ -325,7 +327,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         return true;
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             addingStatus: ActionStatus.error,
             errorMessage: error.message,
@@ -333,23 +335,23 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
         return false;
       },
+      cancelled: () => false,
     );
   }
 
   Future<bool> removeFromTrip() async {
     if (state.hostTripId == null) return false;
-    emit(state.copyWith(addingStatus: ActionStatus.processing));
+    emitSafe(state.copyWith(addingStatus: ActionStatus.processing));
 
     final result = await _removePlaceUseCase(
       tripId: state.hostTripId!,
       placeId: state.place.id,
     );
     await Future.delayed(const Duration(seconds: 2));
-    if (isClosed) return false;
-
+    
     return result.when(
       success: (_) {
-        emit(
+        emitSafe(
           state.copyWith(
             addingStatus: ActionStatus.success,
             placeAlreadyInTrip: false,
@@ -359,7 +361,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         return true;
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             addingStatus: ActionStatus.error,
             errorMessage: error.message,
@@ -367,6 +369,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
         return false;
       },
+      cancelled: () => false,
     );
   }
 
@@ -376,28 +379,28 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     final picked = DateTime(day.year, day.month, day.day);
     if (state.startDate == null ||
         (state.startDate != null && state.endDate != null)) {
-      emit(state.copyWith(startDate: picked, clearEndDate: true));
+      emitSafe(state.copyWith(startDate: picked, clearEndDate: true));
       return;
     }
     if (picked.isBefore(state.startDate!)) {
-      emit(state.copyWith(startDate: picked));
+      emitSafe(state.copyWith(startDate: picked));
       return;
     }
-    emit(state.copyWith(endDate: picked));
+    emitSafe(state.copyWith(endDate: picked));
   }
 
   void updateBudget(String budget) {
-    emit(state.copyWith(selectedBudget: budget));
+    emitSafe(state.copyWith(selectedBudget: budget));
   }
 
   void updatePeople(int people) {
-    emit(state.copyWith(numberOfPeople: people.clamp(1, 10)));
+    emitSafe(state.copyWith(numberOfPeople: people.clamp(1, 10)));
   }
 
   Future<bool> quickGenerateTrip() async {
     if (state.startDate == null || state.endDate == null) return false;
 
-    emit(state.copyWith(creatingStatus: ActionStatus.processing));
+    emitSafe(state.copyWith(creatingStatus: ActionStatus.processing));
 
     final destination = state.place.location.address;
     final now = DateTime.now();
@@ -420,18 +423,15 @@ class AddToTripCubit extends Cubit<AddToTripState> {
     );
 
     final saveResult = await _saveTrip(trip);
-    if (isClosed) return false;
-
+    
     return await saveResult.when(
       success: (_) async {
         final itResult = await _generateItinerary(trip);
-        if (isClosed) return false;
-
+        
         return await itResult.when(
           success: (itinerary) async {
             final saveItResult = await _saveItinerary(itinerary);
-            if (isClosed) return false;
-
+            
             return await saveItResult.when(
               success: (_) async {
                 final result = await _addPlaceUseCase(
@@ -441,11 +441,9 @@ class AddToTripCubit extends Cubit<AddToTripState> {
                   period: PlaceDayPeriod.morning,
                 );
 
-                if (isClosed) return false;
-
                 return result.when(
                   success: (_) {
-                    emit(
+                    emitSafe(
                       state.copyWith(
                         creatingStatus: ActionStatus.success,
                         addingStatus: ActionStatus.success,
@@ -458,7 +456,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
                     return true;
                   },
                   failure: (error) {
-                    emit(
+                    emitSafe(
                       state.copyWith(
                         creatingStatus: ActionStatus.error,
                         errorMessage:
@@ -467,10 +465,11 @@ class AddToTripCubit extends Cubit<AddToTripState> {
                     );
                     return false;
                   },
+                  cancelled: () => false,
                 );
               },
               failure: (error) {
-                emit(
+                emitSafe(
                   state.copyWith(
                     creatingStatus: ActionStatus.error,
                     errorMessage: 'Failed to save itinerary: ${error.message}',
@@ -478,10 +477,11 @@ class AddToTripCubit extends Cubit<AddToTripState> {
                 );
                 return false;
               },
+              cancelled: () => false,
             );
           },
           failure: (error) {
-            emit(
+            emitSafe(
               state.copyWith(
                 creatingStatus: ActionStatus.error,
                 errorMessage: 'Failed to generate itinerary: ${error.message}',
@@ -489,10 +489,11 @@ class AddToTripCubit extends Cubit<AddToTripState> {
             );
             return false;
           },
+          cancelled: () => false,
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             creatingStatus: ActionStatus.error,
             errorMessage: 'Failed to create trip: ${error.message}',
@@ -500,6 +501,7 @@ class AddToTripCubit extends Cubit<AddToTripState> {
         );
         return false;
       },
+      cancelled: () => false,
     );
   }
 }

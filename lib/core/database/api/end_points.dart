@@ -35,13 +35,10 @@ class EndPoints {
   static String getBanners = 'api/v1/home/banners';
   static String getPlannerPreviews = 'api/v1/home/planner-previews';
 
-  // static String formatCategoryQuery(String category) {
-  //   return 'category:"$category"';
-  // }
-
-  // static String formatDateQuery(DateTime time) {
-  //   return 'ts:"$time"';
-  // }
+  // Favorites
+  static String favoritePlaces = 'api/v1/favorites/places';
+  static String deleteFavoritePlace(String placeId) =>
+      'api/v1/favorites/places/$placeId';
 }
 
 class ApiKeys {

@@ -41,6 +41,11 @@ class SearchRepositoryImpl implements SearchRepository {
       );
 
       return Result.ok(results);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

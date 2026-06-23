@@ -14,7 +14,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Result<void>> deleteAccount({CancelToken? cancelToken}) async {
     try {
       await _datasource.deleteAccount(cancelToken: cancelToken);
-      return Result.ok(null);
+      return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

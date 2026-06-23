@@ -84,6 +84,7 @@ class TripRepositoryImpl implements TripRepository {
               success: (itinerary) =>
                   itinerary != null && _containsPlace(itinerary, placeId),
               failure: (_) => false,
+              cancelled: () => false,
             );
 
             if (isFound) return Result.ok(trip);
@@ -91,6 +92,7 @@ class TripRepositoryImpl implements TripRepository {
           return const Result.ok(null);
         },
         failure: (error) async => Result.error(error),
+        cancelled: () async => const Result.cancelled(),
       );
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -103,6 +105,7 @@ class TripRepositoryImpl implements TripRepository {
     return result.when(
       success: (trip) => Result.ok(trip != null),
       failure: (error) => Result.error(error),
+      cancelled: () => const Result.cancelled(),
     );
   }
 

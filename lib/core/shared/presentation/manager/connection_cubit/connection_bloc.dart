@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mindtrip/core/connections/retry_runner.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_bloc.dart';
 
 part 'connection_event.dart';
 part 'connection_state.dart';
@@ -36,7 +37,7 @@ EventTransformer<E> _debounceTransformer<E>(Duration duration) {
   };
 }
 
-class AppConnectionBloc extends Bloc<AppConnectionEvent, AppConnectionState> {
+class AppConnectionBloc extends SafeBloc<AppConnectionEvent, AppConnectionState> {
   AppConnectionBloc(this._internetConnection, this.retryRunner)
     : super(ConnectionInitial()) {
     on<ConnectionStatusConnected>(_onConnected);
@@ -68,7 +69,7 @@ class AppConnectionBloc extends Bloc<AppConnectionEvent, AppConnectionState> {
     Emitter<AppConnectionState> emit,
   ) {
     if (state is Connected) return;
-    emit(Connected());
+    emitSafe(emit, Connected());
     retryRunner.retryAll();
   }
 
@@ -77,7 +78,7 @@ class AppConnectionBloc extends Bloc<AppConnectionEvent, AppConnectionState> {
     Emitter<AppConnectionState> emit,
   ) {
     if (state is Disconnected) return;
-    emit(Disconnected());
+    emitSafe(emit, Disconnected());
   }
 
   @override

@@ -47,6 +47,7 @@ void main() {
       result.when(
         success: (data) => expect(data, equals(tRoute)),
         failure: (_) => fail('Should be success'),
+        cancelled: () => fail('Should not be cancelled'),
       );
       verify(
         () => mockDatasource.getRoute(tWaypoints, NavigationProfile.driving),
@@ -68,6 +69,7 @@ void main() {
       result.when(
         success: (_) => fail('Should be failure'),
         failure: (error) => expect(error, isA<UnknownFailure>()),
+        cancelled: () => fail('Should not be cancelled'),
       );
       verify(
         () => mockDatasource.getRoute(tWaypoints, NavigationProfile.driving),

@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/ai_planner/data/datasources/chat_mock_responses.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/send_message_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
 
-class ChatCubit extends Cubit<ChatState> {
+class ChatCubit extends SafeCubit<ChatState> {
   ChatCubit({
     required SendMessageUseCase sendMessageUseCase,
     required ChatRepository chatRepository,
@@ -20,7 +20,7 @@ class ChatCubit extends Cubit<ChatState> {
 
   void loadMessages(List<ChatMessage> messages) {
     if (messages.isEmpty) return;
-    emit(state.copyWith(messages: messages, status: ChatStatus.loaded));
+    emitSafe(state.copyWith(messages: messages, status: ChatStatus.loaded));
   }
 
   void initialize(String userName) {
@@ -40,24 +40,24 @@ class ChatCubit extends Cubit<ChatState> {
       ],
     );
 
-    emit(state.copyWith(messages: [greeting], status: ChatStatus.loaded));
+    emitSafe(state.copyWith(messages: [greeting], status: ChatStatus.loaded));
   }
 
   void startNewConversation(String userName) {
-    emit(const ChatState());
+    emitSafe(const ChatState());
     initialize(userName);
   }
 
   void addAttachments(List<ChatAttachment> newAttachments) {
     final updated = List<ChatAttachment>.from(state.attachments)
       ..addAll(newAttachments);
-    emit(state.copyWith(attachments: updated));
+    emitSafe(state.copyWith(attachments: updated));
   }
 
   void removeAttachment(int index) {
     final updated = List<ChatAttachment>.from(state.attachments)
       ..removeAt(index);
-    emit(state.copyWith(attachments: updated));
+    emitSafe(state.copyWith(attachments: updated));
   }
 
   Future<void> sendMessage(String text) async {
@@ -75,7 +75,7 @@ class ChatCubit extends Cubit<ChatState> {
       attachments: currentAttachments.isNotEmpty ? currentAttachments : null,
     );
 
-    emit(
+    emitSafe(
       state.copyWith(
         messages: [...state.messages, userMessage],
         isAiTyping: true,
@@ -87,9 +87,8 @@ class ChatCubit extends Cubit<ChatState> {
     // Get AI response
     try {
       final aiResponse = await _sendMessageUseCase(text);
-      if (isClosed) return;
 
-      emit(
+      emitSafe(
         state.copyWith(
           messages: [...state.messages, aiResponse],
           isAiTyping: false,
@@ -97,9 +96,7 @@ class ChatCubit extends Cubit<ChatState> {
         ),
       );
     } catch (e) {
-      if (isClosed) return;
-
-      emit(
+      emitSafe(
         state.copyWith(
           isAiTyping: false,
           errorMessage: 'Failed to get response. Please try again.',
@@ -123,7 +120,7 @@ class ChatCubit extends Cubit<ChatState> {
         )
         .toList();
 
-    emit(state.copyWith(messages: [...state.messages, ...newMessages]));
+    emitSafe(state.copyWith(messages: [...state.messages, ...newMessages]));
   }
 
   Future<void> sendSuggestion(String suggestion) => sendMessage(suggestion);
@@ -149,7 +146,7 @@ class ChatCubit extends Cubit<ChatState> {
       interests: interests,
     );
 
-    emit(state.copyWith(messages: [...state.messages, summary]));
+    emitSafe(state.copyWith(messages: [...state.messages, summary]));
   }
 
   void showRetryMessage() {
@@ -161,10 +158,10 @@ class ChatCubit extends Cubit<ChatState> {
       timestamp: DateTime.now(),
       suggestions: ChatMockResponses.retrySuggestions,
     );
-    emit(state.copyWith(messages: [...state.messages, retryMsg]));
+    emitSafe(state.copyWith(messages: [...state.messages, retryMsg]));
   }
 
   void clearChat() {
-    emit(const ChatState());
+    emitSafe(const ChatState());
   }
 }

@@ -1,9 +1,12 @@
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:mindtrip/core/shared/data/models/place_model.dart';
 
 abstract class FavoritesLocalDataSource {
   Future<Set<String>> getFavoriteIds();
-  Future<void> addFavoriteIds({required String placeId});
-  Future<void> removeFavoriteIds({required String placeId});
+  Future<void> addFavoritePlace({required PlaceModel place});
+  Future<void> removeFavoritePlace({required String placeId});
+  Future<void> replaceAllPlaces(List<PlaceModel> places);
+  Future<List<PlaceModel>> getAllFavoritePlaces();
   Future<void> clearAll();
 
   // Sync queue
@@ -16,7 +19,7 @@ abstract class FavoritesLocalDataSource {
 }
 
 class FavoritesLocalDataSourceImpl implements FavoritesLocalDataSource {
-  final Box<String> box;
+  final Box<PlaceModel> box;
   final Box<String> syncQueueBox;
 
   FavoritesLocalDataSourceImpl({required this.box, required this.syncQueueBox});
@@ -33,13 +36,28 @@ class FavoritesLocalDataSourceImpl implements FavoritesLocalDataSource {
   }
 
   @override
-  Future<void> addFavoriteIds({required String placeId}) {
-    return box.put(placeId, placeId);
+  Future<void> addFavoritePlace({required PlaceModel place}) {
+    return box.put(place.id, place);
   }
 
   @override
-  Future<void> removeFavoriteIds({required String placeId}) async {
+  Future<void> removeFavoritePlace({required String placeId}) async {
     return await box.delete(placeId);
+  }
+
+  @override
+  Future<void> replaceAllPlaces(List<PlaceModel> places) async {
+    await box.clear();
+    final entries = <String, PlaceModel>{};
+    for (var p in places) {
+      entries[p.id] = p;
+    }
+    await box.putAll(entries);
+  }
+
+  @override
+  Future<List<PlaceModel>> getAllFavoritePlaces() async {
+    return box.values.toList();
   }
 
   @override

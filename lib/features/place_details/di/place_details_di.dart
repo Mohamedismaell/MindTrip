@@ -1,5 +1,5 @@
 import 'package:mindtrip/core/database/api/api_consumer.dart';
-import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/place_details/data/datasources/place_details_remote_data_source.dart';
 import 'package:mindtrip/features/place_details/data/repositories/place_details_repository_impl.dart';
@@ -19,7 +19,7 @@ class PlaceDetailsDi {
     sl.registerLazySingleton<PlaceDetailsRepository>(
       () => PlaceDetailsRepositoryImpl(
         remote: sl<PlaceDetailsRemoteDataSource>(),
-        local: sl<PlacesLocalDataSource>(),
+        local: sl<PlaceLocalDataSource>(),
       ),
     );
 
@@ -33,9 +33,7 @@ class PlaceDetailsDi {
 
     // Cubits
     sl.registerFactory<PlaceDetailsCubit>(
-      () => PlaceDetailsCubit(
-        getDetails: sl<GetPlaceDetailsUseCase>(),
-      ),
+      () => PlaceDetailsCubit(getDetails: sl<GetPlaceDetailsUseCase>()),
     );
   }
 }

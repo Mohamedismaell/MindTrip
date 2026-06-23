@@ -4,7 +4,6 @@ import 'package:mindtrip/features/explore/data/datasources/explore_local_data_so
 import 'package:mindtrip/features/explore/data/repositories/explore_repository_impl.dart';
 import 'package:mindtrip/features/explore/domain/repositories/explore_repository.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_cubit.dart';
-import 'package:mindtrip/features/places/domain/use_cases/get_popular_places_use_case.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
 class ExploreDi {

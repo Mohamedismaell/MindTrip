@@ -1,7 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_bloc.dart';
 import 'package:mindtrip/core/utils/bloc_transformers.dart';
 import 'package:mindtrip/features/search/data/models/search_places_request_model.dart';
 import 'package:mindtrip/features/search/domain/use_cases/get_recent_searches_use_case.dart';
@@ -12,7 +12,7 @@ import 'package:mindtrip/features/search/domain/use_cases/search_places_use_case
 import 'global_search_event.dart';
 import 'global_search_state.dart';
 
-class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
+class GlobalSearchBloc extends SafeBloc<GlobalSearchEvent, GlobalSearchState> {
   final SearchPlacesUseCase _searchPlacesUseCase;
   final GetRecentSearchesUseCase _getRecentSearchesUseCase;
   final SaveRecentSearchUseCase _saveRecentSearchUseCase;
@@ -56,7 +56,8 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
 
     if (query.length <= 2 || query == state.lastQuery) return;
 
-    emit(
+    emitSafe(
+      emit,
       state.copyWith(
         status: GlobalSearchStatus.loading,
         lastQuery: query,
@@ -75,11 +76,10 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
       cancelToken: _cancelToken,
     );
 
-    if (isClosed) return;
-
     result.when(
       success: (response) {
-        emit(
+        emitSafe(
+          emit,
           state.copyWith(
             status: GlobalSearchStatus.success,
             results: response.results,
@@ -89,20 +89,22 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
         );
       },
       failure: (failure) {
-        if (isClosed || failure is CancelledFailure) return;
-        emit(
+        emitSafe(
+          emit,
           state.copyWith(
             status: GlobalSearchStatus.error,
             errorMessage: failure.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
   void _onClearSearch(ClearSearch event, Emitter<GlobalSearchState> emit) {
     _cancelToken?.cancel();
-    emit(
+    emitSafe(
+      emit,
       state.copyWith(
         status: GlobalSearchStatus.initial,
         results: [],
@@ -122,7 +124,7 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
       return;
     }
 
-    emit(state.copyWith(status: GlobalSearchStatus.loadingMore));
+    emitSafe(emit, state.copyWith(status: GlobalSearchStatus.loadingMore));
 
     final result = await _searchPlacesUseCase(
       request: SearchPlacesRequestModel(
@@ -132,11 +134,10 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
       ),
     );
 
-    if (isClosed) return;
-
     result.when(
       success: (response) {
-        emit(
+        emitSafe(
+          emit,
           state.copyWith(
             status: GlobalSearchStatus.success,
             results: [...state.results, ...response.results],
@@ -146,14 +147,15 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
         );
       },
       failure: (failure) {
-        if (isClosed || failure is CancelledFailure) return;
-        emit(
+        emitSafe(
+          emit,
           state.copyWith(
             status: GlobalSearchStatus.error,
             errorMessage: failure.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -164,9 +166,10 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
     final result = await _getRecentSearchesUseCase();
     result.when(
       success: (searches) {
-        emit(state.copyWith(recentSearches: searches));
+        emitSafe(emit, state.copyWith(recentSearches: searches));
       },
       failure: (_) {},
+      cancelled: () {},
     );
   }
 
@@ -175,7 +178,7 @@ class GlobalSearchBloc extends Bloc<GlobalSearchEvent, GlobalSearchState> {
     Emitter<GlobalSearchState> emit,
   ) async {
     await _clearRecentSearchesUseCase();
-    emit(state.copyWith(recentSearches: []));
+    emitSafe(emit, state.copyWith(recentSearches: []));
   }
 
   Future<void> _onSaveRecentSearch(

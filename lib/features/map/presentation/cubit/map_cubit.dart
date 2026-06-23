@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import '../../../places/domain/entity/place_entity.dart';
@@ -11,7 +10,7 @@ import '../../domain/entities/map_annotation_entry.dart';
 import '../../domain/entities/google_place.dart';
 import 'map_state.dart';
 
-class MapCubit extends Cubit<MapState> {
+class MapCubit extends SafeCubit<MapState> {
   final FetchPlacePhotoUrlsUseCase _fetchPlacePhotoUrlsUseCase;
 
   CancelToken? _photosCancelToken;
@@ -31,13 +30,12 @@ class MapCubit extends Cubit<MapState> {
   //  Place loading ──
 
   void loadPlaces(List<PlaceEntity> places) {
-    if (isClosed) return;
     final annotations = List<MapAnnotationEntry>.generate(
       places.length,
       (index) =>
           MapAnnotationEntry(place: places[index], sequenceNumber: index + 1),
     );
-    emit(
+    emitSafe(
       state.copyWith(
         annotations: annotations,
         tripDays: null,
@@ -47,12 +45,11 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void loadPlace(PlaceEntity place) {
-    if (isClosed) return;
     final annotations = List<MapAnnotationEntry>.generate(
       1,
       (index) => MapAnnotationEntry(place: place, sequenceNumber: 1),
     );
-    emit(
+    emitSafe(
       state.copyWith(
         annotations: annotations,
         tripDays: null,
@@ -62,15 +59,13 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void loadTripDays(List<TripDay> days) {
-    if (isClosed) return;
-    emit(state.copyWith(tripDays: days));
+    emitSafe(state.copyWith(tripDays: days));
     if (days.isNotEmpty) {
       selectDay(0);
     }
   }
 
   void selectDay(int dayIndex) {
-    if (isClosed) return;
     if (state.tripDays == null ||
         dayIndex < 0 ||
         dayIndex >= state.tripDays!.length) {
@@ -100,7 +95,7 @@ class MapCubit extends Cubit<MapState> {
       }
     }
 
-    emit(
+    emitSafe(
       state.copyWith(
         selectedDayIndex: dayIndex,
         annotations: annotations,
@@ -113,7 +108,6 @@ class MapCubit extends Cubit<MapState> {
   //  Place selection
 
   void selectPlace(String placeId) {
-    if (isClosed) return;
     final entry = state.annotations
         .where((e) => e.place.id == placeId)
         .firstOrNull;
@@ -128,7 +122,7 @@ class MapCubit extends Cubit<MapState> {
     }
 
     if (state.selectedPlace?.id == placeId && !state.isBottomSheetVisible) {
-      emit(state.copyWith(isBottomSheetVisible: true));
+      emitSafe(state.copyWith(isBottomSheetVisible: true));
       triggerFlyTo(
         entry.place.location.latitude,
         entry.place.location.longitude,
@@ -136,7 +130,7 @@ class MapCubit extends Cubit<MapState> {
       return;
     }
 
-    emit(
+    emitSafe(
       state.copyWith(
         selectedPlace: entry.place,
         isBottomSheetVisible: true,
@@ -148,7 +142,6 @@ class MapCubit extends Cubit<MapState> {
   }
 
   Future<void> showGooglePlaceDetails(GooglePlaceEntity place) async {
-    if (isClosed) return;
     final placeModel = PlaceEntity(
       id: place.placeId,
       name: place.displayName,
@@ -176,8 +169,7 @@ class MapCubit extends Cubit<MapState> {
       ..removeWhere((e) => e.place.id == place.placeId)
       ..add(newEntry);
 
-    if (isClosed) return;
-    emit(
+    emitSafe(
       state.copyWith(
         annotations: updatedAnnotations,
         selectedPlace: placeModel,
@@ -195,8 +187,7 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void clearSelection() {
-    if (isClosed) return;
-    emit(
+    emitSafe(
       state.copyWith(
         clearSelectedPlace: true,
         clearSelectedGooglePlace: true,
@@ -208,17 +199,15 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void triggerNavigationPulse() {
-    if (isClosed) return;
-    emit(state.copyWith(navigationPulse: state.navigationPulse + 1));
+    emitSafe(state.copyWith(navigationPulse: state.navigationPulse + 1));
   }
 
   void removeSearchPlace(String placeId) {
-    if (isClosed) return;
     final annotations = List<MapAnnotationEntry>.from(state.annotations)
       ..removeWhere((e) => e.place.id == placeId && e.isSearchResult);
 
     if (state.selectedPlace?.id == placeId) {
-      emit(
+      emitSafe(
         state.copyWith(
           annotations: annotations,
           clearSelectedPlace: true,
@@ -229,7 +218,7 @@ class MapCubit extends Cubit<MapState> {
         ),
       );
     } else {
-      emit(
+      emitSafe(
         state.copyWith(
           annotations: annotations,
           navigationPulse: state.navigationPulse + 1,
@@ -248,11 +237,9 @@ class MapCubit extends Cubit<MapState> {
       cancelToken: token,
     );
 
-    if (isClosed) return;
-
     result.when(
       success: (urls) {
-        if (isClosed || urls.isEmpty) return;
+        if (urls.isEmpty) return;
 
         if (state.selectedPlace != null &&
             (state.selectedPlace!.imageUrls == null ||
@@ -269,7 +256,7 @@ class MapCubit extends Cubit<MapState> {
             );
           }
 
-          emit(
+          emitSafe(
             state.copyWith(
               selectedPlacePhotoUrls: urls,
               annotations: annotations,
@@ -277,21 +264,20 @@ class MapCubit extends Cubit<MapState> {
             ),
           );
         } else {
-          emit(state.copyWith(selectedPlacePhotoUrls: urls));
+          emitSafe(state.copyWith(selectedPlacePhotoUrls: urls));
         }
       },
       failure: (failure) {
-        if (failure is CancelledFailure) return;
-        // Photo fetch failure is non-critical  silently ignore.
+        // Photo fetch failure is non-critical silently ignore.
       },
+      cancelled: () {},
     );
   }
 
   //  UI helpers ──
 
   void dismissBottomSheet() {
-    if (isClosed) return;
-    emit(
+    emitSafe(
       state.copyWith(
         isBottomSheetVisible: false,
         clearSelectedGooglePlace: true,
@@ -301,8 +287,7 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void triggerFlyTo(double lat, double lng) {
-    if (isClosed) return;
-    emit(
+    emitSafe(
       state.copyWith(
         flyToLat: lat,
         flyToLng: lng,
@@ -312,13 +297,11 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void clearFlyToLocation() {
-    if (isClosed) return;
-    emit(state.copyWith(flyToLat: null, flyToLng: null));
+    emitSafe(state.copyWith(flyToLat: null, flyToLng: null));
   }
 
   void setLocationGranted(bool granted) {
-    if (isClosed) return;
-    emit(state.copyWith(isLocationGranted: granted));
+    emitSafe(state.copyWith(isLocationGranted: granted));
   }
 
   @override

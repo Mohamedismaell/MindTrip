@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/use_cases/get_route_use_case.dart';
 import '../../domain/entities/navigation_profile.dart';
 import 'map_navigation_state.dart';
 
-class MapNavigationCubit extends Cubit<MapNavigationState> {
+class MapNavigationCubit extends SafeCubit<MapNavigationState> {
   final GetRouteUseCase _getRouteUseCase;
   final LocationService _locationService;
 
@@ -30,7 +29,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   }
 
   void beginLoading({String? destinationName}) {
-    emit(
+    emitSafe(
       state.copyWith(
         isRouteLoading: true,
         routeError: null,
@@ -40,7 +39,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   }
 
   void setProfile(NavigationProfile profile) {
-    emit(state.copyWith(selectedProfile: profile, currentStepIndex: 0));
+    emitSafe(state.copyWith(selectedProfile: profile, currentStepIndex: 0));
 
     if (_lastWaypoints != null && _lastWaypoints!.isNotEmpty) {
       _fetchRoute(_lastWaypoints!);
@@ -53,7 +52,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     double lng, {
     String? destinationName,
   }) async {
-    emit(
+    emitSafe(
       state.copyWith(destinationName: destinationName, isRouteLoading: true),
     );
     final placePosition = Position(lng, lat);
@@ -73,7 +72,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
   ) async {
     if (waypoints.length < 2) return;
     _sequentialWaypoints = waypoints;
-    emit(
+    emitSafe(
       state.copyWith(
         isSequentialMode: true,
         isRouteLoading: true,
@@ -93,7 +92,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
       stopNavigation();
       return;
     }
-    emit(
+    emitSafe(
       state.copyWith(
         currentLegIndex: nextLeg,
         destinationName: nextLeg < state.placeNames.length
@@ -122,7 +121,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     _lastWaypoints = waypoints;
     final generation = ++_routeGeneration;
 
-    emit(
+    emitSafe(
       state.copyWith(
         isRouteLoading: true,
         currentStepIndex: 0,
@@ -140,17 +139,14 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
 
     result.when(
       success: (route) {
-        if (!isClosed) {
-          emit(state.copyWith(isRouteLoading: false, activeRoute: route));
-        }
+        emitSafe(state.copyWith(isRouteLoading: false, activeRoute: route));
       },
       failure: (failure) {
-        if (!isClosed && failure is! CancelledFailure) {
-          emit(
-            state.copyWith(isRouteLoading: false, routeError: failure.message),
-          );
-        }
+        emitSafe(
+          state.copyWith(isRouteLoading: false, routeError: failure.message),
+        );
       },
+      cancelled: () {},
     );
   }
 
@@ -159,7 +155,7 @@ class MapNavigationCubit extends Cubit<MapNavigationState> {
     _sequentialWaypoints = null;
     _routeGeneration++;
     _getRouteCancelToken?.cancel();
-    emit(
+    emitSafe(
       state.copyWith(
         isRouteLoading: false,
         currentStepIndex: 0,

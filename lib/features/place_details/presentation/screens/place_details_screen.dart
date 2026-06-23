@@ -82,6 +82,7 @@ class _PlaceDetailsBody extends StatelessWidget {
                 PlaceDetailsImageCover(
                   imageUrls: place.imageUrls,
                   placeId: place.id,
+                  place: place,
                   heroTag: heroTag,
                 ),
                 Positioned(

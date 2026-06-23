@@ -1,7 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mindtrip/core/errors/failure/failure.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_bloc.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_details_use_case.dart';
 import 'package:mindtrip/features/map/domain/use_cases/find_autocomplete_predictions_use_case.dart';
 
@@ -9,7 +9,7 @@ import 'package:mindtrip/core/utils/bloc_transformers.dart';
 import 'map_search_event.dart';
 import 'map_search_state.dart';
 
-class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
+class MapSearchBloc extends SafeBloc<MapSearchEvent, MapSearchState> {
   final FindAutocompletePredictionsUseCase _findAutocompletePredictionsUseCase;
   final FetchPlaceDetailsUseCase _fetchPlaceDetailsUseCase;
 
@@ -62,7 +62,8 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
     if (query.length < 2 || query == state.lastQuery) return;
 
     if (state.autocompleteStatus != MapSearchStatus.loading) {
-      emit(
+      emitSafe(
+        emit,
         state.copyWith(
           autocompleteStatus: MapSearchStatus.loading,
           autocompleteErrorMessage: null,
@@ -77,23 +78,25 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
       query,
       cancelToken: token,
     );
-    if (isClosed) return;
+    
     result.when(
-      success: (predictions) => emit(
+      success: (predictions) => emitSafe(
+        emit,
         state.copyWith(
           autocompleteStatus: MapSearchStatus.success,
           autocompletePredictions: predictions,
         ),
       ),
       failure: (failure) {
-        if (isClosed || failure is CancelledFailure) return;
-        emit(
+        emitSafe(
+          emit,
           state.copyWith(
             autocompleteStatus: MapSearchStatus.error,
             autocompleteErrorMessage: failure.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -103,7 +106,8 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
 
   void _clearSearch(Emitter<MapSearchState> emit) {
     _autocompleteToken?.cancel();
-    emit(
+    emitSafe(
+      emit,
       state.copyWith(
         autocompletePredictions: const [],
         autocompleteStatus: MapSearchStatus.initial,
@@ -117,7 +121,8 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
     PredictionSelected event,
     Emitter<MapSearchState> emit,
   ) async {
-    emit(
+    emitSafe(
+      emit,
       state.copyWith(
         placeDetailsStatus: MapSearchStatus.loading,
         placeDetailsErrorMessage: null,
@@ -130,10 +135,11 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
       event.placeId,
       cancelToken: token,
     );
-    if (isClosed) return;
+    
     result.when(
       success: (place) {
-        emit(
+        emitSafe(
+          emit,
           state.copyWith(
             placeDetailsStatus: MapSearchStatus.success,
             resolvedSearchPlace: place,
@@ -146,14 +152,15 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
         _autocompleteToken?.cancel();
       },
       failure: (failure) {
-        if (isClosed || failure is CancelledFailure) return;
-        emit(
+        emitSafe(
+          emit,
           state.copyWith(
             placeDetailsStatus: MapSearchStatus.error,
             placeDetailsErrorMessage: failure.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -161,7 +168,8 @@ class MapSearchBloc extends Bloc<MapSearchEvent, MapSearchState> {
     ClearResolvedPlace event,
     Emitter<MapSearchState> emit,
   ) {
-    emit(
+    emitSafe(
+      emit,
       state.copyWith(
         resolvedSearchPlace: null,
         placeDetailsStatus: MapSearchStatus.initial,

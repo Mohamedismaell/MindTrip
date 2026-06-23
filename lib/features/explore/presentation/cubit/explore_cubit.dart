@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/explore/presentation/cubit/explore_state.dart';
 import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
 import 'package:mindtrip/features/places/domain/use_cases/get_trending_places_use_case.dart';
 
-class ExploreCubit extends Cubit<ExploreState> {
+class ExploreCubit extends SafeCubit<ExploreState> {
   final GetPlacesUseCase getPlacesUseCase;
 
   ExploreCubit({required this.getPlacesUseCase}) : super(const ExploreState());
@@ -26,7 +26,7 @@ class ExploreCubit extends Cubit<ExploreState> {
   Future<void> loadTrendingPlacesFirstPage() async {
     _trendingPlacesFirstPageToken?.cancel();
     _trendingPlacesFirstPageToken = CancelToken();
-    emit(state.copyWith(trendingPlacesStatus: ExploreDataStatus.loading));
+    emitSafe(state.copyWith(trendingPlacesStatus: ExploreDataStatus.loading));
     final result = await getPlacesUseCase(
       request: GetPlacesRequestModel(
         sortBy: "rating",
@@ -36,9 +36,9 @@ class ExploreCubit extends Cubit<ExploreState> {
       ),
       cancelToken: _trendingPlacesFirstPageToken,
     );
-    if (isClosed) return;
+    
     result.when(
-      success: (response) => emit(
+      success: (response) => emitSafe(
         state.copyWith(
           trendingPlacesStatus: ExploreDataStatus.success,
           trendingPlaces: state.trendingPlaces.copyWith(
@@ -50,12 +50,13 @@ class ExploreCubit extends Cubit<ExploreState> {
           trendingPlacesError: '',
         ),
       ),
-      failure: (error) => emit(
+      failure: (error) => emitSafe(
         state.copyWith(
           trendingPlacesStatus: ExploreDataStatus.failure,
           trendingPlacesError: error.message,
         ),
       ),
+      cancelled: () {},
     );
   }
 
@@ -69,7 +70,7 @@ class ExploreCubit extends Cubit<ExploreState> {
     _loadMoreTrendingToken?.cancel();
     _loadMoreTrendingToken = CancelToken();
 
-    emit(
+    emitSafe(
       state.copyWith(
         trendingPlaces: state.trendingPlaces.copyWith(isMoreLoading: true),
       ),
@@ -86,11 +87,9 @@ class ExploreCubit extends Cubit<ExploreState> {
       cancelToken: _loadMoreTrendingToken,
     );
 
-    if (isClosed) return;
-
     result.when(
       success: (response) {
-        emit(
+        emitSafe(
           state.copyWith(
             trendingPlaces: state.trendingPlaces.copyWith(
               items: [...state.trendingPlaces.items, ...response.results],
@@ -103,13 +102,14 @@ class ExploreCubit extends Cubit<ExploreState> {
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             trendingPlaces: state.trendingPlaces.copyWith(isMoreLoading: false),
             trendingPlacesError: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -117,17 +117,15 @@ class ExploreCubit extends Cubit<ExploreState> {
     _otherPlacesFirstToken?.cancel();
     _otherPlacesFirstToken = CancelToken();
 
-    emit(state.copyWith(filteredPlacesStatus: ExploreDataStatus.loading));
+    emitSafe(state.copyWith(filteredPlacesStatus: ExploreDataStatus.loading));
 
     final result = await getPlacesUseCase(
       request: _buildFilteredRequest(page: 1),
       cancelToken: _otherPlacesFirstToken,
     );
 
-    if (isClosed) return;
-
     result.when(
-      success: (response) => emit(
+      success: (response) => emitSafe(
         state.copyWith(
           filteredPlacesStatus: ExploreDataStatus.success,
           filteredPlaces: state.filteredPlaces.copyWith(
@@ -139,12 +137,13 @@ class ExploreCubit extends Cubit<ExploreState> {
           filteredPlacesError: '',
         ),
       ),
-      failure: (error) => emit(
+      failure: (error) => emitSafe(
         state.copyWith(
           filteredPlacesStatus: ExploreDataStatus.failure,
           filteredPlacesError: error.message,
         ),
       ),
+      cancelled: () {},
     );
   }
 
@@ -158,7 +157,7 @@ class ExploreCubit extends Cubit<ExploreState> {
     _otherPlacesMoreToken?.cancel();
     _otherPlacesMoreToken = CancelToken();
 
-    emit(
+    emitSafe(
       state.copyWith(
         filteredPlaces: state.filteredPlaces.copyWith(isMoreLoading: true),
       ),
@@ -170,11 +169,9 @@ class ExploreCubit extends Cubit<ExploreState> {
       cancelToken: _otherPlacesMoreToken,
     );
 
-    if (isClosed) return;
-
     result.when(
       success: (response) {
-        emit(
+        emitSafe(
           state.copyWith(
             filteredPlaces: state.filteredPlaces.copyWith(
               items: [...state.filteredPlaces.items, ...response.results],
@@ -187,13 +184,14 @@ class ExploreCubit extends Cubit<ExploreState> {
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             filteredPlaces: state.filteredPlaces.copyWith(isMoreLoading: false),
             filteredPlacesError: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -245,7 +243,7 @@ class ExploreCubit extends Cubit<ExploreState> {
       chipCategories = {PlaceCategory.all};
     }
 
-    emit(
+    emitSafe(
       state.copyWith(
         advancedFilters: filters,
         selectedCategories: chipCategories,
@@ -255,7 +253,7 @@ class ExploreCubit extends Cubit<ExploreState> {
   }
 
   void resetAdvancedFilters() {
-    emit(state.copyWith(advancedFilters: null));
+    emitSafe(state.copyWith(advancedFilters: null));
     loadFilteredPlacesFirstPage();
   }
 
@@ -277,7 +275,7 @@ class ExploreCubit extends Cubit<ExploreState> {
       }
     }
 
-    emit(
+    emitSafe(
       state.copyWith(
         selectedCategories: newCategories,
         advancedFilters: null, // Reset filters when using chips

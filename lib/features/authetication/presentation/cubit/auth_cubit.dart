@@ -1,10 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/enums/auth_status.dart';
 import 'package:mindtrip/core/enums/otp_flow.dart';
-import 'package:mindtrip/core/errors/failure/failure.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/facebook_auth_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/forget_password_use_case.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/googel_auth.dart';
@@ -16,7 +15,7 @@ import 'package:mindtrip/features/authetication/domain/usecases/verify_email_use
 import 'package:mindtrip/features/authetication/domain/usecases/verify_password_otp_use_case.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends SafeCubit<AuthState> {
   final SignInUseCase _signInUseCase;
   final SignUpUseCase _signUpUseCase;
   final GoogleAuthProvider _googleAuthProvider;
@@ -54,15 +53,15 @@ class AuthCubit extends Cubit<AuthState> {
        super(const AuthState());
 
   void togglePassword() {
-    emit(state.copyWith(obscurePassword: !state.obscurePassword));
+    emitSafe(state.copyWith(obscurePassword: !state.obscurePassword));
   }
 
   void toggleConfirmPassword() {
-    emit(state.copyWith(obscureConfirm: !state.obscureConfirm));
+    emitSafe(state.copyWith(obscureConfirm: !state.obscureConfirm));
   }
 
   void toggleRememberMe(bool value) {
-    emit(state.copyWith(rememberMe: value));
+    emitSafe(state.copyWith(rememberMe: value));
   }
 
   Future<void> signIn({
@@ -70,7 +69,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required bool rememberMe,
   }) async {
-    emit(
+    emitSafe(
       state.copyWith(
         status: AuthStatus.loading,
         errorMessage: null,
@@ -88,7 +87,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       success: (user) {
-        emit(state.copyWith(status: AuthStatus.success, user: user));
+        emitSafe(state.copyWith(status: AuthStatus.success, user: user));
       },
       failure: (error) async {
         final msg = error.message.toLowerCase();
@@ -96,7 +95,7 @@ class AuthCubit extends Cubit<AuthState> {
           final resendResult = await _resendEmailOtpUseCase(email: email);
           resendResult.when(
             success: (_) {
-              emit(
+              emitSafe(
                 state.copyWith(
                   status: AuthStatus.otpSent,
                   otpFlow: OtpFlow.signInVerify,
@@ -104,16 +103,17 @@ class AuthCubit extends Cubit<AuthState> {
               );
             },
             failure: (resendError) {
-              emit(
+              emitSafe(
                 state.copyWith(
                   status: AuthStatus.failure,
                   errorMessage: error.message,
                 ),
               );
             },
+            cancelled: () {},
           );
         } else {
-          emit(
+          emitSafe(
             state.copyWith(
               status: AuthStatus.failure,
               errorMessage: error.message,
@@ -121,6 +121,7 @@ class AuthCubit extends Cubit<AuthState> {
           );
         }
       },
+      cancelled: () {},
     );
   }
 
@@ -130,7 +131,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required bool rememberMe,
   }) async {
-    emit(
+    emitSafe(
       state.copyWith(
         status: AuthStatus.loading,
         errorMessage: null,
@@ -149,60 +150,53 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       success: (_) {
-        emit(
+        emitSafe(
           state.copyWith(status: AuthStatus.otpSent, otpFlow: OtpFlow.signUp),
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.failure,
             errorMessage: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
   Future<void> loginWithGoogle() async {
-    emit(state.copyWith(status: AuthStatus.loading));
+    emitSafe(state.copyWith(status: AuthStatus.loading));
 
     try {
       final idToken = await _googleAuthProvider.signIn();
-      if (isClosed) return;
 
       if (idToken == null) {
-        emit(state.copyWith(status: AuthStatus.initial));
+        emitSafe(state.copyWith(status: AuthStatus.initial));
         return;
       }
 
       final result = await _googleAuthUseCase(token: idToken);
-      if (isClosed) return;
 
       result.when(
         success: (user) {
-          emit(state.copyWith(status: AuthStatus.success, user: user));
+          emitSafe(state.copyWith(status: AuthStatus.success, user: user));
         },
         failure: (error) {
-          emit(
+          emitSafe(
             state.copyWith(
               status: AuthStatus.failure,
               errorMessage: error.message,
             ),
           );
         },
+        cancelled: () {},
       );
     } catch (e) {
-      if (isClosed) return;
-
       final failure = ApiErrorMapper.fromException(e);
 
-      if (failure is CancelledFailure) {
-        emit(state.copyWith(status: AuthStatus.initial));
-        return;
-      }
-
-      emit(
+      emitSafe(
         state.copyWith(
           status: AuthStatus.failure,
           errorMessage: failure.message,
@@ -212,47 +206,45 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> loginWithFacebook() async {
-    emit(state.copyWith(status: AuthStatus.loading));
+    emitSafe(state.copyWith(status: AuthStatus.loading));
 
     try {
       final accessToken = await _facebookAuthProvider.signIn();
-      if (isClosed) return;
 
       if (accessToken == null) {
-        emit(state.copyWith(status: AuthStatus.initial));
+        emitSafe(state.copyWith(status: AuthStatus.initial));
         return;
       }
 
       final result = await _facebookAuthUseCase(token: accessToken);
-      if (isClosed) return;
 
       result.when(
         success: (user) {
-          emit(state.copyWith(status: AuthStatus.success, user: user));
+          emitSafe(state.copyWith(status: AuthStatus.success, user: user));
         },
         failure: (error) {
-          emit(
+          emitSafe(
             state.copyWith(
               status: AuthStatus.failure,
               errorMessage: error.message,
             ),
           );
         },
+        cancelled: () {},
       );
     } catch (e) {
-      if (isClosed) return;
-      emit(state.copyWith(status: AuthStatus.failure));
+      emitSafe(state.copyWith(status: AuthStatus.failure));
     }
   }
 
   Future<void> forgetPassword({required String email}) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    emitSafe(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
     final result = await _forgetPasswordUseCase(email: email);
 
     result.when(
       success: (_) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.otpSent,
             otpFlow: OtpFlow.forgetPassword,
@@ -261,13 +253,14 @@ class AuthCubit extends Cubit<AuthState> {
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.failure,
             errorMessage: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -275,13 +268,13 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String otp,
   }) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    emitSafe(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
     final result = await _verifyPasswordOtpUseCase(email: email, otp: otp);
 
     result.when(
       success: (verifyPassowrdOtp) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.otpVerified,
             resetToken: verifyPassowrdOtp.resetToken,
@@ -289,13 +282,14 @@ class AuthCubit extends Cubit<AuthState> {
         );
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.otpFailure,
             errorMessage: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -305,7 +299,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String newPassword,
     required String confirmNewPassword,
   }) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    emitSafe(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
     final result = await _resetPasswordUseCase(
       email: email,
@@ -316,36 +310,38 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: AuthStatus.passwordResetSuccess));
+        emitSafe(state.copyWith(status: AuthStatus.passwordResetSuccess));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.failure,
             errorMessage: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
   Future<void> verifyEmail({required String email, required String otp}) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    emitSafe(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
     final result = await _verifyEmailUseCase(email: email, otp: otp);
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: AuthStatus.otpVerified));
+        emitSafe(state.copyWith(status: AuthStatus.otpVerified));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.otpFailure,
             errorMessage: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
@@ -353,22 +349,23 @@ class AuthCubit extends Cubit<AuthState> {
     final email = state.email;
     if (email == null) return;
 
-    emit(state.copyWith(status: AuthStatus.initial, errorMessage: null));
+    emitSafe(state.copyWith(status: AuthStatus.initial, errorMessage: null));
 
     final result = await _resendEmailOtpUseCase(email: email);
 
     result.when(
       success: (_) {
-        emit(state.copyWith(status: AuthStatus.otpResent));
+        emitSafe(state.copyWith(status: AuthStatus.otpResent));
       },
       failure: (error) {
-        emit(
+        emitSafe(
           state.copyWith(
             status: AuthStatus.failure,
             errorMessage: error.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 }

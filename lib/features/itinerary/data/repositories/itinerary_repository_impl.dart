@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
@@ -19,6 +20,11 @@ class ItineraryRepositoryImpl implements ItineraryRepository {
     try {
       final model = await _itineraryDataSource.generate(trip);
       return Result.ok(model.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -29,6 +35,11 @@ class ItineraryRepositoryImpl implements ItineraryRepository {
     try {
       final model = await _itineraryDataSource.getByTripId(tripId);
       return Result.ok(model?.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -40,6 +51,11 @@ class ItineraryRepositoryImpl implements ItineraryRepository {
       final model = TripItineraryModel.fromEntity(itinerary);
       await _itineraryDataSource.save(model);
       return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -90,6 +106,7 @@ class ItineraryRepositoryImpl implements ItineraryRepository {
           return Result.ok(newItinerary);
         },
         failure: (error) async => Result.error(error),
+        cancelled: () async => const Result.cancelled(),
       );
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -120,6 +137,7 @@ class ItineraryRepositoryImpl implements ItineraryRepository {
           return Result.ok(newItinerary);
         },
         failure: (error) async => Result.error(error),
+        cancelled: () async => const Result.cancelled(),
       );
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -171,6 +189,7 @@ class ItineraryRepositoryImpl implements ItineraryRepository {
           return Result.ok(newItinerary);
         },
         failure: (error) async => Result.error(error),
+        cancelled: () async => const Result.cancelled(),
       );
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -231,9 +250,11 @@ class ItineraryRepositoryImpl implements ItineraryRepository {
               return Result.ok((updatedSource, updatedTarget));
             },
             failure: (error) async => Result.error(error),
+            cancelled: () async => const Result.cancelled(),
           );
         },
         failure: (error) async => Result.error(error),
+        cancelled: () async => const Result.cancelled(),
       );
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));

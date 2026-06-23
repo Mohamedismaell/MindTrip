@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
@@ -42,6 +43,11 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Result.ok(response.user.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -65,17 +71,12 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
-      // Account exists but email is not verified — resend OTP
-      // so the user can complete verification.
-      // if (_isEmailExistsButUnverified(e)) {
-      //   try {
-      //     await _remoteDataSource.resendEmailOtp(email: email);
-      //     return const Result.ok(null);
-      //   } catch (_) {
-      //     // Resend failed — fall through to original error.
-      //   }
-      // }
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }
@@ -93,6 +94,11 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Result.ok(response.user.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -111,6 +117,11 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Result.ok(response.user.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -122,6 +133,11 @@ class AuthRepositoryImpl implements AuthRepository {
       await _remoteDataSource.forgetPassword(email: email);
 
       return Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -140,6 +156,11 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Result.ok(resetToken.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -161,6 +182,11 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Result.ok(response);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -172,6 +198,11 @@ class AuthRepositoryImpl implements AuthRepository {
       await _remoteDataSource.resendPasswordOtp(email: email);
 
       return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -188,6 +219,11 @@ class AuthRepositoryImpl implements AuthRepository {
       await _remoteDataSource.verifyEmail(email: email, otp: otp);
 
       return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -201,6 +237,11 @@ class AuthRepositoryImpl implements AuthRepository {
       await _remoteDataSource.resendEmailOtp(email: email);
 
       return const Result.ok(null);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -229,6 +270,12 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Result.ok(response.user.toEntity());
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      await _localDataSource.clear();
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       await _localDataSource.clear();
       return Result.error(ApiErrorMapper.fromException(e));
@@ -248,31 +295,4 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Result.ok(null);
     }
   }
-
-  // // registered but not yet verified
-  // bool _isEmailExistsButUnverified(Object e) {
-  //   if (e is! DioException) return false;
-  //   final response = e.response;
-  //   if (response == null) return false;
-
-  //   final statusCode = response.statusCode ?? 0;
-
-  //   // 409 Conflict is the canonical "already exists" status.
-  //   if (statusCode == 409) return true;
-
-  //   // Some APIs return 400/401/422 with a message about verification or already exists.
-  //   if (statusCode == 400 || statusCode == 401 || statusCode == 422) {
-  //     final data = response.data;
-  //     if (data is Map<String, dynamic>) {
-  //       final msg = (data['detail'] ?? data['message'] ?? data['title'] ?? '')
-  //           .toString()
-  //           .toLowerCase();
-  //       return msg.contains('verify') ||
-  //           msg.contains('verified') ||
-  //           msg.contains('already exists');
-  //     }
-  //   }
-
-  //   return false;
-  // }
 }

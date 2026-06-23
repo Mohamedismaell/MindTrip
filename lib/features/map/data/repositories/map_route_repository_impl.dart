@@ -25,6 +25,11 @@ class MapRouteRepositoryImpl implements MapRouteRepository {
         cancelToken: cancelToken,
       );
       return Result.ok(route);
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

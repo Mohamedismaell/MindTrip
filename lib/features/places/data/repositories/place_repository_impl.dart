@@ -5,7 +5,7 @@ import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/models/paginated_response.dart';
 import 'package:mindtrip/features/places/data/datasources/place_remote_data_source.dart';
-import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart';
 import 'package:mindtrip/features/places/data/models/popular_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/recommendation_places_request_model.dart';
 import 'package:mindtrip/features/places/data/models/get_places_request_model.dart';
@@ -13,7 +13,7 @@ import 'package:mindtrip/features/places/domain/repositories/place_repository.da
 
 class PlaceRepositoryImpl implements PlaceRepository {
   final PlaceRemoteDataSource remoteDataSource;
-  final PlacesLocalDataSource localDataSource;
+  final PlaceLocalDataSource localDataSource;
 
   PlaceRepositoryImpl({
     required this.remoteDataSource,
@@ -34,25 +34,37 @@ class PlaceRepositoryImpl implements PlaceRepository {
         await localDataSource.cacheRecommendedPlaces(response.results);
       }
       return Result.ok(response.map((e) => e.toEntity()));
-    } catch (e) {
-      if (request.page == 1) {
-        try {
-          final local = await localDataSource.getRecommendedPlaces();
-          if (local.isNotEmpty) {
-            return Result.ok(
-              PaginatedResponse(
-                results: local.map((e) => e.toEntity()).toList(),
-                total: local.length,
-                page: 1,
-                limit: local.length,
-                totalPages: 1,
-              ),
-            );
-          }
-        } catch (_) {}
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
       }
-      return Result.error(ApiErrorMapper.fromException(e));
+      return _getRecommendedLocalFallback(request, e);
+    } catch (e) {
+      return _getRecommendedLocalFallback(request, e);
     }
+  }
+
+  Future<Result<PaginatedResponse<PlaceEntity>>> _getRecommendedLocalFallback(
+    RecommendationPlacesRequestModel request,
+    Object e,
+  ) async {
+    if (request.page == 1) {
+      try {
+        final local = await localDataSource.getRecommendedPlaces();
+        if (local.isNotEmpty) {
+          return Result.ok(
+            PaginatedResponse(
+              results: local.map((e) => e.toEntity()).toList(),
+              total: local.length,
+              page: 1,
+              limit: local.length,
+              totalPages: 1,
+            ),
+          );
+        }
+      } catch (_) {}
+    }
+    return Result.error(ApiErrorMapper.fromException(e));
   }
 
   @override
@@ -69,25 +81,37 @@ class PlaceRepositoryImpl implements PlaceRepository {
         await localDataSource.cachePopularPlaces(response.results);
       }
       return Result.ok(response.map((e) => e.toEntity()));
-    } catch (e) {
-      if (request.page == 1) {
-        try {
-          final local = await localDataSource.getPopularPlaces();
-          if (local.isNotEmpty) {
-            return Result.ok(
-              PaginatedResponse(
-                results: local.map((e) => e.toEntity()).toList(),
-                total: local.length,
-                page: 1,
-                limit: local.length,
-                totalPages: 1,
-              ),
-            );
-          }
-        } catch (_) {}
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
       }
-      return Result.error(ApiErrorMapper.fromException(e));
+      return _getPopularLocalFallback(request, e);
+    } catch (e) {
+      return _getPopularLocalFallback(request, e);
     }
+  }
+
+  Future<Result<PaginatedResponse<PlaceEntity>>> _getPopularLocalFallback(
+    PopularPlacesRequestModel request,
+    Object e,
+  ) async {
+    if (request.page == 1) {
+      try {
+        final local = await localDataSource.getPopularPlaces();
+        if (local.isNotEmpty) {
+          return Result.ok(
+            PaginatedResponse(
+              results: local.map((e) => e.toEntity()).toList(),
+              total: local.length,
+              page: 1,
+              limit: local.length,
+              totalPages: 1,
+            ),
+          );
+        }
+      } catch (_) {}
+    }
+    return Result.error(ApiErrorMapper.fromException(e));
   }
 
   @override
@@ -107,6 +131,11 @@ class PlaceRepositoryImpl implements PlaceRepository {
         cancelToken: cancelToken,
       );
       return Result.ok(response.map((e) => e.toEntity()));
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }
@@ -123,6 +152,11 @@ class PlaceRepositoryImpl implements PlaceRepository {
         cancelToken: cancelToken,
       );
       return Result.ok(response.map((e) => e.toEntity()));
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
     }

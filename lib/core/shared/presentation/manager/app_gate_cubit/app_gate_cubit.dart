@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/shared/auth/providers/facebook_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/providers/google_auth_provider.dart';
 import 'package:mindtrip/core/shared/auth/token_manager.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/authetication/data/datasources/auth_local_data_source.dart';
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
@@ -11,7 +11,7 @@ import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorit
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 part 'app_gate_state.dart';
 
-class AppGateCubit extends Cubit<AppGateState> {
+class AppGateCubit extends SafeCubit<AppGateState> {
   final OnboardingRepository onboardingRepository;
   final LogoutUseCase logoutUseCase;
   final AuthLocalDataSource authLocal;
@@ -21,6 +21,8 @@ class AppGateCubit extends Cubit<AppGateState> {
   final UserCubit userCubit;
   final FavoriteCubit favoriteCubit;
   final FavoritesRepository favoritesRepository;
+
+  bool _isLoggingOut = false;
 
   AppGateCubit({
     required this.onboardingRepository,
@@ -35,10 +37,11 @@ class AppGateCubit extends Cubit<AppGateState> {
   }) : super(AppGateLoading());
 
   Future<void> start() async {
+    if (_isLoggingOut) return;
     final isFirstTime = await onboardingRepository.isFirstTime();
 
     if (isFirstTime) {
-      emit(AppGateOnboarding());
+      emitSafe(AppGateOnboarding());
       return;
     }
 
@@ -48,7 +51,7 @@ class AppGateCubit extends Cubit<AppGateState> {
 
     if ((accessToken == null || accessToken.isEmpty) &&
         (refreshToken == null || refreshToken.isEmpty)) {
-      emit(AppGateUnauthenticated());
+      emitSafe(AppGateUnauthenticated());
       return;
     }
 
@@ -79,79 +82,95 @@ class AppGateCubit extends Cubit<AppGateState> {
     // Both attempts failed — the session is truly expired. Clear credentials
     // and send the user to the auth screen.
     await authLocal.clear();
-    emit(AppGateUnauthenticated());
+    emitSafe(AppGateUnauthenticated());
   }
 
   void _navigateAfterLoad() {
     if (userCubit.state.user?.interests == null ||
         userCubit.state.user!.interests!.isEmpty) {
-      emit(AppGateInterestsRequired());
+      emitSafe(AppGateInterestsRequired());
     } else {
-      emit(AppGateAuthenticated());
+      favoriteCubit.loadFavorites();
+      emitSafe(AppGateAuthenticated());
     }
   }
 
   Future<void> loginSuccess() async {
-    emit(AppGateLoading());
+    emitSafe(AppGateLoading());
 
     await userCubit.loadUser();
 
     if (userCubit.state.userStatus != UserStatus.loaded) {
-      emit(AppGateUnauthenticated());
+      emitSafe(AppGateUnauthenticated());
       return;
     }
 
     final user = userCubit.state.user;
+    favoriteCubit.loadFavorites();
+
     if (user == null || user.interests == null || user.interests!.isEmpty) {
-      emit(AppGateInterestsRequired());
+      emitSafe(AppGateInterestsRequired());
     } else {
-      emit(AppGateAuthenticated());
+      emitSafe(AppGateAuthenticated());
     }
   }
 
   void interestsComplete() {
-    emit(AppGateAuthenticated());
+    emitSafe(AppGateAuthenticated());
   }
 
   void proceedToAuth() {
-    emit(AppGateUnauthenticated());
+    emitSafe(AppGateUnauthenticated());
   }
 
   Future<void> logout() async {
-    emit(AppGateLoading());
+    // Guard against multiple logout
+    if (state is AppGateUnauthenticated || _isLoggingOut) return;
+
+    _isLoggingOut = true;
     final refreshToken = await authLocal.getRefreshToken();
 
-    await googleAuthProvider.signOut();
-    await facebookAuthProvider.signOut();
-    userCubit.clear();
-    favoriteCubit.clear();
-    await favoritesRepository.clearAll();
+    // 1. Emit loading to show the Splash screen while waiting for remote APIs
+    emitSafe(AppGateLoading());
+
     if (refreshToken == null || refreshToken.isEmpty) {
-      emit(AppGateUnauthenticated());
+      await _performLocalLogout();
       return;
     }
 
     final result = await logoutUseCase(refreshToken: refreshToken);
 
     result.when(
-      success: (_) {
-        emit(AppGateUnauthenticated());
+      success: (_) async {
+        await _performLocalLogout();
       },
-      failure: (error) {
-        // Log the user out locally anyway.
-        emit(AppGateUnauthenticated());
+      failure: (error) async {
+        await _performLocalLogout();
+      },
+      cancelled: () async {
+        await _performLocalLogout();
       },
     );
   }
 
-  Future<void> accountDeleted() async {
-    emit(AppGateLoading());
+  Future<void> _performLocalLogout() async {
     await googleAuthProvider.signOut();
     await facebookAuthProvider.signOut();
+    await authLocal.clear();
     userCubit.clear();
     favoriteCubit.clear();
     await favoritesRepository.clearAll();
-    await authLocal.clear();
-    emit(AppGateUnauthenticated());
+
+    emitSafe(AppGateUnauthenticated());
+    _isLoggingOut = false;
+  }
+
+  Future<void> accountDeleted() async {
+    if (state is AppGateUnauthenticated || _isLoggingOut) return;
+
+    _isLoggingOut = true;
+    emitSafe(AppGateLoading());
+
+    await _performLocalLogout();
   }
 }

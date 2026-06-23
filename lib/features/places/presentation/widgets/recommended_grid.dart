@@ -12,6 +12,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/presentation/widget/favorite_place_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class RecommendedplacesGrid extends StatelessWidget {
@@ -92,7 +94,17 @@ class _RecommendedCard extends StatelessWidget {
                     Positioned(
                       top: 10.h,
                       left: 10.w,
-                      child: FavoriteButton(placeId: destination.id),
+                      child: FavoriteButton(
+                        isFavorite: context.watch<FavoriteCubit>().isFavorite(destination.id),
+                        onTap: () {
+                          final cubit = context.read<FavoriteCubit>();
+                          cubit.toggleFavorite(
+                            placeId: destination.id,
+                            isFavorite: !cubit.isFavorite(destination.id),
+                            place: destination,
+                          );
+                        },
+                      ),
                     ),
                     if (destination.price != null)
                       Positioned(

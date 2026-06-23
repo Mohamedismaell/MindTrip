@@ -1,4 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
@@ -10,7 +10,7 @@ import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_d
 
 import 'ai_planner_state.dart';
 
-class AiPlannerCubit extends Cubit<AiPlannerState> {
+class AiPlannerCubit extends SafeCubit<AiPlannerState> {
   final GetPlanningSessionUseCase _getPlanningSessionUseCase;
   final SavePlanningSessionUseCase _savePlanningSessionUseCase;
   final DeletePlanningSessionUseCase _deletePlanningSessionUseCase;
@@ -22,7 +22,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
   ) : super(AiPlannerState(focusedDay: DateTime.now()));
 
   void reset() {
-    emit(AiPlannerState(focusedDay: DateTime.now()));
+    emitSafe(AiPlannerState(focusedDay: DateTime.now()));
   }
 
   Future<PlanningSession?> loadSession(String tripId) async {
@@ -30,7 +30,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     return result.when(
       success: (session) {
         if (session != null) {
-          emit(
+          emitSafe(
             state.copyWith(
               tripId: session.id,
               currentPage: session.currentPage,
@@ -41,6 +41,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
         return session;
       },
       failure: (_) => null,
+      cancelled: () => null,
     );
   }
 
@@ -76,7 +77,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
       } catch (_) {}
     }
 
-    emit(
+    emitSafe(
       state.copyWith(
         tripId: trip.id,
         selectedDestination: trip.destination,
@@ -93,7 +94,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
   }
 
   void markReadyToGenerate() {
-    emit(state.copyWith(maxReachedPage: 5));
+    emitSafe(state.copyWith(maxReachedPage: 5));
   }
 
   Trip toTripSnapshot({required String tripId}) {
@@ -115,7 +116,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
   }
 
   void setPage(int page) {
-    emit(
+    emitSafe(
       state.copyWith(
         currentPage: page,
         maxReachedPage: page > state.maxReachedPage
@@ -128,7 +129,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
   void nextPage() {
     if (state.currentPage < 4) {
       final next = state.currentPage + 1;
-      emit(
+      emitSafe(
         state.copyWith(
           currentPage: next,
           maxReachedPage: next > state.maxReachedPage
@@ -141,7 +142,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
 
   void previousPage() {
     if (state.currentPage > 0) {
-      emit(state.copyWith(currentPage: state.currentPage - 1));
+      emitSafe(state.copyWith(currentPage: state.currentPage - 1));
     }
   }
 
@@ -149,14 +150,14 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     if (state.selectedDestination != null &&
         state.selectedDestination!.toLowerCase() !=
             query.trim().toLowerCase()) {
-      emit(state.copyWith(destinationQuery: query, clearDestination: true));
+      emitSafe(state.copyWith(destinationQuery: query, clearDestination: true));
     } else {
-      emit(state.copyWith(destinationQuery: query));
+      emitSafe(state.copyWith(destinationQuery: query));
     }
   }
 
   void selectDestination(String destination) {
-    emit(
+    emitSafe(
       state.copyWith(
         selectedDestination: destination,
         destinationQuery: destination,
@@ -168,16 +169,16 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     final picked = DateTime(day.year, day.month, day.day);
     if (state.tripStart == null ||
         (state.tripStart != null && state.tripEnd != null)) {
-      emit(state.copyWith(tripStart: picked, clearTripEnd: true));
+      emitSafe(state.copyWith(tripStart: picked, clearTripEnd: true));
       return;
     }
 
     if (picked.isBefore(state.tripStart!)) {
-      emit(state.copyWith(tripStart: picked));
+      emitSafe(state.copyWith(tripStart: picked));
       return;
     }
 
-    emit(state.copyWith(tripEnd: picked));
+    emitSafe(state.copyWith(tripEnd: picked));
   }
 
   // Month navigation
@@ -186,7 +187,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     final current = state.focusedDay;
     final next = DateTime(current.year, current.month + 1, 1);
     if (next.isAfter(DateTime.utc(2030, 12, 31))) return;
-    emit(state.copyWith(focusedDay: next));
+    emitSafe(state.copyWith(focusedDay: next));
   }
 
   void changeMonth(DateTime focusedDay) {
@@ -194,11 +195,11 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     final lastDay = DateTime.utc(2030, 12, 31);
 
     if (focusedDay.isBefore(firstDay)) {
-      emit(state.copyWith(focusedDay: firstDay));
+      emitSafe(state.copyWith(focusedDay: firstDay));
     } else if (focusedDay.isAfter(lastDay)) {
-      emit(state.copyWith(focusedDay: lastDay));
+      emitSafe(state.copyWith(focusedDay: lastDay));
     } else {
-      emit(state.copyWith(focusedDay: focusedDay));
+      emitSafe(state.copyWith(focusedDay: focusedDay));
     }
   }
 
@@ -206,30 +207,30 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
     final current = state.focusedDay;
     final prev = DateTime(current.year, current.month - 1, 1);
     if (prev.isBefore(DateTime.utc(2020, 1, 1))) return;
-    emit(state.copyWith(focusedDay: prev));
+    emitSafe(state.copyWith(focusedDay: prev));
   }
 
   // Travelers
 
   void changeAdults(int delta) {
-    emit(state.copyWith(adults: (state.adults + delta).clamp(1, 12)));
+    emitSafe(state.copyWith(adults: (state.adults + delta).clamp(1, 12)));
   }
 
   void changeChildren(int delta) {
-    emit(state.copyWith(children: (state.children + delta).clamp(0, 12)));
+    emitSafe(state.copyWith(children: (state.children + delta).clamp(0, 12)));
   }
 
   // Budget
 
   void selectBudget(BudgetTierModel budget) {
-    emit(state.copyWith(selectedBudget: budget, customBudget: ''));
+    emitSafe(state.copyWith(selectedBudget: budget, customBudget: ''));
   }
 
   void updateCustomBudget(String value) {
     if (value.trim().isNotEmpty) {
-      emit(state.copyWith(customBudget: value, clearSelectedBudget: true));
+      emitSafe(state.copyWith(customBudget: value, clearSelectedBudget: true));
     } else {
-      emit(state.copyWith(customBudget: value));
+      emitSafe(state.copyWith(customBudget: value));
     }
   }
 
@@ -243,7 +244,7 @@ class AiPlannerCubit extends Cubit<AiPlannerState> {
       currentInterests.add(interest);
     }
 
-    emit(state.copyWith(selectedInterests: currentInterests));
+    emitSafe(state.copyWith(selectedInterests: currentInterests));
   }
   // Helpers
 

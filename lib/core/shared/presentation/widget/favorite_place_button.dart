@@ -1,73 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
 class FavoriteButton extends StatelessWidget {
   const FavoriteButton({
     super.key,
-    required this.placeId,
+    required this.isFavorite,
+    required this.onTap,
     this.backgroundColor,
     this.showShadow = true,
   });
 
-  final String placeId;
+  final bool isFavorite;
+  final VoidCallback onTap;
   final Color? backgroundColor;
   final bool showShadow;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FavoriteCubit, FavoriteState>(
-      builder: (context, state) {
-        final isFavorite = context.read<FavoriteCubit>().isFavorite(placeId);
-        return TapScaleEffect(
-          onTap: () {
-            context.read<FavoriteCubit>().toggleFavorite(
-              placeId: placeId,
-              isFavorite: !isFavorite,
-            );
-          },
-          child: Container(
-            width: 40.w,
-            height: 40.w,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: backgroundColor ?? AppColors.pureWhite,
-              boxShadow: showShadow
-                  ? [AppShadows.favoritePlaceButtonShadow]
-                  : [],
-            ),
-            child: TweenAnimationBuilder<Color?>(
-              tween: ColorTween(
-                begin: context.colorTheme.onSurface,
-                end: isFavorite
-                    ? context.colorTheme.error
-                    : context.colorTheme.outline,
-              ),
-              duration: const Duration(milliseconds: 250),
-              builder: (context, color, _) {
-                return TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 1, end: isFavorite ? 1.2 : 0.8),
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOutBack,
-                  builder: (context, scale, child) {
-                    return Transform.scale(
-                      scale: scale,
-                      child: Center(
-                        child: Icon(Icons.favorite_rounded, color: color),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        );
+    final inactiveColor = context.colorTheme.outline;
+    final activeColor = context.colorTheme.error;
+
+    return TapScaleEffect(
+      onTap: () {
+        if (!isFavorite) HapticFeedback.lightImpact();
+        onTap();
       },
+      child: Container(
+        width: 40.w,
+        height: 40.w,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: backgroundColor ?? AppColors.pureWhite,
+          boxShadow: showShadow ? [AppShadows.favoritePlaceButtonShadow] : null,
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            if (isFavorite)
+              Container(
+                    width: 15.r,
+                    height: 15.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: activeColor.withValues(alpha: 0.4),
+                    ),
+                  )
+                  .animate()
+                  .scale(
+                    duration: 400.ms,
+                    begin: const Offset(0.5, 0.5),
+                    end: const Offset(2.2, 2.2),
+                    curve: Curves.easeOutExpo,
+                  )
+                  .fadeOut(duration: 400.ms),
+            Icon(
+                  Icons.favorite_rounded,
+                  size: 22.sp,
+                  color: isFavorite ? activeColor : inactiveColor,
+                )
+                .animate(target: isFavorite ? 1 : 0)
+                .scale(
+                  duration: 350.ms,
+                  begin: const Offset(1, 1),
+                  end: const Offset(1.3, 1.3),
+                  curve: Curves.elasticOut,
+                )
+                .tint(color: activeColor, duration: 250.ms),
+          ],
+        ),
+      ),
     );
   }
 }

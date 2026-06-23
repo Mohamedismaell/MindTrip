@@ -6,7 +6,6 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
-import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 
 class CompleteResetPassword extends StatelessWidget {
   const CompleteResetPassword({

@@ -14,7 +14,7 @@ class FaqScreen extends StatefulWidget {
 }
 
 class _FaqScreenState extends State<FaqScreen> {
-  String _query = '';
+  final String _query = '';
   int? _expandedIndex;
 
   @override

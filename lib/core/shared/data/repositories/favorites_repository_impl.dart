@@ -2,7 +2,7 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_local_data_source.dart';
 import 'package:mindtrip/core/shared/data/datasources/favorites_remote_data_source.dart';
-import 'package:mindtrip/core/shared/data/datasources/places_local_data_source.dart';
+import 'package:mindtrip/features/places/data/datasources/place_local_data_source.dart';
 import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
@@ -10,24 +10,27 @@ import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.da
 class FavoritesRepositoryImpl implements FavoritesRepository {
   final FavoritesLocalDataSource _local;
   final FavoritesRemoteDataSource _remote;
-  final PlacesLocalDataSource _placesLocal;
+  final PlaceLocalDataSource _placesLocal;
 
   FavoritesRepositoryImpl({
     required FavoritesLocalDataSource local,
     required FavoritesRemoteDataSource remote,
-    required PlacesLocalDataSource placesLocal,
+    required PlaceLocalDataSource placesLocal,
   }) : _local = local,
        _remote = remote,
        _placesLocal = placesLocal;
 
-  //Todo: Later Handle api call for remote
   @override
-  Future<Result<Set<String>>> getFavoriteIds() async {
+  Future<Result<void>> bootstrapFromServer() async {
     try {
-      final result = await _local.getFavoriteIds();
-      return Result.ok(result);
+      final serverFavorites = await _remote.getFavoritePlacesFromServer();
+      await _local.replaceAllPlaces(
+        serverFavorites.map((e) => e.place).toList(),
+      );
+      return Result.ok(null);
     } catch (e) {
-      return Result.error(ApiErrorMapper.fromException(e));
+      // Silent failure
+      return Result.ok(null);
     }
   }
 
@@ -64,12 +67,22 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   Future<Result<void>> toggleFavorite({
     required String placeId,
     required bool isFavorite,
+    PlaceEntity? place,
   }) async {
     try {
       if (isFavorite) {
-        await _local.addFavoriteIds(placeId: placeId);
+        if (place != null) {
+          // If the UI provided the entity
+          await _local.addFavoritePlace(place: place.toModel());
+        } else {
+          // PlaceModel from the shared places cache
+          final cachedPlace = await _placesLocal.getPlace(placeId);
+          if (cachedPlace != null) {
+            await _local.addFavoritePlace(place: cachedPlace);
+          }
+        }
       } else {
-        await _local.removeFavoriteIds(placeId: placeId);
+        await _local.removeFavoritePlace(placeId: placeId);
       }
 
       try {
@@ -81,7 +94,6 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
         await _local.removeSyncAction(placeId: placeId);
       } catch (e) {
         //* If remote fails ===> enqueue for later
-
         final action = isFavorite ? 'add' : 'remove';
         await _local.enqueueSyncAction(placeId: placeId, action: action);
       }
@@ -96,7 +108,6 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   Future<Result<void>> clearAll() async {
     try {
       await _local.clearAll();
-      await _remote.clearAll();
       return Result.ok(null);
     } catch (e) {
       return Result.error(ApiErrorMapper.fromException(e));
@@ -104,25 +115,11 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Result<List<PlaceEntity>>> getFavoritePlaces({
-    required Set<String> placeIds,
-  }) async {
-    if (placeIds.isEmpty) return Result.ok([]);
-
+  Future<Result<List<PlaceEntity>>> getFavoritePlacesLocal() async {
     try {
-      var result = await _remote.getFavoritePlaces(placeIds: placeIds);
-      if (result.isEmpty) {
-        result = await _placesLocal.getPlaces(placeIds.toList());
-      } else {
-        await _placesLocal.cachePlaces(result);
-      }
-
-      return Result.ok(result.map((m) => m.toEntity()).toList());
+      final localFavorites = await _local.getAllFavoritePlaces();
+      return Result.ok(localFavorites.map((m) => m.toEntity()).toList());
     } catch (e) {
-      final localResult = await _placesLocal.getPlaces(placeIds.toList());
-      if (localResult.isNotEmpty) {
-        return Result.ok(localResult.map((m) => m.toEntity()).toList());
-      }
       return Result.error(ApiErrorMapper.fromException(e));
     }
   }

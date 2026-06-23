@@ -25,19 +25,25 @@ sealed class Result<T> {
   /// Creates a successful [Result], completed with the specified [value].
   const factory Result.ok(T value) = Ok._;
 
-  /// Creates an error [Result], completed with the specified [error].
+  /// Creates un error [Result], completed with the specified [error].
   const factory Result.error(Failure error) = Error._;
+
+  /// Creates a cancelled [Result].
+  const factory Result.cancelled() = Cancelled._;
 
   /// Pattern-matching for [Result].
   R when<R>({
     required R Function(T value) success,
     required R Function(Failure error) failure,
+    required R Function() cancelled,
   }) {
     switch (this) {
       case Ok(:final value):
         return success(value);
       case Error(:final error):
         return failure(error);
+      case Cancelled():
+        return cancelled();
     }
   }
 }
@@ -62,4 +68,12 @@ final class Error<T> extends Result<T> {
 
   @override
   String toString() => 'Result<$T>.error($error)';
+}
+
+/// A cancelled [Result].
+final class Cancelled<T> extends Result<T> {
+  const Cancelled._();
+
+  @override
+  String toString() => 'Result<$T>.cancelled()';
 }

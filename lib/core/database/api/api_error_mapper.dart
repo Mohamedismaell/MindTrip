@@ -12,9 +12,6 @@ class ApiErrorMapper {
       print("ERROR TYPE: ${e.runtimeType}");
       print("ERROR OBJECT: $e");
     }
-    if (e is DioException && CancelToken.isCancel(e)) {
-      return const CancelledFailure();
-    }
     if (e is DioException) {
       return fromDioException(e);
     }
@@ -27,17 +24,15 @@ class ApiErrorMapper {
     //   return UnauthorizedFailure(message: e.message);
     // }
     if (e is GoogleSignInException) {
-      if (e.code == GoogleSignInExceptionCode.canceled) {
-        return const CancelledFailure();
-      }
-
+      // Cancellation handled in repository if possible,
+      // but here we must return a Failure since this method returns Failure.
       return ServerFailure(e.description ?? 'Google sign in failed');
     }
     if (e is CacheFailure) {
-      return CacheFailure(message: 'Failed to access local cache');
+      return const CacheFailure(message: 'Failed to access local cache');
     }
     if (e is SocketException) {
-      return NetworkFailure(message: 'No internet connection');
+      return const NetworkFailure(message: 'No internet connection');
     }
 
     return const UnknownFailure();
@@ -74,7 +69,8 @@ class ApiErrorMapper {
       case DioExceptionType.badResponse:
         return _mapBadResponse(e);
       case DioExceptionType.cancel:
-        return const CancelledFailure();
+        // No-op, managed by repository returning Result.cancelled()
+        return const UnknownFailure();
       case DioExceptionType.unknown:
         if (e.error is NoInternetException || e.error is SocketException) {
           return const NetworkFailure(message: 'No internet connection');

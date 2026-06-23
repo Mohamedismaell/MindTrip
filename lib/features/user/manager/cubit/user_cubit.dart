@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/user/domain/usecases/get_current_user.dart';
 import 'package:mindtrip/features/user/domain/usecases/update_user_interests_use_case.dart';
 import 'package:mindtrip/features/user/domain/usecases/upload_profile_photo_use_case.dart';
@@ -8,7 +8,7 @@ import 'package:mindtrip/features/authetication/domain/entities/user_entity.dart
 part 'user_state.dart';
 
 //Todo: Check if it need Cancel Token.
-class UserCubit extends Cubit<UserState> {
+class UserCubit extends SafeCubit<UserState> {
   final GetCurrentUser _getCurrentUser;
   final UpdateUserInterestsUseCase _updateUserInterests;
   final UploadProfilePhotoUseCase _uploadProfilePhoto;
@@ -23,29 +23,30 @@ class UserCubit extends Cubit<UserState> {
        super(const UserState());
 
   Future<void> loadUser() async {
-    emit(state.copyWith(userStatus: UserStatus.loading));
+    emitSafe(state.copyWith(userStatus: UserStatus.loading));
 
     final result = await _getCurrentUser.call();
 
     result.when(
-      success: (user) => emit(
+      success: (user) => emitSafe(
         state.copyWith(
           user: user,
           interests: user.interests,
           userStatus: UserStatus.loaded,
         ),
       ),
-      failure: (f) => emit(
+      failure: (f) => emitSafe(
         state.copyWith(
           userStatus: UserStatus.error,
           userErrorMessage: f.message,
         ),
       ),
+      cancelled: () {},
     );
   }
 
   void setUser(UserEntity user) {
-    emit(state.copyWith(user: user, userStatus: UserStatus.loaded));
+    emitSafe(state.copyWith(user: user, userStatus: UserStatus.loaded));
   }
 
   void editSelectedCategory(String category) {
@@ -56,18 +57,18 @@ class UserCubit extends Cubit<UserState> {
     } else {
       currentSelected.add(category);
     }
-    emit(state.copyWith(interests: currentSelected));
+    emitSafe(state.copyWith(interests: currentSelected));
   }
 
   Future<void> updateUserInterests() async {
-    emit(state.copyWith(interestStatus: InterestStatus.saving));
+    emitSafe(state.copyWith(interestStatus: InterestStatus.saving));
 
     final result = await _updateUserInterests(state.interests);
     result.when(
       success: (_) {
         if (state.user != null) {
           final updatedUser = state.user!.copyWith(interests: state.interests);
-          emit(
+          emitSafe(
             state.copyWith(
               user: updatedUser,
               interestStatus: InterestStatus.saved,
@@ -76,18 +77,19 @@ class UserCubit extends Cubit<UserState> {
         }
       },
       failure: (f) {
-        emit(
+        emitSafe(
           state.copyWith(
             interestStatus: InterestStatus.failed,
             interestErrorMessage: f.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
   Future<void> uploadProfilePhoto(String filePath) async {
-    emit(
+    emitSafe(
       state.copyWith(
         photoUploadStatus: PhotoUploadStatus.uploading,
         localPhotoPath: filePath,
@@ -100,7 +102,7 @@ class UserCubit extends Cubit<UserState> {
       success: (url) {
         if (state.user != null) {
           final updated = state.user!.copyWith(profilePhotoUrl: url);
-          emit(
+          emitSafe(
             state.copyWith(
               user: updated,
               photoUploadStatus: PhotoUploadStatus.success,
@@ -110,37 +112,22 @@ class UserCubit extends Cubit<UserState> {
         }
       },
       failure: (f) {
-        emit(
+        emitSafe(
           state.copyWith(
             photoUploadStatus: PhotoUploadStatus.failed,
             photoUploadErrorMessage: f.message,
           ),
         );
       },
+      cancelled: () {},
     );
   }
 
-  // Future<void> retryPhotoUpload() async {
-  //   final path = state.localPhotoPath;
-  //   if (path == null) return;
-  //   await uploadProfilePhoto(path);
-  // }
-
-  // void dismissPhotoUploadError() {
-  //   emit(
-  //     state.copyWith(
-  //       photoUploadStatus: PhotoUploadStatus.idle,
-  //       clearLocalPath: true,
-  //     ),
-  //   );
-  // }
   void dismissInterestError() {
-    if (!isClosed) {
-      emit(state.copyWith(interestStatus: InterestStatus.idle));
-    }
+    emitSafe(state.copyWith(interestStatus: InterestStatus.idle));
   }
 
   void clear() {
-    emit(const UserState());
+    emitSafe(const UserState());
   }
 }
