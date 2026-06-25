@@ -7,6 +7,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip_details_args.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
@@ -45,7 +46,18 @@ class AiPlannerFlowListnener extends StatelessWidget {
             } else if (state.status == AiPlannerStatus.success) {
               // context.pop();
               AppDialog.hideLoading(context);
-              context.go('${AppRoutes.tripDetails}?tripId=${state.tripId}');
+              final generatedPlan = state.generatedPlan;
+              if (generatedPlan == null) {
+                AppGlassSnackBar.showError(
+                  context: context,
+                  message: 'Generated plan is missing',
+                );
+                return;
+              }
+              context.go(
+                AppRoutes.tripDetails,
+                extra: TripDetailsArgs(generatedPlan: generatedPlan),
+              );
             } else if (state.status == AiPlannerStatus.failure) {
               // context.pop();
               AppDialog.hideLoading(context);

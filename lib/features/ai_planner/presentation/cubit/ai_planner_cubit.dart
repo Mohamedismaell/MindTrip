@@ -239,7 +239,13 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
     );
     planResult.when(
       success: (plan) async {
-        emitSafe(state.copyWith(status: AiPlannerStatus.success));
+        emitSafe(
+          state.copyWith(
+            status: AiPlannerStatus.success,
+            tripId: plan.tripId,
+            generatedPlan: plan,
+          ),
+        );
       },
       failure: (error) {
         emitSafe(

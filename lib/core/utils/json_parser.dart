@@ -41,3 +41,8 @@ List<String> parseStringList(dynamic value) {
 
   return value.whereType<String>().toList();
 }
+
+String parseString(dynamic value) {
+  if (value == null) return '';
+  return value.toString();
+}

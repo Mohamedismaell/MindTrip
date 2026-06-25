@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
 
 part 'ai_planner_state.freezed.dart';
 
@@ -9,6 +10,7 @@ enum AiPlannerStatus { initial, loading, success, failure }
 abstract class AiPlannerState with _$AiPlannerState {
   const factory AiPlannerState({
     String? tripId,
+    GeneratedPlanEntity? generatedPlan,
     @Default(AiPlannerStatus.initial) AiPlannerStatus status,
     @Default('') String errorMessage,
     @Default(0) int currentPage,

@@ -7,51 +7,63 @@ part 'plan_place_model.g.dart';
 @freezed
 abstract class PlanPlaceModel with _$PlanPlaceModel {
   const factory PlanPlaceModel({
-    @JsonKey(name: 'place_id') required String placeId,
+    @JsonKey(name: 'place_id', fromJson: parseString)
+    @Default('')
+    String placeId,
 
-    required String name,
+    @JsonKey(fromJson: parseString) @Default('') String name,
 
-    required String city,
+    @JsonKey(fromJson: parseString) @Default('') String city,
 
-    @JsonKey(name: 'city_en') required String cityEn,
+    @JsonKey(name: 'city_en', fromJson: parseString) @Default('') String cityEn,
 
-    required String category,
+    @JsonKey(fromJson: parseStringList) @Default([]) List<String> interests,
 
-    @JsonKey(fromJson: parseDouble) required double rating,
+    @JsonKey(fromJson: parseString) @Default('') String category,
+
+    @JsonKey(fromJson: parseDouble) @Default(0.0) double rating,
 
     @JsonKey(name: 'reviews_count', fromJson: parseInt)
-    required int reviewsCount,
+    @Default(0)
+    int reviewsCount,
 
-    required String address,
+    @JsonKey(fromJson: parseString) @Default('') String address,
 
-    required String description,
+    @JsonKey(fromJson: parseString) @Default('') String description,
 
-    @JsonKey(name: 'photo_url') required String photoUrl,
+    @JsonKey(name: 'photo_url', fromJson: parseString)
+    @Default('')
+    String photoUrl,
 
     @JsonKey(name: 'image_urls', fromJson: parseStringList)
-    required List<String> imageUrls,
+    @Default([])
+    List<String> imageUrls,
 
-    @JsonKey(name: 'maps_url') required String mapsUrl,
+    @JsonKey(name: 'maps_url', fromJson: parseString)
+    @Default('')
+    String mapsUrl,
 
-    @JsonKey(fromJson: parseDouble) required double lat,
+    @JsonKey(name: 'opening_hours', fromJson: parseString)
+    @Default('')
+    String openingHours,
 
-    @JsonKey(fromJson: parseDouble) required double lng,
+    @JsonKey(name: 'is_opened', fromJson: parseBool) @Default(false) bool isOpened,
 
-    @JsonKey(fromJson: parseDay) required int day,
+    @JsonKey(fromJson: parseDouble) @Default(0.0) double lat,
 
-    required String type,
+    @JsonKey(fromJson: parseDouble) @Default(0.0) double lng,
 
-    @JsonKey(fromJson: parseDouble) required double price,
+    @JsonKey(fromJson: parseDay) @Default(0) int day,
 
-    @JsonKey(fromJson: parseDouble) required double cost,
+    @JsonKey(fromJson: parseString) @Default('') String type,
 
-    @JsonKey(fromJson: parseStringList) required List<String> interests,
+    @JsonKey(fromJson: parseInt) @Default(0) int price,
 
-    @JsonKey(name: 'is_hidden_gem') required bool isHiddenGem,
+    @JsonKey(fromJson: parseInt) @Default(0) int cost,
 
-    @JsonKey(name: 'opening_hours') required String openingHours,
-
-    @JsonKey(name: 'is_opened', fromJson: parseBool) required bool isOpened,
+    @JsonKey(name: 'is_hidden_gem', fromJson: parseBool)
+    @Default(false)
+    bool isHiddenGem,
   }) = _PlanPlaceModel;
 
   factory PlanPlaceModel.fromJson(Map<String, dynamic> json) =>

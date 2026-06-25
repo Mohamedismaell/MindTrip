@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
@@ -69,6 +70,16 @@ class AiPlannerRoutes {
           path: AppRoutes.tripDetails,
           builder: (context, state) {
             final args = state.extra as TripDetailsArgs;
+            // ?
+            // ??
+            // _tripDetailsArgsFromQuery(state);
+            // if (args == null) {
+            //   // Guard: no args provided (e.g. deep-link / hot-reload). Go back.
+            //   WidgetsBinding.instance.addPostFrameCallback((_) {
+            //     if (context.mounted) context.go(AppRoutes.myTrips);
+            //   });
+            //   return const SizedBox.shrink();
+            // }
             return TripDetailsScreen(args: args);
           },
           transition: AppTransitionRoute.fadeSlide,
@@ -76,4 +87,10 @@ class AiPlannerRoutes {
       ],
     ),
   ];
+
+  // static TripDetailsArgs? _tripDetailsArgsFromQuery(GoRouterState state) {
+  //   final tripId = state.uri.queryParameters['tripId'];
+  //   if (tripId == null || tripId.isEmpty) return null;
+  //   return TripDetailsArgs(tripId: tripId);
+  // }
 }

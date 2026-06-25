@@ -1,12 +1,17 @@
 import 'package:mindtrip/features/ai_planner/data/models/generated_plan_model.dart';
 
 extension GeneratedPlanJsonMapper on GeneratedPlanModel {
+  /// Serialises the model back to the same shape the backend sends.
   Map<String, dynamic> toJson() {
-    final daysMap = <String, dynamic>{};
+    final planData = plan;
 
-    days.forEach((key, value) {
-      daysMap['day$key'] = value.toJson();
-    });
+    // Build the day entries dynamically from the Map<int, DayPlanModel>.
+    final daysMap = <String, dynamic>{};
+    if (planData != null) {
+      planData.days.forEach((dayNumber, dayPlan) {
+        daysMap['day$dayNumber'] = dayPlan.toJson();
+      });
+    }
 
     return {
       'trip_id': tripId,
@@ -15,7 +20,8 @@ extension GeneratedPlanJsonMapper on GeneratedPlanModel {
       'total_calculated_cost': totalCalculatedCost,
       'days_count': daysCount,
       'plan': {
-        'accommodation': accommodation.map((e) => e.toJson()).toList(),
+        'accommodation':
+            planData?.accommodation.map((e) => e.toJson()).toList() ?? [],
         ...daysMap,
       },
     };

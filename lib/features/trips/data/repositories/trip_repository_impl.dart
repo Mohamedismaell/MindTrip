@@ -160,10 +160,10 @@ class TripRepositoryImpl implements TripRepository {
       final planData = jsonDecode(trip.collectedJson!);
       final plan = GeneratedPlanModel.fromJson(planData);
 
-      for (final place in plan.accommodation) {
+      for (final place in plan.plan?.accommodation ?? []) {
         if (place.placeId == placeId) return true;
       }
-      for (final day in plan.days.values) {
+      for (final day in (plan.plan?.days ?? {}).values) {
         if (day.allPlaces.any((p) => p.placeId == placeId)) return true;
       }
       return false;

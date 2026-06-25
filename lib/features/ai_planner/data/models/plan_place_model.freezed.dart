@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PlanPlaceModel {
 
-@JsonKey(name: 'place_id') String get placeId; String get name; String get city;@JsonKey(name: 'city_en') String get cityEn; String get category;@JsonKey(fromJson: parseDouble) double get rating;@JsonKey(name: 'reviews_count', fromJson: parseInt) int get reviewsCount; String get address; String get description;@JsonKey(name: 'photo_url') String get photoUrl;@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> get imageUrls;@JsonKey(name: 'maps_url') String get mapsUrl;@JsonKey(fromJson: parseDouble) double get lat;@JsonKey(fromJson: parseDouble) double get lng;@JsonKey(fromJson: parseDay) int get day; String get type;@JsonKey(fromJson: parseDouble) double get price;@JsonKey(fromJson: parseDouble) double get cost;@JsonKey(fromJson: parseStringList) List<String> get interests;@JsonKey(name: 'is_hidden_gem') bool get isHiddenGem;@JsonKey(name: 'opening_hours') String get openingHours;@JsonKey(name: 'is_opened', fromJson: parseBool) bool get isOpened;
+@JsonKey(name: 'place_id', fromJson: parseString) String get placeId;@JsonKey(fromJson: parseString) String get name;@JsonKey(fromJson: parseString) String get city;@JsonKey(name: 'city_en', fromJson: parseString) String get cityEn;@JsonKey(fromJson: parseStringList) List<String> get interests;@JsonKey(fromJson: parseString) String get category;@JsonKey(fromJson: parseDouble) double get rating;@JsonKey(name: 'reviews_count', fromJson: parseInt) int get reviewsCount;@JsonKey(fromJson: parseString) String get address;@JsonKey(fromJson: parseString) String get description;@JsonKey(name: 'photo_url', fromJson: parseString) String get photoUrl;@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> get imageUrls;@JsonKey(name: 'maps_url', fromJson: parseString) String get mapsUrl;@JsonKey(name: 'opening_hours', fromJson: parseString) String get openingHours;@JsonKey(name: 'is_opened', fromJson: parseBool) bool get isOpened;@JsonKey(fromJson: parseDouble) double get lat;@JsonKey(fromJson: parseDouble) double get lng;@JsonKey(fromJson: parseDay) int get day;@JsonKey(fromJson: parseString) String get type;@JsonKey(fromJson: parseInt) int get price;@JsonKey(fromJson: parseInt) int get cost;@JsonKey(name: 'is_hidden_gem', fromJson: parseBool) bool get isHiddenGem;
 /// Create a copy of PlanPlaceModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $PlanPlaceModelCopyWith<PlanPlaceModel> get copyWith => _$PlanPlaceModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlanPlaceModel&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.cityEn, cityEn) || other.cityEn == cityEn)&&(identical(other.category, category) || other.category == category)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other.imageUrls, imageUrls)&&(identical(other.mapsUrl, mapsUrl) || other.mapsUrl == mapsUrl)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lng, lng) || other.lng == lng)&&(identical(other.day, day) || other.day == day)&&(identical(other.type, type) || other.type == type)&&(identical(other.price, price) || other.price == price)&&(identical(other.cost, cost) || other.cost == cost)&&const DeepCollectionEquality().equals(other.interests, interests)&&(identical(other.isHiddenGem, isHiddenGem) || other.isHiddenGem == isHiddenGem)&&(identical(other.openingHours, openingHours) || other.openingHours == openingHours)&&(identical(other.isOpened, isOpened) || other.isOpened == isOpened));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlanPlaceModel&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.cityEn, cityEn) || other.cityEn == cityEn)&&const DeepCollectionEquality().equals(other.interests, interests)&&(identical(other.category, category) || other.category == category)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other.imageUrls, imageUrls)&&(identical(other.mapsUrl, mapsUrl) || other.mapsUrl == mapsUrl)&&(identical(other.openingHours, openingHours) || other.openingHours == openingHours)&&(identical(other.isOpened, isOpened) || other.isOpened == isOpened)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lng, lng) || other.lng == lng)&&(identical(other.day, day) || other.day == day)&&(identical(other.type, type) || other.type == type)&&(identical(other.price, price) || other.price == price)&&(identical(other.cost, cost) || other.cost == cost)&&(identical(other.isHiddenGem, isHiddenGem) || other.isHiddenGem == isHiddenGem));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,placeId,name,city,cityEn,category,rating,reviewsCount,address,description,photoUrl,const DeepCollectionEquality().hash(imageUrls),mapsUrl,lat,lng,day,type,price,cost,const DeepCollectionEquality().hash(interests),isHiddenGem,openingHours,isOpened]);
+int get hashCode => Object.hashAll([runtimeType,placeId,name,city,cityEn,const DeepCollectionEquality().hash(interests),category,rating,reviewsCount,address,description,photoUrl,const DeepCollectionEquality().hash(imageUrls),mapsUrl,openingHours,isOpened,lat,lng,day,type,price,cost,isHiddenGem]);
 
 @override
 String toString() {
-  return 'PlanPlaceModel(placeId: $placeId, name: $name, city: $city, cityEn: $cityEn, category: $category, rating: $rating, reviewsCount: $reviewsCount, address: $address, description: $description, photoUrl: $photoUrl, imageUrls: $imageUrls, mapsUrl: $mapsUrl, lat: $lat, lng: $lng, day: $day, type: $type, price: $price, cost: $cost, interests: $interests, isHiddenGem: $isHiddenGem, openingHours: $openingHours, isOpened: $isOpened)';
+  return 'PlanPlaceModel(placeId: $placeId, name: $name, city: $city, cityEn: $cityEn, interests: $interests, category: $category, rating: $rating, reviewsCount: $reviewsCount, address: $address, description: $description, photoUrl: $photoUrl, imageUrls: $imageUrls, mapsUrl: $mapsUrl, openingHours: $openingHours, isOpened: $isOpened, lat: $lat, lng: $lng, day: $day, type: $type, price: $price, cost: $cost, isHiddenGem: $isHiddenGem)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $PlanPlaceModelCopyWith<$Res>  {
   factory $PlanPlaceModelCopyWith(PlanPlaceModel value, $Res Function(PlanPlaceModel) _then) = _$PlanPlaceModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'place_id') String placeId, String name, String city,@JsonKey(name: 'city_en') String cityEn, String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount, String address, String description,@JsonKey(name: 'photo_url') String photoUrl,@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> imageUrls,@JsonKey(name: 'maps_url') String mapsUrl,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseDay) int day, String type,@JsonKey(fromJson: parseDouble) double price,@JsonKey(fromJson: parseDouble) double cost,@JsonKey(fromJson: parseStringList) List<String> interests,@JsonKey(name: 'is_hidden_gem') bool isHiddenGem,@JsonKey(name: 'opening_hours') String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened
+@JsonKey(name: 'place_id', fromJson: parseString) String placeId,@JsonKey(fromJson: parseString) String name,@JsonKey(fromJson: parseString) String city,@JsonKey(name: 'city_en', fromJson: parseString) String cityEn,@JsonKey(fromJson: parseStringList) List<String> interests,@JsonKey(fromJson: parseString) String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount,@JsonKey(fromJson: parseString) String address,@JsonKey(fromJson: parseString) String description,@JsonKey(name: 'photo_url', fromJson: parseString) String photoUrl,@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> imageUrls,@JsonKey(name: 'maps_url', fromJson: parseString) String mapsUrl,@JsonKey(name: 'opening_hours', fromJson: parseString) String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseDay) int day,@JsonKey(fromJson: parseString) String type,@JsonKey(fromJson: parseInt) int price,@JsonKey(fromJson: parseInt) int cost,@JsonKey(name: 'is_hidden_gem', fromJson: parseBool) bool isHiddenGem
 });
 
 
@@ -65,13 +65,14 @@ class _$PlanPlaceModelCopyWithImpl<$Res>
 
 /// Create a copy of PlanPlaceModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? placeId = null,Object? name = null,Object? city = null,Object? cityEn = null,Object? category = null,Object? rating = null,Object? reviewsCount = null,Object? address = null,Object? description = null,Object? photoUrl = null,Object? imageUrls = null,Object? mapsUrl = null,Object? lat = null,Object? lng = null,Object? day = null,Object? type = null,Object? price = null,Object? cost = null,Object? interests = null,Object? isHiddenGem = null,Object? openingHours = null,Object? isOpened = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? placeId = null,Object? name = null,Object? city = null,Object? cityEn = null,Object? interests = null,Object? category = null,Object? rating = null,Object? reviewsCount = null,Object? address = null,Object? description = null,Object? photoUrl = null,Object? imageUrls = null,Object? mapsUrl = null,Object? openingHours = null,Object? isOpened = null,Object? lat = null,Object? lng = null,Object? day = null,Object? type = null,Object? price = null,Object? cost = null,Object? isHiddenGem = null,}) {
   return _then(_self.copyWith(
 placeId: null == placeId ? _self.placeId : placeId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,cityEn: null == cityEn ? _self.cityEn : cityEn // ignore: cast_nullable_to_non_nullable
-as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String,interests: null == interests ? _self.interests : interests // ignore: cast_nullable_to_non_nullable
+as List<String>,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String,rating: null == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
 as double,reviewsCount: null == reviewsCount ? _self.reviewsCount : reviewsCount // ignore: cast_nullable_to_non_nullable
 as int,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
@@ -79,16 +80,15 @@ as String,description: null == description ? _self.description : description // 
 as String,photoUrl: null == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
 as String,imageUrls: null == imageUrls ? _self.imageUrls : imageUrls // ignore: cast_nullable_to_non_nullable
 as List<String>,mapsUrl: null == mapsUrl ? _self.mapsUrl : mapsUrl // ignore: cast_nullable_to_non_nullable
-as String,lat: null == lat ? _self.lat : lat // ignore: cast_nullable_to_non_nullable
+as String,openingHours: null == openingHours ? _self.openingHours : openingHours // ignore: cast_nullable_to_non_nullable
+as String,isOpened: null == isOpened ? _self.isOpened : isOpened // ignore: cast_nullable_to_non_nullable
+as bool,lat: null == lat ? _self.lat : lat // ignore: cast_nullable_to_non_nullable
 as double,lng: null == lng ? _self.lng : lng // ignore: cast_nullable_to_non_nullable
 as double,day: null == day ? _self.day : day // ignore: cast_nullable_to_non_nullable
 as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double,cost: null == cost ? _self.cost : cost // ignore: cast_nullable_to_non_nullable
-as double,interests: null == interests ? _self.interests : interests // ignore: cast_nullable_to_non_nullable
-as List<String>,isHiddenGem: null == isHiddenGem ? _self.isHiddenGem : isHiddenGem // ignore: cast_nullable_to_non_nullable
-as bool,openingHours: null == openingHours ? _self.openingHours : openingHours // ignore: cast_nullable_to_non_nullable
-as String,isOpened: null == isOpened ? _self.isOpened : isOpened // ignore: cast_nullable_to_non_nullable
+as int,cost: null == cost ? _self.cost : cost // ignore: cast_nullable_to_non_nullable
+as int,isHiddenGem: null == isHiddenGem ? _self.isHiddenGem : isHiddenGem // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -174,10 +174,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id', fromJson: parseString)  String placeId, @JsonKey(fromJson: parseString)  String name, @JsonKey(fromJson: parseString)  String city, @JsonKey(name: 'city_en', fromJson: parseString)  String cityEn, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(fromJson: parseString)  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount, @JsonKey(fromJson: parseString)  String address, @JsonKey(fromJson: parseString)  String description, @JsonKey(name: 'photo_url', fromJson: parseString)  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url', fromJson: parseString)  String mapsUrl, @JsonKey(name: 'opening_hours', fromJson: parseString)  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day, @JsonKey(fromJson: parseString)  String type, @JsonKey(fromJson: parseInt)  int price, @JsonKey(fromJson: parseInt)  int cost, @JsonKey(name: 'is_hidden_gem', fromJson: parseBool)  bool isHiddenGem)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PlanPlaceModel() when $default != null:
-return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.interests,_that.isHiddenGem,_that.openingHours,_that.isOpened);case _:
+return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.interests,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.openingHours,_that.isOpened,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.isHiddenGem);case _:
   return orElse();
 
 }
@@ -195,10 +195,10 @@ return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id', fromJson: parseString)  String placeId, @JsonKey(fromJson: parseString)  String name, @JsonKey(fromJson: parseString)  String city, @JsonKey(name: 'city_en', fromJson: parseString)  String cityEn, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(fromJson: parseString)  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount, @JsonKey(fromJson: parseString)  String address, @JsonKey(fromJson: parseString)  String description, @JsonKey(name: 'photo_url', fromJson: parseString)  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url', fromJson: parseString)  String mapsUrl, @JsonKey(name: 'opening_hours', fromJson: parseString)  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day, @JsonKey(fromJson: parseString)  String type, @JsonKey(fromJson: parseInt)  int price, @JsonKey(fromJson: parseInt)  int cost, @JsonKey(name: 'is_hidden_gem', fromJson: parseBool)  bool isHiddenGem)  $default,) {final _that = this;
 switch (_that) {
 case _PlanPlaceModel():
-return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.interests,_that.isHiddenGem,_that.openingHours,_that.isOpened);case _:
+return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.interests,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.openingHours,_that.isOpened,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.isHiddenGem);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -215,10 +215,10 @@ return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'place_id', fromJson: parseString)  String placeId, @JsonKey(fromJson: parseString)  String name, @JsonKey(fromJson: parseString)  String city, @JsonKey(name: 'city_en', fromJson: parseString)  String cityEn, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(fromJson: parseString)  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount, @JsonKey(fromJson: parseString)  String address, @JsonKey(fromJson: parseString)  String description, @JsonKey(name: 'photo_url', fromJson: parseString)  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url', fromJson: parseString)  String mapsUrl, @JsonKey(name: 'opening_hours', fromJson: parseString)  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day, @JsonKey(fromJson: parseString)  String type, @JsonKey(fromJson: parseInt)  int price, @JsonKey(fromJson: parseInt)  int cost, @JsonKey(name: 'is_hidden_gem', fromJson: parseBool)  bool isHiddenGem)?  $default,) {final _that = this;
 switch (_that) {
 case _PlanPlaceModel() when $default != null:
-return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.interests,_that.isHiddenGem,_that.openingHours,_that.isOpened);case _:
+return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.interests,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.openingHours,_that.isOpened,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.isHiddenGem);case _:
   return null;
 
 }
@@ -230,33 +230,13 @@ return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,
 @JsonSerializable()
 
 class _PlanPlaceModel implements PlanPlaceModel {
-  const _PlanPlaceModel({@JsonKey(name: 'place_id') required this.placeId, required this.name, required this.city, @JsonKey(name: 'city_en') required this.cityEn, required this.category, @JsonKey(fromJson: parseDouble) required this.rating, @JsonKey(name: 'reviews_count', fromJson: parseInt) required this.reviewsCount, required this.address, required this.description, @JsonKey(name: 'photo_url') required this.photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList) required final  List<String> imageUrls, @JsonKey(name: 'maps_url') required this.mapsUrl, @JsonKey(fromJson: parseDouble) required this.lat, @JsonKey(fromJson: parseDouble) required this.lng, @JsonKey(fromJson: parseDay) required this.day, required this.type, @JsonKey(fromJson: parseDouble) required this.price, @JsonKey(fromJson: parseDouble) required this.cost, @JsonKey(fromJson: parseStringList) required final  List<String> interests, @JsonKey(name: 'is_hidden_gem') required this.isHiddenGem, @JsonKey(name: 'opening_hours') required this.openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool) required this.isOpened}): _imageUrls = imageUrls,_interests = interests;
+  const _PlanPlaceModel({@JsonKey(name: 'place_id', fromJson: parseString) this.placeId = '', @JsonKey(fromJson: parseString) this.name = '', @JsonKey(fromJson: parseString) this.city = '', @JsonKey(name: 'city_en', fromJson: parseString) this.cityEn = '', @JsonKey(fromJson: parseStringList) final  List<String> interests = const [], @JsonKey(fromJson: parseString) this.category = '', @JsonKey(fromJson: parseDouble) this.rating = 0.0, @JsonKey(name: 'reviews_count', fromJson: parseInt) this.reviewsCount = 0, @JsonKey(fromJson: parseString) this.address = '', @JsonKey(fromJson: parseString) this.description = '', @JsonKey(name: 'photo_url', fromJson: parseString) this.photoUrl = '', @JsonKey(name: 'image_urls', fromJson: parseStringList) final  List<String> imageUrls = const [], @JsonKey(name: 'maps_url', fromJson: parseString) this.mapsUrl = '', @JsonKey(name: 'opening_hours', fromJson: parseString) this.openingHours = '', @JsonKey(name: 'is_opened', fromJson: parseBool) this.isOpened = false, @JsonKey(fromJson: parseDouble) this.lat = 0.0, @JsonKey(fromJson: parseDouble) this.lng = 0.0, @JsonKey(fromJson: parseDay) this.day = 0, @JsonKey(fromJson: parseString) this.type = '', @JsonKey(fromJson: parseInt) this.price = 0, @JsonKey(fromJson: parseInt) this.cost = 0, @JsonKey(name: 'is_hidden_gem', fromJson: parseBool) this.isHiddenGem = false}): _interests = interests,_imageUrls = imageUrls;
   factory _PlanPlaceModel.fromJson(Map<String, dynamic> json) => _$PlanPlaceModelFromJson(json);
 
-@override@JsonKey(name: 'place_id') final  String placeId;
-@override final  String name;
-@override final  String city;
-@override@JsonKey(name: 'city_en') final  String cityEn;
-@override final  String category;
-@override@JsonKey(fromJson: parseDouble) final  double rating;
-@override@JsonKey(name: 'reviews_count', fromJson: parseInt) final  int reviewsCount;
-@override final  String address;
-@override final  String description;
-@override@JsonKey(name: 'photo_url') final  String photoUrl;
- final  List<String> _imageUrls;
-@override@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> get imageUrls {
-  if (_imageUrls is EqualUnmodifiableListView) return _imageUrls;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_imageUrls);
-}
-
-@override@JsonKey(name: 'maps_url') final  String mapsUrl;
-@override@JsonKey(fromJson: parseDouble) final  double lat;
-@override@JsonKey(fromJson: parseDouble) final  double lng;
-@override@JsonKey(fromJson: parseDay) final  int day;
-@override final  String type;
-@override@JsonKey(fromJson: parseDouble) final  double price;
-@override@JsonKey(fromJson: parseDouble) final  double cost;
+@override@JsonKey(name: 'place_id', fromJson: parseString) final  String placeId;
+@override@JsonKey(fromJson: parseString) final  String name;
+@override@JsonKey(fromJson: parseString) final  String city;
+@override@JsonKey(name: 'city_en', fromJson: parseString) final  String cityEn;
  final  List<String> _interests;
 @override@JsonKey(fromJson: parseStringList) List<String> get interests {
   if (_interests is EqualUnmodifiableListView) return _interests;
@@ -264,9 +244,29 @@ class _PlanPlaceModel implements PlanPlaceModel {
   return EqualUnmodifiableListView(_interests);
 }
 
-@override@JsonKey(name: 'is_hidden_gem') final  bool isHiddenGem;
-@override@JsonKey(name: 'opening_hours') final  String openingHours;
+@override@JsonKey(fromJson: parseString) final  String category;
+@override@JsonKey(fromJson: parseDouble) final  double rating;
+@override@JsonKey(name: 'reviews_count', fromJson: parseInt) final  int reviewsCount;
+@override@JsonKey(fromJson: parseString) final  String address;
+@override@JsonKey(fromJson: parseString) final  String description;
+@override@JsonKey(name: 'photo_url', fromJson: parseString) final  String photoUrl;
+ final  List<String> _imageUrls;
+@override@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> get imageUrls {
+  if (_imageUrls is EqualUnmodifiableListView) return _imageUrls;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_imageUrls);
+}
+
+@override@JsonKey(name: 'maps_url', fromJson: parseString) final  String mapsUrl;
+@override@JsonKey(name: 'opening_hours', fromJson: parseString) final  String openingHours;
 @override@JsonKey(name: 'is_opened', fromJson: parseBool) final  bool isOpened;
+@override@JsonKey(fromJson: parseDouble) final  double lat;
+@override@JsonKey(fromJson: parseDouble) final  double lng;
+@override@JsonKey(fromJson: parseDay) final  int day;
+@override@JsonKey(fromJson: parseString) final  String type;
+@override@JsonKey(fromJson: parseInt) final  int price;
+@override@JsonKey(fromJson: parseInt) final  int cost;
+@override@JsonKey(name: 'is_hidden_gem', fromJson: parseBool) final  bool isHiddenGem;
 
 /// Create a copy of PlanPlaceModel
 /// with the given fields replaced by the non-null parameter values.
@@ -281,16 +281,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlanPlaceModel&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.cityEn, cityEn) || other.cityEn == cityEn)&&(identical(other.category, category) || other.category == category)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other._imageUrls, _imageUrls)&&(identical(other.mapsUrl, mapsUrl) || other.mapsUrl == mapsUrl)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lng, lng) || other.lng == lng)&&(identical(other.day, day) || other.day == day)&&(identical(other.type, type) || other.type == type)&&(identical(other.price, price) || other.price == price)&&(identical(other.cost, cost) || other.cost == cost)&&const DeepCollectionEquality().equals(other._interests, _interests)&&(identical(other.isHiddenGem, isHiddenGem) || other.isHiddenGem == isHiddenGem)&&(identical(other.openingHours, openingHours) || other.openingHours == openingHours)&&(identical(other.isOpened, isOpened) || other.isOpened == isOpened));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlanPlaceModel&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name)&&(identical(other.city, city) || other.city == city)&&(identical(other.cityEn, cityEn) || other.cityEn == cityEn)&&const DeepCollectionEquality().equals(other._interests, _interests)&&(identical(other.category, category) || other.category == category)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.reviewsCount, reviewsCount) || other.reviewsCount == reviewsCount)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other._imageUrls, _imageUrls)&&(identical(other.mapsUrl, mapsUrl) || other.mapsUrl == mapsUrl)&&(identical(other.openingHours, openingHours) || other.openingHours == openingHours)&&(identical(other.isOpened, isOpened) || other.isOpened == isOpened)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lng, lng) || other.lng == lng)&&(identical(other.day, day) || other.day == day)&&(identical(other.type, type) || other.type == type)&&(identical(other.price, price) || other.price == price)&&(identical(other.cost, cost) || other.cost == cost)&&(identical(other.isHiddenGem, isHiddenGem) || other.isHiddenGem == isHiddenGem));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,placeId,name,city,cityEn,category,rating,reviewsCount,address,description,photoUrl,const DeepCollectionEquality().hash(_imageUrls),mapsUrl,lat,lng,day,type,price,cost,const DeepCollectionEquality().hash(_interests),isHiddenGem,openingHours,isOpened]);
+int get hashCode => Object.hashAll([runtimeType,placeId,name,city,cityEn,const DeepCollectionEquality().hash(_interests),category,rating,reviewsCount,address,description,photoUrl,const DeepCollectionEquality().hash(_imageUrls),mapsUrl,openingHours,isOpened,lat,lng,day,type,price,cost,isHiddenGem]);
 
 @override
 String toString() {
-  return 'PlanPlaceModel(placeId: $placeId, name: $name, city: $city, cityEn: $cityEn, category: $category, rating: $rating, reviewsCount: $reviewsCount, address: $address, description: $description, photoUrl: $photoUrl, imageUrls: $imageUrls, mapsUrl: $mapsUrl, lat: $lat, lng: $lng, day: $day, type: $type, price: $price, cost: $cost, interests: $interests, isHiddenGem: $isHiddenGem, openingHours: $openingHours, isOpened: $isOpened)';
+  return 'PlanPlaceModel(placeId: $placeId, name: $name, city: $city, cityEn: $cityEn, interests: $interests, category: $category, rating: $rating, reviewsCount: $reviewsCount, address: $address, description: $description, photoUrl: $photoUrl, imageUrls: $imageUrls, mapsUrl: $mapsUrl, openingHours: $openingHours, isOpened: $isOpened, lat: $lat, lng: $lng, day: $day, type: $type, price: $price, cost: $cost, isHiddenGem: $isHiddenGem)';
 }
 
 
@@ -301,7 +301,7 @@ abstract mixin class _$PlanPlaceModelCopyWith<$Res> implements $PlanPlaceModelCo
   factory _$PlanPlaceModelCopyWith(_PlanPlaceModel value, $Res Function(_PlanPlaceModel) _then) = __$PlanPlaceModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'place_id') String placeId, String name, String city,@JsonKey(name: 'city_en') String cityEn, String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount, String address, String description,@JsonKey(name: 'photo_url') String photoUrl,@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> imageUrls,@JsonKey(name: 'maps_url') String mapsUrl,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseDay) int day, String type,@JsonKey(fromJson: parseDouble) double price,@JsonKey(fromJson: parseDouble) double cost,@JsonKey(fromJson: parseStringList) List<String> interests,@JsonKey(name: 'is_hidden_gem') bool isHiddenGem,@JsonKey(name: 'opening_hours') String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened
+@JsonKey(name: 'place_id', fromJson: parseString) String placeId,@JsonKey(fromJson: parseString) String name,@JsonKey(fromJson: parseString) String city,@JsonKey(name: 'city_en', fromJson: parseString) String cityEn,@JsonKey(fromJson: parseStringList) List<String> interests,@JsonKey(fromJson: parseString) String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount,@JsonKey(fromJson: parseString) String address,@JsonKey(fromJson: parseString) String description,@JsonKey(name: 'photo_url', fromJson: parseString) String photoUrl,@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> imageUrls,@JsonKey(name: 'maps_url', fromJson: parseString) String mapsUrl,@JsonKey(name: 'opening_hours', fromJson: parseString) String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseDay) int day,@JsonKey(fromJson: parseString) String type,@JsonKey(fromJson: parseInt) int price,@JsonKey(fromJson: parseInt) int cost,@JsonKey(name: 'is_hidden_gem', fromJson: parseBool) bool isHiddenGem
 });
 
 
@@ -318,13 +318,14 @@ class __$PlanPlaceModelCopyWithImpl<$Res>
 
 /// Create a copy of PlanPlaceModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? placeId = null,Object? name = null,Object? city = null,Object? cityEn = null,Object? category = null,Object? rating = null,Object? reviewsCount = null,Object? address = null,Object? description = null,Object? photoUrl = null,Object? imageUrls = null,Object? mapsUrl = null,Object? lat = null,Object? lng = null,Object? day = null,Object? type = null,Object? price = null,Object? cost = null,Object? interests = null,Object? isHiddenGem = null,Object? openingHours = null,Object? isOpened = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? placeId = null,Object? name = null,Object? city = null,Object? cityEn = null,Object? interests = null,Object? category = null,Object? rating = null,Object? reviewsCount = null,Object? address = null,Object? description = null,Object? photoUrl = null,Object? imageUrls = null,Object? mapsUrl = null,Object? openingHours = null,Object? isOpened = null,Object? lat = null,Object? lng = null,Object? day = null,Object? type = null,Object? price = null,Object? cost = null,Object? isHiddenGem = null,}) {
   return _then(_PlanPlaceModel(
 placeId: null == placeId ? _self.placeId : placeId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,cityEn: null == cityEn ? _self.cityEn : cityEn // ignore: cast_nullable_to_non_nullable
-as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as String,interests: null == interests ? _self._interests : interests // ignore: cast_nullable_to_non_nullable
+as List<String>,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String,rating: null == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
 as double,reviewsCount: null == reviewsCount ? _self.reviewsCount : reviewsCount // ignore: cast_nullable_to_non_nullable
 as int,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
@@ -332,16 +333,15 @@ as String,description: null == description ? _self.description : description // 
 as String,photoUrl: null == photoUrl ? _self.photoUrl : photoUrl // ignore: cast_nullable_to_non_nullable
 as String,imageUrls: null == imageUrls ? _self._imageUrls : imageUrls // ignore: cast_nullable_to_non_nullable
 as List<String>,mapsUrl: null == mapsUrl ? _self.mapsUrl : mapsUrl // ignore: cast_nullable_to_non_nullable
-as String,lat: null == lat ? _self.lat : lat // ignore: cast_nullable_to_non_nullable
+as String,openingHours: null == openingHours ? _self.openingHours : openingHours // ignore: cast_nullable_to_non_nullable
+as String,isOpened: null == isOpened ? _self.isOpened : isOpened // ignore: cast_nullable_to_non_nullable
+as bool,lat: null == lat ? _self.lat : lat // ignore: cast_nullable_to_non_nullable
 as double,lng: null == lng ? _self.lng : lng // ignore: cast_nullable_to_non_nullable
 as double,day: null == day ? _self.day : day // ignore: cast_nullable_to_non_nullable
 as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double,cost: null == cost ? _self.cost : cost // ignore: cast_nullable_to_non_nullable
-as double,interests: null == interests ? _self._interests : interests // ignore: cast_nullable_to_non_nullable
-as List<String>,isHiddenGem: null == isHiddenGem ? _self.isHiddenGem : isHiddenGem // ignore: cast_nullable_to_non_nullable
-as bool,openingHours: null == openingHours ? _self.openingHours : openingHours // ignore: cast_nullable_to_non_nullable
-as String,isOpened: null == isOpened ? _self.isOpened : isOpened // ignore: cast_nullable_to_non_nullable
+as int,cost: null == cost ? _self.cost : cost // ignore: cast_nullable_to_non_nullable
+as int,isHiddenGem: null == isHiddenGem ? _self.isHiddenGem : isHiddenGem // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

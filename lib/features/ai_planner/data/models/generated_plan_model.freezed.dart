@@ -11,30 +11,33 @@ part of 'generated_plan_model.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$GeneratedPlanModel {
 
- String get tripId; String get status; int get people; int get totalCalculatedCost; int get daysCount; List<PlanPlaceModel> get accommodation; Map<int, DayPlanModel> get days;
+@JsonKey(name: 'trip_id', fromJson: parseString) String get tripId;@JsonKey(fromJson: parseString) String get status;@JsonKey(fromJson: parseInt) int get people;@JsonKey(name: 'total_calculated_cost', fromJson: parseInt) int get totalCalculatedCost;@JsonKey(name: 'days_count', fromJson: parseInt) int get daysCount; PlanModel? get plan;
 /// Create a copy of GeneratedPlanModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $GeneratedPlanModelCopyWith<GeneratedPlanModel> get copyWith => _$GeneratedPlanModelCopyWithImpl<GeneratedPlanModel>(this as GeneratedPlanModel, _$identity);
 
+  /// Serializes this GeneratedPlanModel to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GeneratedPlanModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.status, status) || other.status == status)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalCalculatedCost, totalCalculatedCost) || other.totalCalculatedCost == totalCalculatedCost)&&(identical(other.daysCount, daysCount) || other.daysCount == daysCount)&&const DeepCollectionEquality().equals(other.accommodation, accommodation)&&const DeepCollectionEquality().equals(other.days, days));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GeneratedPlanModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.status, status) || other.status == status)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalCalculatedCost, totalCalculatedCost) || other.totalCalculatedCost == totalCalculatedCost)&&(identical(other.daysCount, daysCount) || other.daysCount == daysCount)&&(identical(other.plan, plan) || other.plan == plan));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,tripId,status,people,totalCalculatedCost,daysCount,const DeepCollectionEquality().hash(accommodation),const DeepCollectionEquality().hash(days));
+int get hashCode => Object.hash(runtimeType,tripId,status,people,totalCalculatedCost,daysCount,plan);
 
 @override
 String toString() {
-  return 'GeneratedPlanModel(tripId: $tripId, status: $status, people: $people, totalCalculatedCost: $totalCalculatedCost, daysCount: $daysCount, accommodation: $accommodation, days: $days)';
+  return 'GeneratedPlanModel(tripId: $tripId, status: $status, people: $people, totalCalculatedCost: $totalCalculatedCost, daysCount: $daysCount, plan: $plan)';
 }
 
 
@@ -45,11 +48,11 @@ abstract mixin class $GeneratedPlanModelCopyWith<$Res>  {
   factory $GeneratedPlanModelCopyWith(GeneratedPlanModel value, $Res Function(GeneratedPlanModel) _then) = _$GeneratedPlanModelCopyWithImpl;
 @useResult
 $Res call({
- String tripId, String status, int people, int totalCalculatedCost, int daysCount, List<PlanPlaceModel> accommodation, Map<int, DayPlanModel> days
+@JsonKey(name: 'trip_id', fromJson: parseString) String tripId,@JsonKey(fromJson: parseString) String status,@JsonKey(fromJson: parseInt) int people,@JsonKey(name: 'total_calculated_cost', fromJson: parseInt) int totalCalculatedCost,@JsonKey(name: 'days_count', fromJson: parseInt) int daysCount, PlanModel? plan
 });
 
 
-
+$PlanModelCopyWith<$Res>? get plan;
 
 }
 /// @nodoc
@@ -62,19 +65,30 @@ class _$GeneratedPlanModelCopyWithImpl<$Res>
 
 /// Create a copy of GeneratedPlanModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,Object? status = null,Object? people = null,Object? totalCalculatedCost = null,Object? daysCount = null,Object? accommodation = null,Object? days = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,Object? status = null,Object? people = null,Object? totalCalculatedCost = null,Object? daysCount = null,Object? plan = freezed,}) {
   return _then(_self.copyWith(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,people: null == people ? _self.people : people // ignore: cast_nullable_to_non_nullable
 as int,totalCalculatedCost: null == totalCalculatedCost ? _self.totalCalculatedCost : totalCalculatedCost // ignore: cast_nullable_to_non_nullable
 as int,daysCount: null == daysCount ? _self.daysCount : daysCount // ignore: cast_nullable_to_non_nullable
-as int,accommodation: null == accommodation ? _self.accommodation : accommodation // ignore: cast_nullable_to_non_nullable
-as List<PlanPlaceModel>,days: null == days ? _self.days : days // ignore: cast_nullable_to_non_nullable
-as Map<int, DayPlanModel>,
+as int,plan: freezed == plan ? _self.plan : plan // ignore: cast_nullable_to_non_nullable
+as PlanModel?,
   ));
 }
+/// Create a copy of GeneratedPlanModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PlanModelCopyWith<$Res>? get plan {
+    if (_self.plan == null) {
+    return null;
+  }
 
+  return $PlanModelCopyWith<$Res>(_self.plan!, (value) {
+    return _then(_self.copyWith(plan: value));
+  });
+}
 }
 
 
@@ -156,10 +170,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String tripId,  String status,  int people,  int totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'trip_id', fromJson: parseString)  String tripId, @JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseInt)  int people, @JsonKey(name: 'total_calculated_cost', fromJson: parseInt)  int totalCalculatedCost, @JsonKey(name: 'days_count', fromJson: parseInt)  int daysCount,  PlanModel? plan)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GeneratedPlanModel() when $default != null:
-return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.accommodation,_that.days);case _:
+return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.plan);case _:
   return orElse();
 
 }
@@ -177,10 +191,10 @@ return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String tripId,  String status,  int people,  int totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'trip_id', fromJson: parseString)  String tripId, @JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseInt)  int people, @JsonKey(name: 'total_calculated_cost', fromJson: parseInt)  int totalCalculatedCost, @JsonKey(name: 'days_count', fromJson: parseInt)  int daysCount,  PlanModel? plan)  $default,) {final _that = this;
 switch (_that) {
 case _GeneratedPlanModel():
-return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.accommodation,_that.days);case _:
+return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.plan);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +211,10 @@ return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String tripId,  String status,  int people,  int totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'trip_id', fromJson: parseString)  String tripId, @JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseInt)  int people, @JsonKey(name: 'total_calculated_cost', fromJson: parseInt)  int totalCalculatedCost, @JsonKey(name: 'days_count', fromJson: parseInt)  int daysCount,  PlanModel? plan)?  $default,) {final _that = this;
 switch (_that) {
 case _GeneratedPlanModel() when $default != null:
-return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.accommodation,_that.days);case _:
+return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.plan);case _:
   return null;
 
 }
@@ -209,31 +223,18 @@ return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost
 }
 
 /// @nodoc
-
+@JsonSerializable()
 
 class _GeneratedPlanModel implements GeneratedPlanModel {
-  const _GeneratedPlanModel({required this.tripId, required this.status, required this.people, required this.totalCalculatedCost, required this.daysCount, required final  List<PlanPlaceModel> accommodation, required final  Map<int, DayPlanModel> days}): _accommodation = accommodation,_days = days;
-  
+  const _GeneratedPlanModel({@JsonKey(name: 'trip_id', fromJson: parseString) this.tripId = '', @JsonKey(fromJson: parseString) this.status = '', @JsonKey(fromJson: parseInt) this.people = 0, @JsonKey(name: 'total_calculated_cost', fromJson: parseInt) this.totalCalculatedCost = 0, @JsonKey(name: 'days_count', fromJson: parseInt) this.daysCount = 0, this.plan});
+  factory _GeneratedPlanModel.fromJson(Map<String, dynamic> json) => _$GeneratedPlanModelFromJson(json);
 
-@override final  String tripId;
-@override final  String status;
-@override final  int people;
-@override final  int totalCalculatedCost;
-@override final  int daysCount;
- final  List<PlanPlaceModel> _accommodation;
-@override List<PlanPlaceModel> get accommodation {
-  if (_accommodation is EqualUnmodifiableListView) return _accommodation;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_accommodation);
-}
-
- final  Map<int, DayPlanModel> _days;
-@override Map<int, DayPlanModel> get days {
-  if (_days is EqualUnmodifiableMapView) return _days;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_days);
-}
-
+@override@JsonKey(name: 'trip_id', fromJson: parseString) final  String tripId;
+@override@JsonKey(fromJson: parseString) final  String status;
+@override@JsonKey(fromJson: parseInt) final  int people;
+@override@JsonKey(name: 'total_calculated_cost', fromJson: parseInt) final  int totalCalculatedCost;
+@override@JsonKey(name: 'days_count', fromJson: parseInt) final  int daysCount;
+@override final  PlanModel? plan;
 
 /// Create a copy of GeneratedPlanModel
 /// with the given fields replaced by the non-null parameter values.
@@ -241,20 +242,23 @@ class _GeneratedPlanModel implements GeneratedPlanModel {
 @pragma('vm:prefer-inline')
 _$GeneratedPlanModelCopyWith<_GeneratedPlanModel> get copyWith => __$GeneratedPlanModelCopyWithImpl<_GeneratedPlanModel>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$GeneratedPlanModelToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GeneratedPlanModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.status, status) || other.status == status)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalCalculatedCost, totalCalculatedCost) || other.totalCalculatedCost == totalCalculatedCost)&&(identical(other.daysCount, daysCount) || other.daysCount == daysCount)&&const DeepCollectionEquality().equals(other._accommodation, _accommodation)&&const DeepCollectionEquality().equals(other._days, _days));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GeneratedPlanModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.status, status) || other.status == status)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalCalculatedCost, totalCalculatedCost) || other.totalCalculatedCost == totalCalculatedCost)&&(identical(other.daysCount, daysCount) || other.daysCount == daysCount)&&(identical(other.plan, plan) || other.plan == plan));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,tripId,status,people,totalCalculatedCost,daysCount,const DeepCollectionEquality().hash(_accommodation),const DeepCollectionEquality().hash(_days));
+int get hashCode => Object.hash(runtimeType,tripId,status,people,totalCalculatedCost,daysCount,plan);
 
 @override
 String toString() {
-  return 'GeneratedPlanModel(tripId: $tripId, status: $status, people: $people, totalCalculatedCost: $totalCalculatedCost, daysCount: $daysCount, accommodation: $accommodation, days: $days)';
+  return 'GeneratedPlanModel(tripId: $tripId, status: $status, people: $people, totalCalculatedCost: $totalCalculatedCost, daysCount: $daysCount, plan: $plan)';
 }
 
 
@@ -265,11 +269,11 @@ abstract mixin class _$GeneratedPlanModelCopyWith<$Res> implements $GeneratedPla
   factory _$GeneratedPlanModelCopyWith(_GeneratedPlanModel value, $Res Function(_GeneratedPlanModel) _then) = __$GeneratedPlanModelCopyWithImpl;
 @override @useResult
 $Res call({
- String tripId, String status, int people, int totalCalculatedCost, int daysCount, List<PlanPlaceModel> accommodation, Map<int, DayPlanModel> days
+@JsonKey(name: 'trip_id', fromJson: parseString) String tripId,@JsonKey(fromJson: parseString) String status,@JsonKey(fromJson: parseInt) int people,@JsonKey(name: 'total_calculated_cost', fromJson: parseInt) int totalCalculatedCost,@JsonKey(name: 'days_count', fromJson: parseInt) int daysCount, PlanModel? plan
 });
 
 
-
+@override $PlanModelCopyWith<$Res>? get plan;
 
 }
 /// @nodoc
@@ -282,20 +286,31 @@ class __$GeneratedPlanModelCopyWithImpl<$Res>
 
 /// Create a copy of GeneratedPlanModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? status = null,Object? people = null,Object? totalCalculatedCost = null,Object? daysCount = null,Object? accommodation = null,Object? days = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? status = null,Object? people = null,Object? totalCalculatedCost = null,Object? daysCount = null,Object? plan = freezed,}) {
   return _then(_GeneratedPlanModel(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,people: null == people ? _self.people : people // ignore: cast_nullable_to_non_nullable
 as int,totalCalculatedCost: null == totalCalculatedCost ? _self.totalCalculatedCost : totalCalculatedCost // ignore: cast_nullable_to_non_nullable
 as int,daysCount: null == daysCount ? _self.daysCount : daysCount // ignore: cast_nullable_to_non_nullable
-as int,accommodation: null == accommodation ? _self._accommodation : accommodation // ignore: cast_nullable_to_non_nullable
-as List<PlanPlaceModel>,days: null == days ? _self._days : days // ignore: cast_nullable_to_non_nullable
-as Map<int, DayPlanModel>,
+as int,plan: freezed == plan ? _self.plan : plan // ignore: cast_nullable_to_non_nullable
+as PlanModel?,
   ));
 }
 
+/// Create a copy of GeneratedPlanModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PlanModelCopyWith<$Res>? get plan {
+    if (_self.plan == null) {
+    return null;
+  }
 
+  return $PlanModelCopyWith<$Res>(_self.plan!, (value) {
+    return _then(_self.copyWith(plan: value));
+  });
+}
 }
 
 // dart format on
