@@ -8,13 +8,11 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/wavy_clipper.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
-import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 
 class TripShareCard extends StatelessWidget {
   final Trip trip;
-  final TripItinerary? itinerary;
 
-  const TripShareCard({super.key, required this.trip, this.itinerary});
+  const TripShareCard({super.key, required this.trip});
 
   @override
   Widget build(BuildContext context) {
@@ -181,12 +179,12 @@ class TripShareCard extends StatelessWidget {
                   value: '${trip.durationDays} Days',
                 ),
                 const _TripShareVerticalDivider(),
-                _TripShareInfoItem(
-                  icon: Icons.location_on,
-                  label: 'PLACES',
-                  value:
-                      '${itinerary?.totalPlaces ?? 0} Places',
-                ),
+                // _TripShareInfoItem(
+                //   icon: Icons.location_on,
+                //   label: 'PLACES',
+                //   value:
+                //       '${itinerary?.totalPlaces ?? 0} Places',
+                // ),
               ],
             ),
           ),

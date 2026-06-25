@@ -8,7 +8,6 @@ import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';

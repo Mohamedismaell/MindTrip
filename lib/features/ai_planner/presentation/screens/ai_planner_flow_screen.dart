@@ -63,27 +63,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
         _plannerCubit.updateCustomBudget(_customBudgetController.text);
       }
     });
-
-    // if (widget.tripId != null) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     _resumeFromTripId(widget.tripId!);
-    //   });
-    // }
   }
-
-  // Future<void> _resumeFromTripId(String tripId) async {
-  //   if (_tripsCubit.isClosed) return;
-  //   final trip = _tripsCubit.state.getTripById(tripId);
-  //   if (trip == null || !mounted) return;
-  //   if (!_plannerCubit.isClosed) _plannerCubit.loadFromTrip(trip);
-  //   _destinationController.text = trip.destination;
-  //   _customBudgetController.text = trip.totalBudget.toString();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     if (_pageController.hasClients) {
-  //       _pageController.jumpToPage(_plannerCubit.state.currentPage);
-  //     }
-  //   });
-  // }
 
   @override
   void dispose() {
@@ -94,21 +74,12 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     super.dispose();
   }
 
-  // Future<void> _handleBack(bool isLeaving) async {
-  //   if (_plannerCubit.state.currentPage == 0 || isLeaving) {
-  //     if (mounted) context.pop();
-  //     return;
-  //   }
-  //   _plannerCubit.previousPage();
-  // }
   Future<void> _handleBack(bool isLeaving) async {
     if (isLeaving) {
       if (mounted) context.pop();
       return;
     }
-
     final canGoBack = _plannerCubit.goBack();
-
     if (!canGoBack && mounted) {
       context.pop();
     }

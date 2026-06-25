@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
+import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart';
 
 class TripColors {
   final Color edge;

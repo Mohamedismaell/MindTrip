@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PlanPlaceModel {
 
-@JsonKey(name: 'place_id') String get placeId; String get name; String get city;@JsonKey(name: 'city_en') String get cityEn; String get category;@JsonKey(fromJson: parseDouble) double get rating;@JsonKey(name: 'reviews_count', fromJson: parseInt) int get reviewsCount; String get address; String get description;@JsonKey(name: 'photo_url') String get photoUrl;@JsonKey(name: 'image_urls') List<String> get imageUrls;@JsonKey(name: 'maps_url') String get mapsUrl;@JsonKey(fromJson: parseDouble) double get lat;@JsonKey(fromJson: parseDouble) double get lng;@JsonKey(fromJson: parseInt) int get day; String get type;@JsonKey(fromJson: parseDouble) double get price;@JsonKey(fromJson: parseDouble) double get cost; List<String> get interests;@JsonKey(name: 'is_hidden_gem') bool get isHiddenGem;@JsonKey(name: 'opening_hours') String get openingHours;@JsonKey(name: 'is_opened', fromJson: parseBool) bool get isOpened;
+@JsonKey(name: 'place_id') String get placeId; String get name; String get city;@JsonKey(name: 'city_en') String get cityEn; String get category;@JsonKey(fromJson: parseDouble) double get rating;@JsonKey(name: 'reviews_count', fromJson: parseInt) int get reviewsCount; String get address; String get description;@JsonKey(name: 'photo_url') String get photoUrl;@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> get imageUrls;@JsonKey(name: 'maps_url') String get mapsUrl;@JsonKey(fromJson: parseDouble) double get lat;@JsonKey(fromJson: parseDouble) double get lng;@JsonKey(fromJson: parseDay) int get day; String get type;@JsonKey(fromJson: parseDouble) double get price;@JsonKey(fromJson: parseDouble) double get cost;@JsonKey(fromJson: parseStringList) List<String> get interests;@JsonKey(name: 'is_hidden_gem') bool get isHiddenGem;@JsonKey(name: 'opening_hours') String get openingHours;@JsonKey(name: 'is_opened', fromJson: parseBool) bool get isOpened;
 /// Create a copy of PlanPlaceModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PlanPlaceModelCopyWith<$Res>  {
   factory $PlanPlaceModelCopyWith(PlanPlaceModel value, $Res Function(PlanPlaceModel) _then) = _$PlanPlaceModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'place_id') String placeId, String name, String city,@JsonKey(name: 'city_en') String cityEn, String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount, String address, String description,@JsonKey(name: 'photo_url') String photoUrl,@JsonKey(name: 'image_urls') List<String> imageUrls,@JsonKey(name: 'maps_url') String mapsUrl,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseInt) int day, String type,@JsonKey(fromJson: parseDouble) double price,@JsonKey(fromJson: parseDouble) double cost, List<String> interests,@JsonKey(name: 'is_hidden_gem') bool isHiddenGem,@JsonKey(name: 'opening_hours') String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened
+@JsonKey(name: 'place_id') String placeId, String name, String city,@JsonKey(name: 'city_en') String cityEn, String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount, String address, String description,@JsonKey(name: 'photo_url') String photoUrl,@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> imageUrls,@JsonKey(name: 'maps_url') String mapsUrl,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseDay) int day, String type,@JsonKey(fromJson: parseDouble) double price,@JsonKey(fromJson: parseDouble) double cost,@JsonKey(fromJson: parseStringList) List<String> interests,@JsonKey(name: 'is_hidden_gem') bool isHiddenGem,@JsonKey(name: 'opening_hours') String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened
 });
 
 
@@ -174,7 +174,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls')  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseInt)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost,  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PlanPlaceModel() when $default != null:
 return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.interests,_that.isHiddenGem,_that.openingHours,_that.isOpened);case _:
@@ -195,7 +195,7 @@ return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls')  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseInt)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost,  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)  $default,) {final _that = this;
 switch (_that) {
 case _PlanPlaceModel():
 return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.interests,_that.isHiddenGem,_that.openingHours,_that.isOpened);case _:
@@ -215,7 +215,7 @@ return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls')  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseInt)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost,  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'place_id')  String placeId,  String name,  String city, @JsonKey(name: 'city_en')  String cityEn,  String category, @JsonKey(fromJson: parseDouble)  double rating, @JsonKey(name: 'reviews_count', fromJson: parseInt)  int reviewsCount,  String address,  String description, @JsonKey(name: 'photo_url')  String photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList)  List<String> imageUrls, @JsonKey(name: 'maps_url')  String mapsUrl, @JsonKey(fromJson: parseDouble)  double lat, @JsonKey(fromJson: parseDouble)  double lng, @JsonKey(fromJson: parseDay)  int day,  String type, @JsonKey(fromJson: parseDouble)  double price, @JsonKey(fromJson: parseDouble)  double cost, @JsonKey(fromJson: parseStringList)  List<String> interests, @JsonKey(name: 'is_hidden_gem')  bool isHiddenGem, @JsonKey(name: 'opening_hours')  String openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool)  bool isOpened)?  $default,) {final _that = this;
 switch (_that) {
 case _PlanPlaceModel() when $default != null:
 return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,_that.rating,_that.reviewsCount,_that.address,_that.description,_that.photoUrl,_that.imageUrls,_that.mapsUrl,_that.lat,_that.lng,_that.day,_that.type,_that.price,_that.cost,_that.interests,_that.isHiddenGem,_that.openingHours,_that.isOpened);case _:
@@ -230,21 +230,21 @@ return $default(_that.placeId,_that.name,_that.city,_that.cityEn,_that.category,
 @JsonSerializable()
 
 class _PlanPlaceModel implements PlanPlaceModel {
-  const _PlanPlaceModel({@JsonKey(name: 'place_id') this.placeId = '', this.name = '', this.city = '', @JsonKey(name: 'city_en') this.cityEn = '', this.category = '', @JsonKey(fromJson: parseDouble) this.rating = 0, @JsonKey(name: 'reviews_count', fromJson: parseInt) this.reviewsCount = 0, this.address = '', this.description = '', @JsonKey(name: 'photo_url') this.photoUrl = '', @JsonKey(name: 'image_urls') final  List<String> imageUrls = const <String>[], @JsonKey(name: 'maps_url') this.mapsUrl = '', @JsonKey(fromJson: parseDouble) this.lat = 0, @JsonKey(fromJson: parseDouble) this.lng = 0, @JsonKey(fromJson: parseInt) this.day = 0, this.type = '', @JsonKey(fromJson: parseDouble) this.price = 0, @JsonKey(fromJson: parseDouble) this.cost = 0, final  List<String> interests = const <String>[], @JsonKey(name: 'is_hidden_gem') this.isHiddenGem = false, @JsonKey(name: 'opening_hours') this.openingHours = '', @JsonKey(name: 'is_opened', fromJson: parseBool) this.isOpened = false}): _imageUrls = imageUrls,_interests = interests;
+  const _PlanPlaceModel({@JsonKey(name: 'place_id') required this.placeId, required this.name, required this.city, @JsonKey(name: 'city_en') required this.cityEn, required this.category, @JsonKey(fromJson: parseDouble) required this.rating, @JsonKey(name: 'reviews_count', fromJson: parseInt) required this.reviewsCount, required this.address, required this.description, @JsonKey(name: 'photo_url') required this.photoUrl, @JsonKey(name: 'image_urls', fromJson: parseStringList) required final  List<String> imageUrls, @JsonKey(name: 'maps_url') required this.mapsUrl, @JsonKey(fromJson: parseDouble) required this.lat, @JsonKey(fromJson: parseDouble) required this.lng, @JsonKey(fromJson: parseDay) required this.day, required this.type, @JsonKey(fromJson: parseDouble) required this.price, @JsonKey(fromJson: parseDouble) required this.cost, @JsonKey(fromJson: parseStringList) required final  List<String> interests, @JsonKey(name: 'is_hidden_gem') required this.isHiddenGem, @JsonKey(name: 'opening_hours') required this.openingHours, @JsonKey(name: 'is_opened', fromJson: parseBool) required this.isOpened}): _imageUrls = imageUrls,_interests = interests;
   factory _PlanPlaceModel.fromJson(Map<String, dynamic> json) => _$PlanPlaceModelFromJson(json);
 
 @override@JsonKey(name: 'place_id') final  String placeId;
-@override@JsonKey() final  String name;
-@override@JsonKey() final  String city;
+@override final  String name;
+@override final  String city;
 @override@JsonKey(name: 'city_en') final  String cityEn;
-@override@JsonKey() final  String category;
+@override final  String category;
 @override@JsonKey(fromJson: parseDouble) final  double rating;
 @override@JsonKey(name: 'reviews_count', fromJson: parseInt) final  int reviewsCount;
-@override@JsonKey() final  String address;
-@override@JsonKey() final  String description;
+@override final  String address;
+@override final  String description;
 @override@JsonKey(name: 'photo_url') final  String photoUrl;
  final  List<String> _imageUrls;
-@override@JsonKey(name: 'image_urls') List<String> get imageUrls {
+@override@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> get imageUrls {
   if (_imageUrls is EqualUnmodifiableListView) return _imageUrls;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_imageUrls);
@@ -253,12 +253,12 @@ class _PlanPlaceModel implements PlanPlaceModel {
 @override@JsonKey(name: 'maps_url') final  String mapsUrl;
 @override@JsonKey(fromJson: parseDouble) final  double lat;
 @override@JsonKey(fromJson: parseDouble) final  double lng;
-@override@JsonKey(fromJson: parseInt) final  int day;
-@override@JsonKey() final  String type;
+@override@JsonKey(fromJson: parseDay) final  int day;
+@override final  String type;
 @override@JsonKey(fromJson: parseDouble) final  double price;
 @override@JsonKey(fromJson: parseDouble) final  double cost;
  final  List<String> _interests;
-@override@JsonKey() List<String> get interests {
+@override@JsonKey(fromJson: parseStringList) List<String> get interests {
   if (_interests is EqualUnmodifiableListView) return _interests;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_interests);
@@ -301,7 +301,7 @@ abstract mixin class _$PlanPlaceModelCopyWith<$Res> implements $PlanPlaceModelCo
   factory _$PlanPlaceModelCopyWith(_PlanPlaceModel value, $Res Function(_PlanPlaceModel) _then) = __$PlanPlaceModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'place_id') String placeId, String name, String city,@JsonKey(name: 'city_en') String cityEn, String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount, String address, String description,@JsonKey(name: 'photo_url') String photoUrl,@JsonKey(name: 'image_urls') List<String> imageUrls,@JsonKey(name: 'maps_url') String mapsUrl,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseInt) int day, String type,@JsonKey(fromJson: parseDouble) double price,@JsonKey(fromJson: parseDouble) double cost, List<String> interests,@JsonKey(name: 'is_hidden_gem') bool isHiddenGem,@JsonKey(name: 'opening_hours') String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened
+@JsonKey(name: 'place_id') String placeId, String name, String city,@JsonKey(name: 'city_en') String cityEn, String category,@JsonKey(fromJson: parseDouble) double rating,@JsonKey(name: 'reviews_count', fromJson: parseInt) int reviewsCount, String address, String description,@JsonKey(name: 'photo_url') String photoUrl,@JsonKey(name: 'image_urls', fromJson: parseStringList) List<String> imageUrls,@JsonKey(name: 'maps_url') String mapsUrl,@JsonKey(fromJson: parseDouble) double lat,@JsonKey(fromJson: parseDouble) double lng,@JsonKey(fromJson: parseDay) int day, String type,@JsonKey(fromJson: parseDouble) double price,@JsonKey(fromJson: parseDouble) double cost,@JsonKey(fromJson: parseStringList) List<String> interests,@JsonKey(name: 'is_hidden_gem') bool isHiddenGem,@JsonKey(name: 'opening_hours') String openingHours,@JsonKey(name: 'is_opened', fromJson: parseBool) bool isOpened
 });
 
 

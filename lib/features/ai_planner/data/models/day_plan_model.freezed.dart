@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DayPlanModel {
 
- List<PlanPlaceModel> get morning; List<PlanPlaceModel> get afternoon; List<PlanPlaceModel> get evening;
+@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> get morning;@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> get afternoon;@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> get evening;
 /// Create a copy of DayPlanModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $DayPlanModelCopyWith<$Res>  {
   factory $DayPlanModelCopyWith(DayPlanModel value, $Res Function(DayPlanModel) _then) = _$DayPlanModelCopyWithImpl;
 @useResult
 $Res call({
- List<PlanPlaceModel> morning, List<PlanPlaceModel> afternoon, List<PlanPlaceModel> evening
+@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> morning,@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> afternoon,@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> evening
 });
 
 
@@ -155,7 +155,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<PlanPlaceModel> morning,  List<PlanPlaceModel> afternoon,  List<PlanPlaceModel> evening)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> morning, @JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> afternoon, @JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> evening)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DayPlanModel() when $default != null:
 return $default(_that.morning,_that.afternoon,_that.evening);case _:
@@ -176,7 +176,7 @@ return $default(_that.morning,_that.afternoon,_that.evening);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<PlanPlaceModel> morning,  List<PlanPlaceModel> afternoon,  List<PlanPlaceModel> evening)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> morning, @JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> afternoon, @JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> evening)  $default,) {final _that = this;
 switch (_that) {
 case _DayPlanModel():
 return $default(_that.morning,_that.afternoon,_that.evening);case _:
@@ -196,7 +196,7 @@ return $default(_that.morning,_that.afternoon,_that.evening);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<PlanPlaceModel> morning,  List<PlanPlaceModel> afternoon,  List<PlanPlaceModel> evening)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> morning, @JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> afternoon, @JsonKey(fromJson: _parsePlaces)  List<PlanPlaceModel> evening)?  $default,) {final _that = this;
 switch (_that) {
 case _DayPlanModel() when $default != null:
 return $default(_that.morning,_that.afternoon,_that.evening);case _:
@@ -210,26 +210,26 @@ return $default(_that.morning,_that.afternoon,_that.evening);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _DayPlanModel implements DayPlanModel {
-  const _DayPlanModel({final  List<PlanPlaceModel> morning = const <PlanPlaceModel>[], final  List<PlanPlaceModel> afternoon = const <PlanPlaceModel>[], final  List<PlanPlaceModel> evening = const <PlanPlaceModel>[]}): _morning = morning,_afternoon = afternoon,_evening = evening;
+class _DayPlanModel extends DayPlanModel {
+  const _DayPlanModel({@JsonKey(fromJson: _parsePlaces) final  List<PlanPlaceModel> morning = const [], @JsonKey(fromJson: _parsePlaces) final  List<PlanPlaceModel> afternoon = const [], @JsonKey(fromJson: _parsePlaces) final  List<PlanPlaceModel> evening = const []}): _morning = morning,_afternoon = afternoon,_evening = evening,super._();
   factory _DayPlanModel.fromJson(Map<String, dynamic> json) => _$DayPlanModelFromJson(json);
 
  final  List<PlanPlaceModel> _morning;
-@override@JsonKey() List<PlanPlaceModel> get morning {
+@override@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> get morning {
   if (_morning is EqualUnmodifiableListView) return _morning;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_morning);
 }
 
  final  List<PlanPlaceModel> _afternoon;
-@override@JsonKey() List<PlanPlaceModel> get afternoon {
+@override@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> get afternoon {
   if (_afternoon is EqualUnmodifiableListView) return _afternoon;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_afternoon);
 }
 
  final  List<PlanPlaceModel> _evening;
-@override@JsonKey() List<PlanPlaceModel> get evening {
+@override@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> get evening {
   if (_evening is EqualUnmodifiableListView) return _evening;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_evening);
@@ -269,7 +269,7 @@ abstract mixin class _$DayPlanModelCopyWith<$Res> implements $DayPlanModelCopyWi
   factory _$DayPlanModelCopyWith(_DayPlanModel value, $Res Function(_DayPlanModel) _then) = __$DayPlanModelCopyWithImpl;
 @override @useResult
 $Res call({
- List<PlanPlaceModel> morning, List<PlanPlaceModel> afternoon, List<PlanPlaceModel> evening
+@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> morning,@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> afternoon,@JsonKey(fromJson: _parsePlaces) List<PlanPlaceModel> evening
 });
 
 

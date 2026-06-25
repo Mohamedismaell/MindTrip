@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/plan_place_entity.dart';
+import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart'; // For PlaceDayPeriod
 
 class TimePeriodSection extends StatelessWidget {
-  final TimeSlot slot;
+  final PlaceDayPeriod period;
+  final List<PlanPlaceEntity> places;
 
-  const TimePeriodSection({super.key, required this.slot});
+  const TimePeriodSection({
+    super.key,
+    required this.period,
+    required this.places,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +24,15 @@ class TimePeriodSection extends StatelessWidget {
         Row(
           children: [
             Icon(
-              _getTimeIcon(slot.period),
+              _getTimeIcon(period),
               size: 20.sp,
-              color: _getTimeColor(context, slot.period),
+              color: _getTimeColor(context, period),
             ),
             SizedBox(width: 8.w),
             Text(
-              slot.period.name.toUpperCase(),
+              period.name.toUpperCase(),
               style: AppTextStyles.h9Bold.copyWith(
-                color: _getTimeColor(context, slot.period),
+                color: _getTimeColor(context, period),
                 letterSpacing: 1.2,
               ),
             ),
@@ -40,7 +45,7 @@ class TimePeriodSection extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: 10.w),
           child: Column(
-            children: slot.places
+            children: places
                 .map((place) => _PlaceActivityTile(place: place))
                 .toList(),
           ),
@@ -73,7 +78,7 @@ class TimePeriodSection extends StatelessWidget {
 }
 
 class _PlaceActivityTile extends StatefulWidget {
-  final PlaceEntity place;
+  final PlanPlaceEntity place;
 
   const _PlaceActivityTile({required this.place});
 
@@ -86,7 +91,7 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = widget.place.imageUrls?.firstOrNull;
+    final imageUrl = widget.place.imageUrls.firstOrNull;
 
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
@@ -128,7 +133,7 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
           ),
 
           // Thumbnail
-          if (imageUrl != null)
+          if (imageUrl != null && imageUrl.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
               child: Image.network(
@@ -173,7 +178,7 @@ class _PlaceActivityTileState extends State<_PlaceActivityTile> {
                     SizedBox(width: 4.w),
                     Expanded(
                       child: Text(
-                        widget.place.location.address,
+                        widget.place.address,
                         style: AppTextStyles.h10Regular.copyWith(
                           color: context.colorTheme.onSurfaceVariant,
                         ),

@@ -19,11 +19,11 @@ class AiPlannerRepositoryImpl implements AiPlannerRepository {
     CancelToken? cancelToken,
   }) async {
     try {
-      final model = await _remoteDataSource.generate(
+      final result = await _remoteDataSource.generate(
         request: request,
         cancelToken: cancelToken,
       );
-      return Result.ok(model.toEntity());
+      return Result.ok(result.toEntity());
     } on DioException catch (e) {
       if (CancelToken.isCancel(e)) {
         return const Result.cancelled();

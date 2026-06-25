@@ -17,7 +17,6 @@ import 'package:mindtrip/features/place_details/presentation/widgets/place_detai
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_nearby_places.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_photo_strip.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_reviews.dart';
-import 'package:mindtrip/features/place_details/presentation/widgets/place_details_trip_button.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_visit_info.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -159,7 +158,7 @@ class _PlaceDetailsBody extends StatelessWidget {
                             SizedBox(height: 27.h),
                             PlaceDetailsOverview(place: place),
                             SizedBox(height: 32.h),
-                            PlaceDetailsTripButton(place: place),
+                            // PlaceDetailsTripButton(place: place),
                             SizedBox(height: 30.h),
                             PlaceDetailsVisitInfo(place: place),
                             SizedBox(height: 30.h),

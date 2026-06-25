@@ -1,6 +1,6 @@
-import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
 
 class MapTripExtra {
-  const MapTripExtra({required this.days});
-  final List<TripDay> days;
+  const MapTripExtra({required this.generatedPlan});
+  final GeneratedPlanEntity? generatedPlan;
 }

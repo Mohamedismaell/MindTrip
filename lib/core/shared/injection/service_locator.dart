@@ -4,7 +4,6 @@ import 'package:mindtrip/features/explore/di/explore_di.dart';
 import 'package:mindtrip/features/places/di/places_di.dart';
 import 'package:mindtrip/features/home/di/home_di.dart';
 import 'package:mindtrip/features/trips/di/trips_di.dart';
-import 'package:mindtrip/features/itinerary/di/itinerary_di.dart';
 import 'package:mindtrip/features/ai_planner/di/ai_planner_injection.dart';
 import 'package:mindtrip/features/authetication/di/auth_di.dart';
 import 'package:mindtrip/features/map/di/map_di.dart';
@@ -20,7 +19,6 @@ Future<void> initializeDependencies() async {
 
   AuthDi.init();
   OnboardingDi.init();
-  ItineraryDi.init();
   TripsDi.init();
   AiPlannerDi.init();
   MapDi.init();

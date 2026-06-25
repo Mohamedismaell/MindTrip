@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:dio/dio.dart';
+import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
-import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/plan_place_entity.dart';
+import 'package:mindtrip/features/ai_planner/presentation/utils/trip_color_palette.dart';
 import 'package:mindtrip/features/map/domain/use_cases/fetch_place_photo_urls_use_case.dart';
 import '../../../places/domain/entity/place_entity.dart';
-import '../../../../core/shared/domain/entities/location_entity.dart';
-import '../../../ai_planner/presentation/utils/trip_color_palette.dart';
 import '../../domain/entities/map_annotation_entry.dart';
 import '../../domain/entities/google_place.dart';
 import 'map_state.dart';
@@ -38,8 +40,8 @@ class MapCubit extends SafeCubit<MapState> {
     emitSafe(
       state.copyWith(
         annotations: annotations,
-        tripDays: null,
-        selectedDayIndex: null,
+        generatedPlan: null,
+        selectedDayNumber: null,
       ),
     );
   }
@@ -52,52 +54,69 @@ class MapCubit extends SafeCubit<MapState> {
     emitSafe(
       state.copyWith(
         annotations: annotations,
-        tripDays: null,
-        selectedDayIndex: null,
+        generatedPlan: null,
+        selectedDayNumber: null,
       ),
     );
   }
 
-  void loadTripDays(List<TripDay> days) {
-    emitSafe(state.copyWith(tripDays: days));
-    if (days.isNotEmpty) {
-      selectDay(0);
+  void loadPlan(GeneratedPlanEntity plan) {
+    emitSafe(state.copyWith(generatedPlan: plan));
+
+    if (plan.days.isNotEmpty) {
+      selectDay(plan.days.keys.first);
     }
   }
 
-  void selectDay(int dayIndex) {
-    if (state.tripDays == null ||
-        dayIndex < 0 ||
-        dayIndex >= state.tripDays!.length) {
+  void selectDay(int dayNumber) {
+    final day = state.generatedPlan?.days[dayNumber];
+
+    if (day == null) {
       return;
     }
 
-    final day = state.tripDays![dayIndex];
     final annotations = <MapAnnotationEntry>[];
-    int sequence = 1;
+    var sequence = 1;
 
-    for (final slot in day.timeSlots) {
-      final tripColors = TripColorPalette.getPeriodColors(slot.period);
-      final periodColor = tripColors.edge;
-      final periodLabel =
-          slot.period.name[0].toUpperCase() + slot.period.name.substring(1);
-
-      for (final place in slot.places) {
+    void addPlaces({
+      required List<PlanPlaceEntity> places,
+      required Color color,
+      required String label,
+    }) {
+      for (final place in places) {
         annotations.add(
           MapAnnotationEntry(
-            place: place,
+            place: _planPlaceToEntity(place),
             sequenceNumber: sequence++,
-            periodColor: periodColor,
-            periodLabel: periodLabel,
-            dayNumber: day.dayNumber,
+            periodColor: color,
+            periodLabel: label,
+            dayNumber: dayNumber,
           ),
         );
       }
     }
 
+    addPlaces(
+      places: day.morning,
+      color: TripColorPalette.morningColors.edge,
+      label: 'Morning',
+    );
+
+    addPlaces(
+      places: day.afternoon,
+      color: TripColorPalette.afternoonColors.edge,
+      label: 'Afternoon',
+    );
+
+    addPlaces(
+      places: day.evening,
+      color: TripColorPalette.eveningColors.edge,
+      label: 'Evening',
+    );
+
     emitSafe(
       state.copyWith(
-        selectedDayIndex: dayIndex,
+        selectedDayNumber: dayNumber,
         annotations: annotations,
         clearSelectedPlace: true,
         selectedPlacePhotoUrls: [],
@@ -105,6 +124,30 @@ class MapCubit extends SafeCubit<MapState> {
       ),
     );
   }
+
+  /// Converts a [PlanPlaceEntity] to the [PlaceEntity] expected by the map
+  /// layer, mapping coordinates and common fields.
+  PlaceEntity _planPlaceToEntity(PlanPlaceEntity p) {
+    return PlaceEntity(
+      id: p.placeId,
+      name: p.name,
+      description: p.description.isEmpty ? null : p.description,
+      rating: p.rating,
+      reviewCount: p.reviewsCount,
+      price: p.price,
+      imageUrls: p.imageUrls.isEmpty ? null : p.imageUrls,
+      isHiddenGem: p.isHiddenGem,
+      openingHours: p.openingHours.isEmpty ? null : p.openingHours,
+      location: LocationEntity(
+        address: p.address,
+        latitude: p.lat,
+        longitude: p.lng,
+        city: p.city,
+        cityEn: p.cityEn,
+      ),
+    );
+  }
+
   //  Place selection
 
   void selectPlace(String placeId) {

@@ -1,8 +1,7 @@
-import 'package:mindtrip/features/ai_planner/data/mapper/day_plan_mapper.dart';
-import 'package:mindtrip/features/ai_planner/data/mapper/plan_place_mapper.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
-
 import '../models/generated_plan_model.dart';
+import 'day_plan_mapper.dart';
+import 'plan_place_mapper.dart';
+import '../../domain/entities/generated_plan_entity.dart';
 
 extension GeneratedPlanModelMapper on GeneratedPlanModel {
   GeneratedPlanEntity toEntity() {

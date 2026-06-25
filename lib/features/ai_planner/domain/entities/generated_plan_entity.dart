@@ -16,7 +16,7 @@ class GeneratedPlanEntity extends Equatable {
   final String tripId;
   final String status;
   final int people;
-  final double totalCalculatedCost;
+  final int totalCalculatedCost;
   final int daysCount;
   final List<PlanPlaceEntity> accommodation;
   final Map<int, DayPlanEntity> days;

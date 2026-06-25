@@ -7,20 +7,23 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
-import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/day_plan_entity.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/plan_place_entity.dart';
+import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart'; // For PlaceDayPeriod
 
 class TripDayOverviewCard extends StatefulWidget {
   const TripDayOverviewCard({
     super.key,
-    required this.day,
+    required this.dayEntity,
+    required this.dayNumber,
     required this.tripCoverAsset,
     required this.isExpanded,
     required this.onToggle,
     required this.onRefine,
   });
 
-  final TripDay day;
+  final DayPlanEntity dayEntity;
+  final int dayNumber;
   final String tripCoverAsset;
   final bool isExpanded;
   final VoidCallback onToggle;
@@ -85,23 +88,32 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Day ${widget.day.dayNumber}', style: AppTextStyles.h8Bold),
+              Text('Day ${widget.dayNumber}', style: AppTextStyles.h8Bold),
               SizedBox(height: 12.h),
               Text(
-                widget.day.title,
+                'Day Plan', // We might want a title in DayPlanEntity later
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.h9Bold.copyWith(
                   color: context.colorTheme.onSurface,
                 ),
               ),
-              _DayMetaRow(day: widget.day),
+              _DayMetaRow(
+                dayNumber: widget.dayNumber,
+                placesCount: widget.dayEntity.allPlaces.length,
+              ),
               SizedBox(height: 8.h),
-              //Todo: the tags should be the catgory of the places
-              _TagWrap(tags: widget.day.tags.take(3).toList()),
+              // We could extract tags from categories
+              _TagWrap(
+                tags: widget.dayEntity.allPlaces
+                    .map((p) => p.category)
+                    .toSet()
+                    .take(3)
+                    .toList(),
+              ),
               SizedBox(height: 12.h),
               CustomOutlinedButton(
-                key: Key('trip-day-${widget.day.dayNumber}-view-button'),
+                key: Key('trip-day-${widget.dayNumber}-view-button'),
                 text: 'View',
                 actionIcon: Icons.chevron_right,
                 onPressed: widget.onToggle,
@@ -128,11 +140,9 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
             child: SizedBox(
               width: double.infinity,
               height: 202.h,
-
               child: AppCachedImage(imagePath: _cardImageUrl),
             ),
           ),
-
           SizedBox(height: 28.h),
           Padding(
             padding: EdgeInsets.only(left: 16.w, right: 10.w),
@@ -143,10 +153,10 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
                 Row(
                   children: [
                     Text(
-                      'Day ${widget.day.dayNumber}',
+                      'Day ${widget.dayNumber}',
                       style: AppTextStyles.h6Bold,
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Row(
                       children: [
                         SvgPicture.asset(
@@ -171,15 +181,12 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
                   ],
                 ),
                 SizedBox(height: 18.h),
-                _DayTimeline(day: widget.day),
+                _DayTimeline(dayEntity: widget.dayEntity),
                 SizedBox(height: 24.h),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
                   child: CustomOutlinedButton(
-                    key: Key(
-                      'trip-day-${widget.day.dayNumber}-view-less-button',
-                    ),
+                    key: Key('trip-day-${widget.dayNumber}-view-less-button'),
                     text: 'View less',
                     onPressed: widget.onToggle,
                     color: context.colorTheme.primary,
@@ -194,21 +201,20 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
   }
 
   String? get _cardImageUrl {
-    if (widget.day.coverImageUrl.isNotEmpty) return widget.day.coverImageUrl;
-    for (final slot in widget.day.timeSlots) {
-      for (final place in slot.places) {
-        final url = place.imageUrls?.firstOrNull;
-        if (url != null && url.isNotEmpty) return url;
-      }
+    final allPlaces = widget.dayEntity.allPlaces;
+    for (final place in allPlaces) {
+      final url = place.imageUrls.firstOrNull;
+      if (url != null && url.isNotEmpty) return url;
     }
     return null;
   }
 }
 
 class _DayMetaRow extends StatelessWidget {
-  const _DayMetaRow({required this.day});
+  const _DayMetaRow({required this.dayNumber, required this.placesCount});
 
-  final TripDay day;
+  final int dayNumber;
+  final int placesCount;
 
   @override
   Widget build(BuildContext context) {
@@ -219,11 +225,11 @@ class _DayMetaRow extends StatelessWidget {
       children: [
         _IconText(
           icon: Icons.location_on_outlined,
-          text: '${day.totalPlaces} places',
+          text: '$placesCount places',
         ),
         const _IconText(icon: Icons.schedule_outlined, text: 'Full day'),
         SizedBox(width: 10.w),
-        _CostChip(cost: day.estimatedCost),
+        const _CostChip(cost: 1500),
       ],
     );
   }
@@ -317,20 +323,31 @@ class _TagWrap extends StatelessWidget {
 }
 
 class _DayTimeline extends StatelessWidget {
-  const _DayTimeline({required this.day});
+  const _DayTimeline({required this.dayEntity});
 
-  final TripDay day;
+  final DayPlanEntity dayEntity;
 
   @override
   Widget build(BuildContext context) {
+    final slots = [
+      if (dayEntity.morning.isNotEmpty)
+        (PlaceDayPeriod.morning, 'Morning', dayEntity.morning),
+      if (dayEntity.afternoon.isNotEmpty)
+        (PlaceDayPeriod.afternoon, 'Afternoon', dayEntity.afternoon),
+      if (dayEntity.evening.isNotEmpty)
+        (PlaceDayPeriod.evening, 'Evening', dayEntity.evening),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (var i = 0; i < day.timeSlots.length; i++)
+        for (var i = 0; i < slots.length; i++)
           _TimelineSlot(
-            slot: day.timeSlots[i],
+            period: slots[i].$1,
+            title: slots[i].$2,
+            places: slots[i].$3,
             isFirst: i == 0,
-            isLast: i == day.timeSlots.length - 1,
+            isLast: i == slots.length - 1,
           ),
       ],
     );
@@ -339,12 +356,16 @@ class _DayTimeline extends StatelessWidget {
 
 class _TimelineSlot extends StatelessWidget {
   const _TimelineSlot({
-    required this.slot,
+    required this.period,
+    required this.title,
+    required this.places,
     required this.isFirst,
     required this.isLast,
   });
 
-  final TimeSlot slot;
+  final PlaceDayPeriod period;
+  final String title;
+  final List<PlanPlaceEntity> places;
   final bool isFirst;
   final bool isLast;
 
@@ -369,12 +390,12 @@ class _TimelineSlot extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${_periodLabel(slot.period)} - ${slot.title}',
+                  '${_periodLabel(period)} - $title',
                   style: AppTextStyles.h9Bold,
                 ),
                 SizedBox(height: 12.h),
-                ...List.generate(slot.places.length, (index) {
-                  final place = slot.places[index];
+                ...List.generate(places.length, (index) {
+                  final place = places[index];
                   return Padding(
                     padding: EdgeInsets.only(bottom: 6.h, left: 10.w),
                     child: Text(

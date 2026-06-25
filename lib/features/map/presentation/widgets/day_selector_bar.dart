@@ -47,16 +47,20 @@ class _DaySelectorBarState extends State<DaySelectorBar>
   Widget build(BuildContext context) {
     return BlocBuilder<MapCubit, MapState>(
       buildWhen: (prev, curr) =>
-          prev.tripDays != curr.tripDays ||
-          prev.selectedDayIndex != curr.selectedDayIndex,
+          prev.generatedPlan != curr.generatedPlan ||
+          prev.selectedDayNumber != curr.selectedDayNumber,
       builder: (context, state) {
-        final days = state.tripDays;
-        if (days == null || days.isEmpty) return const SizedBox.shrink();
+        final days = state.generatedPlan?.days;
+
+        if (days == null || days.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        final dayNumbers = days.keys.toList()..sort();
 
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Expandable day buttons — slides in from the right
             Expanded(
               child: ClipRRect(
                 child: Align(
@@ -72,19 +76,20 @@ class _DaySelectorBarState extends State<DaySelectorBar>
                       reverse: true,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: List.generate(days.length, (index) {
-                          final reversedIndex = days.length - 1 - index;
-                          final day = days[reversedIndex];
+                        children: List.generate(dayNumbers.length, (index) {
+                          final reversedIndex = dayNumbers.length - 1 - index;
+
+                          final dayNumber = dayNumbers[reversedIndex];
+
                           final isSelected =
-                              state.selectedDayIndex == reversedIndex;
+                              state.selectedDayNumber == dayNumber;
 
                           return Padding(
                             padding: EdgeInsets.only(right: 6.w),
                             child: GestureDetector(
                               onTap: () {
-                                context.read<MapCubit>().selectDay(
-                                  reversedIndex,
-                                );
+                                context.read<MapCubit>().selectDay(dayNumber);
+
                                 _toggleExpand();
                               },
                               child: AnimatedContainer(
@@ -100,7 +105,7 @@ class _DaySelectorBarState extends State<DaySelectorBar>
                                   borderRadius: BorderRadius.circular(14.r),
                                 ),
                                 child: Text(
-                                  'Day ${day.dayNumber}',
+                                  'Day $dayNumber',
                                   style: AppTextStyles.h10Bold.copyWith(
                                     color: isSelected
                                         ? Colors.white
@@ -118,7 +123,6 @@ class _DaySelectorBarState extends State<DaySelectorBar>
               ),
             ),
 
-            // Toggle button (calendar icon)
             GestureDetector(
               onTap: _toggleExpand,
               child: Container(

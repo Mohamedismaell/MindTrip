@@ -37,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
     _mapController = MapController();
 
     if (widget.tripExtra != null) {
-      context.read<MapCubit>().loadTripDays(widget.tripExtra!.days);
+      context.read<MapCubit>().loadPlan(widget.tripExtra!.generatedPlan!);
     } else if (widget.places != null && widget.places!.isNotEmpty) {
       context.read<MapCubit>().loadPlaces(widget.places!);
     } else if (widget.place != null) {

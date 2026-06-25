@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
 
 import '../../../places/domain/entity/place_entity.dart';
 import '../../domain/entities/google_place.dart';
@@ -39,13 +39,14 @@ sealed class MapState with _$MapState {
     /// Pulse that increments whenever we want to force-navigate to the route tab
     @Default(0) int navigationPulse,
 
-    @Default(null) List<TripDay>? tripDays,
+    @Default(null) GeneratedPlanEntity? generatedPlan,
 
     /// Currently selected day (0-indexed); null means "all days".
-    @Default(null) int? selectedDayIndex,
+    @Default(null) int? selectedDayNumber,
   }) = _MapState;
 
   factory MapState.initial() => const MapState();
 
-  bool get hasTripDays => tripDays != null && tripDays!.isNotEmpty;
+  bool get hasTripDays =>
+      generatedPlan != null && generatedPlan!.days.isNotEmpty;
 }

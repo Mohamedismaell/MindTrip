@@ -38,7 +38,7 @@ class AppRouter {
       ...OnBoardingRoutes.routes,
       ...AuthRoutes.routes,
       ...InterestsRoutes.routes,
-      ...AddToTripRoutes.routes,
+      // ...AddToTripRoutes.routes,
       ShellRoute(
         builder: (context, state, child) {
           return AppShell(child: child);

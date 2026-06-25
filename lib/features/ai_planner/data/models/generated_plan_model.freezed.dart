@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GeneratedPlanModel {
 
- String get tripId; String get status; int get people; double get totalCalculatedCost; int get daysCount; List<PlanPlaceModel> get accommodation; Map<int, DayPlanModel> get days;
+ String get tripId; String get status; int get people; int get totalCalculatedCost; int get daysCount; List<PlanPlaceModel> get accommodation; Map<int, DayPlanModel> get days;
 /// Create a copy of GeneratedPlanModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $GeneratedPlanModelCopyWith<$Res>  {
   factory $GeneratedPlanModelCopyWith(GeneratedPlanModel value, $Res Function(GeneratedPlanModel) _then) = _$GeneratedPlanModelCopyWithImpl;
 @useResult
 $Res call({
- String tripId, String status, int people, double totalCalculatedCost, int daysCount, List<PlanPlaceModel> accommodation, Map<int, DayPlanModel> days
+ String tripId, String status, int people, int totalCalculatedCost, int daysCount, List<PlanPlaceModel> accommodation, Map<int, DayPlanModel> days
 });
 
 
@@ -68,7 +68,7 @@ tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_n
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,people: null == people ? _self.people : people // ignore: cast_nullable_to_non_nullable
 as int,totalCalculatedCost: null == totalCalculatedCost ? _self.totalCalculatedCost : totalCalculatedCost // ignore: cast_nullable_to_non_nullable
-as double,daysCount: null == daysCount ? _self.daysCount : daysCount // ignore: cast_nullable_to_non_nullable
+as int,daysCount: null == daysCount ? _self.daysCount : daysCount // ignore: cast_nullable_to_non_nullable
 as int,accommodation: null == accommodation ? _self.accommodation : accommodation // ignore: cast_nullable_to_non_nullable
 as List<PlanPlaceModel>,days: null == days ? _self.days : days // ignore: cast_nullable_to_non_nullable
 as Map<int, DayPlanModel>,
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String tripId,  String status,  int people,  double totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String tripId,  String status,  int people,  int totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GeneratedPlanModel() when $default != null:
 return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.accommodation,_that.days);case _:
@@ -177,7 +177,7 @@ return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String tripId,  String status,  int people,  double totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String tripId,  String status,  int people,  int totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)  $default,) {final _that = this;
 switch (_that) {
 case _GeneratedPlanModel():
 return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.accommodation,_that.days);case _:
@@ -197,7 +197,7 @@ return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String tripId,  String status,  int people,  double totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String tripId,  String status,  int people,  int totalCalculatedCost,  int daysCount,  List<PlanPlaceModel> accommodation,  Map<int, DayPlanModel> days)?  $default,) {final _that = this;
 switch (_that) {
 case _GeneratedPlanModel() when $default != null:
 return $default(_that.tripId,_that.status,_that.people,_that.totalCalculatedCost,_that.daysCount,_that.accommodation,_that.days);case _:
@@ -218,7 +218,7 @@ class _GeneratedPlanModel implements GeneratedPlanModel {
 @override final  String tripId;
 @override final  String status;
 @override final  int people;
-@override final  double totalCalculatedCost;
+@override final  int totalCalculatedCost;
 @override final  int daysCount;
  final  List<PlanPlaceModel> _accommodation;
 @override List<PlanPlaceModel> get accommodation {
@@ -265,7 +265,7 @@ abstract mixin class _$GeneratedPlanModelCopyWith<$Res> implements $GeneratedPla
   factory _$GeneratedPlanModelCopyWith(_GeneratedPlanModel value, $Res Function(_GeneratedPlanModel) _then) = __$GeneratedPlanModelCopyWithImpl;
 @override @useResult
 $Res call({
- String tripId, String status, int people, double totalCalculatedCost, int daysCount, List<PlanPlaceModel> accommodation, Map<int, DayPlanModel> days
+ String tripId, String status, int people, int totalCalculatedCost, int daysCount, List<PlanPlaceModel> accommodation, Map<int, DayPlanModel> days
 });
 
 
@@ -288,7 +288,7 @@ tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_n
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,people: null == people ? _self.people : people // ignore: cast_nullable_to_non_nullable
 as int,totalCalculatedCost: null == totalCalculatedCost ? _self.totalCalculatedCost : totalCalculatedCost // ignore: cast_nullable_to_non_nullable
-as double,daysCount: null == daysCount ? _self.daysCount : daysCount // ignore: cast_nullable_to_non_nullable
+as int,daysCount: null == daysCount ? _self.daysCount : daysCount // ignore: cast_nullable_to_non_nullable
 as int,accommodation: null == accommodation ? _self._accommodation : accommodation // ignore: cast_nullable_to_non_nullable
 as List<PlanPlaceModel>,days: null == days ? _self._days : days // ignore: cast_nullable_to_non_nullable
 as Map<int, DayPlanModel>,

@@ -6,24 +6,15 @@ part of 'day_plan_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_DayPlanModel _$DayPlanModelFromJson(Map<String, dynamic> json) =>
-    _DayPlanModel(
-      morning:
-          (json['morning'] as List<dynamic>?)
-              ?.map((e) => PlanPlaceModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const <PlanPlaceModel>[],
-      afternoon:
-          (json['afternoon'] as List<dynamic>?)
-              ?.map((e) => PlanPlaceModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const <PlanPlaceModel>[],
-      evening:
-          (json['evening'] as List<dynamic>?)
-              ?.map((e) => PlanPlaceModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const <PlanPlaceModel>[],
-    );
+_DayPlanModel _$DayPlanModelFromJson(
+  Map<String, dynamic> json,
+) => _DayPlanModel(
+  morning: json['morning'] == null ? const [] : _parsePlaces(json['morning']),
+  afternoon: json['afternoon'] == null
+      ? const []
+      : _parsePlaces(json['afternoon']),
+  evening: json['evening'] == null ? const [] : _parsePlaces(json['evening']),
+);
 
 Map<String, dynamic> _$DayPlanModelToJson(_DayPlanModel instance) =>
     <String, dynamic>{

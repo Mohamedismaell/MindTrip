@@ -9,19 +9,33 @@ import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
-import 'package:mindtrip/features/trips/presentation/share_trip/trp_share_state.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip_details_args.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
-import 'package:mindtrip/features/trips/presentation/share_trip/trip_share_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/ai_refinement_sheet.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_day_overview_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_details_bar.dart';
-import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_map_preview_card.dart';
-import 'package:mindtrip/features/map/data/models/map_trip_extra.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class TripDetailsScreen extends StatelessWidget {
-  final String tripId;
-  Future<void> _saveTrip(BuildContext context, Trip trip) async {
+class TripDetailsScreen extends StatefulWidget {
+  final TripDetailsArgs args;
+  const TripDetailsScreen({super.key, required this.args});
+
+  @override
+  State<TripDetailsScreen> createState() => _TripDetailsScreenState();
+}
+
+class _TripDetailsScreenState extends State<TripDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TripDetailsCubit>().initialize(widget.args);
+    });
+  }
+
+  Future<void> _saveTrip(BuildContext context) async {
     AppDialog.show(
       context: context,
       title: 'Save Trip',
@@ -30,32 +44,44 @@ class TripDetailsScreen extends StatelessWidget {
       secondaryText: 'Cancel',
       icon: Icons.check_circle,
       onPrimary: () async {
-        // await context.read<TripsCubit>().completeTrip(trip.id);
-        if (!context.mounted) return;
-        AppGlassSnackBar.showSuccess(
-          context: context,
-          message: 'Trip saved successfully',
-        );
-        context.go(AppRoutes.myTrips);
+        await context.read<TripDetailsCubit>().saveTrip();
       },
     );
   }
 
-  const TripDetailsScreen({super.key, required this.tripId});
-
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TripShareCubit, TripShareState>(
+    return BlocListener<TripDetailsCubit, TripDetailsState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
-        if (state is TripShareLoading) {
+        if (state.status == TripDetailsStatus.saving) {
           AppDialog.showLoading(context: context);
-        } else if (state is TripShareSuccess) {
+        } else if (state.status == TripDetailsStatus.saved) {
           AppDialog.hideLoading(context);
-        } else if (state is TripShareError) {
+          AppGlassSnackBar.showSuccess(
+            context: context,
+            message: 'Trip saved successfully',
+          );
+          context.go(AppRoutes.myTrips);
+        } else if (state.status == TripDetailsStatus.error) {
           AppDialog.hideLoading(context);
-          AppGlassSnackBar.showError(context: context, message: state.message);
+          AppGlassSnackBar.showError(
+            context: context,
+            message: state.errorMessage ?? 'An error occurred',
+          );
         }
       },
+      // child: BlocListener<TripShareCubit, TripShareState>(
+      // listener: (context, state) {
+      //   if (state is TripShareLoading) {
+      //     AppDialog.showLoading(context: context);
+      //   } else if (state is TripShareSuccess) {
+      //     AppDialog.hideLoading(context);
+      //   } else if (state is TripShareError) {
+      //     AppDialog.hideLoading(context);
+      //     AppGlassSnackBar.showError(context: context, message: state.message);
+      //   }
+      // },
       child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
@@ -69,23 +95,27 @@ class TripDetailsScreen extends StatelessWidget {
               builder: (context, state) {
                 final isLoading = state.status == TripDetailsStatus.loading;
 
-                if (state.status == TripDetailsStatus.error) {
+                if (state.status == TripDetailsStatus.error &&
+                    state.trip == null &&
+                    state.generatedPlan == null) {
                   return _MessageState(
                     message: state.errorMessage ?? 'Error loading trip',
                   );
                 }
 
-                final trip = isLoading ? _dummyTrip : state.trip;
-                final itinerary = isLoading ? _dummyItinerary : state.itinerary;
+                // Data handles
+                final trip = state.trip;
+                final plan = state.generatedPlan;
+                final isUnsaved = state.isUnsaved;
 
-                if (!isLoading &&
-                    (trip == null ||
-                        itinerary == null ||
-                        itinerary.days.isEmpty)) {
+                // Normalized data for UI
+                final double totalCost =
+                    (trip?.totalCost ?? plan?.totalCalculatedCost ?? 0)
+                        .toDouble();
+
+                if (!isLoading && trip == null && plan == null) {
                   return const _MessageState(message: 'Trip not found');
                 }
-
-                final expandedDay = state.activeDay;
 
                 return Skeletonizer(
                   enabled: isLoading,
@@ -99,94 +129,84 @@ class TripDetailsScreen extends StatelessWidget {
                       slivers: [
                         TripDetailsTopBar(
                           onBack: () => context.go(AppRoutes.myTrips),
-                          onShare: () {
-                            if (isLoading ||
-                                trip == null ||
-                                itinerary == null) {
-                              return;
-                            }
-                            final RenderBox? box =
-                                context.findRenderObject() as RenderBox?;
-                            final sharePositionOrigin = box != null
-                                ? box.localToGlobal(Offset.zero) & box.size
-                                : null;
+                          onShare: isUnsaved
+                              ? null
+                              : () {
+                                  // if (isLoading || trip == null) return;
+                                  // final RenderBox? box =
+                                  //     context.findRenderObject() as RenderBox?;
+                                  // final sharePositionOrigin = box != null
+                                  //     ? box.localToGlobal(Offset.zero) &
+                                  //           box.size
+                                  //     : null;
 
-                            context.read<TripShareCubit>().shareTrip(
-                              context: context,
-                              trip: trip,
-                              itinerary: itinerary,
-                              sharePositionOrigin: sharePositionOrigin,
-                            );
-                          },
+                                  // context.read<TripShareCubit>().shareTrip(
+                                  //   context: context,
+                                  //   trip: trip,
+                                  //   itinerary:
+                                  //       null, // Update ShareCubit if needed
+                                  //   sharePositionOrigin: sharePositionOrigin,
+                                  // );
+                                },
                         ),
                         SliverToBoxAdapter(child: SizedBox(height: 52.h)),
-                        SliverList.separated(
-                          itemCount: itinerary?.days.length ?? 0 + 3,
-                          separatorBuilder: (_, index) {
-                            return SizedBox(height: 42.h);
-                          },
-                          itemBuilder: (context, index) {
-                            if (itinerary != null &&
-                                index < itinerary.days.length) {
-                              final day = itinerary.days[index];
+
+                        // Days List
+                        if (plan != null)
+                          SliverList.separated(
+                            itemCount: plan.daysCount,
+                            separatorBuilder: (_, _) => SizedBox(height: 42.h),
+                            itemBuilder: (context, index) {
+                              final dayNum = index + 1;
+                              final dayPlan = plan.days[dayNum];
+                              if (dayPlan == null) {
+                                return const SizedBox.shrink();
+                              }
+
                               return TripDayOverviewCard(
-                                day: day,
-                                tripCoverAsset: trip?.coverImageUrl ?? '',
-                                isExpanded: day.dayNumber == expandedDay,
-                                onToggle: () {
-                                  context
-                                      .read<TripDetailsCubit>()
-                                      .toggleActiveDay(day.dayNumber);
+                                dayEntity: dayPlan,
+                                dayNumber: dayNum,
+                                tripCoverAsset: '',
+                                isExpanded: dayNum == state.activeDay,
+                                onToggle: () => context
+                                    .read<TripDetailsCubit>()
+                                    .toggleActiveDay(dayNum),
+                                onRefine: () {
+                                  AiRefinementSheet.show(
+                                    context,
+                                    plan.tripId,
+                                    'refinement-${plan.tripId}',
+                                    const [],
+                                  );
                                 },
-                                onRefine: () => AiRefinementSheet.show(
-                                  context,
-                                  trip?.id ?? '',
-                                  // TODO: pass a real refinement sessionId when edit flow is wired
-                                  'refinement-${trip?.id ?? ''}',
-                                  const [],
-                                ),
                               );
-                            } else {
-                              return SizedBox.shrink();
-                            }
-                          },
-                        ),
-                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-                        SliverToBoxAdapter(
-                          child: TripMapPreviewCard(
-                            days: itinerary?.days ?? [],
-                            onViewMap: itinerary?.days.isEmpty ?? true
-                                ? null
-                                : () => context.push(
-                                    AppRoutes.map,
-                                    extra: MapTripExtra(
-                                      days: itinerary?.days ?? [],
-                                    ),
-                                  ),
+                            },
+                          )
+                        else if (trip != null)
+                          // Handle saved trip display (legacy or updated)
+                          const SliverToBoxAdapter(
+                            child: Center(
+                              child: Text(
+                                "Saved Trip Details Implementation...",
+                              ),
+                            ),
                           ),
-                        ),
+
                         SliverToBoxAdapter(child: SizedBox(height: 42.h)),
 
                         SliverToBoxAdapter(
-                          child: _EstimateNote(
-                            estimatedTotalCost:
-                                itinerary?.estimatedTotalCost ?? 0,
-                          ),
+                          child: _EstimateNote(estimatedTotalCost: totalCost),
                         ),
                         SliverToBoxAdapter(child: SizedBox(height: 42.h)),
 
-                        if ((trip?.status ?? TripStatus.draft) ==
-                            TripStatus.completed)
+                        if (!isUnsaved &&
+                            (trip?.status == TripStatus.completed))
                           const SliverToBoxAdapter(child: SizedBox.shrink())
                         else
                           SliverToBoxAdapter(
                             child: _SaveTripButton(
-                              trip: trip ?? _dummyTrip,
-                              onSave: () {
-                                if (trip != null) {
-                                  _saveTrip(context, trip);
-                                }
-                              },
+                              isUnsaved: isUnsaved,
+                              onSave: () => _saveTrip(context),
                             ),
                           ),
                         SliverToBoxAdapter(child: SizedBox(height: 42.h)),
@@ -199,6 +219,7 @@ class TripDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+      // ),
     );
   }
 }
@@ -228,21 +249,18 @@ class _EstimateNote extends StatelessWidget {
 }
 
 class _SaveTripButton extends StatelessWidget {
-  const _SaveTripButton({required this.trip, required this.onSave});
+  const _SaveTripButton({required this.isUnsaved, required this.onSave});
 
-  final Trip trip;
+  final bool isUnsaved;
   final VoidCallback onSave;
 
   @override
   Widget build(BuildContext context) {
-    final isAlreadySaved = trip.status == TripStatus.inProgress;
-    final canSave = !isAlreadySaved;
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: CustomGradientButton(
-        onTap: canSave ? onSave : null,
-        text: isAlreadySaved ? 'Trip Saved ' : 'Save Trip',
+        onTap: isUnsaved ? onSave : null,
+        text: isUnsaved ? 'Save Trip' : 'Trip Saved',
       ),
     );
   }
@@ -266,33 +284,3 @@ class _MessageState extends StatelessWidget {
     );
   }
 }
-
-final _dummyTrip = Trip(
-  id: 'skeleton',
-  title: 'Loading Trip...',
-  status: TripStatus.draft,
-  createdAt: DateTime.now(),
-  updatedAt: DateTime.now(),
-  destination: 'Loading Destination',
-  people: 2,
-  totalBudget: 0,
-  totalCost: 0,
-  interests: const [],
-);
-
-final _dummyItinerary = TripItinerary(
-  tripId: 'skeleton',
-  days: List.generate(
-    3,
-    (i) => TripDay(
-      dayNumber: i + 1,
-      title: 'Loading Day...',
-      coverImageUrl: '',
-      tags: const ['Category', 'Category'],
-      stopCount: 3,
-      estimatedCost: 1500,
-      timeSlots: const [],
-    ),
-  ),
-  estimatedTotalCost: 4500,
-);

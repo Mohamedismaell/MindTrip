@@ -29,6 +29,6 @@ class CacheFailure extends Failure {
 // }
 
 class UnknownFailure extends Failure {
-  const UnknownFailure({String? debugMessage})
-    : super('Something went wrong', debugMessage: debugMessage);
+  const UnknownFailure({required String message, String? debugMessage})
+    : super(message, debugMessage: debugMessage);
 }

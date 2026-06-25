@@ -19,8 +19,8 @@ mixin _$MapState {
 /// when the lat/lng coordinates are the same as the previous request.
  int get flyToPulse; double? get flyToLat; double? get flyToLng;/// Trip days passed from trip‐details; null when map is opened standalone.
 /// Pulse that increments whenever we want to force-navigate to the route tab
- int get navigationPulse; List<TripDay>? get tripDays;/// Currently selected day (0-indexed); null means "all days".
- int? get selectedDayIndex;
+ int get navigationPulse; GeneratedPlanEntity? get generatedPlan;/// Currently selected day (0-indexed); null means "all days".
+ int? get selectedDayNumber;
 /// Create a copy of MapState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -31,16 +31,16 @@ $MapStateCopyWith<MapState> get copyWith => _$MapStateCopyWithImpl<MapState>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MapState&&const DeepCollectionEquality().equals(other.annotations, annotations)&&(identical(other.selectedPlace, selectedPlace) || other.selectedPlace == selectedPlace)&&(identical(other.selectedGooglePlace, selectedGooglePlace) || other.selectedGooglePlace == selectedGooglePlace)&&const DeepCollectionEquality().equals(other.selectedPlacePhotoUrls, selectedPlacePhotoUrls)&&(identical(other.isBottomSheetVisible, isBottomSheetVisible) || other.isBottomSheetVisible == isBottomSheetVisible)&&(identical(other.isLocationGranted, isLocationGranted) || other.isLocationGranted == isLocationGranted)&&(identical(other.clearSelectedPlace, clearSelectedPlace) || other.clearSelectedPlace == clearSelectedPlace)&&(identical(other.clearSelectedGooglePlace, clearSelectedGooglePlace) || other.clearSelectedGooglePlace == clearSelectedGooglePlace)&&(identical(other.clearFlyToLocation, clearFlyToLocation) || other.clearFlyToLocation == clearFlyToLocation)&&(identical(other.flyToPulse, flyToPulse) || other.flyToPulse == flyToPulse)&&(identical(other.flyToLat, flyToLat) || other.flyToLat == flyToLat)&&(identical(other.flyToLng, flyToLng) || other.flyToLng == flyToLng)&&(identical(other.navigationPulse, navigationPulse) || other.navigationPulse == navigationPulse)&&const DeepCollectionEquality().equals(other.tripDays, tripDays)&&(identical(other.selectedDayIndex, selectedDayIndex) || other.selectedDayIndex == selectedDayIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MapState&&const DeepCollectionEquality().equals(other.annotations, annotations)&&(identical(other.selectedPlace, selectedPlace) || other.selectedPlace == selectedPlace)&&(identical(other.selectedGooglePlace, selectedGooglePlace) || other.selectedGooglePlace == selectedGooglePlace)&&const DeepCollectionEquality().equals(other.selectedPlacePhotoUrls, selectedPlacePhotoUrls)&&(identical(other.isBottomSheetVisible, isBottomSheetVisible) || other.isBottomSheetVisible == isBottomSheetVisible)&&(identical(other.isLocationGranted, isLocationGranted) || other.isLocationGranted == isLocationGranted)&&(identical(other.clearSelectedPlace, clearSelectedPlace) || other.clearSelectedPlace == clearSelectedPlace)&&(identical(other.clearSelectedGooglePlace, clearSelectedGooglePlace) || other.clearSelectedGooglePlace == clearSelectedGooglePlace)&&(identical(other.clearFlyToLocation, clearFlyToLocation) || other.clearFlyToLocation == clearFlyToLocation)&&(identical(other.flyToPulse, flyToPulse) || other.flyToPulse == flyToPulse)&&(identical(other.flyToLat, flyToLat) || other.flyToLat == flyToLat)&&(identical(other.flyToLng, flyToLng) || other.flyToLng == flyToLng)&&(identical(other.navigationPulse, navigationPulse) || other.navigationPulse == navigationPulse)&&(identical(other.generatedPlan, generatedPlan) || other.generatedPlan == generatedPlan)&&(identical(other.selectedDayNumber, selectedDayNumber) || other.selectedDayNumber == selectedDayNumber));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(annotations),selectedPlace,selectedGooglePlace,const DeepCollectionEquality().hash(selectedPlacePhotoUrls),isBottomSheetVisible,isLocationGranted,clearSelectedPlace,clearSelectedGooglePlace,clearFlyToLocation,flyToPulse,flyToLat,flyToLng,navigationPulse,const DeepCollectionEquality().hash(tripDays),selectedDayIndex);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(annotations),selectedPlace,selectedGooglePlace,const DeepCollectionEquality().hash(selectedPlacePhotoUrls),isBottomSheetVisible,isLocationGranted,clearSelectedPlace,clearSelectedGooglePlace,clearFlyToLocation,flyToPulse,flyToLat,flyToLng,navigationPulse,generatedPlan,selectedDayNumber);
 
 @override
 String toString() {
-  return 'MapState(annotations: $annotations, selectedPlace: $selectedPlace, selectedGooglePlace: $selectedGooglePlace, selectedPlacePhotoUrls: $selectedPlacePhotoUrls, isBottomSheetVisible: $isBottomSheetVisible, isLocationGranted: $isLocationGranted, clearSelectedPlace: $clearSelectedPlace, clearSelectedGooglePlace: $clearSelectedGooglePlace, clearFlyToLocation: $clearFlyToLocation, flyToPulse: $flyToPulse, flyToLat: $flyToLat, flyToLng: $flyToLng, navigationPulse: $navigationPulse, tripDays: $tripDays, selectedDayIndex: $selectedDayIndex)';
+  return 'MapState(annotations: $annotations, selectedPlace: $selectedPlace, selectedGooglePlace: $selectedGooglePlace, selectedPlacePhotoUrls: $selectedPlacePhotoUrls, isBottomSheetVisible: $isBottomSheetVisible, isLocationGranted: $isLocationGranted, clearSelectedPlace: $clearSelectedPlace, clearSelectedGooglePlace: $clearSelectedGooglePlace, clearFlyToLocation: $clearFlyToLocation, flyToPulse: $flyToPulse, flyToLat: $flyToLat, flyToLng: $flyToLng, navigationPulse: $navigationPulse, generatedPlan: $generatedPlan, selectedDayNumber: $selectedDayNumber)';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $MapStateCopyWith<$Res>  {
   factory $MapStateCopyWith(MapState value, $Res Function(MapState) _then) = _$MapStateCopyWithImpl;
 @useResult
 $Res call({
- List<MapAnnotationEntry> annotations, PlaceEntity? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, List<TripDay>? tripDays, int? selectedDayIndex
+ List<MapAnnotationEntry> annotations, PlaceEntity? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, GeneratedPlanEntity? generatedPlan, int? selectedDayNumber
 });
 
 
@@ -68,7 +68,7 @@ class _$MapStateCopyWithImpl<$Res>
 
 /// Create a copy of MapState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? annotations = null,Object? selectedPlace = freezed,Object? selectedGooglePlace = freezed,Object? selectedPlacePhotoUrls = null,Object? isBottomSheetVisible = null,Object? isLocationGranted = null,Object? clearSelectedPlace = null,Object? clearSelectedGooglePlace = null,Object? clearFlyToLocation = null,Object? flyToPulse = null,Object? flyToLat = freezed,Object? flyToLng = freezed,Object? navigationPulse = null,Object? tripDays = freezed,Object? selectedDayIndex = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? annotations = null,Object? selectedPlace = freezed,Object? selectedGooglePlace = freezed,Object? selectedPlacePhotoUrls = null,Object? isBottomSheetVisible = null,Object? isLocationGranted = null,Object? clearSelectedPlace = null,Object? clearSelectedGooglePlace = null,Object? clearFlyToLocation = null,Object? flyToPulse = null,Object? flyToLat = freezed,Object? flyToLng = freezed,Object? navigationPulse = null,Object? generatedPlan = freezed,Object? selectedDayNumber = freezed,}) {
   return _then(_self.copyWith(
 annotations: null == annotations ? _self.annotations : annotations // ignore: cast_nullable_to_non_nullable
 as List<MapAnnotationEntry>,selectedPlace: freezed == selectedPlace ? _self.selectedPlace : selectedPlace // ignore: cast_nullable_to_non_nullable
@@ -83,8 +83,8 @@ as bool,flyToPulse: null == flyToPulse ? _self.flyToPulse : flyToPulse // ignore
 as int,flyToLat: freezed == flyToLat ? _self.flyToLat : flyToLat // ignore: cast_nullable_to_non_nullable
 as double?,flyToLng: freezed == flyToLng ? _self.flyToLng : flyToLng // ignore: cast_nullable_to_non_nullable
 as double?,navigationPulse: null == navigationPulse ? _self.navigationPulse : navigationPulse // ignore: cast_nullable_to_non_nullable
-as int,tripDays: freezed == tripDays ? _self.tripDays : tripDays // ignore: cast_nullable_to_non_nullable
-as List<TripDay>?,selectedDayIndex: freezed == selectedDayIndex ? _self.selectedDayIndex : selectedDayIndex // ignore: cast_nullable_to_non_nullable
+as int,generatedPlan: freezed == generatedPlan ? _self.generatedPlan : generatedPlan // ignore: cast_nullable_to_non_nullable
+as GeneratedPlanEntity?,selectedDayNumber: freezed == selectedDayNumber ? _self.selectedDayNumber : selectedDayNumber // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }
@@ -167,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  GeneratedPlanEntity? generatedPlan,  int? selectedDayNumber)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MapState() when $default != null:
-return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.tripDays,_that.selectedDayIndex);case _:
+return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.generatedPlan,_that.selectedDayNumber);case _:
   return orElse();
 
 }
@@ -188,10 +188,10 @@ return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  GeneratedPlanEntity? generatedPlan,  int? selectedDayNumber)  $default,) {final _that = this;
 switch (_that) {
 case _MapState():
-return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.tripDays,_that.selectedDayIndex);}
+return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.generatedPlan,_that.selectedDayNumber);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -205,10 +205,10 @@ return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  List<TripDay>? tripDays,  int? selectedDayIndex)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<MapAnnotationEntry> annotations,  PlaceEntity? selectedPlace,  GooglePlaceEntity? selectedGooglePlace,  List<String> selectedPlacePhotoUrls,  bool isBottomSheetVisible,  bool isLocationGranted,  bool clearSelectedPlace,  bool clearSelectedGooglePlace,  bool clearFlyToLocation,  int flyToPulse,  double? flyToLat,  double? flyToLng,  int navigationPulse,  GeneratedPlanEntity? generatedPlan,  int? selectedDayNumber)?  $default,) {final _that = this;
 switch (_that) {
 case _MapState() when $default != null:
-return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.tripDays,_that.selectedDayIndex);case _:
+return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,_that.selectedPlacePhotoUrls,_that.isBottomSheetVisible,_that.isLocationGranted,_that.clearSelectedPlace,_that.clearSelectedGooglePlace,_that.clearFlyToLocation,_that.flyToPulse,_that.flyToLat,_that.flyToLng,_that.navigationPulse,_that.generatedPlan,_that.selectedDayNumber);case _:
   return null;
 
 }
@@ -220,7 +220,7 @@ return $default(_that.annotations,_that.selectedPlace,_that.selectedGooglePlace,
 
 
 class _MapState extends MapState {
-  const _MapState({final  List<MapAnnotationEntry> annotations = const [], this.selectedPlace, this.selectedGooglePlace, final  List<String> selectedPlacePhotoUrls = const [], this.isBottomSheetVisible = false, this.isLocationGranted = false, this.clearSelectedPlace = false, this.clearSelectedGooglePlace = false, this.clearFlyToLocation = false, this.flyToPulse = 0, this.flyToLat, this.flyToLng, this.navigationPulse = 0, final  List<TripDay>? tripDays = null, this.selectedDayIndex = null}): _annotations = annotations,_selectedPlacePhotoUrls = selectedPlacePhotoUrls,_tripDays = tripDays,super._();
+  const _MapState({final  List<MapAnnotationEntry> annotations = const [], this.selectedPlace, this.selectedGooglePlace, final  List<String> selectedPlacePhotoUrls = const [], this.isBottomSheetVisible = false, this.isLocationGranted = false, this.clearSelectedPlace = false, this.clearSelectedGooglePlace = false, this.clearFlyToLocation = false, this.flyToPulse = 0, this.flyToLat, this.flyToLng, this.navigationPulse = 0, this.generatedPlan = null, this.selectedDayNumber = null}): _annotations = annotations,_selectedPlacePhotoUrls = selectedPlacePhotoUrls,super._();
   
 
  final  List<MapAnnotationEntry> _annotations;
@@ -253,17 +253,9 @@ class _MapState extends MapState {
 /// Trip days passed from trip‐details; null when map is opened standalone.
 /// Pulse that increments whenever we want to force-navigate to the route tab
 @override@JsonKey() final  int navigationPulse;
- final  List<TripDay>? _tripDays;
-@override@JsonKey() List<TripDay>? get tripDays {
-  final value = _tripDays;
-  if (value == null) return null;
-  if (_tripDays is EqualUnmodifiableListView) return _tripDays;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
-}
-
+@override@JsonKey() final  GeneratedPlanEntity? generatedPlan;
 /// Currently selected day (0-indexed); null means "all days".
-@override@JsonKey() final  int? selectedDayIndex;
+@override@JsonKey() final  int? selectedDayNumber;
 
 /// Create a copy of MapState
 /// with the given fields replaced by the non-null parameter values.
@@ -275,16 +267,16 @@ _$MapStateCopyWith<_MapState> get copyWith => __$MapStateCopyWithImpl<_MapState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MapState&&const DeepCollectionEquality().equals(other._annotations, _annotations)&&(identical(other.selectedPlace, selectedPlace) || other.selectedPlace == selectedPlace)&&(identical(other.selectedGooglePlace, selectedGooglePlace) || other.selectedGooglePlace == selectedGooglePlace)&&const DeepCollectionEquality().equals(other._selectedPlacePhotoUrls, _selectedPlacePhotoUrls)&&(identical(other.isBottomSheetVisible, isBottomSheetVisible) || other.isBottomSheetVisible == isBottomSheetVisible)&&(identical(other.isLocationGranted, isLocationGranted) || other.isLocationGranted == isLocationGranted)&&(identical(other.clearSelectedPlace, clearSelectedPlace) || other.clearSelectedPlace == clearSelectedPlace)&&(identical(other.clearSelectedGooglePlace, clearSelectedGooglePlace) || other.clearSelectedGooglePlace == clearSelectedGooglePlace)&&(identical(other.clearFlyToLocation, clearFlyToLocation) || other.clearFlyToLocation == clearFlyToLocation)&&(identical(other.flyToPulse, flyToPulse) || other.flyToPulse == flyToPulse)&&(identical(other.flyToLat, flyToLat) || other.flyToLat == flyToLat)&&(identical(other.flyToLng, flyToLng) || other.flyToLng == flyToLng)&&(identical(other.navigationPulse, navigationPulse) || other.navigationPulse == navigationPulse)&&const DeepCollectionEquality().equals(other._tripDays, _tripDays)&&(identical(other.selectedDayIndex, selectedDayIndex) || other.selectedDayIndex == selectedDayIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MapState&&const DeepCollectionEquality().equals(other._annotations, _annotations)&&(identical(other.selectedPlace, selectedPlace) || other.selectedPlace == selectedPlace)&&(identical(other.selectedGooglePlace, selectedGooglePlace) || other.selectedGooglePlace == selectedGooglePlace)&&const DeepCollectionEquality().equals(other._selectedPlacePhotoUrls, _selectedPlacePhotoUrls)&&(identical(other.isBottomSheetVisible, isBottomSheetVisible) || other.isBottomSheetVisible == isBottomSheetVisible)&&(identical(other.isLocationGranted, isLocationGranted) || other.isLocationGranted == isLocationGranted)&&(identical(other.clearSelectedPlace, clearSelectedPlace) || other.clearSelectedPlace == clearSelectedPlace)&&(identical(other.clearSelectedGooglePlace, clearSelectedGooglePlace) || other.clearSelectedGooglePlace == clearSelectedGooglePlace)&&(identical(other.clearFlyToLocation, clearFlyToLocation) || other.clearFlyToLocation == clearFlyToLocation)&&(identical(other.flyToPulse, flyToPulse) || other.flyToPulse == flyToPulse)&&(identical(other.flyToLat, flyToLat) || other.flyToLat == flyToLat)&&(identical(other.flyToLng, flyToLng) || other.flyToLng == flyToLng)&&(identical(other.navigationPulse, navigationPulse) || other.navigationPulse == navigationPulse)&&(identical(other.generatedPlan, generatedPlan) || other.generatedPlan == generatedPlan)&&(identical(other.selectedDayNumber, selectedDayNumber) || other.selectedDayNumber == selectedDayNumber));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_annotations),selectedPlace,selectedGooglePlace,const DeepCollectionEquality().hash(_selectedPlacePhotoUrls),isBottomSheetVisible,isLocationGranted,clearSelectedPlace,clearSelectedGooglePlace,clearFlyToLocation,flyToPulse,flyToLat,flyToLng,navigationPulse,const DeepCollectionEquality().hash(_tripDays),selectedDayIndex);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_annotations),selectedPlace,selectedGooglePlace,const DeepCollectionEquality().hash(_selectedPlacePhotoUrls),isBottomSheetVisible,isLocationGranted,clearSelectedPlace,clearSelectedGooglePlace,clearFlyToLocation,flyToPulse,flyToLat,flyToLng,navigationPulse,generatedPlan,selectedDayNumber);
 
 @override
 String toString() {
-  return 'MapState(annotations: $annotations, selectedPlace: $selectedPlace, selectedGooglePlace: $selectedGooglePlace, selectedPlacePhotoUrls: $selectedPlacePhotoUrls, isBottomSheetVisible: $isBottomSheetVisible, isLocationGranted: $isLocationGranted, clearSelectedPlace: $clearSelectedPlace, clearSelectedGooglePlace: $clearSelectedGooglePlace, clearFlyToLocation: $clearFlyToLocation, flyToPulse: $flyToPulse, flyToLat: $flyToLat, flyToLng: $flyToLng, navigationPulse: $navigationPulse, tripDays: $tripDays, selectedDayIndex: $selectedDayIndex)';
+  return 'MapState(annotations: $annotations, selectedPlace: $selectedPlace, selectedGooglePlace: $selectedGooglePlace, selectedPlacePhotoUrls: $selectedPlacePhotoUrls, isBottomSheetVisible: $isBottomSheetVisible, isLocationGranted: $isLocationGranted, clearSelectedPlace: $clearSelectedPlace, clearSelectedGooglePlace: $clearSelectedGooglePlace, clearFlyToLocation: $clearFlyToLocation, flyToPulse: $flyToPulse, flyToLat: $flyToLat, flyToLng: $flyToLng, navigationPulse: $navigationPulse, generatedPlan: $generatedPlan, selectedDayNumber: $selectedDayNumber)';
 }
 
 
@@ -295,7 +287,7 @@ abstract mixin class _$MapStateCopyWith<$Res> implements $MapStateCopyWith<$Res>
   factory _$MapStateCopyWith(_MapState value, $Res Function(_MapState) _then) = __$MapStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<MapAnnotationEntry> annotations, PlaceEntity? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, List<TripDay>? tripDays, int? selectedDayIndex
+ List<MapAnnotationEntry> annotations, PlaceEntity? selectedPlace, GooglePlaceEntity? selectedGooglePlace, List<String> selectedPlacePhotoUrls, bool isBottomSheetVisible, bool isLocationGranted, bool clearSelectedPlace, bool clearSelectedGooglePlace, bool clearFlyToLocation, int flyToPulse, double? flyToLat, double? flyToLng, int navigationPulse, GeneratedPlanEntity? generatedPlan, int? selectedDayNumber
 });
 
 
@@ -312,7 +304,7 @@ class __$MapStateCopyWithImpl<$Res>
 
 /// Create a copy of MapState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? annotations = null,Object? selectedPlace = freezed,Object? selectedGooglePlace = freezed,Object? selectedPlacePhotoUrls = null,Object? isBottomSheetVisible = null,Object? isLocationGranted = null,Object? clearSelectedPlace = null,Object? clearSelectedGooglePlace = null,Object? clearFlyToLocation = null,Object? flyToPulse = null,Object? flyToLat = freezed,Object? flyToLng = freezed,Object? navigationPulse = null,Object? tripDays = freezed,Object? selectedDayIndex = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? annotations = null,Object? selectedPlace = freezed,Object? selectedGooglePlace = freezed,Object? selectedPlacePhotoUrls = null,Object? isBottomSheetVisible = null,Object? isLocationGranted = null,Object? clearSelectedPlace = null,Object? clearSelectedGooglePlace = null,Object? clearFlyToLocation = null,Object? flyToPulse = null,Object? flyToLat = freezed,Object? flyToLng = freezed,Object? navigationPulse = null,Object? generatedPlan = freezed,Object? selectedDayNumber = freezed,}) {
   return _then(_MapState(
 annotations: null == annotations ? _self._annotations : annotations // ignore: cast_nullable_to_non_nullable
 as List<MapAnnotationEntry>,selectedPlace: freezed == selectedPlace ? _self.selectedPlace : selectedPlace // ignore: cast_nullable_to_non_nullable
@@ -327,8 +319,8 @@ as bool,flyToPulse: null == flyToPulse ? _self.flyToPulse : flyToPulse // ignore
 as int,flyToLat: freezed == flyToLat ? _self.flyToLat : flyToLat // ignore: cast_nullable_to_non_nullable
 as double?,flyToLng: freezed == flyToLng ? _self.flyToLng : flyToLng // ignore: cast_nullable_to_non_nullable
 as double?,navigationPulse: null == navigationPulse ? _self.navigationPulse : navigationPulse // ignore: cast_nullable_to_non_nullable
-as int,tripDays: freezed == tripDays ? _self._tripDays : tripDays // ignore: cast_nullable_to_non_nullable
-as List<TripDay>?,selectedDayIndex: freezed == selectedDayIndex ? _self.selectedDayIndex : selectedDayIndex // ignore: cast_nullable_to_non_nullable
+as int,generatedPlan: freezed == generatedPlan ? _self.generatedPlan : generatedPlan // ignore: cast_nullable_to_non_nullable
+as GeneratedPlanEntity?,selectedDayNumber: freezed == selectedDayNumber ? _self.selectedDayNumber : selectedDayNumber // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }

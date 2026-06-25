@@ -1,6 +1,6 @@
-import 'package:mindtrip/features/ai_planner/data/mapper/plan_place_mapper.dart';
-import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/day_plan_entity.dart';
+import '../models/day_plan_model.dart';
+import 'plan_place_mapper.dart';
+import '../../domain/entities/day_plan_entity.dart';
 
 extension DayPlanModelMapper on DayPlanModel {
   DayPlanEntity toEntity() {

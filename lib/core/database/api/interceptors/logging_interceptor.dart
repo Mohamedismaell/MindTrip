@@ -96,35 +96,36 @@ $yellow└───────────────────────�
     }
   }
 
-  dynamic _truncate(dynamic value) {
-    if (value is List) {
-      // Don't truncate primitive lists
-      if (value.isEmpty ||
-          value.first is String ||
-          value.first is num ||
-          value.first is bool) {
-        return value;
-      }
+  dynamic _truncate(dynamic value) => value;
+  // dynamic _truncate(dynamic value) {
+  //   if (value is List) {
+  //     // Don't truncate primitive lists
+  //     if (value.isEmpty ||
+  //         value.first is String ||
+  //         value.first is num ||
+  //         value.first is bool) {
+  //       return value;
+  //     }
 
-      const maxItems = 1;
+  //     const maxItems = 1;
 
-      if (value.length <= maxItems) {
-        return value.map(_truncate).toList();
-      }
+  //     if (value.length <= maxItems) {
+  //       return value.map(_truncate).toList();
+  //     }
 
-      return {
-        'count': value.length,
-        'showing': maxItems,
-        'items': value.take(maxItems).map(_truncate).toList(),
-      };
-    }
+  //     return {
+  //       'count': value.length,
+  //       'showing': maxItems,
+  //       'items': value.take(maxItems).map(_truncate).toList(),
+  //     };
+  //   }
 
-    if (value is Map) {
-      return value.map((key, value) => MapEntry(key, _truncate(value)));
-    }
+  //   if (value is Map) {
+  //     return value.map((key, value) => MapEntry(key, _truncate(value)));
+  //   }
 
-    return value;
-  }
+  //   return value;
+  // }
 
   String _toCurl(RequestOptions options) {
     final buffer = StringBuffer();

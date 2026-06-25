@@ -10,11 +10,11 @@ class TripDetailsTopBar extends StatelessWidget {
   const TripDetailsTopBar({
     super.key,
     required this.onBack,
-    required this.onShare,
+    this.onShare,
   });
 
   final VoidCallback onBack;
-  final VoidCallback onShare;
+  final VoidCallback? onShare;
 
   @override
   Widget build(BuildContext context) {

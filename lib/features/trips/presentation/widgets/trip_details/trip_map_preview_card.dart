@@ -4,16 +4,15 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
-import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
 
 class TripMapPreviewCard extends StatelessWidget {
   const TripMapPreviewCard({
     super.key,
-    required this.days,
     required this.onViewMap,
+    // required this.generatedPlan,
   });
 
-  final List<TripDay> days;
+  // final GeneratedPlanEntity generatedPlan;
   final VoidCallback? onViewMap;
 
   @override

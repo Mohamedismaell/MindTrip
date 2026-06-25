@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/day_plan_entity.dart';
+import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/time_period_section.dart';
 
 class TripDayCard extends StatelessWidget {
-  final TripDay day;
+  final DayPlanEntity day;
+  final int dayNumber;
+  final String title;
   final bool isExpanded;
   final VoidCallback onToggle;
   final VoidCallback? onViewMap;
@@ -13,6 +17,8 @@ class TripDayCard extends StatelessWidget {
   const TripDayCard({
     super.key,
     required this.day,
+    required this.dayNumber,
+    required this.title,
     required this.isExpanded,
     required this.onToggle,
     this.onViewMap,
@@ -43,7 +49,7 @@ class TripDayCard extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      '${day.dayNumber}',
+                      '$dayNumber',
                       style: AppTextStyles.h7Bold.copyWith(
                         color: isExpanded
                             ? Colors.white
@@ -57,9 +63,9 @@ class TripDayCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(day.title, style: AppTextStyles.h7Bold),
+                      Text(title, style: AppTextStyles.h7Bold),
                       Text(
-                        '${day.stopCount} Activities',
+                        '${day.allPlaces.length} Activities',
                         style: AppTextStyles.h10Regular.copyWith(
                           color: context.colorTheme.onSurfaceVariant,
                         ),
@@ -122,9 +128,28 @@ class TripDayCard extends StatelessWidget {
                       right: 8.w,
                     ),
                     child: Column(
-                      children: day.timeSlots.map((slot) {
-                        return TimePeriodSection(slot: slot);
-                      }).toList(),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (day.morning.isNotEmpty) ...[
+                          TimePeriodSection(
+                            period: PlaceDayPeriod.morning,
+                            places: day.morning,
+                          ),
+                          SizedBox(height: 24.h),
+                        ],
+                        if (day.afternoon.isNotEmpty) ...[
+                          TimePeriodSection(
+                            period: PlaceDayPeriod.afternoon,
+                            places: day.afternoon,
+                          ),
+                          SizedBox(height: 24.h),
+                        ],
+                        if (day.evening.isNotEmpty)
+                          TimePeriodSection(
+                            period: PlaceDayPeriod.evening,
+                            places: day.evening,
+                          ),
+                      ],
                     ),
                   ),
                 ),

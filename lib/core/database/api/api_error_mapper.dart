@@ -35,7 +35,7 @@ class ApiErrorMapper {
       return const NetworkFailure(message: 'No internet connection');
     }
 
-    return const UnknownFailure();
+    return UnknownFailure(message: '$e', debugMessage: e.toString());
   }
 
   static Failure fromDioException(DioException e) {
@@ -70,12 +70,12 @@ class ApiErrorMapper {
         return _mapBadResponse(e);
       case DioExceptionType.cancel:
         // No-op, managed by repository returning Result.cancelled()
-        return const UnknownFailure();
+        return UnknownFailure(message: '$e', debugMessage: e.toString());
       case DioExceptionType.unknown:
         if (e.error is NoInternetException || e.error is SocketException) {
           return const NetworkFailure(message: 'No internet connection');
         }
-        return const UnknownFailure();
+        return UnknownFailure(message: '$e', debugMessage: e.toString());
     }
   }
 
