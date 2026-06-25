@@ -1,26 +1,22 @@
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_attachment_button.dart';
 
 class ChatInputBar extends StatelessWidget {
   const ChatInputBar({
     super.key,
     required this.controller,
     required this.onSend,
-    required this.onPhotosPicked,
-    required this.onVideoPicked,
-    required this.onFilesPicked,
+    // required this.onPhotosPicked,
+    // required this.onVideoPicked,
+    // required this.onFilesPicked,
     required this.attachments,
     required this.onRemoveAttachment,
     this.profilePhotoUrl,
@@ -30,9 +26,9 @@ class ChatInputBar extends StatelessWidget {
 
   final VoidCallback onSend;
 
-  final void Function(List<XFile>) onPhotosPicked;
-  final void Function(XFile) onVideoPicked;
-  final void Function(List<PlatformFile>) onFilesPicked;
+  // final void Function(List<XFile>) onPhotosPicked;
+  // final void Function(XFile) onVideoPicked;
+  // final void Function(List<PlatformFile>) onFilesPicked;
 
   final List<ChatAttachment> attachments;
   final void Function(int index) onRemoveAttachment;
@@ -46,20 +42,19 @@ class ChatInputBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // Plus button
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: context.colorTheme.outline, width: 1.5),
-            ),
-            child: ChatAttachmentButton(
-              onPhotos: onPhotosPicked,
-              onVideo: onVideoPicked,
-              onFiles: onFilesPicked,
-            ),
-          ),
-
-          SizedBox(width: 16.w),
+          // // Plus button
+          // Container(
+          //   decoration: BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     border: Border.all(color: context.colorTheme.outline, width: 1.5),
+          //   ),
+          //   child: ChatAttachmentButton(
+          //     onPhotos: onPhotosPicked,
+          //     onVideo: onVideoPicked,
+          //     onFiles: onFilesPicked,
+          //   ),
+          // ),
+          // SizedBox(width: 16.w),
 
           // Main input container
           Expanded(

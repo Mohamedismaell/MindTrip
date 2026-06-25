@@ -86,6 +86,7 @@ enum PlaceCategory {
     PlaceCategory.artsCulture => '🎨',
     PlaceCategory.hotels => '🏨',
   };
+
   IconData get iconData => switch (this) {
     PlaceCategory.food => Icons.restaurant_rounded,
     PlaceCategory.cafes => Icons.coffee_rounded,
@@ -112,4 +113,47 @@ enum PlaceCategory {
       orElse: () => PlaceCategory.all,
     );
   }
+}
+
+extension PlaceCategoryColor on PlaceCategory {
+  Color get color {
+    switch (this) {
+      case PlaceCategory.all:
+        return const Color(0xFF6B7280); // Gray
+
+      case PlaceCategory.food:
+        return const Color(0xFFFF7043); // Orange
+
+      case PlaceCategory.cafes:
+        return const Color(0xFF8D6E63); // Coffee Brown
+
+      case PlaceCategory.historicalSites:
+        return const Color(0xFFC9A227); // Gold
+
+      case PlaceCategory.religiousSites:
+        return const Color(0xFF5E35B1); // Purple
+
+      case PlaceCategory.beaches:
+        return const Color(0xFF29B6F6); // Sky Blue
+
+      case PlaceCategory.nature:
+        return const Color(0xFF43A047); // Green
+
+      case PlaceCategory.entertainment:
+        return const Color(0xFFE91E63); // Pink
+
+      case PlaceCategory.shopping:
+        return const Color(0xFF7E57C2); // Violet
+
+      case PlaceCategory.artsCulture:
+        return const Color(0xFF00897B); // Teal
+
+      case PlaceCategory.hotels:
+        return const Color(0xFF1565C0); // Royal Blue
+    }
+  }
+}
+
+extension PlaceCategoryChipColor on PlaceCategory {
+  Color get backgroundColor => color.withValues(alpha: 0.12);
 }

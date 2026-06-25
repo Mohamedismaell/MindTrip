@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide DayPeriod;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
@@ -54,73 +55,82 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeInOutCubic,
       alignment: Alignment.topCenter,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(color: context.colorTheme.outline, width: 1.2),
         ),
-        child: widget.isExpanded
-            ? _buildExpanded(context)
-            : _buildCollapsed(context),
+        child: _buildContent(context),
       ),
     );
   }
 
-  Widget _buildCollapsed(BuildContext context) {
-    return Row(
+  Widget _buildContent(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10.r),
-          child: SizedBox(
-            width: 106.w,
-            height: 200.h,
-            // height: double.infinity,
-            child: AppCachedImage(imagePath: _cardImageUrl),
-          ),
-        ),
-        SizedBox(width: 10.w),
-        Expanded(
+        _buildImage(),
+
+        SizedBox(height: 24.h),
+
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Day ${widget.dayNumber}', style: AppTextStyles.h8Bold),
-              SizedBox(height: 12.h),
-              Text(
-                'Day Plan', // We might want a title in DayPlanEntity later
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.h9Bold.copyWith(
-                  color: context.colorTheme.onSurface,
-                ),
-              ),
+              _buildHeader(context),
+
+              SizedBox(height: 14.h),
+
               _DayMetaRow(
                 dayNumber: widget.dayNumber,
                 placesCount: widget.dayEntity.allPlaces.length,
+                totalDayCost: widget.dayEntity.totalCost,
               ),
-              SizedBox(height: 8.h),
-              // We could extract tags from categories
+
+              SizedBox(height: 10.h),
+
               _TagWrap(
                 tags: widget.dayEntity.allPlaces
-                    .map((p) => p.category)
+                    .map((e) => e.category)
                     .toSet()
-                    .take(3)
                     .toList(),
               ),
-              SizedBox(height: 12.h),
+
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SizeTransition(
+                      sizeFactor: animation,
+                      axisAlignment: -1,
+                      child: child,
+                    ),
+                  );
+                },
+                child: widget.isExpanded
+                    ? Padding(
+                        key: const ValueKey('timeline'),
+                        padding: EdgeInsets.only(top: 24.h),
+                        child: _DayTimeline(dayEntity: widget.dayEntity),
+                      )
+                    : const SizedBox(key: ValueKey('empty')),
+              ),
+              SizedBox(height: 24.h),
+
               CustomOutlinedButton(
-                key: Key('trip-day-${widget.dayNumber}-view-button'),
-                text: 'View',
-                actionIcon: Icons.chevron_right,
+                text: widget.isExpanded ? 'View less' : 'View',
+                actionIcon: widget.isExpanded
+                    ? Icons.expand_less
+                    : Icons.chevron_right,
                 onPressed: widget.onToggle,
                 color: context.colorTheme.primary,
-                textStyle: AppTextStyles.h8Bold.copyWith(
-                  color: context.colorTheme.primary,
-                ),
               ),
             ],
           ),
@@ -129,74 +139,46 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
     );
   }
 
-  Widget _buildExpanded(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(14.r),
-            child: SizedBox(
-              width: double.infinity,
-              height: 202.h,
-              child: AppCachedImage(imagePath: _cardImageUrl),
-            ),
-          ),
-          SizedBox(height: 28.h),
-          Padding(
-            padding: EdgeInsets.only(left: 16.w, right: 10.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Day ${widget.dayNumber}',
-                      style: AppTextStyles.h6Bold,
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          ProfileAssets.editIcon,
-                          width: 24.sp,
-                          colorFilter: ColorFilter.mode(
-                            context.colorTheme.primary,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        SizedBox(width: 4.w),
-                        Text(
-                          'Edit with AI',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.h7Bold.copyWith(
-                            color: context.colorTheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 18.h),
-                _DayTimeline(dayEntity: widget.dayEntity),
-                SizedBox(height: 24.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: CustomOutlinedButton(
-                    key: Key('trip-day-${widget.dayNumber}-view-less-button'),
-                    text: 'View less',
-                    onPressed: widget.onToggle,
-                    color: context.colorTheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+  Widget _buildImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14.r),
+      child: SizedBox(
+        width: double.infinity,
+        height: 202.h,
+        child: AppCachedImage(imagePath: _cardImageUrl),
       ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      children: [
+        Text('Day ${widget.dayNumber}', style: AppTextStyles.h6Bold),
+        const Spacer(),
+        InkWell(
+          borderRadius: BorderRadius.circular(8.r),
+          onTap: widget.onRefine,
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                ProfileAssets.editIcon,
+                width: 22.sp,
+                colorFilter: ColorFilter.mode(
+                  context.colorTheme.primary,
+                  BlendMode.srcIn,
+                ),
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                'Edit with AI',
+                style: AppTextStyles.h7Bold.copyWith(
+                  color: context.colorTheme.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -211,11 +193,15 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
 }
 
 class _DayMetaRow extends StatelessWidget {
-  const _DayMetaRow({required this.dayNumber, required this.placesCount});
+  const _DayMetaRow({
+    required this.dayNumber,
+    required this.placesCount,
+    required this.totalDayCost,
+  });
 
   final int dayNumber;
   final int placesCount;
-
+  final double totalDayCost;
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -227,9 +213,9 @@ class _DayMetaRow extends StatelessWidget {
           icon: Icons.location_on_outlined,
           text: '$placesCount places',
         ),
-        const _IconText(icon: Icons.schedule_outlined, text: 'Full day'),
+        // const _IconText(icon: Icons.schedule_outlined, text: 'Full day'),
         SizedBox(width: 10.w),
-        const _CostChip(cost: 1500),
+        _CostChip(cost: totalDayCost),
       ],
     );
   }
@@ -246,7 +232,7 @@ class _IconText extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14.sp, color: context.colorTheme.outline),
+        Icon(icon, size: 20.sp, color: context.colorTheme.outline),
         SizedBox(width: 4.w),
         Text(
           text,
@@ -285,39 +271,30 @@ class _CostChip extends StatelessWidget {
 class _TagWrap extends StatelessWidget {
   const _TagWrap({required this.tags});
 
-  final List<String> tags;
-
-  static const _colors = [
-    (Color(0xFFF1EAFD), Color(0xFF9A89D0)),
-    (Color(0xFFC4E0F9), Color(0xFF5596FE)),
-    (Color(0xFFFCE8D1), Color(0xFFD8906A)),
-    (Color(0xFFD7F1F3), Color(0xFF4F919E)),
-    (Color(0xFFEEF7E9), Color(0xFF57925F)),
-  ];
+  final List<PlaceCategory> tags;
 
   @override
   Widget build(BuildContext context) {
-    if (tags.isEmpty) return const SizedBox.shrink();
+    if (tags.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Wrap(
       spacing: 8.w,
       runSpacing: 8.h,
-      children: [
-        for (var i = 0; i < tags.length; i++)
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-            decoration: BoxDecoration(
-              color: _colors[i % _colors.length].$1,
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            child: Text(
-              tags[i],
-              style: AppTextStyles.h10Regular.copyWith(
-                color: _colors[i % _colors.length].$2,
-              ),
-            ),
+      children: tags.map((category) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            color: category.backgroundColor,
+            borderRadius: BorderRadius.circular(12.r),
           ),
-      ],
+          child: Text(
+            category.displayName,
+            style: AppTextStyles.h10Regular.copyWith(color: category.color),
+          ),
+        );
+      }).toList(),
     );
   }
 }

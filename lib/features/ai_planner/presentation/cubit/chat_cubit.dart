@@ -28,14 +28,18 @@ class ChatCubit extends SafeCubit<ChatState> {
     final greeting = ChatMessage(
       id: 'greeting_${DateTime.now().millisecondsSinceEpoch}',
       content:
-          "Hi $userName! I'm Mindy, your AI travel assistant 🌍 I can help you plan your perfect trip in Egypt. What would you like to do today?",
+          "Hi $userName! 👋 I'm Mindy. Where would you like to go, or what are you in the mood to explore today?",
       sender: MessageSender.ai,
       timestamp: DateTime.now(),
       suggestions: const [
         '🗺️ Plan a trip',
+        '📍 Discover places',
         '🏨 Find hotels',
-        '🍽️ Food recommendations',
-        '🎯 Things to do',
+        '🍽️ Food & cafés',
+        '🏖️ Beaches',
+        '🏛️ Historical sites',
+        '🎉 Nightlife',
+        '🛍️ Shopping',
       ],
     );
 
@@ -47,17 +51,17 @@ class ChatCubit extends SafeCubit<ChatState> {
     initialize(userName);
   }
 
-  void addAttachments(List<ChatAttachment> newAttachments) {
-    final updated = List<ChatAttachment>.from(state.attachments)
-      ..addAll(newAttachments);
-    emitSafe(state.copyWith(attachments: updated));
-  }
+  // void addAttachments(List<ChatAttachment> newAttachments) {
+  //   final updated = List<ChatAttachment>.from(state.attachments)
+  //     ..addAll(newAttachments);
+  //   emitSafe(state.copyWith(attachments: updated));
+  // }
 
-  void removeAttachment(int index) {
-    final updated = List<ChatAttachment>.from(state.attachments)
-      ..removeAt(index);
-    emitSafe(state.copyWith(attachments: updated));
-  }
+  // void removeAttachment(int index) {
+  //   final updated = List<ChatAttachment>.from(state.attachments)
+  //     ..removeAt(index);
+  //   emitSafe(state.copyWith(attachments: updated));
+  // }
 
   Future<void> sendMessage(
     String text, {

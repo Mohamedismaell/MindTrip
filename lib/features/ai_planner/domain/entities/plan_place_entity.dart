@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 
 class PlanPlaceEntity extends Equatable {
   const PlanPlaceEntity({
@@ -30,7 +31,7 @@ class PlanPlaceEntity extends Equatable {
   final String name;
   final String city;
   final String cityEn;
-  final String category;
+  final PlaceCategory category;
   final double rating;
   final int reviewsCount;
   final String address;

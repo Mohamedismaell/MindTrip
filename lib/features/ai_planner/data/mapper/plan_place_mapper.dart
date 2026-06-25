@@ -1,3 +1,5 @@
+import 'package:mindtrip/core/enums/place_category.dart';
+
 import '../models/plan_place_model.dart';
 import '../../domain/entities/plan_place_entity.dart';
 
@@ -8,7 +10,7 @@ extension PlanPlaceModelMapper on PlanPlaceModel {
       name: name,
       city: city,
       cityEn: cityEn,
-      category: category,
+      category: PlaceCategory.fromCategory(category),
       rating: rating,
       reviewsCount: reviewsCount,
       address: address,
@@ -37,7 +39,7 @@ extension PlanPlaceEntityMapper on PlanPlaceEntity {
       name: name,
       city: city,
       cityEn: cityEn,
-      category: category,
+      category: category.category,
       rating: rating,
       reviewsCount: reviewsCount,
       address: address,

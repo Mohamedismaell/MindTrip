@@ -53,22 +53,18 @@ class _AiBubble extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      timeStr,
-                      style: context.textTheme.bodyMedium?.copyWith(
-                        color: context.colorTheme.outline,
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    Text(
-                      'AI Assistant',
-                      style: context.textTheme.bodyMedium?.copyWith(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
+                Text(
+                  timeStr,
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: context.colorTheme.outline,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  'AI Assistant',
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: Colors.black,
+                  ),
                 ),
                 SizedBox(height: 6.h),
                 Container(

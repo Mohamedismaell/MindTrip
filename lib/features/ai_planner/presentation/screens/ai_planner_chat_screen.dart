@@ -79,74 +79,69 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
     });
   }
 
-  void _onPhotosPicked(List<XFile> files) {
-    if (files.isEmpty) return;
+  // void _onPhotosPicked(List<XFile> files) {
+  //   if (files.isEmpty) return;
+  //   final cubit = context.read<ChatCubit>();
+  //   final currentPhotos = cubit.state.attachments
+  //       .where((a) => a.type == AttachmentType.image)
+  //       .length;
+  //   if (currentPhotos + files.length > 6) {
+  //     if (context.mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Maximum 6 photos allowed in total.')),
+  //       );
+  //     }
+  //     final allowed = 6 - currentPhotos;
+  //     if (allowed <= 0) return;
+  //     files = files.take(allowed).toList();
+  //   }
+  //   cubit.addAttachments(
+  //     files
+  //         .map((f) => ChatAttachment(path: f.path, type: AttachmentType.image))
+  //         .toList(),
+  //   );
+  // }
 
-    final cubit = context.read<ChatCubit>();
-    final currentPhotos = cubit.state.attachments
-        .where((a) => a.type == AttachmentType.image)
-        .length;
-    if (currentPhotos + files.length > 6) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Maximum 6 photos allowed in total.')),
-        );
-      }
-      final allowed = 6 - currentPhotos;
-      if (allowed <= 0) return;
-      files = files.take(allowed).toList();
-    }
+  // void _onVideoPicked(XFile file) {
+  //   final cubit = context.read<ChatCubit>();
+  //   final hasVideo = cubit.state.attachments.any(
+  //     (a) => a.type == AttachmentType.video,
+  //   );
+  //   if (hasVideo) {
+  //     if (context.mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Only 1 video allowed per message.')),
+  //       );
+  //     }
+  //     return;
+  //   }
+  //   cubit.addAttachments([
+  //     ChatAttachment(path: file.path, type: AttachmentType.video),
+  //   ]);
+  // }
 
-    cubit.addAttachments(
-      files
-          .map((f) => ChatAttachment(path: f.path, type: AttachmentType.image))
-          .toList(),
-    );
-  }
-
-  void _onVideoPicked(XFile file) {
-    final cubit = context.read<ChatCubit>();
-    final hasVideo = cubit.state.attachments.any(
-      (a) => a.type == AttachmentType.video,
-    );
-    if (hasVideo) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Only 1 video allowed per message.')),
-        );
-      }
-      return;
-    }
-
-    cubit.addAttachments([
-      ChatAttachment(path: file.path, type: AttachmentType.video),
-    ]);
-  }
-
-  void _onFilesPicked(List<PlatformFile> files) {
-    if (files.isEmpty) return;
-
-    final cubit = context.read<ChatCubit>();
-    final currentFiles = cubit.state.attachments
-        .where((a) => a.type == AttachmentType.file)
-        .length;
-    if (currentFiles + files.length > 2) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Maximum 2 files allowed in total.')),
-        );
-      }
-      final allowed = 2 - currentFiles;
-      if (allowed <= 0) return;
-      files = files.take(allowed).toList();
-    }
-
-    cubit.addAttachments(
-      files
-          .map((f) => ChatAttachment(path: f.path!, type: AttachmentType.file))
-          .toList(),
-    );
-  }
+  // void _onFilesPicked(List<PlatformFile> files) {
+  //   if (files.isEmpty) return;
+  //   final cubit = context.read<ChatCubit>();
+  //   final currentFiles = cubit.state.attachments
+  //       .where((a) => a.type == AttachmentType.file)
+  //       .length;
+  //   if (currentFiles + files.length > 2) {
+  //     if (context.mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Maximum 2 files allowed in total.')),
+  //       );
+  //     }
+  //     final allowed = 2 - currentFiles;
+  //     if (allowed <= 0) return;
+  //     files = files.take(allowed).toList();
+  //   }
+  //   cubit.addAttachments(
+  //     files
+  //         .map((f) => ChatAttachment(path: f.path!, type: AttachmentType.file))
+  //         .toList(),
+  //   );
+  // }
 
   void _confirmNewConversation() {
     showDialog(
@@ -392,12 +387,12 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
                           return ChatInputBar(
                             controller: _textController,
                             onSend: _onSendMessage,
-                            onPhotosPicked: _onPhotosPicked,
-                            onVideoPicked: _onVideoPicked,
-                            onFilesPicked: _onFilesPicked,
+                            // onPhotosPicked: _onPhotosPicked,
+                            // onVideoPicked: _onVideoPicked,
+                            // onFilesPicked: _onFilesPicked,
                             attachments: attachments,
                             onRemoveAttachment: (int index) {
-                              context.read<ChatCubit>().removeAttachment(index);
+                              // context.read<ChatCubit>().removeAttachment(index);
                             },
                             // profilePhotoUrl: userState.user?.photoURL,
                           );

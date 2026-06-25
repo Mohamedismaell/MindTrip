@@ -14,6 +14,16 @@ class DayPlanEntity extends Equatable {
 
   List<PlanPlaceEntity> get allPlaces => [...morning, ...afternoon, ...evening];
 
+  int get placesCount => allPlaces.length;
+
+  double get totalCost =>
+      allPlaces.fold<double>(0, (sum, place) => sum + place.cost);
+
+  double get averageRating => placesCount == 0
+      ? 0
+      : allPlaces.fold<double>(0, (sum, place) => sum + place.rating) /
+            placesCount;
+
   @override
   List<Object?> get props => [morning, afternoon, evening];
 }

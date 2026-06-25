@@ -46,7 +46,7 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
   }
 
   void toggleActiveDay(int day) {
-    emitSafe(state.copyWith(activeDay: day));
+    emit(state.copyWith(activeDay: state.activeDay == day ? 0 : day));
   }
 
   Future<void> saveTrip() async {
