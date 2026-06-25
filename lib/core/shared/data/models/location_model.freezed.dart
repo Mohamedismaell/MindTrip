@@ -211,7 +211,7 @@ return $default(_that.address,_that.latitude,_that.longitude,_that.city,_that.ci
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 2, adapterName: 'LocationModelAdapter')
+
 class _LocationModel extends LocationModel {
   const _LocationModel({@JsonKey(name: 'location')@HiveField(0) this.address = '', @HiveField(1) this.latitude = 0.0, @HiveField(2) this.longitude = 0.0, @HiveField(3) this.city = '', @HiveField(4) this.cityEn = ''}): super._();
   factory _LocationModel.fromJson(Map<String, dynamic> json) => _$LocationModelFromJson(json);

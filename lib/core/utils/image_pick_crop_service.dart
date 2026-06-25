@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -107,7 +107,7 @@ class ImagePickCropService {
     }
 
     if (context.mounted) {
-      AppSnackBar.showError(context: context, message: denied);
+      AppGlassSnackBar.showError(context: context, message: denied);
     }
     return false;
   }

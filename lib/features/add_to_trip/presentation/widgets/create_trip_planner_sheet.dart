@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
@@ -38,7 +38,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
           child: RangeCalendar(
             startDate: state.startDate,
             endDate: state.endDate,
-            onDateSelected: cubit.selectTripDate,
+            // onDateSelected: cubit.selectTripDate,
           ),
         ),
       ),
@@ -46,7 +46,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
   }
 
   void _onGenerate(BuildContext context) {
-    context.read<AddToTripCubit>().quickGenerateTrip();
+    // context.read<AddToTripCubit>().quickGenerateTrip();
   }
 
   @override
@@ -64,7 +64,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
             state.addingStatus == ActionStatus.error) {
           AppDialog.hideLoading(context);
           if (state.errorMessage != null) {
-            AppSnackBar.showError(
+            AppGlassSnackBar.showError(
               context: context,
               message: state.errorMessage!,
             );
@@ -79,7 +79,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
             icon: Icons.check_circle_outline_outlined,
             // iconColor: AppColors.customgreeen,
             onPrimary: () {
-              context.read<AddToTripCubit>().reset();
+              // context.read<AddToTripCubit>().reset();
               onClose();
             },
           );
@@ -155,7 +155,8 @@ class CreateTripPlannerSheet extends StatelessWidget {
                   children: AiPlannerMockData.budgetTiers.map((b) {
                     final selected = state.selectedBudget == b.title;
                     return TapScaleEffect(
-                      onTap: () => cubit.updateBudget(b.title),
+                      onTap: () {},
+                      //  cubit.updateBudget(b.title),
                       child: AnimatedContainer(
                         margin: EdgeInsets.only(bottom: 10.r),
                         duration: const Duration(milliseconds: 200),
@@ -203,8 +204,8 @@ class CreateTripPlannerSheet extends StatelessWidget {
                       children: [
                         _CounterButton(
                           icon: Icons.remove,
-                          onTap: () =>
-                              cubit.updatePeople(state.numberOfPeople - 1),
+                          onTap: () {},
+                          // cubit.updatePeople(state.numberOfPeople - 1),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -215,8 +216,8 @@ class CreateTripPlannerSheet extends StatelessWidget {
                         ),
                         _CounterButton(
                           icon: Icons.add,
-                          onTap: () =>
-                              cubit.updatePeople(state.numberOfPeople + 1),
+                          onTap: () {},
+                          // cubit.updatePeople(state.numberOfPeople + 1),
                         ),
                       ],
                     ),

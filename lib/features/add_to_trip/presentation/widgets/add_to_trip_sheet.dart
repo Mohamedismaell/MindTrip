@@ -53,7 +53,7 @@ class AddToTripSheet extends StatelessWidget {
             message:
                 state.errorMessage ??
                 'Please check your connection or try again later',
-            onPressed: () => context.read<AddToTripCubit>().loadTrips(),
+            // onPressed: () => context.read<AddToTripCubit>().loadTrips(),
           );
         }
 
@@ -123,13 +123,10 @@ class AddToTripSheet extends StatelessWidget {
                       );
                     }
                     final trip = state.trips[index];
-                    final coverImage =
-                        trip.itineraryCoverUrl ?? trip.coverAsset;
-                    final placesCount = trip.placePreviews.length;
+                    final coverImage = trip.coverImageUrl ?? trip.coverImageUrl;
                     return _TripTile(
                       title: trip.title,
-                      subtitle:
-                          '${trip.durationDays} days · $placesCount places',
+                      subtitle: '${trip.durationDays} days',
                       imagePath: coverImage,
                       onTap: () => onTripSelected(trip),
                     );

@@ -6,14 +6,14 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/drag_divider.dart';
-import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 
 class SelectDaySheet extends StatelessWidget {
   const SelectDaySheet({
@@ -59,7 +59,7 @@ class SelectDaySheet extends StatelessWidget {
           );
         }
         if (state.addingStatus == ActionStatus.error) {
-          AppSnackBar.showError(
+          AppGlassSnackBar.showError(
             context: context,
             message: state.errorMessage ?? 'Failed to add to trip',
           );
@@ -166,9 +166,10 @@ class SelectDaySheet extends StatelessWidget {
                               child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                                 child: TapScaleEffect(
-                                  onTap: () => context
-                                      .read<AddToTripCubit>()
-                                      .selectPeriod(day.dayNumber, period),
+                                  onTap: () {},
+                                  // context
+                                  //     .read<AddToTripCubit>()
+                                  //     .selectPeriod(day.dayNumber, period),
                                   child: AnimatedContainer(
                                     duration: const Duration(microseconds: 250),
                                     curve: Curves.easeInOutCubic,
@@ -264,7 +265,7 @@ class SelectDaySheet extends StatelessWidget {
             TapScaleEffect(
               onTap: () {
                 // Let AI decide
-                context.read<AddToTripCubit>().addToTrip();
+                // context.read<AddToTripCubit>().addToTrip();
               },
               child: Container(
                 width: double.infinity,
@@ -322,22 +323,22 @@ class SelectDaySheet extends StatelessWidget {
                         final isDifferentTrip =
                             state.selectedTrip?.id != state.hostTripId;
                         if (isDifferentTrip) {
-                          context.read<AddToTripCubit>().moveToAnotherTrip(
-                            state.selectedTrip!,
-                            state.selectedDay!,
-                            state.selectedPeriod!,
-                          );
+                          // context.read<AddToTripCubit>().moveToAnotherTrip(
+                          //   state.selectedTrip!,
+                          //   state.selectedDay!,
+                          //   state.selectedPeriod!,
+                          // );
                         } else {
-                          context.read<AddToTripCubit>().moveToDay(
-                            toDayNumber: state.selectedDay!,
-                            toPeriod: state.selectedPeriod!,
-                          );
+                          // context.read<AddToTripCubit>().moveToDay(
+                          //   toDayNumber: state.selectedDay!,
+                          //   toPeriod: state.selectedPeriod!,
+                          // );
                         }
                       }
                     : (state.selectedDay != null &&
                           state.selectedPeriod != null)
                     ? () {
-                        context.read<AddToTripCubit>().addToTrip();
+                        // context.read<AddToTripCubit>().addToTrip();
                       }
                     : null,
               ),

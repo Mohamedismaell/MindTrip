@@ -32,7 +32,7 @@ class TripMenuButton extends StatelessWidget {
             currentTitle: trip.title,
           );
         } else if (value == delete) {
-          context.read<TripsCubit>().deleteTrip(trip.id);
+          // context.read<TripsCubit>().deleteTrip(trip.id);
         }
       },
       itemBuilder: (_) => [

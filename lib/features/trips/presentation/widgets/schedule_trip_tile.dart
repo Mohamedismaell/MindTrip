@@ -17,7 +17,7 @@ class ScheduleTripTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLocal = !trip.coverAsset.startsWith('http');
+    final isLocal = !(trip.coverImageUrl?.startsWith('http') ?? false);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -41,7 +41,10 @@ class ScheduleTripTile extends StatelessWidget {
           child: Row(
             children: [
               // Cover Thumbnail
-              _CoverImage(isLocal: isLocal, imageCover: trip.coverAsset),
+              _CoverImage(
+                isLocal: isLocal,
+                imageCover: trip.coverImageUrl ?? '',
+              ),
               SizedBox(width: 13.w),
 
               // Trip info

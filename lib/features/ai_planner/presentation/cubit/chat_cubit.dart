@@ -1,8 +1,7 @@
 import 'dart:math';
-
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
-import 'package:mindtrip/features/ai_planner/data/datasources/chat_mock_responses.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/send_message_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
@@ -60,7 +59,11 @@ class ChatCubit extends SafeCubit<ChatState> {
     emitSafe(state.copyWith(attachments: updated));
   }
 
-  Future<void> sendMessage(String text) async {
+  Future<void> sendMessage(
+    String text, {
+    required String sessionId,
+    CollectedPlannerData? collected,
+  }) async {
     final cleanText = text.trim();
     final currentAttachments = state.attachments;
 
@@ -86,7 +89,11 @@ class ChatCubit extends SafeCubit<ChatState> {
 
     // Get AI response
     try {
-      final aiResponse = await _sendMessageUseCase(text);
+      final aiResponse = await _sendMessageUseCase(
+        text,
+        sessionId: sessionId,
+        collected: collected,
+      );
 
       emitSafe(
         state.copyWith(
@@ -123,7 +130,8 @@ class ChatCubit extends SafeCubit<ChatState> {
     emitSafe(state.copyWith(messages: [...state.messages, ...newMessages]));
   }
 
-  Future<void> sendSuggestion(String suggestion) => sendMessage(suggestion);
+  Future<void> sendSuggestion(String suggestion, {required String sessionId}) =>
+      sendMessage(suggestion, sessionId: sessionId);
 
   void generateTripSummary({
     required String destination,
@@ -153,10 +161,12 @@ class ChatCubit extends SafeCubit<ChatState> {
     final random = Random();
     final retryMsg = ChatMessage(
       id: 'msg_${DateTime.now().millisecondsSinceEpoch}_${random.nextInt(9999)}',
-      content: ChatMockResponses.retryMessage,
+      content: '',
+      //  ChatMockResponses.retryMessage,
       sender: MessageSender.ai,
       timestamp: DateTime.now(),
-      suggestions: ChatMockResponses.retrySuggestions,
+      suggestions: [''],
+      // ChatMockResponses.retrySuggestions
     );
     emitSafe(state.copyWith(messages: [...state.messages, retryMsg]));
   }

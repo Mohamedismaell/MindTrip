@@ -18,7 +18,7 @@ Future<void> showRenameTripDialog(
 
     if (newTitle.isEmpty) return;
 
-    context.read<TripsCubit>().updateTripTitle(tripId, newTitle);
+    // context.read<TripsCubit>().updateTripTitle(tripId, newTitle);
   }
 
   return AppDialog.show(

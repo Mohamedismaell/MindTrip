@@ -7,7 +7,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/interests/presentation/widgets/interests_buttons.dart';
 import 'package:mindtrip/features/interests/presentation/widgets/interests_header.dart';
 
@@ -23,7 +23,7 @@ class InterestsScreen extends StatelessWidget {
           context.read<AppGateCubit>().interestsComplete();
 
           if (isEdit) {
-            AppSnackBar.showSuccess(
+            AppGlassSnackBar.showSuccess(
               context: context,
               message: 'Interests updated successfully',
             );
@@ -36,7 +36,7 @@ class InterestsScreen extends StatelessWidget {
             context.go(AppRoutes.home);
           }
         } else if (state.interestStatus == InterestStatus.failed) {
-          AppSnackBar.showError(
+          AppGlassSnackBar.showError(
             context: context,
             message:
                 state.interestErrorMessage ??

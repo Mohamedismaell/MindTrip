@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
@@ -20,6 +21,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
+import 'package:uuid/uuid.dart';
 
 //Todo Bug with float button wrong nav route
 class AiPlannerChatScreen extends StatefulWidget {
@@ -32,6 +34,8 @@ class AiPlannerChatScreen extends StatefulWidget {
 class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
+  // One session ID lives for the lifetime of this screen instance.
+  final String _sessionId = const Uuid().v4();
 
   @override
   void initState() {
@@ -54,13 +58,13 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
     final cubit = context.read<ChatCubit>();
     if (text.trim().isEmpty && cubit.state.attachments.isEmpty) return;
 
-    cubit.sendMessage(text);
+    cubit.sendMessage(text, sessionId: _sessionId);
     _textController.clear();
     _scrollToBottom();
   }
 
   void _onSuggestionTap(String suggestion) {
-    context.read<ChatCubit>().sendSuggestion(suggestion);
+    context.read<ChatCubit>().sendMessage(suggestion, sessionId: _sessionId);
     _scrollToBottom();
   }
 
@@ -192,19 +196,19 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       destination: destination,
-      adults: int.tryParse(metadata?['adults']?.toString() ?? '1') ?? 1,
-      children: int.tryParse(metadata?['children']?.toString() ?? '0') ?? 0,
-      customBudget: metadata?['budget'] as String? ?? '',
+      people: int.tryParse(metadata?['adults']?.toString() ?? '1') ?? 1,
+      totalBudget: int.tryParse(metadata?['budget']?.toString() ?? '0') ?? 0,
+      totalCost: 0,
       interests: (metadata?['interests'] as List?)?.cast<String>() ?? const [],
       // currentPage: 5,
       // chatMessages: messages,
     );
 
-    await tripsCubit.saveTripDraft(snapshot);
+    // await tripsCubit.saveTripDraft(snapshot);
 
     if (!mounted) return;
     // Trigger generation flow in the background (state handles UI)
-    tripsCubit.generateTrip(newTripId);
+    // tripsCubit.generateTrip(snapshot);
   }
 
   @override
@@ -231,7 +235,7 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
                     '${AppRoutes.tripDetails}?tripId=${state.generatedTripId}',
                   );
                 } else if (state.tripsStatus == TripsStatus.error) {
-                  AppSnackBar.showError(
+                  AppGlassSnackBar.showError(
                     context: context,
                     message: state.errorMessage ?? 'Generation failed',
                   );

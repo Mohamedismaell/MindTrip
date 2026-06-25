@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/search/presentation/cubit/voice_search_cubit.dart';
 import 'package:mindtrip/features/search/presentation/cubit/voice_search_state.dart';
@@ -114,7 +114,10 @@ class _VoiceSearchScreenState extends State<VoiceSearchScreen>
           _pulseController.stop();
         } else if (state.status == VoiceSearchStatus.error) {
           _pulseController.stop();
-          AppSnackBar.showError(message: state.errorMessage, context: context);
+          AppGlassSnackBar.showError(
+            message: state.errorMessage,
+            context: context,
+          );
         }
       },
       child: Scaffold(

@@ -18,7 +18,7 @@ class AiFlowActionButton extends StatelessWidget {
     final canContinue = context.select(
       (AiPlannerCubit cubit) => cubit.state.canContinue,
     );
-    final cubit = context.read<AiPlannerCubit>();
+    // final cubit = context.read<AiPlannerCubit>();
     final decoration = canContinue
         ? BoxDecoration(
             gradient: AppColors.blueLightGradient,
@@ -34,7 +34,7 @@ class AiFlowActionButton extends StatelessWidget {
       child: SizedBox(
         width: 283.w,
         child: InkWell(
-          onTap: canContinue ? (onTap ?? cubit.nextPage) : null,
+          onTap: canContinue ? (onTap) : null,
           borderRadius: BorderRadius.circular(50.r),
           child: Container(
             height: 52.h,

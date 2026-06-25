@@ -6,24 +6,24 @@ part of 'planner_preview_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PlannerStopModelAdapter extends TypeAdapter<_PlannerStopModel> {
+class PlannerStopModelAdapter extends TypeAdapter<PlannerStopModel> {
   @override
   final typeId = 12;
 
   @override
-  _PlannerStopModel read(BinaryReader reader) {
+  PlannerStopModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _PlannerStopModel(
+    return PlannerStopModel(
       time: fields[0] as String,
       label: fields[1] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, _PlannerStopModel obj) {
+  void write(BinaryWriter writer, PlannerStopModel obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
@@ -43,17 +43,17 @@ class PlannerStopModelAdapter extends TypeAdapter<_PlannerStopModel> {
           typeId == other.typeId;
 }
 
-class PlannerPreviewModelAdapter extends TypeAdapter<_PlannerPreviewModel> {
+class PlannerPreviewModelAdapter extends TypeAdapter<PlannerPreviewModel> {
   @override
   final typeId = 13;
 
   @override
-  _PlannerPreviewModel read(BinaryReader reader) {
+  PlannerPreviewModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _PlannerPreviewModel(
+    return PlannerPreviewModel(
       title: fields[0] as String,
       imageUrl: fields[1] as String,
       stops: (fields[2] as List).cast<PlannerStopModel>(),
@@ -62,7 +62,7 @@ class PlannerPreviewModelAdapter extends TypeAdapter<_PlannerPreviewModel> {
   }
 
   @override
-  void write(BinaryWriter writer, _PlannerPreviewModel obj) {
+  void write(BinaryWriter writer, PlannerPreviewModel obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)

@@ -25,7 +25,7 @@ class _MyTripsSectionState extends State<MyTripsSection> {
   @override
   void initState() {
     super.initState();
-    sl<TripsCubit>().loadTrips();
+    // sl<TripsCubit>().loadTrips();
   }
 
   @override
@@ -65,7 +65,7 @@ class _MyTripsSectionState extends State<MyTripsSection> {
                         '${AppRoutes.tripDetails}?tripId=${trips[index].id}',
                       );
                     } else if (trips[index].status == TripStatus.draft) {
-                      if (trips[index].placePreviews.isEmpty) {
+                      if (trips[index].planJson == null) {
                         context.push(
                           '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
                         );
@@ -104,7 +104,7 @@ class _MyTripCard extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               AppCachedImage(
-                imagePath: trip.itineraryCoverUrl ?? trip.coverAsset,
+                imagePath: trip?.coverImageUrl ?? '',
                 fit: BoxFit.cover,
               ),
               Align(

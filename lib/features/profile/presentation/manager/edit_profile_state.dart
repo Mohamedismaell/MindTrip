@@ -17,13 +17,11 @@ abstract class EditProfileState with _$EditProfileState {
 
     @Default('') String draftDisplayName,
     @Default('') String draftPhoneNumber,
+    @Default('') String draftBio,
 
     @Default(EditSaveStatus.idle) EditSaveStatus saveStatus,
-
     String? editErrorMessage,
-
     @Default(DeleteAccountStatus.idle) DeleteAccountStatus deleteStatus,
-
     String? deleteErrorMessage,
   }) = _EditProfileState;
 
@@ -37,6 +35,9 @@ abstract class EditProfileState with _$EditProfileState {
     if (draftPhoneNumber != (originalUser!.phoneNumber ?? '')) {
       return true;
     }
+    // if (draftBio != (originalUser!.bio ?? '')) {
+    //   return true;
+    // }
     return false;
   }
 }

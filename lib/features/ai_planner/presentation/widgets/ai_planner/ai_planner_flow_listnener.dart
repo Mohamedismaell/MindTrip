@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
@@ -32,6 +33,29 @@ class AiPlannerFlowListnener extends StatelessWidget {
             );
           },
         ),
+        BlocListener<AiPlannerCubit, AiPlannerState>(
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            if (state.status == AiPlannerStatus.loading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => const GeneratingDialog(),
+              );
+            } else if (state.status == AiPlannerStatus.success) {
+              // context.pop();
+              AppDialog.hideLoading(context);
+              context.go('${AppRoutes.tripDetails}?tripId=${state.tripId}');
+            } else if (state.status == AiPlannerStatus.failure) {
+              // context.pop();
+              AppDialog.hideLoading(context);
+              AppGlassSnackBar.showError(
+                context: context,
+                message: state.errorMessage ?? 'Generation failed',
+              );
+            }
+          },
+        ),
         BlocListener<TripsCubit, TripsState>(
           listenWhen: (previous, current) =>
               previous.isGenerating != current.isGenerating ||
@@ -50,7 +74,7 @@ class AiPlannerFlowListnener extends StatelessWidget {
                 '${AppRoutes.tripDetails}?tripId=${state.generatedTripId}',
               );
             } else if (state.tripsStatus == TripsStatus.error) {
-              AppSnackBar.showError(
+              AppGlassSnackBar.showError(
                 context: context,
                 message: state.errorMessage ?? 'Generation failed',
               );

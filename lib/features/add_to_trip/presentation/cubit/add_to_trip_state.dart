@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
-import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/time_slot.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 

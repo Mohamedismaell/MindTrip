@@ -6,17 +6,17 @@ part of 'location_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class LocationModelAdapter extends TypeAdapter<_LocationModel> {
+class LocationModelAdapter extends TypeAdapter<LocationModel> {
   @override
   final typeId = 2;
 
   @override
-  _LocationModel read(BinaryReader reader) {
+  LocationModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _LocationModel(
+    return LocationModel(
       address: fields[0] == null ? '' : fields[0] as String,
       latitude: fields[1] == null ? 0.0 : (fields[1] as num).toDouble(),
       longitude: fields[2] == null ? 0.0 : (fields[2] as num).toDouble(),
@@ -26,7 +26,7 @@ class LocationModelAdapter extends TypeAdapter<_LocationModel> {
   }
 
   @override
-  void write(BinaryWriter writer, _LocationModel obj) {
+  void write(BinaryWriter writer, LocationModel obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)

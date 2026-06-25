@@ -59,8 +59,8 @@ class _ExploreTrendingListState extends State<ExploreTrendingList> {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 20.h),
               child: AppErrorWidget(
-                message: state.trendingPlacesError.isNotEmpty 
-                    ? state.trendingPlacesError 
+                message: state.trendingPlacesError.isNotEmpty
+                    ? state.trendingPlacesError
                     : 'Failed to load trending places',
                 imageSize: 80,
                 onPressed: () =>
@@ -154,11 +154,14 @@ class _TrendingCard extends StatelessWidget {
           ),
           SizedBox(height: 7.h),
           // Title
-          Text(
-            item.name,
-            style: context.textTheme.bodyMedium,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: Text(
+              item.name,
+              style: context.textTheme.bodyMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),

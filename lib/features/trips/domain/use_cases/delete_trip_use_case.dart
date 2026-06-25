@@ -1,12 +1,12 @@
-import 'package:mindtrip/core/connections/result.dart';
-import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
+// import 'package:mindtrip/core/connections/result.dart';
+// import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
 
-class DeleteTripUseCase {
-  final TripRepository repository;
+// class DeleteTripUseCase {
+//   final TripRepository repository;
 
-  DeleteTripUseCase(this.repository);
+//   DeleteTripUseCase(this.repository);
 
-  Future<Result<void>> call(String id) async {
-    return repository.deleteTrip(id);
-  }
-}
+//   Future<Result<void>> call(String id) async {
+//     return repository.deleteTrip(id);
+//   }
+// }

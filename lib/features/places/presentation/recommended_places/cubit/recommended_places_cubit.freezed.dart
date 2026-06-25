@@ -25,12 +25,12 @@ $RecommendedPlacesStateCopyWith<RecommendedPlacesState> get copyWith => _$Recomm
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecommendedPlacesState&&(identical(other.recommendedPlacesStatus, recommendedPlacesStatus) || other.recommendedPlacesStatus == recommendedPlacesStatus)&&const DeepCollectionEquality().equals(other.recommendedPlaces, recommendedPlaces)&&(identical(other.recommededPlacesError, recommededPlacesError) || other.recommededPlacesError == recommededPlacesError)&&(identical(other.seed, seed) || other.seed == seed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecommendedPlacesState&&(identical(other.recommendedPlacesStatus, recommendedPlacesStatus) || other.recommendedPlacesStatus == recommendedPlacesStatus)&&(identical(other.recommendedPlaces, recommendedPlaces) || other.recommendedPlaces == recommendedPlaces)&&(identical(other.recommededPlacesError, recommededPlacesError) || other.recommededPlacesError == recommededPlacesError)&&(identical(other.seed, seed) || other.seed == seed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,recommendedPlacesStatus,const DeepCollectionEquality().hash(recommendedPlaces),recommededPlacesError,seed);
+int get hashCode => Object.hash(runtimeType,recommendedPlacesStatus,recommendedPlaces,recommededPlacesError,seed);
 
 @override
 String toString() {
@@ -49,7 +49,7 @@ $Res call({
 });
 
 
-
+$PaginationStateCopyWith<PlaceEntity, $Res> get recommendedPlaces;
 
 }
 /// @nodoc
@@ -62,16 +62,25 @@ class _$RecommendedPlacesStateCopyWithImpl<$Res>
 
 /// Create a copy of RecommendedPlacesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? recommendedPlacesStatus = null,Object? recommendedPlaces = freezed,Object? recommededPlacesError = null,Object? seed = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? recommendedPlacesStatus = null,Object? recommendedPlaces = null,Object? recommededPlacesError = null,Object? seed = freezed,}) {
   return _then(_self.copyWith(
 recommendedPlacesStatus: null == recommendedPlacesStatus ? _self.recommendedPlacesStatus : recommendedPlacesStatus // ignore: cast_nullable_to_non_nullable
-as RecommendedPlacesStatus,recommendedPlaces: freezed == recommendedPlaces ? _self.recommendedPlaces : recommendedPlaces // ignore: cast_nullable_to_non_nullable
+as RecommendedPlacesStatus,recommendedPlaces: null == recommendedPlaces ? _self.recommendedPlaces : recommendedPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,recommededPlacesError: null == recommededPlacesError ? _self.recommededPlacesError : recommededPlacesError // ignore: cast_nullable_to_non_nullable
 as String,seed: freezed == seed ? _self.seed : seed // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }
-
+/// Create a copy of RecommendedPlacesState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PaginationStateCopyWith<PlaceEntity, $Res> get recommendedPlaces {
+  
+  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.recommendedPlaces, (value) {
+    return _then(_self.copyWith(recommendedPlaces: value));
+  });
+}
 }
 
 
@@ -227,12 +236,12 @@ _$RecommendedPlacesStateCopyWith<_RecommendedPlacesState> get copyWith => __$Rec
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RecommendedPlacesState&&(identical(other.recommendedPlacesStatus, recommendedPlacesStatus) || other.recommendedPlacesStatus == recommendedPlacesStatus)&&const DeepCollectionEquality().equals(other.recommendedPlaces, recommendedPlaces)&&(identical(other.recommededPlacesError, recommededPlacesError) || other.recommededPlacesError == recommededPlacesError)&&(identical(other.seed, seed) || other.seed == seed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RecommendedPlacesState&&(identical(other.recommendedPlacesStatus, recommendedPlacesStatus) || other.recommendedPlacesStatus == recommendedPlacesStatus)&&(identical(other.recommendedPlaces, recommendedPlaces) || other.recommendedPlaces == recommendedPlaces)&&(identical(other.recommededPlacesError, recommededPlacesError) || other.recommededPlacesError == recommededPlacesError)&&(identical(other.seed, seed) || other.seed == seed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,recommendedPlacesStatus,const DeepCollectionEquality().hash(recommendedPlaces),recommededPlacesError,seed);
+int get hashCode => Object.hash(runtimeType,recommendedPlacesStatus,recommendedPlaces,recommededPlacesError,seed);
 
 @override
 String toString() {
@@ -251,7 +260,7 @@ $Res call({
 });
 
 
-
+@override $PaginationStateCopyWith<PlaceEntity, $Res> get recommendedPlaces;
 
 }
 /// @nodoc
@@ -264,17 +273,26 @@ class __$RecommendedPlacesStateCopyWithImpl<$Res>
 
 /// Create a copy of RecommendedPlacesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? recommendedPlacesStatus = null,Object? recommendedPlaces = freezed,Object? recommededPlacesError = null,Object? seed = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? recommendedPlacesStatus = null,Object? recommendedPlaces = null,Object? recommededPlacesError = null,Object? seed = freezed,}) {
   return _then(_RecommendedPlacesState(
 recommendedPlacesStatus: null == recommendedPlacesStatus ? _self.recommendedPlacesStatus : recommendedPlacesStatus // ignore: cast_nullable_to_non_nullable
-as RecommendedPlacesStatus,recommendedPlaces: freezed == recommendedPlaces ? _self.recommendedPlaces : recommendedPlaces // ignore: cast_nullable_to_non_nullable
+as RecommendedPlacesStatus,recommendedPlaces: null == recommendedPlaces ? _self.recommendedPlaces : recommendedPlaces // ignore: cast_nullable_to_non_nullable
 as PaginationState<PlaceEntity>,recommededPlacesError: null == recommededPlacesError ? _self.recommededPlacesError : recommededPlacesError // ignore: cast_nullable_to_non_nullable
 as String,seed: freezed == seed ? _self.seed : seed // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }
 
-
+/// Create a copy of RecommendedPlacesState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PaginationStateCopyWith<PlaceEntity, $Res> get recommendedPlaces {
+  
+  return $PaginationStateCopyWith<PlaceEntity, $Res>(_self.recommendedPlaces, (value) {
+    return _then(_self.copyWith(recommendedPlaces: value));
+  });
+}
 }
 
 // dart format on

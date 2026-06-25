@@ -1,15 +1,23 @@
-import 'package:flutter/material.dart' hide DayPeriod;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/domain/entities/location_entity.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/time_slot.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/trip_day.dart';
+import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/theme_data_/light_theme_data.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/generate_plan_use_case.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mocktail/mocktail.dart';
+
+class _MockGeneratePlanUseCase extends Mock implements GeneratePlanUseCase {}
 
 void main() {
   group('TripDetailsScreen', () {
@@ -103,7 +111,7 @@ Future<void> _pumpTripDetails(
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
 
-  final tripsCubit = TripsCubit(repo);
+  final tripsCubit = TripsCubit(repo, _MockGeneratePlanUseCase());
   await tripsCubit.loadTrips();
 
   final router = GoRouter(
@@ -159,14 +167,10 @@ class _FakeTripRepository implements TripRepository {
     destination: 'Dahab',
     tripStart: DateTime(2026, 6),
     tripEnd: DateTime(2026, 6, 2),
-    adults: 2,
-    children: 0,
-    pets: 0,
-    budgetTier: 'Flexible',
-    customBudget: '',
+    people: 2,
+    totalBudget: 0,
+    totalCost: 0,
     interests: const ['Beach', 'Adventure'],
-    currentPage: 5,
-    chatMessages: const [],
   );
 
   late final TripItinerary itinerary = TripItinerary(
@@ -223,82 +227,46 @@ class _FakeTripRepository implements TripRepository {
   }
 
   @override
-  Future<void> deleteTrip(String id) async {}
+  Future<Result<void>> deleteTrip(String id) async => const Result.ok(null);
 
   @override
-  Future<TripItinerary> generateItinerary(Trip trip) async => itinerary;
+  Future<Result<List<Trip>>> getAllTrips() async =>
+      missingTrip ? Result.ok([]) : Result.ok([trip]);
 
   @override
-  Future<List<Trip>> getAllTrips() async => missingTrip ? [] : [trip];
-
-  @override
-  Future<TripItinerary?> getItinerary(String tripId) async {
-    if (throwOnLoad) throw Exception('boom');
-    return missingTrip ? null : itinerary;
+  Future<Result<Trip?>> getTripById(String id) async {
+    if (throwOnLoad) return Result.error(Exception('boom') as dynamic);
+    return missingTrip ? const Result.ok(null) : Result.ok(trip);
   }
 
   @override
-  Future<Trip?> getTripById(String id) async {
-    if (throwOnLoad) throw Exception('boom');
-    return missingTrip ? null : trip;
-  }
-
-  @override
-  Future<void> saveItinerary(TripItinerary itinerary) async {}
-
-  @override
-  Future<void> saveTrip(Trip trip) async {
+  Future<Result<void>> saveTrip(Trip trip) async {
     this.trip = trip;
+    return const Result.ok(null);
   }
 
   @override
-  Future<void> updateTrip(Trip trip) async {
+  Future<Result<void>> updateTrip(Trip trip) async {
     this.trip = trip;
+    return const Result.ok(null);
   }
 
   @override
-  Future<TripItinerary> addPlace(
-    String tripId,
-    PlaceEntity place, {
-    int? dayNumber,
-    DayPeriod? period,
-  }) async {
-    throw UnimplementedError();
-  }
+  Future<Result<Trip>> createTrip(trip, plan) async => Result.ok(trip);
 
   @override
-  Future<Trip?> getTripContainingPlace(String placeId) async {
-    throw UnimplementedError();
-  }
+  Future<Result<void>> confirmTrip(String tripId) async =>
+      const Result.ok(null);
 
   @override
-  Future<bool> isPlaceInAnyTrip(String placeId) async {
-    throw UnimplementedError();
-  }
+  Future<Result<void>> updateTripStatus(String tripId, String status) async =>
+      const Result.ok(null);
 
   @override
-  Future<TripItinerary> movePlace(
-    String tripId,
-    String placeId,
-    int toDayNumber,
-    DayPeriod toPeriod,
-  ) async {
-    throw UnimplementedError();
-  }
+  Future<Result<Trip?>> getTripContainingPlace(String placeId) async =>
+      const Result.ok(null);
 
   @override
-  Future<(TripItinerary, TripItinerary)> movePlaceBetweenTrips({
-    required String sourceTripId,
-    required String targetTripId,
-    required String placeId,
-    required int toDayNumber,
-    required DayPeriod toPeriod,
-  }) async {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<TripItinerary> removePlace(String tripId, String placeId) async {
-    throw UnimplementedError();
-  }
+  Future<Result<bool>> isPlaceInAnyTrip(String placeId) async =>
+      const Result.ok(false);
 }

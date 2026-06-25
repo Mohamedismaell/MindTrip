@@ -208,7 +208,7 @@ return $default(_that.time,_that.label);case _:
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 12)
+
 class _PlannerStopModel extends PlannerStopModel {
   const _PlannerStopModel({@HiveField(0) required this.time, @HiveField(1) required this.label}): super._();
   factory _PlannerStopModel.fromJson(Map<String, dynamic> json) => _$PlannerStopModelFromJson(json);
@@ -476,7 +476,7 @@ return $default(_that.title,_that.imageUrl,_that.stops,_that.badge);case _:
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 13)
+
 class _PlannerPreviewModel extends PlannerPreviewModel {
   const _PlannerPreviewModel({@HiveField(0) required this.title, @HiveField(1) required this.imageUrl, @HiveField(2) required final  List<PlannerStopModel> stops, @HiveField(3) required this.badge}): _stops = stops,super._();
   factory _PlannerPreviewModel.fromJson(Map<String, dynamic> json) => _$PlannerPreviewModelFromJson(json);

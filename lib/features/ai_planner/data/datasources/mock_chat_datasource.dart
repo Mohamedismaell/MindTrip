@@ -1,117 +1,116 @@
-import 'dart:math';
+// import 'dart:math';
 
-import 'package:mindtrip/features/ai_planner/data/datasources/chat_mock_responses.dart';
-import 'package:mindtrip/features/ai_planner/data/models/chat_message_model.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+// import 'package:mindtrip/features/ai_planner/data/models/chat_message_model.dart';
+// import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 
-//! sending message will not need all the i think.........
-/// Abstract interface for the chat data source.
-/// Swap [MockChatDataSource] with a real implementation when API is ready.
-abstract class ChatDataSource {
-  Future<ChatMessageModel> sendMessage(String message);
+// //! sending message will not need all the i think.........
+// /// Abstract interface for the chat data source.
+// /// Swap [MockChatDataSource] with a real implementation when API is ready.
+// abstract class ChatDataSource {
+//   Future<ChatMessageModel> sendMessage(String message);
 
-  ChatMessageModel getTripSummary({
-    required String destination,
-    required String startDate,
-    required String endDate,
-    required int adults,
-    required int children,
-    required int pets,
-    required String budget,
-    required List<String> interests,
-  });
-}
+//   ChatMessageModel getTripSummary({
+//     required String destination,
+//     required String startDate,
+//     required String endDate,
+//     required int adults,
+//     required int children,
+//     required int pets,
+//     required String budget,
+//     required List<String> interests,
+//   });
+// }
 
-/// Mock implementation that simulates AI responses with delays.
-class MockChatDataSource implements ChatDataSource {
-  final _random = Random();
+// /// Mock implementation that simulates AI responses with delays.
+// class MockChatDataSource implements ChatDataSource {
+//   final _random = Random();
 
-  String _generateId() =>
-      'msg_${DateTime.now().millisecondsSinceEpoch}_${_random.nextInt(9999)}';
+//   String _generateId() =>
+//       'msg_${DateTime.now().millisecondsSinceEpoch}_${_random.nextInt(9999)}';
 
-  @override
-  Future<ChatMessageModel> sendMessage(String message) async {
-    await Future<void>.delayed(
-      Duration(milliseconds: 1000 + _random.nextInt(1000)),
-    );
+//   @override
+//   Future<ChatMessageModel> sendMessage(String message) async {
+//     await Future<void>.delayed(
+//       Duration(milliseconds: 1000 + _random.nextInt(1000)),
+//     );
 
-    final response = _matchResponse(message.toLowerCase());
+//     final response = _matchResponse(message.toLowerCase());
 
-    return ChatMessageModel(
-      id: _generateId(),
-      content: response.content,
-      sender: MessageSender.ai,
-      timestamp: DateTime.now(),
-      suggestions: null,
-      isReadyToGenerate: response.isReadyToGenerate,
-    );
-  }
+//     return ChatMessageModel(
+//       id: _generateId(),
+//       content: response.content,
+//       sender: MessageSender.ai,
+//       timestamp: DateTime.now(),
+//       suggestions: null,
+//       isReadyToGenerate: response.isReadyToGenerate,
+//     );
+//   }
 
-  @override
-  ChatMessageModel getTripSummary({
-    required String destination,
-    required String startDate,
-    required String endDate,
-    required int adults,
-    required int children,
-    required int pets,
-    required String budget,
-    required List<String> interests,
-  }) {
-    return ChatMessageModel(
-      id: _generateId(),
-      content: ChatMockResponses.tripSummary(
-        destination: destination,
-        startDate: startDate,
-        endDate: endDate,
-        adults: adults,
-        children: children,
-        pets: pets,
-        budget: budget,
-        interests: interests,
-      ),
-      sender: MessageSender.ai,
-      timestamp: DateTime.now(),
-      isReadyToGenerate: true,
-    );
-  }
+//   @override
+//   ChatMessageModel getTripSummary({
+//     required String destination,
+//     required String startDate,
+//     required String endDate,
+//     required int adults,
+//     required int children,
+//     required int pets,
+//     required String budget,
+//     required List<String> interests,
+//   }) {
+//     return ChatMessageModel(
+//       id: _generateId(),
+//       content: ChatMockResponses.tripSummary(
+//         destination: destination,
+//         startDate: startDate,
+//         endDate: endDate,
+//         adults: adults,
+//         children: children,
+//         pets: pets,
+//         budget: budget,
+//         interests: interests,
+//       ),
+//       sender: MessageSender.ai,
+//       timestamp: DateTime.now(),
+//       isReadyToGenerate: true,
+//     );
+//   }
 
-  /// Matches user input keywords to response categories.
-  _MatchedResponse _matchResponse(String input) {
-    for (final entry in ChatMockResponses.keywordMap.entries) {
-      final category = entry.key;
-      final keywords = entry.value;
+//   /// Matches user input keywords to response categories.
+//   _MatchedResponse _matchResponse(String input) {
+//     for (final entry in ChatMockResponses.keywordMap.entries) {
+//       final category = entry.key;
+//       final keywords = entry.value;
 
-      for (final keyword in keywords) {
-        if (input.contains(keyword)) {
-          final categoryResponses = ChatMockResponses.responses[category]!;
-          final response =
-              categoryResponses[_random.nextInt(categoryResponses.length)];
+//       for (final keyword in keywords) {
+//         if (input.contains(keyword)) {
+//           final categoryResponses = ChatMockResponses.responses[category]!;
+//           final response =
+//               categoryResponses[_random.nextInt(categoryResponses.length)];
 
-          // Signal ready if destination is set
-          final isReady = category == 'destination';
+//           // Signal ready if destination is set
+//           final isReady = category == 'destination';
 
-          return _MatchedResponse(
-            content: response,
-            isReadyToGenerate: isReady,
-          );
-        }
-      }
-    }
+//           return _MatchedResponse(
+//             content: response,
+//             isReadyToGenerate: isReady,
+//           );
+//         }
+//       }
+//     }
 
-    // Fallback to general response
-    final generalResponses = ChatMockResponses.responses['general']!;
-    return _MatchedResponse(
-      content: generalResponses[_random.nextInt(generalResponses.length)],
-    );
-  }
-}
+//     // Fallback to general response
+//     final generalResponses = ChatMockResponses.responses['general']!;
+//     return _MatchedResponse(
+//       content: generalResponses[_random.nextInt(generalResponses.length)],
+//     );
+//   }
+// }
 
-class _MatchedResponse {
-  const _MatchedResponse({
-    required this.content,
-    this.isReadyToGenerate = false,
-  });
-  final String content;
-  final bool isReadyToGenerate;
-}
+// class _MatchedResponse {
+//   const _MatchedResponse({
+//     required this.content,
+//     this.isReadyToGenerate = false,
+//   });
+//   final String content;
+//   final bool isReadyToGenerate;
+// }

@@ -3,81 +3,58 @@
 part of 'trip_model.dart';
 
 // **************************************************************************
-// TypeAdapterGenerator
+// JsonSerializableGenerator
 // **************************************************************************
 
-class TripModelAdapter extends TypeAdapter<TripModel> {
-  @override
-  final typeId = 5;
+_TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
+  tripId: json['tripId'] as String,
+  title: json['title'] as String,
+  destinationGovernorate: json['destinationGovernorate'] as String,
+  city: json['city'] as String,
+  startDate: json['startDate'] == null
+      ? null
+      : DateTime.parse(json['startDate'] as String),
+  endDate: json['endDate'] == null
+      ? null
+      : DateTime.parse(json['endDate'] as String),
+  durationDays: (json['durationDays'] as num?)?.toInt(),
+  people: (json['people'] as num).toInt(),
+  totalBudgetEgp: (json['totalBudgetEgp'] as num).toInt(),
+  totalCost: (json['totalCost'] as num).toInt(),
+  status: json['status'] as String,
+  shareToken: json['shareToken'] as String?,
+  isPublic: json['isPublic'] as bool? ?? false,
+  sessionId: json['sessionId'] as String?,
+  collectedJson: json['collectedJson'] as String?,
+  coverImageUrl: json['coverImageUrl'] as String?,
+  placesCount: (json['placesCount'] as num?)?.toInt() ?? 0,
+  progressPercent: (json['progressPercent'] as num?)?.toDouble(),
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
+  plan: json['plan'],
+);
 
-  @override
-  TripModel read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
+    <String, dynamic>{
+      'tripId': instance.tripId,
+      'title': instance.title,
+      'destinationGovernorate': instance.destinationGovernorate,
+      'city': instance.city,
+      'startDate': instance.startDate?.toIso8601String(),
+      'endDate': instance.endDate?.toIso8601String(),
+      'durationDays': instance.durationDays,
+      'people': instance.people,
+      'totalBudgetEgp': instance.totalBudgetEgp,
+      'totalCost': instance.totalCost,
+      'status': instance.status,
+      'shareToken': instance.shareToken,
+      'isPublic': instance.isPublic,
+      'sessionId': instance.sessionId,
+      'collectedJson': instance.collectedJson,
+      'coverImageUrl': instance.coverImageUrl,
+      'placesCount': instance.placesCount,
+      'progressPercent': instance.progressPercent,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
+      'plan': instance.plan,
     };
-    return TripModel(
-      id: fields[0] as String,
-      title: fields[1] as String,
-      status: fields[2] as String,
-      createdAt: fields[3] as DateTime,
-      updatedAt: fields[4] as DateTime,
-      destination: fields[5] as String,
-      tripStart: fields[6] as DateTime?,
-      tripEnd: fields[7] as DateTime?,
-      adults: (fields[8] as num).toInt(),
-      children: (fields[9] as num).toInt(),
-      budgetTier: fields[10] as String?,
-      customBudget: fields[11] as String,
-      interests: (fields[12] as List).cast<String>(),
-      itineraryCoverUrl: fields[13] as String?,
-      placePreviewsJson: fields[16] == null ? '[]' : fields[16] as String,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, TripModel obj) {
-    writer
-      ..writeByte(15)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.title)
-      ..writeByte(2)
-      ..write(obj.status)
-      ..writeByte(3)
-      ..write(obj.createdAt)
-      ..writeByte(4)
-      ..write(obj.updatedAt)
-      ..writeByte(5)
-      ..write(obj.destination)
-      ..writeByte(6)
-      ..write(obj.tripStart)
-      ..writeByte(7)
-      ..write(obj.tripEnd)
-      ..writeByte(8)
-      ..write(obj.adults)
-      ..writeByte(9)
-      ..write(obj.children)
-      ..writeByte(10)
-      ..write(obj.budgetTier)
-      ..writeByte(11)
-      ..write(obj.customBudget)
-      ..writeByte(12)
-      ..write(obj.interests)
-      ..writeByte(13)
-      ..write(obj.itineraryCoverUrl)
-      ..writeByte(16)
-      ..write(obj.placePreviewsJson);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TripModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}

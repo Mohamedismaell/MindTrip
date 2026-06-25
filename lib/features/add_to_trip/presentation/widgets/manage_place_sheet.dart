@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
@@ -39,12 +39,12 @@ class ManagePlaceSheet extends StatelessWidget {
         }
 
         if (state.addingStatus == ActionStatus.success) {
-          context.read<AddToTripCubit>().reset();
+          // context.read<AddToTripCubit>().reset();
           onClose();
         }
 
         if (state.addingStatus == ActionStatus.error) {
-          AppSnackBar.showError(
+          AppGlassSnackBar.showError(
             context: context,
             message: state.errorMessage ?? 'Failed to add to trip',
           );
@@ -92,8 +92,8 @@ class ManagePlaceSheet extends StatelessWidget {
                   primaryText: 'Cancel',
                   onPrimary: () {},
                   secondaryText: 'Remove',
-                  onSecondary: () =>
-                      context.read<AddToTripCubit>().removeFromTrip(),
+                  onSecondary: () {},
+                  // context.read<AddToTripCubit>().removeFromTrip(),
                   iconColor: context.colorTheme.error,
                 );
               },

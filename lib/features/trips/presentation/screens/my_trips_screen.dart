@@ -29,7 +29,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<TripsCubit>().loadTrips();
+    // context.read<TripsCubit>().loadTrips();
     _searchController.addListener(() {
       context.read<TripsCubit>().updateSearchQuary(
         _searchController.text.trim().toLowerCase(),
@@ -137,7 +137,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
 
   void _resumeTrip(BuildContext context, Trip trip) {
     final hasItinerary =
-        trip.placePreviews.isNotEmpty || trip.status == TripStatus.inProgress;
+        trip.planJson != null || trip.status == TripStatus.inProgress;
 
     if (hasItinerary) {
       context.push('${AppRoutes.tripDetails}?tripId=${trip.id}');

@@ -40,9 +40,9 @@ class AppHive {
     if (!Hive.isAdapterRegistered(PlaceCategoryAdapter().typeId)) {
       Hive.registerAdapter(PlaceCategoryAdapter());
     }
-    if (!Hive.isAdapterRegistered(TripModelAdapter().typeId)) {
-      Hive.registerAdapter(TripModelAdapter());
-    }
+    // if (!Hive.isAdapterRegistered(TripModelAdapter().typeId)) {
+    //   Hive.registerAdapter(TripModelAdapter());
+    // }
     if (!Hive.isAdapterRegistered(BannerModelAdapter().typeId)) {
       Hive.registerAdapter(BannerModelAdapter());
     }

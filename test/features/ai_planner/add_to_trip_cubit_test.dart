@@ -7,7 +7,7 @@ import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cub
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/itinerary/domain/entities/trip_itinerary.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/add_place_to_trip_use_case.dart';
-import 'package:mindtrip/features/itinerary/domain/use_cases/generate_itinerary_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/generate_plan_use_case.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/get_itinerary_use_case.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_between_trips_use_case.dart';
 import 'package:mindtrip/features/itinerary/domain/use_cases/move_place_in_trip_use_case.dart';
@@ -43,7 +43,7 @@ class MockGetTripByIdUseCase extends Mock implements GetTripByIdUseCase {}
 class MockSaveTripUseCase extends Mock implements SaveTripUseCase {}
 
 class MockGenerateItineraryUseCase extends Mock
-    implements GenerateItineraryUseCase {}
+    implements GeneratePlanUseCase {}
 
 class MockSaveItineraryUseCase extends Mock implements SaveItineraryUseCase {}
 
@@ -111,10 +111,9 @@ void main() {
       id: 'trip1',
       title: 'Test Trip',
       destination: 'Test Destination',
-      adults: 1,
-      children: 0,
-      budgetTier: 'Cheap',
-      customBudget: '',
+      people: 1,
+      totalBudget: 0,
+      totalCost: 0,
       interests: const [],
       createdAt: DateTime(2026),
       updatedAt: DateTime(2026),

@@ -1,13 +1,13 @@
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
-import 'package:mindtrip/features/ai_planner/data/datasources/mock_chat_datasource.dart';
-import 'package:mindtrip/features/ai_planner/data/datasources/planning_session_local_datasource.dart';
+import 'package:mindtrip/core/database/api/api_consumer.dart';
+import 'package:mindtrip/features/ai_planner/data/datasources/ai_planner_remote_datasource.dart';
+import 'package:mindtrip/features/ai_planner/data/datasources/chat_remote_datasource.dart';
+import 'package:mindtrip/features/ai_planner/data/datasources/ai_planner_local_datasource.dart';
+import 'package:mindtrip/features/ai_planner/data/repositories/ai_planner_repository_impl.dart';
 import 'package:mindtrip/features/ai_planner/data/repositories/chat_repository_impl.dart';
-import 'package:mindtrip/features/ai_planner/data/repositories/planning_session_repository_impl.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
-import 'package:mindtrip/features/ai_planner/domain/repositories/planning_session_repository.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/delete_planning_session_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/get_planning_session_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/save_planning_session_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/repositories/ai_planner_repository.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/generate_plan_use_case.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/send_message_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
@@ -16,41 +16,33 @@ class AiPlannerDi {
   AiPlannerDi._();
 
   static void init() {
-    //! Cubits — registerFactory so it resets on each navigation
-    sl.registerFactory<AiPlannerCubit>(
-      () => AiPlannerCubit(
-        sl<GetPlanningSessionUseCase>(),
-        sl<SavePlanningSessionUseCase>(),
-        sl<DeletePlanningSessionUseCase>(),
-      ),
+    //! Chat — Data sources (real remote implementation)
+    sl.registerLazySingleton<ChatRemoteDataSource>(
+      () => ChatRemoteDataSourceImpl(apiConsumer: sl<ApiConsumer>()),
     );
-
-    //! Chat — Data sources
-    sl.registerLazySingleton<ChatDataSource>(() => MockChatDataSource());
-    sl.registerLazySingleton<PlanningSessionLocalDataSource>(
-      () => PlanningSessionLocalDataSource(),
+    sl.registerLazySingleton<AiPlannerLocalDataSource>(
+      () => AiPlannerLocalDataSource(),
+    );
+    sl.registerLazySingleton<AiPlannerRemoteDataSource>(
+      () => AiPlannerRemoteDataSourceImp(apiConsumer: sl<ApiConsumer>()),
     );
 
     //! Chat — Repository
     sl.registerLazySingleton<ChatRepository>(
-      () => ChatRepositoryImpl(dataSource: sl<ChatDataSource>()),
+      () => ChatRepositoryImpl(dataSource: sl<ChatRemoteDataSource>()),
     );
-    sl.registerLazySingleton<PlanningSessionRepository>(
-      () => PlanningSessionRepositoryImpl(sl<PlanningSessionLocalDataSource>()),
+    sl.registerLazySingleton<AiPlannerRepository>(
+      () => AiPlannerRepositoryImpl(
+        remoteDataSource: sl<AiPlannerRemoteDataSource>(),
+      ),
     );
 
     //! Chat — Use cases
     sl.registerLazySingleton<SendMessageUseCase>(
-      () => SendMessageUseCase(repository: sl<ChatRepository>()),
+      () => SendMessageUseCase(sl<ChatRepository>()),
     );
-    sl.registerLazySingleton<GetPlanningSessionUseCase>(
-      () => GetPlanningSessionUseCase(sl<PlanningSessionRepository>()),
-    );
-    sl.registerLazySingleton<SavePlanningSessionUseCase>(
-      () => SavePlanningSessionUseCase(sl<PlanningSessionRepository>()),
-    );
-    sl.registerLazySingleton<DeletePlanningSessionUseCase>(
-      () => DeletePlanningSessionUseCase(sl<PlanningSessionRepository>()),
+    sl.registerLazySingleton<GeneratePlanUseCase>(
+      () => GeneratePlanUseCase(sl<AiPlannerRepository>()),
     );
 
     //! Chat — Cubit (factory: each trip gets its own chat instance)
@@ -59,6 +51,10 @@ class AiPlannerDi {
         sendMessageUseCase: sl<SendMessageUseCase>(),
         chatRepository: sl<ChatRepository>(),
       ),
+    );
+    //! Cubits — registerFactory so it resets on each navigation
+    sl.registerFactory<AiPlannerCubit>(
+      () => AiPlannerCubit(generatePlanUseCase: sl<GeneratePlanUseCase>()),
     );
   }
 }

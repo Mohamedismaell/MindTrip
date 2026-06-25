@@ -32,9 +32,9 @@ class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
     final cubit = context.read<AddToTripCubit>();
     final startsInManage = cubit.state.hostTripId != null;
     _initialRoute = startsInManage ? _manageRoute : _selectTripRoute;
-    cubit.clearSelection();
+    // cubit.clearSelection();
     if (!startsInManage) {
-      cubit.loadTrips();
+      // cubit.loadTrips();
     }
   }
 
@@ -65,21 +65,21 @@ class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
   }
 
   void _pushSelectTrip() {
-    context.read<AddToTripCubit>().clearSelection();
-    context.read<AddToTripCubit>().loadTrips();
+    // context.read<AddToTripCubit>().clearSelection();
+    // context.read<AddToTripCubit>().loadTrips();
     _push(_selectTripRoute);
   }
 
   Future<void> _selectTrip(Trip trip) async {
-    final didLoad = await context.read<AddToTripCubit>().selectTrip(trip);
-    if (mounted && didLoad) _push(_selectDayRoute);
+    // final didLoad = await context.read<AddToTripCubit>().selectTrip(trip);
+    // if (mounted && didLoad) _push(_selectDayRoute);
   }
 
   Future<void> _pushHostTripDays() async {
-    final didLoad = await context
-        .read<AddToTripCubit>()
-        .loadHostTripItinerary();
-    if (mounted && didLoad) _push(_selectDayRoute);
+    // final didLoad = await context
+    //     .read<AddToTripCubit>()
+    //     .loadHostTripItinerary();
+    // if (mounted && didLoad) _push(_selectDayRoute);
   }
 
   void _closeFlow() {

@@ -6,7 +6,7 @@ import 'package:mindtrip/core/enums/otp_flow.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/utils/app_strings.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_cubit.dart';
 import 'package:mindtrip/features/authetication/presentation/cubit/auth_state.dart';
 
@@ -137,8 +137,8 @@ void _showSnackBar({
   required bool isError,
 }) {
   if (isError) {
-    AppSnackBar.showError(context: context, message: message);
+    AppGlassSnackBar.showError(context: context, message: message);
   } else {
-    AppSnackBar.showSuccess(context: context, message: message);
+    AppGlassSnackBar.showSuccess(context: context, message: message);
   }
 }

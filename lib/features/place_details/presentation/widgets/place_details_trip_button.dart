@@ -19,18 +19,19 @@ class PlaceDetailsTripButton extends StatelessWidget {
     return BlocProvider(
       create: (context) => AddToTripCubit(
         place: place,
-        getTripContainingPlace: sl(),
-        getAllTrips: sl(),
-        getItinerary: sl(),
-        addPlaceUseCase: sl(),
-        removePlaceUseCase: sl(),
-        movePlaceInTripUseCase: sl(),
-        movePlaceBetweenTripsUseCase: sl(),
-        getTripById: sl(),
-        saveTrip: sl(),
+        // getTripContainingPlace: sl(),
+        // getAllTrips: sl(),
+        // getItinerary: sl(),
+        // addPlaceUseCase: sl(),
+        // removePlaceUseCase: sl(),
+        // movePlaceInTripUseCase: sl(),
+        // movePlaceBetweenTripsUseCase: sl(),
+        // getTripById: sl(),
+        // saveTrip: sl(),
         generateItinerary: sl(),
-        saveItinerary: sl(),
-      )..init(),
+        // saveItinerary: sl(),
+      ),
+      // ..init(),
       child: BlocBuilder<AddToTripCubit, AddToTripState>(
         builder: (context, state) {
           final buttonText =

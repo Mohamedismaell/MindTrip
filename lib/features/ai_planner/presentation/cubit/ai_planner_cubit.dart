@@ -1,82 +1,34 @@
+import 'package:mindtrip/core/shared/models/interest_categories.dart';
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+import 'package:mindtrip/features/ai_planner/data/models/generate_plan_request_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/generate_plan_use_case.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/planning_session.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/delete_planning_session_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/get_planning_session_use_case.dart';
-import 'package:mindtrip/features/ai_planner/domain/usecases/save_planning_session_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
-
 import 'ai_planner_state.dart';
 
 class AiPlannerCubit extends SafeCubit<AiPlannerState> {
-  final GetPlanningSessionUseCase _getPlanningSessionUseCase;
-  final SavePlanningSessionUseCase _savePlanningSessionUseCase;
-  final DeletePlanningSessionUseCase _deletePlanningSessionUseCase;
+  AiPlannerCubit({required GeneratePlanUseCase generatePlanUseCase})
+    : _generatePlanUseCase = generatePlanUseCase,
+      super(
+        AiPlannerState(
+          focusedDay: DateTime.now(),
+          visibleMonth: DateTime(DateTime.now().year, DateTime.now().month),
+        ),
+      );
 
-  AiPlannerCubit(
-    this._getPlanningSessionUseCase,
-    this._savePlanningSessionUseCase,
-    this._deletePlanningSessionUseCase,
-  ) : super(AiPlannerState(focusedDay: DateTime.now()));
+  final GeneratePlanUseCase _generatePlanUseCase;
 
   void reset() {
-    emitSafe(AiPlannerState(focusedDay: DateTime.now()));
-  }
-
-  Future<PlanningSession?> loadSession(String tripId) async {
-    final result = await _getPlanningSessionUseCase(tripId);
-    return result.when(
-      success: (session) {
-        if (session != null) {
-          emitSafe(
-            state.copyWith(
-              tripId: session.id,
-              currentPage: session.currentPage,
-              maxReachedPage: session.currentPage,
-            ),
-          );
-        }
-        return session;
-      },
-      failure: (_) => null,
-      cancelled: () => null,
+    emitSafe(
+      AiPlannerState(
+        focusedDay: DateTime.now(),
+        visibleMonth: DateTime(DateTime.now().year, DateTime.now().month),
+      ),
     );
-  }
-
-  Future<void> saveCurrentSession({
-    List<ChatMessage> chatMessages = const [],
-    String? tripId,
-  }) async {
-    final id = tripId ?? state.tripId;
-    if (id == null) return;
-
-    final session = PlanningSession(
-      id: id,
-      currentPage: state.currentPage,
-      chatMessages: chatMessages,
-      updatedAt: DateTime.now(),
-    );
-    await _savePlanningSessionUseCase(session);
-  }
-
-  Future<void> clearSession({String? tripId}) async {
-    final id = tripId ?? state.tripId;
-    if (id == null) return;
-    await _deletePlanningSessionUseCase(id);
   }
 
   void loadFromTrip(Trip trip) {
-    BudgetTierModel? matchingBudget;
-    if (trip.budgetTier != null) {
-      try {
-        matchingBudget = AiPlannerMockData.budgetTiers.firstWhere(
-          (b) => b.title == trip.budgetTier,
-        );
-      } catch (_) {}
-    }
-
     emitSafe(
       state.copyWith(
         tripId: trip.id,
@@ -84,17 +36,13 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
         destinationQuery: trip.destination,
         tripStart: trip.tripStart,
         tripEnd: trip.tripEnd,
-        adults: trip.adults,
-        children: trip.children,
-        selectedBudget: trip.budgetTier != null ? matchingBudget : null,
-        customBudget: trip.customBudget,
+        adults: trip.people,
+        children: 0,
+        selectedBudget: null,
+        customBudget: trip.totalBudget.toString(),
         selectedInterests: trip.interests,
       ),
     );
-  }
-
-  void markReadyToGenerate() {
-    emitSafe(state.copyWith(maxReachedPage: 5));
   }
 
   Trip toTripSnapshot({required String tripId}) {
@@ -107,10 +55,9 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
       destination: state.selectedDestination ?? '',
       tripStart: state.tripStart,
       tripEnd: state.tripEnd,
-      adults: state.adults,
-      children: state.children,
-      budgetTier: state.selectedBudget?.title,
-      customBudget: state.customBudget,
+      people: state.adults + state.children,
+      totalBudget: int.tryParse(state.customBudget) ?? 0,
+      totalCost: 0,
       interests: state.selectedInterests,
     );
   }
@@ -126,31 +73,40 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
     );
   }
 
-  void nextPage() {
-    if (state.currentPage < 4) {
-      final next = state.currentPage + 1;
-      emitSafe(
-        state.copyWith(
-          currentPage: next,
-          maxReachedPage: next > state.maxReachedPage
-              ? next
-              : state.maxReachedPage,
-        ),
-      );
+  bool goNext() {
+    if (state.currentPage >= 4) {
+      return false;
     }
+
+    final next = state.currentPage + 1;
+
+    emitSafe(
+      state.copyWith(
+        currentPage: next,
+        maxReachedPage: next > state.maxReachedPage
+            ? next
+            : state.maxReachedPage,
+      ),
+    );
+
+    return true;
   }
 
-  void previousPage() {
-    if (state.currentPage > 0) {
-      emitSafe(state.copyWith(currentPage: state.currentPage - 1));
+  bool goBack() {
+    if (state.currentPage == 0) {
+      return false;
     }
+
+    emitSafe(state.copyWith(currentPage: state.currentPage - 1));
+
+    return true;
   }
 
   void updateDestinationQuery(String query) {
     if (state.selectedDestination != null &&
         state.selectedDestination!.toLowerCase() !=
             query.trim().toLowerCase()) {
-      emitSafe(state.copyWith(destinationQuery: query, clearDestination: true));
+      emitSafe(state.copyWith(destinationQuery: query));
     } else {
       emitSafe(state.copyWith(destinationQuery: query));
     }
@@ -158,23 +114,25 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
 
   void selectDestination(String destination) {
     emitSafe(
-      state.copyWith(
-        selectedDestination: destination,
-        destinationQuery: destination,
-      ),
+      state.copyWith(selectedDestination: destination, destinationQuery: ''),
     );
   }
 
   void selectTripDate(DateTime day) {
     final picked = DateTime(day.year, day.month, day.day);
-    if (state.tripStart == null ||
-        (state.tripStart != null && state.tripEnd != null)) {
-      emitSafe(state.copyWith(tripStart: picked, clearTripEnd: true));
+
+    if (state.tripStart == null) {
+      emitSafe(state.copyWith(tripStart: picked, tripEnd: null));
+      return;
+    }
+
+    if (state.tripEnd != null) {
+      emitSafe(state.copyWith(tripStart: picked, tripEnd: null));
       return;
     }
 
     if (picked.isBefore(state.tripStart!)) {
-      emitSafe(state.copyWith(tripStart: picked));
+      emitSafe(state.copyWith(tripStart: picked, tripEnd: null));
       return;
     }
 
@@ -223,12 +181,17 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
   // Budget
 
   void selectBudget(BudgetTierModel budget) {
-    emitSafe(state.copyWith(selectedBudget: budget, customBudget: ''));
+    emitSafe(
+      state.copyWith(
+        selectedBudget: budget,
+        customBudget: budget.amount.toString(),
+      ),
+    );
   }
 
   void updateCustomBudget(String value) {
     if (value.trim().isNotEmpty) {
-      emitSafe(state.copyWith(customBudget: value, clearSelectedBudget: true));
+      emitSafe(state.copyWith(customBudget: value));
     } else {
       emitSafe(state.copyWith(customBudget: value));
     }
@@ -246,6 +209,7 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
 
     emitSafe(state.copyWith(selectedInterests: currentInterests));
   }
+
   // Helpers
 
   List<String> getFilteredDestinations(String query) {
@@ -257,5 +221,35 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
         .where((destination) => destination.toLowerCase().contains(q))
         .toList();
     return filteredDestinations;
+  }
+
+  Future<void> generatePlan() async {
+    emitSafe(state.copyWith(status: AiPlannerStatus.loading));
+
+    final planResult = await _generatePlanUseCase(
+      request: GeneratePlanRequestModel(
+        interests: state.selectedInterests
+            .map(InterestCategories.stripEmoji)
+            .toList(),
+        city: state.selectedDestination!,
+        days: state.tripEnd!.difference(state.tripStart!).inDays + 1,
+        people: state.adults + state.children,
+        budget: int.tryParse(state.customBudget) ?? 0,
+      ),
+    );
+    planResult.when(
+      success: (plan) async {
+        emitSafe(state.copyWith(status: AiPlannerStatus.success));
+      },
+      failure: (error) {
+        emitSafe(
+          state.copyWith(
+            status: AiPlannerStatus.failure,
+            errorMessage: 'Failed to generate plan: ${error.message}',
+          ),
+        );
+      },
+      cancelled: () {},
+    );
   }
 }

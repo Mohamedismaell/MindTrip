@@ -5,8 +5,8 @@ part 'planner_preview_model.freezed.dart';
 part 'planner_preview_model.g.dart';
 
 @freezed
+@HiveType(typeId: 12)
 abstract class PlannerStopModel with _$PlannerStopModel {
-  @HiveType(typeId: 12)
   const factory PlannerStopModel({
     @HiveField(0) required String time,
     @HiveField(1) required String label,
@@ -19,8 +19,8 @@ abstract class PlannerStopModel with _$PlannerStopModel {
 }
 
 @freezed
+@HiveType(typeId: 13)
 abstract class PlannerPreviewModel with _$PlannerPreviewModel {
-  @HiveType(typeId: 13)
   const factory PlannerPreviewModel({
     @HiveField(0) required String title,
     @HiveField(1) required String imageUrl,

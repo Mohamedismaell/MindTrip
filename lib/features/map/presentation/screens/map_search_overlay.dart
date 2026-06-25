@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/map/presentation/bloc/map_search_bloc.dart';
 import 'package:mindtrip/features/map/presentation/bloc/map_search_event.dart';
@@ -144,13 +144,13 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                     previous.placeDetailsStatus != current.placeDetailsStatus,
                 listener: (context, state) {
                   if (state.autocompleteStatus == MapSearchStatus.error) {
-                    AppSnackBar.showError(
+                    AppGlassSnackBar.showError(
                       context: context,
                       message: state.autocompleteErrorMessage!,
                     );
                   }
                   if (state.placeDetailsStatus == MapSearchStatus.error) {
-                    AppSnackBar.showError(
+                    AppGlassSnackBar.showError(
                       context: context,
                       message: state.placeDetailsErrorMessage!,
                     );

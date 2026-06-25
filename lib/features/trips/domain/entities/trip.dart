@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:mindtrip/features/ai_planner/data/datasources/trip_cover_assets.dart';
 
-enum TripStatus { draft, inProgress, completed }
+enum TripStatus { draft, inProgress, completed, upcoming, cancelled }
 
 class Trip extends Equatable {
   final String id;
@@ -12,16 +11,24 @@ class Trip extends Equatable {
 
   // Domain data
   final String destination;
+  final String? destinationGovernorate;
   final DateTime? tripStart;
   final DateTime? tripEnd;
-  final int adults;
-  final int children;
-  final String? budgetTier;
-  final String customBudget;
+  final int people;
+  final int totalBudget;
+  final int totalCost;
   final List<String> interests;
 
-  final String? itineraryCoverUrl;
-  final List<Map<String, String>> placePreviews; // [{name, imageUrl}]
+  final String? coverImageUrl;
+  final String? sessionId;
+  final String? backendTripId;
+  final String? planJson;
+  final String? collectedJson;
+
+  final String? shareToken;
+  final bool isPublic;
+  final int placesCount;
+  final double progressPercent;
 
   const Trip({
     required this.id,
@@ -30,15 +37,22 @@ class Trip extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     required this.destination,
+    this.destinationGovernorate,
     this.tripStart,
     this.tripEnd,
-    required this.adults,
-    required this.children,
-    this.budgetTier,
-    required this.customBudget,
+    required this.people,
+    this.totalBudget = 0,
+    this.totalCost = 0,
     required this.interests,
-    this.itineraryCoverUrl,
-    this.placePreviews = const [],
+    this.coverImageUrl,
+    this.sessionId,
+    this.backendTripId,
+    this.planJson,
+    this.collectedJson,
+    this.shareToken,
+    this.isPublic = false,
+    this.placesCount = 0,
+    this.progressPercent = 0,
   });
 
   Trip copyWith({
@@ -48,15 +62,22 @@ class Trip extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     String? destination,
+    String? destinationGovernorate,
     DateTime? tripStart,
     DateTime? tripEnd,
-    int? adults,
-    int? children,
-    String? budgetTier,
-    String? customBudget,
+    int? people,
+    int? totalBudget,
+    int? totalCost,
     List<String>? interests,
-    String? itineraryCoverUrl,
-    List<Map<String, String>>? placePreviews,
+    String? coverImageUrl,
+    String? sessionId,
+    String? backendTripId,
+    String? planJson,
+    String? collectedJson,
+    String? shareToken,
+    bool? isPublic,
+    int? placesCount,
+    double? progressPercent,
   }) {
     return Trip(
       id: id ?? this.id,
@@ -65,15 +86,23 @@ class Trip extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       destination: destination ?? this.destination,
+      destinationGovernorate:
+          destinationGovernorate ?? this.destinationGovernorate,
       tripStart: tripStart ?? this.tripStart,
       tripEnd: tripEnd ?? this.tripEnd,
-      adults: adults ?? this.adults,
-      children: children ?? this.children,
-      budgetTier: budgetTier ?? this.budgetTier,
-      customBudget: customBudget ?? this.customBudget,
+      people: people ?? this.people,
+      totalBudget: totalBudget ?? this.totalBudget,
+      totalCost: totalCost ?? this.totalCost,
       interests: interests ?? this.interests,
-      itineraryCoverUrl: itineraryCoverUrl ?? this.itineraryCoverUrl,
-      placePreviews: placePreviews ?? this.placePreviews,
+      coverImageUrl: coverImageUrl ?? this.coverImageUrl,
+      sessionId: sessionId ?? this.sessionId,
+      backendTripId: backendTripId ?? this.backendTripId,
+      planJson: planJson ?? this.planJson,
+      collectedJson: collectedJson ?? this.collectedJson,
+      shareToken: shareToken ?? this.shareToken,
+      isPublic: isPublic ?? this.isPublic,
+      placesCount: placesCount ?? this.placesCount,
+      progressPercent: progressPercent ?? this.progressPercent,
     );
   }
 
@@ -81,15 +110,10 @@ class Trip extends Equatable {
     if (status != TripStatus.draft) return 1.0;
 
     // Calculate progress based on presence of data steps
-    double progress = 0.2; // Step 0: Destination (always present for a draft)
+    double progress = 0.2; // Step 0: Destination
     if (tripStart != null) progress = 0.4; // Step 1: Dates
-    if (adults > 0 || children > 0) {
-      progress = 0.6; // Step 2: Travelers
-    }
-    if ((budgetTier != null && budgetTier!.isNotEmpty) ||
-        customBudget.isNotEmpty) {
-      progress = 0.8; // Step 3: Budget
-    }
+    if (people > 0) progress = 0.6; // Step 2: Travelers
+    if (totalBudget > 0) progress = 0.8; // Step 3: Budget
     if (interests.isNotEmpty) progress = 1.0; // Step 4: Interests
 
     return progress;
@@ -114,7 +138,8 @@ class Trip extends Equatable {
     return tripEnd!.difference(tripStart!).inDays + 1;
   }
 
-  String get coverAsset => TripCoverAssets.getForCity(destination);
+  // String get coverAsset => TripCoverAssets.getForCity(destination);
+
   @override
   List<Object?> get props => [
     id,
@@ -123,12 +148,21 @@ class Trip extends Equatable {
     createdAt,
     updatedAt,
     destination,
+    destinationGovernorate,
     tripStart,
     tripEnd,
-    adults,
-    children,
-    budgetTier,
-    customBudget,
+    people,
+    totalBudget,
+    totalCost,
     interests,
+    coverImageUrl,
+    sessionId,
+    backendTripId,
+    planJson,
+    collectedJson,
+    shareToken,
+    isPublic,
+    placesCount,
+    progressPercent,
   ];
 }

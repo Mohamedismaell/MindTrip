@@ -28,10 +28,10 @@ class AddToTripRoutes {
               onCreateNew: () =>
                   context.push(AppRoutes.addToTripCreatePlan, extra: cubit),
               onTripSelected: (trip) async {
-                final success = await cubit.selectTrip(trip);
-                if (success && context.mounted) {
-                  context.push(AppRoutes.addToTripSelectDay, extra: cubit);
-                }
+                // final success = await cubit.selectTrip(trip);
+                // if (success && context.mounted) {
+                context.push(AppRoutes.addToTripSelectDay, extra: cubit);
+                // }
               },
             ),
           ),
@@ -79,14 +79,14 @@ class AddToTripRoutes {
                 }
               },
               onMoveToDay: () async {
-                final success = await cubit.loadHostTripItinerary();
-                if (success && context.mounted) {
-                  context.push(AppRoutes.addToTripSelectDay, extra: cubit);
-                }
+                // final success = await cubit.loadHostTripItinerary();
+                // if (success && context.mounted) {
+                context.push(AppRoutes.addToTripSelectDay, extra: cubit);
+                // }
               },
               onMoveToTrip: () {
-                cubit.clearSelection();
-                context.push(AppRoutes.addToTripSelectTrip, extra: cubit);
+                // cubit.clearSelection();
+                // context.push(AppRoutes.addToTripSelectTrip, extra: cubit);
               },
             ),
           ),

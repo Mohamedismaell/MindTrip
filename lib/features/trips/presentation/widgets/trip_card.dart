@@ -24,14 +24,14 @@ class TripCard extends StatelessWidget {
   final Trip trip;
   final VoidCallback onContinue;
   final TripStatus tripStatus;
-  String get _coverImage => trip.itineraryCoverUrl ?? trip.coverAsset;
+  String get _coverImage => trip.coverImageUrl ?? trip.coverImageUrl ?? '';
 
   @override
   Widget build(BuildContext context) {
     final isInprogress = tripStatus == TripStatus.inProgress;
     final isDradt = tripStatus == TripStatus.draft;
 
-    final places = trip.placePreviews;
+    final places = const [];
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 5.w),

@@ -1,15 +1,24 @@
-import 'package:mindtrip/features/ai_planner/data/datasources/mock_chat_datasource.dart';
+import 'package:mindtrip/features/ai_planner/data/datasources/chat_remote_datasource.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
   const ChatRepositoryImpl({required this.dataSource});
 
-  final ChatDataSource dataSource;
+  final ChatRemoteDataSource dataSource;
 
   @override
-  Future<ChatMessage> sendMessage(String message) async {
-    final model = await dataSource.sendMessage(message);
+  Future<ChatMessage> sendMessage(
+    String message, {
+    required String sessionId,
+    CollectedPlannerData? collected,
+  }) async {
+    final model = await dataSource.sendMessage(
+      message,
+      sessionId: sessionId,
+      collected: collected,
+    );
     return model.toEntity();
   }
 

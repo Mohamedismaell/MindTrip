@@ -16,6 +16,7 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/dur
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/interests_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/travelers_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/ai_chat_bot_button.dart';
+import 'package:uuid/uuid.dart';
 
 class AiPlannerFlowScreen extends StatelessWidget {
   const AiPlannerFlowScreen({super.key, this.tripId});
@@ -43,17 +44,13 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   final TextEditingController _customBudgetController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late final AiPlannerCubit _plannerCubit;
-  late final ChatCubit _chatCubit;
-  late final TripsCubit _tripsCubit;
-  String? _activeTripId;
+  final String _sessionId = const Uuid().v4();
 
   @override
   void initState() {
     super.initState();
 
     _plannerCubit = context.read<AiPlannerCubit>();
-    _chatCubit = context.read<ChatCubit>();
-    _tripsCubit = context.read<TripsCubit>();
 
     _destinationController.addListener(() {
       if (!_plannerCubit.isClosed) {
@@ -67,43 +64,26 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
       }
     });
 
-    if (widget.tripId != null) {
-      _activeTripId = widget.tripId;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _resumeFromTripId(widget.tripId!);
-      });
-    }
+    // if (widget.tripId != null) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     _resumeFromTripId(widget.tripId!);
+    //   });
+    // }
   }
 
-  Future<void> _resumeFromTripId(String tripId) async {
-    if (_tripsCubit.isClosed) return;
-    if (_tripsCubit.state.trips.isEmpty) {
-      await _tripsCubit.loadTrips();
-    }
-    if (_tripsCubit.isClosed) return;
-
-    final trip = _tripsCubit.state.getTripById(tripId);
-    if (trip == null || !mounted) return;
-
-    if (!_plannerCubit.isClosed) _plannerCubit.loadFromTrip(trip);
-
-    if (_plannerCubit.isClosed) return;
-    final session = await _plannerCubit.loadSession(tripId);
-
-    if (_chatCubit.isClosed) return;
-    if (session != null && session.chatMessages.isNotEmpty) {
-      _chatCubit.loadMessages(session.chatMessages);
-    }
-
-    _destinationController.text = trip.destination;
-    _customBudgetController.text = trip.customBudget;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_pageController.hasClients) {
-        _pageController.jumpToPage(_plannerCubit.state.currentPage);
-      }
-    });
-  }
+  // Future<void> _resumeFromTripId(String tripId) async {
+  //   if (_tripsCubit.isClosed) return;
+  //   final trip = _tripsCubit.state.getTripById(tripId);
+  //   if (trip == null || !mounted) return;
+  //   if (!_plannerCubit.isClosed) _plannerCubit.loadFromTrip(trip);
+  //   _destinationController.text = trip.destination;
+  //   _customBudgetController.text = trip.totalBudget.toString();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     if (_pageController.hasClients) {
+  //       _pageController.jumpToPage(_plannerCubit.state.currentPage);
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -114,77 +94,34 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
     super.dispose();
   }
 
+  // Future<void> _handleBack(bool isLeaving) async {
+  //   if (_plannerCubit.state.currentPage == 0 || isLeaving) {
+  //     if (mounted) context.pop();
+  //     return;
+  //   }
+  //   _plannerCubit.previousPage();
+  // }
   Future<void> _handleBack(bool isLeaving) async {
-    if (_plannerCubit.isClosed) return;
-
-    if (_plannerCubit.state.currentPage == 0 || isLeaving) {
-      await _autoSave();
+    if (isLeaving) {
       if (mounted) context.pop();
       return;
     }
-    _plannerCubit.previousPage();
-    await _autoSave();
+
+    final canGoBack = _plannerCubit.goBack();
+
+    if (!canGoBack && mounted) {
+      context.pop();
+    }
   }
 
   Future<void> _onStepCompleted() async {
-    if (_plannerCubit.isClosed) return;
     FocusScope.of(context).unfocus();
-    if (_plannerCubit.state.currentPage < 4) {
-      _plannerCubit.nextPage();
-      await _autoSave();
-    } else {
-      _finishPlanning();
+
+    final hasNextPage = _plannerCubit.goNext();
+
+    if (!hasNextPage) {
+      _plannerCubit.generatePlan();
     }
-  }
-
-  Future<void> _autoSave() async {
-    if (_tripsCubit.isClosed || _plannerCubit.isClosed) return;
-
-    final plannerState = _plannerCubit.state;
-    if (plannerState.selectedDestination == null ||
-        plannerState.selectedDestination!.isEmpty) {
-      return;
-    }
-
-    if (_activeTripId == null) {
-      //* First time need to create a draft
-      final newId = await _tripsCubit.createDraft(
-        plannerState.selectedDestination!,
-      );
-      if (_tripsCubit.isClosed) return;
-      _activeTripId = newId;
-    }
-
-    final snapshot = _plannerCubit.toTripSnapshot(tripId: _activeTripId!);
-    await _tripsCubit.saveTripDraft(snapshot);
-
-    if (_plannerCubit.isClosed || _chatCubit.isClosed) return;
-    // Single writer: pass current chat state into session
-    await _plannerCubit.saveCurrentSession(
-      chatMessages: _chatCubit.state.messages,
-      tripId: _activeTripId,
-    );
-  }
-
-  Future<void> _finishPlanning() async {
-    if (_tripsCubit.isClosed || _plannerCubit.isClosed) {
-      return;
-    }
-    _plannerCubit.markReadyToGenerate();
-    await _autoSave();
-
-    if (_tripsCubit.isClosed || _plannerCubit.isClosed) return;
-
-    // Session cleanup: the planning chat has no value after generation starts.
-    await _plannerCubit.clearSession(tripId: _activeTripId);
-
-    if (_activeTripId == null) {
-      if (mounted) context.pop();
-      return;
-    }
-    if (!mounted) return;
-
-    _tripsCubit.generateTrip(_activeTripId!);
   }
 
   @override
@@ -204,7 +141,9 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
       },
       child: Scaffold(
         backgroundColor: context.colorTheme.surface,
-        floatingActionButton: showFab ? const AiChatBotButton() : null,
+        floatingActionButton: showFab
+            ? AiChatBotButton(sessionId: _sessionId)
+            : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
@@ -222,7 +161,6 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                         icon: Icons.arrow_back_rounded,
                         onTap: () => _handleBack(false),
                       ),
-
                       Builder(
                         builder: (context) {
                           final page = context.select(
@@ -241,14 +179,12 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                           color: AppColors.primaryLightGray,
                           shape: BoxShape.circle,
                         ),
-                        //Todo change the icon into X Icon
                         child: TapScaleEffect(
                           onTap: () => _handleBack(true),
                           child: Padding(
                             padding: EdgeInsets.all(10.r),
                             child: Icon(
                               Icons.close,
-                              // size: 30.sp,
                               color: context.colorTheme.onSurfaceVariant,
                             ),
                           ),
@@ -267,7 +203,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                           DestinationStep(
                             controller: _destinationController,
                             onDestinationTap: (dest) {
-                              _destinationController.text = dest;
+                              _destinationController.text = '';
                             },
                             onContinue: _onStepCompleted,
                           ),

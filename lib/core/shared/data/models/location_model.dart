@@ -5,8 +5,8 @@ part 'location_model.freezed.dart';
 part 'location_model.g.dart';
 
 @freezed
+@HiveType(typeId: 2, adapterName: 'LocationModelAdapter')
 abstract class LocationModel with _$LocationModel {
-  @HiveType(typeId: 2, adapterName: 'LocationModelAdapter')
   const factory LocationModel({
     @JsonKey(name: 'location') @HiveField(0) @Default('') String address,
     @HiveField(1) @Default(0.0) double latitude,

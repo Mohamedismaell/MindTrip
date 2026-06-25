@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -68,7 +68,7 @@ class AttachmentPickerService {
     final bytes = await File(file.path).length();
     if (bytes > maxVideoBytes) {
       if (context.mounted) {
-        AppSnackBar.showError(
+        AppGlassSnackBar.showError(
           context: context,
           message: 'Video exceeds 100 MB limit and was not sent.',
         );
@@ -89,7 +89,7 @@ class AttachmentPickerService {
 
     final capped = result.files.take(maxFiles).toList();
     if (result.files.length > maxFiles && context.mounted) {
-      AppSnackBar.showError(
+      AppGlassSnackBar.showError(
         context: context,
         message:
             'Maximum $maxFiles files allowed. Only the first $maxFiles were selected.',
@@ -101,7 +101,7 @@ class AttachmentPickerService {
       final size = f.size;
       if (size > maxFileBytes) {
         if (context.mounted) {
-          AppSnackBar.showError(
+          AppGlassSnackBar.showError(
             context: context,
             message: '"${f.name}" exceeds 25 MB and was not attached.',
           );
@@ -128,7 +128,7 @@ class AttachmentPickerService {
     if (files.length > maxCount) {
       capped = files.take(maxCount).toList();
       if (context.mounted) {
-        AppSnackBar.showError(
+        AppGlassSnackBar.showError(
           context: context,
           message:
               'Maximum $maxCount ${typeName}s allowed. Extras were removed.',
@@ -142,7 +142,7 @@ class AttachmentPickerService {
       final bytes = await File(f.path).length();
       if (bytes > maxBytes) {
         if (context.mounted) {
-          AppSnackBar.showError(
+          AppGlassSnackBar.showError(
             context: context,
             message:
                 '"${f.name}" exceeds $sizeLimitLabel and was not attached.',
@@ -175,7 +175,7 @@ class AttachmentPickerService {
       );
     }
     if (context.mounted) {
-      AppSnackBar.showError(context: context, message: denied);
+      AppGlassSnackBar.showError(context: context, message: denied);
     }
     return false;
   }

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_snackbar.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_state.dart';
 
@@ -18,22 +19,27 @@ class EditProfileListeners extends StatelessWidget {
           listenWhen: (prev, curr) => prev.saveStatus != curr.saveStatus,
           listener: (context, state) {
             if (state.saveStatus == EditSaveStatus.success) {
-              AppSnackBar.showSuccess(
+              AppGlassSnackBar.showSuccess(
                 context: context,
                 message: 'Profile updated!',
               );
+
               if (context.canPop()) {
                 context.pop();
               } else {
                 context.go(AppRoutes.profile);
               }
             } else if (state.saveStatus == EditSaveStatus.failed) {
-              AppSnackBar.showError(
+              AppGlassSnackBar.showError(
                 context: context,
-                message:
-                    state.editErrorMessage ??
-                    'Failed to save changes. Please try again.',
+                message: 'Failed to update profile',
               );
+              // AppGlassSnackBar.showError(
+              //   context: context,
+              //   message:
+              //       state.editErrorMessage ??
+              //       'Failed to save changes. Please try again.',
+              // );
               context.read<EditProfileCubit>().dismissError();
             }
           },
@@ -47,7 +53,7 @@ class EditProfileListeners extends StatelessWidget {
               context.read<AppGateCubit>().accountDeleted();
             } else if (state.deleteStatus == DeleteAccountStatus.failed &&
                 context.mounted) {
-              AppSnackBar.showError(
+              AppGlassSnackBar.showError(
                 context: context,
                 message: 'Failed to delete account, please try again.',
               );

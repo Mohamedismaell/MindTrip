@@ -1,121 +1,53 @@
-import 'package:hive_ce_flutter/adapters.dart';
-import 'package:mindtrip/features/trips/domain/entities/trip.dart';
-import 'dart:convert';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'trip_model.freezed.dart';
 part 'trip_model.g.dart';
 
-@HiveType(typeId: 5)
-class TripModel extends HiveObject {
-  @HiveField(0)
-  final String id;
+@freezed
+abstract class TripModel with _$TripModel {
+  const factory TripModel({
+    required String tripId,
 
-  @HiveField(1)
-  final String title;
+    required String title,
 
-  @HiveField(2)
-  final String status;
+    required String destinationGovernorate,
 
-  @HiveField(3)
-  final DateTime createdAt;
+    required String city,
 
-  @HiveField(4)
-  final DateTime updatedAt;
+    DateTime? startDate,
 
-  @HiveField(5)
-  final String destination;
+    DateTime? endDate,
 
-  @HiveField(6)
-  final DateTime? tripStart;
+    int? durationDays,
 
-  @HiveField(7)
-  final DateTime? tripEnd;
+    required int people,
 
-  @HiveField(8)
-  final int adults;
+    required int totalBudgetEgp,
 
-  @HiveField(9)
-  final int children;
-  @HiveField(10)
-  final String? budgetTier;
+    required int totalCost,
 
-  @HiveField(11)
-  final String customBudget;
+    required String status,
 
-  @HiveField(12)
-  final List<String> interests;
+    String? shareToken,
 
-  @HiveField(13)
-  final String? itineraryCoverUrl;
+    @Default(false) bool isPublic,
 
-  @HiveField(16)
-  final String placePreviewsJson;
+    String? sessionId,
 
-  TripModel({
-    required this.id,
-    required this.title,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.destination,
-    this.tripStart,
-    this.tripEnd,
-    required this.adults,
-    required this.children,
-    this.budgetTier,
-    required this.customBudget,
-    required this.interests,
-    this.itineraryCoverUrl,
-    this.placePreviewsJson = '[]',
-  });
+    String? collectedJson,
 
-  factory TripModel.fromEntity(Trip trip) {
-    return TripModel(
-      id: trip.id,
-      title: trip.title,
-      status: trip.status.name,
-      createdAt: trip.createdAt,
-      updatedAt: trip.updatedAt,
-      destination: trip.destination,
-      tripStart: trip.tripStart,
-      tripEnd: trip.tripEnd,
-      adults: trip.adults,
-      children: trip.children,
-      budgetTier: trip.budgetTier,
-      customBudget: trip.customBudget,
-      interests: trip.interests,
-      itineraryCoverUrl: trip.itineraryCoverUrl,
-      placePreviewsJson: jsonEncode(trip.placePreviews),
-    );
-  }
+    String? coverImageUrl,
 
-  Trip toEntity() {
-    return Trip(
-      id: id,
-      title: title,
-      status: TripStatus.values.firstWhere(
-        (e) => e.name == status,
-        orElse: () => TripStatus.draft,
-      ),
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      destination: destination,
-      tripStart: tripStart,
-      tripEnd: tripEnd,
-      adults: adults,
-      children: children,
-      budgetTier: budgetTier,
-      customBudget: customBudget,
-      interests: interests,
-      itineraryCoverUrl: itineraryCoverUrl,
-      placePreviews: _parsePlacePreviews(),
-    );
-  }
+    @Default(0) int placesCount,
 
-  List<Map<String, String>> _parsePlacePreviews() {
-    try {
-      final List<dynamic> decoded = jsonDecode(placePreviewsJson);
-      return decoded.map((e) => Map<String, String>.from(e as Map)).toList();
-    } catch (_) {
-      return [];
-    }
-  }
+    double? progressPercent,
+
+    required DateTime createdAt,
+
+    required DateTime updatedAt,
+
+    dynamic plan,
+  }) = _TripModel;
+  factory TripModel.fromJson(Map<String, dynamic> json) =>
+      _$TripModelFromJson(json);
 }

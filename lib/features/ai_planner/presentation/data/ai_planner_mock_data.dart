@@ -5,15 +5,15 @@ class AiPlannerMockData {
   static const List<String> destinations = [
     'Cairo',
     'Giza',
-    'Dahab',
     'Alexandria',
-    'Aswan',
+    'Ismailia',
+    'Port Said',
     'Luxor',
+    'Aswan',
     'Hurghada',
-    'Sharm El-Sheikh',
     'Fayoum',
-    'Sinai',
-    'Matrouh',
+    'Sharm El Sheikh',
+    'Marsa Matrouh',
   ];
   static const List<String> monthNames = [
     'January',

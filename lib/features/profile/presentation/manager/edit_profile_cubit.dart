@@ -60,6 +60,12 @@ class EditProfileCubit extends SafeCubit<EditProfileState> {
     emitSafe(state.copyWith(draftPhoneNumber: value));
   }
 
+  void updateBio(String value) {
+    if (!isClosed) {
+      emit(state.copyWith(draftBio: value));
+    }
+  }
+
   Future<void> saveChanges() async {
     if (!state.hasChanges) return;
     _getEditToken();

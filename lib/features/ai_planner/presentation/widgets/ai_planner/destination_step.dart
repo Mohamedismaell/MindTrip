@@ -5,6 +5,7 @@ import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
+import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_hint.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/ai_flow_action_button.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/selection_tile.dart';
@@ -73,7 +74,6 @@ class _DestinationsList extends StatefulWidget {
 
 class _DestinationsListState extends State<_DestinationsList> {
   final ScrollController _scrollController = ScrollController();
-
   @override
   void dispose() {
     _scrollController.dispose();
@@ -105,6 +105,7 @@ class _DestinationsListState extends State<_DestinationsList> {
               trackVisibility: true,
               thickness: 2.w,
               child: ListView.separated(
+                // key: ValueKey(cubit.state.destinationQuery),
                 padding: EdgeInsets.only(right: 10.w, bottom: 20),
                 controller: _scrollController,
                 itemCount: cubit
@@ -114,13 +115,26 @@ class _DestinationsListState extends State<_DestinationsList> {
                   final destination = cubit.getFilteredDestinations(
                     cubit.state.destinationQuery,
                   )[index];
+
                   return SelectionTile(
                     label: destination,
                     selected: selectedDestination == destination,
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      widget._onDestinationTap(destination);
                       cubit.selectDestination(destination);
+                      // cubit.updateDestinationQuery('');
+                      widget._onDestinationTap(destination);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        final itemIndex = AiPlannerMockData.destinations
+                            .indexOf(destination);
+                        if (itemIndex != -1) {
+                          _scrollController.animateTo(
+                            itemIndex * 70.h,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOut,
+                          );
+                        }
+                      });
                     },
                   );
                 },
