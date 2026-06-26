@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:mindtrip/core/shared/models/interest_categories.dart';
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
@@ -240,10 +237,12 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
 
   Future<void> generatePlan({
     GeneratePlanRequestModel? generatePlanRequestModel,
+    DateTime? tripStart,
   }) async {
     final request = generatePlanRequestModel ?? _buildGeneratePlanRequest();
     final collectedData = _buildCollectedData(request);
-
+    final start = tripStart ?? state.tripStart;
+    final end = start?.add(Duration(days: request.days - 1));
     emitSafe(
       state.copyWith(
         status: AiPlannerStatus.generatingPlan,
@@ -251,6 +250,8 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
         generatedPlan: null,
         savedTripId: null,
         collectedData: collectedData,
+        tripStart: start,
+        tripEnd: end,
       ),
     );
 
@@ -285,26 +286,23 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
     emitSafe(
       state.copyWith(status: AiPlannerStatus.savingTrip, errorMessage: ''),
     );
-    debugPrint('================ GENERATED PLAN ================');
-    debugPrint('daysCount = ${generatedPlan.daysCount}');
-    debugPrint('days keys = ${generatedPlan.days.keys}');
-    debugPrint('days length = ${generatedPlan.days.length}');
-    debugPrint('accommodation = ${generatedPlan.accommodation.length}');
+    // debugPrint('================ GENERATED PLAN ================');
+    // debugPrint('daysCount = ${generatedPlan.daysCount}');
+    // debugPrint('days keys = ${generatedPlan.days.keys}');
+    // debugPrint('days length = ${generatedPlan.days.length}');
+    // debugPrint('accommodation = ${generatedPlan.accommodation.length}');
     final request = generatedPlan.toCreateTripRequest(
       collected: state.collectedData,
       sessionId: state.sessionId,
       startDate: state.tripStart,
       endDate: state.tripEnd,
     );
-    debugPrint('================ REQUEST MODEL ================');
-    debugPrint('request.plan.plan.days = ${request.plan.plan?.days.keys}');
-    debugPrint(
-      'request.plan.plan.days length = ${request.plan.plan?.days.length}',
-    );
-    final body = request.toJson();
+    // debugPrint('================ REQUEST MODEL ================');
+    // debugPrint('request.plan.plan.days = ${request.plan.plan?.days.keys}');
+    // debugPrint(
+    //   'request.plan.plan.days length = ${request.plan.plan?.days.length}',
+    // );
 
-    const encoder = JsonEncoder.withIndent('  ');
-    debugPrint(encoder.convert(body));
     final saveResult = await _createTripUseCase(request);
     saveResult.when(
       success: (trip) {

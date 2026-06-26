@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/manager/edit_profile_state.dart';
 

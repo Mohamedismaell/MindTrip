@@ -17,7 +17,8 @@ class GeneratePlanCard extends StatelessWidget {
 
   final CollectedPlannerDataEntity collected;
   final String aiMessage;
-  final ValueChanged<GeneratePlanRequestModel> onGenerate;
+  final void Function(GeneratePlanRequestModel request, {DateTime? tripStart})
+  onGenerate;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,7 @@ class GeneratePlanCard extends StatelessWidget {
                     budget: collected.budget,
                     interests: collected.interests,
                   ),
+                  tripStart: DateTime.parse(collected.date!),
                 );
               },
               icon: const Icon(Icons.auto_awesome),

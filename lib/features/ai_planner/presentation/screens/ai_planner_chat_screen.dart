@@ -15,7 +15,6 @@ import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart'
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_input_bar.dart';
 
-//Todo Bug with float button wrong nav route
 class AiPlannerChatScreen extends StatefulWidget {
   const AiPlannerChatScreen({super.key});
   @override
@@ -141,8 +140,6 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
       description: 'Your current chat will be cleared',
       primaryText: "Start new",
       onPrimary: () {
-        // Navigator.pop(context);
-
         final userName =
             context.read<UserCubit>().state.user?.displayName ?? 'Mohamed';
         context.read<ChatCubit>().startNewConversation(userName);
@@ -150,35 +147,15 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
       },
       secondaryText: "Cancel",
     );
-    // showDialog(
-    //   context: context,
-    //   builder: (_) => AlertDialog(
-    //     title: const Text('Start new conversation?'),
-    //     content: const Text('Your current chat will be cleared.'),
-    //     actions: [
-    //       TextButton(
-    //         onPressed: () => Navigator.pop(context),
-    //         child: const Text('Cancel'),
-    //       ),
-    //       TextButton(
-    //         onPressed: () {
-    //           final userName =
-    //               context.read<UserCubit>().state.user?.displayName ??
-    //               'Traveler';
-    //           context.read<ChatCubit>().startNewConversation(userName);
-    //         },
-    //         child: const Text('Start new'),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 
   Future<void> _onGeneratePlan(
-    GeneratePlanRequestModel generatePlanRequestModel,
-  ) async {
+    GeneratePlanRequestModel generatePlanRequestModel, {
+    DateTime? tripStart,
+  }) async {
     context.read<AiPlannerCubit>().generatePlan(
       generatePlanRequestModel: generatePlanRequestModel,
+      tripStart: tripStart,
     );
   }
 

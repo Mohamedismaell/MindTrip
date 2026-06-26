@@ -1,6 +1,6 @@
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
-TripStatus _statusFromString(String value) {
+TripStatus statusFromString(String value) {
   switch (value.toLowerCase()) {
     case 'draft':
       return TripStatus.draft;
@@ -19,7 +19,7 @@ TripStatus _statusFromString(String value) {
   }
 }
 
-String _statusToString(TripStatus status) {
+String statusToString(TripStatus status) {
   switch (status) {
     case TripStatus.draft:
       return 'Draft';

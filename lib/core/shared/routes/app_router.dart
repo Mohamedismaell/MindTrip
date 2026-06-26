@@ -8,7 +8,6 @@ import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
-import 'package:mindtrip/features/add_to_trip/routes/add_to_trip_routes.dart';
 import 'package:mindtrip/features/ai_planner/routes/ai_planner_routes.dart';
 import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
 import 'package:mindtrip/features/favorite/routes/favorites_routes.dart';

@@ -5,6 +5,7 @@ class CollectedPlannerDataEntity extends Equatable {
     this.destination = '',
     this.days = 0,
     this.budget = 0,
+    this.date,
     this.interests = const [],
     this.people = 0,
     this.mustInclude = const [],
@@ -13,6 +14,7 @@ class CollectedPlannerDataEntity extends Equatable {
   final String destination;
   final int days;
   final int budget;
+  final String? date;
   final List<String> interests;
   final int people;
   final List<String> mustInclude;

@@ -27,19 +27,20 @@ class TravelersStep extends StatelessWidget {
         ),
         SizedBox(height: 42.h),
         CounterRow(
-          label: 'Adults',
+          label: 'Travelers',
           value: adults,
           onDecrease: () => cubit.changeAdults(-1),
           onIncrease: () => cubit.changeAdults(1),
           showDivider: true,
         ),
-        CounterRow(
-          label: 'Children',
-          value: children,
-          onDecrease: () => cubit.changeChildren(-1),
-          onIncrease: () => cubit.changeChildren(1),
-          showDivider: true,
-        ),
+        // CounterRow(
+        //   label: 'Children',
+        //   value: children,
+        //   onDecrease: () => cubit.changeChildren(-1),
+        //   onIncrease: () => cubit.changeChildren(1),
+        //   showDivider: true,
+        // ),
+        // SizedBox(height: 200.h),
         AiFlowActionButton(text: 'Continue', onTap: onContinue),
         SizedBox(height: 24.h),
         Center(

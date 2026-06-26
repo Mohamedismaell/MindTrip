@@ -15,12 +15,27 @@ extension CreateTripRequestMapper on GeneratedPlanEntity {
         ? 'Unknown'
         : collected.destination;
 
+    DateTime? resolvedStartDate = startDate;
+    DateTime? resolvedEndDate = endDate;
+
+    if (resolvedStartDate == null &&
+        collected.date != null &&
+        collected.date!.isNotEmpty) {
+      resolvedStartDate = DateTime.parse(collected.date!);
+    }
+
+    if (resolvedEndDate == null && resolvedStartDate != null) {
+      resolvedEndDate = resolvedStartDate.add(
+        Duration(days: collected.days > 0 ? collected.days - 1 : 0),
+      );
+    }
+
     return CreateTripRequestModel(
       title: 'Trip to $resolvedDestination',
       destinationGovernorate: resolvedDestination,
       city: resolvedDestination,
-      startDate: startDate?.toIso8601String(),
-      endDate: endDate?.toIso8601String(),
+      startDate: resolvedStartDate?.toIso8601String(),
+      endDate: resolvedEndDate?.toIso8601String(),
       people: collected.people > 0 ? collected.people : people,
       totalBudgetEgp: collected.budget > 0
           ? collected.budget

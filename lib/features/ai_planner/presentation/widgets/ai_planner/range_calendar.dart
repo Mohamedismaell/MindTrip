@@ -148,6 +148,12 @@ class _RangeCalendarState extends State<RangeCalendar> {
               headerVisible: false,
               rangeStartDay: startDate,
               rangeEndDay: endDate,
+              enabledDayPredicate: (day) {
+                final today = DateTime.now();
+                final todayOnly = DateTime(today.year, today.month, today.day);
+
+                return !day.isBefore(todayOnly);
+              },
               rangeSelectionMode: RangeSelectionMode.toggledOn,
               daysOfWeekHeight: 40.h,
               rowHeight: 50.h,

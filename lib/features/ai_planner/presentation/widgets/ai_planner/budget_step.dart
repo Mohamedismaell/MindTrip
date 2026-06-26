@@ -38,7 +38,7 @@ class BudgetStep extends StatelessWidget {
               StepHeading(
                 title: 'What is your budget?',
                 subtitle: 'this is the total budget for the entire group',
-                icon: Icons.paid_rounded,
+                icon: Icons.payments_rounded,
               ),
               SizedBox(height: 24.h),
               GridView.builder(

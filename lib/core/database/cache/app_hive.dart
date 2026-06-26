@@ -13,7 +13,6 @@ class AppHive {
   static late Box<String> favoritesSyncQueueBox;
   static late Box<PlaceModel> placesCacheBox;
   static late Box<Map> tripsBox;
-  static late Box<String> itinerariesBox;
   static late Box planningSessionsBox;
   static late Box<BannerModel> bannersBox;
   static late Box<PlannerPreviewModel> plannerPreviewsBox;
@@ -61,7 +60,6 @@ class AppHive {
     favoritesSyncQueueBox = await Hive.openBox('favoritesSyncQueueBox');
     placesCacheBox = await Hive.openBox('placesCacheBox');
     tripsBox = await Hive.openBox<Map>('tripsBox');
-    itinerariesBox = await Hive.openBox<String>('itinerariesBox');
     planningSessionsBox = await Hive.openBox('planning_sessions');
     bannersBox = await Hive.openBox<BannerModel>('bannersBox');
     plannerPreviewsBox = await Hive.openBox<PlannerPreviewModel>(
@@ -76,7 +74,6 @@ class AppHive {
     favoritesSyncQueueBox.clear();
     placesCacheBox.clear();
     tripsBox.clear();
-    itinerariesBox.clear();
     planningSessionsBox.clear();
     bannersBox.clear();
     plannerPreviewsBox.clear();

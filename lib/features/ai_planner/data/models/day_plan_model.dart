@@ -1,38 +1,58 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:mindtrip/features/ai_planner/data/models/plan_place_model.dart';
-
-part 'day_plan_model.freezed.dart';
-part 'day_plan_model.g.dart';
 
 enum PlaceDayPeriod { morning, afternoon, evening }
 
-@freezed
-abstract class DayPlanModel with _$DayPlanModel {
-  const DayPlanModel._();
+class DayPlanModel extends Equatable {
+  const DayPlanModel({
+    this.morning = const [],
+    this.afternoon = const [],
+    this.evening = const [],
+  });
 
-  const factory DayPlanModel({
-    @JsonKey(fromJson: _parsePlaces) @Default([]) List<PlanPlaceModel> morning,
+  final List<PlanPlaceModel> morning;
+  final List<PlanPlaceModel> afternoon;
+  final List<PlanPlaceModel> evening;
 
-    @JsonKey(fromJson: _parsePlaces)
-    @Default([])
-    List<PlanPlaceModel> afternoon,
-
-    @JsonKey(fromJson: _parsePlaces) @Default([]) List<PlanPlaceModel> evening,
-  }) = _DayPlanModel;
-
-  /// All places across all periods, in order.
   List<PlanPlaceModel> get allPlaces => [...morning, ...afternoon, ...evening];
 
-  factory DayPlanModel.fromJson(Map<String, dynamic> json) =>
-      _$DayPlanModelFromJson(json);
+  factory DayPlanModel.fromJson(Map<String, dynamic> json) {
+    return DayPlanModel(
+      morning: _parsePlaces(json['morning']),
+      afternoon: _parsePlaces(json['afternoon']),
+      evening: _parsePlaces(json['evening']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'morning': morning.map((e) => e.toJson()).toList(),
+      'afternoon': afternoon.map((e) => e.toJson()).toList(),
+      'evening': evening.map((e) => e.toJson()).toList(),
+    };
+  }
+
+  DayPlanModel copyWith({
+    List<PlanPlaceModel>? morning,
+    List<PlanPlaceModel>? afternoon,
+    List<PlanPlaceModel>? evening,
+  }) {
+    return DayPlanModel(
+      morning: morning ?? this.morning,
+      afternoon: afternoon ?? this.afternoon,
+      evening: evening ?? this.evening,
+    );
+  }
+
+  @override
+  List<Object?> get props => [morning, afternoon, evening];
 }
 
-/// Safely parse a list that may contain nulls or non-map entries.
 List<PlanPlaceModel> _parsePlaces(dynamic value) {
-  if (value is! List) return [];
+  if (value is! List) return const [];
 
   return value
-      .whereType<Map<String, dynamic>>() // filters out null entries
+      .whereType<Map<String, dynamic>>()
       .map(PlanPlaceModel.fromJson)
       .toList();
 }

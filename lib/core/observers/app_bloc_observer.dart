@@ -1,26 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBlocObserver extends BlocObserver {
+  static const int _chunkSize = 800;
+  static const int _maxLength = 3000;
+
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
 
     if (!kDebugMode) return;
-    print('🟢 ${bloc.runtimeType} created');
-  }
 
-  @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-
-    if (!kDebugMode) return;
-
-    print(
-      '🔄 ${bloc.runtimeType}'
-      ' | ${change.currentState.runtimeType}'
-      ' → ${change.nextState.runtimeType}',
-    );
+    debugPrint('🟢 ${bloc.runtimeType} created');
   }
 
   @override
@@ -29,10 +22,7 @@ class AppBlocObserver extends BlocObserver {
 
     if (!kDebugMode) return;
 
-    print(
-      '📥 ${bloc.runtimeType}'
-      ' | ${event.runtimeType}',
-    );
+    debugPrint('📥 ${bloc.runtimeType} | ${event.runtimeType}');
   }
 
   @override
@@ -41,12 +31,37 @@ class AppBlocObserver extends BlocObserver {
 
     if (!kDebugMode) return;
 
-    print(
+    debugPrint(
       '🔀 ${bloc.runtimeType}'
       ' | ${transition.event.runtimeType}'
       ' | ${transition.currentState.runtimeType}'
       ' → ${transition.nextState.runtimeType}',
     );
+
+    // Uncomment while debugging ONE specific bloc.
+    //
+    // if (bloc.runtimeType.toString() == 'AiPlannerCubit') {
+    //   _log(_pretty(transition.nextState));
+    // }
+  }
+
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+
+    if (!kDebugMode) return;
+
+    debugPrint(
+      '🔄 ${bloc.runtimeType}'
+      ' | ${change.currentState.runtimeType}'
+      ' → ${change.nextState.runtimeType}',
+    );
+
+    // Uncomment while debugging ONE specific cubit.
+    //
+    // if (bloc.runtimeType.toString() == 'TripDetailsCubit') {
+    //   _log(_pretty(change.nextState));
+    // }
   }
 
   @override
@@ -55,9 +70,15 @@ class AppBlocObserver extends BlocObserver {
 
     if (!kDebugMode) return;
 
-    print('❌ ${bloc.runtimeType}');
-    print('Error: $error');
-    print(stackTrace);
+    _log('''
+❌ ${bloc.runtimeType}
+
+ERROR:
+$error
+
+STACKTRACE:
+$stackTrace
+''');
   }
 
   @override
@@ -65,6 +86,47 @@ class AppBlocObserver extends BlocObserver {
     super.onClose(bloc);
 
     if (!kDebugMode) return;
-    print('🔴 ${bloc.runtimeType} closed');
+
+    debugPrint('🔴 ${bloc.runtimeType} closed');
+  }
+
+  void _log(String text) {
+    for (var i = 0; i < text.length; i += _chunkSize) {
+      debugPrint(
+        text.substring(
+          i,
+          i + _chunkSize > text.length ? text.length : i + _chunkSize,
+        ),
+      );
+    }
+  }
+
+  String _pretty(Object? object) {
+    try {
+      dynamic value = object;
+
+      final dynamic dyn = value;
+      try {
+        value = dyn.toJson();
+      } catch (_) {}
+
+      final text = const JsonEncoder.withIndent('  ').convert(value);
+
+      if (text.length <= _maxLength) {
+        return text;
+      }
+
+      return '${text.substring(0, _maxLength)}'
+          '\n\n... <truncated ${text.length - _maxLength} chars>';
+    } catch (_) {
+      final text = object.toString();
+
+      if (text.length <= _maxLength) {
+        return text;
+      }
+
+      return '${text.substring(0, _maxLength)}'
+          '\n\n... <truncated ${text.length - _maxLength} chars>';
+    }
   }
 }

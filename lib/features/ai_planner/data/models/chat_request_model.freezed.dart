@@ -52,7 +52,7 @@ $Res call({
 });
 
 
-$CollectedDataModelCopyWith<$Res> get collected;$CollectedDataModelCopyWith<$Res> get cardAnswers;
+
 
 }
 /// @nodoc
@@ -74,25 +74,7 @@ as CollectedDataModel,cardAnswers: null == cardAnswers ? _self.cardAnswers : car
 as CollectedDataModel,
   ));
 }
-/// Create a copy of ChatRequestModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CollectedDataModelCopyWith<$Res> get collected {
-  
-  return $CollectedDataModelCopyWith<$Res>(_self.collected, (value) {
-    return _then(_self.copyWith(collected: value));
-  });
-}/// Create a copy of ChatRequestModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CollectedDataModelCopyWith<$Res> get cardAnswers {
-  
-  return $CollectedDataModelCopyWith<$Res>(_self.cardAnswers, (value) {
-    return _then(_self.copyWith(cardAnswers: value));
-  });
-}
+
 }
 
 
@@ -275,7 +257,7 @@ $Res call({
 });
 
 
-@override $CollectedDataModelCopyWith<$Res> get collected;@override $CollectedDataModelCopyWith<$Res> get cardAnswers;
+
 
 }
 /// @nodoc
@@ -298,25 +280,7 @@ as CollectedDataModel,
   ));
 }
 
-/// Create a copy of ChatRequestModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CollectedDataModelCopyWith<$Res> get collected {
-  
-  return $CollectedDataModelCopyWith<$Res>(_self.collected, (value) {
-    return _then(_self.copyWith(collected: value));
-  });
-}/// Create a copy of ChatRequestModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CollectedDataModelCopyWith<$Res> get cardAnswers {
-  
-  return $CollectedDataModelCopyWith<$Res>(_self.cardAnswers, (value) {
-    return _then(_self.copyWith(cardAnswers: value));
-  });
-}
+
 }
 
 // dart format on

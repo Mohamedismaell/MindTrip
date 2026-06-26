@@ -1,44 +1,93 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:mindtrip/core/utils/json_parser.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 
-part 'collected_planner_data_model.freezed.dart';
-part 'collected_planner_data_model.g.dart';
+class CollectedDataModel extends Equatable {
+  const CollectedDataModel({
+    this.destination = '',
+    this.days = 0,
+    this.budget = 0,
+    this.interests = const [],
+    this.people = 0,
+    this.mustInclude = const [],
+    this.date,
+  });
 
-@freezed
-abstract class CollectedDataModel with _$CollectedDataModel {
-  const factory CollectedDataModel({
-    @JsonKey(fromJson: parseString) @Default('') String destination,
+  final String destination;
+  final int days;
+  final int budget;
+  final List<String> interests;
+  final int people;
+  final List<String> mustInclude;
+  final String? date;
+  factory CollectedDataModel.fromJson(Map<String, dynamic> json) {
+    return CollectedDataModel(
+      destination: parseString(json['destination']),
+      days: parseInt(json['days']),
+      budget: parseInt(json['budget']),
+      interests: parseStringList(json['interests']),
+      people: parseInt(json['people']),
+      mustInclude: parseStringList(json['mustInclude']),
+      date: parseString(json['date']),
+    );
+  }
 
-    @JsonKey(fromJson: parseInt) @Default(0) int days,
-
-    @JsonKey(fromJson: parseInt) @Default(0) int budget,
-
-    @JsonKey(fromJson: parseStringList)
-    @Default(<String>[])
-    List<String> interests,
-
-    @JsonKey(fromJson: parseInt) @Default(0) int people,
-
-    @JsonKey(fromJson: parseStringList)
-    @Default(<String>[])
-    List<String> mustInclude,
-  }) = _CollectedDataModel;
-
-  factory CollectedDataModel.fromJson(Map<String, dynamic> json) =>
-      _$CollectedDataModelFromJson(json);
-
-  factory CollectedDataModel.fromEntity(CollectedPlannerDataEntity entity) =>
-      CollectedDataModel(
-        destination: entity.destination,
-        days: entity.days,
-        budget: entity.budget,
-        interests: entity.interests,
-        people: entity.people,
-        mustInclude: entity.mustInclude,
-      );
+  factory CollectedDataModel.fromEntity(CollectedPlannerDataEntity entity) {
+    return CollectedDataModel(
+      destination: entity.destination,
+      days: entity.days,
+      budget: entity.budget,
+      interests: entity.interests,
+      people: entity.people,
+      mustInclude: entity.mustInclude,
+      date: entity.date,
+    );
+  }
 
   factory CollectedDataModel.empty() => const CollectedDataModel();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'destination': destination,
+      'days': days,
+      'budget': budget,
+      'interests': interests,
+      'people': people,
+      'mustInclude': mustInclude,
+      'date': date,
+    };
+  }
+
+  CollectedDataModel copyWith({
+    String? destination,
+    int? days,
+    int? budget,
+    List<String>? interests,
+    int? people,
+    List<String>? mustInclude,
+    String? date,
+  }) {
+    return CollectedDataModel(
+      destination: destination ?? this.destination,
+      days: days ?? this.days,
+      budget: budget ?? this.budget,
+      interests: interests ?? this.interests,
+      people: people ?? this.people,
+      mustInclude: mustInclude ?? this.mustInclude,
+      date: date ?? this.date,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    destination,
+    days,
+    budget,
+    interests,
+    people,
+    mustInclude,
+    date,
+  ];
 }
 
 extension CollectedDataModelMapper on CollectedDataModel {
@@ -50,6 +99,7 @@ extension CollectedDataModelMapper on CollectedDataModel {
       interests: interests,
       people: people,
       mustInclude: mustInclude,
+      date: date,
     );
   }
 }
@@ -63,6 +113,7 @@ extension CollectedPlannerDataEntityMapper on CollectedPlannerDataEntity {
       interests: interests,
       people: people,
       mustInclude: mustInclude,
+      date: date,
     );
   }
 }

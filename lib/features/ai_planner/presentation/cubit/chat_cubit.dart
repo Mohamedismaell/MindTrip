@@ -98,7 +98,6 @@ class ChatCubit extends SafeCubit<ChatState> {
         message: cleanText,
         collected: collected ?? state.collected,
       );
-
       final response = await _sendMessageUseCase(request);
 
       final aiMessage = response.toChatMessage(

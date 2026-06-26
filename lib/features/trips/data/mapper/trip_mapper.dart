@@ -1,4 +1,3 @@
-import 'package:mindtrip/core/shared/data/mapper/trip_mapper.dart';
 import 'package:mindtrip/features/ai_planner/data/mapper/generated_plan_mapper.dart';
 import 'package:mindtrip/features/ai_planner/data/models/collected_planner_data_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';

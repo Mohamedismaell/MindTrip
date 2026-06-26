@@ -15,14 +15,19 @@ class MessageList extends StatelessWidget {
     required VoidCallback scrollToBottom,
     required VoidCallback onSuggestionTap,
     required ScrollController scrollController,
-    required ValueChanged<GeneratePlanRequestModel> onGeneratePlan,
+    required void Function(
+      GeneratePlanRequestModel request, {
+      DateTime? tripStart,
+    })
+    onGeneratePlan,
   }) : _scrollToBottom = scrollToBottom,
        _onGeneratePlan = onGeneratePlan,
        _onSuggestionTap = onSuggestionTap,
        _scrollController = scrollController;
   final VoidCallback _scrollToBottom;
   final VoidCallback _onSuggestionTap;
-  final ValueChanged<GeneratePlanRequestModel> _onGeneratePlan;
+  final void Function(GeneratePlanRequestModel request, {DateTime? tripStart})
+  _onGeneratePlan;
   final ScrollController _scrollController;
   @override
   Widget build(BuildContext context) {
