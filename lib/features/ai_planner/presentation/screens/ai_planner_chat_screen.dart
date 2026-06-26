@@ -1,31 +1,27 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
+import 'package:mindtrip/features/ai_planner/data/models/generate_plan_request_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/message_list.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_input_bar.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_message_bubble.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_suggestion_chips.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_typing_indicator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
-import 'package:uuid/uuid.dart';
 
 //Todo Bug with float button wrong nav route
 class AiPlannerChatScreen extends StatefulWidget {
   const AiPlannerChatScreen({super.key});
-
   @override
   State<AiPlannerChatScreen> createState() => _AiPlannerChatScreenState();
 }
@@ -33,12 +29,11 @@ class AiPlannerChatScreen extends StatefulWidget {
 class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
-  // One session ID lives for the lifetime of this screen instance.
-  final String _sessionId = const Uuid().v4();
 
   @override
   void initState() {
     super.initState();
+
     final userName =
         context.read<UserCubit>().state.user?.displayName ?? 'Traveler';
     context.read<ChatCubit>().initialize(userName);
@@ -52,18 +47,18 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
     super.dispose();
   }
 
-  void _onSendMessage() {
+  void _onSendMessage(String sessionId) {
     final text = _textController.text;
     final cubit = context.read<ChatCubit>();
     if (text.trim().isEmpty && cubit.state.attachments.isEmpty) return;
 
-    cubit.sendMessage(text, sessionId: _sessionId);
+    cubit.sendMessage(text, sessionId: sessionId);
     _textController.clear();
     _scrollToBottom();
   }
 
-  void _onSuggestionTap(String suggestion) {
-    context.read<ChatCubit>().sendMessage(suggestion, sessionId: _sessionId);
+  void _onSuggestionTap(String suggestion, String sessionId) {
+    context.read<ChatCubit>().sendMessage(suggestion, sessionId: sessionId);
     _scrollToBottom();
   }
 
@@ -144,65 +139,51 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
   // }
 
   void _confirmNewConversation() {
-    showDialog(
+    AppDialog.show(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Start new conversation?'),
-        content: const Text('Your current chat will be cleared.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              final userName =
-                  context.read<UserCubit>().state.user?.displayName ??
-                  'Traveler';
-              context.read<ChatCubit>().startNewConversation(userName);
-            },
-            child: const Text('Start new'),
-          ),
-        ],
-      ),
+      title: 'Do you want to start new conversation?',
+      description: 'Your current chat will be cleared',
+      primaryText: "Start new",
+      onPrimary: () {
+        // Navigator.pop(context);
+
+        final userName =
+            context.read<UserCubit>().state.user?.displayName ?? 'Mohamed';
+        context.read<ChatCubit>().startNewConversation(userName);
+        context.read<AiPlannerCubit>().createNewSession();
+      },
+      secondaryText: "Cancel",
     );
+    // showDialog(
+    //   context: context,
+    //   builder: (_) => AlertDialog(
+    //     title: const Text('Start new conversation?'),
+    //     content: const Text('Your current chat will be cleared.'),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () => Navigator.pop(context),
+    //         child: const Text('Cancel'),
+    //       ),
+    //       TextButton(
+    //         onPressed: () {
+    //           final userName =
+    //               context.read<UserCubit>().state.user?.displayName ??
+    //               'Traveler';
+    //           context.read<ChatCubit>().startNewConversation(userName);
+    //         },
+    //         child: const Text('Start new'),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
-  //Todo: When real API is ready, replace this with a proper API call using metadata
-  Future<void> _onGeneratePlan() async {
-    final chatCubit = context.read<ChatCubit>();
-    final messages = chatCubit.state.messages;
-    if (messages.isEmpty) return;
-
-    final tripsCubit = context.read<TripsCubit>();
-
-    //Todo: either we extract the reponse of the back end  json or we get a flag so we don't extract any thing
-    final metadata = chatCubit.state.tripMetadata;
-    final destination = metadata?['destination'] as String? ?? 'My Trip';
-    final title = 'Trip to $destination';
-
-    final newTripId = DateTime.now().millisecondsSinceEpoch.toString();
-    final snapshot = Trip(
-      id: newTripId,
-      title: title,
-      status: TripStatus.draft,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      destination: destination,
-      people: int.tryParse(metadata?['adults']?.toString() ?? '1') ?? 1,
-      totalBudget: int.tryParse(metadata?['budget']?.toString() ?? '0') ?? 0,
-      totalCost: 0,
-      interests: (metadata?['interests'] as List?)?.cast<String>() ?? const [],
-      // currentPage: 5,
-      // chatMessages: messages,
+  Future<void> _onGeneratePlan(
+    GeneratePlanRequestModel generatePlanRequestModel,
+  ) async {
+    context.read<AiPlannerCubit>().generatePlan(
+      generatePlanRequestModel: generatePlanRequestModel,
     );
-
-    // await tripsCubit.saveTripDraft(snapshot);
-
-    if (!mounted) return;
-    // Trigger generation flow in the background (state handles UI)
-    // tripsCubit.generateTrip(snapshot);
   }
 
   @override
@@ -248,145 +229,33 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
                       SizedBox(height: 20.h),
 
                       //  Message List
-                      Expanded(
-                        child: BlocConsumer<ChatCubit, ChatState>(
-                          listener: (context, state) {
-                            _scrollToBottom();
-                          },
-                          builder: (context, state) {
-                            final messages = state.messages;
-                            return ListView.builder(
-                              controller: _scrollController,
-                              padding: EdgeInsets.only(bottom: 8.h),
-                              itemCount:
-                                  messages.length + (state.isAiTyping ? 1 : 0),
-                              itemBuilder: (context, index) {
-                                // Show indicator as the last item
-                                if (index == messages.length &&
-                                    state.isAiTyping) {
-                                  return const ChatTypingIndicator();
-                                }
-
-                                final message = messages[index];
-
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ChatMessageBubble(message: message),
-
-                                    //Todo: Edit with suit ui
-                                    if (message.hasSuggestions &&
-                                        message == messages.last)
-                                      ChatSuggestionChips(
-                                        suggestions: message.suggestions!,
-                                        onTap: _onSuggestionTap,
-                                      ),
-
-                                    // Special Generate Plan Card inside the chat
-                                    if (message.isReadyToGenerate &&
-                                        message == messages.last)
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          top: 16.h,
-                                          bottom: 8.h,
-                                        ),
-                                        child: Center(
-                                          child: Container(
-                                            padding: EdgeInsets.all(16.r),
-                                            decoration: BoxDecoration(
-                                              color: context.colorTheme.primary
-                                                  .withValues(alpha: 0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(16.r),
-                                              border: Border.all(
-                                                color: context
-                                                    .colorTheme
-                                                    .primary
-                                                    .withValues(alpha: 0.3),
-                                              ),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Icons.auto_awesome,
-                                                  color: context
-                                                      .colorTheme
-                                                      .primary,
-                                                  size: 32.sp,
-                                                ),
-                                                SizedBox(height: 8.h),
-                                                Text(
-                                                  'Ready to build your trip!',
-                                                  style: AppTextStyles
-                                                      .h8SemiBold
-                                                      .copyWith(
-                                                        color: context
-                                                            .colorTheme
-                                                            .primary,
-                                                      ),
-                                                ),
-                                                SizedBox(height: 4.h),
-                                                Text(
-                                                  'I have enough information to create a personalized itinerary for you.',
-                                                  textAlign: TextAlign.center,
-                                                  style: AppTextStyles.h9Regular
-                                                      .copyWith(
-                                                        color: context
-                                                            .colorTheme
-                                                            .onSurfaceVariant,
-                                                      ),
-                                                ),
-                                                SizedBox(height: 16.h),
-                                                SizedBox(
-                                                  width: double.infinity,
-                                                  child: ElevatedButton(
-                                                    onPressed: _onGeneratePlan,
-                                                    style: ElevatedButton.styleFrom(
-                                                      backgroundColor: context
-                                                          .colorTheme
-                                                          .primary,
-                                                      foregroundColor: context
-                                                          .colorTheme
-                                                          .onPrimary,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                            vertical: 12.h,
-                                                          ),
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              12.r,
-                                                            ),
-                                                      ),
-                                                      elevation: 0,
-                                                    ),
-                                                    child: Text(
-                                                      'Generate Trip Plan',
-                                                      style: AppTextStyles
-                                                          .h8SemiBold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
+                      MessageList(
+                        scrollToBottom: _scrollToBottom,
+                        onSuggestionTap: () {
+                          (suggestion) {
+                            final sessionId = context
+                                .read<AiPlannerCubit>()
+                                .state
+                                .sessionId;
+                            _onSuggestionTap(suggestion, sessionId);
+                          };
+                        },
+                        onGeneratePlan: _onGeneratePlan,
+                        scrollController: _scrollController,
                       ),
-
                       //  Input Bar
                       BlocSelector<ChatCubit, ChatState, List<ChatAttachment>>(
                         selector: (state) => state.attachments,
                         builder: (context, attachments) {
                           return ChatInputBar(
                             controller: _textController,
-                            onSend: _onSendMessage,
+                            onSend: () {
+                              final sessionId = context
+                                  .read<AiPlannerCubit>()
+                                  .state
+                                  .sessionId;
+                              _onSendMessage(sessionId);
+                            },
                             // onPhotosPicked: _onPhotosPicked,
                             // onVideoPicked: _onVideoPicked,
                             // onFilesPicked: _onFilesPicked,

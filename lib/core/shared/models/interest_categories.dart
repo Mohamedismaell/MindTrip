@@ -28,4 +28,12 @@ class InterestCategories {
   }
 
   static List<String> get apiCategories => categories.map(stripEmoji).toList();
+
+  static String withEmoji(String interest) {
+    return categories.firstWhere(
+      (category) =>
+          stripEmoji(category).toLowerCase() == interest.trim().toLowerCase(),
+      orElse: () => interest,
+    );
+  }
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AiPlannerState {
 
- String? get tripId; GeneratedPlanEntity? get generatedPlan; AiPlannerStatus get status; String get errorMessage; int get currentPage; int get maxReachedPage; String? get selectedDestination; String get destinationQuery; DateTime? get tripStart; DateTime? get tripEnd; int get adults; int get children; BudgetTierModel? get selectedBudget; String get customBudget; DateTime? get visibleMonth; List<String> get selectedInterests; DateTime get focusedDay;
+ String? get tripId; GeneratedPlanEntity? get generatedPlan; AiPlannerStatus get status; String get errorMessage; int get currentPage; String get sessionId; int get maxReachedPage; String? get selectedDestination; String get destinationQuery; DateTime? get tripStart; DateTime? get tripEnd; int get adults; int get children; BudgetTierModel? get selectedBudget; String get customBudget; DateTime? get visibleMonth; List<String> get selectedInterests; DateTime get focusedDay;
 /// Create a copy of AiPlannerState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AiPlannerStateCopyWith<AiPlannerState> get copyWith => _$AiPlannerStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AiPlannerState&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.generatedPlan, generatedPlan) || other.generatedPlan == generatedPlan)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.maxReachedPage, maxReachedPage) || other.maxReachedPage == maxReachedPage)&&(identical(other.selectedDestination, selectedDestination) || other.selectedDestination == selectedDestination)&&(identical(other.destinationQuery, destinationQuery) || other.destinationQuery == destinationQuery)&&(identical(other.tripStart, tripStart) || other.tripStart == tripStart)&&(identical(other.tripEnd, tripEnd) || other.tripEnd == tripEnd)&&(identical(other.adults, adults) || other.adults == adults)&&(identical(other.children, children) || other.children == children)&&(identical(other.selectedBudget, selectedBudget) || other.selectedBudget == selectedBudget)&&(identical(other.customBudget, customBudget) || other.customBudget == customBudget)&&(identical(other.visibleMonth, visibleMonth) || other.visibleMonth == visibleMonth)&&const DeepCollectionEquality().equals(other.selectedInterests, selectedInterests)&&(identical(other.focusedDay, focusedDay) || other.focusedDay == focusedDay));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AiPlannerState&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.generatedPlan, generatedPlan) || other.generatedPlan == generatedPlan)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.maxReachedPage, maxReachedPage) || other.maxReachedPage == maxReachedPage)&&(identical(other.selectedDestination, selectedDestination) || other.selectedDestination == selectedDestination)&&(identical(other.destinationQuery, destinationQuery) || other.destinationQuery == destinationQuery)&&(identical(other.tripStart, tripStart) || other.tripStart == tripStart)&&(identical(other.tripEnd, tripEnd) || other.tripEnd == tripEnd)&&(identical(other.adults, adults) || other.adults == adults)&&(identical(other.children, children) || other.children == children)&&(identical(other.selectedBudget, selectedBudget) || other.selectedBudget == selectedBudget)&&(identical(other.customBudget, customBudget) || other.customBudget == customBudget)&&(identical(other.visibleMonth, visibleMonth) || other.visibleMonth == visibleMonth)&&const DeepCollectionEquality().equals(other.selectedInterests, selectedInterests)&&(identical(other.focusedDay, focusedDay) || other.focusedDay == focusedDay));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tripId,generatedPlan,status,errorMessage,currentPage,maxReachedPage,selectedDestination,destinationQuery,tripStart,tripEnd,adults,children,selectedBudget,customBudget,visibleMonth,const DeepCollectionEquality().hash(selectedInterests),focusedDay);
+int get hashCode => Object.hash(runtimeType,tripId,generatedPlan,status,errorMessage,currentPage,sessionId,maxReachedPage,selectedDestination,destinationQuery,tripStart,tripEnd,adults,children,selectedBudget,customBudget,visibleMonth,const DeepCollectionEquality().hash(selectedInterests),focusedDay);
 
 @override
 String toString() {
-  return 'AiPlannerState(tripId: $tripId, generatedPlan: $generatedPlan, status: $status, errorMessage: $errorMessage, currentPage: $currentPage, maxReachedPage: $maxReachedPage, selectedDestination: $selectedDestination, destinationQuery: $destinationQuery, tripStart: $tripStart, tripEnd: $tripEnd, adults: $adults, children: $children, selectedBudget: $selectedBudget, customBudget: $customBudget, visibleMonth: $visibleMonth, selectedInterests: $selectedInterests, focusedDay: $focusedDay)';
+  return 'AiPlannerState(tripId: $tripId, generatedPlan: $generatedPlan, status: $status, errorMessage: $errorMessage, currentPage: $currentPage, sessionId: $sessionId, maxReachedPage: $maxReachedPage, selectedDestination: $selectedDestination, destinationQuery: $destinationQuery, tripStart: $tripStart, tripEnd: $tripEnd, adults: $adults, children: $children, selectedBudget: $selectedBudget, customBudget: $customBudget, visibleMonth: $visibleMonth, selectedInterests: $selectedInterests, focusedDay: $focusedDay)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AiPlannerStateCopyWith<$Res>  {
   factory $AiPlannerStateCopyWith(AiPlannerState value, $Res Function(AiPlannerState) _then) = _$AiPlannerStateCopyWithImpl;
 @useResult
 $Res call({
- String? tripId, GeneratedPlanEntity? generatedPlan, AiPlannerStatus status, String errorMessage, int currentPage, int maxReachedPage, String? selectedDestination, String destinationQuery, DateTime? tripStart, DateTime? tripEnd, int adults, int children, BudgetTierModel? selectedBudget, String customBudget, DateTime? visibleMonth, List<String> selectedInterests, DateTime focusedDay
+ String? tripId, GeneratedPlanEntity? generatedPlan, AiPlannerStatus status, String errorMessage, int currentPage, String sessionId, int maxReachedPage, String? selectedDestination, String destinationQuery, DateTime? tripStart, DateTime? tripEnd, int adults, int children, BudgetTierModel? selectedBudget, String customBudget, DateTime? visibleMonth, List<String> selectedInterests, DateTime focusedDay
 });
 
 
@@ -62,14 +62,15 @@ class _$AiPlannerStateCopyWithImpl<$Res>
 
 /// Create a copy of AiPlannerState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tripId = freezed,Object? generatedPlan = freezed,Object? status = null,Object? errorMessage = null,Object? currentPage = null,Object? maxReachedPage = null,Object? selectedDestination = freezed,Object? destinationQuery = null,Object? tripStart = freezed,Object? tripEnd = freezed,Object? adults = null,Object? children = null,Object? selectedBudget = freezed,Object? customBudget = null,Object? visibleMonth = freezed,Object? selectedInterests = null,Object? focusedDay = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tripId = freezed,Object? generatedPlan = freezed,Object? status = null,Object? errorMessage = null,Object? currentPage = null,Object? sessionId = null,Object? maxReachedPage = null,Object? selectedDestination = freezed,Object? destinationQuery = null,Object? tripStart = freezed,Object? tripEnd = freezed,Object? adults = null,Object? children = null,Object? selectedBudget = freezed,Object? customBudget = null,Object? visibleMonth = freezed,Object? selectedInterests = null,Object? focusedDay = null,}) {
   return _then(_self.copyWith(
 tripId: freezed == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String?,generatedPlan: freezed == generatedPlan ? _self.generatedPlan : generatedPlan // ignore: cast_nullable_to_non_nullable
 as GeneratedPlanEntity?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AiPlannerStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
-as int,maxReachedPage: null == maxReachedPage ? _self.maxReachedPage : maxReachedPage // ignore: cast_nullable_to_non_nullable
+as int,sessionId: null == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
+as String,maxReachedPage: null == maxReachedPage ? _self.maxReachedPage : maxReachedPage // ignore: cast_nullable_to_non_nullable
 as int,selectedDestination: freezed == selectedDestination ? _self.selectedDestination : selectedDestination // ignore: cast_nullable_to_non_nullable
 as String?,destinationQuery: null == destinationQuery ? _self.destinationQuery : destinationQuery // ignore: cast_nullable_to_non_nullable
 as String,tripStart: freezed == tripStart ? _self.tripStart : tripStart // ignore: cast_nullable_to_non_nullable
@@ -166,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? tripId,  GeneratedPlanEntity? generatedPlan,  AiPlannerStatus status,  String errorMessage,  int currentPage,  int maxReachedPage,  String? selectedDestination,  String destinationQuery,  DateTime? tripStart,  DateTime? tripEnd,  int adults,  int children,  BudgetTierModel? selectedBudget,  String customBudget,  DateTime? visibleMonth,  List<String> selectedInterests,  DateTime focusedDay)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? tripId,  GeneratedPlanEntity? generatedPlan,  AiPlannerStatus status,  String errorMessage,  int currentPage,  String sessionId,  int maxReachedPage,  String? selectedDestination,  String destinationQuery,  DateTime? tripStart,  DateTime? tripEnd,  int adults,  int children,  BudgetTierModel? selectedBudget,  String customBudget,  DateTime? visibleMonth,  List<String> selectedInterests,  DateTime focusedDay)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AiPlannerState() when $default != null:
-return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage,_that.currentPage,_that.maxReachedPage,_that.selectedDestination,_that.destinationQuery,_that.tripStart,_that.tripEnd,_that.adults,_that.children,_that.selectedBudget,_that.customBudget,_that.visibleMonth,_that.selectedInterests,_that.focusedDay);case _:
+return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage,_that.currentPage,_that.sessionId,_that.maxReachedPage,_that.selectedDestination,_that.destinationQuery,_that.tripStart,_that.tripEnd,_that.adults,_that.children,_that.selectedBudget,_that.customBudget,_that.visibleMonth,_that.selectedInterests,_that.focusedDay);case _:
   return orElse();
 
 }
@@ -187,10 +188,10 @@ return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? tripId,  GeneratedPlanEntity? generatedPlan,  AiPlannerStatus status,  String errorMessage,  int currentPage,  int maxReachedPage,  String? selectedDestination,  String destinationQuery,  DateTime? tripStart,  DateTime? tripEnd,  int adults,  int children,  BudgetTierModel? selectedBudget,  String customBudget,  DateTime? visibleMonth,  List<String> selectedInterests,  DateTime focusedDay)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? tripId,  GeneratedPlanEntity? generatedPlan,  AiPlannerStatus status,  String errorMessage,  int currentPage,  String sessionId,  int maxReachedPage,  String? selectedDestination,  String destinationQuery,  DateTime? tripStart,  DateTime? tripEnd,  int adults,  int children,  BudgetTierModel? selectedBudget,  String customBudget,  DateTime? visibleMonth,  List<String> selectedInterests,  DateTime focusedDay)  $default,) {final _that = this;
 switch (_that) {
 case _AiPlannerState():
-return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage,_that.currentPage,_that.maxReachedPage,_that.selectedDestination,_that.destinationQuery,_that.tripStart,_that.tripEnd,_that.adults,_that.children,_that.selectedBudget,_that.customBudget,_that.visibleMonth,_that.selectedInterests,_that.focusedDay);case _:
+return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage,_that.currentPage,_that.sessionId,_that.maxReachedPage,_that.selectedDestination,_that.destinationQuery,_that.tripStart,_that.tripEnd,_that.adults,_that.children,_that.selectedBudget,_that.customBudget,_that.visibleMonth,_that.selectedInterests,_that.focusedDay);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +208,10 @@ return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? tripId,  GeneratedPlanEntity? generatedPlan,  AiPlannerStatus status,  String errorMessage,  int currentPage,  int maxReachedPage,  String? selectedDestination,  String destinationQuery,  DateTime? tripStart,  DateTime? tripEnd,  int adults,  int children,  BudgetTierModel? selectedBudget,  String customBudget,  DateTime? visibleMonth,  List<String> selectedInterests,  DateTime focusedDay)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? tripId,  GeneratedPlanEntity? generatedPlan,  AiPlannerStatus status,  String errorMessage,  int currentPage,  String sessionId,  int maxReachedPage,  String? selectedDestination,  String destinationQuery,  DateTime? tripStart,  DateTime? tripEnd,  int adults,  int children,  BudgetTierModel? selectedBudget,  String customBudget,  DateTime? visibleMonth,  List<String> selectedInterests,  DateTime focusedDay)?  $default,) {final _that = this;
 switch (_that) {
 case _AiPlannerState() when $default != null:
-return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage,_that.currentPage,_that.maxReachedPage,_that.selectedDestination,_that.destinationQuery,_that.tripStart,_that.tripEnd,_that.adults,_that.children,_that.selectedBudget,_that.customBudget,_that.visibleMonth,_that.selectedInterests,_that.focusedDay);case _:
+return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage,_that.currentPage,_that.sessionId,_that.maxReachedPage,_that.selectedDestination,_that.destinationQuery,_that.tripStart,_that.tripEnd,_that.adults,_that.children,_that.selectedBudget,_that.customBudget,_that.visibleMonth,_that.selectedInterests,_that.focusedDay);case _:
   return null;
 
 }
@@ -222,7 +223,7 @@ return $default(_that.tripId,_that.generatedPlan,_that.status,_that.errorMessage
 
 
 class _AiPlannerState extends AiPlannerState {
-  const _AiPlannerState({this.tripId, this.generatedPlan, this.status = AiPlannerStatus.initial, this.errorMessage = '', this.currentPage = 0, this.maxReachedPage = 0, this.selectedDestination, this.destinationQuery = '', this.tripStart, this.tripEnd, this.adults = 0, this.children = 0, this.selectedBudget, this.customBudget = '', this.visibleMonth, final  List<String> selectedInterests = const <String>[], required this.focusedDay}): _selectedInterests = selectedInterests,super._();
+  const _AiPlannerState({this.tripId, this.generatedPlan, this.status = AiPlannerStatus.initial, this.errorMessage = '', this.currentPage = 0, this.sessionId = '', this.maxReachedPage = 0, this.selectedDestination, this.destinationQuery = '', this.tripStart, this.tripEnd, this.adults = 0, this.children = 0, this.selectedBudget, this.customBudget = '', this.visibleMonth, final  List<String> selectedInterests = const <String>[], required this.focusedDay}): _selectedInterests = selectedInterests,super._();
   
 
 @override final  String? tripId;
@@ -230,6 +231,7 @@ class _AiPlannerState extends AiPlannerState {
 @override@JsonKey() final  AiPlannerStatus status;
 @override@JsonKey() final  String errorMessage;
 @override@JsonKey() final  int currentPage;
+@override@JsonKey() final  String sessionId;
 @override@JsonKey() final  int maxReachedPage;
 @override final  String? selectedDestination;
 @override@JsonKey() final  String destinationQuery;
@@ -259,16 +261,16 @@ _$AiPlannerStateCopyWith<_AiPlannerState> get copyWith => __$AiPlannerStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AiPlannerState&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.generatedPlan, generatedPlan) || other.generatedPlan == generatedPlan)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.maxReachedPage, maxReachedPage) || other.maxReachedPage == maxReachedPage)&&(identical(other.selectedDestination, selectedDestination) || other.selectedDestination == selectedDestination)&&(identical(other.destinationQuery, destinationQuery) || other.destinationQuery == destinationQuery)&&(identical(other.tripStart, tripStart) || other.tripStart == tripStart)&&(identical(other.tripEnd, tripEnd) || other.tripEnd == tripEnd)&&(identical(other.adults, adults) || other.adults == adults)&&(identical(other.children, children) || other.children == children)&&(identical(other.selectedBudget, selectedBudget) || other.selectedBudget == selectedBudget)&&(identical(other.customBudget, customBudget) || other.customBudget == customBudget)&&(identical(other.visibleMonth, visibleMonth) || other.visibleMonth == visibleMonth)&&const DeepCollectionEquality().equals(other._selectedInterests, _selectedInterests)&&(identical(other.focusedDay, focusedDay) || other.focusedDay == focusedDay));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AiPlannerState&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.generatedPlan, generatedPlan) || other.generatedPlan == generatedPlan)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.maxReachedPage, maxReachedPage) || other.maxReachedPage == maxReachedPage)&&(identical(other.selectedDestination, selectedDestination) || other.selectedDestination == selectedDestination)&&(identical(other.destinationQuery, destinationQuery) || other.destinationQuery == destinationQuery)&&(identical(other.tripStart, tripStart) || other.tripStart == tripStart)&&(identical(other.tripEnd, tripEnd) || other.tripEnd == tripEnd)&&(identical(other.adults, adults) || other.adults == adults)&&(identical(other.children, children) || other.children == children)&&(identical(other.selectedBudget, selectedBudget) || other.selectedBudget == selectedBudget)&&(identical(other.customBudget, customBudget) || other.customBudget == customBudget)&&(identical(other.visibleMonth, visibleMonth) || other.visibleMonth == visibleMonth)&&const DeepCollectionEquality().equals(other._selectedInterests, _selectedInterests)&&(identical(other.focusedDay, focusedDay) || other.focusedDay == focusedDay));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tripId,generatedPlan,status,errorMessage,currentPage,maxReachedPage,selectedDestination,destinationQuery,tripStart,tripEnd,adults,children,selectedBudget,customBudget,visibleMonth,const DeepCollectionEquality().hash(_selectedInterests),focusedDay);
+int get hashCode => Object.hash(runtimeType,tripId,generatedPlan,status,errorMessage,currentPage,sessionId,maxReachedPage,selectedDestination,destinationQuery,tripStart,tripEnd,adults,children,selectedBudget,customBudget,visibleMonth,const DeepCollectionEquality().hash(_selectedInterests),focusedDay);
 
 @override
 String toString() {
-  return 'AiPlannerState(tripId: $tripId, generatedPlan: $generatedPlan, status: $status, errorMessage: $errorMessage, currentPage: $currentPage, maxReachedPage: $maxReachedPage, selectedDestination: $selectedDestination, destinationQuery: $destinationQuery, tripStart: $tripStart, tripEnd: $tripEnd, adults: $adults, children: $children, selectedBudget: $selectedBudget, customBudget: $customBudget, visibleMonth: $visibleMonth, selectedInterests: $selectedInterests, focusedDay: $focusedDay)';
+  return 'AiPlannerState(tripId: $tripId, generatedPlan: $generatedPlan, status: $status, errorMessage: $errorMessage, currentPage: $currentPage, sessionId: $sessionId, maxReachedPage: $maxReachedPage, selectedDestination: $selectedDestination, destinationQuery: $destinationQuery, tripStart: $tripStart, tripEnd: $tripEnd, adults: $adults, children: $children, selectedBudget: $selectedBudget, customBudget: $customBudget, visibleMonth: $visibleMonth, selectedInterests: $selectedInterests, focusedDay: $focusedDay)';
 }
 
 
@@ -279,7 +281,7 @@ abstract mixin class _$AiPlannerStateCopyWith<$Res> implements $AiPlannerStateCo
   factory _$AiPlannerStateCopyWith(_AiPlannerState value, $Res Function(_AiPlannerState) _then) = __$AiPlannerStateCopyWithImpl;
 @override @useResult
 $Res call({
- String? tripId, GeneratedPlanEntity? generatedPlan, AiPlannerStatus status, String errorMessage, int currentPage, int maxReachedPage, String? selectedDestination, String destinationQuery, DateTime? tripStart, DateTime? tripEnd, int adults, int children, BudgetTierModel? selectedBudget, String customBudget, DateTime? visibleMonth, List<String> selectedInterests, DateTime focusedDay
+ String? tripId, GeneratedPlanEntity? generatedPlan, AiPlannerStatus status, String errorMessage, int currentPage, String sessionId, int maxReachedPage, String? selectedDestination, String destinationQuery, DateTime? tripStart, DateTime? tripEnd, int adults, int children, BudgetTierModel? selectedBudget, String customBudget, DateTime? visibleMonth, List<String> selectedInterests, DateTime focusedDay
 });
 
 
@@ -296,14 +298,15 @@ class __$AiPlannerStateCopyWithImpl<$Res>
 
 /// Create a copy of AiPlannerState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = freezed,Object? generatedPlan = freezed,Object? status = null,Object? errorMessage = null,Object? currentPage = null,Object? maxReachedPage = null,Object? selectedDestination = freezed,Object? destinationQuery = null,Object? tripStart = freezed,Object? tripEnd = freezed,Object? adults = null,Object? children = null,Object? selectedBudget = freezed,Object? customBudget = null,Object? visibleMonth = freezed,Object? selectedInterests = null,Object? focusedDay = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tripId = freezed,Object? generatedPlan = freezed,Object? status = null,Object? errorMessage = null,Object? currentPage = null,Object? sessionId = null,Object? maxReachedPage = null,Object? selectedDestination = freezed,Object? destinationQuery = null,Object? tripStart = freezed,Object? tripEnd = freezed,Object? adults = null,Object? children = null,Object? selectedBudget = freezed,Object? customBudget = null,Object? visibleMonth = freezed,Object? selectedInterests = null,Object? focusedDay = null,}) {
   return _then(_AiPlannerState(
 tripId: freezed == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String?,generatedPlan: freezed == generatedPlan ? _self.generatedPlan : generatedPlan // ignore: cast_nullable_to_non_nullable
 as GeneratedPlanEntity?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AiPlannerStatus,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
-as int,maxReachedPage: null == maxReachedPage ? _self.maxReachedPage : maxReachedPage // ignore: cast_nullable_to_non_nullable
+as int,sessionId: null == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
+as String,maxReachedPage: null == maxReachedPage ? _self.maxReachedPage : maxReachedPage // ignore: cast_nullable_to_non_nullable
 as int,selectedDestination: freezed == selectedDestination ? _self.selectedDestination : selectedDestination // ignore: cast_nullable_to_non_nullable
 as String?,destinationQuery: null == destinationQuery ? _self.destinationQuery : destinationQuery // ignore: cast_nullable_to_non_nullable
 as String,tripStart: freezed == tripStart ? _self.tripStart : tripStart // ignore: cast_nullable_to_non_nullable

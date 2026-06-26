@@ -47,14 +47,15 @@ class AiPlannerRoutes {
         GoRoute(
           path: AppRoutes.aiPlannerFlow,
           builder: (context, state) {
-            final tripId = state.uri.queryParameters['tripId'];
-            return AiPlannerFlowScreen(tripId: tripId);
+            // final tripId = state.uri.queryParameters['tripId'];
+            return AiPlannerFlowScreen();
           },
           routes: [
             AppTransitionRoute.custom(
               path: 'chat',
               builder: (context, state) {
-                return const AiPlannerChatScreen();
+                // final sessionId = state.extra as String;
+                return AiPlannerChatScreen();
               },
               transition: AppTransitionRoute.slideBottom,
             ),
@@ -73,7 +74,7 @@ class AiPlannerRoutes {
                 state.extra as TripDetailsArgs? ??
                 _tripDetailsArgsFromQuery(state);
             if (args == null) {
-              // Guard: no args provided (e.g. deep-link / hot-reload). Go back.
+              // Guard
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (context.mounted) context.go(AppRoutes.myTrips);
               });

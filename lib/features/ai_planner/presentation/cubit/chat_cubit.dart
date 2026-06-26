@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
+import 'package:mindtrip/features/ai_planner/data/models/chat_request_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
@@ -16,6 +18,8 @@ class ChatCubit extends SafeCubit<ChatState> {
 
   final SendMessageUseCase _sendMessageUseCase;
   final ChatRepository _chatRepository;
+  String _generateId(String prefix) =>
+      '${prefix}_${DateTime.now().millisecondsSinceEpoch}';
 
   void loadMessages(List<ChatMessage> messages) {
     if (messages.isEmpty) return;
@@ -26,7 +30,7 @@ class ChatCubit extends SafeCubit<ChatState> {
     if (state.messages.isNotEmpty) return;
 
     final greeting = ChatMessage(
-      id: 'greeting_${DateTime.now().millisecondsSinceEpoch}',
+      id: _generateId('greeting'),
       content:
           "Hi $userName! 👋 I'm Mindy. Where would you like to go, or what are you in the mood to explore today?",
       sender: MessageSender.ai,
@@ -69,44 +73,48 @@ class ChatCubit extends SafeCubit<ChatState> {
     CollectedPlannerData? collected,
   }) async {
     final cleanText = text.trim();
-    final currentAttachments = state.attachments;
 
-    if (cleanText.isEmpty && currentAttachments.isEmpty) return;
+    if (cleanText.isEmpty && state.attachments.isEmpty) return;
 
-    // Add user message
     final userMessage = ChatMessage(
-      id: 'user_${DateTime.now().millisecondsSinceEpoch}',
+      id: _generateId('user'),
       content: cleanText,
       sender: MessageSender.user,
       timestamp: DateTime.now(),
-      attachments: currentAttachments.isNotEmpty ? currentAttachments : null,
+      attachments: state.attachments.isNotEmpty ? state.attachments : null,
     );
 
     emitSafe(
       state.copyWith(
         messages: [...state.messages, userMessage],
         isAiTyping: true,
-        clearError: true,
+        errorMessage: null,
         attachments: const [],
       ),
     );
 
-    // Get AI response
     try {
-      final aiResponse = await _sendMessageUseCase(
-        text,
+      final request = ChatRequestModel.fromCollected(
         sessionId: sessionId,
-        collected: collected,
+        message: cleanText,
+        collected: collected ?? state.collected,
+      );
+
+      final response = await _sendMessageUseCase(request);
+
+      final aiMessage = response.toChatMessage(
+        id: _generateId('ai'),
+        timestamp: DateTime.now(),
       );
 
       emitSafe(
         state.copyWith(
-          messages: [...state.messages, aiResponse],
+          messages: [...state.messages, aiMessage],
           isAiTyping: false,
-          isReadyToGenerate: aiResponse.isReadyToGenerate,
+          lastResponse: response,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emitSafe(
         state.copyWith(
           isAiTyping: false,
@@ -137,29 +145,29 @@ class ChatCubit extends SafeCubit<ChatState> {
   Future<void> sendSuggestion(String suggestion, {required String sessionId}) =>
       sendMessage(suggestion, sessionId: sessionId);
 
-  void generateTripSummary({
-    required String destination,
-    required DateTime startDate,
-    required DateTime endDate,
-    required int adults,
-    required int children,
-    required int pets,
-    required String budget,
-    required List<String> interests,
-  }) {
-    final summary = _chatRepository.generateTripSummary(
-      destination: destination,
-      startDate: startDate,
-      endDate: endDate,
-      adults: adults,
-      children: children,
-      pets: pets,
-      budget: budget,
-      interests: interests,
-    );
+  // void generateTripSummary({
+  //   required String destination,
+  //   required DateTime startDate,
+  //   required DateTime endDate,
+  //   required int adults,
+  //   required int children,
+  //   required int pets,
+  //   required String budget,
+  //   required List<String> interests,
+  // }) {
+  //   final summary = _chatRepository.generateTripSummary(
+  //     destination: destination,
+  //     startDate: startDate,
+  //     endDate: endDate,
+  //     adults: adults,
+  //     children: children,
+  //     pets: pets,
+  //     budget: budget,
+  //     interests: interests,
+  //   );
 
-    emitSafe(state.copyWith(messages: [...state.messages, summary]));
-  }
+  //   emitSafe(state.copyWith(messages: [...state.messages, summary]));
+  // }
 
   void showRetryMessage() {
     final random = Random();

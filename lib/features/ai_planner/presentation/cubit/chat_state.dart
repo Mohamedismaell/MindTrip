@@ -1,56 +1,32 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_response.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+part 'chat_state.freezed.dart';
 
 enum ChatStatus { initial, loaded, error }
 
-class ChatState extends Equatable {
-  const ChatState({
-    this.messages = const [],
-    this.status = ChatStatus.initial,
-    this.isAiTyping = false,
-    this.errorMessage,
-    this.attachments = const [],
-    this.isReadyToGenerate = false,
-    this.tripMetadata,
-  });
-
-  final List<ChatMessage> messages;
-  final ChatStatus status;
-  final bool isAiTyping;
-  final String? errorMessage;
-  final List<ChatAttachment> attachments;
-
-  final bool isReadyToGenerate;
-  final Map<String, dynamic>? tripMetadata;
-  ChatState copyWith({
-    List<ChatMessage>? messages,
-    ChatStatus? status,
-    bool? isAiTyping,
+@freezed
+abstract class ChatState with _$ChatState {
+  const factory ChatState({
+    @Default([]) List<ChatMessage> messages,
+    @Default(ChatStatus.initial) ChatStatus status,
+    @Default(false) bool isAiTyping,
     String? errorMessage,
-    bool clearError = false,
-    List<ChatAttachment>? attachments,
-    bool? isReadyToGenerate,
-    Map<String, dynamic>? tripMetadata,
-  }) {
-    return ChatState(
-      messages: messages ?? this.messages,
-      status: status ?? this.status,
-      isAiTyping: isAiTyping ?? this.isAiTyping,
-      errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
-      attachments: attachments ?? this.attachments,
-      isReadyToGenerate: isReadyToGenerate ?? this.isReadyToGenerate,
-      tripMetadata: tripMetadata ?? this.tripMetadata,
-    );
-  }
+    @Default([]) List<ChatAttachment> attachments,
 
-  @override
-  List<Object?> get props => [
-    messages,
-    status,
-    isAiTyping,
-    errorMessage,
-    attachments,
-    isReadyToGenerate,
-    tripMetadata,
-  ];
+    ChatResponse? lastResponse,
+  }) = _ChatState;
+}
+
+extension ChatStateX on ChatState {
+  bool get isReadyToGenerate => lastResponse?.isReadyToGenerate ?? false;
+
+  CollectedPlannerData get collected =>
+      lastResponse?.collected ?? const CollectedPlannerData();
+
+  List<String> get missing => lastResponse?.missing ?? const [];
+
+  String get aiOutput => lastResponse?.output ?? '';
 }

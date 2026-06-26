@@ -5,6 +5,7 @@ import 'package:mindtrip/features/ai_planner/domain/usecases/generate_plan_use_c
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
+import 'package:uuid/uuid.dart';
 import 'ai_planner_state.dart';
 
 class AiPlannerCubit extends SafeCubit<AiPlannerState> {
@@ -14,6 +15,7 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
         AiPlannerState(
           focusedDay: DateTime.now(),
           visibleMonth: DateTime(DateTime.now().year, DateTime.now().month),
+          sessionId: const Uuid().v4(),
         ),
       );
 
@@ -24,8 +26,13 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
       AiPlannerState(
         focusedDay: DateTime.now(),
         visibleMonth: DateTime(DateTime.now().year, DateTime.now().month),
+        sessionId: const Uuid().v4(),
       ),
     );
+  }
+
+  void createNewSession() {
+    emit(state.copyWith(sessionId: const Uuid().v4()));
   }
 
   void loadFromTrip(Trip trip) {
@@ -223,19 +230,23 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
     return filteredDestinations;
   }
 
-  Future<void> generatePlan() async {
+  Future<void> generatePlan({
+    GeneratePlanRequestModel? generatePlanRequestModel,
+  }) async {
     emitSafe(state.copyWith(status: AiPlannerStatus.loading));
 
     final planResult = await _generatePlanUseCase(
-      request: GeneratePlanRequestModel(
-        interests: state.selectedInterests
-            .map(InterestCategories.stripEmoji)
-            .toList(),
-        city: state.selectedDestination!,
-        days: state.tripEnd!.difference(state.tripStart!).inDays + 1,
-        people: state.adults + state.children,
-        budget: int.tryParse(state.customBudget) ?? 0,
-      ),
+      request:
+          generatePlanRequestModel ??
+          GeneratePlanRequestModel(
+            interests: state.selectedInterests
+                .map(InterestCategories.stripEmoji)
+                .toList(),
+            city: state.selectedDestination!,
+            days: state.tripEnd!.difference(state.tripStart!).inDays + 1,
+            people: state.adults + state.children,
+            budget: int.tryParse(state.customBudget) ?? 0,
+          ),
     );
     planResult.when(
       success: (plan) async {

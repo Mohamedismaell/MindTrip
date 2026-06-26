@@ -4,16 +4,14 @@ import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/features/ai_planner/data/models/chat_message_model.dart';
+import 'package:mindtrip/features/ai_planner/data/models/chat_request_model.dart';
+import 'package:mindtrip/features/ai_planner/data/models/chat_response_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_response.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
 
-/// Abstract interface for the chat data source.
 abstract class ChatRemoteDataSource {
-  Future<ChatMessageModel> sendMessage(
-    String message, {
-    required String sessionId,
-    CollectedPlannerData? collected,
-  });
+  Future<ChatResponse> sendMessage(ChatRequestModel request);
 
   ChatMessageModel getTripSummary({
     required String destination,
@@ -27,7 +25,6 @@ abstract class ChatRemoteDataSource {
   });
 }
 
-/// Real implementation — calls POST /api/v1/ai/chat.
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   ChatRemoteDataSourceImpl({required ApiConsumer apiConsumer})
     : _api = apiConsumer;
@@ -39,63 +36,37 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       'msg_${DateTime.now().millisecondsSinceEpoch}_${_random.nextInt(9999)}';
 
   @override
-  Future<ChatMessageModel> sendMessage(
-    String message, {
-    required String sessionId,
-    CollectedPlannerData? collected,
-  }) async {
+  Future<ChatResponse> sendMessage(ChatRequestModel request) async {
     try {
-      final body = <String, dynamic>{
-        'sessionId': sessionId,
-        'message': message,
-      };
-
-      if (collected != null) {
-        final collectedMap = collected.toCollectedMap();
-        if (collectedMap.isNotEmpty) {
-          body['collected'] = collectedMap;
-          body['cardAnswers'] = collected.toCardAnswersMap();
-        }
-      }
-
-      final response = await _api.post(EndPoints.aiChat, data: body);
+      final response = await _api.post(
+        EndPoints.aiChat,
+        data: request.toJson(),
+      );
       return _parseResponse(response);
     } catch (e) {
       throw ApiErrorMapper.fromException(e);
     }
   }
 
-  ChatMessageModel _parseResponse(dynamic response) {
-    // Backend may return a plain string or a JSON object.
-    String content;
-    bool isReady = false;
-    List<String>? suggestions;
-
+  ChatResponse _parseResponse(dynamic response) {
     if (response is String) {
-      content = response;
-    } else if (response is Map<String, dynamic>) {
-      content =
-          (response['message'] ??
-                  response['reply'] ??
-                  response['content'] ??
-                  '')
-              .toString();
-      isReady = response['isReadyToGenerate'] as bool? ?? false;
-      final rawSuggestions = response['suggestions'];
-      if (rawSuggestions is List) {
-        suggestions = rawSuggestions.map((e) => e.toString()).toList();
-      }
-    } else {
-      content = response?.toString() ?? '';
+      return ChatResponse(
+        status: 'chat',
+        output: response,
+        collected: const CollectedPlannerData(),
+        missing: const [],
+      );
     }
 
-    return ChatMessageModel(
-      id: _generateId(),
-      content: content,
-      sender: MessageSender.ai,
-      timestamp: DateTime.now(),
-      suggestions: suggestions,
-      isReadyToGenerate: isReady,
+    if (response is Map<String, dynamic>) {
+      return ChatResponseModel.fromJson(response).toEntity();
+    }
+
+    return ChatResponse(
+      status: 'chat',
+      output: response?.toString() ?? '',
+      collected: const CollectedPlannerData(),
+      missing: const [],
     );
   }
 
@@ -110,16 +81,15 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required String budget,
     required List<String> interests,
   }) {
-    // Trip summary is generated locally — no backend call needed.
     final interestsList = interests.join(', ');
     final content =
-        '🗺️ Here\'s your trip summary:\n\n'
-        '📍 Destination: $destination\n'
-        '📅 Dates: $startDate → $endDate\n'
-        '👥 Travelers: $adults adult${adults != 1 ? 's' : ''}'
+        'Here is your trip summary:\n\n'
+        'Destination: $destination\n'
+        'Dates: $startDate -> $endDate\n'
+        'Travelers: $adults adult${adults != 1 ? 's' : ''}'
         '${children > 0 ? ', $children child${children != 1 ? 'ren' : ''}' : ''}\n'
-        '💰 Budget: $budget\n'
-        '🎯 Interests: $interestsList\n\n'
+        'Budget: $budget\n'
+        'Interests: $interestsList\n\n'
         'Ready to generate your personalized itinerary!';
 
     return ChatMessageModel(

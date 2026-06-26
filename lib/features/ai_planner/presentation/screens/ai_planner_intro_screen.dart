@@ -39,7 +39,6 @@ class AiPlannerIntroScreen extends StatelessWidget {
               ),
               SizedBox(height: 32.h),
 
-              // Start Planning — new trip (no tripId)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 11.5.w),
                 child: CustomGradientButton(

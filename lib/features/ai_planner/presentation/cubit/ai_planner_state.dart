@@ -14,6 +14,7 @@ abstract class AiPlannerState with _$AiPlannerState {
     @Default(AiPlannerStatus.initial) AiPlannerStatus status,
     @Default('') String errorMessage,
     @Default(0) int currentPage,
+    @Default('') String sessionId,
 
     @Default(0) int maxReachedPage,
 

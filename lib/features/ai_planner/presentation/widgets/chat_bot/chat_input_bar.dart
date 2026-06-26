@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 
 class ChatInputBar extends StatelessWidget {
@@ -70,8 +72,7 @@ class ChatInputBar extends StatelessWidget {
                 final isOverLimit = length >= 200;
 
                 return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.r),
-
+                  padding: EdgeInsets.only(left: 12.r),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24.r),
 
@@ -157,7 +158,7 @@ class ChatInputBar extends StatelessWidget {
 
                               textInputAction: TextInputAction.send,
 
-                              onSubmitted: (_) => _handleSend(),
+                              onSubmitted: (_) => _handleSend() ? onSend : null,
 
                               minLines: 1,
                               maxLines: 4,
@@ -211,14 +212,17 @@ class ChatInputBar extends StatelessWidget {
                             },
 
                             child: hasText || attachments.isNotEmpty
-                                ? GestureDetector(
+                                ? TapScaleEffect(
                                     key: const ValueKey('send_button'),
 
-                                    onTap: isOverLimit ? null : _handleSend,
+                                    onTap: isOverLimit
+                                        ? null
+                                        : _handleSend()
+                                        ? onSend
+                                        : null,
 
                                     child: Container(
                                       padding: EdgeInsets.all(8.r),
-
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
 
@@ -239,7 +243,7 @@ class ChatInputBar extends StatelessWidget {
                                       ),
                                     ),
                                   )
-                                : GestureDetector(
+                                : TapScaleEffect(
                                     key: const ValueKey('voice_button'),
                                     onTap: () async {
                                       final result = await context.push<String>(
@@ -277,13 +281,12 @@ class ChatInputBar extends StatelessWidget {
     );
   }
 
-  void _handleSend() {
+  bool _handleSend() {
     final text = controller.text;
-
-    if ((text.trim().isNotEmpty || attachments.isNotEmpty) &&
-        text.length <= 200) {
-      onSend();
-    }
+    final canSend =
+        (text.trim().isNotEmpty || attachments.isNotEmpty) &&
+        text.length <= 200;
+    return canSend;
   }
 
   Widget _buildAttachmentPreview(ChatAttachment item, BuildContext context) {

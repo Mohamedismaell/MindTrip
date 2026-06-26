@@ -1,30 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 
 enum MessageSender { user, ai }
 
 enum AttachmentType { image, video, file }
-
-class ChatAttachment extends Equatable {
-  const ChatAttachment({required this.path, required this.type});
-
-  final String path;
-  final AttachmentType type;
-
-  factory ChatAttachment.fromJson(Map<String, dynamic> json) {
-    return ChatAttachment(
-      path: json['path'] as String,
-      type: AttachmentType.values.firstWhere(
-        (e) => e.name == json['type'],
-        orElse: () => AttachmentType.image,
-      ),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {'path': path, 'type': type.name};
-
-  @override
-  List<Object?> get props => [path, type];
-}
 
 class ChatMessage extends Equatable {
   const ChatMessage({
@@ -50,25 +29,6 @@ class ChatMessage extends Equatable {
   bool get isAi => sender == MessageSender.ai;
   bool get hasSuggestions => suggestions != null && suggestions!.isNotEmpty;
   bool get hasAttachments => attachments != null && attachments!.isNotEmpty;
-
-  factory ChatMessage.fromJson(Map<String, dynamic> json) {
-    return ChatMessage(
-      id: json['id'] as String,
-      content: json['content'] as String,
-      sender: MessageSender.values.firstWhere(
-        (e) => e.name == json['sender'],
-        orElse: () => MessageSender.user,
-      ),
-      timestamp: DateTime.fromMillisecondsSinceEpoch(json['timestamp'] as int),
-      suggestions: (json['suggestions'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      attachments: (json['attachments'] as List<dynamic>?)
-          ?.map((e) => ChatAttachment.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      isReadyToGenerate: json['is_ready_to_generate'] as bool? ?? false,
-    );
-  }
 
   Map<String, dynamic> toJson() => {
     'id': id,

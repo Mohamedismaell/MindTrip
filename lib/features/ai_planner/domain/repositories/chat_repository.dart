@@ -1,12 +1,9 @@
+import 'package:mindtrip/features/ai_planner/data/models/chat_request_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/chat_response.dart';
 
 abstract class ChatRepository {
-  Future<ChatMessage> sendMessage(
-    String message, {
-    required String sessionId,
-    CollectedPlannerData? collected,
-  });
+  Future<ChatResponse> sendMessage(ChatRequestModel request);
 
   ChatMessage generateTripSummary({
     required String destination,

@@ -17,7 +17,7 @@ class _ChatTypingIndicatorState extends State<ChatTypingIndicator>
 
   static const int _dotCount = 3;
   static const Duration _dotDuration = Duration(milliseconds: 400);
-  static const Duration _dotDelay = Duration(seconds: 160);
+  static const Duration _dotDelay = Duration(milliseconds: 120);
 
   @override
   void initState() {

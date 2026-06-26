@@ -14,22 +14,18 @@ import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/dur
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/interests_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/travelers_step.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/ai_chat_bot_button.dart';
-import 'package:uuid/uuid.dart';
 
 class AiPlannerFlowScreen extends StatelessWidget {
-  const AiPlannerFlowScreen({super.key, this.tripId});
-
-  final String? tripId;
+  const AiPlannerFlowScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _AiPlannerFlowView(tripId: tripId);
+    return _AiPlannerFlowView();
   }
 }
 
 class _AiPlannerFlowView extends StatefulWidget {
-  const _AiPlannerFlowView({this.tripId});
-  final String? tripId;
+  const _AiPlannerFlowView();
 
   @override
   State<_AiPlannerFlowView> createState() => _AiPlannerFlowViewState();
@@ -42,12 +38,10 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
   final TextEditingController _customBudgetController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late final AiPlannerCubit _plannerCubit;
-  final String _sessionId = const Uuid().v4();
 
   @override
   void initState() {
     super.initState();
-
     _plannerCubit = context.read<AiPlannerCubit>();
 
     _destinationController.addListener(() {
@@ -110,9 +104,7 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
       },
       child: Scaffold(
         backgroundColor: context.colorTheme.surface,
-        floatingActionButton: showFab
-            ? AiChatBotButton(sessionId: _sessionId)
-            : null,
+        floatingActionButton: showFab ? AiChatBotButton() : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
