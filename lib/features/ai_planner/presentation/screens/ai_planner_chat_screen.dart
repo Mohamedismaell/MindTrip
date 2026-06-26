@@ -7,6 +7,8 @@ import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/ai_planner/data/models/generate_plan_request_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_screen_listener.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/message_list.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
@@ -194,28 +196,7 @@ class _AiPlannerChatScreenState extends State<AiPlannerChatScreen> {
 
         return Scaffold(
           body: SafeArea(
-            child: BlocListener<TripsCubit, TripsState>(
-              listenWhen: (previous, current) =>
-                  previous.isGenerating != current.isGenerating ||
-                  previous.generatedTripId != current.generatedTripId,
-              listener: (context, state) {
-                if (state.isGenerating) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) => const GeneratingDialog(),
-                  );
-                } else if (state.generatedTripId != null) {
-                  context.go(
-                    '${AppRoutes.tripDetails}?tripId=${state.generatedTripId}',
-                  );
-                } else if (state.tripsStatus == TripsStatus.error) {
-                  AppGlassSnackBar.showError(
-                    context: context,
-                    message: state.errorMessage ?? 'Generation failed',
-                  );
-                }
-              },
+            child: ChatScreenListener(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 30.h),
                 child: Center(

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatResponseModel {
 
-@JsonKey(fromJson: parseString) String get status;@JsonKey(fromJson: parseString) String get output; ChatCollectedDataModel get collected;@JsonKey(fromJson: parseStringList) List<String> get missing;
+@JsonKey(fromJson: parseString) String get status;@JsonKey(fromJson: parseString) String get output; CollectedDataModel get collected;@JsonKey(fromJson: parseStringList) List<String> get missing;
 /// Create a copy of ChatResponseModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $ChatResponseModelCopyWith<$Res>  {
   factory $ChatResponseModelCopyWith(ChatResponseModel value, $Res Function(ChatResponseModel) _then) = _$ChatResponseModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(fromJson: parseString) String status,@JsonKey(fromJson: parseString) String output, ChatCollectedDataModel collected,@JsonKey(fromJson: parseStringList) List<String> missing
+@JsonKey(fromJson: parseString) String status,@JsonKey(fromJson: parseString) String output, CollectedDataModel collected,@JsonKey(fromJson: parseStringList) List<String> missing
 });
 
 
-$ChatCollectedDataModelCopyWith<$Res> get collected;
+$CollectedDataModelCopyWith<$Res> get collected;
 
 }
 /// @nodoc
@@ -70,7 +70,7 @@ class _$ChatResponseModelCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,output: null == output ? _self.output : output // ignore: cast_nullable_to_non_nullable
 as String,collected: null == collected ? _self.collected : collected // ignore: cast_nullable_to_non_nullable
-as ChatCollectedDataModel,missing: null == missing ? _self.missing : missing // ignore: cast_nullable_to_non_nullable
+as CollectedDataModel,missing: null == missing ? _self.missing : missing // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }
@@ -78,9 +78,9 @@ as List<String>,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatCollectedDataModelCopyWith<$Res> get collected {
+$CollectedDataModelCopyWith<$Res> get collected {
   
-  return $ChatCollectedDataModelCopyWith<$Res>(_self.collected, (value) {
+  return $CollectedDataModelCopyWith<$Res>(_self.collected, (value) {
     return _then(_self.copyWith(collected: value));
   });
 }
@@ -165,7 +165,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseString)  String output,  ChatCollectedDataModel collected, @JsonKey(fromJson: parseStringList)  List<String> missing)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseString)  String output,  CollectedDataModel collected, @JsonKey(fromJson: parseStringList)  List<String> missing)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatResponseModel() when $default != null:
 return $default(_that.status,_that.output,_that.collected,_that.missing);case _:
@@ -186,7 +186,7 @@ return $default(_that.status,_that.output,_that.collected,_that.missing);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseString)  String output,  ChatCollectedDataModel collected, @JsonKey(fromJson: parseStringList)  List<String> missing)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseString)  String output,  CollectedDataModel collected, @JsonKey(fromJson: parseStringList)  List<String> missing)  $default,) {final _that = this;
 switch (_that) {
 case _ChatResponseModel():
 return $default(_that.status,_that.output,_that.collected,_that.missing);case _:
@@ -206,7 +206,7 @@ return $default(_that.status,_that.output,_that.collected,_that.missing);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseString)  String output,  ChatCollectedDataModel collected, @JsonKey(fromJson: parseStringList)  List<String> missing)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: parseString)  String status, @JsonKey(fromJson: parseString)  String output,  CollectedDataModel collected, @JsonKey(fromJson: parseStringList)  List<String> missing)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatResponseModel() when $default != null:
 return $default(_that.status,_that.output,_that.collected,_that.missing);case _:
@@ -221,12 +221,12 @@ return $default(_that.status,_that.output,_that.collected,_that.missing);case _:
 @JsonSerializable()
 
 class _ChatResponseModel implements ChatResponseModel {
-  const _ChatResponseModel({@JsonKey(fromJson: parseString) this.status = '', @JsonKey(fromJson: parseString) this.output = '', this.collected = const ChatCollectedDataModel(), @JsonKey(fromJson: parseStringList) final  List<String> missing = const []}): _missing = missing;
+  const _ChatResponseModel({@JsonKey(fromJson: parseString) this.status = '', @JsonKey(fromJson: parseString) this.output = '', this.collected = const CollectedDataModel(), @JsonKey(fromJson: parseStringList) final  List<String> missing = const []}): _missing = missing;
   factory _ChatResponseModel.fromJson(Map<String, dynamic> json) => _$ChatResponseModelFromJson(json);
 
 @override@JsonKey(fromJson: parseString) final  String status;
 @override@JsonKey(fromJson: parseString) final  String output;
-@override@JsonKey() final  ChatCollectedDataModel collected;
+@override@JsonKey() final  CollectedDataModel collected;
  final  List<String> _missing;
 @override@JsonKey(fromJson: parseStringList) List<String> get missing {
   if (_missing is EqualUnmodifiableListView) return _missing;
@@ -268,11 +268,11 @@ abstract mixin class _$ChatResponseModelCopyWith<$Res> implements $ChatResponseM
   factory _$ChatResponseModelCopyWith(_ChatResponseModel value, $Res Function(_ChatResponseModel) _then) = __$ChatResponseModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(fromJson: parseString) String status,@JsonKey(fromJson: parseString) String output, ChatCollectedDataModel collected,@JsonKey(fromJson: parseStringList) List<String> missing
+@JsonKey(fromJson: parseString) String status,@JsonKey(fromJson: parseString) String output, CollectedDataModel collected,@JsonKey(fromJson: parseStringList) List<String> missing
 });
 
 
-@override $ChatCollectedDataModelCopyWith<$Res> get collected;
+@override $CollectedDataModelCopyWith<$Res> get collected;
 
 }
 /// @nodoc
@@ -290,7 +290,7 @@ class __$ChatResponseModelCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,output: null == output ? _self.output : output // ignore: cast_nullable_to_non_nullable
 as String,collected: null == collected ? _self.collected : collected // ignore: cast_nullable_to_non_nullable
-as ChatCollectedDataModel,missing: null == missing ? _self._missing : missing // ignore: cast_nullable_to_non_nullable
+as CollectedDataModel,missing: null == missing ? _self._missing : missing // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }
@@ -299,9 +299,9 @@ as List<String>,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatCollectedDataModelCopyWith<$Res> get collected {
+$CollectedDataModelCopyWith<$Res> get collected {
   
-  return $ChatCollectedDataModelCopyWith<$Res>(_self.collected, (value) {
+  return $CollectedDataModelCopyWith<$Res>(_self.collected, (value) {
     return _then(_self.copyWith(collected: value));
   });
 }

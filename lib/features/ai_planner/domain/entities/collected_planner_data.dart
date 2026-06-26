@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// Value object that mirrors the `collected` / `cardAnswers` fields
-/// sent to the backend's `/api/v1/ai/chat` endpoint.
 class CollectedPlannerData extends Equatable {
   const CollectedPlannerData({
     this.destination = '',
@@ -19,7 +17,6 @@ class CollectedPlannerData extends Equatable {
   final int people;
   final List<String> mustInclude;
 
-  /// Builds the `collected` map for the chat request body.
   Map<String, dynamic> toCollectedMap() => {
     'destination': destination,
     'days': days,
@@ -29,7 +26,6 @@ class CollectedPlannerData extends Equatable {
     'mustInclude': mustInclude,
   };
 
-  /// Builds the `cardAnswers` map for the chat request body.
   Map<String, dynamic> toCardAnswersMap() => {
     'destination': destination,
     'days': days,

@@ -1,5 +1,7 @@
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/ai_planner/data/mapper/generated_plan_entity_json_mapper.dart';
+import 'package:mindtrip/features/ai_planner/data/mapper/generated_plan_mapper.dart';
+import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/trips/data/models/create_trip_request_model.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip_details_args.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_details_use_case.dart';
@@ -54,7 +56,6 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
     if (plan == null) return;
 
     emitSafe(state.copyWith(status: TripDetailsStatus.saving));
-    final planJson = plan.toJson();
     final request = CreateTripRequestModel(
       title: '',
       destinationGovernorate: '',
@@ -62,10 +63,10 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
       people: plan.people,
       totalBudgetEgp: plan.totalCalculatedCost,
       totalCost: plan.totalCalculatedCost,
-      plan: planJson['plan'] as Map<String, dynamic>,
+      plan: plan.toModel(),
       sessionId: plan.tripId,
       isPublic: true,
-      collected: '',
+      collected: context.read<ChatCubit>().state.collected.toModel(),
       status: 0,
     );
 

@@ -25,12 +25,12 @@ $ChatStateCopyWith<ChatState> get copyWith => _$ChatStateCopyWithImpl<ChatState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatState&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.status, status) || other.status == status)&&(identical(other.isAiTyping, isAiTyping) || other.isAiTyping == isAiTyping)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other.attachments, attachments)&&const DeepCollectionEquality().equals(other.lastResponse, lastResponse));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatState&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.status, status) || other.status == status)&&(identical(other.isAiTyping, isAiTyping) || other.isAiTyping == isAiTyping)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other.attachments, attachments)&&(identical(other.lastResponse, lastResponse) || other.lastResponse == lastResponse));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(messages),status,isAiTyping,errorMessage,const DeepCollectionEquality().hash(attachments),const DeepCollectionEquality().hash(lastResponse));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(messages),status,isAiTyping,errorMessage,const DeepCollectionEquality().hash(attachments),lastResponse);
 
 @override
 String toString() {
@@ -243,12 +243,12 @@ _$ChatStateCopyWith<_ChatState> get copyWith => __$ChatStateCopyWithImpl<_ChatSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.status, status) || other.status == status)&&(identical(other.isAiTyping, isAiTyping) || other.isAiTyping == isAiTyping)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other._attachments, _attachments)&&const DeepCollectionEquality().equals(other.lastResponse, lastResponse));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.status, status) || other.status == status)&&(identical(other.isAiTyping, isAiTyping) || other.isAiTyping == isAiTyping)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other._attachments, _attachments)&&(identical(other.lastResponse, lastResponse) || other.lastResponse == lastResponse));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),status,isAiTyping,errorMessage,const DeepCollectionEquality().hash(_attachments),const DeepCollectionEquality().hash(lastResponse));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),status,isAiTyping,errorMessage,const DeepCollectionEquality().hash(_attachments),lastResponse);
 
 @override
 String toString() {

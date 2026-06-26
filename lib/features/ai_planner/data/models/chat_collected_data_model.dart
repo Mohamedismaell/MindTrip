@@ -6,8 +6,8 @@ part 'chat_collected_data_model.freezed.dart';
 part 'chat_collected_data_model.g.dart';
 
 @freezed
-abstract class ChatCollectedDataModel with _$ChatCollectedDataModel {
-  const factory ChatCollectedDataModel({
+abstract class CollectedDataModel with _$ChatCollectedDataModel {
+  const factory CollectedDataModel({
     @JsonKey(fromJson: parseString) @Default('') String destination,
     @JsonKey(fromJson: parseInt) @Default(0) int days,
     @JsonKey(fromJson: parseInt) @Default(0) int budget,
@@ -15,18 +15,18 @@ abstract class ChatCollectedDataModel with _$ChatCollectedDataModel {
     @JsonKey(fromJson: parseInt) @Default(0) int people,
     @JsonKey(
       name: 'mustInclude',
-      readValue: ChatCollectedDataModel._readMustInclude,
-      fromJson: ChatCollectedDataModel._parseMustInclude,
+      readValue: CollectedDataModel._readMustInclude,
+      fromJson: CollectedDataModel._parseMustInclude,
     )
     @Default([])
     List<String> mustInclude,
   }) = _ChatCollectedDataModel;
 
-  factory ChatCollectedDataModel.fromJson(Map<String, dynamic> json) =>
+  factory CollectedDataModel.fromJson(Map<String, dynamic> json) =>
       _$ChatCollectedDataModelFromJson(json);
 
-  factory ChatCollectedDataModel.fromEntity(CollectedPlannerData entity) {
-    return ChatCollectedDataModel(
+  factory CollectedDataModel.fromEntity(CollectedPlannerData entity) {
+    return CollectedDataModel(
       destination: entity.destination,
       days: entity.days,
       budget: entity.budget,
@@ -36,7 +36,7 @@ abstract class ChatCollectedDataModel with _$ChatCollectedDataModel {
     );
   }
 
-  factory ChatCollectedDataModel.empty() => const ChatCollectedDataModel();
+  factory CollectedDataModel.empty() => const CollectedDataModel();
 
   static List<String> _parseMustInclude(dynamic value) {
     return parseStringList(value);
@@ -47,7 +47,7 @@ abstract class ChatCollectedDataModel with _$ChatCollectedDataModel {
   }
 }
 
-extension ChatCollectedDataModelMapper on ChatCollectedDataModel {
+extension ChatCollectedDataModelMapper on CollectedDataModel {
   CollectedPlannerData toEntity() {
     return CollectedPlannerData(
       destination: destination,

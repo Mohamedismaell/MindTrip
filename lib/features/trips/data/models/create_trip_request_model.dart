@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/features/ai_planner/data/models/chat_collected_data_model.dart';
+import 'package:mindtrip/features/ai_planner/data/models/generated_plan_model.dart';
 
 part 'create_trip_request_model.freezed.dart';
 part 'create_trip_request_model.g.dart';
@@ -15,9 +17,9 @@ abstract class CreateTripRequestModel with _$CreateTripRequestModel {
     required int totalBudgetEgp,
     required int totalCost,
 
-    required Map<String, dynamic> plan,
+    required GeneratedPlanModel plan,
 
-    required String collected,
+    required CollectedDataModel collected,
 
     String? sessionId,
 

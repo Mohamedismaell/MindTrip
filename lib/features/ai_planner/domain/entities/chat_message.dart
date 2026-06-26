@@ -14,6 +14,7 @@ class ChatMessage extends Equatable {
     this.suggestions,
     this.attachments,
     this.isReadyToGenerate = false,
+    this.isError = false,
   });
 
   final String id;
@@ -24,6 +25,7 @@ class ChatMessage extends Equatable {
 
   final List<ChatAttachment>? attachments;
   final bool isReadyToGenerate;
+  final bool isError;
 
   bool get isUser => sender == MessageSender.user;
   bool get isAi => sender == MessageSender.ai;
@@ -39,6 +41,7 @@ class ChatMessage extends Equatable {
     if (attachments != null)
       'attachments': attachments!.map((a) => a.toJson()).toList(),
     'is_ready_to_generate': isReadyToGenerate,
+    'is_error': isError,
   };
 
   @override
@@ -50,5 +53,6 @@ class ChatMessage extends Equatable {
     suggestions,
     attachments,
     isReadyToGenerate,
+    isError,
   ];
 }

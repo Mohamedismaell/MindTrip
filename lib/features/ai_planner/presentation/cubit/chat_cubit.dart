@@ -13,11 +13,10 @@ class ChatCubit extends SafeCubit<ChatState> {
     required SendMessageUseCase sendMessageUseCase,
     required ChatRepository chatRepository,
   }) : _sendMessageUseCase = sendMessageUseCase,
-       _chatRepository = chatRepository,
        super(const ChatState());
 
   final SendMessageUseCase _sendMessageUseCase;
-  final ChatRepository _chatRepository;
+
   String _generateId(String prefix) =>
       '${prefix}_${DateTime.now().millisecondsSinceEpoch}';
 
@@ -114,11 +113,19 @@ class ChatCubit extends SafeCubit<ChatState> {
           lastResponse: response,
         ),
       );
-    } catch (_) {
+    } catch (e) {
+      final errorBubble = ChatMessage(
+        id: _generateId('error'),
+        content: 'Failed to get response. Please try again.',
+        sender: MessageSender.ai,
+        timestamp: DateTime.now(),
+        isError: true,
+      );
       emitSafe(
         state.copyWith(
           isAiTyping: false,
           errorMessage: 'Failed to get response. Please try again.',
+          messages: [...state.messages, errorBubble],
         ),
       );
     }

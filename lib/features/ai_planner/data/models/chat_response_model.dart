@@ -11,7 +11,7 @@ abstract class ChatResponseModel with _$ChatResponseModel {
   const factory ChatResponseModel({
     @JsonKey(fromJson: parseString) @Default('') String status,
     @JsonKey(fromJson: parseString) @Default('') String output,
-    @Default(ChatCollectedDataModel()) ChatCollectedDataModel collected,
+    @Default(CollectedDataModel()) CollectedDataModel collected,
     @JsonKey(fromJson: parseStringList) @Default([]) List<String> missing,
   }) = _ChatResponseModel;
 

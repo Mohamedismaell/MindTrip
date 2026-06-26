@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatRequestModel {
 
- String get sessionId; String get message; ChatCollectedDataModel get collected; ChatCollectedDataModel get cardAnswers;
+ String get sessionId; String get message; CollectedDataModel get collected; CollectedDataModel get cardAnswers;
 /// Create a copy of ChatRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $ChatRequestModelCopyWith<$Res>  {
   factory $ChatRequestModelCopyWith(ChatRequestModel value, $Res Function(ChatRequestModel) _then) = _$ChatRequestModelCopyWithImpl;
 @useResult
 $Res call({
- String sessionId, String message, ChatCollectedDataModel collected, ChatCollectedDataModel cardAnswers
+ String sessionId, String message, CollectedDataModel collected, CollectedDataModel cardAnswers
 });
 
 
-$ChatCollectedDataModelCopyWith<$Res> get collected;$ChatCollectedDataModelCopyWith<$Res> get cardAnswers;
+$CollectedDataModelCopyWith<$Res> get collected;$CollectedDataModelCopyWith<$Res> get cardAnswers;
 
 }
 /// @nodoc
@@ -70,26 +70,26 @@ class _$ChatRequestModelCopyWithImpl<$Res>
 sessionId: null == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,collected: null == collected ? _self.collected : collected // ignore: cast_nullable_to_non_nullable
-as ChatCollectedDataModel,cardAnswers: null == cardAnswers ? _self.cardAnswers : cardAnswers // ignore: cast_nullable_to_non_nullable
-as ChatCollectedDataModel,
+as CollectedDataModel,cardAnswers: null == cardAnswers ? _self.cardAnswers : cardAnswers // ignore: cast_nullable_to_non_nullable
+as CollectedDataModel,
   ));
 }
 /// Create a copy of ChatRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatCollectedDataModelCopyWith<$Res> get collected {
+$CollectedDataModelCopyWith<$Res> get collected {
   
-  return $ChatCollectedDataModelCopyWith<$Res>(_self.collected, (value) {
+  return $CollectedDataModelCopyWith<$Res>(_self.collected, (value) {
     return _then(_self.copyWith(collected: value));
   });
 }/// Create a copy of ChatRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatCollectedDataModelCopyWith<$Res> get cardAnswers {
+$CollectedDataModelCopyWith<$Res> get cardAnswers {
   
-  return $ChatCollectedDataModelCopyWith<$Res>(_self.cardAnswers, (value) {
+  return $CollectedDataModelCopyWith<$Res>(_self.cardAnswers, (value) {
     return _then(_self.copyWith(cardAnswers: value));
   });
 }
@@ -174,7 +174,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String sessionId,  String message,  ChatCollectedDataModel collected,  ChatCollectedDataModel cardAnswers)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String sessionId,  String message,  CollectedDataModel collected,  CollectedDataModel cardAnswers)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatRequestModel() when $default != null:
 return $default(_that.sessionId,_that.message,_that.collected,_that.cardAnswers);case _:
@@ -195,7 +195,7 @@ return $default(_that.sessionId,_that.message,_that.collected,_that.cardAnswers)
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String sessionId,  String message,  ChatCollectedDataModel collected,  ChatCollectedDataModel cardAnswers)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String sessionId,  String message,  CollectedDataModel collected,  CollectedDataModel cardAnswers)  $default,) {final _that = this;
 switch (_that) {
 case _ChatRequestModel():
 return $default(_that.sessionId,_that.message,_that.collected,_that.cardAnswers);case _:
@@ -215,7 +215,7 @@ return $default(_that.sessionId,_that.message,_that.collected,_that.cardAnswers)
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String sessionId,  String message,  ChatCollectedDataModel collected,  ChatCollectedDataModel cardAnswers)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String sessionId,  String message,  CollectedDataModel collected,  CollectedDataModel cardAnswers)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatRequestModel() when $default != null:
 return $default(_that.sessionId,_that.message,_that.collected,_that.cardAnswers);case _:
@@ -235,8 +235,8 @@ class _ChatRequestModel implements ChatRequestModel {
 
 @override final  String sessionId;
 @override final  String message;
-@override final  ChatCollectedDataModel collected;
-@override final  ChatCollectedDataModel cardAnswers;
+@override final  CollectedDataModel collected;
+@override final  CollectedDataModel cardAnswers;
 
 /// Create a copy of ChatRequestModel
 /// with the given fields replaced by the non-null parameter values.
@@ -271,11 +271,11 @@ abstract mixin class _$ChatRequestModelCopyWith<$Res> implements $ChatRequestMod
   factory _$ChatRequestModelCopyWith(_ChatRequestModel value, $Res Function(_ChatRequestModel) _then) = __$ChatRequestModelCopyWithImpl;
 @override @useResult
 $Res call({
- String sessionId, String message, ChatCollectedDataModel collected, ChatCollectedDataModel cardAnswers
+ String sessionId, String message, CollectedDataModel collected, CollectedDataModel cardAnswers
 });
 
 
-@override $ChatCollectedDataModelCopyWith<$Res> get collected;@override $ChatCollectedDataModelCopyWith<$Res> get cardAnswers;
+@override $CollectedDataModelCopyWith<$Res> get collected;@override $CollectedDataModelCopyWith<$Res> get cardAnswers;
 
 }
 /// @nodoc
@@ -293,8 +293,8 @@ class __$ChatRequestModelCopyWithImpl<$Res>
 sessionId: null == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,collected: null == collected ? _self.collected : collected // ignore: cast_nullable_to_non_nullable
-as ChatCollectedDataModel,cardAnswers: null == cardAnswers ? _self.cardAnswers : cardAnswers // ignore: cast_nullable_to_non_nullable
-as ChatCollectedDataModel,
+as CollectedDataModel,cardAnswers: null == cardAnswers ? _self.cardAnswers : cardAnswers // ignore: cast_nullable_to_non_nullable
+as CollectedDataModel,
   ));
 }
 
@@ -302,18 +302,18 @@ as ChatCollectedDataModel,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatCollectedDataModelCopyWith<$Res> get collected {
+$CollectedDataModelCopyWith<$Res> get collected {
   
-  return $ChatCollectedDataModelCopyWith<$Res>(_self.collected, (value) {
+  return $CollectedDataModelCopyWith<$Res>(_self.collected, (value) {
     return _then(_self.copyWith(collected: value));
   });
 }/// Create a copy of ChatRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ChatCollectedDataModelCopyWith<$Res> get cardAnswers {
+$CollectedDataModelCopyWith<$Res> get cardAnswers {
   
-  return $ChatCollectedDataModelCopyWith<$Res>(_self.cardAnswers, (value) {
+  return $CollectedDataModelCopyWith<$Res>(_self.cardAnswers, (value) {
     return _then(_self.copyWith(cardAnswers: value));
   });
 }

@@ -42,6 +42,7 @@ class _AiBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeStr = _formatTime(message.timestamp);
+    final isError = message.isError;
 
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
@@ -79,30 +80,37 @@ class _AiBubble extends StatelessWidget {
                       bottomRight: Radius.circular(20.r),
                       bottomLeft: Radius.circular(20.r),
                     ),
+                    color: isError
+                        ? const Color(0xFFFF4444).withValues(alpha: 0.06)
+                        : null,
                     border: Border.all(
-                      color: context.colorTheme.outline,
-                      width: 1.3.w,
+                      color: isError
+                          ? const Color(0xFFFF4444).withValues(alpha: 0.6)
+                          : context.colorTheme.outline,
+                      width: isError ? 1.5.w : 1.3.w,
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (message.hasAttachments)
-                        ...message.attachments!.map(
-                          (a) => Padding(
-                            padding: EdgeInsets.only(bottom: 8.h),
-                            child: _AttachmentPreview(attachment: a),
-                          ),
+                  child: isError
+                      ? _ErrorMessage(content: message.content)
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (message.hasAttachments)
+                              ...message.attachments!.map(
+                                (a) => Padding(
+                                  padding: EdgeInsets.only(bottom: 8.h),
+                                  child: _AttachmentPreview(attachment: a),
+                                ),
+                              ),
+                            if (message.content.isNotEmpty)
+                              Text(
+                                message.content,
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  color: Colors.black,
+                                ),
+                              ),
+                          ],
                         ),
-                      if (message.content.isNotEmpty)
-                        Text(
-                          message.content,
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            color: Colors.black,
-                          ),
-                        ),
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -110,6 +118,34 @@ class _AiBubble extends StatelessWidget {
           SizedBox(width: 32.w),
         ],
       ),
+    );
+  }
+}
+
+class _ErrorMessage extends StatelessWidget {
+  const _ErrorMessage({required this.content});
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.error_outline_rounded,
+          color: const Color(0xFFFF4444),
+          size: 18.sp,
+        ),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Text(
+            content,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: const Color(0xFFCC2222),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

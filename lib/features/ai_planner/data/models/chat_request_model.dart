@@ -10,8 +10,8 @@ abstract class ChatRequestModel with _$ChatRequestModel {
   const factory ChatRequestModel({
     required String sessionId,
     required String message,
-    required ChatCollectedDataModel collected,
-    required ChatCollectedDataModel cardAnswers,
+    required CollectedDataModel collected,
+    required CollectedDataModel cardAnswers,
   }) = _ChatRequestModel;
 
   factory ChatRequestModel.fromJson(Map<String, dynamic> json) =>
@@ -23,8 +23,8 @@ abstract class ChatRequestModel with _$ChatRequestModel {
     CollectedPlannerData? collected,
   }) {
     final collectedModel = collected == null
-        ? ChatCollectedDataModel.empty()
-        : ChatCollectedDataModel.fromEntity(collected);
+        ? CollectedDataModel.empty()
+        : CollectedDataModel.fromEntity(collected);
     return ChatRequestModel(
       sessionId: sessionId,
       message: message,
