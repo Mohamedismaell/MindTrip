@@ -59,6 +59,7 @@ class BudgetStep extends StatelessWidget {
                     selected: selectedBudget == budget,
                     onTap: () {
                       FocusScope.of(context).unfocus();
+                      customBudgetController.clear();
                       cubit.selectBudget(budget);
                     },
                   );

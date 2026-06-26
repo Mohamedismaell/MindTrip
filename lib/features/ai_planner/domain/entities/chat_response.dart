@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 
 class ChatResponse extends Equatable {
   const ChatResponse({
@@ -12,7 +12,7 @@ class ChatResponse extends Equatable {
 
   final String status;
   final String output;
-  final CollectedPlannerData collected;
+  final CollectedPlannerDataEntity collected;
   final List<String> missing;
 
   bool get isReadyToGenerate => missing.isEmpty;

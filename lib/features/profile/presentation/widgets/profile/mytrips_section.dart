@@ -59,22 +59,9 @@ class _MyTripsSectionState extends State<MyTripsSection> {
                 return _MyTripCard(
                   trip: trips[index],
                   onTap: () {
-                    //Todo: Handle the navigaiton works but with silly way
-                    if (trips[index].status == TripStatus.inProgress) {
-                      context.push(
-                        '${AppRoutes.tripDetails}?tripId=${trips[index].id}',
-                      );
-                    } else if (trips[index].status == TripStatus.draft) {
-                      if (trips[index].planJson == null) {
-                        context.push(
-                          '${AppRoutes.aiPlannerFlow}?tripId=${trips[index].id}',
-                        );
-                      } else {
-                        context.push(
-                          '${AppRoutes.tripDetails}?tripId=${trips[index].id}',
-                        );
-                      }
-                    }
+                    context.push(
+                      '${AppRoutes.tripDetails}?tripId=${trips[index].tripId}',
+                    );
                   },
                 );
               },
@@ -134,7 +121,7 @@ class _MyTripCard extends StatelessWidget {
                           SizedBox(height: 8.h),
                           Expanded(
                             child: Text(
-                              trip.destination,
+                              trip.destinationGovernorate,
                               style: AppTextStyles.h9Bold.copyWith(
                                 fontSize: 14.sp,
                                 color: AppColors.primaryLightGray,

@@ -273,7 +273,7 @@ class TripCalendarScreen extends StatelessWidget {
                             );
                           },
                           child: ScheduleTripTile(
-                            key: ValueKey(trip.id),
+                            key: ValueKey(trip.tripId),
                             trip: trip,
                           ),
                         ),

@@ -130,7 +130,7 @@ class TripCard extends StatelessWidget {
                               SizedBox(width: 8.w),
 
                               Text(
-                                '${trip.destination} / Egypt',
+                                '${trip.destinationGovernorate} / Egypt',
                                 style: context.textTheme.bodyMedium?.copyWith(
                                   color: context.colorTheme.onSurfaceVariant,
                                 ),
@@ -141,23 +141,22 @@ class TripCard extends StatelessWidget {
                           ),
 
                           SizedBox(width: 9.w),
-                          if (trip.tripStart != null)
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.calendar_today_outlined,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today_outlined,
+                                color: context.colorTheme.onSurfaceVariant,
+                                size: 16.sp,
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                '${trip.durationDays} Days',
+                                style: context.textTheme.bodyMedium?.copyWith(
                                   color: context.colorTheme.onSurfaceVariant,
-                                  size: 16.sp,
                                 ),
-                                SizedBox(width: 8.w),
-                                Text(
-                                  '${trip.durationDays} Days',
-                                  style: context.textTheme.bodyMedium?.copyWith(
-                                    color: context.colorTheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
 
@@ -226,9 +225,7 @@ class TripCard extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              isInprogress
-                                  ? '${trip.daysRemaining} Days'
-                                  : '${(trip.planningProgress * 100).toInt()}%',
+                              '${(trip.progressPercent * 100).toInt()}%',
                               style: AppTextStyles.h8Medium.copyWith(
                                 color: context.colorTheme.onSurface,
                               ),
@@ -239,9 +236,7 @@ class TripCard extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20.r),
                           child: LinearProgressIndicator(
-                            value: isInprogress
-                                ? trip.tripProgress
-                                : trip.planningProgress,
+                            value: trip.progressPercent.toDouble(),
                             backgroundColor: AppColors.primaryLightGray,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               context.colorTheme.primary,

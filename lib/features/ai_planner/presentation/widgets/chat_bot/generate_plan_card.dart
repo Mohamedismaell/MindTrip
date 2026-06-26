@@ -5,7 +5,7 @@ import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/data/models/generate_plan_request_model.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 
 class GeneratePlanCard extends StatelessWidget {
   const GeneratePlanCard({
@@ -15,7 +15,7 @@ class GeneratePlanCard extends StatelessWidget {
     required this.onGenerate,
   });
 
-  final CollectedPlannerData collected;
+  final CollectedPlannerDataEntity collected;
   final String aiMessage;
   final ValueChanged<GeneratePlanRequestModel> onGenerate;
 
@@ -133,7 +133,7 @@ class _Header extends StatelessWidget {
 class _SummaryGrid extends StatelessWidget {
   const _SummaryGrid({required this.collected});
 
-  final CollectedPlannerData collected;
+  final CollectedPlannerDataEntity collected;
 
   @override
   Widget build(BuildContext context) {

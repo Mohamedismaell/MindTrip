@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateTripRequestModel {
 
- String get title; String get destinationGovernorate; String get city; String? get startDate; String? get endDate; int get people; int get totalBudgetEgp; int get totalCost; GeneratedPlanModel get plan; CollectedDataModel get collected; String? get sessionId; bool get isPublic; int get status;
+ String get title; String get destinationGovernorate; String get city; String? get startDate; String? get endDate; int get people; int get totalBudgetEgp; int get totalCost; GeneratedPlanModel get plan; CollectedDataModel get collected; String? get sessionId; bool get isPublic;
 /// Create a copy of CreateTripRequestModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CreateTripRequestModelCopyWith<CreateTripRequestModel> get copyWith => _$Create
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateTripRequestModel&&(identical(other.title, title) || other.title == title)&&(identical(other.destinationGovernorate, destinationGovernorate) || other.destinationGovernorate == destinationGovernorate)&&(identical(other.city, city) || other.city == city)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalBudgetEgp, totalBudgetEgp) || other.totalBudgetEgp == totalBudgetEgp)&&(identical(other.totalCost, totalCost) || other.totalCost == totalCost)&&(identical(other.plan, plan) || other.plan == plan)&&(identical(other.collected, collected) || other.collected == collected)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateTripRequestModel&&(identical(other.title, title) || other.title == title)&&(identical(other.destinationGovernorate, destinationGovernorate) || other.destinationGovernorate == destinationGovernorate)&&(identical(other.city, city) || other.city == city)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalBudgetEgp, totalBudgetEgp) || other.totalBudgetEgp == totalBudgetEgp)&&(identical(other.totalCost, totalCost) || other.totalCost == totalCost)&&(identical(other.plan, plan) || other.plan == plan)&&(identical(other.collected, collected) || other.collected == collected)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,destinationGovernorate,city,startDate,endDate,people,totalBudgetEgp,totalCost,plan,collected,sessionId,isPublic,status);
+int get hashCode => Object.hash(runtimeType,title,destinationGovernorate,city,startDate,endDate,people,totalBudgetEgp,totalCost,plan,collected,sessionId,isPublic);
 
 @override
 String toString() {
-  return 'CreateTripRequestModel(title: $title, destinationGovernorate: $destinationGovernorate, city: $city, startDate: $startDate, endDate: $endDate, people: $people, totalBudgetEgp: $totalBudgetEgp, totalCost: $totalCost, plan: $plan, collected: $collected, sessionId: $sessionId, isPublic: $isPublic, status: $status)';
+  return 'CreateTripRequestModel(title: $title, destinationGovernorate: $destinationGovernorate, city: $city, startDate: $startDate, endDate: $endDate, people: $people, totalBudgetEgp: $totalBudgetEgp, totalCost: $totalCost, plan: $plan, collected: $collected, sessionId: $sessionId, isPublic: $isPublic)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CreateTripRequestModelCopyWith<$Res>  {
   factory $CreateTripRequestModelCopyWith(CreateTripRequestModel value, $Res Function(CreateTripRequestModel) _then) = _$CreateTripRequestModelCopyWithImpl;
 @useResult
 $Res call({
- String title, String destinationGovernorate, String city, String? startDate, String? endDate, int people, int totalBudgetEgp, int totalCost, GeneratedPlanModel plan, CollectedDataModel collected, String? sessionId, bool isPublic, int status
+ String title, String destinationGovernorate, String city, String? startDate, String? endDate, int people, int totalBudgetEgp, int totalCost, GeneratedPlanModel plan, CollectedDataModel collected, String? sessionId, bool isPublic
 });
 
 
@@ -65,7 +65,7 @@ class _$CreateTripRequestModelCopyWithImpl<$Res>
 
 /// Create a copy of CreateTripRequestModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? destinationGovernorate = null,Object? city = null,Object? startDate = freezed,Object? endDate = freezed,Object? people = null,Object? totalBudgetEgp = null,Object? totalCost = null,Object? plan = null,Object? collected = null,Object? sessionId = freezed,Object? isPublic = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? destinationGovernorate = null,Object? city = null,Object? startDate = freezed,Object? endDate = freezed,Object? people = null,Object? totalBudgetEgp = null,Object? totalCost = null,Object? plan = null,Object? collected = null,Object? sessionId = freezed,Object? isPublic = null,}) {
   return _then(_self.copyWith(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,destinationGovernorate: null == destinationGovernorate ? _self.destinationGovernorate : destinationGovernorate // ignore: cast_nullable_to_non_nullable
@@ -79,8 +79,7 @@ as int,plan: null == plan ? _self.plan : plan // ignore: cast_nullable_to_non_nu
 as GeneratedPlanModel,collected: null == collected ? _self.collected : collected // ignore: cast_nullable_to_non_nullable
 as CollectedDataModel,sessionId: freezed == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
 as String?,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
-as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as int,
+as bool,
   ));
 }
 /// Create a copy of CreateTripRequestModel
@@ -183,10 +182,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String destinationGovernorate,  String city,  String? startDate,  String? endDate,  int people,  int totalBudgetEgp,  int totalCost,  GeneratedPlanModel plan,  CollectedDataModel collected,  String? sessionId,  bool isPublic,  int status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String destinationGovernorate,  String city,  String? startDate,  String? endDate,  int people,  int totalBudgetEgp,  int totalCost,  GeneratedPlanModel plan,  CollectedDataModel collected,  String? sessionId,  bool isPublic)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateTripRequestModel() when $default != null:
-return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startDate,_that.endDate,_that.people,_that.totalBudgetEgp,_that.totalCost,_that.plan,_that.collected,_that.sessionId,_that.isPublic,_that.status);case _:
+return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startDate,_that.endDate,_that.people,_that.totalBudgetEgp,_that.totalCost,_that.plan,_that.collected,_that.sessionId,_that.isPublic);case _:
   return orElse();
 
 }
@@ -204,10 +203,10 @@ return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startD
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String destinationGovernorate,  String city,  String? startDate,  String? endDate,  int people,  int totalBudgetEgp,  int totalCost,  GeneratedPlanModel plan,  CollectedDataModel collected,  String? sessionId,  bool isPublic,  int status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String destinationGovernorate,  String city,  String? startDate,  String? endDate,  int people,  int totalBudgetEgp,  int totalCost,  GeneratedPlanModel plan,  CollectedDataModel collected,  String? sessionId,  bool isPublic)  $default,) {final _that = this;
 switch (_that) {
 case _CreateTripRequestModel():
-return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startDate,_that.endDate,_that.people,_that.totalBudgetEgp,_that.totalCost,_that.plan,_that.collected,_that.sessionId,_that.isPublic,_that.status);case _:
+return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startDate,_that.endDate,_that.people,_that.totalBudgetEgp,_that.totalCost,_that.plan,_that.collected,_that.sessionId,_that.isPublic);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -224,10 +223,10 @@ return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startD
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String destinationGovernorate,  String city,  String? startDate,  String? endDate,  int people,  int totalBudgetEgp,  int totalCost,  GeneratedPlanModel plan,  CollectedDataModel collected,  String? sessionId,  bool isPublic,  int status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String destinationGovernorate,  String city,  String? startDate,  String? endDate,  int people,  int totalBudgetEgp,  int totalCost,  GeneratedPlanModel plan,  CollectedDataModel collected,  String? sessionId,  bool isPublic)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateTripRequestModel() when $default != null:
-return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startDate,_that.endDate,_that.people,_that.totalBudgetEgp,_that.totalCost,_that.plan,_that.collected,_that.sessionId,_that.isPublic,_that.status);case _:
+return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startDate,_that.endDate,_that.people,_that.totalBudgetEgp,_that.totalCost,_that.plan,_that.collected,_that.sessionId,_that.isPublic);case _:
   return null;
 
 }
@@ -239,7 +238,7 @@ return $default(_that.title,_that.destinationGovernorate,_that.city,_that.startD
 @JsonSerializable()
 
 class _CreateTripRequestModel implements CreateTripRequestModel {
-  const _CreateTripRequestModel({required this.title, required this.destinationGovernorate, required this.city, this.startDate, this.endDate, required this.people, required this.totalBudgetEgp, required this.totalCost, required this.plan, required this.collected, this.sessionId, required this.isPublic, required this.status});
+  const _CreateTripRequestModel({required this.title, required this.destinationGovernorate, required this.city, this.startDate, this.endDate, required this.people, required this.totalBudgetEgp, required this.totalCost, required this.plan, required this.collected, this.sessionId, required this.isPublic});
   factory _CreateTripRequestModel.fromJson(Map<String, dynamic> json) => _$CreateTripRequestModelFromJson(json);
 
 @override final  String title;
@@ -254,7 +253,6 @@ class _CreateTripRequestModel implements CreateTripRequestModel {
 @override final  CollectedDataModel collected;
 @override final  String? sessionId;
 @override final  bool isPublic;
-@override final  int status;
 
 /// Create a copy of CreateTripRequestModel
 /// with the given fields replaced by the non-null parameter values.
@@ -269,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateTripRequestModel&&(identical(other.title, title) || other.title == title)&&(identical(other.destinationGovernorate, destinationGovernorate) || other.destinationGovernorate == destinationGovernorate)&&(identical(other.city, city) || other.city == city)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalBudgetEgp, totalBudgetEgp) || other.totalBudgetEgp == totalBudgetEgp)&&(identical(other.totalCost, totalCost) || other.totalCost == totalCost)&&(identical(other.plan, plan) || other.plan == plan)&&(identical(other.collected, collected) || other.collected == collected)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateTripRequestModel&&(identical(other.title, title) || other.title == title)&&(identical(other.destinationGovernorate, destinationGovernorate) || other.destinationGovernorate == destinationGovernorate)&&(identical(other.city, city) || other.city == city)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.people, people) || other.people == people)&&(identical(other.totalBudgetEgp, totalBudgetEgp) || other.totalBudgetEgp == totalBudgetEgp)&&(identical(other.totalCost, totalCost) || other.totalCost == totalCost)&&(identical(other.plan, plan) || other.plan == plan)&&(identical(other.collected, collected) || other.collected == collected)&&(identical(other.sessionId, sessionId) || other.sessionId == sessionId)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,destinationGovernorate,city,startDate,endDate,people,totalBudgetEgp,totalCost,plan,collected,sessionId,isPublic,status);
+int get hashCode => Object.hash(runtimeType,title,destinationGovernorate,city,startDate,endDate,people,totalBudgetEgp,totalCost,plan,collected,sessionId,isPublic);
 
 @override
 String toString() {
-  return 'CreateTripRequestModel(title: $title, destinationGovernorate: $destinationGovernorate, city: $city, startDate: $startDate, endDate: $endDate, people: $people, totalBudgetEgp: $totalBudgetEgp, totalCost: $totalCost, plan: $plan, collected: $collected, sessionId: $sessionId, isPublic: $isPublic, status: $status)';
+  return 'CreateTripRequestModel(title: $title, destinationGovernorate: $destinationGovernorate, city: $city, startDate: $startDate, endDate: $endDate, people: $people, totalBudgetEgp: $totalBudgetEgp, totalCost: $totalCost, plan: $plan, collected: $collected, sessionId: $sessionId, isPublic: $isPublic)';
 }
 
 
@@ -289,7 +287,7 @@ abstract mixin class _$CreateTripRequestModelCopyWith<$Res> implements $CreateTr
   factory _$CreateTripRequestModelCopyWith(_CreateTripRequestModel value, $Res Function(_CreateTripRequestModel) _then) = __$CreateTripRequestModelCopyWithImpl;
 @override @useResult
 $Res call({
- String title, String destinationGovernorate, String city, String? startDate, String? endDate, int people, int totalBudgetEgp, int totalCost, GeneratedPlanModel plan, CollectedDataModel collected, String? sessionId, bool isPublic, int status
+ String title, String destinationGovernorate, String city, String? startDate, String? endDate, int people, int totalBudgetEgp, int totalCost, GeneratedPlanModel plan, CollectedDataModel collected, String? sessionId, bool isPublic
 });
 
 
@@ -306,7 +304,7 @@ class __$CreateTripRequestModelCopyWithImpl<$Res>
 
 /// Create a copy of CreateTripRequestModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? destinationGovernorate = null,Object? city = null,Object? startDate = freezed,Object? endDate = freezed,Object? people = null,Object? totalBudgetEgp = null,Object? totalCost = null,Object? plan = null,Object? collected = null,Object? sessionId = freezed,Object? isPublic = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? destinationGovernorate = null,Object? city = null,Object? startDate = freezed,Object? endDate = freezed,Object? people = null,Object? totalBudgetEgp = null,Object? totalCost = null,Object? plan = null,Object? collected = null,Object? sessionId = freezed,Object? isPublic = null,}) {
   return _then(_CreateTripRequestModel(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,destinationGovernorate: null == destinationGovernorate ? _self.destinationGovernorate : destinationGovernorate // ignore: cast_nullable_to_non_nullable
@@ -320,8 +318,7 @@ as int,plan: null == plan ? _self.plan : plan // ignore: cast_nullable_to_non_nu
 as GeneratedPlanModel,collected: null == collected ? _self.collected : collected // ignore: cast_nullable_to_non_nullable
 as CollectedDataModel,sessionId: freezed == sessionId ? _self.sessionId : sessionId // ignore: cast_nullable_to_non_nullable
 as String?,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
-as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as int,
+as bool,
   ));
 }
 

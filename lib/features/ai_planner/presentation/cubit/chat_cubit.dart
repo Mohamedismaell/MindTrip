@@ -3,7 +3,7 @@ import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/ai_planner/data/models/chat_request_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/send_message_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
@@ -69,7 +69,7 @@ class ChatCubit extends SafeCubit<ChatState> {
   Future<void> sendMessage(
     String text, {
     required String sessionId,
-    CollectedPlannerData? collected,
+    CollectedPlannerDataEntity? collected,
   }) async {
     final cleanText = text.trim();
 

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/core/database/api/api_error_mapper.dart';
 import 'package:mindtrip/features/trips/data/datasources/trip_local_datasource.dart';
@@ -6,7 +5,6 @@ import 'package:mindtrip/features/trips/data/datasources/remote_trip_datasource.
 import 'package:mindtrip/features/trips/data/models/create_trip_request_model.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
-import 'package:mindtrip/features/ai_planner/data/models/generated_plan_model.dart';
 import 'package:mindtrip/features/trips/data/mapper/trip_mapper.dart';
 
 class TripRepositoryImpl implements TripRepository {
@@ -89,26 +87,6 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Result<void>> confirmTrip(String tripId) async {
-    try {
-      final tripOpt = await getTripById(tripId);
-      final trip = tripOpt.when(
-        success: (t) => t,
-        failure: (_) => null,
-        cancelled: () => null,
-      );
-      if (trip != null) {
-        await _remoteDataSource.confirmTrip(trip.id);
-        final updated = trip.copyWith(status: TripStatus.upcoming);
-        await saveTrip(updated);
-      }
-      return const Result.ok(null);
-    } catch (e) {
-      return Result.error(ApiErrorMapper.fromException(e));
-    }
-  }
-
-  @override
   Future<Result<void>> updateTripStatus(String tripId, String status) async {
     try {
       final tripOpt = await getTripById(tripId);
@@ -118,12 +96,14 @@ class TripRepositoryImpl implements TripRepository {
         cancelled: () => null,
       );
       if (trip != null) {
-        await _remoteDataSource.updateTripStatus(trip.id, status);
+        await _remoteDataSource.updateTripStatus(trip.tripId, status);
         final statusEnum = TripStatus.values.firstWhere(
           (e) => e.name.toLowerCase() == status.toLowerCase(),
           orElse: () => trip.status,
         );
-        final updated = trip.copyWith(status: statusEnum);
+        //Todo check
+
+        final updated = trip;
         await saveTrip(updated);
       }
       return const Result.ok(null);
@@ -139,9 +119,9 @@ class TripRepositoryImpl implements TripRepository {
       return tripsResult.when(
         success: (trips) {
           for (final trip in trips) {
-            if (_containsPlace(trip, placeId)) {
-              return Result.ok(true);
-            }
+            // if (_containsPlace(trip, placeId)) {
+            // return Result.ok(true);
+            // }
           }
           return const Result.ok(false);
         },
@@ -153,22 +133,22 @@ class TripRepositoryImpl implements TripRepository {
     }
   }
 
-  // Helpers
-  bool _containsPlace(Trip trip, String placeId) {
-    if (trip.collectedJson == null || trip.collectedJson!.isEmpty) return false;
-    try {
-      final planData = jsonDecode(trip.collectedJson!);
-      final plan = GeneratedPlanModel.fromJson(planData);
+  // // Helpers
+  // bool _containsPlace(Trip trip, String placeId) {
+  //   if (trip.collected == null ) return false;
+  //   try {
+  //     final planData = jsonDecode(trip.collectedJson!);
+  //     final plan = GeneratedPlanModel.fromJson(planData);
 
-      for (final place in plan.plan?.accommodation ?? []) {
-        if (place.placeId == placeId) return true;
-      }
-      for (final day in (plan.plan?.days ?? {}).values) {
-        if (day.allPlaces.any((p) => p.placeId == placeId)) return true;
-      }
-      return false;
-    } catch (_) {
-      return false;
-    }
-  }
+  //     for (final place in plan.plan?.accommodation ?? []) {
+  //       if (place.placeId == placeId) return true;
+  //     }
+  //     for (final day in (plan.plan?.days ?? {}).values) {
+  //       if (day.allPlaces.any((p) => p.placeId == placeId)) return true;
+  //     }
+  //     return false;
+  //   } catch (_) {
+  //     return false;
+  //   }
+  // }
 }

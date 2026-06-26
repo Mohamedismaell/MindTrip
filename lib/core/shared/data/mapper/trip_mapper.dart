@@ -1,35 +1,64 @@
-import 'package:mindtrip/core/shared/data/models/trip_model.dart';
-import 'package:mindtrip/core/shared/domain/entities/trip_entity.dart';
-import 'package:mindtrip/features/places/data/mapper/place_mapper.dart';
+import 'package:mindtrip/features/ai_planner/data/mapper/generated_plan_mapper.dart';
+import 'package:mindtrip/features/ai_planner/data/models/collected_planner_data_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
+import 'package:mindtrip/features/trips/data/models/trip_model.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
-extension TripMapper on TripModel {
-  TripEntity toEntity() {
-    return TripEntity(
-      id: id,
+extension TripModelMapper on TripModel {
+  Trip toEntity() {
+    return Trip(
+      tripId: tripId,
       title: title,
-      subtitle: subtitle,
-      imageUrl: imageUrl,
-      places: places.map((e) => e.toEntity()).toList(),
-      startDate: startDate,
-      endDate: endDate,
-      isFavorite: isFavorite,
-      isAiGenerated: isAiGenerated,
+      city: city,
+      destinationGovernorate: destinationGovernorate,
+      tripStart: startDate,
+      tripEnd: endDate,
+      durationDays: durationDays,
+      people: people,
+      totalBudget: totalBudgetEgp,
+      totalCost: totalCost,
+      status: TripStatus.values.firstWhere(
+        (e) => e.name.toLowerCase() == status.toLowerCase(),
+        orElse: () => TripStatus.draft,
+      ),
+      shareToken: shareToken,
+      isPublic: isPublic,
+      sessionId: sessionId,
+      coverImageUrl: coverImageUrl,
+      placesCount: placesCount,
+      progressPercent: progressPercent,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      plan: plan.toEntity(),
+      collected: collected.toEntity(),
     );
   }
 }
 
-extension TripEntityMapper on TripEntity {
+extension TripEntityMapper on Trip {
   TripModel toModel() {
     return TripModel(
-      id: id,
+      tripId: tripId,
       title: title,
-      subtitle: subtitle,
-      imageUrl: imageUrl,
-      places: places.map((e) => e.toModel()).toList(),
-      startDate: startDate,
-      endDate: endDate,
-      isFavorite: isFavorite,
-      isAiGenerated: isAiGenerated,
+      destinationGovernorate: destinationGovernorate,
+      city: city,
+      startDate: tripStart,
+      endDate: tripEnd,
+      durationDays: durationDays,
+      people: people,
+      totalBudgetEgp: totalBudget,
+      totalCost: totalCost,
+      status: status.name,
+      shareToken: shareToken,
+      isPublic: isPublic,
+      sessionId: sessionId,
+      collected: (collected ?? const CollectedPlannerDataEntity()).toModel(),
+      coverImageUrl: coverImageUrl ?? '',
+      placesCount: placesCount,
+      progressPercent: progressPercent.toInt(),
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      plan: plan.toModel(),
     );
   }
 }

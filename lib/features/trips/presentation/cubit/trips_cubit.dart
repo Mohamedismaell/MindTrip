@@ -42,25 +42,25 @@ class TripsCubit extends SafeCubit<TripsState> {
   //   );
   // }
 
-  Future<String> createDraft(String destination) async {
-    final now = DateTime.now();
-    final newTrip = Trip(
-      id: _uuid.v4(),
-      title: 'Trip to $destination',
-      status: TripStatus.draft,
-      createdAt: now,
-      updatedAt: now,
-      destination: destination,
-      people: 1,
-      totalBudget: 0,
-      totalCost: 0,
-      interests: const [],
-    );
+  // Future<String> createDraft(String destination) async {
+  //   final now = DateTime.now();
+  //   final newTrip = Trip(
+  //     id: _uuid.v4(),
+  //     title: 'Trip to $destination',
+  //     status: TripStatus.draft,
+  //     createdAt: now,
+  //     updatedAt: now,
+  //     destination: destination,
+  //     people: 1,
+  //     totalBudget: 0,
+  //     totalCost: 0,
+  //     interests: const [],
+  //   );
 
-    final updatedTrips = List<Trip>.from(state.trips)..add(newTrip);
-    emitSafe(state.copyWith(trips: updatedTrips));
-    return newTrip.id;
-  }
+  //   final updatedTrips = List<Trip>.from(state.trips)..add(newTrip);
+  //   emitSafe(state.copyWith(trips: updatedTrips));
+  //   return newTrip.id;
+  // }
 
   // Future<void> saveTripDraft(Trip trip) async {
   //   final result = await _repository.saveTrip(trip);

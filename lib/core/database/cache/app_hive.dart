@@ -5,7 +5,6 @@ import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/data/models/banner_model.dart';
 import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
-import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 import 'package:mindtrip/features/search/data/models/recent_search_model.dart';
 
 class AppHive {
@@ -13,14 +12,13 @@ class AppHive {
   static late Box<PlaceModel> favoritesBox;
   static late Box<String> favoritesSyncQueueBox;
   static late Box<PlaceModel> placesCacheBox;
-  static late Box<TripModel> tripsBox;
+  static late Box<Map> tripsBox;
   static late Box<String> itinerariesBox;
   static late Box planningSessionsBox;
   static late Box<BannerModel> bannersBox;
   static late Box<PlannerPreviewModel> plannerPreviewsBox;
   static late Box<List<String>> metadataBox;
   static late Box<RecentSearchModel> recentSearchBox;
-
   static Future<void> init() async {
     await Hive.initFlutter();
     registerAdapters();
@@ -41,7 +39,7 @@ class AppHive {
       Hive.registerAdapter(PlaceCategoryAdapter());
     }
     // if (!Hive.isAdapterRegistered(TripModelAdapter().typeId)) {
-    //   Hive.registerAdapter(TripModelAdapter());
+    // Hive.registerAdapter(TripModelAdapter());
     // }
     if (!Hive.isAdapterRegistered(BannerModelAdapter().typeId)) {
       Hive.registerAdapter(BannerModelAdapter());
@@ -62,7 +60,7 @@ class AppHive {
     favoritesBox = await Hive.openBox<PlaceModel>('favoritesBox');
     favoritesSyncQueueBox = await Hive.openBox('favoritesSyncQueueBox');
     placesCacheBox = await Hive.openBox('placesCacheBox');
-    tripsBox = await Hive.openBox('tripsBox');
+    tripsBox = await Hive.openBox<Map>('tripsBox');
     itinerariesBox = await Hive.openBox<String>('itinerariesBox');
     planningSessionsBox = await Hive.openBox('planning_sessions');
     bannersBox = await Hive.openBox<BannerModel>('bannersBox');

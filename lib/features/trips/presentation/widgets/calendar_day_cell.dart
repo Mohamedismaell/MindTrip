@@ -64,10 +64,10 @@ class CalendarDayCell extends StatelessWidget {
       return dayText;
     }
 
-    events.sort((a, b) => b.tripStart!.compareTo(a.tripStart!));
+    events.sort((a, b) => b.tripStart.compareTo(a.tripStart));
 
     final trip = events.first;
-    final colors = TripColorPalette.getColorsForId(trip.id);
+    final colors = TripColorPalette.getColorsForId(trip.tripId);
 
     return Stack(
       alignment: Alignment.center,

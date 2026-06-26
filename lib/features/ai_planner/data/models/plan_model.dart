@@ -1,58 +1,68 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart';
 import 'package:mindtrip/features/ai_planner/data/models/plan_place_model.dart';
 
-part 'plan_model.freezed.dart';
-part 'plan_model.g.dart';
+class PlanModel {
+  const PlanModel({this.accommodation = const [], this.days = const {}});
 
-@freezed
-abstract class PlanModel with _$PlanModel {
-  const PlanModel._();
+  final List<PlanPlaceModel> accommodation;
+  final Map<int, DayPlanModel> days;
 
-  const factory PlanModel({
-    @JsonKey(name: 'accommodation', fromJson: _parseAccommodation)
-    @Default([])
-    List<PlanPlaceModel> accommodation,
+  factory PlanModel.fromJson(Map<String, dynamic> json) {
+    final accommodation =
+        (json['accommodation'] as List?)
+            ?.whereType<Map<String, dynamic>>()
+            .map(PlanPlaceModel.fromJson)
+            .toList() ??
+        const <PlanPlaceModel>[];
 
-    /// Days keyed by day number (1-based). Populated via custom fromJson.
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default({})
-    Map<int, DayPlanModel> days,
-  }) = _PlanModel;
+    final days = <int, DayPlanModel>{};
 
-  factory PlanModel.fromJson(Map<String, dynamic> json) =>
-      _parsePlanModel(json);
-}
+    for (final entry in json.entries) {
+      if (!entry.key.startsWith('day')) continue;
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+      final day = int.tryParse(entry.key.substring(3));
+      if (day == null) continue;
 
-List<PlanPlaceModel> _parseAccommodation(dynamic value) {
-  if (value is! List) return [];
-  return value
-      .whereType<Map<String, dynamic>>()
-      .map(PlanPlaceModel.fromJson)
-      .toList();
-}
-
-/// Custom factory that first runs Freezed's generated fromJson, then manually
-/// parses every `dayN` key from the raw JSON into the [days] map.
-PlanModel _parsePlanModel(Map<String, dynamic> json) {
-  // Parse accommodation via the generated code path.
-  final accommodation = _parseAccommodation(json['accommodation']);
-
-  // Parse every dayN entry dynamically.
-  final days = <int, DayPlanModel>{};
-  for (final entry in json.entries) {
-    if (!entry.key.startsWith('day')) continue;
-    final dayNumber = int.tryParse(entry.key.replaceFirst('day', ''));
-    if (dayNumber == null) continue;
-    final raw = entry.value;
-    if (raw is Map<String, dynamic>) {
-      days[dayNumber] = DayPlanModel.fromJson(raw);
+      if (entry.value is Map<String, dynamic>) {
+        days[day] = DayPlanModel.fromJson(entry.value);
+      }
     }
+
+    return PlanModel(accommodation: accommodation, days: days);
   }
 
-  return PlanModel(accommodation: accommodation, days: days);
+  Map<String, dynamic> toJson() {
+    final json = <String, dynamic>{
+      'accommodation': accommodation.map((e) => e.toJson()).toList(),
+    };
+
+    final sortedDays = days.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+
+    for (final entry in sortedDays) {
+      json['day${entry.key}'] = entry.value.toJson();
+    }
+
+    return json;
+  }
+
+  PlanModel copyWith({
+    List<PlanPlaceModel>? accommodation,
+    Map<int, DayPlanModel>? days,
+  }) {
+    return PlanModel(
+      accommodation: accommodation ?? this.accommodation,
+      days: days ?? this.days,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlanModel &&
+          other.accommodation == accommodation &&
+          other.days == days;
+
+  @override
+  int get hashCode => Object.hash(accommodation, days);
 }

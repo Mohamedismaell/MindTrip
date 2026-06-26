@@ -3,10 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 
-//Todo Edit UI later
 class GeneratingDialog extends StatelessWidget {
-  const GeneratingDialog({super.key});
-
+  const GeneratingDialog({
+    super.key,
+    required this.title,
+    required this.description,
+  });
+  final String title;
+  final String description;
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -34,14 +38,14 @@ class GeneratingDialog extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  'Generating Itinerary ...',
+                  title,
                   style: AppTextStyles.h6Bold.copyWith(color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 10.h),
                 Text(
                   textAlign: TextAlign.center,
-                  'Please wait while our AI works its magic to create the perfect trip plan tailored to your preferences.',
+                  description,
                   style: AppTextStyles.h7Regular.copyWith(
                     color: context.colorTheme.outline,
                   ),

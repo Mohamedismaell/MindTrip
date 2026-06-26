@@ -9,7 +9,6 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_search_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
-import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/start_planning_button.dart';
@@ -120,7 +119,9 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                           return TripCard(
                             trip: trip,
                             tripStatus: trip.status,
-                            onContinue: () => _resumeTrip(context, trip),
+                            onContinue: () => context.push(
+                              '${AppRoutes.tripDetails}?tripId=${trip.tripId}',
+                            ),
                           );
                         },
                       );
@@ -133,17 +134,6 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
         ),
       ),
     );
-  }
-
-  void _resumeTrip(BuildContext context, Trip trip) {
-    final hasItinerary =
-        trip.planJson != null || trip.status == TripStatus.inProgress;
-
-    if (hasItinerary) {
-      context.push('${AppRoutes.tripDetails}?tripId=${trip.id}');
-    } else {
-      context.push('${AppRoutes.aiPlannerFlow}?tripId=${trip.id}');
-    }
   }
 }
 

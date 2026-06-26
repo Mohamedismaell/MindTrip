@@ -57,9 +57,10 @@ class TripsState extends Equatable {
   List<Trip> get drafts =>
       trips.where((t) => t.status == TripStatus.draft).toList();
 
-  Trip? getTripById(String id) => trips.where((t) => t.id == id).firstOrNull;
+  Trip? getTripById(String id) =>
+      trips.where((t) => t.tripId == id).firstOrNull;
 
-  int getTripIndex(String id) => trips.indexWhere((t) => t.id == id);
+  int getTripIndex(String id) => trips.indexWhere((t) => t.tripId == id);
 
   List<Trip> get completed =>
       trips.where((t) => t.status == TripStatus.completed).toList();
@@ -95,7 +96,7 @@ class TripsState extends Equatable {
         .where(
           (t) =>
               t.title.toLowerCase().contains(searchQuery) ||
-              t.destination.toLowerCase().contains(searchQuery),
+              t.destinationGovernorate.toLowerCase().contains(searchQuery),
         )
         .toList();
   }

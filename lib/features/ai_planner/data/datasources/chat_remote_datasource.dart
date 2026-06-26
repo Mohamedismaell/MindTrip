@@ -8,7 +8,7 @@ import 'package:mindtrip/features/ai_planner/data/models/chat_request_model.dart
 import 'package:mindtrip/features/ai_planner/data/models/chat_response_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_response.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 
 abstract class ChatRemoteDataSource {
   Future<ChatResponse> sendMessage(ChatRequestModel request);
@@ -53,7 +53,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       return ChatResponse(
         status: 'chat',
         output: response,
-        collected: const CollectedPlannerData(),
+        collected: const CollectedPlannerDataEntity(),
         missing: const [],
       );
     }
@@ -65,7 +65,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     return ChatResponse(
       status: 'chat',
       output: response?.toString() ?? '',
-      collected: const CollectedPlannerData(),
+      collected: const CollectedPlannerDataEntity(),
       missing: const [],
     );
   }

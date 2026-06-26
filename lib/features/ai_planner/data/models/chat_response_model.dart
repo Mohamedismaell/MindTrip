@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/core/utils/json_parser.dart';
-import 'package:mindtrip/features/ai_planner/data/models/chat_collected_data_model.dart';
+import 'package:mindtrip/features/ai_planner/data/models/collected_planner_data_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_response.dart';
 
 part 'chat_response_model.freezed.dart';

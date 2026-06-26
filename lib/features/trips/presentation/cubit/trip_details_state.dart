@@ -1,15 +1,9 @@
-import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
-enum TripDetailsStatus { initial, loading, loaded, saving, saved, error }
+enum TripDetailsStatus { initial, loading, loaded, error }
 
 class TripDetailsState {
-  final TripDetailsStatus status;
-  final Trip? trip;
-  final GeneratedPlanEntity? generatedPlan;
-  final int activeDay;
-  final String? errorMessage;
-
   const TripDetailsState({
     this.status = TripDetailsStatus.initial,
     this.trip,
@@ -18,21 +12,31 @@ class TripDetailsState {
     this.errorMessage,
   });
 
-  bool get isUnsaved => generatedPlan != null && trip == null;
+  static const _unset = Object();
+
+  final TripDetailsStatus status;
+  final Trip? trip;
+  final GeneratedPlanEntity? generatedPlan;
+  final int activeDay;
+  final String? errorMessage;
 
   TripDetailsState copyWith({
     TripDetailsStatus? status,
-    Trip? trip,
-    GeneratedPlanEntity? generatedPlan,
+    Object? trip = _unset,
+    Object? generatedPlan = _unset,
     int? activeDay,
-    String? errorMessage,
+    Object? errorMessage = _unset,
   }) {
     return TripDetailsState(
       status: status ?? this.status,
-      trip: trip ?? this.trip,
-      generatedPlan: generatedPlan ?? this.generatedPlan,
+      trip: identical(trip, _unset) ? this.trip : trip as Trip?,
+      generatedPlan: identical(generatedPlan, _unset)
+          ? this.generatedPlan
+          : generatedPlan as GeneratedPlanEntity?,
       activeDay: activeDay ?? this.activeDay,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: identical(errorMessage, _unset)
+          ? this.errorMessage
+          : errorMessage as String?,
     );
   }
 }

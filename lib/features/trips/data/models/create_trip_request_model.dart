@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mindtrip/features/ai_planner/data/models/chat_collected_data_model.dart';
+import 'package:mindtrip/features/ai_planner/data/models/collected_planner_data_model.dart';
 import 'package:mindtrip/features/ai_planner/data/models/generated_plan_model.dart';
 
 part 'create_trip_request_model.freezed.dart';
 part 'create_trip_request_model.g.dart';
 
-@freezed
+// @JsonSerializable(explicitToJson: true)
+@Freezed()
 abstract class CreateTripRequestModel with _$CreateTripRequestModel {
   const factory CreateTripRequestModel({
     required String title,
@@ -24,8 +25,6 @@ abstract class CreateTripRequestModel with _$CreateTripRequestModel {
     String? sessionId,
 
     required bool isPublic,
-
-    required int status,
   }) = _CreateTripRequestModel;
 
   factory CreateTripRequestModel.fromJson(Map<String, dynamic> json) =>

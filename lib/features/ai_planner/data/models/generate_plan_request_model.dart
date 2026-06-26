@@ -19,13 +19,15 @@ abstract class GeneratePlanRequestModel with _$GeneratePlanRequestModel {
       _$GeneratePlanRequestModelFromJson(json);
 
   factory GeneratePlanRequestModel.fromTrip(Trip trip) {
+    final collected = trip.collected;
+
     return GeneratePlanRequestModel(
-      city: trip.destination,
-      days: trip.durationDays,
-      budget: trip.totalBudget,
-      people: trip.people,
-      interests: trip.interests,
-      mustInclude: null,
+      city: trip.city,
+      days: collected?.days ?? trip.durationDays,
+      budget: collected?.budget ?? trip.totalBudget,
+      people: collected?.people ?? trip.people,
+      interests: collected?.interests ?? const [],
+      mustInclude: collected?.mustInclude.join(', '),
     );
   }
 }

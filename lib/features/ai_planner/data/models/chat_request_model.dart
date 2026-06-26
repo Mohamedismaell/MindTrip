@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mindtrip/features/ai_planner/data/models/chat_collected_data_model.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+import 'package:mindtrip/features/ai_planner/data/models/collected_planner_data_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 
 part 'chat_request_model.freezed.dart';
 part 'chat_request_model.g.dart';
@@ -20,7 +20,7 @@ abstract class ChatRequestModel with _$ChatRequestModel {
   factory ChatRequestModel.fromCollected({
     required String sessionId,
     required String message,
-    CollectedPlannerData? collected,
+    CollectedPlannerDataEntity? collected,
   }) {
     final collectedModel = collected == null
         ? CollectedDataModel.empty()
@@ -39,8 +39,8 @@ extension ChatRequestModelJson on ChatRequestModel {
     return {
       'sessionId': sessionId,
       'message': message,
-      'collected': collected.toJson(),
-      'cardAnswers': cardAnswers.toCardAnswersJson(),
+      'collected': collected,
+      'cardAnswers': cardAnswers,
     };
   }
 }

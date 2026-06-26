@@ -5,12 +5,12 @@ import 'package:mindtrip/features/ai_planner/data/models/plan_model.dart';
 part 'generated_plan_model.freezed.dart';
 part 'generated_plan_model.g.dart';
 
-@freezed
+// fromJson: true, toJson: true
+// @JsonSerializable(explicitToJson: true)
+@Freezed()
 abstract class GeneratedPlanModel with _$GeneratedPlanModel {
   const factory GeneratedPlanModel({
-    @JsonKey(name: 'trip_id', fromJson: parseString)
-    @Default('')
-    String tripId,
+    @JsonKey(name: 'trip_id', fromJson: parseString) @Default('') String tripId,
 
     @JsonKey(fromJson: parseString) @Default('') String status,
 

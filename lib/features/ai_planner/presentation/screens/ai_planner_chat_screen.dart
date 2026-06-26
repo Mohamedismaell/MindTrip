@@ -3,11 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
-import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/features/ai_planner/data/models/generate_plan_request_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_screen_listener.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/message_list.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
@@ -15,11 +13,7 @@ import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
-import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_input_bar.dart';
-import 'package:mindtrip/core/shared/routes/app_routes.dart';
-import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
-import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
 //Todo Bug with float button wrong nav route
 class AiPlannerChatScreen extends StatefulWidget {

@@ -7,35 +7,39 @@ import 'package:mindtrip/core/errors/exceptions/no_internet_exception.dart';
 import 'package:mindtrip/core/errors/failure/failure.dart';
 
 class ApiErrorMapper {
-  static Failure fromException(Object e) {
+  static Failure fromException(Object e, [StackTrace? stackTrace]) {
     if (kDebugMode) {
-      print("ERROR TYPE: ${e.runtimeType}");
-      print("ERROR OBJECT: $e");
+      debugPrint('════════════ EXCEPTION ════════════');
+      debugPrint('Type: ${e.runtimeType}');
+      debugPrint('Error: $e');
+      if (stackTrace != null) {
+        debugPrintStack(stackTrace: stackTrace);
+      }
+      debugPrint('═══════════════════════════════════');
     }
+
+    if (e is Failure) return e;
+
     if (e is DioException) {
       return fromDioException(e);
     }
 
-    // if (e is PostgrestException) {
-    //   return ServerFailure(e.message);
-    // }
-
-    // if (e is AuthException) {
-    //   return UnauthorizedFailure(message: e.message);
-    // }
     if (e is GoogleSignInException) {
-      // Cancellation handled in repository if possible,
-      // but here we must return a Failure since this method returns Failure.
       return ServerFailure(e.description ?? 'Google sign in failed');
     }
+
     if (e is CacheFailure) {
       return const CacheFailure(message: 'Failed to access local cache');
     }
+
     if (e is SocketException) {
       return const NetworkFailure(message: 'No internet connection');
     }
 
-    return UnknownFailure(message: '$e', debugMessage: e.toString());
+    return UnknownFailure(
+      message: '${e.runtimeType}: $e',
+      debugMessage: stackTrace?.toString() ?? '',
+    );
   }
 
   static Failure fromDioException(DioException e) {

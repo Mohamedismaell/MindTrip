@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_attachment.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/chat_response.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 part 'chat_state.freezed.dart';
 
 enum ChatStatus { initial, loaded, error }
@@ -23,8 +23,8 @@ abstract class ChatState with _$ChatState {
 extension ChatStateX on ChatState {
   bool get isReadyToGenerate => lastResponse?.isReadyToGenerate ?? false;
 
-  CollectedPlannerData get collected =>
-      lastResponse?.collected ?? const CollectedPlannerData();
+  CollectedPlannerDataEntity get collected =>
+      lastResponse?.collected ?? const CollectedPlannerDataEntity();
 
   List<String> get missing => lastResponse?.missing ?? const [];
 

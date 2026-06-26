@@ -130,7 +130,7 @@ class TripShareCard extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          trip.destination,
+                          trip.destinationGovernorate,
                           style: AppTextStyles.h3Bold.copyWith(
                             color: Colors.white,
                           ),
@@ -145,7 +145,7 @@ class TripShareCard extends StatelessWidget {
                             ),
                             SizedBox(width: 4),
                             Text(
-                              trip.destination,
+                              trip.destinationGovernorate,
                               style: AppTextStyles.h8Medium.copyWith(
                                 color: Colors.white,
                               ),

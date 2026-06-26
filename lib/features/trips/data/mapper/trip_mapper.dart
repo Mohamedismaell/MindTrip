@@ -1,33 +1,37 @@
+import 'package:mindtrip/core/shared/data/mapper/trip_mapper.dart';
+import 'package:mindtrip/features/ai_planner/data/mapper/generated_plan_mapper.dart';
+import 'package:mindtrip/features/ai_planner/data/models/collected_planner_data_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 extension TripModelMapper on TripModel {
   Trip toEntity() {
     return Trip(
-      id: tripId,
-      backendTripId: tripId,
+      tripId: tripId,
       title: title,
+      city: city,
+      destinationGovernorate: destinationGovernorate,
+      tripStart: startDate,
+      tripEnd: endDate,
+      durationDays: durationDays,
+      people: people,
+      totalBudget: totalBudgetEgp,
+      totalCost: totalCost,
       status: TripStatus.values.firstWhere(
         (e) => e.name.toLowerCase() == status.toLowerCase(),
         orElse: () => TripStatus.draft,
       ),
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      destination: city,
-      destinationGovernorate: destinationGovernorate,
-      tripStart: startDate,
-      tripEnd: endDate,
-      people: people,
-      totalBudget: totalBudgetEgp,
-      totalCost: totalCost,
       shareToken: shareToken,
       isPublic: isPublic,
       sessionId: sessionId,
-      collectedJson: collectedJson,
       coverImageUrl: coverImageUrl,
       placesCount: placesCount,
-      progressPercent: progressPercent ?? 0.0,
-      interests: const [],
+      progressPercent: progressPercent,
+      plan: plan.toEntity(),
+      // collected: ... we'll discuss below
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 }
@@ -35,10 +39,10 @@ extension TripModelMapper on TripModel {
 extension TripEntityMapper on Trip {
   TripModel toModel() {
     return TripModel(
-      tripId: backendTripId ?? id,
+      tripId: tripId,
       title: title,
-      destinationGovernorate: destinationGovernorate ?? '',
-      city: destination,
+      destinationGovernorate: destinationGovernorate,
+      city: city,
       startDate: tripStart,
       endDate: tripEnd,
       durationDays: durationDays,
@@ -49,13 +53,13 @@ extension TripEntityMapper on Trip {
       shareToken: shareToken,
       isPublic: isPublic,
       sessionId: sessionId,
-      collectedJson: collectedJson,
-      coverImageUrl: coverImageUrl,
+      collected: (collected ?? const CollectedPlannerDataEntity()).toModel(),
+      coverImageUrl: coverImageUrl ?? '',
       placesCount: placesCount,
       progressPercent: progressPercent,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      plan: planJson,
+      plan: plan.toModel(),
     );
   }
 }

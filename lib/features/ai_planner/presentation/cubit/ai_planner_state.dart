@@ -1,19 +1,39 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/features/ai_planner/data/models/budget_tier_model.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'ai_planner_state.freezed.dart';
 
-enum AiPlannerStatus { initial, loading, success, failure }
+enum AiPlannerStatus {
+  initial,
+  generatingPlan,
+  generated,
+  savingTrip,
+  success,
+  generateFailure,
+  saveFailure,
+}
 
 @freezed
 abstract class AiPlannerState with _$AiPlannerState {
+  const AiPlannerState._();
+
   const factory AiPlannerState({
     String? tripId,
     GeneratedPlanEntity? generatedPlan,
+
+    @Default(CollectedPlannerDataEntity())
+    CollectedPlannerDataEntity collectedData,
+
+    String? savedTripId,
+
     @Default(AiPlannerStatus.initial) AiPlannerStatus status,
+
     @Default('') String errorMessage,
+
     @Default(0) int currentPage,
+
     @Default('') String sessionId,
 
     @Default(0) int maxReachedPage,
@@ -40,8 +60,6 @@ abstract class AiPlannerState with _$AiPlannerState {
 
     required DateTime focusedDay,
   }) = _AiPlannerState;
-
-  const AiPlannerState._();
 
   DateTime get resolvedVisibleMonth =>
       visibleMonth ?? DateTime(DateTime.now().year, DateTime.now().month);

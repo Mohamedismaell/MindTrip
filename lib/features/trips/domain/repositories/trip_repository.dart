@@ -9,9 +9,7 @@ abstract class TripRepository {
   Future<Result<void>> deleteTrip(String id);
   Future<Result<void>> updateTrip(Trip trip);
 
-  // New backend actions
   Future<Result<Trip>> createTrip(CreateTripRequestModel request);
-  Future<Result<void>> confirmTrip(String tripId);
   Future<Result<void>> updateTripStatus(String tripId, String status);
 
   // Add-to-Trip UI check methods

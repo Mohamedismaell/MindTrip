@@ -99,7 +99,7 @@ class ScheduleTripTile extends StatelessWidget {
                         SizedBox(width: 7.5.w),
                         Expanded(
                           child: Text(
-                            '${trip.destination} / Egypt',
+                            '${trip.destinationGovernorate} / Egypt',
                             style: context.textTheme.bodyMedium?.copyWith(
                               color: context.colorTheme.onSurfaceVariant,
                             ),
@@ -110,23 +110,22 @@ class ScheduleTripTile extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 10.h),
-                    if (trip.tripStart != null)
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.calendar_today_outlined,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today_outlined,
+                          color: context.colorTheme.onSurfaceVariant,
+                          size: 16.sp,
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          '${DateFormat('dd MMMM').format(trip.tripStart)} - ${DateFormat('dd MMMM').format(trip.tripStart)} ',
+                          style: context.textTheme.bodyMedium?.copyWith(
                             color: context.colorTheme.onSurfaceVariant,
-                            size: 16.sp,
                           ),
-                          SizedBox(width: 8.w),
-                          Text(
-                            '${DateFormat('dd MMMM').format(trip.tripStart!)} - ${DateFormat('dd MMMM').format(trip.tripStart!)} ',
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colorTheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -140,7 +139,7 @@ class ScheduleTripTile extends StatelessWidget {
             Icons.bookmark,
             size: 32.sp,
             color: TripColorPalette.getColorForId(
-              trip.id,
+              trip.tripId,
             ).withValues(alpha: 0.5),
           ),
         ),

@@ -52,7 +52,7 @@ $Res call({
 });
 
 
-$PlanModelCopyWith<$Res>? get plan;
+
 
 }
 /// @nodoc
@@ -76,19 +76,7 @@ as int,plan: freezed == plan ? _self.plan : plan // ignore: cast_nullable_to_non
 as PlanModel?,
   ));
 }
-/// Create a copy of GeneratedPlanModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$PlanModelCopyWith<$Res>? get plan {
-    if (_self.plan == null) {
-    return null;
-  }
 
-  return $PlanModelCopyWith<$Res>(_self.plan!, (value) {
-    return _then(_self.copyWith(plan: value));
-  });
-}
 }
 
 
@@ -273,7 +261,7 @@ $Res call({
 });
 
 
-@override $PlanModelCopyWith<$Res>? get plan;
+
 
 }
 /// @nodoc
@@ -298,19 +286,7 @@ as PlanModel?,
   ));
 }
 
-/// Create a copy of GeneratedPlanModel
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$PlanModelCopyWith<$Res>? get plan {
-    if (_self.plan == null) {
-    return null;
-  }
 
-  return $PlanModelCopyWith<$Res>(_self.plan!, (value) {
-    return _then(_self.copyWith(plan: value));
-  });
-}
 }
 
 // dart format on

@@ -10,22 +10,19 @@ abstract class RemoteTripDataSource {
   Future<Trip> createTrip(CreateTripRequestModel request);
   Future<List<Trip>> getAllTrips();
   Future<void> updateTripStatus(String tripId, String status);
-  Future<void> confirmTrip(String tripId);
 }
 
 class RemoteTripDataSourceImpl implements RemoteTripDataSource {
-  final ApiConsumer _apiConsumer;
+  const RemoteTripDataSourceImpl(this._apiConsumer);
 
-  RemoteTripDataSourceImpl(this._apiConsumer);
+  final ApiConsumer _apiConsumer;
 
   @override
   Future<Trip> createTrip(CreateTripRequestModel request) async {
     try {
-      final requestData = request;
-
       final response = await _apiConsumer.post(
         EndPoints.trips,
-        data: requestData,
+        data: request.toJson(),
       );
 
       final responseData = response as Map<String, dynamic>;
@@ -56,15 +53,6 @@ class RemoteTripDataSourceImpl implements RemoteTripDataSource {
         '${EndPoints.trips}/$tripId/status',
         data: {'status': status},
       );
-    } catch (e) {
-      throw ApiErrorMapper.fromException(e);
-    }
-  }
-
-  @override
-  Future<void> confirmTrip(String tripId) async {
-    try {
-      await _apiConsumer.post(EndPoints.confirmTrip(tripId), data: {});
     } catch (e) {
       throw ApiErrorMapper.fromException(e);
     }

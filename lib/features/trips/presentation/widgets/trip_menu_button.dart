@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
-import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/rename_trip_dialog.dart';
 
 class TripMenuButton extends StatelessWidget {
@@ -28,7 +26,7 @@ class TripMenuButton extends StatelessWidget {
         if (value == rename) {
           showRenameTripDialog(
             context,
-            tripId: trip.id,
+            tripId: trip.tripId,
             currentTitle: trip.title,
           );
         } else if (value == delete) {
