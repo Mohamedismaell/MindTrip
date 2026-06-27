@@ -32,10 +32,11 @@ class AddToTripSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listener: (context, state) {
-        if (state.status == AddToTripStatus.loading) {
-          print('Loading opop op op po op po');
-          AppDialog.showLoading(context: context);
-        } else if (state.status == AddToTripStatus.initial) {
+        // if (state.status == AddToTripStatus.loading) {
+        //   print('Loading opop op op po op po');
+        //   AppDialog.showLoading(context: context);
+        // } else
+        if (state.status == AddToTripStatus.initial) {
           AppDialog.hideLoading(context);
         } else if (state.status == AddToTripStatus.success) {
           print('Success opop op op po op po');
@@ -54,54 +55,59 @@ class AddToTripSheet extends StatelessWidget {
           );
         }
 
-        return Column(
-          children: [
-            const DragDivider(),
-            SizedBox(height: 25.h),
-            Text(
-              'Add to a Trip',
-              style: AppTextStyles.h6Bold.copyWith(color: AppColors.pureBlack),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              'Choose where you want to add this place',
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorTheme.outline,
-              ),
-            ),
-            SizedBox(height: 24.h),
-            Expanded(
-              child: Skeletonizer(
-                enabled:
-                    state.status == AddToTripStatus.loading &&
-                    state.trips.isEmpty,
-                child: ListView.separated(
-                  controller: scrollController,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: state.trips.length + 1,
-                  separatorBuilder: (_, _) => SizedBox(height: 16.h),
-                  itemBuilder: (context, index) {
-                    if (index == state.trips.length) {
-                      return _TripTile(
-                        title: 'Create New Trip',
-                        subtitle: 'Start planning with AI',
-                        leadingIcon: Icons.add,
-                        onTap: onCreateNew,
-                      );
-                    }
-                    final trip = state.trips[index];
-                    return _TripTile(
-                      title: trip.title,
-                      subtitle: '${trip.plan.daysCount} days',
-                      imagePath: trip.coverImageUrl,
-                      onTap: () => onTripSelected(trip),
-                      placesCount: trip.plan.placesCount.toString(),
-                    );
-                  },
+        return Skeletonizer(
+          enabled: state.status == AddToTripStatus.loading,
+          child: Column(
+            children: [
+              const DragDivider(),
+              SizedBox(height: 25.h),
+              Text(
+                'Add to a Trip',
+                style: AppTextStyles.h6Bold.copyWith(
+                  color: AppColors.pureBlack,
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 8.h),
+              Text(
+                'Choose where you want to add this place',
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorTheme.outline,
+                ),
+              ),
+              SizedBox(height: 24.h),
+              Expanded(
+                child: Skeletonizer(
+                  enabled:
+                      state.status == AddToTripStatus.loading &&
+                      state.trips.isEmpty,
+                  child: ListView.separated(
+                    controller: scrollController,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: state.trips.length + 1,
+                    separatorBuilder: (_, _) => SizedBox(height: 16.h),
+                    itemBuilder: (context, index) {
+                      if (index == state.trips.length) {
+                        return _TripTile(
+                          title: 'Create New Trip',
+                          subtitle: 'Start planning with AI',
+                          leadingIcon: Icons.add,
+                          onTap: onCreateNew,
+                        );
+                      }
+                      final trip = state.trips[index];
+                      return _TripTile(
+                        title: trip.title,
+                        subtitle: '${trip.plan.daysCount} days',
+                        imagePath: trip.coverImageUrl,
+                        onTap: () => onTripSelected(trip),
+                        placesCount: trip.plan.placesCount.toString(),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -126,16 +132,19 @@ class _TripTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TapScaleEffect(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(8.w, 8.w, 21.w, 8.w),
-        decoration: BoxDecoration(
-          color: context.colorTheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(20.r),
+    return Container(
+      padding: EdgeInsets.fromLTRB(8.w, 8.w, 21.w, 8.w),
+      decoration: BoxDecoration(
+        color: context.colorTheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(20.r),
 
-          border: Border.all(color: context.colorTheme.outline, width: 1.3),
+        border: Border.all(color: context.colorTheme.outline, width: 1.3),
+      ),
+      child: TapScaleEffect(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.r),
         ),
+        onTap: onTap,
         child: Row(
           children: [
             ClipRRect(
@@ -152,7 +161,14 @@ class _TripTile extends StatelessWidget {
                   : Container(
                       width: 100.w,
                       height: 100.h,
-                      color: context.colorTheme.primaryContainer,
+                      // color: context.colorTheme.primaryContainer
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: context.colorTheme.outline,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
                       alignment: Alignment.center,
                       child: Icon(
                         leadingIcon ?? Icons.map_outlined,

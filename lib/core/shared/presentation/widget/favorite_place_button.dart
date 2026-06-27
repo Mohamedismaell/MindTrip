@@ -26,19 +26,20 @@ class FavoriteButton extends StatelessWidget {
     final inactiveColor = context.colorTheme.outline;
     final activeColor = context.colorTheme.error;
 
-    return TapScaleEffect(
-      onTap: () {
-        if (!isFavorite) HapticFeedback.lightImpact();
-        onTap();
-      },
-      child: Container(
-        width: 40.w,
-        height: 40.w,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: backgroundColor ?? AppColors.pureWhite,
-          boxShadow: showShadow ? [AppShadows.favoritePlaceButtonShadow] : null,
-        ),
+    return Container(
+      width: 40.w,
+      height: 40.w,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: backgroundColor ?? AppColors.pureWhite,
+        boxShadow: showShadow ? [AppShadows.favoritePlaceButtonShadow] : null,
+      ),
+      child: TapScaleEffect(
+        shape: const CircleBorder(),
+        onTap: () {
+          if (!isFavorite) HapticFeedback.lightImpact();
+          onTap();
+        },
         child: Stack(
           alignment: Alignment.center,
           children: [

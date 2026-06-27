@@ -74,11 +74,13 @@ class _HomeCategoryPlacesListState extends State<HomeCategoryPlacesList> {
               padding: EdgeInsets.symmetric(vertical: 20.h),
               child: AppErrorWidget(
                 imageSize: 100,
-                message: state.categoryPlacesError.isNotEmpty 
-                    ? state.categoryPlacesError 
+                message: state.categoryPlacesError.isNotEmpty
+                    ? state.categoryPlacesError
                     : 'Failed to load places for this category',
                 onPressed: () {
-                  context.read<HomeCubit>().loadFirstPageCategoryPlaces(state.selectedCategory.category);
+                  context.read<HomeCubit>().loadFirstPageCategoryPlaces(
+                    state.selectedCategory.category,
+                  );
                 },
               ),
             ),
@@ -91,9 +93,12 @@ class _HomeCategoryPlacesListState extends State<HomeCategoryPlacesList> {
               padding: EdgeInsets.symmetric(vertical: 20.h),
               child: AppErrorWidget.noInfo(
                 imageSize: 100,
-                message: 'No places found for ${state.selectedCategory.category}',
+                message:
+                    'No places found for ${state.selectedCategory.category}',
                 onRetry: () {
-                   context.read<HomeCubit>().loadFirstPageCategoryPlaces(state.selectedCategory.category);
+                  context.read<HomeCubit>().loadFirstPageCategoryPlaces(
+                    state.selectedCategory.category,
+                  );
                 },
               ),
             ),
@@ -144,6 +149,7 @@ class _CategoryPlaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      enableOverlay: false,
       onTap: () {
         context.push(
           '${AppRoutes.placeDetails}?placeId=${place.id}&heroTag=home_cat_${place.id}',
@@ -168,7 +174,9 @@ class _CategoryPlaceCard extends StatelessWidget {
                 top: 8.h,
                 right: 8.w,
                 child: FavoriteButton(
-                  isFavorite: context.watch<FavoriteCubit>().isFavorite(place.id),
+                  isFavorite: context.watch<FavoriteCubit>().isFavorite(
+                    place.id,
+                  ),
                   onTap: () {
                     final cubit = context.read<FavoriteCubit>();
                     cubit.toggleFavorite(

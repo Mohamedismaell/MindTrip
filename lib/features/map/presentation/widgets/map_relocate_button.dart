@@ -13,6 +13,7 @@ class MapRelocateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      enableOverlay: false,
       onTap: onPressed,
       child: Container(
         width: 56.w,

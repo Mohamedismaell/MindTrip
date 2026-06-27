@@ -21,6 +21,7 @@ class MapActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      enableOverlay: false,
       onTap: onTap ?? () {},
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8.h),

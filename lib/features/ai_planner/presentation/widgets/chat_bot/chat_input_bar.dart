@@ -213,6 +213,7 @@ class ChatInputBar extends StatelessWidget {
 
                             child: hasText || attachments.isNotEmpty
                                 ? TapScaleEffect(
+                                    enableOverlay: false,
                                     key: const ValueKey('send_button'),
 
                                     onTap: isOverLimit
@@ -245,6 +246,7 @@ class ChatInputBar extends StatelessWidget {
                                   )
                                 : TapScaleEffect(
                                     key: const ValueKey('voice_button'),
+                                    enableOverlay: false,
                                     onTap: () async {
                                       final result = await context.push<String>(
                                         AppRoutes.voiceSearch,

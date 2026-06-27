@@ -103,12 +103,12 @@ class _CounterAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TapScaleEffect(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(30.r),
-      child: SizedBox(
-        height: 45.h,
-        width: 34.w,
+    return SizedBox(
+      height: 45.h,
+      width: 34.w,
+      child: TapScaleEffect(
+        onTap: onTap,
+        shape: const CircleBorder(),
         child: Center(
           child: Text(
             label,

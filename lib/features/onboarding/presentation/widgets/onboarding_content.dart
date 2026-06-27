@@ -65,16 +65,20 @@ class OnboardingContent extends StatelessWidget {
                   maintainAnimation: true,
                   maintainState: true,
                   child: TapScaleEffect(
+                    shape: const CircleBorder(),
                     onTap: () async {
                       await context.read<OnboardingCubit>().finishOnboarding();
                       if (context.mounted) {
                         context.go(AppRoutes.welcomeAuth);
                       }
                     },
-                    child: Text(
-                      AppStrings.skip,
-                      style: AppTextStyles.h7Regular.copyWith(
-                        color: context.colorTheme.outline,
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.all(4.r),
+                      child: Text(
+                        AppStrings.skip,
+                        style: AppTextStyles.h7Regular.copyWith(
+                          color: context.colorTheme.outline,
+                        ),
                       ),
                     ),
                   ),

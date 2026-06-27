@@ -72,10 +72,17 @@ class AuthoptionsContent extends StatelessWidget {
                 SizedBox(width: 4.w),
                 TapScaleEffect(
                   onTap: onActionTap,
-                  child: Text(
-                    actionText,
-                    style: context.textTheme.bodyLarge!.copyWith(
-                      color: context.colorTheme.primary,
+                  shape: const CircleBorder(),
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.symmetric(
+                      horizontal: 4.w,
+                      vertical: 4.h,
+                    ),
+                    child: Text(
+                      actionText,
+                      style: context.textTheme.bodyLarge!.copyWith(
+                        color: context.colorTheme.primary,
+                      ),
                     ),
                   ),
                 ),

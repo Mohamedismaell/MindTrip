@@ -76,23 +76,23 @@ class _PlaceCardVarticalGridState extends State<PlaceCardVarticalGrid> {
           opacity: _removing ? 0 : 1,
           duration: const Duration(milliseconds: 280),
           curve: Curves.easeOut,
-          child: TapScaleEffect(
-            onTap: () {
-              context.push(
-                '${AppRoutes.placeDetails}?placeId=${widget.place.id}&heroTag=${widget.heroPrefix}_${widget.place.id}',
-                extra: widget.place,
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.pureWhite,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.pureWhite,
+              borderRadius: BorderRadius.circular(15.r),
+              boxShadow: [AppShadows.tourPackagesCard],
+              border: Border.all(color: context.colorTheme.outline, width: 0.5),
+            ),
+            child: TapScaleEffect(
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.r),
-                boxShadow: [AppShadows.tourPackagesCard],
-                border: Border.all(
-                  color: context.colorTheme.outline,
-                  width: 0.5,
-                ),
               ),
+              onTap: () {
+                context.push(
+                  '${AppRoutes.placeDetails}?placeId=${widget.place.id}&heroTag=${widget.heroPrefix}_${widget.place.id}',
+                  extra: widget.place,
+                );
+              },
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
                 child: Column(

@@ -140,10 +140,11 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
                           color: AppColors.primaryLightGray,
                           shape: BoxShape.circle,
                         ),
-                        child: TapScaleEffect(
-                          onTap: () => _handleBack(true),
-                          child: Padding(
-                            padding: EdgeInsets.all(10.r),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.r),
+                          child: TapScaleEffect(
+                            shape: const CircleBorder(),
+                            onTap: () => _handleBack(true),
                             child: Icon(
                               Icons.close,
                               color: context.colorTheme.onSurfaceVariant,
@@ -200,7 +201,7 @@ class _HeaderIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TapScaleEffect(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(25.r),
+      shape: const CircleBorder(),
       child: Container(
         width: 40.w,
         height: 40.h,

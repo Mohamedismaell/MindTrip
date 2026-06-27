@@ -31,6 +31,7 @@ class ExploreCategoryChips extends StatelessWidget {
                 final isSelected = state.selectedCategories.contains(category);
 
                 return TapScaleEffect(
+                  enableOverlay: false,
                   onTap: () {
                     context.read<ExploreCubit>().onCategoryToggled(category);
                   },

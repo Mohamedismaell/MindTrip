@@ -65,6 +65,7 @@ class _MapSearchOverlayState extends State<MapSearchOverlay> {
                     child: Row(
                       children: [
                         TapScaleEffect(
+                          enableOverlay: false,
                           onTap: () {
                             context.read<MapSearchBloc>().add(
                               const SearchCleared(),

@@ -140,6 +140,7 @@ class _HiddenGemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       onTap: () {
         context.push(
           '${AppRoutes.placeDetails}?placeId=${place.id}&heroTag=home_hg_${place.id}',

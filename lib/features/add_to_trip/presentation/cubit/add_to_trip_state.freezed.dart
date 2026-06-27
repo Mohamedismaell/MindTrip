@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AddToTripState {
 
- PlaceEntity get place; AddToTripStatus get status; List<Trip> get trips; Trip? get selectedTrip; String get errorMessage;// For creating new trip
- DateTime? get startDate; DateTime? get endDate; int get adultCount; int get childCount; String get budget; int get currentPage;
+ PlaceEntity get place; AddToTripStatus get status; List<Trip> get trips; Trip? get selectedTrip; String get errorMessage; DateTime? get startDate; DateTime? get endDate; int get adultCount; String get budget; String get customBudget; int get currentPage;
 /// Create a copy of AddToTripState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +25,16 @@ $AddToTripStateCopyWith<AddToTripState> get copyWith => _$AddToTripStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddToTripState&&(identical(other.place, place) || other.place == place)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.trips, trips)&&(identical(other.selectedTrip, selectedTrip) || other.selectedTrip == selectedTrip)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.adultCount, adultCount) || other.adultCount == adultCount)&&(identical(other.childCount, childCount) || other.childCount == childCount)&&(identical(other.budget, budget) || other.budget == budget)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddToTripState&&(identical(other.place, place) || other.place == place)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.trips, trips)&&(identical(other.selectedTrip, selectedTrip) || other.selectedTrip == selectedTrip)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.adultCount, adultCount) || other.adultCount == adultCount)&&(identical(other.budget, budget) || other.budget == budget)&&(identical(other.customBudget, customBudget) || other.customBudget == customBudget)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,place,status,const DeepCollectionEquality().hash(trips),selectedTrip,errorMessage,startDate,endDate,adultCount,childCount,budget,currentPage);
+int get hashCode => Object.hash(runtimeType,place,status,const DeepCollectionEquality().hash(trips),selectedTrip,errorMessage,startDate,endDate,adultCount,budget,customBudget,currentPage);
 
 @override
 String toString() {
-  return 'AddToTripState(place: $place, status: $status, trips: $trips, selectedTrip: $selectedTrip, errorMessage: $errorMessage, startDate: $startDate, endDate: $endDate, adultCount: $adultCount, childCount: $childCount, budget: $budget, currentPage: $currentPage)';
+  return 'AddToTripState(place: $place, status: $status, trips: $trips, selectedTrip: $selectedTrip, errorMessage: $errorMessage, startDate: $startDate, endDate: $endDate, adultCount: $adultCount, budget: $budget, customBudget: $customBudget, currentPage: $currentPage)';
 }
 
 
@@ -46,7 +45,7 @@ abstract mixin class $AddToTripStateCopyWith<$Res>  {
   factory $AddToTripStateCopyWith(AddToTripState value, $Res Function(AddToTripState) _then) = _$AddToTripStateCopyWithImpl;
 @useResult
 $Res call({
- PlaceEntity place, AddToTripStatus status, List<Trip> trips, Trip? selectedTrip, String errorMessage, DateTime? startDate, DateTime? endDate, int adultCount, int childCount, String budget, int currentPage
+ PlaceEntity place, AddToTripStatus status, List<Trip> trips, Trip? selectedTrip, String errorMessage, DateTime? startDate, DateTime? endDate, int adultCount, String budget, String customBudget, int currentPage
 });
 
 
@@ -63,7 +62,7 @@ class _$AddToTripStateCopyWithImpl<$Res>
 
 /// Create a copy of AddToTripState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? place = null,Object? status = null,Object? trips = null,Object? selectedTrip = freezed,Object? errorMessage = null,Object? startDate = freezed,Object? endDate = freezed,Object? adultCount = null,Object? childCount = null,Object? budget = null,Object? currentPage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? place = null,Object? status = null,Object? trips = null,Object? selectedTrip = freezed,Object? errorMessage = null,Object? startDate = freezed,Object? endDate = freezed,Object? adultCount = null,Object? budget = null,Object? customBudget = null,Object? currentPage = null,}) {
   return _then(_self.copyWith(
 place: null == place ? _self.place : place // ignore: cast_nullable_to_non_nullable
 as PlaceEntity,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
@@ -73,8 +72,8 @@ as Trip?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage 
 as String,startDate: freezed == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,adultCount: null == adultCount ? _self.adultCount : adultCount // ignore: cast_nullable_to_non_nullable
-as int,childCount: null == childCount ? _self.childCount : childCount // ignore: cast_nullable_to_non_nullable
 as int,budget: null == budget ? _self.budget : budget // ignore: cast_nullable_to_non_nullable
+as String,customBudget: null == customBudget ? _self.customBudget : customBudget // ignore: cast_nullable_to_non_nullable
 as String,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,
   ));
@@ -161,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PlaceEntity place,  AddToTripStatus status,  List<Trip> trips,  Trip? selectedTrip,  String errorMessage,  DateTime? startDate,  DateTime? endDate,  int adultCount,  int childCount,  String budget,  int currentPage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PlaceEntity place,  AddToTripStatus status,  List<Trip> trips,  Trip? selectedTrip,  String errorMessage,  DateTime? startDate,  DateTime? endDate,  int adultCount,  String budget,  String customBudget,  int currentPage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AddToTripState() when $default != null:
-return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.errorMessage,_that.startDate,_that.endDate,_that.adultCount,_that.childCount,_that.budget,_that.currentPage);case _:
+return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.errorMessage,_that.startDate,_that.endDate,_that.adultCount,_that.budget,_that.customBudget,_that.currentPage);case _:
   return orElse();
 
 }
@@ -182,10 +181,10 @@ return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.er
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PlaceEntity place,  AddToTripStatus status,  List<Trip> trips,  Trip? selectedTrip,  String errorMessage,  DateTime? startDate,  DateTime? endDate,  int adultCount,  int childCount,  String budget,  int currentPage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PlaceEntity place,  AddToTripStatus status,  List<Trip> trips,  Trip? selectedTrip,  String errorMessage,  DateTime? startDate,  DateTime? endDate,  int adultCount,  String budget,  String customBudget,  int currentPage)  $default,) {final _that = this;
 switch (_that) {
 case _AddToTripState():
-return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.errorMessage,_that.startDate,_that.endDate,_that.adultCount,_that.childCount,_that.budget,_that.currentPage);case _:
+return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.errorMessage,_that.startDate,_that.endDate,_that.adultCount,_that.budget,_that.customBudget,_that.currentPage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +201,10 @@ return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.er
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PlaceEntity place,  AddToTripStatus status,  List<Trip> trips,  Trip? selectedTrip,  String errorMessage,  DateTime? startDate,  DateTime? endDate,  int adultCount,  int childCount,  String budget,  int currentPage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PlaceEntity place,  AddToTripStatus status,  List<Trip> trips,  Trip? selectedTrip,  String errorMessage,  DateTime? startDate,  DateTime? endDate,  int adultCount,  String budget,  String customBudget,  int currentPage)?  $default,) {final _that = this;
 switch (_that) {
 case _AddToTripState() when $default != null:
-return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.errorMessage,_that.startDate,_that.endDate,_that.adultCount,_that.childCount,_that.budget,_that.currentPage);case _:
+return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.errorMessage,_that.startDate,_that.endDate,_that.adultCount,_that.budget,_that.customBudget,_that.currentPage);case _:
   return null;
 
 }
@@ -216,8 +215,8 @@ return $default(_that.place,_that.status,_that.trips,_that.selectedTrip,_that.er
 /// @nodoc
 
 
-class _AddToTripState implements AddToTripState {
-  const _AddToTripState({required this.place, this.status = AddToTripStatus.initial, final  List<Trip> trips = const [], this.selectedTrip, this.errorMessage = '', this.startDate, this.endDate, this.adultCount = 0, this.childCount = 0, this.budget = '', this.currentPage = 0}): _trips = trips;
+class _AddToTripState extends AddToTripState {
+  const _AddToTripState({required this.place, this.status = AddToTripStatus.initial, final  List<Trip> trips = const [], this.selectedTrip, this.errorMessage = '', this.startDate, this.endDate, this.adultCount = 0, this.budget = '', this.customBudget = '', this.currentPage = 0}): _trips = trips,super._();
   
 
 @override final  PlaceEntity place;
@@ -231,12 +230,11 @@ class _AddToTripState implements AddToTripState {
 
 @override final  Trip? selectedTrip;
 @override@JsonKey() final  String errorMessage;
-// For creating new trip
 @override final  DateTime? startDate;
 @override final  DateTime? endDate;
 @override@JsonKey() final  int adultCount;
-@override@JsonKey() final  int childCount;
 @override@JsonKey() final  String budget;
+@override@JsonKey() final  String customBudget;
 @override@JsonKey() final  int currentPage;
 
 /// Create a copy of AddToTripState
@@ -249,16 +247,16 @@ _$AddToTripStateCopyWith<_AddToTripState> get copyWith => __$AddToTripStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddToTripState&&(identical(other.place, place) || other.place == place)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._trips, _trips)&&(identical(other.selectedTrip, selectedTrip) || other.selectedTrip == selectedTrip)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.adultCount, adultCount) || other.adultCount == adultCount)&&(identical(other.childCount, childCount) || other.childCount == childCount)&&(identical(other.budget, budget) || other.budget == budget)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddToTripState&&(identical(other.place, place) || other.place == place)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._trips, _trips)&&(identical(other.selectedTrip, selectedTrip) || other.selectedTrip == selectedTrip)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.adultCount, adultCount) || other.adultCount == adultCount)&&(identical(other.budget, budget) || other.budget == budget)&&(identical(other.customBudget, customBudget) || other.customBudget == customBudget)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,place,status,const DeepCollectionEquality().hash(_trips),selectedTrip,errorMessage,startDate,endDate,adultCount,childCount,budget,currentPage);
+int get hashCode => Object.hash(runtimeType,place,status,const DeepCollectionEquality().hash(_trips),selectedTrip,errorMessage,startDate,endDate,adultCount,budget,customBudget,currentPage);
 
 @override
 String toString() {
-  return 'AddToTripState(place: $place, status: $status, trips: $trips, selectedTrip: $selectedTrip, errorMessage: $errorMessage, startDate: $startDate, endDate: $endDate, adultCount: $adultCount, childCount: $childCount, budget: $budget, currentPage: $currentPage)';
+  return 'AddToTripState(place: $place, status: $status, trips: $trips, selectedTrip: $selectedTrip, errorMessage: $errorMessage, startDate: $startDate, endDate: $endDate, adultCount: $adultCount, budget: $budget, customBudget: $customBudget, currentPage: $currentPage)';
 }
 
 
@@ -269,7 +267,7 @@ abstract mixin class _$AddToTripStateCopyWith<$Res> implements $AddToTripStateCo
   factory _$AddToTripStateCopyWith(_AddToTripState value, $Res Function(_AddToTripState) _then) = __$AddToTripStateCopyWithImpl;
 @override @useResult
 $Res call({
- PlaceEntity place, AddToTripStatus status, List<Trip> trips, Trip? selectedTrip, String errorMessage, DateTime? startDate, DateTime? endDate, int adultCount, int childCount, String budget, int currentPage
+ PlaceEntity place, AddToTripStatus status, List<Trip> trips, Trip? selectedTrip, String errorMessage, DateTime? startDate, DateTime? endDate, int adultCount, String budget, String customBudget, int currentPage
 });
 
 
@@ -286,7 +284,7 @@ class __$AddToTripStateCopyWithImpl<$Res>
 
 /// Create a copy of AddToTripState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? place = null,Object? status = null,Object? trips = null,Object? selectedTrip = freezed,Object? errorMessage = null,Object? startDate = freezed,Object? endDate = freezed,Object? adultCount = null,Object? childCount = null,Object? budget = null,Object? currentPage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? place = null,Object? status = null,Object? trips = null,Object? selectedTrip = freezed,Object? errorMessage = null,Object? startDate = freezed,Object? endDate = freezed,Object? adultCount = null,Object? budget = null,Object? customBudget = null,Object? currentPage = null,}) {
   return _then(_AddToTripState(
 place: null == place ? _self.place : place // ignore: cast_nullable_to_non_nullable
 as PlaceEntity,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
@@ -296,8 +294,8 @@ as Trip?,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage 
 as String,startDate: freezed == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,adultCount: null == adultCount ? _self.adultCount : adultCount // ignore: cast_nullable_to_non_nullable
-as int,childCount: null == childCount ? _self.childCount : childCount // ignore: cast_nullable_to_non_nullable
 as int,budget: null == budget ? _self.budget : budget // ignore: cast_nullable_to_non_nullable
+as String,customBudget: null == customBudget ? _self.customBudget : customBudget // ignore: cast_nullable_to_non_nullable
 as String,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,
   ));

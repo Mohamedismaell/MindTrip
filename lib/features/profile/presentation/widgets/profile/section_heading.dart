@@ -32,11 +32,20 @@ class SectionHeading extends StatelessWidget {
         const Spacer(),
         if (actionText != null)
           TapScaleEffect(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
             onTap: onActionTap,
-            child: Text(
-              actionText!,
-              style: context.textTheme.labelLarge!.copyWith(
-                color: context.colorTheme.primary,
+            child: Padding(
+              padding: EdgeInsetsGeometry.symmetric(
+                horizontal: 8.w,
+                vertical: 4.h,
+              ),
+              child: Text(
+                actionText!,
+                style: context.textTheme.labelLarge!.copyWith(
+                  color: context.colorTheme.primary,
+                ),
               ),
             ),
           ),

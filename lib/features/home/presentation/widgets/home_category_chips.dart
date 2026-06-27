@@ -31,6 +31,7 @@ class HomeCategoryChips extends StatelessWidget {
                 final isSelected = state.selectedCategory == category;
 
                 return TapScaleEffect(
+                  enableOverlay: false,
                   onTap: () {
                     context.read<HomeCubit>().onCategoryChanged(category);
                   },

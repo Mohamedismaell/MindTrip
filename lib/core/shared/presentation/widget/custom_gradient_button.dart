@@ -35,17 +35,19 @@ class CustomGradientButton extends StatelessWidget {
     final disabledTextColor = isDisabled
         ? context.colorTheme.onSurface.withValues(alpha: 0.38)
         : buttonColor;
-    return TapScaleEffect(
-      borderRadius: BorderRadius.circular(50.r),
-      onTap: onTap,
-      child: Container(
-        width: width ?? 200.w,
-        decoration: BoxDecoration(
-          color: isDisabled ? disabledBackground : null,
-          gradient: isDisabled ? null : AppGradients.mainBlueGradient,
-          boxShadow: isDisabled ? [] : [AppShadows.mainElevationButton],
+    return Container(
+      width: width ?? 200.w,
+      decoration: BoxDecoration(
+        color: isDisabled ? disabledBackground : null,
+        gradient: isDisabled ? null : AppGradients.mainBlueGradient,
+        boxShadow: isDisabled ? [] : [AppShadows.mainElevationButton],
+        borderRadius: BorderRadius.circular(50.r),
+      ),
+      child: TapScaleEffect(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.r),
         ),
+        onTap: onTap,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 12.h),
           child: Center(

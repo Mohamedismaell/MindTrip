@@ -73,6 +73,7 @@ class Interestes extends StatelessWidget {
                 onTap: () {
                   context.read<AiPlannerCubit>().toggleInterest(category);
                 },
+                enableOverlay: false,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 8.w,

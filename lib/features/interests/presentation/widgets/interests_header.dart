@@ -16,6 +16,7 @@ class InterestsHeader extends StatelessWidget {
       children: [
         context.canPop()
             ? TapScaleEffect(
+                enableOverlay: false,
                 onTap: () => context.pop(),
                 child: Container(
                   width: 40.w,

@@ -19,6 +19,7 @@ class EditTopBar extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: TapScaleEffect(
+              enableOverlay: false,
               onTap: onBackTap,
               child: Container(
                 width: 40.w,

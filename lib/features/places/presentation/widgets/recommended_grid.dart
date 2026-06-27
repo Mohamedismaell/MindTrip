@@ -70,6 +70,7 @@ class _RecommendedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       onTap: () {
         if (isLoading) return;
         context.push(
@@ -95,7 +96,9 @@ class _RecommendedCard extends StatelessWidget {
                       top: 10.h,
                       left: 10.w,
                       child: FavoriteButton(
-                        isFavorite: context.watch<FavoriteCubit>().isFavorite(destination.id),
+                        isFavorite: context.watch<FavoriteCubit>().isFavorite(
+                          destination.id,
+                        ),
                         onTap: () {
                           final cubit = context.read<FavoriteCubit>();
                           cubit.toggleFavorite(

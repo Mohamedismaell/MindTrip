@@ -57,6 +57,8 @@ class _ProfileLegalTopBar extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 16.w),
               child: TapScaleEffect(
+                enableOverlay: false,
+
                 key: Key('${title.toLowerCase().replaceAll(' ', '-')}-back'),
                 onTap: () {
                   if (context.canPop()) {

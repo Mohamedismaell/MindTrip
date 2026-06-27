@@ -64,7 +64,12 @@ class TripsDi {
     );
 
     sl.registerLazySingleton<TripsCubit>(
-      () => TripsCubit(sl<TripRepository>()),
+      () => TripsCubit(
+        sl<GetAllTripsUseCase>(),
+        sl<DeleteTripUseCase>(),
+        sl<RenameTripUseCase>(),
+        sl<ShareTripUseCase>(),
+      ),
     );
 
     sl.registerFactory<TripDetailsCubit>(

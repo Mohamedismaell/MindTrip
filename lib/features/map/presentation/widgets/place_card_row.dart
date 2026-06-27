@@ -183,6 +183,7 @@ class _PlaceCardRowState extends State<PlaceCardRow> {
                     duration: const Duration(milliseconds: 300),
                     scale: isRemoving ? .8 : 1,
                     child: TapScaleEffect(
+                      enableOverlay: false,
                       onTap: () => isSelected && isExpanded
                           ? context.read<MapCubit>().dismissBottomSheet()
                           : context.read<MapCubit>().selectPlace(place.id),
@@ -288,6 +289,7 @@ class BuildDriveCard extends StatelessWidget {
     bool showExpanded = isExpanded && isRouteSelected;
 
     return TapScaleEffect(
+      enableOverlay: false,
       onTap: onTap,
       child: Align(
         alignment: Alignment.bottomCenter,

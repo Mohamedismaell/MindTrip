@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.dart';
@@ -25,6 +26,7 @@ class TripDayOverviewCard extends StatefulWidget {
     required this.isExpanded,
     required this.onToggle,
     required this.onRefine,
+    required this.tripStatus,
   });
 
   final DayPlanEntity dayEntity;
@@ -33,6 +35,7 @@ class TripDayOverviewCard extends StatefulWidget {
   final bool isExpanded;
   final VoidCallback onToggle;
   final VoidCallback onRefine;
+  final TripStatus tripStatus;
 
   @override
   State<TripDayOverviewCard> createState() => _TripDayOverviewCardState();
@@ -159,29 +162,32 @@ class _TripDayOverviewCardState extends State<TripDayOverviewCard> {
       children: [
         Text('Day ${widget.dayNumber}', style: AppTextStyles.h6Bold),
         const Spacer(),
-        InkWell(
-          borderRadius: BorderRadius.circular(8.r),
-          onTap: widget.onRefine,
-          child: Row(
-            children: [
-              SvgPicture.asset(
-                ProfileAssets.editIcon,
-                width: 22.sp,
-                colorFilter: ColorFilter.mode(
-                  context.colorTheme.primary,
-                  BlendMode.srcIn,
+        if (widget.tripStatus == TripStatus.draft)
+          TapScaleEffect(
+            enableOverlay: false,
+
+            borderRadius: BorderRadius.circular(8.r),
+            onTap: widget.onRefine,
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  ProfileAssets.editIcon,
+                  width: 22.sp,
+                  colorFilter: ColorFilter.mode(
+                    context.colorTheme.primary,
+                    BlendMode.srcIn,
+                  ),
                 ),
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                'Edit with AI',
-                style: AppTextStyles.h7Bold.copyWith(
-                  color: context.colorTheme.primary,
+                SizedBox(width: 4.w),
+                Text(
+                  'Edit with AI',
+                  style: AppTextStyles.h7Bold.copyWith(
+                    color: context.colorTheme.primary,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

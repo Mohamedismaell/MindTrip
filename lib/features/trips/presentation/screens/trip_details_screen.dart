@@ -172,8 +172,9 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                     .read<TripDetailsCubit>()
                                     .onDayChanged(dayNum),
                                 onRefine: () {
-                                  AiRefinementSheet.show(context, trip!);
+                                  AiRefinementSheet.show(context, trip);
                                 },
+                                tripStatus: trip!.status,
                               );
                             },
                           )

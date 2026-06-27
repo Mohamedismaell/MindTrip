@@ -44,10 +44,19 @@ class HomeSectionHeader extends StatelessWidget {
                 showSeeMore
                     ? TapScaleEffect(
                         onTap: onSeeMore ?? () {},
-                        child: Text(
-                          actionLabel,
-                          style: context.textTheme.bodyMedium!.copyWith(
-                            color: context.colorTheme.onSurfaceVariant,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 4,
+                          ),
+                          child: Text(
+                            actionLabel,
+                            style: context.textTheme.bodyMedium!.copyWith(
+                              color: context.colorTheme.onSurfaceVariant,
+                            ),
                           ),
                         ),
                       )

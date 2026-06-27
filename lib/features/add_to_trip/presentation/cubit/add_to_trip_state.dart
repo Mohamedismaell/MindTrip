@@ -8,6 +8,8 @@ enum AddToTripStatus { initial, loading, success, failure }
 
 @freezed
 abstract class AddToTripState with _$AddToTripState {
+  const AddToTripState._();
+
   const factory AddToTripState({
     required PlaceEntity place,
     @Default(AddToTripStatus.initial) AddToTripStatus status,
@@ -15,16 +17,24 @@ abstract class AddToTripState with _$AddToTripState {
     Trip? selectedTrip,
     @Default('') String errorMessage,
 
-    // For creating new trip
     DateTime? startDate,
     DateTime? endDate,
     @Default(0) int adultCount,
-    @Default(0) int childCount,
-    @Default('') String budget,
 
-    @Default(0)
-    int currentPage, // 0: Select Trip/Create, 1: Create Details (if new)
+    @Default('') String budget,
+    @Default('') String customBudget,
+
+    @Default(0) int currentPage,
   }) = _AddToTripState;
+
+  String get finalBudget =>
+      customBudget.trim().isNotEmpty ? customBudget.trim() : budget;
+
+  bool get canCreateTrip =>
+      startDate != null &&
+      endDate != null &&
+      finalBudget.isNotEmpty &&
+      adultCount > 0;
 }
 // enum TripsLoadStatus { initial, loading, loaded, error }
 

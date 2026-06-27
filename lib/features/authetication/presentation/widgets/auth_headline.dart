@@ -24,15 +24,16 @@ class AuthHeadline extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TapScaleEffect(
-          onTap: () => context.pop(),
-          child: Container(
-            width: 40.w,
-            height: 40.h,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.primaryLightGray,
-            ),
+        Container(
+          width: 40.w,
+          height: 40.h,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.primaryLightGray,
+          ),
+          child: TapScaleEffect(
+            shape: const CircleBorder(),
+            onTap: () => context.pop(),
             child: Icon(
               Icons.arrow_back_ios_new_rounded,
               size: 20.sp,

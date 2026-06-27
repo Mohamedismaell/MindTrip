@@ -28,6 +28,7 @@ class HomeHeader extends StatelessWidget {
           child: Row(
             children: [
               TapScaleEffect(
+                enableOverlay: false,
                 onTap: () {
                   context.go(AppRoutes.profile);
                 },
@@ -77,26 +78,27 @@ class HomeHeader extends StatelessWidget {
                   ],
                 ),
               ),
+
               // _HeaderAction(
               //   iconPath: HomeAssets.notificaitonIcon,
               //   onTap: () {},
               // ),
-
-              //   TapScaleEffect(
-              //   onTap: () => context.push(AppRoutes.tripCalendar),
-              //   child: Container(
-              //     padding: EdgeInsets.all(8.r),
-              //     decoration: BoxDecoration(
-              //       color: AppColors.primaryLightGray,
-              //       shape: BoxShape.circle,
-              //     ),
-              //     child: Icon(
-              //       Icons.calendar_month_rounded,
-              //       size: 28.sp,
-              //       color: context.colorTheme.primary,
-              //     ),
-              //   ),
-              // ),
+              Container(
+                padding: EdgeInsets.all(8.r),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLightGray,
+                  shape: BoxShape.circle,
+                ),
+                child: TapScaleEffect(
+                  onTap: () => context.push(AppRoutes.tripCalendar),
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Icon(
+                    Icons.calendar_today_outlined,
+                    size: 24.sp,
+                    color: context.colorTheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
             ],
           ),
         );

@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
-import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/delete_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/get_all_trips_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/rename_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/share_trip_use_case.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
-//Todo attach the use cases not th
 class TripsCubit extends SafeCubit<TripsState> {
-  final TripRepository _repository;
-  TripsCubit(this._repository) : super(TripsState(focusedDay: DateTime.now()));
+  final GetAllTripsUseCase _getAllTripsUseCase;
+  final DeleteTripUseCase _deleteTripUseCase;
+  final RenameTripUseCase _renameTripUseCase;
+  final ShareTripUseCase _shareTripUseCase;
+
+  TripsCubit(
+    this._getAllTripsUseCase,
+    this._deleteTripUseCase,
+    this._renameTripUseCase,
+    this._shareTripUseCase,
+  ) : super(TripsState(focusedDay: DateTime.now()));
 
   void resetActionStatus() {
     emit(
@@ -17,7 +28,7 @@ class TripsCubit extends SafeCubit<TripsState> {
 
   Future<void> loadTrips({bool silent = false}) async {
     if (!silent) emitSafe(state.copyWith(tripsStatus: TripsStatus.loading));
-    final result = await _repository.getTrips();
+    final result = await _getAllTripsUseCase();
     result.when(
       success: (trips) {
         emitSafe(state.copyWith(tripsStatus: TripsStatus.loaded, trips: trips));
@@ -36,7 +47,7 @@ class TripsCubit extends SafeCubit<TripsState> {
 
   Future<void> deleteTrip(String tripId) async {
     emitSafe(state.copyWith(actionStatus: TripsActionStatus.loading));
-    final result = await _repository.deleteTrip(tripId);
+    final result = await _deleteTripUseCase(tripId);
     result.when(
       success: (_) {
         final updatedTrips = state.trips
@@ -61,18 +72,28 @@ class TripsCubit extends SafeCubit<TripsState> {
 
   Future<void> shareTrip(String tripId) async {
     emitSafe(state.copyWith(actionStatus: TripsActionStatus.loading));
-    // Simulate or call use case
-    await Future.delayed(const Duration(milliseconds: 500));
-    emitSafe(state.copyWith(actionStatus: TripsActionStatus.success));
+    final result = await _shareTripUseCase(tripId);
+    result.when(
+      success: (_) {
+        emitSafe(state.copyWith(actionStatus: TripsActionStatus.success));
+      },
+      failure: (error) => emitSafe(
+        state.copyWith(
+          actionStatus: TripsActionStatus.error,
+          actionError: error.message,
+        ),
+      ),
+      cancelled: () => resetActionStatus(),
+    );
   }
 
   Future<void> renameTrip(String tripId, String newName) async {
     emitSafe(state.copyWith(actionStatus: TripsActionStatus.loading));
-    final result = await _repository.renameTrip(tripId, newName);
+    final result = await _renameTripUseCase(tripId, newName);
     result.when(
       success: (_) {
         emitSafe(state.copyWith(actionStatus: TripsActionStatus.success));
-        loadTrips();
+        loadTrips(silent: true);
       },
       failure: (error) => emitSafe(
         state.copyWith(

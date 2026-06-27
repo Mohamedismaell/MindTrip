@@ -67,7 +67,7 @@ class FloatMapButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TapScaleEffect(
       onTap: () => onTap(context),
-
+      enableOverlay: false,
       child: Container(
         width: 65.w,
         height: 65.h,

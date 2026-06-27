@@ -209,6 +209,8 @@ class _SettingsTopBar extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           TapScaleEffect(
+            enableOverlay: false,
+
             onTap: onBackTap,
             child: Align(
               alignment: Alignment.centerLeft,
@@ -345,6 +347,8 @@ class _SettingsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      enableOverlay: false,
+
       onTap: onTap,
       borderRadius: BorderRadius.circular(12.r),
       child: SizedBox(

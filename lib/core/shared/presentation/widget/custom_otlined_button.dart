@@ -33,20 +33,21 @@ class CustomOutlinedButton extends StatelessWidget {
     final isDisabled = onPressed == null
         ? context.colorTheme.outline
         : buttonColor;
-    return TapScaleEffect(
-      onTap: onPressed,
-      child: Container(
-        padding:
-            padding ?? EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
-        decoration: BoxDecoration(
-          color: backGroundColor,
-          borderRadius: BorderRadius.circular(30.r),
-          border: Border.all(
-            color: isLoading == true ? buttonColor : isDisabled,
-            width: 1.6,
-          ),
+    return Container(
+      padding: padding ?? EdgeInsets.symmetric(vertical: 14.r, horizontal: 5.r),
+      decoration: BoxDecoration(
+        color: backGroundColor,
+        borderRadius: BorderRadius.circular(30.r),
+        border: Border.all(
+          color: isLoading == true ? buttonColor : isDisabled,
+          width: 1.6,
         ),
-
+      ),
+      child: TapScaleEffect(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.r),
+        ),
+        onTap: onPressed,
         child: SizedBox(
           width: double.infinity,
           child: Stack(

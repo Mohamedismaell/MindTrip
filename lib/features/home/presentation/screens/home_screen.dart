@@ -15,6 +15,8 @@ import 'package:mindtrip/features/home/presentation/widgets/home_recommended_sec
 import 'package:mindtrip/features/home/presentation/widgets/home_hidden_gems_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_section_header.dart';
 import 'package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,6 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<RecommendedPlacesCubit>().loadFirstPage(
       selectedCategories: interests,
     );
+
+    // Global Trip state
+    final tripsCubit = context.read<TripsCubit>();
+    if (tripsCubit.state.tripsStatus == TripsStatus.initial) {
+      tripsCubit.loadTrips(silent: true);
+    }
   }
 
   void _navigateToRecommended() {
@@ -43,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppRefreshIndicator(
       onRefresh: () async {
         context.read<HomeCubit>().loadAllData();
+        context.read<TripsCubit>().loadTrips(silent: true);
         await context.read<RecommendedPlacesCubit>().loadFirstPage(
           selectedCategories: context.read<UserCubit>().state.interests,
         );

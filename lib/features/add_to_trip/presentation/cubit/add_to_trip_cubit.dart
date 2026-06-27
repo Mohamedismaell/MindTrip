@@ -35,16 +35,22 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
     final result = await _getAllTripsUseCase();
     result.when(
       success: (trips) {
-        emitSafe(state.copyWith(
-          status: AddToTripStatus.initial,
-          trips: trips.where((t) => t.status != TripStatus.completed).toList(),
-        ));
+        emitSafe(
+          state.copyWith(
+            status: AddToTripStatus.initial,
+            trips: trips
+                .where((t) => t.status != TripStatus.completed)
+                .toList(),
+          ),
+        );
       },
       failure: (error) {
-        emitSafe(state.copyWith(
-          status: AddToTripStatus.failure,
-          errorMessage: error.message,
-        ));
+        emitSafe(
+          state.copyWith(
+            status: AddToTripStatus.failure,
+            errorMessage: error.message,
+          ),
+        );
       },
       cancelled: () {},
     );
@@ -62,7 +68,9 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
 
     final request = EditPlanRequestModel(
       targetChange: 'Add ${state.place.name} to the itinerary',
-      destination: trip.city.isNotEmpty ? trip.city : trip.destinationGovernorate,
+      destination: trip.city.isNotEmpty
+          ? trip.city
+          : trip.destinationGovernorate,
       city: trip.city.isNotEmpty ? trip.city : trip.destinationGovernorate,
       days: trip.plan.daysCount,
       budget: trip.plan.totalCalculatedCost.toInt(),
@@ -70,10 +78,7 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
       interests: trip.collected?.interests ?? [],
       existingPlan: trip.plan.toModels(),
       mode: 'add',
-      item: ItemToEdit(
-        placeId: state.place.id,
-        name: state.place.name,
-      ),
+      item: ItemToEdit(placeId: state.place.id, name: state.place.name),
       tripId: trip.tripId,
     );
 
@@ -86,17 +91,21 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
           // But according to the flow, AI Edit might just return the new plan.
           emitSafe(state.copyWith(status: AddToTripStatus.success));
         } else {
-          emitSafe(state.copyWith(
-            status: AddToTripStatus.failure,
-            errorMessage: response.message ?? 'Failed to add place.',
-          ));
+          emitSafe(
+            state.copyWith(
+              status: AddToTripStatus.failure,
+              errorMessage: response.message ?? 'Failed to add place.',
+            ),
+          );
         }
       },
       failure: (error) {
-        emitSafe(state.copyWith(
-          status: AddToTripStatus.failure,
-          errorMessage: error.message,
-        ));
+        emitSafe(
+          state.copyWith(
+            status: AddToTripStatus.failure,
+            errorMessage: error.message,
+          ),
+        );
       },
       cancelled: () {},
     );
@@ -108,12 +117,13 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
     emitSafe(state.copyWith(status: AddToTripStatus.loading));
 
     final days = state.endDate!.difference(state.startDate!).inDays + 1;
-    
+
     final request = GeneratePlanRequestModel(
-      city: state.place.location.address, // Or city from place
+      city: state.place.location.cityEn, // Or city from place
       days: days,
-      people: state.adultCount + state.childCount,
-      budget: int.tryParse(state.budget) ?? 0,
+      people: state.adultCount,
+      budget:
+          int.tryParse(state.budget) ?? int.tryParse(state.customBudget) ?? 0,
       interests: [], // User would need to pick these, or we default
       mustInclude: state.place.name,
     );
@@ -123,10 +133,13 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
       success: (plan) async {
         // Now save the trip
         final collected = CollectedPlannerDataEntity(
-          destination: state.place.location.address,
+          destination: state.place.location.cityEn,
           days: days,
-          people: state.adultCount + state.childCount,
-          budget: int.tryParse(state.budget) ?? 0,
+          people: state.adultCount,
+          budget:
+              int.tryParse(state.budget) ??
+              int.tryParse(state.customBudget) ??
+              0,
           mustInclude: [state.place.name],
         );
 
@@ -136,35 +149,46 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
           startDate: state.startDate,
           endDate: state.endDate,
         );
-        
+
         final saveResult = await _createTripUseCase(createRequest);
         saveResult.when(
           success: (trip) {
             emitSafe(state.copyWith(status: AddToTripStatus.success));
           },
           failure: (error) {
-             emitSafe(state.copyWith(
-              status: AddToTripStatus.failure,
-              errorMessage: error.message,
-            ));
+            emitSafe(
+              state.copyWith(
+                status: AddToTripStatus.failure,
+                errorMessage: error.message,
+              ),
+            );
           },
           cancelled: () {},
         );
       },
       failure: (error) {
-        emitSafe(state.copyWith(
-          status: AddToTripStatus.failure,
-          errorMessage: error.message,
-        ));
+        emitSafe(
+          state.copyWith(
+            status: AddToTripStatus.failure,
+            errorMessage: error.message,
+          ),
+        );
       },
       cancelled: () {},
     );
   }
 
-  void updateStartDate(DateTime? date) => emitSafe(state.copyWith(startDate: date));
+  void updateStartDate(DateTime? date) =>
+      emitSafe(state.copyWith(startDate: date));
   void updateEndDate(DateTime? date) => emitSafe(state.copyWith(endDate: date));
   void updateAdults(int count) => emitSafe(state.copyWith(adultCount: count));
-  void updateChildren(int count) => emitSafe(state.copyWith(childCount: count));
-  void updateBudget(String budget) => emitSafe(state.copyWith(budget: budget));
+  void updateBudget(String value) {
+    emit(state.copyWith(budget: value, customBudget: ''));
+  }
+
+  void updateCustomBudget(String value) {
+    emit(state.copyWith(customBudget: value, budget: ''));
+  }
+
   void setPage(int page) => emitSafe(state.copyWith(currentPage: page));
 }

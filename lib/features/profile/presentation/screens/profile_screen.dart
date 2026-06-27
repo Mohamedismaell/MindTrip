@@ -53,6 +53,7 @@ class ProfileScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TapScaleEffect(
+                        enableOverlay: false,
                         onTap: () => context.push(AppRoutes.profileSettings),
                         borderRadius: BorderRadius.circular(25.r),
                         child: Container(
@@ -84,6 +85,7 @@ class ProfileScreen extends StatelessWidget {
                         trailing: SizedBox(
                           width: 20.w,
                           child: TapScaleEffect(
+                            enableOverlay: false,
                             onTap: () {
                               context.push(AppRoutes.interests, extra: true);
                             },
@@ -103,7 +105,9 @@ class ProfileScreen extends StatelessWidget {
                           spacing: 12.w,
                           runSpacing: 18.h,
                           children: interests
-                              .map((interest) => InterestChip(interest: interest))
+                              .map(
+                                (interest) => InterestChip(interest: interest),
+                              )
                               .toList(),
                         ),
                       ],

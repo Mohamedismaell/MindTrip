@@ -14,8 +14,22 @@ import 'package:mindtrip/features/trips/presentation/widgets/swipe_calender_arrr
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
-class TripCalendarScreen extends StatelessWidget {
+class TripCalendarScreen extends StatefulWidget {
   const TripCalendarScreen({super.key});
+
+  @override
+  State<TripCalendarScreen> createState() => _TripCalendarScreenState();
+}
+
+class _TripCalendarScreenState extends State<TripCalendarScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<TripsCubit>();
+    if (cubit.state.tripsStatus == TripsStatus.initial) {
+      cubit.loadTrips();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +38,6 @@ class TripCalendarScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-
           child: CustomScrollView(
             slivers: [
               // HEADER
@@ -49,7 +62,6 @@ class TripCalendarScreen extends StatelessWidget {
                       width: 1.w,
                     ),
                   ),
-
                   child: BlocBuilder<TripsCubit, TripsState>(
                     builder: (context, state) {
                       final focusedDay = state.focusedDay;
@@ -58,7 +70,6 @@ class TripCalendarScreen extends StatelessWidget {
 
                       return Padding(
                         padding: EdgeInsets.all(23.r),
-
                         child: Column(
                           children: [
                             // MONTH HEADER
@@ -71,10 +82,9 @@ class TripCalendarScreen extends StatelessWidget {
                                   builder: (context, focusedDay) {
                                     return Expanded(
                                       child: Text(
-                                        DateFormat(
-                                          'MMMM yyyy',
-                                        ).format(focusedDay),
-
+                                        DateFormat('MMMM yyyy').format(
+                                          focusedDay,
+                                        ),
                                         style: AppTextStyles.h9Medium.copyWith(
                                           color: context.colorTheme.onSurface,
                                         ),
@@ -82,7 +92,6 @@ class TripCalendarScreen extends StatelessWidget {
                                     );
                                   },
                                 ),
-
                                 SwipeCalenderArrrow(
                                   onTap: () {
                                     context.read<TripsCubit>().previouseMonth(
@@ -115,14 +124,12 @@ class TripCalendarScreen extends StatelessWidget {
                                 cellMargin: EdgeInsets.zero,
                                 cellPadding: EdgeInsets.zero,
                               ),
-
-                              eventLoader: (day) =>
-                                  cubit.getTripsForDay(day, state.trips),
-
+                              eventLoader:
+                                  (day) =>
+                                      cubit.getTripsForDay(day, state.trips),
                               selectedDayPredicate: (day) {
                                 return isSameDay(selectedDay, day);
                               },
-
                               onPageChanged: (focusedDay) {
                                 cubit.changeMonth(
                                   DateTime(
@@ -132,7 +139,6 @@ class TripCalendarScreen extends StatelessWidget {
                                   ),
                                 );
                               },
-
                               calendarBuilders: CalendarBuilders<Trip>(
                                 dowBuilder: (context, day) {
                                   final days = [
@@ -148,7 +154,6 @@ class TripCalendarScreen extends StatelessWidget {
                                   return Center(
                                     child: Text(
                                       days[day.weekday % 7],
-
                                       style: AppTextStyles.h9Medium.copyWith(
                                         color:
                                             context.colorTheme.onSurfaceVariant,
@@ -156,14 +161,12 @@ class TripCalendarScreen extends StatelessWidget {
                                     ),
                                   );
                                 },
-
                                 defaultBuilder: (context, day, focusedDay) {
                                   return CalendarDayCell(
                                     day: day,
                                     trips: state.trips,
                                   );
                                 },
-
                                 outsideBuilder: (context, day, focusedDay) {
                                   return CalendarDayCell(
                                     day: day,
@@ -172,7 +175,6 @@ class TripCalendarScreen extends StatelessWidget {
                                     isToday: isSameDay(day, DateTime.now()),
                                   );
                                 },
-
                                 todayBuilder: (context, day, focusedDay) {
                                   return CalendarDayCell(
                                     day: day,
@@ -180,7 +182,6 @@ class TripCalendarScreen extends StatelessWidget {
                                     isToday: true,
                                   );
                                 },
-
                                 selectedBuilder: (context, day, focusedDay) {
                                   return CalendarDayCell(
                                     day: day,
@@ -189,9 +190,9 @@ class TripCalendarScreen extends StatelessWidget {
                                     isToday: isSameDay(day, DateTime.now()),
                                   );
                                 },
-
-                                markerBuilder: (context, day, events) =>
-                                    const SizedBox.shrink(),
+                                markerBuilder:
+                                    (context, day, events) =>
+                                        const SizedBox.shrink(),
                               ),
                             ),
                           ],
@@ -209,10 +210,8 @@ class TripCalendarScreen extends StatelessWidget {
                     SizedBox(height: 28.h),
                     Align(
                       alignment: Alignment.centerLeft,
-
                       child: Text(
                         'My Schedule',
-
                         style: AppTextStyles.h7Bold.copyWith(
                           color: context.colorTheme.onSurface,
                         ),
@@ -226,6 +225,12 @@ class TripCalendarScreen extends StatelessWidget {
               // SCHEDULE LIST
               BlocBuilder<TripsCubit, TripsState>(
                 builder: (context, state) {
+                  if (state.tripsStatus == TripsStatus.loading) {
+                    return const SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+
                   final currentMonthTrips = context
                       .read<TripsCubit>()
                       .getTripsForMonth(state.focusedDay);
@@ -235,7 +240,6 @@ class TripCalendarScreen extends StatelessWidget {
                       child: Center(
                         child: Text(
                           'No trips scheduled for this month.',
-
                           style: AppTextStyles.h10Regular.copyWith(
                             color: context.colorTheme.outline,
                           ),
@@ -246,13 +250,11 @@ class TripCalendarScreen extends StatelessWidget {
 
                   return SliverList.builder(
                     itemCount: currentMonthTrips.length,
-
                     itemBuilder: (context, index) {
                       final trip = currentMonthTrips[index];
 
                       return Padding(
                         padding: EdgeInsets.only(bottom: 16.h),
-
                         child: TweenAnimationBuilder<double>(
                           duration: Duration(milliseconds: 350 + (index * 60)),
                           tween: Tween(begin: 0, end: 1),
@@ -260,13 +262,10 @@ class TripCalendarScreen extends StatelessWidget {
                           builder: (context, value, child) {
                             return Opacity(
                               opacity: value,
-
                               child: Transform.translate(
                                 offset: Offset(0, 20 * (1 - value)),
-
                                 child: Transform.scale(
                                   scale: 0.98 + (0.02 * value),
-
                                   child: child,
                                 ),
                               ),

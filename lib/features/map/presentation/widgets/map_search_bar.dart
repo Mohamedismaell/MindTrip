@@ -33,6 +33,7 @@ class MapSearchBar extends StatelessWidget {
               child: Row(
                 children: [
                   TapScaleEffect(
+                    enableOverlay: false,
                     onTap: () {
                       context.pop();
                     },
@@ -52,6 +53,7 @@ class MapSearchBar extends StatelessWidget {
                   ),
                   SizedBox(width: 10.w),
                   TapScaleEffect(
+                    enableOverlay: false,
                     onTap: () {
                       context.push(AppRoutes.mapSearch);
                     },

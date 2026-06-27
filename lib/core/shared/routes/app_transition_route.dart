@@ -16,7 +16,7 @@ class AppTransitionRoute {
     required String path,
     required Widget Function(BuildContext, GoRouterState) builder,
     required AppTransitionBuilder transition,
-    Duration duration = const Duration(milliseconds: 600),
+    Duration duration = const Duration(milliseconds: 500),
     bool opaque = true,
     List<RouteBase> routes = const [],
   }) {

@@ -105,43 +105,56 @@ class _ExplorePlacesGridState extends State<ExplorePlacesGrid> {
               final containerHeight =
                   (cardHeight * rows) + (crossAxisSpacing * (rows - 1));
 
-              return SizedBox(
-                height: containerHeight,
-                child: Skeletonizer(
-                  enabled: isLoading,
-                  child: Stack(
-                    children: [
-                      GridView.builder(
-                        controller: _scrollController,
-                        // physics: const  BouncingScrollPhysics(),
-                        physics: const ClampingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemCount:
-                            places.length +
-                            (state.filteredPlaces.isMoreLoading ? 2 : 0),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: rows,
-                          mainAxisSpacing: 24.w,
-                          crossAxisSpacing: 32.h,
-                          mainAxisExtent: cardWidth,
-                        ),
-                        itemBuilder: (context, index) {
-                          if (index >= places.length) {
-                            return const Skeletonizer(
-                              enabled: true,
-                              child: PlaceCardVarticalGrid(
-                                place: DummyData.place,
+              return Scrollbar(
+                controller: _scrollController,
+                thickness: 3.w,
+                radius: Radius.circular(10.r),
+                thumbVisibility: true,
+                trackVisibility: true,
+
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+
+                  child: SizedBox(
+                    height: containerHeight,
+                    child: Skeletonizer(
+                      enabled: isLoading,
+                      child: Stack(
+                        children: [
+                          GridView.builder(
+                            controller: _scrollController,
+                            // physics: const  BouncingScrollPhysics(),
+                            physics: const ClampingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                places.length +
+                                (state.filteredPlaces.isMoreLoading ? 2 : 0),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: rows,
+                                  mainAxisSpacing: 24.w,
+                                  crossAxisSpacing: 32.h,
+                                  mainAxisExtent: cardWidth,
+                                ),
+                            itemBuilder: (context, index) {
+                              if (index >= places.length) {
+                                return const Skeletonizer(
+                                  enabled: true,
+                                  child: PlaceCardVarticalGrid(
+                                    place: DummyData.place,
+                                    hasBadge: true,
+                                  ),
+                                );
+                              }
+                              return PlaceCardVarticalGrid(
+                                place: places[index],
                                 hasBadge: true,
-                              ),
-                            );
-                          }
-                          return PlaceCardVarticalGrid(
-                            place: places[index],
-                            hasBadge: true,
-                          );
-                        },
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               );

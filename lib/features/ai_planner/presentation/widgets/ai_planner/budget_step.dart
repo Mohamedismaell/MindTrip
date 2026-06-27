@@ -142,7 +142,7 @@ class _BudgetTile extends StatelessWidget {
         : context.colorTheme.outline.withValues(alpha: 0.7);
     return TapScaleEffect(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(10.r),
+      enableOverlay: false,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 220),
         width: double.infinity,

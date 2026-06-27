@@ -1,15 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
+import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/home/domain/entity/banner_entity.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/cubit/home/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/utils/dummy_data.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -93,17 +96,23 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
         }
 
         return SliverToBoxAdapter(
-          child: GestureDetector(
-            onHorizontalDragEnd: (details) {
-              if (details.primaryVelocity! < 0) {
-                // swipe left
-                _next(banners.length);
-              } else if (details.primaryVelocity! > 0) {
-                // swipe right
-                _prev(banners.length);
-              }
+          child: TapScaleEffect(
+            enableOverlay: false,
+            onTap: () {
+              context.push(AppRoutes.aiPlannerFlow);
             },
-            child: _buildBanner(banners),
+            child: GestureDetector(
+              onHorizontalDragEnd: (details) {
+                if (details.primaryVelocity! < 0) {
+                  // swipe left
+                  _next(banners.length);
+                } else if (details.primaryVelocity! > 0) {
+                  // swipe right
+                  _prev(banners.length);
+                }
+              },
+              child: _buildBanner(banners),
+            ),
           ),
         );
       },
@@ -168,7 +177,7 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                                 color: AppColors.pureWhite,
                               ),
                             ),
-                            // SizedBox(height: 20.h),
+                            SizedBox(height: 20.h),
                             // Padding(
                             //   padding: EdgeInsets.symmetric(horizontal: 80.0),
                             //   child: CustomOutlinedButton(

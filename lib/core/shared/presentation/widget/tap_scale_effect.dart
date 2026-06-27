@@ -8,7 +8,8 @@ class TapScaleEffect extends StatefulWidget {
     this.scaleDown = 0.97,
     this.duration = const Duration(milliseconds: 120),
     this.borderRadius,
-    this.enableOverlay = false,
+    this.enableOverlay = true,
+    this.shape,
   });
 
   final Widget child;
@@ -17,6 +18,7 @@ class TapScaleEffect extends StatefulWidget {
   final Duration duration;
   final BorderRadius? borderRadius;
   final bool enableOverlay;
+  final ShapeBorder? shape;
 
   @override
   State<TapScaleEffect> createState() => _TapScaleEffectState();
@@ -41,16 +43,34 @@ class _TapScaleEffectState extends State<TapScaleEffect> {
       curve: Curves.easeOut,
       child: Material(
         color: Colors.transparent,
-        borderRadius: widget.borderRadius,
+        shape: widget.shape,
+
         child: InkWell(
-          borderRadius: widget.borderRadius,
+          // borderRadius: widget.borderRadius,
+          customBorder: widget.shape,
           onTap: widget.onTap,
-          splashColor: widget.enableOverlay ? null : Colors.transparent,
-          highlightColor: widget.enableOverlay ? null : Colors.transparent,
-          hoverColor: widget.enableOverlay ? null : Colors.transparent,
+
           overlayColor: widget.enableOverlay
-              ? null
+              ? WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.pressed)) {
+                    return Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.08);
+                  }
+
+                  if (states.contains(WidgetState.hovered)) {
+                    return Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.08);
+                  }
+
+                  return Colors.transparent;
+                })
               : WidgetStateProperty.all(Colors.transparent),
+
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+
           onTapDown: (_) => _setPressed(true),
           onTapUp: (_) async {
             await Future.delayed(const Duration(milliseconds: 70));

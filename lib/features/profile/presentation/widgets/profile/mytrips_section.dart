@@ -89,6 +89,7 @@ class _MyTripCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      enableOverlay: false,
       onTap: onTap,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30.r),
