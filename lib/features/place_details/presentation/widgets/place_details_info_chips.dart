@@ -15,13 +15,20 @@ class PlaceDetailsInfoChips extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const _OutlinedInfoChip(label: '2-3 Hours', emoji: '🕛'),
+        Expanded(
+          child: _OutlinedInfoChip(
+            label: place.openingHours ?? '',
+            emoji: '🕛',
+          ),
+        ),
         SizedBox(width: 16.w),
-        _OutlinedInfoChip(
-          label: place.price == null || place.price == 0
-              ? 'Free entry'
-              : 'Moderate budget',
-          emoji: '💰',
+        Expanded(
+          child: _OutlinedInfoChip(
+            label: place.price == null || place.price == 0
+                ? 'Free entry'
+                : 'Moderate budget',
+            emoji: '💰',
+          ),
         ),
       ],
     );
@@ -48,10 +55,13 @@ class _OutlinedInfoChip extends StatelessWidget {
         children: [
           Text(emoji),
           SizedBox(width: 8.w),
-          Text(
-            label,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.h8Medium.copyWith(),
+          Expanded(
+            child: Text(
+              label,
+              // overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.h9Medium.copyWith(),
+            ),
           ),
         ],
       ),

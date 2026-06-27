@@ -25,31 +25,49 @@ class PlaceDetailsVisitInfo extends StatelessWidget {
         SizedBox(height: 14.h),
         Row(
           children: [
-            const Expanded(
-              child: _VisitInfoTile(title: 'Best Time', value: 'Oct-Apr'),
+            Expanded(
+              child: _VisitInfoTile(
+                title: 'Category',
+                value: place.category.name.capitalize(),
+              ),
             ),
             SizedBox(width: 25.w),
-            const Expanded(
-              child: _VisitInfoTile(title: 'Crowd Level', value: 'Medium'),
+            Expanded(
+              child: _VisitInfoTile(
+                title: 'Hidden Gem',
+                value: switch (place.isHiddenGem) {
+                  true => 'Yes',
+                  false => 'No',
+                  null => 'No',
+                },
+              ),
             ),
           ],
         ),
         SizedBox(height: 15.h),
         Row(
+          // isOpened == 'false' ? 'Closed' : 'Open'
           children: [
-            const Expanded(
+            Expanded(
               child: _VisitInfoTile(
-                title: 'Best For',
-                value: 'Friends • Families',
+                title: 'Open',
+                value: switch (place.isOpened) {
+                  'true' => 'Opend',
+                  'false' => 'Closed',
+                  _ => 'Opend',
+                },
               ),
             ),
             SizedBox(width: 20.w),
             Expanded(
               child: _VisitInfoTile(
-                title: 'Suggested Visit',
-                value: place.category.displayName == 'Restaurants'
-                    ? 'Evening'
-                    : 'Morning',
+                title: 'Avg Price',
+                value: place.price != null
+                    ? 'EGP ${place.price!.toStringAsFixed(0)} '
+                    : 'Free entry',
+                style: AppTextStyles.h8Regular.copyWith(
+                  color: AppColors.customgreeen,
+                ),
               ),
             ),
           ],
@@ -59,11 +77,20 @@ class PlaceDetailsVisitInfo extends StatelessWidget {
   }
 }
 
+// if (place.price != null) ...[
+//             SizedBox(width: 12.w),
+//             Text(
+//               'EGP ${place.price!.toStringAsFixed(0)} ',
+//               style: AppTextStyles.h8Bold.copyWith(
+//                 color: AppColors.customgreeen,
+//               ),
+//             ),
+//           ],
 class _VisitInfoTile extends StatelessWidget {
   final String title;
   final String value;
-
-  const _VisitInfoTile({required this.title, required this.value});
+  final TextStyle? style;
+  const _VisitInfoTile({required this.title, required this.value, this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +118,7 @@ class _VisitInfoTile extends StatelessWidget {
             value,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: context.textTheme.bodyLarge,
+            style: style ?? context.textTheme.bodyLarge,
           ),
         ],
       ),

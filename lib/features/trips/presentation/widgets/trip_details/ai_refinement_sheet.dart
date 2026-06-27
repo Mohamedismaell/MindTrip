@@ -1,46 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/features/ai_planner/domain/entities/chat_message.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
-import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_message_bubble.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_typing_indicator.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/ai_edit_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/ai_edit_state.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
 
-//Todo replace it with share
 class AiRefinementSheet extends StatefulWidget {
-  final String tripId;
-  final String sessionId;
-  final List<ChatMessage> initialMessages;
+  final Trip trip;
+  final TripDetailsCubit tripDetailsCubit;
 
   const AiRefinementSheet({
     super.key,
-    required this.tripId,
-    required this.sessionId,
-    this.initialMessages = const [],
+    required this.trip,
+    required this.tripDetailsCubit,
   });
 
   static Future<void> show(
     BuildContext context,
-    String tripId,
-    String sessionId,
-    List<ChatMessage> messages,
+    Trip trip,
   ) {
+    final tripDetailsCubit = context.read<TripDetailsCubit>();
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => BlocProvider.value(
-        value: context.read<ChatCubit>(),
-        child: AiRefinementSheet(
-          tripId: tripId,
-          sessionId: sessionId,
-          initialMessages: messages,
-        ),
+      builder: (_) => BlocProvider(
+        create: (context) => sl<AiEditCubit>(param1: trip, param2: trip.plan),
+        child: AiRefinementSheet(trip: trip, tripDetailsCubit: tripDetailsCubit),
       ),
-    );
+    ).then((_) {
+       // Optional: refresh if needed, but the cubit update handle it
+    });
   }
 
   @override
@@ -50,15 +46,6 @@ class AiRefinementSheet extends StatefulWidget {
 class _AiRefinementSheetState extends State<AiRefinementSheet> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    // Load existing chat history if any
-    if (widget.initialMessages.isNotEmpty) {
-      context.read<ChatCubit>().loadMessages(widget.initialMessages);
-    }
-  }
 
   @override
   void dispose() {
@@ -135,15 +122,19 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
 
           // Chat Area
           Expanded(
-            child: BlocConsumer<ChatCubit, ChatState>(
+            child: BlocConsumer<AiEditCubit, AiEditState>(
               listener: (context, state) {
                 if (state.messages.isNotEmpty) _scrollToBottom();
+                if (state.status == AiEditStatus.success &&
+                    state.currentPlan != null) {
+                  widget.tripDetailsCubit.updatePlan(state.currentPlan!);
+                }
               },
               builder: (context, state) {
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.all(20.r),
-                  itemCount: state.messages.length + (state.isAiTyping ? 1 : 0),
+                  itemCount: state.messages.length + (state.status == AiEditStatus.loading ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == state.messages.length) {
                       return const Align(
@@ -205,7 +196,7 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
                         vertical: 12.h,
                       ),
                     ),
-                    onSubmitted: (val) => _sendMessage(),
+                    onSubmitted: (val) => _sendMessage(context),
                   ),
                 ),
                 SizedBox(width: 8.w),
@@ -213,7 +204,7 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
                   backgroundColor: context.colorTheme.primary,
                   child: IconButton(
                     icon: const Icon(Icons.send, color: Colors.white, size: 20),
-                    onPressed: _sendMessage,
+                    onPressed: () => _sendMessage(context),
                   ),
                 ),
               ],
@@ -224,12 +215,10 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
     );
   }
 
-  void _sendMessage() {
+  void _sendMessage(BuildContext context) {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
-    context
-        .read<ChatCubit>()
-        .sendMessage(text, sessionId: widget.sessionId);
+    context.read<AiEditCubit>().sendMessage(text);
     _controller.clear();
   }
 }

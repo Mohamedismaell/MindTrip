@@ -9,8 +9,12 @@ import 'package:mindtrip/features/ai_planner/domain/repositories/chat_repository
 import 'package:mindtrip/features/ai_planner/domain/repositories/ai_planner_repository.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/generate_plan_use_case.dart';
 import 'package:mindtrip/features/ai_planner/domain/usecases/send_message_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/usecases/edit_plan_use_case.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/ai_edit_cubit.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/create_trip_use_case.dart';
 
 class AiPlannerDi {
@@ -42,6 +46,9 @@ class AiPlannerDi {
     sl.registerLazySingleton<GeneratePlanUseCase>(
       () => GeneratePlanUseCase(sl<AiPlannerRepository>()),
     );
+    sl.registerLazySingleton<EditPlanUseCase>(
+      () => EditPlanUseCase(repository: sl<AiPlannerRepository>()),
+    );
 
     sl.registerFactory<ChatCubit>(
       () => ChatCubit(
@@ -53,6 +60,14 @@ class AiPlannerDi {
       () => AiPlannerCubit(
         generatePlanUseCase: sl<GeneratePlanUseCase>(),
         createTripUseCase: sl<CreateTripUseCase>(),
+      ),
+    );
+
+    sl.registerFactoryParam<AiEditCubit, Trip, GeneratedPlanEntity>(
+      (trip, initialPlan) => AiEditCubit(
+        editPlanUseCase: sl<EditPlanUseCase>(),
+        trip: trip,
+        initialPlan: initialPlan,
       ),
     );
   }

@@ -11,6 +11,7 @@ import 'package:mindtrip/features/onboarding/di/on_boarding_injection.dart';
 import 'package:mindtrip/features/profile/di/profile_di.dart';
 import 'package:mindtrip/features/place_details/di/place_details_di.dart';
 import 'package:mindtrip/features/search/di/search_di.dart';
+import 'package:mindtrip/features/add_to_trip/di/add_to_trip_di.dart';
 
 final sl = GetIt.instance;
 
@@ -28,4 +29,5 @@ Future<void> initializeDependencies() async {
   ExploreDi.init();
   SearchDi.init();
   HomeDi.init();
+  AddToTripDi.init();
 }

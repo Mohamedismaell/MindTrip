@@ -1,9 +1,31 @@
-// import 'package:equatable/equatable.dart';
-// import 'package:intl/intl.dart';
-// import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart';
-// import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
-// import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
+part 'add_to_trip_state.freezed.dart';
+
+enum AddToTripStatus { initial, loading, success, failure }
+
+@freezed
+abstract class AddToTripState with _$AddToTripState {
+  const factory AddToTripState({
+    required PlaceEntity place,
+    @Default(AddToTripStatus.initial) AddToTripStatus status,
+    @Default([]) List<Trip> trips,
+    Trip? selectedTrip,
+    @Default('') String errorMessage,
+
+    // For creating new trip
+    DateTime? startDate,
+    DateTime? endDate,
+    @Default(0) int adultCount,
+    @Default(0) int childCount,
+    @Default('') String budget,
+
+    @Default(0)
+    int currentPage, // 0: Select Trip/Create, 1: Create Details (if new)
+  }) = _AddToTripState;
+}
 // enum TripsLoadStatus { initial, loading, loaded, error }
 
 // enum ActionStatus { initial, processing, success, error }

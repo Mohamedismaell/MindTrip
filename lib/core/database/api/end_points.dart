@@ -45,6 +45,7 @@ class EndPoints {
   // AI Planner
   static String generatePlan = 'api/v1/ai/generate-plan';
   static String aiChat = 'api/v1/ai/chat';
+  static String aiEdit = 'api/v1/ai/edit';
 
   // Trips
   static String trips = 'api/v1/trips';

@@ -4,6 +4,7 @@ import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
 
+//Todo attach the use cases not th
 class TripsCubit extends SafeCubit<TripsState> {
   final TripRepository _repository;
   TripsCubit(this._repository) : super(TripsState(focusedDay: DateTime.now()));

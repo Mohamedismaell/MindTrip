@@ -20,6 +20,20 @@ class GeneratedPlanEntity extends Equatable {
   final int daysCount;
   final List<PlanPlaceEntity> accommodation;
   final Map<int, DayPlanEntity> days;
+  List<PlanPlaceEntity> get allPlaces => [
+    // ...accommodation,
+    ...days.values.expand((day) => day.allPlaces),
+  ];
+
+  int get placesCount {
+    var count = accommodation.length;
+
+    for (final day in days.values) {
+      count += day.placesCount;
+    }
+
+    return count;
+  }
 
   @override
   List<Object?> get props => [

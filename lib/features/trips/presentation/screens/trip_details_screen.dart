@@ -172,12 +172,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                     .read<TripDetailsCubit>()
                                     .onDayChanged(dayNum),
                                 onRefine: () {
-                                  AiRefinementSheet.show(
-                                    context,
-                                    plan.tripId,
-                                    'refinement-${plan.tripId}',
-                                    const [],
-                                  );
+                                  AiRefinementSheet.show(context, trip!);
                                 },
                               );
                             },
@@ -216,7 +211,10 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                             onSubmitted: (rating, comment) =>
                                                 context
                                                     .read<TripDetailsCubit>()
-                                                    .reviewTrip(rating, comment),
+                                                    .reviewTrip(
+                                                      rating,
+                                                      comment,
+                                                    ),
                                           );
                                         },
                                         width: double.infinity,

@@ -32,15 +32,6 @@ class PlaceDetailsHeader extends StatelessWidget {
                 ),
               ),
             ),
-            if (place.price != null) ...[
-              SizedBox(width: 12.w),
-              Text(
-                '\$${place.price!.toStringAsFixed(0)} AVG',
-                style: AppTextStyles.h8Bold.copyWith(
-                  color: AppColors.customgreeen,
-                ),
-              ),
-            ],
           ],
         ),
         SizedBox(height: 12.h),
@@ -60,7 +51,7 @@ class PlaceDetailsHeader extends StatelessWidget {
             SizedBox(width: 8.w),
             Expanded(
               child: Text(
-                '${place.location.address}, Egypt',
+                '${place.location.city}, Egypt',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: context.textTheme.bodyLarge?.copyWith(

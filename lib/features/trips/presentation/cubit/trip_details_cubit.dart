@@ -3,6 +3,7 @@ import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/change_trip_status_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_details_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/review_trip_use_case.dart';
+import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.dart';
 
 class TripDetailsCubit extends SafeCubit<TripDetailsState> {
@@ -128,4 +129,12 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
       cancelled: () => resetActionStatus(),
     );
   }
+
+  void updatePlan(GeneratedPlanEntity plan) {
+    if (state.trip == null) return;
+    emitSafe(
+      state.copyWith(generatedPlan: plan, trip: state.trip!.copyWith(plan: plan)),
+    );
+  }
 }
+

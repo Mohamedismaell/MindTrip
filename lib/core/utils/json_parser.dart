@@ -33,6 +33,7 @@ bool parseBool(dynamic value) {
 }
 
 int parseDay(dynamic value) {
+  if (value == 'accommodation') return 0;
   return parseInt(value);
 }
 
