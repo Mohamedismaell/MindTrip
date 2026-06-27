@@ -60,8 +60,6 @@ class _SignUpFormState extends State<SignUpForm> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      print('here ========= ${_formKey.currentState!.validate()}');
-
       final authCubit = context.read<AuthCubit>();
       TextInput.finishAutofillContext();
       context.read<AuthCubit>().signUp(

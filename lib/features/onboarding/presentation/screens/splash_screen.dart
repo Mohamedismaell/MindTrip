@@ -15,20 +15,45 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  // // TODO: remove this after testing
-  // late OnboardingLocalDataSourceImpl onboardingLocalDataSourceImpl =
-  //     OnboardingLocalDataSourceImpl();
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  // // // TODO: remove this after testing
+  // // late OnboardingLocalDataSourceImpl onboardingLocalDataSourceImpl =
+  // //     OnboardingLocalDataSourceImpl();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // TODO: remove this after testing
+  //   // onboardingLocalDataSourceImpl.clearOnboardingBox();
+
+  //   Future.delayed(const Duration(seconds: 2), () {
+  //     if (!mounted) return;
+  //     context.read<AppGateCubit>().start();
+  //   });
+  // }
+  late final AnimationController _controller;
   @override
   void initState() {
     super.initState();
-    // // TODO: remove this after testing
-    // onboardingLocalDataSourceImpl.clearOnboardingBox();
 
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      context.read<AppGateCubit>().start();
+    _controller = AnimationController(vsync: this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.wait([
+        context.read<AppGateCubit>().start(),
+        Future.delayed(const Duration(seconds: 2)),
+      ]);
+
+      if (mounted) {
+        _controller.stop();
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,6 +103,16 @@ class _SplashScreenState extends State<SplashScreen> {
               fit: BoxFit.contain,
               // width: 100.w,
               height: 100.h,
+              controller: _controller,
+              onLoaded: (composition) {
+                _controller.duration = composition.duration;
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    _controller.repeat();
+                  }
+                });
+              },
             ),
           ),
         ],

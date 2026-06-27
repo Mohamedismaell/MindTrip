@@ -7,7 +7,6 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_state.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
-import 'package:mindtrip/features/trips/domain/entities/trip_details_args.dart';
 
 class AiPlannerStatusListener extends StatelessWidget {
   const AiPlannerStatusListener({super.key, required this.child});
@@ -53,10 +52,7 @@ class AiPlannerStatusListener extends StatelessWidget {
             }
 
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.go(
-                AppRoutes.tripDetails,
-                extra: TripDetailsArgs(tripId: tripId),
-              );
+              context.go('${AppRoutes.tripDetails}?tripId=$tripId');
             });
 
             break;

@@ -28,240 +28,274 @@ class TripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isInprogress = tripStatus == TripStatus.inProgress;
-    final isDradt = tripStatus == TripStatus.draft;
+    final isInProgress = tripStatus == TripStatus.inProgress;
+    final isCompleted = tripStatus == TripStatus.completed;
 
     final places = const [];
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5.w),
-      child: Container(
-        // height: 500.h,
-        decoration: BoxDecoration(
-          color: AppColors.pureWhite,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: context.colorTheme.outline, width: 1),
-          boxShadow: [AppShadows.tourPackagesCard],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(19.r),
-                  topRight: Radius.circular(19.r),
-                ),
-                child: Stack(
-                  alignment: Alignment.topLeft,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: AppCachedImage(
-                        imagePath: _coverImage,
-                        fit: BoxFit.cover,
-                      ),
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 300),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5.w),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.pureWhite,
+            borderRadius: BorderRadius.circular(20.r),
+            border: Border.all(color: context.colorTheme.outline, width: 1),
+            boxShadow: [AppShadows.tourPackagesCard],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image
+              Hero(
+                tag: 'trip-image-${trip.tripId}',
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(19.r),
+                      topRight: Radius.circular(19.r),
                     ),
+                    child: Stack(
+                      alignment: Alignment.topLeft,
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: AppCachedImage(
+                            imagePath: _coverImage,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
 
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 8.w,
-                        vertical: 17.h,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30.w,
-                        vertical: 5.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryLightGray,
-                        borderRadius: BorderRadius.circular(40.r),
-                      ),
-                      child: Text('Draft', style: context.textTheme.bodyMedium),
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 8.w,
+                            vertical: 17.h,
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 5.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: context.colorTheme.primary.withValues(
+                              alpha: 0.9,
+                            ),
+                            borderRadius: BorderRadius.circular(40.r),
+                          ),
+                          child: Text(
+                            _getStatusText(tripStatus),
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
 
-            // Content Section
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 20.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Last Update
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              trip.title,
-                              style: AppTextStyles.h6Bold.copyWith(
-                                color: context.colorTheme.onSurface,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          TripMenuButton(trip: trip),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 18.w,
-                                height: 18.h,
-                                child: SvgPicture.asset(
-                                  HomeAssets.locationIcon,
-                                  colorFilter: ColorFilter.mode(
-                                    context.colorTheme.onSurfaceVariant,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(width: 8.w),
-
-                              Text(
-                                '${trip.destinationGovernorate} / Egypt',
-                                style: context.textTheme.bodyMedium?.copyWith(
-                                  color: context.colorTheme.onSurfaceVariant,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(width: 9.w),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_today_outlined,
-                                color: context.colorTheme.onSurfaceVariant,
-                                size: 16.sp,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                '${trip.durationDays} Days',
-                                style: context.textTheme.bodyMedium?.copyWith(
-                                  color: context.colorTheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      if (places.isNotEmpty && isInprogress)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 11.h),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.map_outlined,
-                                  size: 18.sp,
-                                  color: context.colorTheme.onSurfaceVariant,
-                                ),
-                                SizedBox(width: 6.w),
-                                Text(
-                                  'Places to visit',
-                                  style: AppTextStyles.h9SemiBold.copyWith(
-                                    color: context.colorTheme.onSurface,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8.h),
-                            ...places.take(2).map((place) {
-                              final name = place['name'] ?? '';
-                              // final imgUrl = place['imageUrl'] ?? '';
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 4.h),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "• $name",
-                                      style: context.textTheme.bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                            if (places.length > 2)
-                              Text(
-                                '+${places.length - 2} more places',
-                                style: context.textTheme.bodyMedium?.copyWith(
-                                  color: context.colorTheme.outline,
-                                ),
-                              ),
-                          ],
-                        ),
-                    ],
-                  ),
-                  SizedBox(height: 12.h),
-                  if (isInprogress || isDradt)
+              // Content Section
+              Padding(
+                padding: EdgeInsets.fromLTRB(15.w, 0.h, 15.w, 20.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // Last Update
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
-                            Text(
-                              isInprogress
-                                  ? 'Trip Progress'
-                                  : 'Planning Progress',
-                              style: AppTextStyles.h8Medium.copyWith(
-                                color: context.colorTheme.onSurface,
+                            Expanded(
+                              child: Text(
+                                trip.title,
+                                style: AppTextStyles.h6Bold.copyWith(
+                                  color: context.colorTheme.onSurface,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            const Spacer(),
-                            Text(
-                              '${(trip.progressPercent * 100).toInt()}%',
-                              style: AppTextStyles.h8Medium.copyWith(
-                                color: context.colorTheme.onSurface,
-                              ),
+                            TripMenuButton(trip: trip),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 18.w,
+                                  height: 18.h,
+                                  child: SvgPicture.asset(
+                                    HomeAssets.locationIcon,
+                                    colorFilter: ColorFilter.mode(
+                                      context.colorTheme.onSurfaceVariant,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(width: 8.w),
+
+                                Text(
+                                  '${trip.destinationGovernorate} / Egypt',
+                                  style: context.textTheme.bodyMedium?.copyWith(
+                                    color: context.colorTheme.onSurfaceVariant,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(width: 9.w),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today_outlined,
+                                  color: context.colorTheme.onSurfaceVariant,
+                                  size: 16.sp,
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  '${trip.durationDays} Days',
+                                  style: context.textTheme.bodyMedium?.copyWith(
+                                    color: context.colorTheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        SizedBox(height: 8.h),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20.r),
-                          child: LinearProgressIndicator(
-                            value: trip.progressPercent.toDouble(),
-                            backgroundColor: AppColors.primaryLightGray,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              context.colorTheme.primary,
-                            ),
-                            minHeight: 9.h,
-                          ),
-                        ),
-                        SizedBox(height: 18.h),
 
-                        // Button
-                        CustomGradientButton(
-                          text: isInprogress
-                              ? 'View Trip'
-                              : 'Continue Planning',
-                          onTap: onContinue,
-                          width: double.infinity,
-                        ),
+                        if (places.isNotEmpty && isInProgress)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 11.h),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.map_outlined,
+                                    size: 18.sp,
+                                    color: context.colorTheme.onSurfaceVariant,
+                                  ),
+                                  SizedBox(width: 6.w),
+                                  Text(
+                                    'Places to visit',
+                                    style: AppTextStyles.h9SemiBold.copyWith(
+                                      color: context.colorTheme.onSurface,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8.h),
+                              ...places.take(2).map((place) {
+                                final name = place['name'] ?? '';
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 4.h),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "• $name",
+                                        style: context.textTheme.bodyMedium,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                              if (places.length > 2)
+                                Text(
+                                  '+${places.length - 2} more places',
+                                  style: context.textTheme.bodyMedium?.copyWith(
+                                    color: context.colorTheme.outline,
+                                  ),
+                                ),
+                            ],
+                          ),
                       ],
                     ),
-                ],
+                    SizedBox(height: 12.h),
+                    if (!isCompleted)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       isInProgress
+                          //           ? 'Trip Progress'
+                          //           : 'Planning Progress',
+                          //       style: AppTextStyles.h8Medium.copyWith(
+                          //         color: context.colorTheme.onSurface,
+                          //       ),
+                          //     ),
+                          //     const Spacer(),
+                          //     Text(
+                          //       '${trip.progressPercent.toInt()}%',
+                          //       style: AppTextStyles.h8Medium.copyWith(
+                          //         color: context.colorTheme.onSurface,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // SizedBox(height: 8.h),
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(20.r),
+                          //   child: LinearProgressIndicator(
+                          //     value: trip.progressPercent / 100.0,
+                          //     backgroundColor: AppColors.primaryLightGray,
+                          //     valueColor: AlwaysStoppedAnimation<Color>(
+                          //       context.colorTheme.primary,
+                          //     ),
+                          //     minHeight: 9.h,
+                          //   ),
+                          // ),
+                          // SizedBox(height: 18.h),
+
+                          // Button
+                          CustomGradientButton(
+                            text: 'View Trip',
+                            onTap: onContinue,
+                            width: double.infinity,
+                          ),
+                        ],
+                      )
+                    else
+                      Column(
+                        children: [
+                          SizedBox(height: 8.h),
+                          CustomGradientButton(
+                            text: 'Write a Review',
+                            onTap: onContinue, // Map to review sheet in UI
+                            width: double.infinity,
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  String _getStatusText(TripStatus status) {
+    switch (status) {
+      case TripStatus.draft:
+        return 'Draft';
+      case TripStatus.inProgress:
+        return 'In Progress';
+      case TripStatus.completed:
+        return 'Completed';
+      default:
+        return status.name.capitalize();
+    }
   }
 }

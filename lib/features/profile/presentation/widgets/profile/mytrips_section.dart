@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -13,6 +12,7 @@ import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class MyTripsSection extends StatefulWidget {
   const MyTripsSection({super.key});
@@ -25,50 +25,57 @@ class _MyTripsSectionState extends State<MyTripsSection> {
   @override
   void initState() {
     super.initState();
-    // sl<TripsCubit>().loadTrips();
+    final status = context.read<TripsCubit>().state.tripsStatus;
+    context.read<TripsCubit>().loadTrips(silent: status == TripsStatus.loaded);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: sl<TripsCubit>(),
-      child: BlocBuilder<TripsCubit, TripsState>(
-        builder: (context, tripsState) {
-          final trips = tripsState.trips;
-          if (trips.isEmpty) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: Center(
-                child: Text(
-                  'No trips generated yet.',
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorTheme.outline,
-                  ),
+    return BlocBuilder<TripsCubit, TripsState>(
+      builder: (context, tripsState) {
+        final isLoading = tripsState.tripsStatus == TripsStatus.loading;
+        final trips = tripsState.trips;
+
+        if (!isLoading && trips.isEmpty) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.h),
+            child: Center(
+              child: Text(
+                'No trips generated yet.',
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorTheme.outline,
                 ),
               ),
-            );
-          }
-          return SizedBox(
+            ),
+          );
+        }
+        return Skeletonizer(
+          enabled: isLoading,
+          child: SizedBox(
             height: 233.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               clipBehavior: Clip.none,
-              itemCount: trips.length,
+              itemCount: isLoading ? 3 : trips.length,
               separatorBuilder: (_, _) => SizedBox(width: 32.w),
               itemBuilder: (context, index) {
+                if (isLoading) {
+                  return _MyTripCard(trip: Trip.empty());
+                }
                 return _MyTripCard(
                   trip: trips[index],
                   onTap: () {
                     context.push(
                       '${AppRoutes.tripDetails}?tripId=${trips[index].tripId}',
+                      extra: trips[index],
                     );
                   },
                 );
               },
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -90,9 +97,12 @@ class _MyTripCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              AppCachedImage(
-                imagePath: trip?.coverImageUrl ?? '',
-                fit: BoxFit.cover,
+              Hero(
+                tag: 'trip-image-${trip.tripId}',
+                child: AppCachedImage(
+                  imagePath: trip.coverImageUrl ?? '',
+                  fit: BoxFit.cover,
+                ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,

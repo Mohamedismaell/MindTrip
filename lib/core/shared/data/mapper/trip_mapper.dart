@@ -21,16 +21,16 @@ extension TripModelMapper on TripModel {
         (e) => e.name.toLowerCase() == status.toLowerCase(),
         orElse: () => TripStatus.draft,
       ),
-      shareToken: shareToken,
+      shareToken: shareToken ?? '',
       isPublic: isPublic,
-      sessionId: sessionId,
+      sessionId: sessionId ?? '',
       coverImageUrl: coverImageUrl,
       placesCount: placesCount,
       progressPercent: progressPercent,
       createdAt: createdAt,
       updatedAt: updatedAt,
       plan: plan.toEntity(),
-      collected: collected.toEntity(),
+      collected: collected?.toEntity(),
     );
   }
 }

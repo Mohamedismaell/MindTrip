@@ -3,6 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
@@ -371,20 +375,74 @@ class _TimelineSlot extends StatelessWidget {
                   style: AppTextStyles.h9Bold,
                 ),
                 SizedBox(height: 12.h),
-                ...List.generate(places.length, (index) {
-                  final place = places[index];
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 6.h, left: 10.w),
-                    child: Text(
-                      '- ${place.name}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.h9Regular.copyWith(
-                        color: context.colorTheme.onSurfaceVariant,
-                      ),
-                    ),
-                  );
-                }),
+                BlocBuilder<TripDetailsCubit, TripDetailsState>(
+                  builder: (context, state) {
+                    final isInProgress =
+                        state.trip?.status == TripStatus.inProgress;
+                    return Column(
+                      children: places.map((place) {
+                        final isChecked = state.checkedPlaces.contains(
+                          place.name,
+                        );
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 6.h, left: 0),
+                          child: InkWell(
+                            onTap: isInProgress
+                                ? () => context
+                                      .read<TripDetailsCubit>()
+                                      .togglePlaceChecked(place.name)
+                                : null,
+                            child: Row(
+                              children: [
+                                if (isInProgress)
+                                  SizedBox(
+                                    width: 24.w,
+                                    height: 24.h,
+                                    child: Checkbox(
+                                      value: isChecked,
+                                      onChanged: (val) => context
+                                          .read<TripDetailsCubit>()
+                                          .togglePlaceChecked(place.name),
+                                      activeColor: context.colorTheme.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          4.r,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 10.w),
+                                    child: Text(
+                                      '•',
+                                      style: AppTextStyles.h9Regular,
+                                    ),
+                                  ),
+                                SizedBox(width: 8.w),
+                                Expanded(
+                                  child: Text(
+                                    place.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.h9Regular.copyWith(
+                                      color: isChecked
+                                          ? context.colorTheme.outline
+                                          : context.colorTheme.onSurfaceVariant,
+                                      decoration: isChecked
+                                          ? TextDecoration.lineThrough
+                                          : null,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
               ],
             ),
           ),

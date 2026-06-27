@@ -19,6 +19,10 @@ class GeneratedPlanModel extends Equatable {
   final int daysCount;
   final PlanModel? plan;
 
+  factory GeneratedPlanModel.empty() {
+    return const GeneratedPlanModel();
+  }
+
   factory GeneratedPlanModel.fromJson(Map<String, dynamic> json) {
     return GeneratedPlanModel(
       tripId: parseString(json['trip_id']),

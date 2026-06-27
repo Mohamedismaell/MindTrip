@@ -4,11 +4,11 @@ import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
 
 class CreateTripUseCase {
-  final TripRepository _repository;
+  final TripRepository repository;
 
-  CreateTripUseCase(this._repository);
+  CreateTripUseCase(this.repository);
 
-  Future<Result<Trip>> call(CreateTripRequestModel request) async {
-    return _repository.createTrip(request);
+  Future<Result<Trip>> call(CreateTripRequestModel request) {
+    return repository.createTrip(request);
   }
 }

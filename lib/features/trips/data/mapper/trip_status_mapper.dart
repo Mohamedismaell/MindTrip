@@ -5,14 +5,11 @@ TripStatus statusFromString(String value) {
     case 'draft':
       return TripStatus.draft;
 
-    case 'upcoming':
-      return TripStatus.upcoming;
+    case 'inprogress':
+      return TripStatus.inProgress;
 
     case 'completed':
       return TripStatus.completed;
-
-    case 'cancelled':
-      return TripStatus.cancelled;
 
     default:
       return TripStatus.draft;
@@ -24,16 +21,12 @@ String statusToString(TripStatus status) {
     case TripStatus.draft:
       return 'Draft';
 
-    case TripStatus.upcoming:
-      return 'Upcoming';
+    case TripStatus.inProgress:
+      return 'InProgress';
 
     case TripStatus.completed:
       return 'Completed';
-
-    case TripStatus.cancelled:
-      return 'Cancelled';
-
-    case TripStatus.inProgress:
+    default:
       return 'Draft';
   }
 }

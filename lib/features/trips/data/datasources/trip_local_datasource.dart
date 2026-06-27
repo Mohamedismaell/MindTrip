@@ -22,23 +22,19 @@ class TripLocalDataSource {
 
   Future<void> save(TripModel trip) async {
     final json = trip.toJson();
+    await _tripsBox.put(trip.tripId, json);
+  }
 
-    print('================ STORAGE JSON ================');
-    print(json.toString());
+  Future<void> replaceAll(List<TripModel> trips) async {
+    await _tripsBox.clear();
 
-    json.forEach((key, value) {
-      print('$key -> ${value.runtimeType}');
-    });
+    final data = <String, Map>{};
 
-    final plan = json['plan'];
-    if (plan is Map) {
-      print('------------ PLAN ------------');
-      plan.forEach((key, value) {
-        print('$key -> ${value.runtimeType}');
-      });
+    for (final trip in trips) {
+      data[trip.tripId] = trip.toJson();
     }
 
-    await _tripsBox.put(trip.tripId, json);
+    await _tripsBox.putAll(data);
   }
 
   Future<void> delete(String id) async {

@@ -35,7 +35,6 @@ class ScreenshotUtils {
               as RenderRepaintBoundary?;
       if (boundary == null) return null;
 
-      print('Boundary size: ${boundary.size.width} x ${boundary.size.height}');
       final ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
       final ByteData? byteData = await image.toByteData(
         format: ui.ImageByteFormat.png,

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/enums/app_flow.dart';
-import 'package:mindtrip/core/shared/presentation/widget/shell/tabs_shell.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
-import 'package:mindtrip/core/shared/presentation/widget/shell/app_shell.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
+import 'package:mindtrip/core/shared/presentation/widget/shell/app_shell.dart';
+import 'package:mindtrip/core/shared/presentation/widget/shell/tabs_shell.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/shared/routes/go_router_refresh_stream.dart';
 import 'package:mindtrip/core/shared/routes/route_register.dart';
 import 'package:mindtrip/features/ai_planner/routes/ai_planner_routes.dart';
 import 'package:mindtrip/features/authetication/routes/auth_routes.dart';
+import 'package:mindtrip/features/explore/routes/explore_routes.dart';
 import 'package:mindtrip/features/favorite/routes/favorites_routes.dart';
 import 'package:mindtrip/features/home/routes/home_routes.dart';
-import 'package:mindtrip/features/map/routes/map_routes.dart';
 import 'package:mindtrip/features/interests/routes/interests_routes.dart';
+import 'package:mindtrip/features/map/routes/map_routes.dart';
 import 'package:mindtrip/features/onboarding/routes/onboarding_routes.dart';
-import 'package:mindtrip/features/explore/routes/explore_routes.dart';
+import 'package:mindtrip/features/place_details/routes/place_details_routes.dart';
 import 'package:mindtrip/features/places/routes/recommended_places_routes.dart';
 import 'package:mindtrip/features/profile/routes/profile_routes.dart';
-import 'package:mindtrip/features/place_details/routes/place_details_routes.dart';
 import 'package:mindtrip/features/search/routes/search_routes.dart';
 
 class AppRouter {
@@ -53,6 +53,15 @@ class AppRouter {
               StatefulShellBranch(routes: [ExploreRoutes.exploreRoutes]),
               StatefulShellBranch(routes: [AiPlannerRoutes.aiPlannerRoute]),
               StatefulShellBranch(routes: [ProfileRoutes.profileRoute]),
+              // StatefulShellBranch(routes: [
+              //   GoRoute(
+              //     path: AppRoutes.profile,
+              //     builder: (context, state) => BlocProvider.value(
+              //       value: sl<TripsCubit>(),
+              //       child: const ProfileScreen(),
+              //     ),
+              //   ),
+              // ]),
             ],
           ),
           ...RecommendedPlacesRoutes.recommendedRoute,

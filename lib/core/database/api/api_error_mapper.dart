@@ -73,7 +73,6 @@ class ApiErrorMapper {
       case DioExceptionType.badResponse:
         return _mapBadResponse(e);
       case DioExceptionType.cancel:
-        // No-op, managed by repository returning Result.cancelled()
         return UnknownFailure(message: '$e', debugMessage: e.toString());
       case DioExceptionType.unknown:
         if (e.error is NoInternetException || e.error is SocketException) {

@@ -62,9 +62,7 @@ class ImagePickCropService {
     );
     if (cropped == null) return null;
 
-    print('Cropped image ${cropped.path}');
     final compressed = await _compressFile(File(cropped.path));
-    print('Compressed image $compressed');
     return compressed;
   }
 

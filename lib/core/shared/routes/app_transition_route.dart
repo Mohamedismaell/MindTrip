@@ -16,7 +16,7 @@ class AppTransitionRoute {
     required String path,
     required Widget Function(BuildContext, GoRouterState) builder,
     required AppTransitionBuilder transition,
-    Duration duration = const Duration(milliseconds: 300),
+    Duration duration = const Duration(milliseconds: 600),
     bool opaque = true,
     List<RouteBase> routes = const [],
   }) {
@@ -109,8 +109,9 @@ class AppTransitionRoute {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
+    debugPrint('fadeSlide: ${animation.value}');
     final slide = Tween<Offset>(
-      begin: const Offset(.04, 0),
+      begin: const Offset(.1, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic));
 

@@ -10,25 +10,20 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-
     if (!kDebugMode) return;
-
     debugPrint('🟢 ${bloc.runtimeType} created');
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-
     if (!kDebugMode) return;
-
     debugPrint('📥 ${bloc.runtimeType} | ${event.runtimeType}');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-
     if (!kDebugMode) return;
 
     debugPrint(
@@ -37,18 +32,11 @@ class AppBlocObserver extends BlocObserver {
       ' | ${transition.currentState.runtimeType}'
       ' → ${transition.nextState.runtimeType}',
     );
-
-    // Uncomment while debugging ONE specific bloc.
-    //
-    // if (bloc.runtimeType.toString() == 'AiPlannerCubit') {
-    //   _log(_pretty(transition.nextState));
-    // }
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-
     if (!kDebugMode) return;
 
     debugPrint(
@@ -56,18 +44,11 @@ class AppBlocObserver extends BlocObserver {
       ' | ${change.currentState.runtimeType}'
       ' → ${change.nextState.runtimeType}',
     );
-
-    // Uncomment while debugging ONE specific cubit.
-    //
-    // if (bloc.runtimeType.toString() == 'TripDetailsCubit') {
-    //   _log(_pretty(change.nextState));
-    // }
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
-
     if (!kDebugMode) return;
 
     _log('''
@@ -84,24 +65,51 @@ $stackTrace
   @override
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
-
     if (!kDebugMode) return;
-
     debugPrint('🔴 ${bloc.runtimeType} closed');
   }
 
-  void _log(String text) {
-    for (var i = 0; i < text.length; i += _chunkSize) {
+  static void logRequestBody(Object? body, {String title = 'REQUEST BODY'}) {
+    if (!kDebugMode) return;
+    _printSection(title, _pretty(body));
+  }
+
+  static void logResponseBody(Object? body, {String title = 'RESPONSE BODY'}) {
+    if (!kDebugMode) return;
+    _printSection(title, _pretty(body));
+  }
+
+  static void logMessage(String title, Object? data) {
+    if (!kDebugMode) return;
+    _printSection(title, _pretty(data));
+  }
+
+  static void _printSection(String title, String text) {
+    _log('''
+📦 $title
+$text
+''');
+  }
+
+  static void _log(String text) {
+    final safeText = _truncate(text);
+    for (var i = 0; i < safeText.length; i += _chunkSize) {
       debugPrint(
-        text.substring(
+        safeText.substring(
           i,
-          i + _chunkSize > text.length ? text.length : i + _chunkSize,
+          i + _chunkSize > safeText.length ? safeText.length : i + _chunkSize,
         ),
       );
     }
   }
 
-  String _pretty(Object? object) {
+  static String _truncate(String text) {
+    if (text.length <= _maxLength) return text;
+    return '${text.substring(0, _maxLength)}'
+        '\n\n... <truncated ${text.length - _maxLength} chars>';
+  }
+
+  static String _pretty(Object? object) {
     try {
       dynamic value = object;
 
@@ -111,22 +119,9 @@ $stackTrace
       } catch (_) {}
 
       final text = const JsonEncoder.withIndent('  ').convert(value);
-
-      if (text.length <= _maxLength) {
-        return text;
-      }
-
-      return '${text.substring(0, _maxLength)}'
-          '\n\n... <truncated ${text.length - _maxLength} chars>';
+      return _truncate(text);
     } catch (_) {
-      final text = object.toString();
-
-      if (text.length <= _maxLength) {
-        return text;
-      }
-
-      return '${text.substring(0, _maxLength)}'
-          '\n\n... <truncated ${text.length - _maxLength} chars>';
+      return _truncate(object.toString());
     }
   }
 }

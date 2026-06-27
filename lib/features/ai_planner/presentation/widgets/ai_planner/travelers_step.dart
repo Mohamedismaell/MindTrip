@@ -16,7 +16,7 @@ class TravelersStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<AiPlannerCubit>();
     final adults = context.select((AiPlannerCubit c) => c.state.adults);
-    final children = context.select((AiPlannerCubit c) => c.state.children);
+    // final children = context.select((AiPlannerCubit c) => c.state.children);
     return ListView(
       padding: EdgeInsets.only(top: 6.h, bottom: 24.h),
       children: [

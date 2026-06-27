@@ -3,6 +3,8 @@ import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 enum TripDetailsStatus { initial, loading, loaded, error }
 
+enum TripDetailsActionStatus { idle, loading, success, error }
+
 class TripDetailsState {
   const TripDetailsState({
     this.status = TripDetailsStatus.initial,
@@ -10,6 +12,9 @@ class TripDetailsState {
     this.generatedPlan,
     this.activeDay = 1,
     this.errorMessage,
+    this.checkedPlaces = const {},
+    this.actionStatus = TripDetailsActionStatus.idle,
+    this.actionError,
   });
 
   static const _unset = Object();
@@ -19,6 +24,9 @@ class TripDetailsState {
   final GeneratedPlanEntity? generatedPlan;
   final int activeDay;
   final String? errorMessage;
+  final Set<String> checkedPlaces;
+  final TripDetailsActionStatus actionStatus;
+  final String? actionError;
 
   TripDetailsState copyWith({
     TripDetailsStatus? status,
@@ -26,6 +34,9 @@ class TripDetailsState {
     Object? generatedPlan = _unset,
     int? activeDay,
     Object? errorMessage = _unset,
+    Set<String>? checkedPlaces,
+    TripDetailsActionStatus? actionStatus,
+    Object? actionError = _unset,
   }) {
     return TripDetailsState(
       status: status ?? this.status,
@@ -37,6 +48,11 @@ class TripDetailsState {
       errorMessage: identical(errorMessage, _unset)
           ? this.errorMessage
           : errorMessage as String?,
+      checkedPlaces: checkedPlaces ?? this.checkedPlaces,
+      actionStatus: actionStatus ?? this.actionStatus,
+      actionError: identical(actionError, _unset)
+          ? this.actionError
+          : actionError as String?,
     );
   }
 }

@@ -3,12 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:mindtrip/features/place_details/presentation/screens/place_details_screen.dart';
 
 class PlaceDetailsRoutes {
   static final List<GoRoute> routes = [
-    GoRoute(
+    AppTransitionRoute.custom(
       path: AppRoutes.placeDetails,
       builder: (context, state) {
         final placeId = state.uri.queryParameters['placeId'];
@@ -25,6 +26,7 @@ class PlaceDetailsRoutes {
           child: PlaceDetailsScreen(heroTag: heroTag),
         );
       },
+      transition: AppTransitionRoute.fade,
     ),
   ];
 }

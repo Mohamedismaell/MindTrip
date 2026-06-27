@@ -21,14 +21,14 @@ extension TripModelMapper on TripModel {
         (e) => e.name.toLowerCase() == status.toLowerCase(),
         orElse: () => TripStatus.draft,
       ),
-      shareToken: shareToken,
+      shareToken: shareToken ?? '',
       isPublic: isPublic,
-      sessionId: sessionId,
+      sessionId: sessionId ?? '',
       coverImageUrl: coverImageUrl,
       placesCount: placesCount,
       progressPercent: progressPercent,
       plan: plan.toEntity(),
-      // collected: ... we'll discuss below
+      // collected: collected?.toEntity(),
       createdAt: createdAt,
       updatedAt: updatedAt,
     );

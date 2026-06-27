@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/rename_trip_dialog.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 
 class TripMenuButton extends StatelessWidget {
   const TripMenuButton({super.key, required this.trip});
@@ -10,8 +14,10 @@ class TripMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rename = 'reame';
-    final delete = 'delete';
+    const String rename = 'rename';
+    const String delete = 'delete';
+    const String share = 'share';
+
     return PopupMenuButton<String>(
       icon: Icon(
         Icons.more_vert_rounded,
@@ -22,7 +28,7 @@ class TripMenuButton extends StatelessWidget {
       position: PopupMenuPosition.under,
       offset: const Offset(-25, 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      onSelected: (value) {
+      onSelected: (value) async {
         if (value == rename) {
           showRenameTripDialog(
             context,
@@ -30,7 +36,19 @@ class TripMenuButton extends StatelessWidget {
             currentTitle: trip.title,
           );
         } else if (value == delete) {
-          // context.read<TripsCubit>().deleteTrip(trip.id);
+          await AppDialog.show(
+            context: context,
+            title: 'Delete Trip',
+            description: 'Are you sure you want to delete this trip?',
+            primaryText: 'Cancel',
+            onPrimary: () {},
+            onSecondary: () {
+              context.read<TripsCubit>().deleteTrip(trip.tripId);
+            },
+            secondaryText: 'Delete',
+          );
+        } else if (value == share) {
+          context.read<TripsCubit>().shareTrip(trip.tripId);
         }
       },
       itemBuilder: (_) => [
@@ -44,7 +62,16 @@ class TripMenuButton extends StatelessWidget {
             ],
           ),
         ),
-
+        PopupMenuItem(
+          value: share,
+          child: Row(
+            children: [
+              Icon(Icons.share_outlined, size: 22.sp),
+              SizedBox(width: 10.w),
+              Text('Share', style: context.textTheme.bodyLarge),
+            ],
+          ),
+        ),
         PopupMenuItem(
           value: delete,
           child: Row(
@@ -56,7 +83,7 @@ class TripMenuButton extends StatelessWidget {
               ),
               SizedBox(width: 10.w),
               Text(
-                'Delete Draft',
+                'Delete',
                 style: context.textTheme.bodyLarge?.copyWith(color: Colors.red),
               ),
             ],

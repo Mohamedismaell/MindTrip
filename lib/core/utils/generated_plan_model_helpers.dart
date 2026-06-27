@@ -27,7 +27,6 @@ Map<int, DayPlanModel> parseDays(Map<String, dynamic> plan) {
     if (dayNumber == null) {
       continue;
     }
-    print(jsonEncode(entry.value));
     final json = entry.value as Map<String, dynamic>;
 
     result[dayNumber] = DayPlanModel.fromJson(json);

@@ -3,17 +3,94 @@ import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
-import 'package:uuid/uuid.dart';
 
 class TripsCubit extends SafeCubit<TripsState> {
   final TripRepository _repository;
-  // final GeneratePlanUseCase _generatePlanUseCase;
-  final _uuid = const Uuid();
+  TripsCubit(this._repository) : super(TripsState(focusedDay: DateTime.now()));
 
-  TripsCubit(
-    this._repository,
-    // this._generatePlanUseCase,
-  ) : super(TripsState(focusedDay: DateTime.now()));
+  void resetActionStatus() {
+    emit(
+      state.copyWith(actionStatus: TripsActionStatus.idle, actionError: null),
+    );
+  }
+
+  Future<void> loadTrips({bool silent = false}) async {
+    if (!silent) emitSafe(state.copyWith(tripsStatus: TripsStatus.loading));
+    final result = await _repository.getTrips();
+    result.when(
+      success: (trips) {
+        emitSafe(state.copyWith(tripsStatus: TripsStatus.loaded, trips: trips));
+      },
+      failure: (error) {
+        emitSafe(
+          state.copyWith(
+            tripsStatus: TripsStatus.error,
+            errorMessage: 'Failed to load trips: ${error.message}',
+          ),
+        );
+      },
+      cancelled: () {},
+    );
+  }
+
+  Future<void> deleteTrip(String tripId) async {
+    emitSafe(state.copyWith(actionStatus: TripsActionStatus.loading));
+    final result = await _repository.deleteTrip(tripId);
+    result.when(
+      success: (_) {
+        final updatedTrips = state.trips
+            .where((t) => t.tripId != tripId)
+            .toList();
+        emitSafe(
+          state.copyWith(
+            actionStatus: TripsActionStatus.success,
+            trips: updatedTrips,
+          ),
+        );
+      },
+      failure: (error) => emitSafe(
+        state.copyWith(
+          actionStatus: TripsActionStatus.error,
+          actionError: error.message,
+        ),
+      ),
+      cancelled: () => resetActionStatus(),
+    );
+  }
+
+  Future<void> shareTrip(String tripId) async {
+    emitSafe(state.copyWith(actionStatus: TripsActionStatus.loading));
+    // Simulate or call use case
+    await Future.delayed(const Duration(milliseconds: 500));
+    emitSafe(state.copyWith(actionStatus: TripsActionStatus.success));
+  }
+
+  Future<void> renameTrip(String tripId, String newName) async {
+    emitSafe(state.copyWith(actionStatus: TripsActionStatus.loading));
+    final result = await _repository.renameTrip(tripId, newName);
+    result.when(
+      success: (_) {
+        emitSafe(state.copyWith(actionStatus: TripsActionStatus.success));
+        loadTrips();
+      },
+      failure: (error) => emitSafe(
+        state.copyWith(
+          actionStatus: TripsActionStatus.error,
+          actionError: error.message,
+        ),
+      ),
+      cancelled: () => resetActionStatus(),
+    );
+  }
+
+  void onSearchChanged(String query) {
+    emitSafe(state.copyWith(searchQuery: query));
+  }
+
+  void onTabChanged(int index) {
+    final tab = TripFilterTab.values[index];
+    emitSafe(state.copyWith(selectedTab: tab));
+  }
 
   Future<void> updateSearchQuary(String? searchQuary) async {
     emitSafe(state.copyWith(searchQuery: searchQuary));
@@ -56,7 +133,6 @@ class TripsCubit extends SafeCubit<TripsState> {
   //     totalCost: 0,
   //     interests: const [],
   //   );
-
   //   final updatedTrips = List<Trip>.from(state.trips)..add(newTrip);
   //   emitSafe(state.copyWith(trips: updatedTrips));
   //   return newTrip.id;
@@ -167,7 +243,6 @@ class TripsCubit extends SafeCubit<TripsState> {
 
   // Future<void> deleteTrip(String tripId) async {
   //   final result = await _repository.deleteTrip(tripId);
-
   //   result.when(
   //     success: (_) {
   //       final updatedTrips = state.trips.where((t) => t.id != tripId).toList();
@@ -188,14 +263,11 @@ class TripsCubit extends SafeCubit<TripsState> {
   // Future<void> updateTripTitle(String tripId, String newTitle) async {
   //   final index = state.getTripIndex(tripId);
   //   if (index == -1) return;
-
   //   final trip = state.trips[index].copyWith(
   //     title: newTitle,
   //     updatedAt: DateTime.now(),
   //   );
-
   //   final result = await _repository.updateTrip(trip);
-
   //   result.when(
   //     success: (_) {
   //       final updatedTrips = List<Trip>.from(state.trips);
@@ -219,9 +291,8 @@ class TripsCubit extends SafeCubit<TripsState> {
     final endOfMonth = DateTime(month.year, month.month + 1, 0);
 
     return state.trips.where((trip) {
-      if (trip.tripStart == null) return false;
-      final start = trip.tripStart!;
-      final end = trip.tripEnd ?? start;
+      final start = trip.tripStart;
+      final end = trip.tripEnd;
 
       return start.isBefore(endOfMonth.add(const Duration(days: 1))) &&
           end.isAfter(startOfMonth.subtract(const Duration(days: 1)));
@@ -232,10 +303,8 @@ class TripsCubit extends SafeCubit<TripsState> {
     final current = DateUtils.dateOnly(day);
 
     return trips.where((trip) {
-      if (trip.tripStart == null || trip.tripEnd == null) return false;
-
-      final start = DateUtils.dateOnly(trip.tripStart!);
-      final end = DateUtils.dateOnly(trip.tripEnd!);
+      final start = DateUtils.dateOnly(trip.tripStart);
+      final end = DateUtils.dateOnly(trip.tripEnd);
 
       return !current.isBefore(start) && !current.isAfter(end);
     }).toList();

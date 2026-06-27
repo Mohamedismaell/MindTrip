@@ -2,12 +2,12 @@ import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
 import 'package:dio/dio.dart';
 
-class DeleteTripUseCase {
+class ShareTripUseCase {
   final TripRepository repository;
 
-  DeleteTripUseCase(this.repository);
+  ShareTripUseCase(this.repository);
 
-  Future<Result<void>> call(String id, {CancelToken? cancelToken}) {
-    return repository.deleteTrip(id, cancelToken: cancelToken);
+  Future<Result<String>> call(String id, {CancelToken? cancelToken}) {
+    return repository.shareTrip(id, cancelToken: cancelToken);
   }
 }

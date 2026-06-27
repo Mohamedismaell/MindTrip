@@ -5,6 +5,8 @@ enum TripsStatus { initial, loading, loaded, error }
 
 enum TripFilterTab { all, inProgress, completed, drafts }
 
+enum TripsActionStatus { idle, loading, success, error }
+
 class TripsState extends Equatable {
   final List<Trip> trips;
   final TripsStatus tripsStatus;
@@ -15,6 +17,11 @@ class TripsState extends Equatable {
   final DateTime? selectedDay;
   final String? generatedTripId;
   final bool isGenerating;
+
+  // New action fields
+  final TripsActionStatus actionStatus;
+  final String? actionError;
+
   const TripsState({
     this.trips = const [],
     this.tripsStatus = TripsStatus.initial,
@@ -25,6 +32,8 @@ class TripsState extends Equatable {
     this.selectedDay,
     this.generatedTripId,
     this.isGenerating = false,
+    this.actionStatus = TripsActionStatus.idle,
+    this.actionError,
   });
 
   TripsState copyWith({
@@ -38,6 +47,8 @@ class TripsState extends Equatable {
     String? generatedTripId,
     bool clearGeneratedTripId = false,
     bool? isGenerating,
+    TripsActionStatus? actionStatus,
+    String? actionError,
   }) {
     return TripsState(
       trips: trips ?? this.trips,
@@ -47,18 +58,18 @@ class TripsState extends Equatable {
       selectedTab: selectedTab ?? this.selectedTab,
       focusedDay: focusedDay ?? this.focusedDay,
       selectedDay: selectedDay ?? this.selectedDay,
-      generatedTripId: clearGeneratedTripId
-          ? null
-          : generatedTripId ?? this.generatedTripId,
+      generatedTripId:
+          clearGeneratedTripId ? null : generatedTripId ?? this.generatedTripId,
       isGenerating: isGenerating ?? this.isGenerating,
+      actionStatus: actionStatus ?? this.actionStatus,
+      actionError: actionError ?? this.actionError,
     );
   }
 
   List<Trip> get drafts =>
       trips.where((t) => t.status == TripStatus.draft).toList();
 
-  Trip? getTripById(String id) =>
-      trips.where((t) => t.tripId == id).firstOrNull;
+  Trip? getTripById(String id) => trips.where((t) => t.tripId == id).firstOrNull;
 
   int getTripIndex(String id) => trips.indexWhere((t) => t.tripId == id);
 
@@ -112,5 +123,7 @@ class TripsState extends Equatable {
     selectedDay,
     generatedTripId,
     isGenerating,
+    actionStatus,
+    actionError,
   ];
 }

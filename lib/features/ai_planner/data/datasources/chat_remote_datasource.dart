@@ -61,11 +61,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     if (response is Map<String, dynamic>) {
       final model = ChatResponseModel.fromJson(response);
 
-      print('MODEL DATE = ${model.collected.date}');
-
       final entity = model.toEntity();
-
-      print('ENTITY DATE = ${entity.collected.date}');
 
       return entity;
     }

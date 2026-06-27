@@ -15,7 +15,7 @@ class OnBoardingRoutes {
       builder: (context, state) {
         return const SplashScreen();
       },
-      transition: AppTransitionRoute.fadeSlide,
+      transition: AppTransitionRoute.fade,
     ),
     ShellRoute(
       builder: (context, state, child) {
@@ -27,7 +27,7 @@ class OnBoardingRoutes {
           builder: (context, state) {
             return const OnboardingScreen();
           },
-          transition: AppTransitionRoute.fadeSlide,
+          transition: AppTransitionRoute.fade,
         ),
 
         AppTransitionRoute.custom(
@@ -35,7 +35,7 @@ class OnBoardingRoutes {
           builder: (context, state) {
             return const WelcomeAuthScreen();
           },
-          transition: AppTransitionRoute.fadeSlide,
+          transition: AppTransitionRoute.fade,
         ),
       ],
     ),

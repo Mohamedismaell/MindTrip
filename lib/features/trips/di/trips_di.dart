@@ -5,13 +5,14 @@ import 'package:mindtrip/features/trips/data/datasources/remote_trip_datasource.
 import 'package:mindtrip/features/trips/data/datasources/trip_local_datasource.dart';
 import 'package:mindtrip/features/trips/data/repositories/trip_repository_impl.dart';
 import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/change_trip_status_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/create_trip_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/delete_trip_use_case.dart';
-import 'package:mindtrip/features/trips/domain/use_cases/get_all_trips_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_by_id_use_case.dart';
-import 'package:mindtrip/features/trips/domain/use_cases/get_trip_containing_place_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_details_use_case.dart';
-import 'package:mindtrip/features/trips/domain/use_cases/update_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/rename_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/review_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/share_trip_use_case.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 
@@ -33,32 +34,41 @@ class TripsDi {
       ),
     );
 
-    sl.registerLazySingleton<GetAllTripsUseCase>(
-      () => GetAllTripsUseCase(sl<TripRepository>()),
-    );
-    sl.registerLazySingleton<GetTripByIdUseCase>(
-      () => GetTripByIdUseCase(sl<TripRepository>()),
-    );
     sl.registerLazySingleton<GetTripDetailsUseCase>(
       () => GetTripDetailsUseCase(sl<TripRepository>()),
     );
     sl.registerLazySingleton<CreateTripUseCase>(
       () => CreateTripUseCase(sl<TripRepository>()),
     );
+    sl.registerLazySingleton<RenameTripUseCase>(
+      () => RenameTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<ShareTripUseCase>(
+      () => ShareTripUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<ChangeTripStatusUseCase>(
+      () => ChangeTripStatusUseCase(sl<TripRepository>()),
+    );
     sl.registerLazySingleton<DeleteTripUseCase>(
       () => DeleteTripUseCase(sl<TripRepository>()),
     );
-    sl.registerLazySingleton<UpdateTripUseCase>(
-      () => UpdateTripUseCase(sl<TripRepository>()),
+    sl.registerLazySingleton<GetTripByIdUseCase>(
+      () => GetTripByIdUseCase(sl<TripRepository>()),
     );
-    sl.registerLazySingleton<GetTripContainingPlaceUseCase>(
-      () => GetTripContainingPlaceUseCase(sl<TripRepository>()),
+    sl.registerLazySingleton<ReviewTripUseCase>(
+      () => ReviewTripUseCase(sl<TripRepository>()),
     );
 
-    sl.registerLazySingleton<TripsCubit>(() => TripsCubit(sl<TripRepository>()));
+    sl.registerLazySingleton<TripsCubit>(
+      () => TripsCubit(sl<TripRepository>()),
+    );
 
     sl.registerFactory<TripDetailsCubit>(
-      () => TripDetailsCubit(sl<GetTripDetailsUseCase>()),
+      () => TripDetailsCubit(
+        sl<GetTripDetailsUseCase>(),
+        sl<ChangeTripStatusUseCase>(),
+        sl<ReviewTripUseCase>(),
+      ),
     );
   }
 }

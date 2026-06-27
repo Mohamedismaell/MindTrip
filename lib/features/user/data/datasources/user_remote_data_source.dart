@@ -4,7 +4,6 @@ import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/features/user/data/models/upload_photo_response.dart';
 import 'package:mindtrip/features/user/data/models/user_model.dart';
 
-
 class UserRemoteDataSource {
   final ApiConsumer _api;
 
@@ -16,14 +15,10 @@ class UserRemoteDataSource {
   }
 
   Future<void> updateInterests(List<String> interests) async {
-    await _api.put(
-      EndPoints.insertInterests,
-      data: {'interests': interests},
-    );
+    await _api.put(EndPoints.insertInterests, data: {'interests': interests});
   }
 
   Future<String> uploadProfilePhoto(String filePath) async {
-    print(' profile photo ******* ===>$filePath}');
     final formDataMap = {
       'file': await MultipartFile.fromFile(
         filePath,

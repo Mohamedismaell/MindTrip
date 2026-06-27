@@ -68,7 +68,7 @@ class OnboardingContent extends StatelessWidget {
                     onTap: () async {
                       await context.read<OnboardingCubit>().finishOnboarding();
                       if (context.mounted) {
-                        context.pushReplacement(AppRoutes.welcomeAuth);
+                        context.go(AppRoutes.welcomeAuth);
                       }
                     },
                     child: Text(

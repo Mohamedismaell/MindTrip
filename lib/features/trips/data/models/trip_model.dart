@@ -17,11 +17,11 @@ class TripModel extends Equatable {
     required this.totalBudgetEgp,
     required this.totalCost,
     required this.status,
-    required this.shareToken,
+    this.shareToken,
     required this.isPublic,
-    required this.sessionId,
-    required this.collected,
-    required this.coverImageUrl,
+    this.sessionId,
+    this.collected,
+    this.coverImageUrl,
     required this.placesCount,
     required this.progressPercent,
     required this.createdAt,
@@ -40,11 +40,11 @@ class TripModel extends Equatable {
   final int totalBudgetEgp;
   final int totalCost;
   final String status;
-  final String shareToken;
+  final String? shareToken;
   final bool isPublic;
-  final String sessionId;
-  final CollectedDataModel collected;
-  final String coverImageUrl;
+  final String? sessionId;
+  final CollectedDataModel? collected;
+  final String? coverImageUrl;
   final int placesCount;
   final int progressPercent;
   final DateTime createdAt;
@@ -53,27 +53,37 @@ class TripModel extends Equatable {
 
   factory TripModel.fromJson(Map<String, dynamic> json) {
     return TripModel(
-      tripId: json['tripId'] as String,
-      title: json['title'] as String,
-      destinationGovernorate: json['destinationGovernorate'] as String,
-      city: json['city'] as String,
-      startDate: DateTime.parse(json['startDate'] as String),
-      endDate: DateTime.parse(json['endDate'] as String),
-      durationDays: (json['durationDays'] as num).toInt(),
-      people: (json['people'] as num).toInt(),
-      totalBudgetEgp: (json['totalBudgetEgp'] as num).toInt(),
-      totalCost: (json['totalCost'] as num).toInt(),
-      status: json['status'] as String,
-      shareToken: json['shareToken'] as String,
-      isPublic: json['isPublic'] as bool,
-      sessionId: json['sessionId'] as String,
+      tripId: json['tripId'] as String? ?? '',
+      title: json['title'] as String? ?? 'Untitled Trip',
+      destinationGovernorate: json['destinationGovernorate'] as String? ?? '',
+      city: json['city'] as String? ?? '',
+      startDate: json['startDate'] != null
+          ? DateTime.parse(json['startDate'] as String)
+          : DateTime.now(),
+      endDate: json['endDate'] != null
+          ? DateTime.parse(json['endDate'] as String)
+          : DateTime.now(),
+      durationDays: (json['durationDays'] as num?)?.toInt() ?? 0,
+      people: (json['people'] as num?)?.toInt() ?? 1,
+      totalBudgetEgp: (json['totalBudgetEgp'] as num?)?.toInt() ?? 0,
+      totalCost: (json['totalCost'] as num?)?.toInt() ?? 0,
+      status: json['status'] as String? ?? 'Draft',
+      shareToken: json['shareToken'] as String?,
+      isPublic: json['isPublic'] as bool? ?? false,
+      sessionId: json['sessionId'] as String?,
       collected: _collectedFromJson(json['collectedJson']),
-      coverImageUrl: json['coverImageUrl'] as String,
-      placesCount: (json['placesCount'] as num).toInt(),
-      progressPercent: (json['progressPercent'] as num).toInt(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      plan: GeneratedPlanModel.fromJson(json['plan'] as Map<String, dynamic>),
+      coverImageUrl: json['coverImageUrl'] as String?,
+      placesCount: (json['placesCount'] as num?)?.toInt() ?? 0,
+      progressPercent: (json['progressPercent'] as num?)?.toInt() ?? 0,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
+      plan: json['plan'] != null
+          ? GeneratedPlanModel.fromJson(json['plan'] as Map<String, dynamic>)
+          : GeneratedPlanModel.empty(),
     );
   }
 
@@ -93,7 +103,7 @@ class TripModel extends Equatable {
       'shareToken': shareToken,
       'isPublic': isPublic,
       'sessionId': sessionId,
-      'collectedJson': _collectedToJson(collected),
+      'collectedJson': collected != null ? _collectedToJson(collected!) : null,
       'coverImageUrl': coverImageUrl,
       'placesCount': placesCount,
       'progressPercent': progressPercent,
@@ -152,11 +162,11 @@ class TripModel extends Equatable {
     );
   }
 
-  static CollectedDataModel _collectedFromJson(dynamic json) {
-    if (json == null) return CollectedDataModel.empty();
+  static CollectedDataModel? _collectedFromJson(dynamic json) {
+    if (json == null) return null;
 
     if (json is String) {
-      if (json.isEmpty) return CollectedDataModel.empty();
+      if (json.isEmpty) return null;
 
       return CollectedDataModel.fromJson(
         jsonDecode(json) as Map<String, dynamic>,
@@ -167,7 +177,7 @@ class TripModel extends Equatable {
       return CollectedDataModel.fromJson(json);
     }
 
-    throw ArgumentError('Unsupported collectedJson type: ${json.runtimeType}');
+    return null;
   }
 
   static String _collectedToJson(CollectedDataModel model) {
