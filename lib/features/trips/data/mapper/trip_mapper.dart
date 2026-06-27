@@ -17,10 +17,7 @@ extension TripModelMapper on TripModel {
       people: people,
       totalBudget: totalBudgetEgp,
       totalCost: totalCost,
-      status: TripStatus.values.firstWhere(
-        (e) => e.name.toLowerCase() == status.toLowerCase(),
-        orElse: () => TripStatus.draft,
-      ),
+      status: _mapStatus(status),
       shareToken: shareToken ?? '',
       isPublic: isPublic,
       sessionId: sessionId ?? '',
@@ -32,6 +29,19 @@ extension TripModelMapper on TripModel {
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
+  }
+
+  TripStatus _mapStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'draft':
+      case 'temporary':
+        return TripStatus.draft;
+      case 'complete':
+      case 'completed':
+        return TripStatus.completed;
+      default:
+        return TripStatus.inProgress;
+    }
   }
 }
 

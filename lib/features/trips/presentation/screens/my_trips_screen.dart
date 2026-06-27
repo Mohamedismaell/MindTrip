@@ -157,14 +157,10 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
                                   trip: trip,
                                   tripStatus: trip.status,
                                   onContinue: () {
-                                    if (trip.status == TripStatus.completed) {
-                                      // Todo: Show review sheet
-                                    } else {
-                                      context.push(
-                                        '${AppRoutes.tripDetails}?tripId=${trip.tripId}',
-                                        extra: trip,
-                                      );
-                                    }
+                                    context.push(
+                                      '${AppRoutes.tripDetails}?tripId=${trip.tripId}',
+                                      extra: trip,
+                                    );
                                   },
                                 );
                               },

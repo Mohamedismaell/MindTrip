@@ -10,6 +10,7 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/ai_refinement_sheet.dart';
+import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_accommodation_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_day_overview_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_details_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
@@ -17,6 +18,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_review_sheet.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 
 class TripDetailsScreen extends StatefulWidget {
@@ -35,9 +37,9 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<TripDetailsCubit>().initialize(
-            widget.tripId,
-            initialTrip: widget.trip,
-          );
+        widget.tripId,
+        initialTrip: widget.trip,
+      );
     });
   }
 
@@ -64,9 +66,17 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
               message: state.actionError ?? 'Operation failed',
             );
             context.read<TripDetailsCubit>().resetActionStatus();
-          } else if (state.actionStatus == TripDetailsActionStatus.success) {
-            AppDialog.hideLoading(context);
             context.read<TripsCubit>().loadTrips(silent: true);
+
+            if (state.trip?.status == TripStatus.completed) {
+              TripReviewSheet.show(
+                context,
+                (rating, comment) => context
+                    .read<TripDetailsCubit>()
+                    .reviewTrip(rating, comment),
+              );
+            }
+
             context.read<TripDetailsCubit>().resetActionStatus();
           }
         },
@@ -113,23 +123,21 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                   trip.tripId,
                                 ),
                         ),
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 24.h),
-                            child: Hero(
-                              tag: 'trip-image-${widget.tripId}',
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.r),
-                                child: AppCachedImage(
-                                  imagePath: trip?.coverImageUrl ?? '',
-                                  height: 200.h,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
+
+                        if (plan != null &&
+                            plan.accommodation.isNotEmpty &&
+                            trip != null)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 32.h),
+                              child: TripAccommodationCard(
+                                accommodation: plan.accommodation.first,
+                                tripStart: trip.tripStart,
+                                tripEnd: trip.tripEnd,
+                                tripId: trip.tripId,
                               ),
                             ),
                           ),
-                        ),
                         if (plan != null)
                           SliverList.separated(
                             itemCount: plan.daysCount,
@@ -188,26 +196,33 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                       child: CustomGradientButton(
                                         text: 'Write a Review',
                                         onTap: () {
-                                          // Todo: Show review sheet
+                                          TripReviewSheet.show(
+                                            context,
+                                            (rating, comment) => context
+                                                .read<TripDetailsCubit>()
+                                                .reviewTrip(rating, comment),
+                                          );
                                         },
                                         width: double.infinity,
                                       ),
                                     );
                                   }
 
+                                  final isDraft =
+                                      trip.status == TripStatus.draft;
+
                                   return Padding(
                                     padding: EdgeInsets.symmetric(
                                       vertical: 20.h,
                                     ),
                                     child: CustomGradientButton(
-                                      text: trip.status == TripStatus.draft
+                                      text: isDraft
                                           ? 'Start Trip'
                                           : 'Mark Completed',
                                       onTap: () {
-                                        final nextStatus =
-                                            trip.status == TripStatus.draft
-                                            ? 1
-                                            : 2;
+                                        final nextStatus = isDraft
+                                            ? TripStatus.inProgress.index
+                                            : TripStatus.completed.index;
                                         context
                                             .read<TripDetailsCubit>()
                                             .changeTripStatus(nextStatus);

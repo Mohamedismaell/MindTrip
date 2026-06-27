@@ -109,7 +109,7 @@ class AppTransitionRoute {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    debugPrint('fadeSlide: ${animation.value}');
+    // debugPrint('fadeSlide: ${animation.value}');
     final slide = Tween<Offset>(
       begin: const Offset(.1, 0),
       end: Offset.zero,

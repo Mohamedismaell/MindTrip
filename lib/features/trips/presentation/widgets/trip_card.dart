@@ -220,62 +220,63 @@ class TripCard extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 12.h),
-                    if (!isCompleted)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Row(
-                          //   children: [
-                          //     Text(
-                          //       isInProgress
-                          //           ? 'Trip Progress'
-                          //           : 'Planning Progress',
-                          //       style: AppTextStyles.h8Medium.copyWith(
-                          //         color: context.colorTheme.onSurface,
-                          //       ),
-                          //     ),
-                          //     const Spacer(),
-                          //     Text(
-                          //       '${trip.progressPercent.toInt()}%',
-                          //       style: AppTextStyles.h8Medium.copyWith(
-                          //         color: context.colorTheme.onSurface,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(height: 8.h),
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.circular(20.r),
-                          //   child: LinearProgressIndicator(
-                          //     value: trip.progressPercent / 100.0,
-                          //     backgroundColor: AppColors.primaryLightGray,
-                          //     valueColor: AlwaysStoppedAnimation<Color>(
-                          //       context.colorTheme.primary,
-                          //     ),
-                          //     minHeight: 9.h,
-                          //   ),
-                          // ),
-                          // SizedBox(height: 18.h),
+                    CustomGradientButton(
+                      text: 'View Trip',
+                      onTap: onContinue,
+                      width: double.infinity,
+                    ),
 
-                          // Button
-                          CustomGradientButton(
-                            text: 'View Trip',
-                            onTap: onContinue,
-                            width: double.infinity,
-                          ),
-                        ],
-                      )
-                    else
-                      Column(
-                        children: [
-                          SizedBox(height: 8.h),
-                          CustomGradientButton(
-                            text: 'Write a Review',
-                            onTap: onContinue, // Map to review sheet in UI
-                            width: double.infinity,
-                          ),
-                        ],
-                      ),
+                    // if (!isCompleted)
+                    //   Column(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    // children: [
+                    // Row(
+                    //   children: [
+                    //     Text(
+                    //       isInProgress
+                    //           ? 'Trip Progress'
+                    //           : 'Planning Progress',
+                    //       style: AppTextStyles.h8Medium.copyWith(
+                    //         color: context.colorTheme.onSurface,
+                    //       ),
+                    //     ),
+                    //     const Spacer(),
+                    //     Text(
+                    //       '${trip.progressPercent.toInt()}%',
+                    //       style: AppTextStyles.h8Medium.copyWith(
+                    //         color: context.colorTheme.onSurface,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // SizedBox(height: 8.h),
+                    // ClipRRect(
+                    //   borderRadius: BorderRadius.circular(20.r),
+                    //   child: LinearProgressIndicator(
+                    //     value: trip.progressPercent / 100.0,
+                    //     backgroundColor: AppColors.primaryLightGray,
+                    //     valueColor: AlwaysStoppedAnimation<Color>(
+                    //       context.colorTheme.primary,
+                    //     ),
+                    //     minHeight: 9.h,
+                    //   ),
+                    // ),
+                    // SizedBox(height: 18.h),
+
+                    // Button
+                    // ],
+                    // ),
+                    // else
+                    //   Column(
+                    //     children: [
+                    //       SizedBox(height: 8.h),
+                    //       CustomGradientButton(
+                    //         text: 'Write a Review',
+                    //         onTap: onContinue, // Map to review sheet in UI
+                    //         width: double.infinity,
+                    //       ),
+                    //     ],
+                    //   ),
                   ],
                 ),
               ),
