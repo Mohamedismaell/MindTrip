@@ -20,6 +20,9 @@ class AppDialog {
     Color? iconColor,
     TextStyle? titleStyle,
     Widget? child,
+    bool showCloseButton = false,
+    bool isSecondaryPlain = false,
+    Color? secondaryColor,
     Widget Function(BuildContext, Widget)? providerBuilder,
   }) {
     return showGeneralDialog<bool>(
@@ -46,6 +49,16 @@ class AppDialog {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // if (showCloseButton)
+                  //   Align(
+                  //     alignment: Alignment.topRight,
+                  //     child: IconButton(
+                  //       onPressed: () => Navigator.pop(dialogContext),
+                  //       icon: const Icon(Icons.close),
+                  //       padding: EdgeInsets.zero,
+                  //       constraints: const BoxConstraints(),
+                  //     ),
+                  //   ),
                   // Icon
                   showIcon == false
                       ? const SizedBox.shrink()
@@ -72,12 +85,20 @@ class AppDialog {
                   // Description
                   description == null
                       ? child ?? const SizedBox.shrink()
-                      : Text(
-                          description,
-                          textAlign: TextAlign.center,
-                          style: context.textTheme.bodyLarge?.copyWith(
-                            color: context.colorTheme.outline,
-                          ),
+                      : Column(
+                          children: [
+                            Text(
+                              description,
+                              textAlign: TextAlign.center,
+                              style: context.textTheme.bodyLarge?.copyWith(
+                                color: context.colorTheme.outline,
+                              ),
+                            ),
+                            if (child != null) ...[
+                              SizedBox(height: 16.h),
+                              child,
+                            ],
+                          ],
                         ),
                   SizedBox(height: 20.h),
 
@@ -106,29 +127,47 @@ class AppDialog {
 
                               SizedBox(
                                 width: double.infinity,
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.pop(dialogContext, false);
-                                    onSecondary?.call();
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                      color: context.colorTheme.error,
-                                      width: 1.5,
-                                    ),
-
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 14.h,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    secondaryText,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: context.colorTheme.error,
-                                    ),
-                                  ),
-                                ),
+                                child: isSecondaryPlain
+                                    ? TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(dialogContext, false);
+                                          onSecondary?.call();
+                                        },
+                                        child: Text(
+                                          secondaryText,
+                                          style: TextStyle(
+                                            color:
+                                                secondaryColor ??
+                                                context.colorTheme.primary,
+                                          ),
+                                        ),
+                                      )
+                                    : OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.pop(dialogContext, false);
+                                          onSecondary?.call();
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          side: BorderSide(
+                                            color:
+                                                secondaryColor ??
+                                                context.colorTheme.error,
+                                            width: 1.5,
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 14.h,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          secondaryText,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color:
+                                                secondaryColor ??
+                                                context.colorTheme.error,
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ],
                           ],
@@ -138,36 +177,53 @@ class AppDialog {
                         children: [
                           if (secondaryText != null) ...[
                             Expanded(
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pop(dialogContext, false);
+                              child: isSecondaryPlain
+                                  ? TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(dialogContext, false);
+                                        onSecondary?.call();
+                                      },
+                                      child: Text(
+                                        secondaryText,
+                                        style: TextStyle(
+                                          color:
+                                              secondaryColor ??
+                                              context.colorTheme.primary,
+                                        ),
+                                      ),
+                                    )
+                                  : OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pop(dialogContext, false);
 
-                                  onSecondary?.call();
-                                },
-
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: context.colorTheme.error,
-                                    width: 1.5,
-                                  ),
-
-                                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                                ),
-
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    secondaryText,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: context.colorTheme.error,
+                                        onSecondary?.call();
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                          color:
+                                              secondaryColor ??
+                                              context.colorTheme.error,
+                                          width: 1.5,
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 14.h,
+                                        ),
+                                      ),
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          secondaryText,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color:
+                                                secondaryColor ??
+                                                context.colorTheme.error,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
                             ),
-
                             SizedBox(width: 12.w),
                           ],
                           Expanded(
@@ -177,7 +233,6 @@ class AppDialog {
 
                                 onPrimary();
                               },
-
                               text: primaryText,
                             ),
                           ),

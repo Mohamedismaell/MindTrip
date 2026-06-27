@@ -21,6 +21,7 @@ class EndPoints {
   static String updateProfile = 'api/v1/users/me';
   static String insertInterests = 'api/v1/users/me/interests';
   static String uploadPhoto = 'api/v1/users/me/photo';
+  static String getMyReviews = 'api/v1/users/me/reviews';
 
   // Places
   static String getRecommendedPlaces = 'api/v1/ai/places/recommend';

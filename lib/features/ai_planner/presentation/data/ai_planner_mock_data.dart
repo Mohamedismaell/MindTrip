@@ -30,9 +30,9 @@ class AiPlannerMockData {
     'December',
   ];
   static final List<BudgetTierModel> budgetTiers = const [
-    BudgetTierModel(title: '🙂 Basic', amount: 300),
-    BudgetTierModel(title: '💸 Standard', amount: 500),
-    BudgetTierModel(title: '✨ Comfort', amount: 1000),
-    BudgetTierModel(title: '👑 Premium', amount: 2000),
+    BudgetTierModel(title: '🙂 Basic', amount: 1800),
+    BudgetTierModel(title: '💸 Standard', amount: 2700),
+    BudgetTierModel(title: '✨ Comfort', amount: 4500),
+    BudgetTierModel(title: '👑 Premium', amount: 7200),
   ];
 }

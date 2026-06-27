@@ -10,6 +10,7 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_menu_button.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 //Todo: Edit compeleted Trips Ui
 //Todo: Chanege the progress count for the trip
 
@@ -68,26 +69,28 @@ class TripCard extends StatelessWidget {
                           ),
                         ),
 
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 8.w,
-                            vertical: 17.h,
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 5.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: context.colorTheme.primary.withValues(
-                              alpha: 0.9,
+                        Skeleton.shade(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 17.h,
                             ),
-                            borderRadius: BorderRadius.circular(40.r),
-                          ),
-                          child: Text(
-                            _getStatusText(tripStatus),
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 5.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: context.colorTheme.primary.withValues(
+                                alpha: 0.9,
+                              ),
+                              borderRadius: BorderRadius.circular(40.r),
+                            ),
+                            child: Text(
+                              _getStatusText(tripStatus),
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
@@ -127,14 +130,16 @@ class TripCard extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                SizedBox(
-                                  width: 18.w,
-                                  height: 18.h,
-                                  child: SvgPicture.asset(
-                                    HomeAssets.locationIcon,
-                                    colorFilter: ColorFilter.mode(
-                                      context.colorTheme.onSurfaceVariant,
-                                      BlendMode.srcIn,
+                                Skeleton.shade(
+                                  child: SizedBox(
+                                    width: 18.w,
+                                    height: 18.h,
+                                    child: SvgPicture.asset(
+                                      HomeAssets.locationIcon,
+                                      colorFilter: ColorFilter.mode(
+                                        context.colorTheme.onSurfaceVariant,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -220,10 +225,12 @@ class TripCard extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 12.h),
-                    CustomGradientButton(
-                      text: 'View Trip',
-                      onTap: onContinue,
-                      width: double.infinity,
+                    Skeleton.shade(
+                      child: CustomGradientButton(
+                        text: 'View Trip',
+                        onTap: onContinue,
+                        width: double.infinity,
+                      ),
                     ),
 
                     // if (!isCompleted)

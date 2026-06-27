@@ -14,4 +14,14 @@ class ProfileRemoteDatasource {
       cancelToken: cancelToken,
     );
   }
+
+  Future<List<Map<String, dynamic>>> getMyReviews({
+    CancelToken? cancelToken,
+  }) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getMyReviews,
+      cancelToken: cancelToken,
+    );
+    return List<Map<String, dynamic>>.from(response);
+  }
 }

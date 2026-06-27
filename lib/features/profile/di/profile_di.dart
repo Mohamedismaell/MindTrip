@@ -1,5 +1,9 @@
 import 'package:mindtrip/core/database/api/api_consumer.dart';
+import 'package:mindtrip/core/database/cache/cache_helper.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
+import 'package:mindtrip/features/profile/data/datasources/profile_local_datasource.dart';
+import 'package:mindtrip/features/profile/domain/use_cases/get_my_reviews_use_case.dart';
+import 'package:mindtrip/features/profile/presentation/manager/profile_reviews_cubit.dart';
 import 'package:mindtrip/features/user/domain/usecases/update_profile_use_case.dart';
 import 'package:mindtrip/features/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
@@ -18,13 +22,22 @@ class ProfileDi {
     sl.registerLazySingleton<ProfileRemoteDatasource>(
       () => ProfileRemoteDatasource(apiConsumer: sl<ApiConsumer>()),
     );
+    sl.registerLazySingleton<ProfileLocalDatasource>(
+      () => ProfileLocalDatasourceImpl(cacheHelper: sl<CacheHelper>()),
+    );
 
     // Repositories
     sl.registerLazySingleton<ProfileRepository>(
-      () => ProfileRepositoryImpl(datasource: sl<ProfileRemoteDatasource>()),
+      () => ProfileRepositoryImpl(
+        remoteDatasource: sl<ProfileRemoteDatasource>(),
+        localDatasource: sl<ProfileLocalDatasource>(),
+      ),
     );
     sl.registerLazySingleton<DeleteAccountUseCase>(
       () => DeleteAccountUseCase(repository: sl<ProfileRepository>()),
+    );
+    sl.registerLazySingleton<GetMyReviewsUseCase>(
+      () => GetMyReviewsUseCase(repository: sl<ProfileRepository>()),
     );
 
     // Cubits
@@ -35,6 +48,9 @@ class ProfileDi {
         userCubit: sl<UserCubit>(),
         deleteAccountUseCase: sl<DeleteAccountUseCase>(),
       ),
+    );
+    sl.registerFactory(
+      () => ProfileReviewsCubit(getMyReviewsUseCase: sl<GetMyReviewsUseCase>()),
     );
   }
 }

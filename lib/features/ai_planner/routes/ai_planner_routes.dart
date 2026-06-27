@@ -57,9 +57,10 @@ class AiPlannerRoutes {
             ),
           ],
         ),
-        GoRoute(
+        AppTransitionRoute.custom(
           path: AppRoutes.tripCalendar,
           builder: (context, state) => const TripCalendarScreen(),
+          transition: AppTransitionRoute.fadeSlide,
         ),
         AppTransitionRoute.custom(
           path: AppRoutes.tripDetails,

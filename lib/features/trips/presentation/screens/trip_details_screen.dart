@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide DayPeriod;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -12,13 +12,11 @@ import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.da
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/ai_refinement_sheet.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_accommodation_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_day_overview_card.dart';
-import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_details_bar.dart';
-import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
-import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_review_sheet.dart';
+import 'package:mindtrip/features/trips/presentation/widgets/trip_review_dialog.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 
 class TripDetailsScreen extends StatefulWidget {
@@ -66,12 +64,15 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
               message: state.actionError ?? 'Operation failed',
             );
             context.read<TripDetailsCubit>().resetActionStatus();
+          } else if (state.actionStatus == TripDetailsActionStatus.success) {
+            AppDialog.hideLoading(context);
             context.read<TripsCubit>().loadTrips(silent: true);
 
             if (state.trip?.status == TripStatus.completed) {
-              TripReviewSheet.show(
+              TripReviewDialog.show(
                 context,
-                (rating, comment) => context
+                tripTitle: state.trip?.title ?? 'your trip',
+                onSubmitted: (rating, comment) => context
                     .read<TripDetailsCubit>()
                     .reviewTrip(rating, comment),
               );
@@ -113,15 +114,28 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                     ),
                     child: CustomScrollView(
                       slivers: [
-                        TripDetailsTopBar(
-                          onBack: () => context.canPop()
-                              ? context.pop()
-                              : context.go(AppRoutes.myTrips),
-                          onShare: trip == null
-                              ? null
-                              : () => context.read<TripsCubit>().shareTrip(
-                                  trip.tripId,
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.h),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () => context.canPop()
+                                      ? context.pop()
+                                      : context.go(AppRoutes.myTrips),
+                                  icon: const Icon(Icons.arrow_back_ios_new),
                                 ),
+                                const Spacer(),
+                                if (trip != null)
+                                  IconButton(
+                                    onPressed: () => context
+                                        .read<TripsCubit>()
+                                        .shareTrip(trip.tripId),
+                                    icon: const Icon(Icons.share_outlined),
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
 
                         if (plan != null &&
@@ -196,11 +210,13 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                       child: CustomGradientButton(
                                         text: 'Write a Review',
                                         onTap: () {
-                                          TripReviewSheet.show(
+                                          TripReviewDialog.show(
                                             context,
-                                            (rating, comment) => context
-                                                .read<TripDetailsCubit>()
-                                                .reviewTrip(rating, comment),
+                                            tripTitle: trip.title,
+                                            onSubmitted: (rating, comment) =>
+                                                context
+                                                    .read<TripDetailsCubit>()
+                                                    .reviewTrip(rating, comment),
                                           );
                                         },
                                         width: double.infinity,
@@ -257,7 +273,6 @@ class _EstimateNote extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: CustomHeadLine(
-        key: const Key('trip-estimate-note'),
         textAlign: TextAlign.left,
         firstTitle: 'Note: ',
         firstStyle: AppTextStyles.h9Medium.copyWith(
