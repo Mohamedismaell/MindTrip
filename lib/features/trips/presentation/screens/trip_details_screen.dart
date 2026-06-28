@@ -290,7 +290,9 @@ class _EstimateNote extends StatelessWidget {
         firstStyle: AppTextStyles.h9Medium.copyWith(
           color: context.colorTheme.onSurface,
         ),
-        secondStyle: AppTextStyles.h9Medium.copyWith(color: Colors.black),
+        secondStyle: AppTextStyles.h9Medium.copyWith(
+          color: context.colorTheme.outline,
+        ),
         secondTitle:
             'This is an approximate estimate and may vary depending on your food choices, activity upgrades, seasonal prices, and any custom changes to your itinerary',
       ),
