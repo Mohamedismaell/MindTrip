@@ -9,6 +9,7 @@ sealed class UserModel with _$UserModel {
     required String userId,
     required String displayName,
     required String email,
+    String? bio,
 
     String? phoneNumber,
     String? profilePhotoUrl,

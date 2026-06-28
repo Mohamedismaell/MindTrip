@@ -47,6 +47,7 @@ class CustomOutlinedButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.r),
         ),
+        enableOverlay: false,
         onTap: onPressed,
         child: SizedBox(
           width: double.infinity,

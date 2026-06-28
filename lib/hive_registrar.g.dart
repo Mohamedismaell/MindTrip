@@ -7,6 +7,7 @@ import 'package:mindtrip/core/enums/place_badge.dart';
 import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/enums/place_city.dart';
 import 'package:mindtrip/core/shared/data/models/banner_model.dart';
+import 'package:mindtrip/core/shared/data/models/favorite_trip_model.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
@@ -15,6 +16,7 @@ import 'package:mindtrip/features/search/data/models/recent_search_model.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(BannerModelAdapter());
+    registerAdapter(FavoriteTripModelAdapter());
     registerAdapter(LocationModelAdapter());
     registerAdapter(PlaceBadgeAdapter());
     registerAdapter(PlaceCategoryAdapter());
@@ -29,6 +31,7 @@ extension HiveRegistrar on HiveInterface {
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(BannerModelAdapter());
+    registerAdapter(FavoriteTripModelAdapter());
     registerAdapter(LocationModelAdapter());
     registerAdapter(PlaceBadgeAdapter());
     registerAdapter(PlaceCategoryAdapter());

@@ -61,10 +61,18 @@ class MapCubit extends SafeCubit<MapState> {
   }
 
   void loadPlan(GeneratedPlanEntity plan) {
-    emitSafe(state.copyWith(generatedPlan: plan));
+    emitSafe(
+      state.copyWith(
+        generatedPlan: plan,
+        clearSelectedPlace: true,
+        clearSelectedGooglePlace: true,
+        selectedPlacePhotoUrls: const [],
+        isBottomSheetVisible: false,
+      ),
+    );
 
     if (plan.days.isNotEmpty) {
-      selectDay(plan.days.keys.first);
+      selectDay((plan.days.keys.toList()..sort()).first);
     }
   }
 
@@ -125,12 +133,11 @@ class MapCubit extends SafeCubit<MapState> {
     );
   }
 
-  /// Converts a [PlanPlaceEntity] to the [PlaceEntity] expected by the map
-  /// layer, mapping coordinates and common fields.
   PlaceEntity _planPlaceToEntity(PlanPlaceEntity p) {
     return PlaceEntity(
       id: p.placeId,
       name: p.name,
+      category: p.category,
       description: p.description.isEmpty ? null : p.description,
       rating: p.rating,
       reviewCount: p.reviewsCount,
@@ -149,7 +156,6 @@ class MapCubit extends SafeCubit<MapState> {
   }
 
   //  Place selection
-
   void selectPlace(String placeId) {
     final entry = state.annotations
         .where((e) => e.place.id == placeId)

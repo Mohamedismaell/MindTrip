@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/presentation/manager/trip_favorite_cubit/trip_favorite_cubit.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
@@ -88,6 +89,9 @@ class _MyTripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final isFavorite = context.watch<TripFavoriteCubit>().isFavorite(
+    //   widget.place.id,
+    // );
     return TapScaleEffect(
       enableOverlay: false,
       onTap: onTap,
@@ -147,6 +151,14 @@ class _MyTripCard extends StatelessWidget {
                   ),
                 ),
               ),
+              // Positioned(
+              //               top: 0.h,
+              //               right: 0.w,
+              //               child: FavoriteButton(
+              //                 isFavorite: isFavorite,
+              //                 onTap: _onFavoritePressed,
+              //               ),
+              //             ),
             ],
           ),
         ),

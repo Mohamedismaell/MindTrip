@@ -15,8 +15,6 @@ T _$identity<T>(T value) => value;
 mixin _$MapState {
 
  List<MapAnnotationEntry> get annotations; PlaceEntity? get selectedPlace; GooglePlaceEntity? get selectedGooglePlace; List<String> get selectedPlacePhotoUrls; bool get isBottomSheetVisible; bool get isLocationGranted; bool get clearSelectedPlace; bool get clearSelectedGooglePlace; bool get clearFlyToLocation;/// Monotonically-increasing counter that bumps on every triggerFlyTo call.
-/// The MapListener uses this to reliably detect a new flyTo request even
-/// when the lat/lng coordinates are the same as the previous request.
  int get flyToPulse; double? get flyToLat; double? get flyToLng;/// Trip days passed from trip‐details; null when map is opened standalone.
 /// Pulse that increments whenever we want to force-navigate to the route tab
  int get navigationPulse; GeneratedPlanEntity? get generatedPlan;/// Currently selected day (0-indexed); null means "all days".
@@ -245,8 +243,6 @@ class _MapState extends MapState {
 @override@JsonKey() final  bool clearSelectedGooglePlace;
 @override@JsonKey() final  bool clearFlyToLocation;
 /// Monotonically-increasing counter that bumps on every triggerFlyTo call.
-/// The MapListener uses this to reliably detect a new flyTo request even
-/// when the lat/lng coordinates are the same as the previous request.
 @override@JsonKey() final  int flyToPulse;
 @override final  double? flyToLat;
 @override final  double? flyToLng;

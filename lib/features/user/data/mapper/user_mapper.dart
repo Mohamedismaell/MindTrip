@@ -11,6 +11,7 @@ extension UserMapper on UserModel {
       profilePhotoUrl: profilePhotoUrl,
       languagePreference: languagePreference,
       interests: interests,
+      bio: bio,
     );
   }
 }
@@ -25,6 +26,7 @@ extension UserEntityMapper on UserEntity {
       profilePhotoUrl: profilePhotoUrl,
       languagePreference: languagePreference,
       interests: interests,
+      bio: bio,
     );
   }
 }

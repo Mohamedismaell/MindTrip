@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:mindtrip/features/ai_planner/data/models/day_plan_model.dart';
 import 'package:mindtrip/features/ai_planner/data/models/plan_place_model.dart';
 

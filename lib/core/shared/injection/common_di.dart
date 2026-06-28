@@ -24,6 +24,11 @@ import 'package:mindtrip/core/shared/domain/usecases/get_favorite_places_localus
 import 'package:mindtrip/core/shared/domain/usecases/sync_favorites_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/toggle_favorite_use_case.dart';
 import 'package:mindtrip/core/shared/domain/usecases/bootstrap_favorites_use_case.dart';
+import 'package:mindtrip/core/shared/presentation/manager/trip_favorite_cubit/trip_favorite_cubit.dart';
+import 'package:mindtrip/core/shared/domain/usecases/toggle_trip_favorite_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/sync_favorite_trips_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/get_favorite_trips_local_use_case.dart';
+import 'package:mindtrip/core/shared/domain/usecases/bootstrap_favorite_trips_use_case.dart';
 import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/app_gate_cubit/app_gate_cubit.dart';
@@ -143,6 +148,8 @@ class CommonDi {
       () => FavoritesLocalDataSourceImpl(
         box: AppHive.favoritesBox,
         syncQueueBox: AppHive.favoritesSyncQueueBox,
+        tripBox: AppHive.favoriteTripsBox,
+        tripSyncQueueBox: AppHive.favoriteTripsSyncQueueBox,
       ),
     );
 
@@ -178,6 +185,27 @@ class CommonDi {
       ),
     );
 
+    sl.registerLazySingleton(
+      () => GetFavoriteTripsLocalUseCase(repository: sl<FavoritesRepository>()),
+    );
+    sl.registerLazySingleton(
+      () => ToggleTripFavoriteUseCase(repository: sl<FavoritesRepository>()),
+    );
+    sl.registerLazySingleton(
+      () => SyncFavoriteTripsUseCase(repository: sl<FavoritesRepository>()),
+    );
+    sl.registerLazySingleton(
+      () =>
+          BootstrapFavoriteTripsUseCase(repository: sl<FavoritesRepository>()),
+    );
+    sl.registerLazySingleton(
+      () => TripFavoriteCubit(
+        getFavoriteTripsLocalUseCase: sl<GetFavoriteTripsLocalUseCase>(),
+        toggleTripFavoriteUseCase: sl<ToggleTripFavoriteUseCase>(),
+        syncFavoriteTripsUseCase: sl<SyncFavoriteTripsUseCase>(),
+        bootstrapFavoriteTripsUseCase: sl<BootstrapFavoriteTripsUseCase>(),
+      ),
+    );
     //  Local Storage
     final cacheHelper = CacheHelper();
     await cacheHelper.init();
@@ -201,6 +229,7 @@ class CommonDi {
         facebookAuthProvider: sl<FacebookAuthProvider>(),
         userCubit: sl<UserCubit>(),
         favoriteCubit: sl<FavoriteCubit>(),
+        tripFavoriteCubit: sl<TripFavoriteCubit>(),
         favoritesRepository: sl<FavoritesRepository>(),
       ),
     );

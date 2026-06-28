@@ -8,6 +8,7 @@ import 'package:mindtrip/features/authetication/data/datasources/auth_local_data
 import 'package:mindtrip/features/authetication/domain/usecases/logout_use_case.dart';
 import 'package:mindtrip/features/onboarding/domain/repositories/onboarding_repository.dart';
 import 'package:mindtrip/core/shared/presentation/manager/favorite_cubit/favorite_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/trip_favorite_cubit/trip_favorite_cubit.dart';
 import 'package:mindtrip/core/shared/domain/repositories/favorites_repository.dart';
 part 'app_gate_state.dart';
 
@@ -20,6 +21,7 @@ class AppGateCubit extends SafeCubit<AppGateState> {
   final FacebookAuthProvider facebookAuthProvider;
   final UserCubit userCubit;
   final FavoriteCubit favoriteCubit;
+  final TripFavoriteCubit tripFavoriteCubit;
   final FavoritesRepository favoritesRepository;
 
   bool _isLoggingOut = false;
@@ -33,6 +35,7 @@ class AppGateCubit extends SafeCubit<AppGateState> {
     required this.facebookAuthProvider,
     required this.userCubit,
     required this.favoriteCubit,
+    required this.tripFavoriteCubit,
     required this.favoritesRepository,
   }) : super(AppGateLoading());
 
@@ -91,6 +94,7 @@ class AppGateCubit extends SafeCubit<AppGateState> {
       emitSafe(AppGateInterestsRequired());
     } else {
       favoriteCubit.loadFavorites();
+      tripFavoriteCubit.loadFavoriteTrips();
       emitSafe(AppGateAuthenticated());
     }
   }
@@ -107,6 +111,7 @@ class AppGateCubit extends SafeCubit<AppGateState> {
 
     final user = userCubit.state.user;
     favoriteCubit.loadFavorites();
+    tripFavoriteCubit.loadFavoriteTrips();
 
     if (user == null || user.interests == null || user.interests!.isEmpty) {
       emitSafe(AppGateInterestsRequired());
@@ -159,6 +164,7 @@ class AppGateCubit extends SafeCubit<AppGateState> {
     await authLocal.clear();
     userCubit.clear();
     favoriteCubit.clear();
+    tripFavoriteCubit.clear();
     await favoritesRepository.clearAll();
 
     emitSafe(AppGateUnauthenticated());

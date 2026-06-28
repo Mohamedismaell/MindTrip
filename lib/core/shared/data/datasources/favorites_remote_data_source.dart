@@ -1,6 +1,7 @@
 import 'package:mindtrip/core/database/api/api_consumer.dart';
 import 'package:mindtrip/core/database/api/end_points.dart';
 import 'package:mindtrip/core/shared/data/models/favorite_place_model.dart';
+import 'package:mindtrip/core/shared/data/models/favorite_trip_model.dart';
 
 class FavoritesRemoteDataSource {
   final ApiConsumer _api;
@@ -22,4 +23,19 @@ class FavoritesRemoteDataSource {
     await _api.post(EndPoints.favoritePlaces, data: {'placeId': placeId});
   }
 
+  Future<List<FavoriteTripModel>> getFavoriteTripsFromServer() async {
+    final response = await _api.get(EndPoints.favoriteTrips);
+    return (response as List)
+        .map((e) => FavoriteTripModel.fromJson(e))
+        .toList();
+  }
+
+  Future<FavoriteTripModel> addFavoriteTrip({required String tripId}) async {
+    final response = await _api.post(EndPoints.favoriteTrip(tripId));
+    return FavoriteTripModel.fromJson(response as Map<String, dynamic>);
+  }
+
+  Future<void> deleteFavoriteTrip({required String tripId}) async {
+    await _api.delete(EndPoints.favoriteTrip(tripId));
+  }
 }

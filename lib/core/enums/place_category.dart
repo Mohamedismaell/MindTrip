@@ -38,14 +38,6 @@ enum PlaceCategory {
   @HiveField(10)
   hotels;
 
-  // food_cafes
-  // historical_sites
-  // religious_sites
-  // beaches
-  // nature
-  // entertainment
-  // shopping
-  // arts_culture
   String get category => switch (this) {
     PlaceCategory.all => 'all',
     PlaceCategory.food => 'food',

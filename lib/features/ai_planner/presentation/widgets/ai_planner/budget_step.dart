@@ -26,9 +26,11 @@ class BudgetStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AiPlannerCubit>();
-    final selectedBudget = context.select(
-      (AiPlannerCubit c) => c.state.selectedBudget,
-    );
+    final state = context.watch<AiPlannerCubit>().state;
+    final selectedBudget = state.selectedBudget;
+    final validationMessage = state.budgetValidationMessage;
+    final minimumBudget = state.minimumBudget;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -83,6 +85,7 @@ class BudgetStep extends StatelessWidget {
                 ),
                 decoration: InputDecoration(
                   hintText: 'Enter your custom amount',
+                  errorText: validationMessage,
                   hintStyle: context.textTheme.bodyLarge?.copyWith(
                     color: context.colorTheme.outline,
                   ),
@@ -105,10 +108,24 @@ class BudgetStep extends StatelessWidget {
                       width: 1.5,
                     ),
                   ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: context.colorTheme.error),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(
+                      color: context.colorTheme.error,
+                      width: 1.5,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 24.h),
-              AiFlowActionButton(text: 'Continue', onTap: onContinue),
+              AiFlowActionButton(
+                text: 'Continue',
+                onTap: state.isBudgetValid ? onContinue : null,
+              ),
               SizedBox(height: 24.h),
               Center(
                 child: AiHint(

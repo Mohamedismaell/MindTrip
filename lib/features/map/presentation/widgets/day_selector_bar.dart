@@ -133,13 +133,13 @@ class _DaySelectorBarState extends State<DaySelectorBar>
                   shape: BoxShape.circle,
                   boxShadow: [AppShadows.mapToolButtons],
                 ),
-                child: AnimatedRotation(
-                  turns: _isExpanded ? 0.5 : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  child: Icon(
-                    Icons.calendar_today_rounded,
-                    size: 20.sp,
-                    color: context.colorTheme.primary,
+                child: Center(
+                  child: Text(
+                    'Day ${state.selectedDayNumber}',
+                    style: AppTextStyles.h10Bold.copyWith(
+                      color: context.colorTheme.primary,
+                      fontSize: 12.sp,
+                    ),
                   ),
                 ),
               ),

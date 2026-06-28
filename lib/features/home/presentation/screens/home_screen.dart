@@ -13,6 +13,8 @@ import 'package:mindtrip/features/home/presentation/widgets/home_category_places
 import 'package:mindtrip/features/home/presentation/widgets/home_header.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_recommended_section.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_hidden_gems_section.dart';
+import 'package:mindtrip/features/home/presentation/widgets/home_favorite_trips_section.dart';
+import 'package:mindtrip/core/shared/presentation/manager/trip_favorite_cubit/trip_favorite_cubit.dart';
 import 'package:mindtrip/features/home/presentation/widgets/home_section_header.dart';
 import 'package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
@@ -40,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (tripsCubit.state.tripsStatus == TripsStatus.initial) {
       tripsCubit.loadTrips(silent: true);
     }
+    context.read<TripFavoriteCubit>().loadFavoriteTrips();
   }
 
   void _navigateToRecommended() {
@@ -52,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onRefresh: () async {
         context.read<HomeCubit>().loadAllData();
         context.read<TripsCubit>().loadTrips(silent: true);
+        context.read<TripFavoriteCubit>().loadFavoriteTrips();
         await context.read<RecommendedPlacesCubit>().loadFirstPage(
           selectedCategories: context.read<UserCubit>().state.interests,
         );
@@ -77,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverToBoxAdapter(child: SizedBox(height: 20.h)),
                 const HomeBannerCarousel(),
                 SliverToBoxAdapter(child: SizedBox(height: 28.h)),
+                // const HomeFavoriteTripsSection(),
                 HomeSectionHeader(
                   title: 'Recommended',
                   subtitle: 'Based on your interests',

@@ -25,11 +25,11 @@ class ProfileMockData {
   static const String bio =
       'Adventure seeker 🌊 | History Lover 🏛️ Always Planning the next trip across Egypt';
 
-  static const List<ProfileStatData> stats = [
-    ProfileStatData(label: 'Trips', value: '5'),
-    ProfileStatData(label: 'Reviews', value: '3'),
-    ProfileStatData(label: 'Saved', value: '10'),
-  ];
+  // static const List<ProfileStatData> stats = [
+  //   ProfileStatData(label: 'Trips', value: '5'),
+  //   ProfileStatData(label: 'Reviews', value: '3'),
+  //   ProfileStatData(label: 'Saved', value: '10'),
+  // ];
 
   // static const List<ProfileInterestData> interests = [
   //   ProfileInterestData(emoji: '🔥', label: 'Camping'),

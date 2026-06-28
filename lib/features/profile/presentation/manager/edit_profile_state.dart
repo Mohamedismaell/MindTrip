@@ -14,30 +14,42 @@ abstract class EditProfileState with _$EditProfileState {
   const factory EditProfileState({
     UserEntity? originalUser,
     String? pendingPhotoPath,
-
     @Default('') String draftDisplayName,
     @Default('') String draftPhoneNumber,
+    @Default('EG') String draftPhoneCountryCode,
+    @Default('20') String draftPhoneDialCode,
     @Default('') String draftBio,
-
     @Default(EditSaveStatus.idle) EditSaveStatus saveStatus,
     String? editErrorMessage,
     @Default(DeleteAccountStatus.idle) DeleteAccountStatus deleteStatus,
     String? deleteErrorMessage,
   }) = _EditProfileState;
 
+  String get fullDraftPhone {
+    final normalized = draftPhoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
+    if (normalized.isEmpty) return '';
+    return '+$draftPhoneDialCode$normalized';
+  }
+
   bool get hasChanges {
     if (originalUser == null) return false;
+
     if (pendingPhotoPath != null &&
         pendingPhotoPath != originalUser!.profilePhotoUrl) {
       return true;
     }
+
     if (draftDisplayName != originalUser!.displayName) return true;
-    if (draftPhoneNumber != (originalUser!.phoneNumber ?? '')) {
+
+    final originalPhone = originalUser!.phoneNumber ?? '';
+    if (fullDraftPhone != originalPhone) {
       return true;
     }
-    // if (draftBio != (originalUser!.bio ?? '')) {
-    //   return true;
-    // }
+
+    if (draftBio != (originalUser!.bio ?? '')) {
+      return true;
+    }
+
     return false;
   }
 }

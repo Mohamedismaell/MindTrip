@@ -4,6 +4,7 @@ import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/trip_favorite_cubit/trip_favorite_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/fq_screen.dart';
 import 'package:mindtrip/features/profile/presentation/screens/user_policy_screen.dart';
@@ -14,8 +15,11 @@ import 'package:mindtrip/features/profile/presentation/screens/terms_of_service_
 class ProfileRoutes {
   static final profileRoute = GoRoute(
     path: AppRoutes.profile,
-    builder: (context, state) => BlocProvider.value(
-      value: sl<TripsCubit>(),
+    builder: (context, state) => MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: sl<TripsCubit>()),
+        BlocProvider.value(value: sl<TripFavoriteCubit>()),
+      ],
       child: const ProfileScreen(),
     ),
   );

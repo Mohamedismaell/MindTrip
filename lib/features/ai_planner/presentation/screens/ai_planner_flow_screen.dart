@@ -102,88 +102,97 @@ class _AiPlannerFlowViewState extends State<_AiPlannerFlowView> {
         if (didPop) return;
         await _handleBack(false);
       },
-      child: Scaffold(
-        backgroundColor: context.colorTheme.surface,
-        floatingActionButton: showFab ? AiChatBotButton() : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-            child: AiPlannerFlowListnener(
-              pageController: _pageController,
-              child: Column(
-                children: [
-                  SizedBox(height: 20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _HeaderIconButton(
-                        icon: Icons.arrow_back_rounded,
-                        onTap: () => _handleBack(false),
-                      ),
-                      Builder(
-                        builder: (context) {
-                          final page = context.select(
-                            (AiPlannerCubit cubit) => cubit.state.currentPage,
-                          );
-                          final double progressValue =
-                              (page + 1) / _progressSteps;
-                          return SizedBox(
-                            width: 220.w,
-                            child: AnimatedProgressBar(progress: progressValue),
-                          );
-                        },
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryLightGray,
-                          shape: BoxShape.circle,
+      //! maybe remove the Listener
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Scaffold(
+          backgroundColor: context.colorTheme.surface,
+          floatingActionButton: showFab ? AiChatBotButton() : null,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+              child: AiPlannerFlowListnener(
+                pageController: _pageController,
+                child: Column(
+                  children: [
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _HeaderIconButton(
+                          icon: Icons.arrow_back_rounded,
+                          onTap: () => _handleBack(false),
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.all(10.r),
-                          child: TapScaleEffect(
-                            shape: const CircleBorder(),
-                            onTap: () => _handleBack(true),
-                            child: Icon(
-                              Icons.close,
-                              color: context.colorTheme.onSurfaceVariant,
+                        Builder(
+                          builder: (context) {
+                            final page = context.select(
+                              (AiPlannerCubit cubit) => cubit.state.currentPage,
+                            );
+                            final double progressValue =
+                                (page + 1) / _progressSteps;
+                            return SizedBox(
+                              width: 220.w,
+                              child: AnimatedProgressBar(
+                                progress: progressValue,
+                              ),
+                            );
+                          },
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryLightGray,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10.r),
+                            child: TapScaleEffect(
+                              shape: const CircleBorder(),
+                              onTap: () => _handleBack(true),
+                              child: Icon(
+                                Icons.close,
+                                color: context.colorTheme.onSurfaceVariant,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 22.h),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: PageView(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          DestinationStep(
-                            controller: _destinationController,
-                            onDestinationTap: (dest) {
-                              _destinationController.text = '';
-                            },
-                            onContinue: _onStepCompleted,
-                          ),
-                          DurationStep(onContinue: _onStepCompleted),
-                          TravelersStep(onContinue: _onStepCompleted),
-                          BudgetStep(
-                            customBudgetController: _customBudgetController,
-                            onContinue: _onStepCompleted,
-                          ),
-                          InterestsStep(
-                            scrollController: _scrollController,
-                            onContinue: _onStepCompleted,
-                          ),
-                        ],
+                      ],
+                    ),
+                    SizedBox(height: 22.h),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: PageView(
+                          controller: _pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            DestinationStep(
+                              controller: _destinationController,
+                              onDestinationTap: (dest) {
+                                _destinationController.text = '';
+                              },
+                              onContinue: _onStepCompleted,
+                            ),
+                            DurationStep(onContinue: _onStepCompleted),
+                            TravelersStep(onContinue: _onStepCompleted),
+                            BudgetStep(
+                              customBudgetController: _customBudgetController,
+                              onContinue: _onStepCompleted,
+                            ),
+                            InterestsStep(
+                              scrollController: _scrollController,
+                              onContinue: _onStepCompleted,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/core/shared/data/models/location_model.dart';
 import 'package:mindtrip/core/shared/data/models/place_model.dart';
 import 'package:mindtrip/core/shared/data/models/banner_model.dart';
+import 'package:mindtrip/core/shared/data/models/favorite_trip_model.dart';
 import 'package:mindtrip/core/shared/data/models/planner_preview_model.dart';
 import 'package:mindtrip/features/search/data/models/recent_search_model.dart';
 
@@ -11,6 +12,8 @@ class AppHive {
   static late Box onboardingBox;
   static late Box<PlaceModel> favoritesBox;
   static late Box<String> favoritesSyncQueueBox;
+  static late Box<FavoriteTripModel> favoriteTripsBox;
+  static late Box<String> favoriteTripsSyncQueueBox;
   static late Box<PlaceModel> placesCacheBox;
   static late Box<Map> tripsBox;
   static late Box planningSessionsBox;
@@ -52,12 +55,19 @@ class AppHive {
     if (!Hive.isAdapterRegistered(RecentSearchModelAdapter().typeId)) {
       Hive.registerAdapter(RecentSearchModelAdapter());
     }
+    if (!Hive.isAdapterRegistered(FavoriteTripModelAdapter().typeId)) {
+      Hive.registerAdapter(FavoriteTripModelAdapter());
+    }
   }
 
   static Future<void> openBoxes() async {
     onboardingBox = await Hive.openBox('onboardingBox');
     favoritesBox = await Hive.openBox<PlaceModel>('favoritesBox');
     favoritesSyncQueueBox = await Hive.openBox('favoritesSyncQueueBox');
+    favoriteTripsBox = await Hive.openBox<FavoriteTripModel>(
+      'favoriteTripsBox',
+    );
+    favoriteTripsSyncQueueBox = await Hive.openBox('favoriteTripsSyncQueueBox');
     placesCacheBox = await Hive.openBox('placesCacheBox');
     tripsBox = await Hive.openBox<Map>('tripsBox');
     planningSessionsBox = await Hive.openBox('planning_sessions');
@@ -72,6 +82,8 @@ class AppHive {
   static Future<void> clearBoxes() async {
     favoritesBox.clear();
     favoritesSyncQueueBox.clear();
+    favoriteTripsBox.clear();
+    favoriteTripsSyncQueueBox.clear();
     placesCacheBox.clear();
     tripsBox.clear();
     planningSessionsBox.clear();

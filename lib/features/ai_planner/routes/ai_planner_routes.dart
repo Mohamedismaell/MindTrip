@@ -6,6 +6,7 @@ import 'package:mindtrip/core/shared/routes/app_transition_route.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/ai_planner_cubit.dart';
 import 'package:mindtrip/features/ai_planner/presentation/cubit/chat_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/trip_favorite_cubit/trip_favorite_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/screens/my_trips_screen.dart';
 import 'package:mindtrip/features/trips/presentation/screens/trip_calendar_screen.dart';
 import 'package:mindtrip/features/trips/presentation/screens/trip_details_screen.dart';
@@ -28,6 +29,7 @@ class AiPlannerRoutes {
           providers: [
             BlocProvider(create: (_) => sl<AiPlannerCubit>()),
             BlocProvider.value(value: sl<TripsCubit>()),
+            BlocProvider.value(value: sl<TripFavoriteCubit>()),
             BlocProvider(create: (_) => sl<ChatCubit>()),
             BlocProvider(create: (_) => sl<TripDetailsCubit>()),
           ],

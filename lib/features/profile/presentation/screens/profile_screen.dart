@@ -7,6 +7,7 @@ import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/features/profile/presentation/manager/profile_reviews_cubit.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/my_reviews_section.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_stats_section.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
@@ -34,6 +35,7 @@ class ProfileScreen extends StatelessWidget {
           final displayName = user?.displayName ?? 'Traveler';
           final photoUrl = user?.profilePhotoUrl;
           final interests = user?.interests;
+          final bio = user?.bio;
           return PopScope(
             canPop: false,
             onPopInvokedWithResult: (didPop, result) {
@@ -74,11 +76,12 @@ class ProfileScreen extends StatelessWidget {
                       ProfileIdentity(
                         displayName: displayName,
                         photoUrl: photoUrl,
+                        bio: bio,
                       ),
                       SizedBox(height: 24.h),
                       const _EditprofileButoon(),
                       SizedBox(height: 34.h),
-                      Center(child: StatsCard(stats: ProfileMockData.stats)),
+                      Center(child: const ProfileStatsSection()),
                       SizedBox(height: 28.h),
                       SectionHeading(
                         title: 'My interests',

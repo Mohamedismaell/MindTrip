@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserModel {
 
- String get userId; String get displayName; String get email; String? get phoneNumber; String? get profilePhotoUrl; String? get languagePreference; String? get homeGovernorate; List<String>? get interests;
+ String get userId; String get displayName; String get email; String? get bio; String? get phoneNumber; String? get profilePhotoUrl; String? get languagePreference; String? get homeGovernorate; List<String>? get interests;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserModelCopyWith<UserModel> get copyWith => _$UserModelCopyWithImpl<UserModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.languagePreference, languagePreference) || other.languagePreference == languagePreference)&&(identical(other.homeGovernorate, homeGovernorate) || other.homeGovernorate == homeGovernorate)&&const DeepCollectionEquality().equals(other.interests, interests));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.languagePreference, languagePreference) || other.languagePreference == languagePreference)&&(identical(other.homeGovernorate, homeGovernorate) || other.homeGovernorate == homeGovernorate)&&const DeepCollectionEquality().equals(other.interests, interests));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,displayName,email,phoneNumber,profilePhotoUrl,languagePreference,homeGovernorate,const DeepCollectionEquality().hash(interests));
+int get hashCode => Object.hash(runtimeType,userId,displayName,email,bio,phoneNumber,profilePhotoUrl,languagePreference,homeGovernorate,const DeepCollectionEquality().hash(interests));
 
 @override
 String toString() {
-  return 'UserModel(userId: $userId, displayName: $displayName, email: $email, phoneNumber: $phoneNumber, profilePhotoUrl: $profilePhotoUrl, languagePreference: $languagePreference, homeGovernorate: $homeGovernorate, interests: $interests)';
+  return 'UserModel(userId: $userId, displayName: $displayName, email: $email, bio: $bio, phoneNumber: $phoneNumber, profilePhotoUrl: $profilePhotoUrl, languagePreference: $languagePreference, homeGovernorate: $homeGovernorate, interests: $interests)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- String userId, String displayName, String email, String? phoneNumber, String? profilePhotoUrl, String? languagePreference, String? homeGovernorate, List<String>? interests
+ String userId, String displayName, String email, String? bio, String? phoneNumber, String? profilePhotoUrl, String? languagePreference, String? homeGovernorate, List<String>? interests
 });
 
 
@@ -65,12 +65,13 @@ class _$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? displayName = null,Object? email = null,Object? phoneNumber = freezed,Object? profilePhotoUrl = freezed,Object? languagePreference = freezed,Object? homeGovernorate = freezed,Object? interests = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? displayName = null,Object? email = null,Object? bio = freezed,Object? phoneNumber = freezed,Object? profilePhotoUrl = freezed,Object? languagePreference = freezed,Object? homeGovernorate = freezed,Object? interests = freezed,}) {
   return _then(_self.copyWith(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
 as String?,languagePreference: freezed == languagePreference ? _self.languagePreference : languagePreference // ignore: cast_nullable_to_non_nullable
 as String?,homeGovernorate: freezed == homeGovernorate ? _self.homeGovernorate : homeGovernorate // ignore: cast_nullable_to_non_nullable
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  String displayName,  String email,  String? phoneNumber,  String? profilePhotoUrl,  String? languagePreference,  String? homeGovernorate,  List<String>? interests)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  String displayName,  String email,  String? bio,  String? phoneNumber,  String? profilePhotoUrl,  String? languagePreference,  String? homeGovernorate,  List<String>? interests)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
-return $default(_that.userId,_that.displayName,_that.email,_that.phoneNumber,_that.profilePhotoUrl,_that.languagePreference,_that.homeGovernorate,_that.interests);case _:
+return $default(_that.userId,_that.displayName,_that.email,_that.bio,_that.phoneNumber,_that.profilePhotoUrl,_that.languagePreference,_that.homeGovernorate,_that.interests);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.userId,_that.displayName,_that.email,_that.phoneNumber,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  String displayName,  String email,  String? phoneNumber,  String? profilePhotoUrl,  String? languagePreference,  String? homeGovernorate,  List<String>? interests)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  String displayName,  String email,  String? bio,  String? phoneNumber,  String? profilePhotoUrl,  String? languagePreference,  String? homeGovernorate,  List<String>? interests)  $default,) {final _that = this;
 switch (_that) {
 case _UserModel():
-return $default(_that.userId,_that.displayName,_that.email,_that.phoneNumber,_that.profilePhotoUrl,_that.languagePreference,_that.homeGovernorate,_that.interests);}
+return $default(_that.userId,_that.displayName,_that.email,_that.bio,_that.phoneNumber,_that.profilePhotoUrl,_that.languagePreference,_that.homeGovernorate,_that.interests);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -195,10 +196,10 @@ return $default(_that.userId,_that.displayName,_that.email,_that.phoneNumber,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  String displayName,  String email,  String? phoneNumber,  String? profilePhotoUrl,  String? languagePreference,  String? homeGovernorate,  List<String>? interests)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  String displayName,  String email,  String? bio,  String? phoneNumber,  String? profilePhotoUrl,  String? languagePreference,  String? homeGovernorate,  List<String>? interests)?  $default,) {final _that = this;
 switch (_that) {
 case _UserModel() when $default != null:
-return $default(_that.userId,_that.displayName,_that.email,_that.phoneNumber,_that.profilePhotoUrl,_that.languagePreference,_that.homeGovernorate,_that.interests);case _:
+return $default(_that.userId,_that.displayName,_that.email,_that.bio,_that.phoneNumber,_that.profilePhotoUrl,_that.languagePreference,_that.homeGovernorate,_that.interests);case _:
   return null;
 
 }
@@ -210,12 +211,13 @@ return $default(_that.userId,_that.displayName,_that.email,_that.phoneNumber,_th
 @JsonSerializable()
 
 class _UserModel implements UserModel {
-  const _UserModel({required this.userId, required this.displayName, required this.email, this.phoneNumber, this.profilePhotoUrl, this.languagePreference, this.homeGovernorate, final  List<String>? interests}): _interests = interests;
+  const _UserModel({required this.userId, required this.displayName, required this.email, this.bio, this.phoneNumber, this.profilePhotoUrl, this.languagePreference, this.homeGovernorate, final  List<String>? interests}): _interests = interests;
   factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
 @override final  String userId;
 @override final  String displayName;
 @override final  String email;
+@override final  String? bio;
 @override final  String? phoneNumber;
 @override final  String? profilePhotoUrl;
 @override final  String? languagePreference;
@@ -243,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.languagePreference, languagePreference) || other.languagePreference == languagePreference)&&(identical(other.homeGovernorate, homeGovernorate) || other.homeGovernorate == homeGovernorate)&&const DeepCollectionEquality().equals(other._interests, _interests));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.languagePreference, languagePreference) || other.languagePreference == languagePreference)&&(identical(other.homeGovernorate, homeGovernorate) || other.homeGovernorate == homeGovernorate)&&const DeepCollectionEquality().equals(other._interests, _interests));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,displayName,email,phoneNumber,profilePhotoUrl,languagePreference,homeGovernorate,const DeepCollectionEquality().hash(_interests));
+int get hashCode => Object.hash(runtimeType,userId,displayName,email,bio,phoneNumber,profilePhotoUrl,languagePreference,homeGovernorate,const DeepCollectionEquality().hash(_interests));
 
 @override
 String toString() {
-  return 'UserModel(userId: $userId, displayName: $displayName, email: $email, phoneNumber: $phoneNumber, profilePhotoUrl: $profilePhotoUrl, languagePreference: $languagePreference, homeGovernorate: $homeGovernorate, interests: $interests)';
+  return 'UserModel(userId: $userId, displayName: $displayName, email: $email, bio: $bio, phoneNumber: $phoneNumber, profilePhotoUrl: $profilePhotoUrl, languagePreference: $languagePreference, homeGovernorate: $homeGovernorate, interests: $interests)';
 }
 
 
@@ -263,7 +265,7 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- String userId, String displayName, String email, String? phoneNumber, String? profilePhotoUrl, String? languagePreference, String? homeGovernorate, List<String>? interests
+ String userId, String displayName, String email, String? bio, String? phoneNumber, String? profilePhotoUrl, String? languagePreference, String? homeGovernorate, List<String>? interests
 });
 
 
@@ -280,12 +282,13 @@ class __$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? displayName = null,Object? email = null,Object? phoneNumber = freezed,Object? profilePhotoUrl = freezed,Object? languagePreference = freezed,Object? homeGovernorate = freezed,Object? interests = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? displayName = null,Object? email = null,Object? bio = freezed,Object? phoneNumber = freezed,Object? profilePhotoUrl = freezed,Object? languagePreference = freezed,Object? homeGovernorate = freezed,Object? interests = freezed,}) {
   return _then(_UserModel(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
 as String?,languagePreference: freezed == languagePreference ? _self.languagePreference : languagePreference // ignore: cast_nullable_to_non_nullable
 as String?,homeGovernorate: freezed == homeGovernorate ? _self.homeGovernorate : homeGovernorate // ignore: cast_nullable_to_non_nullable

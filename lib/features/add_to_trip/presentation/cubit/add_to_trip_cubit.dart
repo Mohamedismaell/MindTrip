@@ -164,7 +164,6 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
     _emitStatus(AddToTripStatus.generatingNewTripPlan);
 
     final days = state.endDate!.difference(state.startDate!).inDays + 1;
-
     final request = GeneratePlanRequestModel(
       city: state.place.location.cityEn,
       days: days,
@@ -174,9 +173,14 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
       interests: userInterests
           .map((e) => InterestCategories.stripEmoji(e))
           .toList(),
-      mustInclude: state.place.name,
+      mustInclude: [
+        GeneratePlanMustIncludeItem(
+          name: state.place.name,
+          placeId: state.place.id,
+          type: 'Activity',
+        ),
+      ],
     );
-
     final result = await _generatePlanUseCase(request: request);
 
     await result.when(

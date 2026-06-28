@@ -5,21 +5,23 @@ import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_refresh_indicator.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/map/data/models/map_trip_extra.dart';
+import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.dart';
+import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/ai_refinement_sheet.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_accommodation_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_day_overview_card.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
-import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
-import 'package:mindtrip/features/trips/domain/entities/trip.dart';
+import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_map_preview_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_review_dialog.dart';
-import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class TripDetailsScreen extends StatefulWidget {
   const TripDetailsScreen({super.key, required this.tripId, this.trip});
@@ -196,6 +198,25 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                 child: Text('Trip details are not available.'),
                               ),
                             ),
+                          SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+                          SliverToBoxAdapter(
+                            child: TripMapPreviewCard(
+                              onViewMap: () {
+                                final trip = state.trip;
+                                final plan = state.generatedPlan;
+
+                                if (trip == null || plan == null) return;
+
+                                context.push(
+                                  AppRoutes.map,
+                                  extra: MapTripExtra(
+                                    trip: trip,
+                                    generatedPlan: plan,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                           SliverToBoxAdapter(child: SizedBox(height: 42.h)),
                           SliverToBoxAdapter(
                             child: _EstimateNote(estimatedTotalCost: totalCost),

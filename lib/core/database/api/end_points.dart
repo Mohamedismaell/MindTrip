@@ -41,6 +41,8 @@ class EndPoints {
   static String favoritePlaces = 'api/v1/favorites/places';
   static String deleteFavoritePlace(String placeId) =>
       'api/v1/favorites/places/$placeId';
+  static String favoriteTrips = 'api/v1/favorites/trips';
+  static String favoriteTrip(String tripId) => 'api/v1/favorites/trips/$tripId';
 
   // AI Planner
   static String generatePlan = 'api/v1/ai/generate-plan';

@@ -6,6 +6,7 @@ import 'package:mindtrip/features/home/presentation/cubit/home/home_cubit.dart';
 import 'package:mindtrip/features/home/presentation/screens/home_screen.dart';
 import 'package:mindtrip/features/places/presentation/recommended_places/cubit/recommended_places_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/core/shared/presentation/manager/trip_favorite_cubit/trip_favorite_cubit.dart';
 
 class HomeRoutes {
   static final homeRoute = GoRoute(
@@ -17,6 +18,7 @@ class HomeRoutes {
           create: (context) => sl<RecommendedPlacesCubit>(),
         ),
         BlocProvider<TripsCubit>.value(value: sl<TripsCubit>()),
+        BlocProvider<TripFavoriteCubit>.value(value: sl<TripFavoriteCubit>()),
       ],
       child: const HomeScreen(),
     ),

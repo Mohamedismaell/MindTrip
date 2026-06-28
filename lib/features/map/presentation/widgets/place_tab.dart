@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mindtrip/core/enums/place_category.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/presentation/manager/location_cubit/location_cubit.dart';
@@ -306,7 +309,9 @@ class PlaceContent extends StatelessWidget {
     final photoUrls = place.imageUrls;
     final placeLat = place.location.latitude;
     final placeLng = place.location.longitude;
-
+    debugPrint(
+      'place=${place.name} enum=${place.category.name} apiKey=${place.category.category} display=${place.category.displayName}',
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -375,7 +380,7 @@ class PlaceContent extends StatelessWidget {
                       borderRadius: BorderRadius.circular(100.r),
                     ),
                     child: Text(
-                      place.category.name.replaceAll('_', ' '),
+                      place.category.name,
                       style: AppTextStyles.h10SemiBold.copyWith(
                         color: context.colorTheme.primary,
                       ),

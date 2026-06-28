@@ -326,6 +326,9 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
   }
 
   GeneratePlanRequestModel _buildGeneratePlanRequest() {
+    final resolvedBudget =
+        state.selectedBudget?.amount ?? int.tryParse(state.customBudget) ?? 0;
+
     return GeneratePlanRequestModel(
       interests: state.selectedInterests
           .map(InterestCategories.stripEmoji)
@@ -335,23 +338,25 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
           ? state.tripEnd!.difference(state.tripStart!).inDays + 1
           : 0,
       people: state.adults + state.children,
-      budget: int.tryParse(state.customBudget) ?? 0,
+      budget: resolvedBudget,
     );
   }
 
   CollectedPlannerDataEntity _buildCollectedData(
     GeneratePlanRequestModel request,
   ) {
-    final mustInclude = request.mustInclude?.trim();
+    final mustIncludeNames = request.mustInclude
+        .map((item) => item.name.trim())
+        .where((name) => name.isNotEmpty)
+        .toList();
+
     return CollectedPlannerDataEntity(
       destination: request.city,
       days: request.days,
       budget: request.budget,
       interests: request.interests,
       people: request.people,
-      mustInclude: mustInclude == null || mustInclude.isEmpty
-          ? const []
-          : [mustInclude],
+      mustInclude: mustIncludeNames,
     );
   }
 }

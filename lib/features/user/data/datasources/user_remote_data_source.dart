@@ -36,11 +36,15 @@ class UserRemoteDataSource {
     return parsed.url;
   }
 
-  Future<void> updateProfile({String? displayName, String? phoneNumber}) async {
+  Future<void> updateProfile({
+    String? displayName,
+    String? phoneNumber,
+    String? bio,
+  }) async {
     final data = <String, dynamic>{};
     if (displayName != null) data['displayName'] = displayName;
     if (phoneNumber != null) data['phoneNumber'] = phoneNumber;
-
+    if (bio != null) data['bio'] = bio;
     await _api.patch(EndPoints.updateProfile, data: data);
   }
 }

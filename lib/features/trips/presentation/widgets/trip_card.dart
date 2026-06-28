@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindtrip/core/shared/domain/entities/favorite_trip_entity.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_shadows.dart';
@@ -10,6 +11,7 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_menu_button.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/profile/favorite_trip_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 //Todo: Edit compeleted Trips Ui
 //Todo: Chanege the progress count for the trip
@@ -27,11 +29,22 @@ class TripCard extends StatelessWidget {
   final TripStatus tripStatus;
   String get _coverImage => trip.coverImageUrl ?? trip.coverImageUrl ?? '';
 
+  FavoriteTripEntity get _favoriteTrip => FavoriteTripEntity(
+    favoriteTripId: trip.tripId,
+    tripId: trip.tripId,
+    destination: trip.destinationGovernorate.isNotEmpty
+        ? trip.destinationGovernorate
+        : trip.city,
+    startDate: trip.tripStart,
+    endDate: trip.tripEnd,
+    durationDays: trip.durationDays,
+    status: _getStatusText(tripStatus),
+    createdAt: trip.createdAt,
+  );
+
   @override
   Widget build(BuildContext context) {
     final isInProgress = tripStatus == TripStatus.inProgress;
-    final isCompleted = tripStatus == TripStatus.completed;
-
     final places = const [];
 
     return AnimatedSize(

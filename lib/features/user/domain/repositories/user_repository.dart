@@ -8,5 +8,6 @@ abstract class UserRepository {
   Future<Result<void>> updateProfile({
     String? displayName,
     String? phoneNumber,
+    String? bio,
   });
 }

@@ -1,8 +1,12 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:flutter/services.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
+import 'package:mindtrip/features/profile/presentation/manager/edit_profile_cubit.dart';
+import 'package:mindtrip/features/profile/presentation/manager/edit_profile_state.dart';
 
 class EditableInfo extends StatelessWidget {
   const EditableInfo({
@@ -25,17 +29,13 @@ class EditableInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //! Label
         Text(
           label,
           style: context.textTheme.labelLarge?.copyWith(
             color: context.colorTheme.onSurface,
           ),
         ),
-
         SizedBox(height: 8.h),
-
-        //! Input Container
         Container(
           decoration: BoxDecoration(
             color: context.colorTheme.surface,
@@ -44,35 +44,27 @@ class EditableInfo extends StatelessWidget {
               color: context.colorTheme.outline.withValues(alpha: 0.25),
             ),
           ),
-
           child: isPhone
-              ? CountryPicker(controller: controller, hintText: hintText)
-              : TextField(
+              ? CountryPhoneField(controller: controller, hintText: hintText)
+              : TextFormField(
                   controller: controller,
-
                   keyboardType: keyboardType,
-
                   textAlign: TextAlign.left,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
                   style: AppTextStyles.h9Medium.copyWith(
                     color: context.colorTheme.onSurface,
                   ),
-
                   decoration: InputDecoration(
                     hintText: hintText,
-
                     hintStyle: AppTextStyles.h9Regular.copyWith(
                       color: context.colorTheme.onSurfaceVariant,
                     ),
-
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     errorBorder: InputBorder.none,
                     focusedErrorBorder: InputBorder.none,
-
                     isDense: true,
-
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 16.w,
                       vertical: 14.h,
@@ -85,152 +77,179 @@ class EditableInfo extends StatelessWidget {
   }
 }
 
-class CountryPicker extends StatefulWidget {
-  const CountryPicker({
+class CountryPhoneField extends StatelessWidget {
+  const CountryPhoneField({
     super.key,
-    this.initialIsoCode = 'EG',
-    this.controller,
+    required this.controller,
     this.hintText,
     this.enabled = true,
-    this.onChanged,
-    this.validator,
   });
 
-  final String initialIsoCode;
-
-  final TextEditingController? controller;
-
+  final TextEditingController controller;
   final String? hintText;
-
   final bool enabled;
-
-  final ValueChanged<PhoneNumber>? onChanged;
-
-  final String? Function(String?)? validator;
-
-  @override
-  State<CountryPicker> createState() => _CountryPickerState();
-}
-
-class _CountryPickerState extends State<CountryPicker> {
-  late PhoneNumber initialPhoneNumber;
-  bool isValidNumber = false;
-
-  @override
-  void initState() {
-    super.initState();
-    initialPhoneNumber = PhoneNumber(isoCode: widget.initialIsoCode);
-    _initPhoneNumber();
-  }
-
-  Future<void> _initPhoneNumber() async {
-    final text = widget.controller?.text;
-    if (text != null && text.isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          isValidNumber = true;
-        });
-      }
-
-      try {
-        final number = await PhoneNumber.getRegionInfoFromPhoneNumber(text);
-        if (mounted) {
-          setState(() {
-            initialPhoneNumber = number;
-          });
-        }
-      } catch (_) {}
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return InternationalPhoneNumberInput(
-      isEnabled: widget.enabled,
-      initialValue: initialPhoneNumber,
-      textFieldController: widget.controller,
-      formatInput: false,
-      ignoreBlank: true,
-      autoValidateMode: AutovalidateMode.onUserInteraction,
-      keyboardType: const TextInputType.numberWithOptions(
-        signed: false,
-        decimal: false,
-      ),
-      onInputValidated: (bool value) {
-        if (mounted && isValidNumber != value) {
-          setState(() {
-            isValidNumber = value;
-          });
-        }
+    return BlocBuilder<EditProfileCubit, EditProfileState>(
+      buildWhen: (previous, current) =>
+          previous.draftPhoneCountryCode != current.draftPhoneCountryCode ||
+          previous.draftPhoneDialCode != current.draftPhoneDialCode,
+      builder: (context, state) {
+        final selectedCountry =
+            Country.tryParse(state.draftPhoneCountryCode) ??
+            Country.parse('EG');
+
+        return Row(
+          children: [
+            InkWell(
+              onTap: enabled
+                  ? () {
+                      showCountryPicker(
+                        context: context,
+                        showPhoneCode: true,
+                        favorite: const ['EG', 'SA', 'AE', 'US', 'GB'],
+                        moveAlongWithKeyboard: true,
+                        countryListTheme: CountryListThemeData(
+                          backgroundColor: context.colorTheme.surface,
+                          textStyle: AppTextStyles.h9Medium.copyWith(
+                            color: context.colorTheme.onSurface,
+                          ),
+                          searchTextStyle: AppTextStyles.h9Medium.copyWith(
+                            color: context.colorTheme.onSurface,
+                          ),
+                          flagSize: 22,
+                          bottomSheetHeight: 0.72.sh,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(24.r),
+                          ),
+                          padding: EdgeInsets.all(16.w),
+                          inputDecoration: InputDecoration(
+                            hintText: 'Search country',
+                            hintStyle: AppTextStyles.h9Regular.copyWith(
+                              color: context.colorTheme.onSurfaceVariant,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: context.colorTheme.onSurfaceVariant,
+                            ),
+                            filled: true,
+                            fillColor: context.colorTheme.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide(
+                                color: context.colorTheme.outline.withValues(
+                                  alpha: 0.25,
+                                ),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide(
+                                color: context.colorTheme.outline.withValues(
+                                  alpha: 0.25,
+                                ),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.r),
+                              borderSide: BorderSide(
+                                color: context.colorTheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onSelect: (Country country) {
+                          context.read<EditProfileCubit>().updatePhoneCountry(
+                            countryCode: country.countryCode,
+                            dialCode: country.phoneCode,
+                          );
+                        },
+                      );
+                    }
+                  : null,
+              borderRadius: BorderRadius.circular(12.r),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      selectedCountry.flagEmoji,
+                      style: TextStyle(fontSize: 20.sp),
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      '+${state.draftPhoneDialCode}',
+                      style: AppTextStyles.h9Medium.copyWith(
+                        color: context.colorTheme.onSurface,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: context.colorTheme.onSurfaceVariant,
+                      size: 20.sp,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: 1,
+              height: 24.h,
+              color: context.colorTheme.outline.withValues(alpha: 0.25),
+            ),
+            Expanded(
+              child: TextFormField(
+                controller: controller,
+                enabled: enabled,
+                keyboardType: TextInputType.phone,
+                textAlign: TextAlign.left,
+                onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9\s()-]')),
+                ],
+                style: AppTextStyles.h9Medium.copyWith(
+                  color: context.colorTheme.onSurface,
+                ),
+                decoration: InputDecoration(
+                  hintText: hintText ?? 'Phone number',
+                  hintStyle: AppTextStyles.h9Regular.copyWith(
+                    color: context.colorTheme.onSurfaceVariant,
+                  ),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 14.h,
+                  ),
+                ),
+                validator: (value) {
+                  final normalized = (value ?? '').replaceAll(
+                    RegExp(r'[^0-9]'),
+                    '',
+                  );
+
+                  if (normalized.isEmpty) {
+                    return 'Phone number required';
+                  }
+
+                  if (normalized.length < 8) {
+                    return 'Invalid phone number';
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+          ],
+        );
       },
-      //! SELECTOR
-      selectorConfig: const SelectorConfig(
-        selectorType: PhoneInputSelectorType.DROPDOWN,
-        useEmoji: false,
-        showFlags: true,
-        trailingSpace: false,
-        setSelectorButtonAsPrefixIcon: true,
-      ),
-      spaceBetweenSelectorAndTextField: 0,
-
-      //! COUNTRY CODE TEXT
-      selectorTextStyle: AppTextStyles.h9Medium.copyWith(
-        color: context.colorTheme.onSurface,
-      ),
-
-      //! PHONE TEXT
-      textStyle: AppTextStyles.h9Medium.copyWith(
-        color: context.colorTheme.onSurface,
-      ),
-      cursorColor: context.colorTheme.primary,
-      //! INPUT DECORATION
-      inputDecoration: InputDecoration(
-        hintText: widget.hintText ?? 'Phone number',
-
-        hintStyle: AppTextStyles.h9Regular.copyWith(
-          color: context.colorTheme.onSurfaceVariant,
-        ),
-
-        border: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        errorBorder: InputBorder.none,
-        focusedErrorBorder: InputBorder.none,
-
-        isDense: true,
-
-        //! PICKER WIDTH
-        prefix: Container(
-          width: 1,
-          height: 24.h,
-          color: context.colorTheme.outline.withValues(alpha: 0.25),
-        ),
-        //! TEXT FIELD PADDING
-        contentPadding: EdgeInsets.symmetric(vertical: 14.h),
-      ),
-
-      //! PHONE CHANGED
-      onInputChanged: (phoneNumber) {
-        try {
-          // DO NOT update initialPhoneNumber here, it causes the widget to re-initialize and crash
-          widget.onChanged?.call(phoneNumber);
-        } catch (_) {}
-      },
-
-      //! VALIDATION
-      validator:
-          widget.validator ??
-          (value) {
-            if (value == null || value.isEmpty) {
-              return 'Phone number required';
-            }
-
-            if (!isValidNumber) {
-              return 'Invalid phone number';
-            }
-
-            return null;
-          },
     );
   }
 }

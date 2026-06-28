@@ -8,6 +8,7 @@ sealed class UserEntity with _$UserEntity {
     required String userId,
     required String displayName,
     required String email,
+    String? bio,
 
     String? phoneNumber,
     String? profilePhotoUrl,

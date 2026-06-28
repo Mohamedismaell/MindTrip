@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EditProfileState {
 
- UserEntity? get originalUser; String? get pendingPhotoPath; String get draftDisplayName; String get draftPhoneNumber; String get draftBio; EditSaveStatus get saveStatus; String? get editErrorMessage; DeleteAccountStatus get deleteStatus; String? get deleteErrorMessage;
+ UserEntity? get originalUser; String? get pendingPhotoPath; String get draftDisplayName; String get draftPhoneNumber; String get draftPhoneCountryCode; String get draftPhoneDialCode; String get draftBio; EditSaveStatus get saveStatus; String? get editErrorMessage; DeleteAccountStatus get deleteStatus; String? get deleteErrorMessage;
 /// Create a copy of EditProfileState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EditProfileStateCopyWith<EditProfileState> get copyWith => _$EditProfileStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditProfileState&&(identical(other.originalUser, originalUser) || other.originalUser == originalUser)&&(identical(other.pendingPhotoPath, pendingPhotoPath) || other.pendingPhotoPath == pendingPhotoPath)&&(identical(other.draftDisplayName, draftDisplayName) || other.draftDisplayName == draftDisplayName)&&(identical(other.draftPhoneNumber, draftPhoneNumber) || other.draftPhoneNumber == draftPhoneNumber)&&(identical(other.draftBio, draftBio) || other.draftBio == draftBio)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.editErrorMessage, editErrorMessage) || other.editErrorMessage == editErrorMessage)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&(identical(other.deleteErrorMessage, deleteErrorMessage) || other.deleteErrorMessage == deleteErrorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditProfileState&&(identical(other.originalUser, originalUser) || other.originalUser == originalUser)&&(identical(other.pendingPhotoPath, pendingPhotoPath) || other.pendingPhotoPath == pendingPhotoPath)&&(identical(other.draftDisplayName, draftDisplayName) || other.draftDisplayName == draftDisplayName)&&(identical(other.draftPhoneNumber, draftPhoneNumber) || other.draftPhoneNumber == draftPhoneNumber)&&(identical(other.draftPhoneCountryCode, draftPhoneCountryCode) || other.draftPhoneCountryCode == draftPhoneCountryCode)&&(identical(other.draftPhoneDialCode, draftPhoneDialCode) || other.draftPhoneDialCode == draftPhoneDialCode)&&(identical(other.draftBio, draftBio) || other.draftBio == draftBio)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.editErrorMessage, editErrorMessage) || other.editErrorMessage == editErrorMessage)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&(identical(other.deleteErrorMessage, deleteErrorMessage) || other.deleteErrorMessage == deleteErrorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,originalUser,pendingPhotoPath,draftDisplayName,draftPhoneNumber,draftBio,saveStatus,editErrorMessage,deleteStatus,deleteErrorMessage);
+int get hashCode => Object.hash(runtimeType,originalUser,pendingPhotoPath,draftDisplayName,draftPhoneNumber,draftPhoneCountryCode,draftPhoneDialCode,draftBio,saveStatus,editErrorMessage,deleteStatus,deleteErrorMessage);
 
 @override
 String toString() {
-  return 'EditProfileState(originalUser: $originalUser, pendingPhotoPath: $pendingPhotoPath, draftDisplayName: $draftDisplayName, draftPhoneNumber: $draftPhoneNumber, draftBio: $draftBio, saveStatus: $saveStatus, editErrorMessage: $editErrorMessage, deleteStatus: $deleteStatus, deleteErrorMessage: $deleteErrorMessage)';
+  return 'EditProfileState(originalUser: $originalUser, pendingPhotoPath: $pendingPhotoPath, draftDisplayName: $draftDisplayName, draftPhoneNumber: $draftPhoneNumber, draftPhoneCountryCode: $draftPhoneCountryCode, draftPhoneDialCode: $draftPhoneDialCode, draftBio: $draftBio, saveStatus: $saveStatus, editErrorMessage: $editErrorMessage, deleteStatus: $deleteStatus, deleteErrorMessage: $deleteErrorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $EditProfileStateCopyWith<$Res>  {
   factory $EditProfileStateCopyWith(EditProfileState value, $Res Function(EditProfileState) _then) = _$EditProfileStateCopyWithImpl;
 @useResult
 $Res call({
- UserEntity? originalUser, String? pendingPhotoPath, String draftDisplayName, String draftPhoneNumber, String draftBio, EditSaveStatus saveStatus, String? editErrorMessage, DeleteAccountStatus deleteStatus, String? deleteErrorMessage
+ UserEntity? originalUser, String? pendingPhotoPath, String draftDisplayName, String draftPhoneNumber, String draftPhoneCountryCode, String draftPhoneDialCode, String draftBio, EditSaveStatus saveStatus, String? editErrorMessage, DeleteAccountStatus deleteStatus, String? deleteErrorMessage
 });
 
 
@@ -62,12 +62,14 @@ class _$EditProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of EditProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? originalUser = freezed,Object? pendingPhotoPath = freezed,Object? draftDisplayName = null,Object? draftPhoneNumber = null,Object? draftBio = null,Object? saveStatus = null,Object? editErrorMessage = freezed,Object? deleteStatus = null,Object? deleteErrorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? originalUser = freezed,Object? pendingPhotoPath = freezed,Object? draftDisplayName = null,Object? draftPhoneNumber = null,Object? draftPhoneCountryCode = null,Object? draftPhoneDialCode = null,Object? draftBio = null,Object? saveStatus = null,Object? editErrorMessage = freezed,Object? deleteStatus = null,Object? deleteErrorMessage = freezed,}) {
   return _then(_self.copyWith(
 originalUser: freezed == originalUser ? _self.originalUser : originalUser // ignore: cast_nullable_to_non_nullable
 as UserEntity?,pendingPhotoPath: freezed == pendingPhotoPath ? _self.pendingPhotoPath : pendingPhotoPath // ignore: cast_nullable_to_non_nullable
 as String?,draftDisplayName: null == draftDisplayName ? _self.draftDisplayName : draftDisplayName // ignore: cast_nullable_to_non_nullable
 as String,draftPhoneNumber: null == draftPhoneNumber ? _self.draftPhoneNumber : draftPhoneNumber // ignore: cast_nullable_to_non_nullable
+as String,draftPhoneCountryCode: null == draftPhoneCountryCode ? _self.draftPhoneCountryCode : draftPhoneCountryCode // ignore: cast_nullable_to_non_nullable
+as String,draftPhoneDialCode: null == draftPhoneDialCode ? _self.draftPhoneDialCode : draftPhoneDialCode // ignore: cast_nullable_to_non_nullable
 as String,draftBio: null == draftBio ? _self.draftBio : draftBio // ignore: cast_nullable_to_non_nullable
 as String,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
 as EditSaveStatus,editErrorMessage: freezed == editErrorMessage ? _self.editErrorMessage : editErrorMessage // ignore: cast_nullable_to_non_nullable
@@ -170,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserEntity? originalUser,  String? pendingPhotoPath,  String draftDisplayName,  String draftPhoneNumber,  String draftBio,  EditSaveStatus saveStatus,  String? editErrorMessage,  DeleteAccountStatus deleteStatus,  String? deleteErrorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserEntity? originalUser,  String? pendingPhotoPath,  String draftDisplayName,  String draftPhoneNumber,  String draftPhoneCountryCode,  String draftPhoneDialCode,  String draftBio,  EditSaveStatus saveStatus,  String? editErrorMessage,  DeleteAccountStatus deleteStatus,  String? deleteErrorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EditProfileState() when $default != null:
-return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName,_that.draftPhoneNumber,_that.draftBio,_that.saveStatus,_that.editErrorMessage,_that.deleteStatus,_that.deleteErrorMessage);case _:
+return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName,_that.draftPhoneNumber,_that.draftPhoneCountryCode,_that.draftPhoneDialCode,_that.draftBio,_that.saveStatus,_that.editErrorMessage,_that.deleteStatus,_that.deleteErrorMessage);case _:
   return orElse();
 
 }
@@ -191,10 +193,10 @@ return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserEntity? originalUser,  String? pendingPhotoPath,  String draftDisplayName,  String draftPhoneNumber,  String draftBio,  EditSaveStatus saveStatus,  String? editErrorMessage,  DeleteAccountStatus deleteStatus,  String? deleteErrorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserEntity? originalUser,  String? pendingPhotoPath,  String draftDisplayName,  String draftPhoneNumber,  String draftPhoneCountryCode,  String draftPhoneDialCode,  String draftBio,  EditSaveStatus saveStatus,  String? editErrorMessage,  DeleteAccountStatus deleteStatus,  String? deleteErrorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _EditProfileState():
-return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName,_that.draftPhoneNumber,_that.draftBio,_that.saveStatus,_that.editErrorMessage,_that.deleteStatus,_that.deleteErrorMessage);case _:
+return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName,_that.draftPhoneNumber,_that.draftPhoneCountryCode,_that.draftPhoneDialCode,_that.draftBio,_that.saveStatus,_that.editErrorMessage,_that.deleteStatus,_that.deleteErrorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -211,10 +213,10 @@ return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserEntity? originalUser,  String? pendingPhotoPath,  String draftDisplayName,  String draftPhoneNumber,  String draftBio,  EditSaveStatus saveStatus,  String? editErrorMessage,  DeleteAccountStatus deleteStatus,  String? deleteErrorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserEntity? originalUser,  String? pendingPhotoPath,  String draftDisplayName,  String draftPhoneNumber,  String draftPhoneCountryCode,  String draftPhoneDialCode,  String draftBio,  EditSaveStatus saveStatus,  String? editErrorMessage,  DeleteAccountStatus deleteStatus,  String? deleteErrorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _EditProfileState() when $default != null:
-return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName,_that.draftPhoneNumber,_that.draftBio,_that.saveStatus,_that.editErrorMessage,_that.deleteStatus,_that.deleteErrorMessage);case _:
+return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName,_that.draftPhoneNumber,_that.draftPhoneCountryCode,_that.draftPhoneDialCode,_that.draftBio,_that.saveStatus,_that.editErrorMessage,_that.deleteStatus,_that.deleteErrorMessage);case _:
   return null;
 
 }
@@ -226,13 +228,15 @@ return $default(_that.originalUser,_that.pendingPhotoPath,_that.draftDisplayName
 
 
 class _EditProfileState extends EditProfileState {
-  const _EditProfileState({this.originalUser, this.pendingPhotoPath, this.draftDisplayName = '', this.draftPhoneNumber = '', this.draftBio = '', this.saveStatus = EditSaveStatus.idle, this.editErrorMessage, this.deleteStatus = DeleteAccountStatus.idle, this.deleteErrorMessage}): super._();
+  const _EditProfileState({this.originalUser, this.pendingPhotoPath, this.draftDisplayName = '', this.draftPhoneNumber = '', this.draftPhoneCountryCode = 'EG', this.draftPhoneDialCode = '20', this.draftBio = '', this.saveStatus = EditSaveStatus.idle, this.editErrorMessage, this.deleteStatus = DeleteAccountStatus.idle, this.deleteErrorMessage}): super._();
   
 
 @override final  UserEntity? originalUser;
 @override final  String? pendingPhotoPath;
 @override@JsonKey() final  String draftDisplayName;
 @override@JsonKey() final  String draftPhoneNumber;
+@override@JsonKey() final  String draftPhoneCountryCode;
+@override@JsonKey() final  String draftPhoneDialCode;
 @override@JsonKey() final  String draftBio;
 @override@JsonKey() final  EditSaveStatus saveStatus;
 @override final  String? editErrorMessage;
@@ -249,16 +253,16 @@ _$EditProfileStateCopyWith<_EditProfileState> get copyWith => __$EditProfileStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditProfileState&&(identical(other.originalUser, originalUser) || other.originalUser == originalUser)&&(identical(other.pendingPhotoPath, pendingPhotoPath) || other.pendingPhotoPath == pendingPhotoPath)&&(identical(other.draftDisplayName, draftDisplayName) || other.draftDisplayName == draftDisplayName)&&(identical(other.draftPhoneNumber, draftPhoneNumber) || other.draftPhoneNumber == draftPhoneNumber)&&(identical(other.draftBio, draftBio) || other.draftBio == draftBio)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.editErrorMessage, editErrorMessage) || other.editErrorMessage == editErrorMessage)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&(identical(other.deleteErrorMessage, deleteErrorMessage) || other.deleteErrorMessage == deleteErrorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditProfileState&&(identical(other.originalUser, originalUser) || other.originalUser == originalUser)&&(identical(other.pendingPhotoPath, pendingPhotoPath) || other.pendingPhotoPath == pendingPhotoPath)&&(identical(other.draftDisplayName, draftDisplayName) || other.draftDisplayName == draftDisplayName)&&(identical(other.draftPhoneNumber, draftPhoneNumber) || other.draftPhoneNumber == draftPhoneNumber)&&(identical(other.draftPhoneCountryCode, draftPhoneCountryCode) || other.draftPhoneCountryCode == draftPhoneCountryCode)&&(identical(other.draftPhoneDialCode, draftPhoneDialCode) || other.draftPhoneDialCode == draftPhoneDialCode)&&(identical(other.draftBio, draftBio) || other.draftBio == draftBio)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.editErrorMessage, editErrorMessage) || other.editErrorMessage == editErrorMessage)&&(identical(other.deleteStatus, deleteStatus) || other.deleteStatus == deleteStatus)&&(identical(other.deleteErrorMessage, deleteErrorMessage) || other.deleteErrorMessage == deleteErrorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,originalUser,pendingPhotoPath,draftDisplayName,draftPhoneNumber,draftBio,saveStatus,editErrorMessage,deleteStatus,deleteErrorMessage);
+int get hashCode => Object.hash(runtimeType,originalUser,pendingPhotoPath,draftDisplayName,draftPhoneNumber,draftPhoneCountryCode,draftPhoneDialCode,draftBio,saveStatus,editErrorMessage,deleteStatus,deleteErrorMessage);
 
 @override
 String toString() {
-  return 'EditProfileState(originalUser: $originalUser, pendingPhotoPath: $pendingPhotoPath, draftDisplayName: $draftDisplayName, draftPhoneNumber: $draftPhoneNumber, draftBio: $draftBio, saveStatus: $saveStatus, editErrorMessage: $editErrorMessage, deleteStatus: $deleteStatus, deleteErrorMessage: $deleteErrorMessage)';
+  return 'EditProfileState(originalUser: $originalUser, pendingPhotoPath: $pendingPhotoPath, draftDisplayName: $draftDisplayName, draftPhoneNumber: $draftPhoneNumber, draftPhoneCountryCode: $draftPhoneCountryCode, draftPhoneDialCode: $draftPhoneDialCode, draftBio: $draftBio, saveStatus: $saveStatus, editErrorMessage: $editErrorMessage, deleteStatus: $deleteStatus, deleteErrorMessage: $deleteErrorMessage)';
 }
 
 
@@ -269,7 +273,7 @@ abstract mixin class _$EditProfileStateCopyWith<$Res> implements $EditProfileSta
   factory _$EditProfileStateCopyWith(_EditProfileState value, $Res Function(_EditProfileState) _then) = __$EditProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- UserEntity? originalUser, String? pendingPhotoPath, String draftDisplayName, String draftPhoneNumber, String draftBio, EditSaveStatus saveStatus, String? editErrorMessage, DeleteAccountStatus deleteStatus, String? deleteErrorMessage
+ UserEntity? originalUser, String? pendingPhotoPath, String draftDisplayName, String draftPhoneNumber, String draftPhoneCountryCode, String draftPhoneDialCode, String draftBio, EditSaveStatus saveStatus, String? editErrorMessage, DeleteAccountStatus deleteStatus, String? deleteErrorMessage
 });
 
 
@@ -286,12 +290,14 @@ class __$EditProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of EditProfileState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? originalUser = freezed,Object? pendingPhotoPath = freezed,Object? draftDisplayName = null,Object? draftPhoneNumber = null,Object? draftBio = null,Object? saveStatus = null,Object? editErrorMessage = freezed,Object? deleteStatus = null,Object? deleteErrorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? originalUser = freezed,Object? pendingPhotoPath = freezed,Object? draftDisplayName = null,Object? draftPhoneNumber = null,Object? draftPhoneCountryCode = null,Object? draftPhoneDialCode = null,Object? draftBio = null,Object? saveStatus = null,Object? editErrorMessage = freezed,Object? deleteStatus = null,Object? deleteErrorMessage = freezed,}) {
   return _then(_EditProfileState(
 originalUser: freezed == originalUser ? _self.originalUser : originalUser // ignore: cast_nullable_to_non_nullable
 as UserEntity?,pendingPhotoPath: freezed == pendingPhotoPath ? _self.pendingPhotoPath : pendingPhotoPath // ignore: cast_nullable_to_non_nullable
 as String?,draftDisplayName: null == draftDisplayName ? _self.draftDisplayName : draftDisplayName // ignore: cast_nullable_to_non_nullable
 as String,draftPhoneNumber: null == draftPhoneNumber ? _self.draftPhoneNumber : draftPhoneNumber // ignore: cast_nullable_to_non_nullable
+as String,draftPhoneCountryCode: null == draftPhoneCountryCode ? _self.draftPhoneCountryCode : draftPhoneCountryCode // ignore: cast_nullable_to_non_nullable
+as String,draftPhoneDialCode: null == draftPhoneDialCode ? _self.draftPhoneDialCode : draftPhoneDialCode // ignore: cast_nullable_to_non_nullable
 as String,draftBio: null == draftBio ? _self.draftBio : draftBio // ignore: cast_nullable_to_non_nullable
 as String,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
 as EditSaveStatus,editErrorMessage: freezed == editErrorMessage ? _self.editErrorMessage : editErrorMessage // ignore: cast_nullable_to_non_nullable

@@ -159,13 +159,15 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               ),
             ),
             IgnorePointer(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
                       child: Center(
                         child: Column(
                           children: [
@@ -177,7 +179,7 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                                 color: AppColors.pureWhite,
                               ),
                             ),
-                            SizedBox(height: 20.h),
+                            // SizedBox(height: 20.h),
                             // Padding(
                             //   padding: EdgeInsets.symmetric(horizontal: 80.0),
                             //   child: CustomOutlinedButton(
@@ -195,28 +197,33 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(banners.length, (i) {
-                      final isActive = index == i;
+                    // SizedBox(height: 12.h),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 12,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(banners.length, (i) {
+                  final isActive = index == i;
 
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
-                        margin: EdgeInsets.symmetric(horizontal: 3.5.w),
-                        width: isActive ? 34.w : 8.w,
-                        height: isActive ? 5.h : 8.h,
-                        decoration: BoxDecoration(
-                          color: isActive
-                              ? AppColors.pureWhite
-                              : AppColors.primaryShadow,
-                          borderRadius: BorderRadius.circular(60.r),
-                        ),
-                      );
-                    }),
-                  ),
-                ],
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    margin: EdgeInsets.symmetric(horizontal: 3.5.w),
+                    width: isActive ? 34.w : 8.w,
+                    height: isActive ? 5.h : 8.h,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? AppColors.pureWhite
+                          : AppColors.primaryShadow,
+                      borderRadius: BorderRadius.circular(60.r),
+                    ),
+                  );
+                }),
               ),
             ),
           ],

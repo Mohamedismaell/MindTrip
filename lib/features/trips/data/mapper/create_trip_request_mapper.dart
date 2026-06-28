@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:mindtrip/features/ai_planner/data/mapper/generated_plan_mapper.dart';
 import 'package:mindtrip/features/ai_planner/data/models/collected_planner_data_model.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/collected_planner_data_entity.dart';
@@ -30,6 +32,10 @@ extension CreateTripRequestMapper on GeneratedPlanEntity {
       );
     }
 
+    final safeBudget = collected.budget > 0 ? collected.budget : 0;
+    final safeTotalCost = totalCalculatedCost > 0 ? totalCalculatedCost : 0;
+    final biggestAmount = math.max(safeBudget, safeTotalCost);
+
     return CreateTripRequestModel(
       title: 'Trip to $resolvedDestination',
       destinationGovernorate: resolvedDestination,
@@ -37,10 +43,8 @@ extension CreateTripRequestMapper on GeneratedPlanEntity {
       startDate: resolvedStartDate?.toIso8601String(),
       endDate: resolvedEndDate?.toIso8601String(),
       people: collected.people > 0 ? collected.people : people,
-      totalBudgetEgp: collected.budget > 0
-          ? collected.budget
-          : totalCalculatedCost,
-      totalCost: totalCalculatedCost,
+      totalBudgetEgp: biggestAmount,
+      totalCost: biggestAmount,
       plan: toModel(),
       collected: CollectedDataModel.fromEntity(collected),
       sessionId: sessionId,

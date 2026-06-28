@@ -61,11 +61,13 @@ class UserRepositoryImpl extends UserRepository {
   Future<Result<void>> updateProfile({
     String? displayName,
     String? phoneNumber,
+    String? bio,
   }) async {
     try {
       await _remoteDataSource.updateProfile(
         displayName: displayName,
         phoneNumber: phoneNumber,
+        bio: bio,
       );
       return const Result.ok(null);
     } on DioException catch (e) {

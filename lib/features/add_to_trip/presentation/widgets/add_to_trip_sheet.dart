@@ -51,7 +51,7 @@ class AddToTripSheet extends StatelessWidget {
           _showLoading(
             context,
             const GeneratingDialog(
-              title: 'Generating itinerary...',
+              title: 'Edit itinerary...',
               description: 'Our AI is adding this place to your trip.',
             ),
           );

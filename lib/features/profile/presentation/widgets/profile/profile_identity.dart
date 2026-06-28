@@ -7,7 +7,6 @@ import 'package:mindtrip/core/shared/presentation/manager/location_cubit/locatio
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
-import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_user_avatar.dart';
 
 class ProfileIdentity extends StatelessWidget {
@@ -15,11 +14,12 @@ class ProfileIdentity extends StatelessWidget {
     super.key,
     required this.displayName,
     required this.photoUrl,
+    this.bio,
   });
 
   final String displayName;
   final String? photoUrl;
-
+  final String? bio;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -95,12 +95,14 @@ class ProfileIdentity extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 15.h),
-          Text(
-            ProfileMockData.bio,
-            textAlign: TextAlign.center,
-            style: context.textTheme.bodyMedium,
-          ),
+          if (bio != null && bio!.isNotEmpty && bio != '') ...[
+            SizedBox(height: 15.h),
+            Text(
+              bio!,
+              textAlign: TextAlign.center,
+              style: context.textTheme.bodyMedium,
+            ),
+          ],
         ],
       ),
     );

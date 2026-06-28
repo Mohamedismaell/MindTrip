@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
+import 'package:mindtrip/features/profile/presentation/widgets/edit/edit_bio_section.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/extension.dart';
@@ -30,19 +33,55 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _phoneController;
+  late final TextEditingController _bioController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late final EditProfileCubit _cubit;
+  Timer? _phoneDebounce;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _phoneController = TextEditingController();
+    _bioController = TextEditingController();
+
+    _cubit = sl<EditProfileCubit>();
+
+    final user = sl<UserCubit>().state.user;
+    if (user != null) {
+      _cubit.init(user);
+      _nameController.text = user.displayName;
+      _phoneController.text = user.phoneNumber ?? '';
+      _bioController.text = user.bio ?? '';
+    }
+
+    _nameController.addListener(_onNameChanged);
+    _phoneController.addListener(_onPhoneChanged);
+    _bioController.addListener(_onBioChanged);
+  }
+
+  void _onNameChanged() {
+    _cubit.updateDisplayName(_nameController.text);
+  }
+
+  void _onPhoneChanged() {
+    _phoneDebounce?.cancel();
+    _phoneDebounce = Timer(const Duration(milliseconds: 250), () {
+      _cubit.updatePhoneNumber(_phoneController.text);
+    });
+  }
+
+  void _onBioChanged() {
+    _cubit.updateBio(_bioController.text);
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
+    _bioController.dispose();
+    _phoneDebounce?.cancel();
+    _cubit.close();
     super.dispose();
   }
 
@@ -96,23 +135,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.user;
 
-    return BlocProvider<EditProfileCubit>(
-      create: (_) {
-        final cubit = sl<EditProfileCubit>();
-        if (user != null) {
-          cubit.init(user);
-          _nameController.text = user.displayName;
-          _phoneController.text = user.phoneNumber ?? '';
-        }
-        // Sync changes
-        _nameController.addListener(
-          () => cubit.updateDisplayName(_nameController.text),
-        );
-        _phoneController.addListener(
-          () => cubit.updatePhoneNumber(_phoneController.text),
-        );
-        return cubit;
-      },
+    return BlocProvider.value(
+      value: _cubit,
       child: EditProfileListeners(
         child: BlocBuilder<EditProfileCubit, EditProfileState>(
           builder: (context, state) {
@@ -160,8 +184,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             email: email,
                           ),
                         ),
+                        SizedBox(height: 28.h),
+                        EditBioSection(controller: _bioController),
                         SizedBox(height: 38.h),
-
                         // Save Button
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 40.w),
@@ -255,7 +280,7 @@ class _EditableInfoCard extends StatelessWidget {
           key: const Key('edit-profile-phone-row'),
           label: 'Phone Number: ',
           controller: phoneController,
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.phone,
           hintText: 'Enter phone number',
           isPhone: true,
         ),

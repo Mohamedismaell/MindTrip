@@ -76,7 +76,8 @@ abstract class AiPlannerState with _$AiPlannerState {
         return adults + children > 0;
 
       case 3:
-        return selectedBudget != null || customBudget.isNotEmpty;
+        return (selectedBudget != null || customBudget.isNotEmpty) &&
+            isBudgetValid;
 
       case 4:
         return selectedInterests.isNotEmpty;
@@ -84,6 +85,42 @@ abstract class AiPlannerState with _$AiPlannerState {
       default:
         return false;
     }
+  }
+
+  int get tripDurationDays {
+    if (tripStart == null || tripEnd == null) return 0;
+    return tripEnd!.difference(tripStart!).inDays + 1;
+  }
+
+  int get minimumBudget {
+    if (tripDurationDays <= 0) return 0;
+    return tripDurationDays * 1800;
+  }
+
+  int get resolvedBudget {
+    return selectedBudget?.amount ?? int.tryParse(customBudget) ?? 0;
+  }
+
+  bool get isBudgetValid {
+    if (currentPage != 3) return true;
+    return resolvedBudget >= minimumBudget;
+  }
+
+  String? get budgetValidationMessage {
+    if (currentPage != 3) return null;
+
+    final hasSelectedBudget = selectedBudget != null;
+    final hasCustomBudget = customBudget.trim().isNotEmpty;
+
+    if (!hasSelectedBudget && !hasCustomBudget) {
+      return null;
+    }
+
+    if (resolvedBudget < minimumBudget) {
+      return 'Minimum budget is EGP $minimumBudget for $tripDurationDays day(s)';
+    }
+
+    return null;
   }
 
   String get monthLabel {
