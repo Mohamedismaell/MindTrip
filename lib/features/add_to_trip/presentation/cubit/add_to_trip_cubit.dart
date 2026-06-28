@@ -68,13 +68,18 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
 
     final request = EditPlanRequestModel(
       targetChange: 'Add ${state.place.name} to the itinerary',
-      destination: trip.city.isNotEmpty
-          ? trip.city
-          : trip.destinationGovernorate,
+      destination:
+          trip.city.isNotEmpty ? trip.city : trip.destinationGovernorate,
       city: trip.city.isNotEmpty ? trip.city : trip.destinationGovernorate,
-      days: trip.plan.daysCount,
-      budget: trip.plan.totalCalculatedCost.toInt(),
-      people: trip.people,
+      days:
+          trip.plan.daysCount > 0
+              ? trip.plan.daysCount
+              : (trip.durationDays > 0 ? trip.durationDays : 1),
+      budget:
+          trip.plan.totalCalculatedCost > 0
+              ? trip.plan.totalCalculatedCost
+              : (trip.totalBudget > 0 ? trip.totalBudget : 1000),
+      people: trip.people > 0 ? trip.people : 1,
       interests: trip.collected?.interests ?? [],
       existingPlan: trip.plan.toModels(),
       mode: 'add',

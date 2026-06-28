@@ -7,11 +7,7 @@ import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 
 class TripDetailsTopBar extends StatelessWidget {
-  const TripDetailsTopBar({
-    super.key,
-    required this.onBack,
-    this.onShare,
-  });
+  const TripDetailsTopBar({super.key, required this.onBack, this.onShare});
 
   final VoidCallback onBack;
   final VoidCallback? onShare;
@@ -29,6 +25,8 @@ class TripDetailsTopBar extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: TapScaleEffect(
+                  enableOverlay: false,
+
                   onTap: onBack,
                   child: Container(
                     width: 40.w,

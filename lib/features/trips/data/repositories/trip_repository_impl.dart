@@ -7,6 +7,7 @@ import 'package:mindtrip/features/trips/data/models/create_trip_request_model.da
 import 'package:mindtrip/features/trips/data/models/get_trips_request_model.dart';
 import 'package:mindtrip/features/trips/data/models/rename_trip_request_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_review_request_model.dart';
+import 'package:mindtrip/features/trips/data/models/update_trip_plan_request_model.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/repositories/trip_repository.dart';
 import 'package:mindtrip/features/trips/data/mapper/trip_mapper.dart';
@@ -200,6 +201,28 @@ class TripRepositoryImpl implements TripRepository {
         cancelToken: cancelToken,
       );
       return const Result.ok(null);
+    } catch (e) {
+      if (e is DioException && e.type == DioExceptionType.cancel) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
+  Future<Result<Trip>> updateTripPlan(
+    String id,
+    UpdateTripPlanRequestModel request, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final trip = await _remoteDataSource.updateTripPlan(
+        id,
+        request,
+        cancelToken: cancelToken,
+      );
+      await _localDataSource.save(trip.toModel());
+      return Result.ok(trip);
     } catch (e) {
       if (e is DioException && e.type == DioExceptionType.cancel) {
         return const Result.cancelled();

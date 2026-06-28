@@ -47,17 +47,32 @@ class AiEditCubit extends SafeCubit<AiEditState> {
 
     final request = EditPlanRequestModel(
       targetChange: text,
-      destination: trip.city.isNotEmpty ? trip.city : trip.destinationGovernorate,
+      destination:
+          trip.city.isNotEmpty ? trip.city : trip.destinationGovernorate,
       city: trip.city.isNotEmpty ? trip.city : trip.destinationGovernorate,
-      days: state.currentPlan?.daysCount ?? 0,
-      budget: state.currentPlan?.totalCalculatedCost.toInt() ?? 0,
-      people: state.currentPlan?.people ?? 0,
+      days:
+          (state.currentPlan?.daysCount ?? 0) > 0
+              ? state.currentPlan!.daysCount
+              : (trip.durationDays > 0 ? trip.durationDays : 1),
+      budget:
+          (state.currentPlan?.totalCalculatedCost ?? 0) > 0
+              ? state.currentPlan!.totalCalculatedCost
+              : (trip.totalBudget > 0 ? trip.totalBudget : 1000),
+      people:
+          (state.currentPlan?.people ?? 0) > 0
+              ? state.currentPlan!.people
+              : (trip.people > 0 ? trip.people : 1),
       interests: trip.collected?.interests ?? [],
       existingPlan: state.currentPlan?.toModels() ?? [],
-      conversation: state.messages.map((m) => ConversationTurnModel(
-        role: m.sender == MessageSender.user ? 'user' : 'assistant',
-        content: m.content,
-      )).toList(),
+      conversation:
+          state.messages
+              .map(
+                (m) => ConversationTurnModel(
+                  role: m.sender == MessageSender.user ? 'user' : 'assistant',
+                  content: m.content,
+                ),
+              )
+              .toList(),
       tripId: state.tripId,
     );
 
@@ -75,11 +90,16 @@ class AiEditCubit extends SafeCubit<AiEditState> {
           timestamp: DateTime.now(),
         );
 
+        final updatedPlan =
+            (response.plan != null && response.plan!.daysCount > 0)
+                ? response.plan
+                : state.currentPlan;
+
         emitSafe(state.copyWith(
           status: AiEditStatus.success,
           messages: [...state.messages, aiMessage],
           lastAIResponse: response,
-          currentPlan: response.plan ?? state.currentPlan,
+          currentPlan: updatedPlan,
         ));
       },
       failure: (error) {

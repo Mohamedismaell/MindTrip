@@ -27,6 +27,8 @@ class TripFilterTabs extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(right: 14.w),
             child: TapScaleEffect(
+              enableOverlay: false,
+
               onTap: () => onSelect(tab),
               child: AnimatedContainer(
                 key: ValueKey(tab),

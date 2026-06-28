@@ -15,6 +15,8 @@ class StartPlanningButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      enableOverlay: false,
+
       onTap: () {
         context.read<AiPlannerCubit>().reset();
         context.read<ChatCubit>().clearChat();

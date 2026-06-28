@@ -8,6 +8,7 @@ import 'package:mindtrip/features/trips/data/models/get_trips_request_model.dart
 import 'package:mindtrip/features/trips/data/models/rename_trip_request_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_model.dart';
 import 'package:mindtrip/features/trips/data/models/trip_review_request_model.dart';
+import 'package:mindtrip/features/trips/data/models/update_trip_plan_request_model.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 abstract class RemoteTripDataSource {
@@ -35,6 +36,11 @@ abstract class RemoteTripDataSource {
   Future<void> reviewTrip(
     String id,
     TripReviewRequestModel request, {
+    CancelToken? cancelToken,
+  });
+  Future<Trip> updateTripPlan(
+    String id,
+    UpdateTripPlanRequestModel request, {
     CancelToken? cancelToken,
   });
 }
@@ -175,6 +181,24 @@ class RemoteTripDataSourceImpl implements RemoteTripDataSource {
         data: request.toJson(),
         cancelToken: cancelToken,
       );
+    } catch (e) {
+      throw ApiErrorMapper.fromException(e);
+    }
+  }
+
+  @override
+  Future<Trip> updateTripPlan(
+    String id,
+    UpdateTripPlanRequestModel request, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.tripPlan(id),
+        data: request.toJson(),
+        cancelToken: cancelToken,
+      );
+      return TripModel.fromJson(response as Map<String, dynamic>).toEntity();
     } catch (e) {
       throw ApiErrorMapper.fromException(e);
     }

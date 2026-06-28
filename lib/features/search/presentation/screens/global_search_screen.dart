@@ -76,6 +76,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
               child: Row(
                 children: [
                   TapScaleEffect(
+                    enableOverlay: false,
                     onTap: () => context.pop(),
                     child: Container(
                       decoration: const BoxDecoration(
@@ -234,6 +235,8 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                   ),
                   Spacer(),
                   TapScaleEffect(
+                    enableOverlay: false,
+
                     onTap: () {
                       context.read<GlobalSearchBloc>().add(
                         const ClearRecentSearches(),
@@ -262,6 +265,8 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                     itemBuilder: (context, index) {
                       final search = state.recentSearches[index];
                       return TapScaleEffect(
+                        enableOverlay: false,
+
                         onTap: () {
                           _searchController.text = search.query;
                           _searchController

@@ -227,6 +227,8 @@ class _CustomHeader extends StatelessWidget {
               ),
             ),
             TapScaleEffect(
+              enableOverlay: false,
+
               onTap: () => context.push(AppRoutes.tripCalendar),
               child: Container(
                 padding: EdgeInsets.all(8.r),

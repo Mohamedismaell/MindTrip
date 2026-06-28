@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
+import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_message_bubble.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_suggestion_chips.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/chat_bot/chat_typing_indicator.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/ai_edit_cubit.dart';
@@ -21,10 +24,7 @@ class AiRefinementSheet extends StatefulWidget {
     required this.tripDetailsCubit,
   });
 
-  static Future<void> show(
-    BuildContext context,
-    Trip trip,
-  ) {
+  static Future<void> show(BuildContext context, Trip trip) {
     final tripDetailsCubit = context.read<TripDetailsCubit>();
     return showModalBottomSheet(
       context: context,
@@ -32,10 +32,13 @@ class AiRefinementSheet extends StatefulWidget {
       backgroundColor: Colors.transparent,
       builder: (_) => BlocProvider(
         create: (context) => sl<AiEditCubit>(param1: trip, param2: trip.plan),
-        child: AiRefinementSheet(trip: trip, tripDetailsCubit: tripDetailsCubit),
+        child: AiRefinementSheet(
+          trip: trip,
+          tripDetailsCubit: tripDetailsCubit,
+        ),
       ),
     ).then((_) {
-       // Optional: refresh if needed, but the cubit update handle it
+      // Optional: refresh if needed, but the cubit update handle it
     });
   }
 
@@ -96,19 +99,19 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
             child: Row(
               children: [
                 Container(
+                  width: 44,
                   padding: EdgeInsets.all(8.r),
                   decoration: BoxDecoration(
-                    color: context.colorTheme.primaryContainer,
                     shape: BoxShape.circle,
+                    border: Border.all(color: context.colorTheme.primary),
                   ),
-                  child: Icon(
-                    Icons.auto_awesome,
-                    color: context.colorTheme.primary,
-                    size: 20.sp,
+                  child: SvgPicture.asset(
+                    AiPlannerAssets.chatFaceIcon,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 SizedBox(width: 12.w),
-                Text('Refine with Mindy', style: AppTextStyles.h7Bold),
+                Text('Edit with Mindy', style: AppTextStyles.h7Bold),
                 const Spacer(),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -118,15 +121,14 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
             ),
           ),
 
-          const Divider(),
-
           // Chat Area
           Expanded(
             child: BlocConsumer<AiEditCubit, AiEditState>(
               listener: (context, state) {
                 if (state.messages.isNotEmpty) _scrollToBottom();
                 if (state.status == AiEditStatus.success &&
-                    state.currentPlan != null) {
+                    state.currentPlan != null &&
+                    state.currentPlan!.daysCount > 0) {
                   widget.tripDetailsCubit.updatePlan(state.currentPlan!);
                 }
               },
@@ -134,7 +136,9 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.all(20.r),
-                  itemCount: state.messages.length + (state.status == AiEditStatus.loading ? 1 : 0),
+                  itemCount:
+                      state.messages.length +
+                      (state.status == AiEditStatus.loading ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == state.messages.length) {
                       return const Align(
@@ -154,25 +158,24 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-            child: Row(
-              children: [
-                _SuggestionChip(
-                  label: '🏰 More museums',
-                  onTap: () => _controller.text =
-                      'Can you add more historical sites and museums?',
-                ),
-                _SuggestionChip(
-                  label: '🍝 Local food',
-                  onTap: () => _controller.text =
-                      'I want more authentic local food stops.',
-                ),
-                _SuggestionChip(
-                  label: '💰 Cheaper options',
-                  onTap: () => _controller.text =
-                      'Make the itinerary more budget-friendly.',
-                ),
+            child: ChatSuggestionChips(
+              suggestions: [
+                '🏰 More museums',
+                '🍝 Local food',
+                '💰 Cheaper options',
               ],
+              onTap: (value) => _controller.text = value,
             ),
+            // Row(
+            //   children: [
+
+            //     _SuggestionChip(
+            //       label: '💰 Cheaper options',
+            //       onTap: () => _controller.text =
+            //           'Make the itinerary more budget-friendly.',
+            //     ),
+            //   ],
+            // ),
           ),
 
           // Input Area

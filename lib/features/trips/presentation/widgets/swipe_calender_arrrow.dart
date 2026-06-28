@@ -15,6 +15,8 @@ class SwipeCalenderArrrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScaleEffect(
+      enableOverlay: false,
+
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(

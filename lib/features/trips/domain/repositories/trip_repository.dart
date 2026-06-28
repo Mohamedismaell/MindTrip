@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mindtrip/core/connections/result.dart';
 import 'package:mindtrip/features/trips/data/models/create_trip_request_model.dart';
+import 'package:mindtrip/features/trips/data/models/update_trip_plan_request_model.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 abstract class TripRepository {
@@ -29,6 +30,11 @@ abstract class TripRepository {
     String id,
     int rating,
     String? comment, {
+    CancelToken? cancelToken,
+  });
+  Future<Result<Trip>> updateTripPlan(
+    String id,
+    UpdateTripPlanRequestModel request, {
     CancelToken? cancelToken,
   });
 }
