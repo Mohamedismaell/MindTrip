@@ -13,6 +13,8 @@ import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_sta
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/drag_divider.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mindtrip/core/shared/presentation/widget/glss_snack_bar.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
 
 class AddToTripSheet extends StatelessWidget {
   const AddToTripSheet({
@@ -28,26 +30,60 @@ class AddToTripSheet extends StatelessWidget {
   final VoidCallback onCreateNew;
   final ValueChanged<Trip> onTripSelected;
 
+  void _showLoading(BuildContext context, Widget dialog) {
+    AppDialog.hideLoading(context);
+
+    if (!(ModalRoute.of(context)?.isCurrent ?? true)) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => dialog,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        // if (state.status == AddToTripStatus.loading) {
-        //   print('Loading opop op op po op po');
-        //   AppDialog.showLoading(context: context);
-        // } else
-        if (state.status == AddToTripStatus.initial) {
+        if (state.status == AddToTripStatus.editingExistingTripPlan) {
+          _showLoading(
+            context,
+            const GeneratingDialog(
+              title: 'Generating itinerary...',
+              description: 'Our AI is adding this place to your trip.',
+            ),
+          );
+        } else if (state.status == AddToTripStatus.updatingTrip) {
+          _showLoading(
+            context,
+            const GeneratingDialog(
+              title: 'Saving changes...',
+              description: 'Updating your trip plan.',
+            ),
+          );
+        } else if (state.status == AddToTripStatus.success ||
+            state.status == AddToTripStatus.initial) {
           AppDialog.hideLoading(context);
-        } else if (state.status == AddToTripStatus.success) {
-          print('Success opop op op po op po');
+        } else if (state.status == AddToTripStatus.generateFailure ||
+            state.status == AddToTripStatus.saveFailure) {
           AppDialog.hideLoading(context);
-        } else if (state.status == AddToTripStatus.failure) {
-          print('Failure opop op op po op po');
-          AppDialog.hideLoading(context);
+          AppGlassSnackBar.showError(
+            context: context,
+            message: state.errorMessage,
+          );
+        } else if (state.status == AddToTripStatus.loadingTripsFailure &&
+            state.trips.isNotEmpty) {
+          AppGlassSnackBar.showError(
+            context: context,
+            message: state.errorMessage,
+          );
         }
       },
       builder: (context, state) {
-        if (state.status == AddToTripStatus.failure && state.trips.isEmpty) {
+        if (state.status == AddToTripStatus.loadingTripsFailure &&
+            state.trips.isEmpty) {
           return AppErrorWidget(
             title: 'Failed to load trips',
             message: state.errorMessage,
@@ -56,7 +92,7 @@ class AddToTripSheet extends StatelessWidget {
         }
 
         return Skeletonizer(
-          enabled: state.status == AddToTripStatus.loading,
+          enabled: state.status == AddToTripStatus.loadingTrips,
           child: Column(
             children: [
               const DragDivider(),
@@ -78,7 +114,7 @@ class AddToTripSheet extends StatelessWidget {
               Expanded(
                 child: Skeletonizer(
                   enabled:
-                      state.status == AddToTripStatus.loading &&
+                      state.status == AddToTripStatus.loadingTrips &&
                       state.trips.isEmpty,
                   child: ListView.separated(
                     controller: scrollController,
@@ -94,6 +130,7 @@ class AddToTripSheet extends StatelessWidget {
                           onTap: onCreateNew,
                         );
                       }
+
                       final trip = state.trips[index];
                       return _TripTile(
                         title: trip.title,
@@ -121,6 +158,7 @@ class _TripTile extends StatelessWidget {
   final VoidCallback onTap;
   final IconData? leadingIcon;
   final String? placesCount;
+
   const _TripTile({
     required this.title,
     required this.subtitle,
@@ -137,7 +175,6 @@ class _TripTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colorTheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(20.r),
-
         border: Border.all(color: context.colorTheme.outline, width: 1.3),
       ),
       child: TapScaleEffect(
@@ -161,7 +198,6 @@ class _TripTile extends StatelessWidget {
                   : Container(
                       width: 100.w,
                       height: 100.h,
-                      // color: context.colorTheme.primaryContainer
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: context.colorTheme.outline,

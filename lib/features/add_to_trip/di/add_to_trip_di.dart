@@ -5,6 +5,7 @@ import 'package:mindtrip/features/ai_planner/domain/usecases/generate_plan_use_c
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/create_trip_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_all_trips_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/update_trip_plan_use_case.dart';
 
 class AddToTripDi {
   AddToTripDi._();
@@ -17,6 +18,7 @@ class AddToTripDi {
         editPlanUseCase: sl<EditPlanUseCase>(),
         generatePlanUseCase: sl<GeneratePlanUseCase>(),
         createTripUseCase: sl<CreateTripUseCase>(),
+        updateTripPlanUseCase: sl<UpdateTripPlanUseCase>(),
       ),
     );
   }

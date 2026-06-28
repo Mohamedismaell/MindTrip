@@ -14,7 +14,9 @@ import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cub
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_state.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/drag_divider.dart';
 import 'package:mindtrip/features/ai_planner/presentation/data/ai_planner_mock_data.dart';
+import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/generating_loading_dialog.dart';
 import 'package:mindtrip/features/ai_planner/presentation/widgets/ai_planner/range_calendar.dart';
+import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 
 class CreateTripPlannerSheet extends StatelessWidget {
   const CreateTripPlannerSheet({
@@ -80,7 +82,6 @@ class CreateTripPlannerSheet extends StatelessWidget {
               hintText: 'Enter custom budget',
               filled: true,
               fillColor: AppColors.primaryLightGray,
-
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 14.w,
                 vertical: 12.h,
@@ -113,12 +114,39 @@ class CreateTripPlannerSheet extends StatelessWidget {
     );
   }
 
+  void _showLoading(BuildContext context, Widget dialog) {
+    AppDialog.hideLoading(context);
+
+    if (!(ModalRoute.of(context)?.isCurrent ?? true)) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => dialog,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        if (state.status == AddToTripStatus.loading) {
-          AppDialog.showLoading(context: context);
+        if (state.status == AddToTripStatus.generatingNewTripPlan) {
+          _showLoading(
+            context,
+            const GeneratingDialog(
+              title: 'Generating itinerary...',
+              description: 'Our AI is creating the perfect trip for you.',
+            ),
+          );
+        } else if (state.status == AddToTripStatus.creatingTrip) {
+          _showLoading(
+            context,
+            const GeneratingDialog(
+              title: 'Saving trip...',
+              description: 'Please wait while we save your trip.',
+            ),
+          );
         } else if (state.status == AddToTripStatus.success) {
           AppDialog.hideLoading(context);
           AppDialog.show(
@@ -129,7 +157,8 @@ class CreateTripPlannerSheet extends StatelessWidget {
             primaryText: 'Awesome',
             onPrimary: onClose,
           );
-        } else if (state.status == AddToTripStatus.failure) {
+        } else if (state.status == AddToTripStatus.generateFailure ||
+            state.status == AddToTripStatus.saveFailure) {
           AppDialog.hideLoading(context);
           AppGlassSnackBar.showError(
             context: context,
@@ -139,6 +168,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
       },
       builder: (context, state) {
         final cubit = context.read<AddToTripCubit>();
+        final interests = context.read<UserCubit>().state.interests;
 
         return SingleChildScrollView(
           child: Column(
@@ -174,7 +204,6 @@ class CreateTripPlannerSheet extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 33.h),
-
               _SectionCard(
                 title: 'Duration',
                 child: Column(
@@ -205,9 +234,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
                   ],
                 ),
               ),
-
               SizedBox(height: 16.h),
-
               _SectionCard(
                 title: 'Budget',
                 child: Column(
@@ -313,9 +340,7 @@ class CreateTripPlannerSheet extends StatelessWidget {
                   ],
                 ),
               ),
-
               SizedBox(height: 16.h),
-
               _SectionCard(
                 title: 'Traveler',
                 child: Row(
@@ -351,15 +376,14 @@ class CreateTripPlannerSheet extends StatelessWidget {
                   ],
                 ),
               ),
-
               SizedBox(height: 16.h),
-
               CustomGradientButton(
                 width: double.infinity,
-                onTap: state.canCreateTrip ? cubit.createNewTripAndAdd : null,
+                onTap: state.canCreateTrip
+                    ? () => cubit.createNewTripAndAdd(userInterests: interests)
+                    : null,
                 text: 'Create & Add',
               ),
-
               SizedBox(height: 40.h),
             ],
           ),

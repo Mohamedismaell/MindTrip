@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
+import 'package:mindtrip/core/shared/presentation/widget/app_refresh_indicator.dart';
 import 'package:mindtrip/core/shared/presentation/widget/appp_dialog.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_head_line.dart';
 import 'package:mindtrip/core/shared/routes/app_routes.dart';
@@ -81,179 +83,190 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
             context.read<TripDetailsCubit>().resetActionStatus();
           }
         },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
-              builder: (context, state) {
-                final isLoading = state.status == TripDetailsStatus.loading;
-                final trip = state.trip;
-                final plan = state.generatedPlan;
+        child: AppRefreshIndicator(
+          onRefresh: () {
+            return context.read<TripDetailsCubit>().initialize(widget.tripId);
+          },
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
+                builder: (context, state) {
+                  final isLoading = state.status == TripDetailsStatus.loading;
+                  final trip = state.trip;
+                  final plan = state.generatedPlan;
 
-                if (state.status == TripDetailsStatus.error && trip == null) {
-                  return _MessageState(
-                    message: state.errorMessage ?? 'Error loading trip',
-                  );
-                }
+                  if (state.status == TripDetailsStatus.error && trip == null) {
+                    return AppErrorWidget(
+                      message: state.errorMessage ?? 'Error loading trip',
+                      onPressed: () {
+                        context.read<TripDetailsCubit>().initialize(
+                          widget.tripId,
+                        );
+                      },
+                    );
+                  }
 
-                if (!isLoading && trip == null) {
-                  return const _MessageState(message: 'Trip not found');
-                }
+                  if (!isLoading && trip == null) {
+                    return const _MessageState(message: 'Trip not found');
+                  }
 
-                final double totalCost =
-                    (trip?.totalCost ?? plan?.totalCalculatedCost ?? 0)
-                        .toDouble();
+                  final double totalCost =
+                      (trip?.totalCost ?? plan?.totalCalculatedCost ?? 0)
+                          .toDouble();
 
-                return Skeletonizer(
-                  enabled: isLoading,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 14.w,
-                      right: 14.w,
-                      bottom: 20.h,
-                    ),
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20.h),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () => context.canPop()
-                                      ? context.pop()
-                                      : context.go(AppRoutes.myTrips),
-                                  icon: const Icon(Icons.arrow_back_ios_new),
-                                ),
-                                const Spacer(),
-                                if (trip != null)
-                                  IconButton(
-                                    onPressed: () => context
-                                        .read<TripsCubit>()
-                                        .shareTrip(trip.tripId),
-                                    icon: const Icon(Icons.share_outlined),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        if (plan != null &&
-                            plan.accommodation.isNotEmpty &&
-                            trip != null)
+                  return Skeletonizer(
+                    enabled: isLoading,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 14.w,
+                        right: 14.w,
+                        bottom: 20.h,
+                      ),
+                      child: CustomScrollView(
+                        slivers: [
                           SliverToBoxAdapter(
                             child: Padding(
-                              padding: EdgeInsets.only(bottom: 32.h),
-                              child: TripAccommodationCard(
-                                accommodation: plan.accommodation.first,
-                                tripStart: trip.tripStart,
-                                tripEnd: trip.tripEnd,
-                                tripId: trip.tripId,
+                              padding: EdgeInsets.symmetric(vertical: 20.h),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () => context.canPop()
+                                        ? context.pop()
+                                        : context.go(AppRoutes.myTrips),
+                                    icon: const Icon(Icons.arrow_back_ios_new),
+                                  ),
+                                  const Spacer(),
+                                  if (trip != null)
+                                    IconButton(
+                                      onPressed: () => context
+                                          .read<TripsCubit>()
+                                          .shareTrip(trip.tripId),
+                                      icon: const Icon(Icons.share_outlined),
+                                    ),
+                                ],
                               ),
                             ),
                           ),
-                        if (plan != null)
-                          SliverList.separated(
-                            itemCount: plan.daysCount,
-                            separatorBuilder: (_, _) => SizedBox(height: 42.h),
-                            itemBuilder: (context, index) {
-                              final dayNum = index + 1;
-                              final dayPlan = plan.days[dayNum];
-                              if (dayPlan == null) {
-                                return const SizedBox.shrink();
-                              }
 
-                              return TripDayOverviewCard(
-                                dayEntity: dayPlan,
-                                dayNumber: dayNum,
-                                tripCoverAsset: '',
-                                isExpanded: dayNum == state.activeDay,
-                                onToggle: () => context
-                                    .read<TripDetailsCubit>()
-                                    .onDayChanged(dayNum),
-                                onRefine: () {
-                                  AiRefinementSheet.show(context, trip);
-                                },
-                                tripStatus: trip!.status,
-                              );
-                            },
-                          )
-                        else
-                          const SliverToBoxAdapter(
-                            child: Center(
-                              child: Text('Trip details are not available.'),
+                          if (plan != null &&
+                              plan.accommodation.isNotEmpty &&
+                              trip != null)
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 32.h),
+                                child: TripAccommodationCard(
+                                  accommodation: plan.accommodation.first,
+                                  tripStart: trip.tripStart,
+                                  tripEnd: trip.tripEnd,
+                                  tripId: trip.tripId,
+                                ),
+                              ),
                             ),
-                          ),
-                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-                        SliverToBoxAdapter(
-                          child: _EstimateNote(estimatedTotalCost: totalCost),
-                        ),
-                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-                        SliverToBoxAdapter(
-                          child:
-                              BlocBuilder<TripDetailsCubit, TripDetailsState>(
-                                builder: (context, state) {
-                                  final trip = state.trip;
-                                  if (trip == null || isLoading) {
-                                    return const SizedBox.shrink();
-                                  }
+                          if (plan != null)
+                            SliverList.separated(
+                              itemCount: plan.daysCount,
+                              separatorBuilder: (_, _) =>
+                                  SizedBox(height: 42.h),
+                              itemBuilder: (context, index) {
+                                final dayNum = index + 1;
+                                final dayPlan = plan.days[dayNum];
+                                if (dayPlan == null) {
+                                  return const SizedBox.shrink();
+                                }
 
-                                  if (trip.status == TripStatus.completed) {
+                                return TripDayOverviewCard(
+                                  dayEntity: dayPlan,
+                                  dayNumber: dayNum,
+                                  tripCoverAsset: '',
+                                  isExpanded: dayNum == state.activeDay,
+                                  onToggle: () => context
+                                      .read<TripDetailsCubit>()
+                                      .onDayChanged(dayNum),
+                                  onRefine: () {
+                                    AiRefinementSheet.show(context, trip);
+                                  },
+                                  tripStatus: trip!.status,
+                                );
+                              },
+                            )
+                          else
+                            const SliverToBoxAdapter(
+                              child: Center(
+                                child: Text('Trip details are not available.'),
+                              ),
+                            ),
+                          SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+                          SliverToBoxAdapter(
+                            child: _EstimateNote(estimatedTotalCost: totalCost),
+                          ),
+                          SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+                          SliverToBoxAdapter(
+                            child:
+                                BlocBuilder<TripDetailsCubit, TripDetailsState>(
+                                  builder: (context, state) {
+                                    final trip = state.trip;
+                                    if (trip == null || isLoading) {
+                                      return const SizedBox.shrink();
+                                    }
+
+                                    if (trip.status == TripStatus.completed) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 20.h,
+                                        ),
+                                        child: CustomGradientButton(
+                                          text: 'Write a Review',
+                                          onTap: () {
+                                            TripReviewDialog.show(
+                                              context,
+                                              tripTitle: trip.title,
+                                              onSubmitted: (rating, comment) =>
+                                                  context
+                                                      .read<TripDetailsCubit>()
+                                                      .reviewTrip(
+                                                        rating,
+                                                        comment,
+                                                      ),
+                                            );
+                                          },
+                                          width: double.infinity,
+                                        ),
+                                      );
+                                    }
+
+                                    final isDraft =
+                                        trip.status == TripStatus.draft;
+
                                     return Padding(
                                       padding: EdgeInsets.symmetric(
                                         vertical: 20.h,
                                       ),
                                       child: CustomGradientButton(
-                                        text: 'Write a Review',
+                                        text: isDraft
+                                            ? 'Start Trip'
+                                            : 'Mark Completed',
                                         onTap: () {
-                                          TripReviewDialog.show(
-                                            context,
-                                            tripTitle: trip.title,
-                                            onSubmitted: (rating, comment) =>
-                                                context
-                                                    .read<TripDetailsCubit>()
-                                                    .reviewTrip(
-                                                      rating,
-                                                      comment,
-                                                    ),
-                                          );
+                                          final nextStatus = isDraft
+                                              ? TripStatus.inProgress.index
+                                              : TripStatus.completed.index;
+                                          context
+                                              .read<TripDetailsCubit>()
+                                              .changeTripStatus(nextStatus);
                                         },
                                         width: double.infinity,
                                       ),
                                     );
-                                  }
-
-                                  final isDraft =
-                                      trip.status == TripStatus.draft;
-
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 20.h,
-                                    ),
-                                    child: CustomGradientButton(
-                                      text: isDraft
-                                          ? 'Start Trip'
-                                          : 'Mark Completed',
-                                      onTap: () {
-                                        final nextStatus = isDraft
-                                            ? TripStatus.inProgress.index
-                                            : TripStatus.completed.index;
-                                        context
-                                            .read<TripDetailsCubit>()
-                                            .changeTripStatus(nextStatus);
-                                      },
-                                      width: double.infinity,
-                                    ),
-                                  );
-                                },
-                              ),
-                        ),
-                        SliverToBoxAdapter(child: SizedBox(height: 42.h)),
-                      ],
+                                  },
+                                ),
+                          ),
+                          SliverToBoxAdapter(child: SizedBox(height: 42.h)),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),
