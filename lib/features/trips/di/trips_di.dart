@@ -12,6 +12,7 @@ import 'package:mindtrip/features/trips/domain/use_cases/get_all_trips_use_case.
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_by_id_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_details_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/rename_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/get_my_trip_review_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/review_trip_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/share_trip_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/update_trip_plan_use_case.dart';
@@ -66,6 +67,9 @@ class TripsDi {
     sl.registerLazySingleton<UpdateTripPlanUseCase>(
       () => UpdateTripPlanUseCase(sl<TripRepository>()),
     );
+    sl.registerLazySingleton<GetMyTripReviewUseCase>(
+      () => GetMyTripReviewUseCase(sl<TripRepository>()),
+    );
 
     sl.registerLazySingleton<TripsCubit>(
       () => TripsCubit(
@@ -82,6 +86,7 @@ class TripsDi {
         sl<ChangeTripStatusUseCase>(),
         sl<ReviewTripUseCase>(),
         sl<UpdateTripPlanUseCase>(),
+        sl<GetMyTripReviewUseCase>(),
       ),
     );
   }

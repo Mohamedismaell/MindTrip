@@ -210,6 +210,25 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  Future<Result<bool>> getMyTripReview(
+    String id, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final hasReviewed = await _remoteDataSource.getMyTripReview(
+        id,
+        cancelToken: cancelToken,
+      );
+      return Result.ok(hasReviewed);
+    } catch (e) {
+      if (e is DioException && e.type == DioExceptionType.cancel) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
   Future<Result<Trip>> updateTripPlan(
     String id,
     UpdateTripPlanRequestModel request, {

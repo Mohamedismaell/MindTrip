@@ -15,6 +15,7 @@ class TripDetailsState {
     this.checkedPlaces = const {},
     this.actionStatus = TripDetailsActionStatus.idle,
     this.actionError,
+    this.hasReviewed = true,
   });
 
   static const _unset = Object();
@@ -27,6 +28,7 @@ class TripDetailsState {
   final Set<String> checkedPlaces;
   final TripDetailsActionStatus actionStatus;
   final String? actionError;
+  final bool hasReviewed;
 
   TripDetailsState copyWith({
     TripDetailsStatus? status,
@@ -37,6 +39,7 @@ class TripDetailsState {
     Set<String>? checkedPlaces,
     TripDetailsActionStatus? actionStatus,
     Object? actionError = _unset,
+    bool? hasReviewed,
   }) {
     return TripDetailsState(
       status: status ?? this.status,
@@ -53,6 +56,7 @@ class TripDetailsState {
       actionError: identical(actionError, _unset)
           ? this.actionError
           : actionError as String?,
+      hasReviewed: hasReviewed ?? this.hasReviewed,
     );
   }
 }

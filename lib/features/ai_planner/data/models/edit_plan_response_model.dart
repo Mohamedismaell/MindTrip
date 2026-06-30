@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mindtrip/features/ai_planner/data/models/generated_plan_model.dart';
+import 'package:mindtrip/features/ai_planner/data/models/plan_model.dart';
 import 'package:mindtrip/features/ai_planner/data/models/plan_place_model.dart';
 
 part 'edit_plan_response_model.freezed.dart';
@@ -23,6 +24,26 @@ abstract class EditPlanResponseModel with _$EditPlanResponseModel {
     GeneratedPlanModel? plan,
   }) = _EditPlanResponseModel;
 
-  factory EditPlanResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$EditPlanResponseModelFromJson(json);
+  factory EditPlanResponseModel.fromJson(Map<String, dynamic> json) {
+    final parsed = _$EditPlanResponseModelFromJson(json);
+    if (json['plan'] != null && json['plan'] is Map<String, dynamic>) {
+      final innerPlan = json['plan'] as Map<String, dynamic>;
+      if (!innerPlan.containsKey('plan')) {
+        final generatedPlan = GeneratedPlanModel(
+          tripId: json['trip_id']?.toString() ?? '',
+          status: json['status']?.toString() ?? '',
+          people: json['people'] is num ? (json['people'] as num).toInt() : 0,
+          totalCalculatedCost: json['total_calculated_cost'] is num
+              ? (json['total_calculated_cost'] as num).toInt()
+              : 0,
+          daysCount: json['days_count'] is num
+              ? (json['days_count'] as num).toInt()
+              : 0,
+          plan: PlanModel.fromJson(innerPlan),
+        );
+        return parsed.copyWith(plan: generatedPlan);
+      }
+    }
+    return parsed;
+  }
 }

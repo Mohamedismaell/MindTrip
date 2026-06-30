@@ -24,20 +24,19 @@ class MyReviewsSection extends StatelessWidget {
           );
         }
 
-        final displayReviews =
-            state.isLoading && state.reviews.isEmpty
-                ? List.generate(
-                  2,
-                  (_) => TripReviewEntity(
-                    tripReviewId: 'id',
-                    tripId: 'tripId',
-                    destination: 'Loading destination...',
-                    rating: 5,
-                    comment: 'Loading review comment content...',
-                    createdAt: DateTime.now(),
-                  ),
-                )
-                : state.reviews;
+        final displayReviews = state.isLoading && state.reviews.isEmpty
+            ? List.generate(
+                2,
+                (_) => TripReviewEntity(
+                  tripReviewId: 'id',
+                  tripId: 'tripId',
+                  destination: 'Loading destination...',
+                  rating: 5,
+                  comment: 'Loading review comment content...',
+                  createdAt: DateTime.now(),
+                ),
+              )
+            : state.reviews;
 
         if (displayReviews.isEmpty && !state.isLoading) {
           return const SizedBox.shrink();
@@ -50,7 +49,6 @@ class MyReviewsSection extends StatelessWidget {
               const SectionHeading(title: 'My Reviews', actionText: 'See all'),
               SizedBox(height: 24.h),
               ...displayReviews.map((review) {
-                // Map TripReviewEntity to ReviewEntity for the existing ReviewCard
                 final data = ReviewEntity(
                   id: review.tripReviewId,
                   userId: '',

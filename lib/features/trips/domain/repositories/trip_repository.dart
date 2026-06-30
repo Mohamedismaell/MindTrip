@@ -32,6 +32,10 @@ abstract class TripRepository {
     String? comment, {
     CancelToken? cancelToken,
   });
+  Future<Result<bool>> getMyTripReview(
+    String id, {
+    CancelToken? cancelToken,
+  });
   Future<Result<Trip>> updateTripPlan(
     String id,
     UpdateTripPlanRequestModel request, {

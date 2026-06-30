@@ -15,12 +15,10 @@ import 'package:mindtrip/core/utils/app_assets.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
-import 'package:mindtrip/features/profile/presentation/data/profile_mock_data.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/interest_chip.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/mytrips_section.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/profile_identity.dart';
 import 'package:mindtrip/features/profile/presentation/widgets/profile/section_heading.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile/stats_card.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

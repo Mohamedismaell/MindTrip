@@ -2,6 +2,7 @@ import 'package:mindtrip/core/shared/presentation/bloc/safe_cubit.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/change_trip_status_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_trip_details_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/get_my_trip_review_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/review_trip_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/update_trip_plan_use_case.dart';
 import 'package:mindtrip/features/ai_planner/domain/entities/generated_plan_entity.dart';
@@ -16,12 +17,14 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
     this._changeTripStatus,
     this._reviewTrip,
     this._updateTripPlan,
+    this._getMyTripReview,
   ) : super(const TripDetailsState());
 
   final GetTripDetailsUseCase _getTripDetails;
   final ChangeTripStatusUseCase _changeTripStatus;
   final ReviewTripUseCase _reviewTrip;
   final UpdateTripPlanUseCase _updateTripPlan;
+  final GetMyTripReviewUseCase _getMyTripReview;
 
   Future<void> initialize(String tripId, {Trip? initialTrip}) async {
     if (initialTrip != null) {
@@ -30,29 +33,49 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
           status: TripDetailsStatus.loaded,
           trip: initialTrip,
           generatedPlan: initialTrip.plan,
+          hasReviewed: true,
         ),
       );
     } else {
       emitSafe(
-        state.copyWith(status: TripDetailsStatus.loading, errorMessage: null),
+        state.copyWith(
+          status: TripDetailsStatus.loading,
+          errorMessage: null,
+          hasReviewed: true,
+        ),
       );
     }
     final result = await _getTripDetails(tripId);
     result.when(
-      success: (trip) => emitSafe(
-        state.copyWith(
-          status: TripDetailsStatus.loaded,
-          trip: trip,
-          generatedPlan: trip?.plan,
-          errorMessage: null,
-        ),
-      ),
+      success: (trip) async {
+        emitSafe(
+          state.copyWith(
+            status: TripDetailsStatus.loaded,
+            trip: trip,
+            generatedPlan: trip?.plan,
+            errorMessage: null,
+            hasReviewed: true,
+          ),
+        );
+        if (trip?.status == TripStatus.completed) {
+          final reviewResult = await _getMyTripReview(tripId);
+          reviewResult.when(
+            success: (hasReviewed) =>
+                emitSafe(state.copyWith(hasReviewed: hasReviewed)),
+            failure: (_) => emitSafe(state.copyWith(hasReviewed: false)),
+            cancelled: () {},
+          );
+        } else {
+          emitSafe(state.copyWith(hasReviewed: false));
+        }
+      },
       failure: (error) => emitSafe(
         state.copyWith(
           status: TripDetailsStatus.error,
           trip: null,
           generatedPlan: null,
           errorMessage: error.message,
+          hasReviewed: false,
         ),
       ),
       cancelled: () => emitSafe(
@@ -124,7 +147,10 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
 
     result.when(
       success: (_) => emitSafe(
-        state.copyWith(actionStatus: TripDetailsActionStatus.success),
+        state.copyWith(
+          actionStatus: TripDetailsActionStatus.success,
+          hasReviewed: true,
+        ),
       ),
       failure: (error) => emitSafe(
         state.copyWith(
@@ -186,4 +212,3 @@ class TripDetailsCubit extends SafeCubit<TripDetailsState> {
     );
   }
 }
-

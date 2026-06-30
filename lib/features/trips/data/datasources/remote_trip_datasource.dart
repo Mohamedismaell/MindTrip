@@ -38,6 +38,7 @@ abstract class RemoteTripDataSource {
     TripReviewRequestModel request, {
     CancelToken? cancelToken,
   });
+  Future<bool> getMyTripReview(String id, {CancelToken? cancelToken});
   Future<Trip> updateTripPlan(
     String id,
     UpdateTripPlanRequestModel request, {
@@ -181,6 +182,24 @@ class RemoteTripDataSourceImpl implements RemoteTripDataSource {
         data: request.toJson(),
         cancelToken: cancelToken,
       );
+    } catch (e) {
+      throw ApiErrorMapper.fromException(e);
+    }
+  }
+
+  @override
+  Future<bool> getMyTripReview(String id, {CancelToken? cancelToken}) async {
+    try {
+      await _apiConsumer.get(
+        EndPoints.tripReviewMe(id),
+        cancelToken: cancelToken,
+      );
+      return true;
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) rethrow;
+      // 404 means no review yet — treat as false
+      if (e.response?.statusCode == 404) return false;
+      throw ApiErrorMapper.fromException(e);
     } catch (e) {
       throw ApiErrorMapper.fromException(e);
     }

@@ -54,26 +54,29 @@ class HomeHeader extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8.h),
-                    Row(
-                      children: [
-                        //* You may give it exact size idk
-                        SvgPicture.asset(HomeAssets.locationIcon),
-                        SizedBox(width: 6.w),
-                        BlocSelector<LocationCubit, LocationState, String>(
-                          selector: (state) => state.hasLocation
-                              ? state.displayName
-                              : 'Locating...',
-                          builder: (context, locationText) {
-                            return Text(
-                              locationText,
-                              style: context.textTheme.bodyMedium?.copyWith(
-                                fontSize: 14.sp,
-                                color: context.colorTheme.outline,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                    BlocSelector<LocationCubit, LocationState, bool>(
+                      selector: (state) => state.hasLocation,
+                      builder: (context, hasLocation) {
+                        if (!hasLocation) return const SizedBox.shrink();
+                        return Row(
+                          children: [
+                            SvgPicture.asset(HomeAssets.locationIcon),
+                            SizedBox(width: 6.w),
+                            BlocSelector<LocationCubit, LocationState, String>(
+                              selector: (state) => state.displayName,
+                              builder: (context, locationText) {
+                                return Text(
+                                  locationText,
+                                  style: context.textTheme.bodyMedium?.copyWith(
+                                    fontSize: 14.sp,
+                                    color: context.colorTheme.outline,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

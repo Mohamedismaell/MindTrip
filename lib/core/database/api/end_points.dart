@@ -57,6 +57,7 @@ class EndPoints {
   static String tripRename(String id) => 'api/v1/trips/$id/rename';
   static String tripShare(String id) => 'api/v1/trips/$id/share';
   static String tripReview(String id) => 'api/v1/trips/$id/review';
+  static String tripReviewMe(String id) => 'api/v1/trips/$id/review/me';
   static String confirmTrip(String id) => 'api/v1/trips/$id/confirm';
 }
 

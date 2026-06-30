@@ -128,7 +128,8 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
                 if (state.messages.isNotEmpty) _scrollToBottom();
                 if (state.status == AiEditStatus.success &&
                     state.currentPlan != null &&
-                    state.currentPlan!.daysCount > 0) {
+                    state.currentPlan!.daysCount > 0 &&
+                    state.lastAIResponse?.mode != 'chat') {
                   widget.tripDetailsCubit.updatePlan(state.currentPlan!);
                 }
               },
@@ -155,27 +156,13 @@ class _AiRefinementSheetState extends State<AiRefinementSheet> {
           ),
 
           // Suggestions
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-            child: ChatSuggestionChips(
-              suggestions: [
-                '🏰 More museums',
-                '🍝 Local food',
-                '💰 Cheaper options',
-              ],
-              onTap: (value) => _controller.text = value,
-            ),
-            // Row(
-            //   children: [
-
-            //     _SuggestionChip(
-            //       label: '💰 Cheaper options',
-            //       onTap: () => _controller.text =
-            //           'Make the itinerary more budget-friendly.',
-            //     ),
-            //   ],
-            // ),
+          ChatSuggestionChips(
+            suggestions: [
+              '🏰 More museums',
+              '🍝 Local food',
+              '💰 Cheaper options',
+            ],
+            onTap: (value) => _controller.text = value,
           ),
 
           // Input Area

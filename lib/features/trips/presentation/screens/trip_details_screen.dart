@@ -12,6 +12,7 @@ import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/map/data/models/map_trip_extra.dart';
+import 'package:mindtrip/features/profile/presentation/manager/profile_reviews_cubit.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_state.dart';
@@ -57,7 +58,8 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
       },
       child: BlocListener<TripDetailsCubit, TripDetailsState>(
         listenWhen: (previous, current) =>
-            previous.actionStatus != current.actionStatus,
+            previous.actionStatus != current.actionStatus ||
+            previous.hasReviewed != current.hasReviewed,
         listener: (context, state) {
           if (state.actionStatus == TripDetailsActionStatus.loading) {
             AppDialog.showLoading(context: context);
@@ -72,7 +74,9 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
             AppDialog.hideLoading(context);
             context.read<TripsCubit>().loadTrips(silent: true);
 
-            if (state.trip?.status == TripStatus.completed) {
+            // Only pop the review dialog when trip just became completed and not yet reviewed
+            if (state.trip?.status == TripStatus.completed &&
+                !state.hasReviewed) {
               TripReviewDialog.show(
                 context,
                 tripTitle: state.trip?.title ?? 'your trip',
@@ -80,6 +84,15 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                     .read<TripDetailsCubit>()
                     .reviewTrip(rating, comment),
               );
+            }
+
+            // Refresh profile reviews instantly after a review is submitted
+            if (state.hasReviewed) {
+              try {
+                context.read<ProfileReviewsCubit>().getReviews();
+              } catch (_) {
+                // ProfileReviewsCubit may not be in scope on this screen
+              }
             }
 
             context.read<TripDetailsCubit>().resetActionStatus();
@@ -232,26 +245,34 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                     }
 
                                     if (trip.status == TripStatus.completed) {
+                                      final hasReviewed = state.hasReviewed;
                                       return Padding(
                                         padding: EdgeInsets.symmetric(
                                           vertical: 20.h,
                                         ),
-                                        child: CustomGradientButton(
-                                          text: 'Write a Review',
-                                          onTap: () {
-                                            TripReviewDialog.show(
-                                              context,
-                                              tripTitle: trip.title,
-                                              onSubmitted: (rating, comment) =>
-                                                  context
-                                                      .read<TripDetailsCubit>()
-                                                      .reviewTrip(
-                                                        rating,
-                                                        comment,
-                                                      ),
-                                            );
-                                          },
-                                          width: double.infinity,
+                                        child: Opacity(
+                                          opacity: hasReviewed ? 0.5 : 1.0,
+                                          child: CustomGradientButton(
+                                            text: hasReviewed
+                                                ? 'Review Submitted'
+                                                : 'Write a Review',
+                                            onTap: hasReviewed
+                                                ? null
+                                                : () {
+                                                    TripReviewDialog.show(
+                                                      context,
+                                                      tripTitle: trip.title,
+                                                      onSubmitted: (rating, comment) =>
+                                                          context
+                                                              .read<TripDetailsCubit>()
+                                                              .reviewTrip(
+                                                                rating,
+                                                                comment,
+                                                              ),
+                                                    );
+                                                  },
+                                            width: double.infinity,
+                                          ),
                                         ),
                                       );
                                     }

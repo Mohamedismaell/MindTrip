@@ -66,34 +66,38 @@ class ProfileIdentity extends StatelessWidget {
           //   ),
           // ),
           // SizedBox(height: 12.h),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 14.5.w,
-                child: SvgPicture.asset(
-                  HomeAssets.locationIcon,
-                  colorFilter: ColorFilter.mode(
-                    context.colorTheme.onSurfaceVariant,
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-
-              SizedBox(width: 8.w),
-              BlocSelector<LocationCubit, LocationState, String>(
-                selector: (state) =>
-                    state.hasLocation ? state.displayName : 'Locating...',
-                builder: (context, stateText) {
-                  return Text(
-                    stateText,
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: context.colorTheme.onSurfaceVariant,
+          BlocSelector<LocationCubit, LocationState, bool>(
+            selector: (state) => state.hasLocation,
+            builder: (context, hasLocation) {
+              if (!hasLocation) return const SizedBox.shrink();
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 14.5.w,
+                    child: SvgPicture.asset(
+                      HomeAssets.locationIcon,
+                      colorFilter: ColorFilter.mode(
+                        context.colorTheme.onSurfaceVariant,
+                        BlendMode.srcIn,
+                      ),
                     ),
-                  );
-                },
-              ),
-            ],
+                  ),
+                  SizedBox(width: 8.w),
+                  BlocSelector<LocationCubit, LocationState, String>(
+                    selector: (state) => state.displayName,
+                    builder: (context, locationText) {
+                      return Text(
+                        locationText,
+                        style: context.textTheme.labelLarge?.copyWith(
+                          color: context.colorTheme.onSurfaceVariant,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
           ),
           if (bio != null && bio!.isNotEmpty && bio != '') ...[
             SizedBox(height: 15.h),
