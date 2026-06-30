@@ -210,6 +210,44 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  Future<Result<void>> updateReview(
+    String id,
+    int rating,
+    String? comment, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      await _remoteDataSource.updateReview(
+        id,
+        TripReviewRequestModel(rating: rating, comment: comment),
+        cancelToken: cancelToken,
+      );
+      return const Result.ok(null);
+    } catch (e) {
+      if (e is DioException && e.type == DioExceptionType.cancel) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
+  Future<Result<void>> deleteReview(
+    String id, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      await _remoteDataSource.deleteReview(id, cancelToken: cancelToken);
+      return const Result.ok(null);
+    } catch (e) {
+      if (e is DioException && e.type == DioExceptionType.cancel) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
   Future<Result<bool>> getMyTripReview(
     String id, {
     CancelToken? cancelToken,
@@ -238,6 +276,26 @@ class TripRepositoryImpl implements TripRepository {
       final trip = await _remoteDataSource.updateTripPlan(
         id,
         request,
+        cancelToken: cancelToken,
+      );
+      await _localDataSource.save(trip.toModel());
+      return Result.ok(trip);
+    } catch (e) {
+      if (e is DioException && e.type == DioExceptionType.cancel) {
+        return const Result.cancelled();
+      }
+      return Result.error(ApiErrorMapper.fromException(e));
+    }
+  }
+
+  @override
+  Future<Result<Trip>> getSharedTrip(
+    String token, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final trip = await _remoteDataSource.getSharedTrip(
+        token,
         cancelToken: cancelToken,
       );
       await _localDataSource.save(trip.toModel());

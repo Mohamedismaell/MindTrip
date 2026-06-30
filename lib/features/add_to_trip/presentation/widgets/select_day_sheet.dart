@@ -278,14 +278,28 @@ class SelectDaySheet extends StatelessWidget {
             SizedBox(height: 16.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: CustomGradientButton(
-                width: double.infinity,
-                text: 'Add',
-                onTap: state.canAddToExistingTrip
-                    ? () {
-                        context.read<AddToTripCubit>().addToExistingTrip();
-                      }
-                    : null,
+              child: Builder(
+                builder: (context) {
+                  final trip = state.selectedTrip;
+                  final isAlreadyInTrip = trip != null &&
+                      trip.plan.days.values.any(
+                        (day) => day.allPlaces.any(
+                          (p) => p.placeId == state.place.id,
+                        ),
+                      );
+
+                  return CustomGradientButton(
+                    width: double.infinity,
+                    text: isAlreadyInTrip ? 'Move' : 'Add',
+                    onTap: state.canAddToExistingTrip
+                        ? () {
+                            context.read<AddToTripCubit>().addToExistingTrip(
+                              isMoveMode: isAlreadyInTrip,
+                            );
+                          }
+                        : null,
+                  );
+                },
               ),
             ),
             SizedBox(height: 24.h),

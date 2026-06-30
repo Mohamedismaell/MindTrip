@@ -146,7 +146,89 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
     }
   }
 
-  Future<void> addToExistingTrip() async {
+  Future<void> removeFromTrip(Trip trip) async {
+    _emitStatus(AddToTripStatus.removingFromTrip);
+
+    try {
+      final currentGeneratedPlan = trip.plan.toModel();
+      final currentPlan = currentGeneratedPlan.plan;
+
+      if (currentPlan == null) {
+        _emitFailure(AddToTripStatus.removingFailure, 'Trip plan is missing.');
+        return;
+      }
+
+      final placeId = state.place.id;
+
+      final updatedDays = Map<int, DayPlanModel>.from(
+        currentPlan.days.map((dayNum, dayPlan) {
+          return MapEntry(
+            dayNum,
+            dayPlan.copyWith(
+              morning: dayPlan.morning
+                  .where((p) => p.placeId != placeId)
+                  .toList(),
+              afternoon: dayPlan.afternoon
+                  .where((p) => p.placeId != placeId)
+                  .toList(),
+              evening: dayPlan.evening
+                  .where((p) => p.placeId != placeId)
+                  .toList(),
+            ),
+          );
+        }),
+      );
+
+      final updatedPlan = currentPlan.copyWith(days: updatedDays);
+      final updatedGeneratedPlan = currentGeneratedPlan.copyWith(
+        plan: updatedPlan,
+      );
+
+      final updateRequest = UpdateTripPlanRequestModel(
+        title: trip.title,
+        destinationGovernorate: trip.destinationGovernorate,
+        city: trip.city,
+        startDate: trip.tripStart.toIso8601String(),
+        endDate: trip.tripEnd.toIso8601String(),
+        people: trip.people,
+        totalBudgetEgp: trip.totalBudget,
+        totalCost: updatedGeneratedPlan.totalCalculatedCost,
+        plan: updatedGeneratedPlan,
+        collected: trip.collected != null
+            ? CollectedDataModel.fromEntity(trip.collected!)
+            : null,
+        sessionId: trip.sessionId,
+        isPublic: trip.isPublic,
+      );
+
+      final saveResult = await _updateTripPlanUseCase(
+        trip.tripId,
+        updateRequest,
+      );
+
+      saveResult.when(
+        success: (_) {
+          emitSafe(
+            state.copyWith(
+              status: AddToTripStatus.success,
+              errorMessage: '',
+            ),
+          );
+        },
+        failure: (error) {
+          _emitFailure(AddToTripStatus.removingFailure, error.message);
+        },
+        cancelled: () {},
+      );
+    } catch (_) {
+      _emitFailure(
+        AddToTripStatus.removingFailure,
+        'Failed to remove the place from the trip.',
+      );
+    }
+  }
+
+  Future<void> addToExistingTrip({bool isMoveMode = false}) async {
     final trip = state.selectedTrip;
     final selectedPeriod = state.selectedPeriod;
     final dayNumber = _extractDayNumber(state.selectedDay);
@@ -169,12 +251,13 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
         dayNumber: dayNumber,
       );
 
+      // Check if the place already exists anywhere in the trip.
       final alreadyExistsInTrip = currentPlan.days.values.any(
         (dayPlan) =>
             dayPlan.allPlaces.any((place) => place.placeId == newPlace.placeId),
       );
 
-      if (alreadyExistsInTrip) {
+      if (alreadyExistsInTrip && !isMoveMode) {
         _emitFailure(
           AddToTripStatus.saveFailure,
           'This place is already added to this trip.',
@@ -182,7 +265,31 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
         return;
       }
 
-      final updatedDays = Map<int, DayPlanModel>.from(currentPlan.days);
+      // Build the updated days map, removing the old instance when in move mode.
+      var updatedDays = Map<int, DayPlanModel>.from(currentPlan.days);
+
+      if (isMoveMode && alreadyExistsInTrip) {
+        final placeId = state.place.id;
+        updatedDays = Map<int, DayPlanModel>.from(
+          updatedDays.map((dayNum, dayPlan) {
+            return MapEntry(
+              dayNum,
+              dayPlan.copyWith(
+                morning: dayPlan.morning
+                    .where((p) => p.placeId != placeId)
+                    .toList(),
+                afternoon: dayPlan.afternoon
+                    .where((p) => p.placeId != placeId)
+                    .toList(),
+                evening: dayPlan.evening
+                    .where((p) => p.placeId != placeId)
+                    .toList(),
+              ),
+            );
+          }),
+        );
+      }
+
       final existingDayPlan = updatedDays[dayNumber] ?? const DayPlanModel();
 
       updatedDays[dayNumber] = _addPlaceToPeriod(
@@ -226,7 +333,10 @@ class AddToTripCubit extends SafeCubit<AddToTripState> {
       saveResult.when(
         success: (_) {
           emitSafe(
-            state.copyWith(status: AddToTripStatus.success, errorMessage: ''),
+            state.copyWith(
+              status: AddToTripStatus.success,
+              errorMessage: '',
+            ),
           );
         },
         failure: (error) {

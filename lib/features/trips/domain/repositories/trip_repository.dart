@@ -32,6 +32,16 @@ abstract class TripRepository {
     String? comment, {
     CancelToken? cancelToken,
   });
+  Future<Result<void>> updateReview(
+    String id,
+    int rating,
+    String? comment, {
+    CancelToken? cancelToken,
+  });
+  Future<Result<void>> deleteReview(
+    String id, {
+    CancelToken? cancelToken,
+  });
   Future<Result<bool>> getMyTripReview(
     String id, {
     CancelToken? cancelToken,
@@ -41,4 +51,5 @@ abstract class TripRepository {
     UpdateTripPlanRequestModel request, {
     CancelToken? cancelToken,
   });
+  Future<Result<Trip>> getSharedTrip(String token, {CancelToken? cancelToken});
 }

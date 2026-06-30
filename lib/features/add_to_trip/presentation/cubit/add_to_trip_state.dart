@@ -9,11 +9,13 @@ enum AddToTripStatus {
   loadingTrips,
   loadingTripsFailure,
   updatingTrip,
+  removingFromTrip,
   generatingNewTripPlan,
   creatingTrip,
   success,
   generateFailure,
   saveFailure,
+  removingFailure,
 }
 
 class AddToTripState extends Equatable {

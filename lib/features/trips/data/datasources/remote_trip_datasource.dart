@@ -38,12 +38,19 @@ abstract class RemoteTripDataSource {
     TripReviewRequestModel request, {
     CancelToken? cancelToken,
   });
+  Future<void> updateReview(
+    String id,
+    TripReviewRequestModel request, {
+    CancelToken? cancelToken,
+  });
+  Future<void> deleteReview(String id, {CancelToken? cancelToken});
   Future<bool> getMyTripReview(String id, {CancelToken? cancelToken});
   Future<Trip> updateTripPlan(
     String id,
     UpdateTripPlanRequestModel request, {
     CancelToken? cancelToken,
   });
+  Future<Trip> getSharedTrip(String token, {CancelToken? cancelToken});
 }
 
 class RemoteTripDataSourceImpl implements RemoteTripDataSource {
@@ -188,6 +195,35 @@ class RemoteTripDataSourceImpl implements RemoteTripDataSource {
   }
 
   @override
+  Future<void> updateReview(
+    String id,
+    TripReviewRequestModel request, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      await _apiConsumer.patch(
+        EndPoints.tripReview(id),
+        data: request.toJson(),
+        cancelToken: cancelToken,
+      );
+    } catch (e) {
+      throw ApiErrorMapper.fromException(e);
+    }
+  }
+
+  @override
+  Future<void> deleteReview(String id, {CancelToken? cancelToken}) async {
+    try {
+      await _apiConsumer.delete(
+        EndPoints.tripReview(id),
+        cancelToken: cancelToken,
+      );
+    } catch (e) {
+      throw ApiErrorMapper.fromException(e);
+    }
+  }
+
+  @override
   Future<bool> getMyTripReview(String id, {CancelToken? cancelToken}) async {
     try {
       await _apiConsumer.get(
@@ -215,6 +251,19 @@ class RemoteTripDataSourceImpl implements RemoteTripDataSource {
       final response = await _apiConsumer.put(
         EndPoints.tripPlan(id),
         data: request.toJson(),
+        cancelToken: cancelToken,
+      );
+      return TripModel.fromJson(response as Map<String, dynamic>).toEntity();
+    } catch (e) {
+      throw ApiErrorMapper.fromException(e);
+    }
+  }
+
+  @override
+  Future<Trip> getSharedTrip(String token, {CancelToken? cancelToken}) async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.tripByShareToken(token),
         cancelToken: cancelToken,
       );
       return TripModel.fromJson(response as Map<String, dynamic>).toEntity();

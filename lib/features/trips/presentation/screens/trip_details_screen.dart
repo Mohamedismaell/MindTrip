@@ -22,6 +22,8 @@ import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_a
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_day_overview_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_details/trip_map_preview_card.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_review_dialog.dart';
+import 'package:mindtrip/features/trips/presentation/share_trip/trip_share_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/share_trip/trp_share_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class TripDetailsScreen extends StatefulWidget {
@@ -48,9 +50,23 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (didPop, result) {
+    return BlocListener<TripShareCubit, TripShareState>(
+      listener: (context, state) {
+        if (state is TripShareLoading) {
+          AppDialog.showLoading(context: context);
+        } else if (state is TripShareError) {
+          AppDialog.hideLoading(context);
+          AppGlassSnackBar.showError(
+            context: context,
+            message: state.message,
+          );
+        } else if (state is TripShareSuccess) {
+          AppDialog.hideLoading(context);
+        }
+      },
+      child: PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
         if (context.canPop()) {
           context.pop();
@@ -154,9 +170,12 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                   const Spacer(),
                                   if (trip != null)
                                     IconButton(
-                                      onPressed: () => context
-                                          .read<TripsCubit>()
-                                          .shareTrip(trip.tripId),
+                                      onPressed: () {
+                                        context.read<TripShareCubit>().shareTrip(
+                                              context: context,
+                                              trip: trip,
+                                            );
+                                      },
                                       icon: const Icon(Icons.share_outlined),
                                     ),
                                 ],
@@ -312,6 +331,7 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

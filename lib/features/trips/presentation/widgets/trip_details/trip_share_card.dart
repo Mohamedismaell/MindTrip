@@ -17,9 +17,8 @@ class TripShareCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('dd-MM MMM yyyy');
-    final dateRange = trip.tripStart != null && trip.tripEnd != null
-        ? '${DateFormat('d').format(trip.tripStart!)}-${dateFormat.format(trip.tripEnd!)}'
-        : 'TBD';
+    final dateRange =
+        '${DateFormat('d').format(trip.tripStart)}-${dateFormat.format(trip.tripEnd)}';
 
     return Container(
       width: 450,
@@ -179,12 +178,11 @@ class TripShareCard extends StatelessWidget {
                   value: '${trip.durationDays} Days',
                 ),
                 const _TripShareVerticalDivider(),
-                // _TripShareInfoItem(
-                //   icon: Icons.location_on,
-                //   label: 'PLACES',
-                //   value:
-                //       '${itinerary?.totalPlaces ?? 0} Places',
-                // ),
+                _TripShareInfoItem(
+                  icon: Icons.location_on,
+                  label: 'PLACES',
+                  value: '${trip.placesCount} Places',
+                ),
               ],
             ),
           ),

@@ -124,12 +124,18 @@ class AddToTripSheet extends StatelessWidget {
                       }
 
                       final trip = state.trips[index];
+                      final isAlreadyAdded = trip.plan.days.values.any(
+                        (day) => day.allPlaces.any(
+                          (p) => p.placeId == state.place.id,
+                        ),
+                      );
                       return _TripTile(
                         title: trip.title,
                         subtitle: '${trip.plan.daysCount} days',
                         imagePath: trip.coverImageUrl,
                         onTap: () => onTripSelected(trip),
                         placesCount: trip.plan.placesCount.toString(),
+                        isAlreadyAdded: isAlreadyAdded,
                       );
                     },
                   ),
@@ -150,6 +156,7 @@ class _TripTile extends StatelessWidget {
   final VoidCallback onTap;
   final IconData? leadingIcon;
   final String? placesCount;
+  final bool isAlreadyAdded;
 
   const _TripTile({
     required this.title,
@@ -158,6 +165,7 @@ class _TripTile extends StatelessWidget {
     this.imagePath,
     this.leadingIcon,
     this.placesCount,
+    this.isAlreadyAdded = false,
   });
 
   @override
@@ -165,9 +173,16 @@ class _TripTile extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(8.w, 8.w, 21.w, 8.w),
       decoration: BoxDecoration(
-        color: context.colorTheme.surfaceContainerLow,
+        color: isAlreadyAdded
+            ? context.colorTheme.primaryContainer.withValues(alpha: 0.4)
+            : context.colorTheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: context.colorTheme.outline, width: 1.3),
+        border: Border.all(
+          color: isAlreadyAdded
+              ? context.colorTheme.primary
+              : context.colorTheme.outline,
+          width: isAlreadyAdded ? 1.5 : 1.3,
+        ),
       ),
       child: TapScaleEffect(
         shape: RoundedRectangleBorder(
@@ -229,13 +244,37 @@ class _TripTile extends StatelessWidget {
                         ),
                     ],
                   ),
+                  if (isAlreadyAdded) ...[
+                    SizedBox(height: 6.h),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 3.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: context.colorTheme.primary,
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Text(
+                        'Already added',
+                        style: AppTextStyles.h9Medium.copyWith(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
             Skeleton.shade(
               child: Icon(
-                Icons.chevron_right,
-                color: context.colorTheme.outline,
+                isAlreadyAdded
+                    ? Icons.edit_outlined
+                    : Icons.chevron_right,
+                color: isAlreadyAdded
+                    ? context.colorTheme.primary
+                    : context.colorTheme.outline,
               ),
             ),
           ],

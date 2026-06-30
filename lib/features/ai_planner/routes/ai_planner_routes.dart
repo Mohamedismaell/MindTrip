@@ -16,6 +16,8 @@ import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_flo
 import 'package:mindtrip/features/ai_planner/presentation/screens/ai_planner_intro_screen.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
+import 'package:mindtrip/features/trips/presentation/share_trip/trip_share_cubit.dart';
+
 class AiPlannerRoutes {
   static final aiPlannerRoute = GoRoute(
     path: AppRoutes.aiPlannerIntro,
@@ -32,6 +34,7 @@ class AiPlannerRoutes {
             BlocProvider.value(value: sl<TripFavoriteCubit>()),
             BlocProvider(create: (_) => sl<ChatCubit>()),
             BlocProvider(create: (_) => sl<TripDetailsCubit>()),
+            BlocProvider(create: (_) => sl<TripShareCubit>()),
           ],
           child: child,
         );

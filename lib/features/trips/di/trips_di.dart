@@ -14,10 +14,13 @@ import 'package:mindtrip/features/trips/domain/use_cases/get_trip_details_use_ca
 import 'package:mindtrip/features/trips/domain/use_cases/rename_trip_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/get_my_trip_review_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/review_trip_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/delete_review_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/update_review_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/share_trip_use_case.dart';
 import 'package:mindtrip/features/trips/domain/use_cases/update_trip_plan_use_case.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trip_details_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/share_trip/trip_share_cubit.dart';
 
 class TripsDi {
   TripsDi._();
@@ -61,6 +64,12 @@ class TripsDi {
     sl.registerLazySingleton<ReviewTripUseCase>(
       () => ReviewTripUseCase(sl<TripRepository>()),
     );
+    sl.registerLazySingleton<UpdateReviewUseCase>(
+      () => UpdateReviewUseCase(sl<TripRepository>()),
+    );
+    sl.registerLazySingleton<DeleteReviewUseCase>(
+      () => DeleteReviewUseCase(sl<TripRepository>()),
+    );
     sl.registerLazySingleton<GetAllTripsUseCase>(
       () => GetAllTripsUseCase(sl<TripRepository>()),
     );
@@ -88,6 +97,10 @@ class TripsDi {
         sl<UpdateTripPlanUseCase>(),
         sl<GetMyTripReviewUseCase>(),
       ),
+    );
+
+    sl.registerFactory<TripShareCubit>(
+      () => TripShareCubit(sl<ShareTripUseCase>()),
     );
   }
 }

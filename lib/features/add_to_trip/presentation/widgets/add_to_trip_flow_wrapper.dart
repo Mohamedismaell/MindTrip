@@ -5,6 +5,7 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/add_to_trip_sheet.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/create_trip_planner_sheet.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/manage_place_sheet.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/select_day_sheet.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
@@ -19,9 +20,13 @@ class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
   static const _selectTripRoute = '/select-trip';
   static const _createTripRoute = '/create-trip';
   static const _selectDayRoute = '/select-day';
+  static const _managePlaceRoute = '/manage-place';
 
   final _navigatorKey = GlobalKey<NavigatorState>();
   bool _canPopInternal = false;
+
+  /// The trip that is currently being "managed" (already contains the place).
+  Trip? _managedTrip;
 
   @override
   void initState() {
@@ -57,10 +62,28 @@ class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
     _scheduleRefreshCanPop();
   }
 
+  /// Tap on a trip tile in AddToTripSheet.
+  ///
+  /// If the place is already in [trip] → show ManagePlaceSheet.
+  /// Otherwise → navigate to SelectDaySheet as usual.
   Future<void> _selectTrip(Trip trip) async {
-    context.read<AddToTripCubit>().selectTrip(trip);
-    _push(_selectDayRoute);
+    final state = context.read<AddToTripCubit>().state;
+    final placeId = state.place.id;
+    final alreadyInThisTrip = trip.plan.days.values.any(
+      (day) => day.allPlaces.any((p) => p.placeId == placeId),
+    );
+
+    if (alreadyInThisTrip) {
+      // The place is already in this trip – open the manage sheet.
+      setState(() => _managedTrip = trip);
+      _push(_managePlaceRoute);
+    } else {
+      context.read<AddToTripCubit>().selectTrip(trip);
+      _push(_selectDayRoute);
+    }
   }
+
+  void _closeSheet() => Navigator.of(context).pop();
 
   @override
   Widget build(BuildContext context) {
@@ -91,18 +114,31 @@ class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
               pageBuilder: (_, animation, _) {
                 final child = switch (settings.name) {
                   _createTripRoute => CreateTripPlannerSheet(
-                      onBack: _popInternal,
-                      onClose: () => Navigator.of(context).pop(),
-                    ),
+                    onBack: _popInternal,
+                    onClose: _closeSheet,
+                  ),
                   _selectDayRoute => SelectDaySheet(
-                      onBack: _popInternal,
-                      onClose: () => Navigator.of(context).pop(),
-                    ),
+                    onBack: _popInternal,
+                    onClose: _closeSheet,
+                  ),
+                  _managePlaceRoute => _managedTrip != null
+                      ? ManagePlaceSheet(
+                          trip: _managedTrip!,
+                          onMoveToDay: () {
+                            // Replace manage route with select-day
+                            _navigatorKey.currentState?.pushReplacementNamed(
+                              _selectDayRoute,
+                            );
+                            _scheduleRefreshCanPop();
+                          },
+                          onClose: _closeSheet,
+                        )
+                      : const SizedBox.shrink(),
                   _ => AddToTripSheet(
-                      onBack: _popInternal,
-                      onCreateNew: () => _push(_createTripRoute),
-                      onTripSelected: _selectTrip,
-                    ),
+                    onBack: _popInternal,
+                    onCreateNew: () => _push(_createTripRoute),
+                    onTripSelected: _selectTrip,
+                  ),
                 };
                 return child;
               },

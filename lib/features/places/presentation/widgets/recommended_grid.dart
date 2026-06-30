@@ -82,56 +82,104 @@ class _RecommendedCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Hero(
-              tag: 'rec_${destination.id}',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.r),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    AppCachedImage(
-                      imagePath: destination.imageUrls?.first ?? '',
-                    ),
-                    Positioned(
-                      top: 10.h,
-                      left: 10.w,
-                      child: FavoriteButton(
-                        isFavorite: context.watch<FavoriteCubit>().isFavorite(
-                          destination.id,
+            child: (isLoading || (Skeletonizer.maybeOf(context)?.enabled ?? false))
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(20.r),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        AppCachedImage(
+                          imagePath: destination.imageUrls?.first ?? '',
                         ),
-                        onTap: () {
-                          final cubit = context.read<FavoriteCubit>();
-                          cubit.toggleFavorite(
-                            placeId: destination.id,
-                            isFavorite: !cubit.isFavorite(destination.id),
-                            place: destination,
-                          );
-                        },
-                      ),
-                    ),
-                    if (destination.price != null)
-                      Positioned(
-                        top: 6.h,
-                        right: 10.w,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10.w,
-                            vertical: 4.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.pureWhite.withValues(alpha: 0.92),
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          child: Text(
-                            destination.price.toString(),
-                            style: context.textTheme.labelLarge,
+                        Positioned(
+                          top: 10.h,
+                          left: 10.w,
+                          child: FavoriteButton(
+                            isFavorite: context.watch<FavoriteCubit>().isFavorite(
+                              destination.id,
+                            ),
+                            onTap: () {
+                              final cubit = context.read<FavoriteCubit>();
+                              cubit.toggleFavorite(
+                                placeId: destination.id,
+                                isFavorite: !cubit.isFavorite(destination.id),
+                                place: destination,
+                              );
+                            },
                           ),
                         ),
+                        if (destination.price != null)
+                          Positioned(
+                            top: 6.h,
+                            right: 10.w,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10.w,
+                                vertical: 4.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.pureWhite.withValues(alpha: 0.92),
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                              child: Text(
+                                destination.price.toString(),
+                                style: context.textTheme.labelLarge,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  )
+                : Hero(
+                    tag: 'rec_${destination.id}',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.r),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          AppCachedImage(
+                            imagePath: destination.imageUrls?.first ?? '',
+                          ),
+                          Positioned(
+                            top: 10.h,
+                            left: 10.w,
+                            child: FavoriteButton(
+                              isFavorite: context.watch<FavoriteCubit>().isFavorite(
+                                destination.id,
+                              ),
+                              onTap: () {
+                                final cubit = context.read<FavoriteCubit>();
+                                cubit.toggleFavorite(
+                                  placeId: destination.id,
+                                  isFavorite: !cubit.isFavorite(destination.id),
+                                  place: destination,
+                                );
+                              },
+                            ),
+                          ),
+                          if (destination.price != null)
+                            Positioned(
+                              top: 6.h,
+                              right: 10.w,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10.w,
+                                  vertical: 4.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.pureWhite.withValues(alpha: 0.92),
+                                  borderRadius: BorderRadius.circular(20.r),
+                                ),
+                                child: Text(
+                                  destination.price.toString(),
+                                  style: context.textTheme.labelLarge,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                  ],
-                ),
-              ),
-            ),
+                    ),
+                  ),
           ),
           SizedBox(height: 10.h),
           Padding(

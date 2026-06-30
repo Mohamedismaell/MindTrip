@@ -5,6 +5,8 @@ import 'package:mindtrip/features/profile/data/datasources/profile_local_datasou
 import 'package:mindtrip/features/profile/domain/use_cases/get_my_reviews_use_case.dart';
 import 'package:mindtrip/features/profile/presentation/manager/profile_reviews_cubit.dart';
 import 'package:mindtrip/features/user/domain/usecases/update_profile_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/update_review_use_case.dart';
+import 'package:mindtrip/features/trips/domain/use_cases/delete_review_use_case.dart';
 import 'package:mindtrip/features/user/domain/usecases/upload_profile_photo_use_case.dart';
 import 'package:mindtrip/features/user/manager/cubit/user_cubit.dart';
 import 'package:mindtrip/features/profile/domain/repositories/profile_repository.dart';
@@ -50,7 +52,11 @@ class ProfileDi {
       ),
     );
     sl.registerFactory(
-      () => ProfileReviewsCubit(getMyReviewsUseCase: sl<GetMyReviewsUseCase>()),
+      () => ProfileReviewsCubit(
+        getMyReviewsUseCase: sl<GetMyReviewsUseCase>(),
+        updateReviewUseCase: sl<UpdateReviewUseCase>(),
+        deleteReviewUseCase: sl<DeleteReviewUseCase>(),
+      ),
     );
   }
 }

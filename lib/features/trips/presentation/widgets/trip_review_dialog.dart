@@ -9,10 +9,12 @@ class TripReviewDialog {
   static Future<void> show(
     BuildContext context, {
     required String tripTitle,
+    double initialRating = 4.0,
+    String? initialComment,
     required Function(double rating, String comment) onSubmitted,
   }) {
-    double rating = 4;
-    final controller = TextEditingController();
+    double rating = initialRating;
+    final controller = TextEditingController(text: initialComment);
 
     return AppDialog.show(
       context: context,
@@ -31,7 +33,7 @@ class TripReviewDialog {
               mainAxisSize: MainAxisSize.min,
               children: [
                 RatingBar.builder(
-                  initialRating: 4,
+                  initialRating: initialRating,
                   minRating: 1,
                   direction: Axis.horizontal,
                   itemCount: 5,
@@ -73,7 +75,7 @@ class TripReviewDialog {
           },
         ),
       ),
-      primaryText: 'Write a review',
+      primaryText: initialComment != null ? 'Update review' : 'Write a review',
       onPrimary: () {
         onSubmitted(rating, controller.text);
       },

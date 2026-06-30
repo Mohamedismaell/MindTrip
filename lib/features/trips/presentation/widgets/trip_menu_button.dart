@@ -7,6 +7,7 @@ import 'package:mindtrip/features/trips/presentation/widgets/rename_trip_dialog.
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/share_trip/trip_share_cubit.dart';
 
 class TripMenuButton extends StatelessWidget {
   const TripMenuButton({super.key, required this.trip});
@@ -48,7 +49,10 @@ class TripMenuButton extends StatelessWidget {
             secondaryText: 'Delete',
           );
         } else if (value == share) {
-          context.read<TripsCubit>().shareTrip(trip.tripId);
+          context.read<TripShareCubit>().shareTrip(
+                context: context,
+                trip: trip,
+              );
         }
       },
       itemBuilder: (_) => [

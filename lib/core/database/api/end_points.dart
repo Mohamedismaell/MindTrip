@@ -59,6 +59,7 @@ class EndPoints {
   static String tripReview(String id) => 'api/v1/trips/$id/review';
   static String tripReviewMe(String id) => 'api/v1/trips/$id/review/me';
   static String confirmTrip(String id) => 'api/v1/trips/$id/confirm';
+  static String tripByShareToken(String token) => 'api/v1/trips/share/$token';
 }
 
 class ApiKeys {

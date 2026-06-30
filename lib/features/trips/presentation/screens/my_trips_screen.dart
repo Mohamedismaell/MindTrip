@@ -14,6 +14,8 @@ import 'package:mindtrip/core/shared/presentation/widget/tap_scale_effect.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_cubit.dart';
 import 'package:mindtrip/features/trips/presentation/cubit/trips_state.dart';
+import 'package:mindtrip/features/trips/presentation/share_trip/trip_share_cubit.dart';
+import 'package:mindtrip/features/trips/presentation/share_trip/trp_share_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/start_planning_button.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_card.dart';
@@ -57,29 +59,43 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
           context.go(AppRoutes.profile);
         }
       },
-      child: BlocListener<TripsCubit, TripsState>(
-        listenWhen: (previous, current) =>
-            previous.actionStatus != current.actionStatus,
+      child: BlocListener<TripShareCubit, TripShareState>(
         listener: (context, state) {
-          if (state.actionStatus == TripsActionStatus.loading) {
+          if (state is TripShareLoading) {
             AppDialog.showLoading(context: context);
-          } else if (state.actionStatus == TripsActionStatus.error) {
+          } else if (state is TripShareError) {
             AppDialog.hideLoading(context);
             AppGlassSnackBar.showError(
               context: context,
-              message: state.actionError ?? 'Something went wrong',
+              message: state.message,
             );
-            context.read<TripsCubit>().resetActionStatus();
-          } else if (state.actionStatus == TripsActionStatus.success) {
+          } else if (state is TripShareSuccess) {
             AppDialog.hideLoading(context);
-            // AppGlassSnackBar.showSuccess(
-            //   context: context,
-            //   message: 'Action completed successfully',
-            // );
-            context.read<TripsCubit>().resetActionStatus();
           }
         },
-        child: Scaffold(
+        child: BlocListener<TripsCubit, TripsState>(
+          listenWhen: (previous, current) =>
+              previous.actionStatus != current.actionStatus,
+          listener: (context, state) {
+            if (state.actionStatus == TripsActionStatus.loading) {
+              AppDialog.showLoading(context: context);
+            } else if (state.actionStatus == TripsActionStatus.error) {
+              AppDialog.hideLoading(context);
+              AppGlassSnackBar.showError(
+                context: context,
+                message: state.actionError ?? 'Something went wrong',
+              );
+              context.read<TripsCubit>().resetActionStatus();
+            } else if (state.actionStatus == TripsActionStatus.success) {
+              AppDialog.hideLoading(context);
+              // AppGlassSnackBar.showSuccess(
+              //   context: context,
+              //   message: 'Action completed successfully',
+              // );
+              context.read<TripsCubit>().resetActionStatus();
+            }
+          },
+          child: Scaffold(
           backgroundColor: context.colorTheme.surface,
           floatingActionButton: StartPlanningButton(),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -175,6 +191,7 @@ class _MyTripsScreenState extends State<MyTripsScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }
