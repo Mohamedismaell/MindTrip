@@ -31,7 +31,7 @@ class MapDi {
       () => GooglePlacesRemoteDatasource(dio: sl<Dio>()),
     );
     sl.registerLazySingleton<MapRouteRemoteDatasource>(
-      () => MapRouteRemoteDatasourceImpl(dio: sl<Dio>()),
+      () => MapRouteRemoteDatasourceImpl(dio: Dio()),
     );
 
     // Repositories

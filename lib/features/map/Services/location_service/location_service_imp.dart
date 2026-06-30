@@ -8,6 +8,12 @@ abstract class LocationService {
   Future<LocationAccessStatus> checkAccess();
   Future<Position?> getCurrentLocation();
   Future<LocationResult?> getCurrentLocationDetails();
+
+  Stream<Position> getPositionStream({
+    LocationAccuracy accuracy = LocationAccuracy.high,
+    int distanceFilter = 8,
+  });
+
   double? getDistanceBetween({
     required double userLat,
     required double userLng,
@@ -19,13 +25,11 @@ abstract class LocationService {
 class LocationServiceImp implements LocationService {
   @override
   Future<LocationAccessStatus> checkAccess() async {
-    //GPS
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return LocationAccessStatus.serviceDisabled;
     }
 
-    //Permission
     var permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -58,6 +62,19 @@ class LocationServiceImp implements LocationService {
   }
 
   @override
+  Stream<Position> getPositionStream({
+    LocationAccuracy accuracy = LocationAccuracy.high,
+    int distanceFilter = 8,
+  }) {
+    return Geolocator.getPositionStream(
+      locationSettings: LocationSettings(
+        accuracy: accuracy,
+        distanceFilter: distanceFilter,
+      ),
+    );
+  }
+
+  @override
   Future<LocationResult?> getCurrentLocationDetails() async {
     try {
       final position = await getCurrentLocation();
@@ -67,16 +84,10 @@ class LocationServiceImp implements LocationService {
         position.latitude,
         position.longitude,
       );
-      print('place: $placemarks');
 
       if (placemarks.isEmpty) return null;
 
       final place = placemarks.first;
-      print('place: $place');
-      print('country: ${place.country}');
-      print('city: ${place.locality}');
-      print('subAdministrativeArea: ${place.subAdministrativeArea}');
-      print('administrativeArea: ${place.administrativeArea}');
       return LocationResult(
         latitude: position.latitude,
         longitude: position.longitude,
@@ -99,7 +110,6 @@ class LocationServiceImp implements LocationService {
 
   String _cleanCityName(String name) {
     if (name.isEmpty) return '';
-
     return name.replaceAll('Governorate', '').replaceAll(' محافظة', '').trim();
   }
 
@@ -111,13 +121,7 @@ class LocationServiceImp implements LocationService {
     required double placeLng,
   }) {
     try {
-      final result = Geolocator.distanceBetween(
-        userLat,
-        userLng,
-        placeLat,
-        placeLng,
-      );
-      return result;
+      return Geolocator.distanceBetween(userLat, userLng, placeLat, placeLng);
     } catch (_) {
       return null;
     }

@@ -10,41 +10,45 @@ sealed class MapNavigationState with _$MapNavigationState {
   const MapNavigationState._();
 
   const factory MapNavigationState({
-    MapRoute? activeRoute,
-
+    @Default({}) Map<NavigationProfile, MapRoute> routesByProfile,
     @Default(false) bool isRouteLoading,
-
     String? routeError,
-
     @Default(NavigationProfile.driving) NavigationProfile selectedProfile,
-
     @Default(0) int currentStepIndex,
-
     @Default(0) int totalLegs,
-
     @Default(0) int currentLegIndex,
-
     @Default(false) bool isSequentialMode,
-
     String? destinationName,
-
     @Default([]) List<String> placeNames,
+    double? remainingStepDistanceMeters,
   }) = _MapNavigationState;
 
   factory MapNavigationState.initial() => const MapNavigationState();
 
+  MapRoute? get activeRoute => routesByProfile[selectedProfile];
+
   MapNavigationState clearActiveRoute() {
-    return copyWith(activeRoute: null);
+    final updatedRoutes = Map<NavigationProfile, MapRoute>.from(
+      routesByProfile,
+    );
+    updatedRoutes.remove(selectedProfile);
+    return copyWith(routesByProfile: updatedRoutes);
+  }
+
+  MapNavigationState clearAllRoutes() {
+    return copyWith(routesByProfile: {});
   }
 
   MapNavigationState clearRouteError() {
     return copyWith(routeError: null);
   }
 
-  String formatDuration(int minutes) {
-    final days = minutes ~/ 1440;
-    final hours = (minutes % 1440) ~/ 60;
-    final mins = minutes % 60;
+  String formatDurationFromSeconds(double seconds) {
+    final totalMinutes = (seconds / 60).round();
+
+    final days = totalMinutes ~/ 1440;
+    final hours = (totalMinutes % 1440) ~/ 60;
+    final mins = totalMinutes % 60;
 
     if (days > 0) {
       if (hours > 0) return '${days}d ${hours}h';

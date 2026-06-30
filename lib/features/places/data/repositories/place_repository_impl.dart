@@ -115,32 +115,32 @@ class PlaceRepositoryImpl implements PlaceRepository {
     return Result.error(ApiErrorMapper.fromException(e));
   }
 
-  @override
-  Future<Result<PaginatedResponse<PlaceEntity>>> searchPlaces({
-    String? query,
-    Map<String, dynamic>? filters,
-    int page = 1,
-    int limit = 10,
-    CancelToken? cancelToken,
-  }) async {
-    try {
-      final response = await remoteDataSource.searchPlaces(
-        query: query,
-        filters: filters,
-        page: page,
-        limit: limit,
-        cancelToken: cancelToken,
-      );
-      return Result.ok(response.map((e) => e.toEntity()));
-    } on DioException catch (e) {
-      if (CancelToken.isCancel(e)) {
-        return const Result.cancelled();
-      }
-      return Result.error(ApiErrorMapper.fromException(e));
-    } catch (e) {
-      return Result.error(ApiErrorMapper.fromException(e));
-    }
-  }
+  // @override
+  // Future<Result<PaginatedResponse<PlaceEntity>>> searchPlaces({
+  //   String? query,
+  //   Map<String, dynamic>? filters,
+  //   int page = 1,
+  //   int limit = 10,
+  //   CancelToken? cancelToken,
+  // }) async {
+  //   try {
+  //     final response = await remoteDataSource.searchPlaces(
+  //       query: query,
+  //       filters: filters,
+  //       page: page,
+  //       limit: limit,
+  //       cancelToken: cancelToken,
+  //     );
+  //     return Result.ok(response.map((e) => e.toEntity()));
+  //   } on DioException catch (e) {
+  //     if (CancelToken.isCancel(e)) {
+  //       return const Result.cancelled();
+  //     }
+  //     return Result.error(ApiErrorMapper.fromException(e));
+  //   } catch (e) {
+  //     return Result.error(ApiErrorMapper.fromException(e));
+  //   }
+  // }
 
   @override
   Future<Result<PaginatedResponse<PlaceEntity>>> getPlaces({

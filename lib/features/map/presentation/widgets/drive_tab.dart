@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mindtrip/core/shared/injection/service_locator.dart';
+import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/extension.dart';
-import 'package:mindtrip/core/shared/presentation/widget/custom_otlined_button.dart';
 import 'package:mindtrip/features/map/Services/location_service/location_service_imp.dart';
 import 'package:mindtrip/features/map/domain/entities/navigation_profile.dart';
 import 'package:mindtrip/features/map/domain/utils/distance_utils.dart';
@@ -18,7 +18,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 class DriveTab extends StatelessWidget {
   const DriveTab({super.key});
 
-  //ToDo: Need to be checked
   Future<void> navigateAll(BuildContext context) async {
     final position = await sl<LocationService>().getCurrentLocation();
     if (context.mounted && position != null) {
@@ -30,7 +29,6 @@ class DriveTab extends StatelessWidget {
       final isTripMode = context.read<MapCubit>().state.hasTripDays;
 
       if (isTripMode) {
-        // In trip mode, route in strict list order
         for (final entry in annotations) {
           waypoints.add(
             Position(
@@ -51,6 +49,7 @@ class DriveTab extends StatelessWidget {
             currentLat,
             currentLng,
           );
+
           if (nearest != null) {
             waypoints.add(
               Position(
@@ -78,9 +77,10 @@ class DriveTab extends StatelessWidget {
       buildWhen: (previous, current) {
         return previous.activeRoute != current.activeRoute ||
             previous.selectedProfile != current.selectedProfile ||
-            previous.isRouteLoading != current.isRouteLoading;
-        // previous.routeError != current.routeError;
-        // previous.currentStepIndex != current.currentStepIndex;
+            previous.isRouteLoading != current.isRouteLoading ||
+            previous.routeError != current.routeError ||
+            previous.currentLegIndex != current.currentLegIndex ||
+            previous.routesByProfile != current.routesByProfile;
       },
       builder: (context, navigationState) {
         if (navigationState.activeRoute == null &&
@@ -88,7 +88,6 @@ class DriveTab extends StatelessWidget {
           return _buildEmptyRoute(context, () => navigateAll(context));
         }
 
-        // Error state
         if (navigationState.routeError != null) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
@@ -112,7 +111,7 @@ class DriveTab extends StatelessWidget {
 
         final distanceText = route != null
             ? navigationState.formatDistance(route.distance)
-            : (isLoading ? '0.0 km' : '5.0');
+            : '--';
 
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
@@ -128,21 +127,20 @@ class DriveTab extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Row(
                     children: [
-                      Flexible(
-                        child: Text(
-                          '${navigationState.destinationName}',
-                          style: AppTextStyles.h8Bold,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
                       Expanded(
                         child: Text(
-                          distanceText,
-                          style: AppTextStyles.h9SemiBold,
-                          textAlign: TextAlign.right,
+                          navigationState.destinationName!,
+                          style: AppTextStyles.h8Bold,
+                          textAlign: TextAlign.left,
+                          // maxLines: 1,
+                          // overflow: TextOverflow.ellipsis,
                         ),
+                      ),
+                      SizedBox(width: 20.w),
+                      Text(
+                        distanceText,
+                        style: AppTextStyles.h9SemiBold,
+                        textAlign: TextAlign.right,
                       ),
                     ],
                   ),
@@ -247,19 +245,21 @@ Widget _buildDriveError(BuildContext context, String error) {
   );
 }
 
-//  Profile Chips
-
 Widget _buildProfileChips(BuildContext context, NavigationProfile selected) {
   final navigationState = context.watch<MapNavigationCubit>().state;
-  final route = navigationState.activeRoute;
-  final durationMin = navigationState.formatDuration(
-    route?.duration.ceil() ?? 0,
-  );
+
   return SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     child: Row(
       children: NavigationProfile.values.map((profile) {
         final isSelected = selected == profile;
+        final routeForProfile = navigationState.routesByProfile[profile];
+
+        final durationText = routeForProfile != null
+            ? navigationState.formatDurationFromSeconds(
+                routeForProfile.duration,
+              )
+            : '--';
 
         return Padding(
           padding: EdgeInsets.only(right: 8.w),
@@ -293,10 +293,9 @@ Widget _buildProfileChips(BuildContext context, NavigationProfile selected) {
                           : context.colorTheme.onSurface,
                     ),
                   ),
-
                   SizedBox(width: 8.w),
                   Text(
-                    durationMin,
+                    durationText,
                     style: AppTextStyles.h10SemiBold.copyWith(
                       color: isSelected
                           ? context.colorTheme.onPrimary
@@ -312,8 +311,6 @@ Widget _buildProfileChips(BuildContext context, NavigationProfile selected) {
     ),
   );
 }
-
-//  Empty Route
 
 Widget _buildEmptyRoute(BuildContext context, VoidCallback onTap) {
   return Center(

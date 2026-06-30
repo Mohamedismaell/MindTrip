@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mindtrip/core/utils/app_env.dart';
 import '../../domain/entities/map_route.dart';
 import '../../domain/entities/navigation_profile.dart';
 import '../../domain/entities/route_leg.dart';
@@ -16,7 +17,7 @@ abstract class MapRouteRemoteDatasource {
 
 class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
   final Dio dio;
-  static const String _accessToken = String.fromEnvironment('ACCESS_TOKEN');
+  final String accessToken = AppEnv.mapBoxApiKey;
 
   MapRouteRemoteDatasourceImpl({required this.dio});
 
@@ -34,7 +35,7 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
       'steps': 'true',
       'banner_instructions': 'true',
       'language': 'en',
-      'access_token': _accessToken,
+      'access_token': accessToken,
     };
 
     //Todo: Add congestion annotations only for driving-traffic
@@ -110,10 +111,10 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
   RouteStep _parseStep(Map<String, dynamic> rawStep) {
     final maneuver = rawStep['maneuver'] as Map<String, dynamic>;
 
-    // Parse banner instructions
     String? bannerText;
     String? bannerType;
     String? bannerModifier;
+
     final bannerInstructions = rawStep['bannerInstructions'] as List?;
     if (bannerInstructions != null && bannerInstructions.isNotEmpty) {
       final primary = bannerInstructions[0]['primary'];
@@ -122,6 +123,14 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
         bannerType = primary['type'] as String?;
         bannerModifier = primary['modifier'] as String?;
       }
+    }
+
+    Position? maneuverLocation;
+    final rawLocation = maneuver['location'] as List?;
+    if (rawLocation != null && rawLocation.length >= 2) {
+      final lng = (rawLocation[0] as num).toDouble();
+      final lat = (rawLocation[1] as num).toDouble();
+      maneuverLocation = Position(lng, lat);
     }
 
     return RouteStep(
@@ -133,6 +142,7 @@ class MapRouteRemoteDatasourceImpl implements MapRouteRemoteDatasource {
       bannerText: bannerText,
       bannerType: bannerType,
       bannerModifier: bannerModifier,
+      maneuverLocation: maneuverLocation,
     );
   }
 }

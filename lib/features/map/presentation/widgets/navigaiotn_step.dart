@@ -13,6 +13,13 @@ class NavigaiotnStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MapNavigationCubit, MapNavigationState>(
+      buildWhen: (previous, current) {
+        return previous.activeRoute != current.activeRoute ||
+            previous.currentStepIndex != current.currentStepIndex ||
+            previous.isRouteLoading != current.isRouteLoading ||
+            previous.remainingStepDistanceMeters !=
+                current.remainingStepDistanceMeters;
+      },
       builder: (context, state) {
         final route = state.activeRoute;
         if (route == null || state.isRouteLoading) {
@@ -20,18 +27,24 @@ class NavigaiotnStep extends StatelessWidget {
         }
 
         final steps = route.allSteps;
-        final stepIndex = state.currentStepIndex;
-        final currentStep = (stepIndex >= 0 && stepIndex < steps.length)
-            ? steps[stepIndex]
-            : null;
+        if (steps.isEmpty) {
+          return const SizedBox.shrink();
+        }
 
-        // final instruction =
-        //     currentStep?.instruction ??
-        //     'Proceed to ${state.destinationName ?? "destination"}';
-        final durationMin = state.formatDuration(route.duration.ceil());
-        final distanceText = currentStep != null
-            ? state.formatDistance(currentStep.distance)
-            : '';
+        final stepIndex = state.currentStepIndex.clamp(0, steps.length - 1);
+        final currentStep = steps[stepIndex];
+
+        final durationText = state.formatDurationFromSeconds(route.duration);
+
+        final distanceValue =
+            state.remainingStepDistanceMeters ?? currentStep.distance;
+        final distanceText = state.formatDistance(distanceValue);
+
+        final instructionText =
+            currentStep.bannerText?.trim().isNotEmpty == true
+            ? currentStep.bannerText!
+            : currentStep.instruction;
+
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
           decoration: BoxDecoration(
@@ -43,18 +56,14 @@ class NavigaiotnStep extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 4.h),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Step number circle
-                Center(
-                  child: Icon(
-                    _getManeuverIcon(
-                      currentStep?.bannerType,
-                      currentStep?.bannerModifier,
-                    ),
-                    size: 42.sp,
-                    color: context.colorTheme.onSurface,
+                Icon(
+                  _getManeuverIcon(
+                    currentStep.bannerType,
+                    currentStep.bannerModifier,
                   ),
+                  size: 42.sp,
+                  color: context.colorTheme.onSurface,
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
@@ -69,10 +78,13 @@ class NavigaiotnStep extends StatelessWidget {
                               style: AppTextStyles.h8SemiBold.copyWith(
                                 color: context.colorTheme.onSurface,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          SizedBox(width: 8.w),
                           Text(
-                            durationMin,
+                            durationText,
                             style: AppTextStyles.h9SemiBold.copyWith(
                               color: context.colorTheme.onSurface,
                             ),
@@ -80,14 +92,13 @@ class NavigaiotnStep extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 2.h),
-
-                      Text(
-                        currentStep?.bannerText ??
-                            currentStep?.instruction ??
-                            '',
-                        style: context.textTheme.bodyMedium,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Flexible(
+                        child: Text(
+                          instructionText,
+                          style: context.textTheme.bodyMedium,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
@@ -103,6 +114,7 @@ class NavigaiotnStep extends StatelessWidget {
 
 IconData _getManeuverIcon(String? type, String? modifier) {
   if (type == null) return Icons.straight;
+
   switch (type) {
     case 'turn':
       if (modifier == 'left' ||
