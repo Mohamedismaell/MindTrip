@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
@@ -51,7 +53,9 @@ class PlaceDetailsReviews extends StatelessWidget {
               ],
             ),
             SizedBox(width: 33.w),
-            Expanded(child: _RatingBars(rating: rating)),
+            Expanded(
+              child: _RatingBars(rating: rating, seed: place.id),
+            ),
           ],
         ),
         //! no review cards for now
@@ -82,22 +86,29 @@ class PlaceDetailsReviews extends StatelessWidget {
 }
 
 //Todo need to be replaced with real data
+
 class _RatingBars extends StatelessWidget {
   final double rating;
+  final String seed;
 
-  const _RatingBars({required this.rating});
+  const _RatingBars({required this.rating, required this.seed});
 
   @override
   Widget build(BuildContext context) {
+    final rng = Random(seed.hashCode);
     final normalized = (rating / 5).clamp(0.0, 1.0);
+
+    final bar5 = normalized * (0.75 + rng.nextDouble() * 0.25); // 75–100%
+    final bar4 = normalized * (0.40 + rng.nextDouble() * 0.30); // 40–70%
+    final bar3 = normalized * (0.10 + rng.nextDouble() * 0.20); // 10–30%
 
     return Column(
       children: [
-        _RatingBar(label: '5', value: normalized),
+        _RatingBar(label: '5', value: bar5.clamp(0.0, 1.0)),
         SizedBox(height: 11.h),
-        _RatingBar(label: '4', value: normalized * 0.62),
+        _RatingBar(label: '4', value: bar4.clamp(0.0, 1.0)),
         SizedBox(height: 11.h),
-        _RatingBar(label: '3', value: normalized * 0.28),
+        _RatingBar(label: '3', value: bar3.clamp(0.0, 1.0)),
       ],
     );
   }

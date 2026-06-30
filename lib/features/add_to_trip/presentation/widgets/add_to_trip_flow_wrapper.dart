@@ -5,6 +5,7 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/cubit/add_to_trip_cubit.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/add_to_trip_sheet.dart';
 import 'package:mindtrip/features/add_to_trip/presentation/widgets/create_trip_planner_sheet.dart';
+import 'package:mindtrip/features/add_to_trip/presentation/widgets/select_day_sheet.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 
 class AddToTripFlowWrapper extends StatefulWidget {
@@ -17,6 +18,7 @@ class AddToTripFlowWrapper extends StatefulWidget {
 class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
   static const _selectTripRoute = '/select-trip';
   static const _createTripRoute = '/create-trip';
+  static const _selectDayRoute = '/select-day';
 
   final _navigatorKey = GlobalKey<NavigatorState>();
   bool _canPopInternal = false;
@@ -57,8 +59,7 @@ class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
 
   Future<void> _selectTrip(Trip trip) async {
     context.read<AddToTripCubit>().selectTrip(trip);
-    await context.read<AddToTripCubit>().addToExistingTrip();
-    if (mounted) Navigator.of(context).pop();
+    _push(_selectDayRoute);
   }
 
   @override
@@ -90,6 +91,10 @@ class _AddToTripFlowWrapperState extends State<AddToTripFlowWrapper> {
               pageBuilder: (_, animation, _) {
                 final child = switch (settings.name) {
                   _createTripRoute => CreateTripPlannerSheet(
+                      onBack: _popInternal,
+                      onClose: () => Navigator.of(context).pop(),
+                    ),
+                  _selectDayRoute => SelectDaySheet(
                       onBack: _popInternal,
                       onClose: () => Navigator.of(context).pop(),
                     ),

@@ -100,10 +100,9 @@ class LoggingInterceptor extends Interceptor {
       buffer
         ..writeln('  │ Data:')
         ..writeln(
-          // _indent(
-          //   _pretty(_truncateStructure(response.data), maxChars: _maxBodyChars),
-          // ),
-          _indent(_prettyFull(response.data)),
+          _indent(
+            _pretty(_truncateStructure(response.data), maxChars: _maxBodyChars),
+          ),
         );
     } else {
       buffer.writeln('  │ Data: [Skipped]');
@@ -167,12 +166,10 @@ class LoggingInterceptor extends Interceptor {
         buffer.writeln('   • size: ${f.length} bytes');
       }
 
-      // return _truncateText(buffer.toString(), _maxBodyChars);
-      return buffer.toString();
+      return _truncateText(buffer.toString(), _maxBodyChars);
     }
 
-    // return _pretty(_truncateStructure(data), maxChars: _maxBodyChars);
-    return _prettyFull(data);
+    return _pretty(_truncateStructure(data), maxChars: _maxBodyChars);
   }
 
   dynamic _truncateStructure(dynamic value) {

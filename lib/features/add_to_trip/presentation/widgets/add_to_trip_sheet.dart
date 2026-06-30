@@ -47,15 +47,7 @@ class AddToTripSheet extends StatelessWidget {
     return BlocConsumer<AddToTripCubit, AddToTripState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        if (state.status == AddToTripStatus.editingExistingTripPlan) {
-          _showLoading(
-            context,
-            const GeneratingDialog(
-              title: 'Edit itinerary...',
-              description: 'Our AI is adding this place to your trip.',
-            ),
-          );
-        } else if (state.status == AddToTripStatus.updatingTrip) {
+        if (state.status == AddToTripStatus.updatingTrip) {
           _showLoading(
             context,
             const GeneratingDialog(
@@ -240,7 +232,12 @@ class _TripTile extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: context.colorTheme.outline),
+            Skeleton.shade(
+              child: Icon(
+                Icons.chevron_right,
+                color: context.colorTheme.outline,
+              ),
+            ),
           ],
         ),
       ),

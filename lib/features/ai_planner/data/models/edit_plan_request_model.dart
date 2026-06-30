@@ -32,6 +32,8 @@ abstract class ItemToEdit with _$ItemToEdit {
   const factory ItemToEdit({
     @JsonKey(name: 'place_id') String? placeId,
     @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'day') int? day,
+    @JsonKey(name: 'slot') String? slot,
   }) = _ItemToEdit;
 
   factory ItemToEdit.fromJson(Map<String, dynamic> json) =>

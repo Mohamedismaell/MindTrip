@@ -373,7 +373,7 @@ $ItemToEditCopyWith<$Res>? get item {
 /// @nodoc
 mixin _$ItemToEdit {
 
-@JsonKey(name: 'place_id') String? get placeId;@JsonKey(name: 'name') String? get name;
+@JsonKey(name: 'place_id') String? get placeId;@JsonKey(name: 'name') String? get name;@JsonKey(name: 'day') int? get day;@JsonKey(name: 'slot') String? get slot;
 /// Create a copy of ItemToEdit
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -386,16 +386,16 @@ $ItemToEditCopyWith<ItemToEdit> get copyWith => _$ItemToEditCopyWithImpl<ItemToE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemToEdit&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemToEdit&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name)&&(identical(other.day, day) || other.day == day)&&(identical(other.slot, slot) || other.slot == slot));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,placeId,name);
+int get hashCode => Object.hash(runtimeType,placeId,name,day,slot);
 
 @override
 String toString() {
-  return 'ItemToEdit(placeId: $placeId, name: $name)';
+  return 'ItemToEdit(placeId: $placeId, name: $name, day: $day, slot: $slot)';
 }
 
 
@@ -406,7 +406,7 @@ abstract mixin class $ItemToEditCopyWith<$Res>  {
   factory $ItemToEditCopyWith(ItemToEdit value, $Res Function(ItemToEdit) _then) = _$ItemToEditCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'place_id') String? placeId,@JsonKey(name: 'name') String? name
+@JsonKey(name: 'place_id') String? placeId,@JsonKey(name: 'name') String? name,@JsonKey(name: 'day') int? day,@JsonKey(name: 'slot') String? slot
 });
 
 
@@ -423,10 +423,12 @@ class _$ItemToEditCopyWithImpl<$Res>
 
 /// Create a copy of ItemToEdit
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? placeId = freezed,Object? name = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? placeId = freezed,Object? name = freezed,Object? day = freezed,Object? slot = freezed,}) {
   return _then(_self.copyWith(
 placeId: freezed == placeId ? _self.placeId : placeId // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,day: freezed == day ? _self.day : day // ignore: cast_nullable_to_non_nullable
+as int?,slot: freezed == slot ? _self.slot : slot // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -512,10 +514,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String? placeId, @JsonKey(name: 'name')  String? name)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String? placeId, @JsonKey(name: 'name')  String? name, @JsonKey(name: 'day')  int? day, @JsonKey(name: 'slot')  String? slot)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ItemToEdit() when $default != null:
-return $default(_that.placeId,_that.name);case _:
+return $default(_that.placeId,_that.name,_that.day,_that.slot);case _:
   return orElse();
 
 }
@@ -533,10 +535,10 @@ return $default(_that.placeId,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String? placeId, @JsonKey(name: 'name')  String? name)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'place_id')  String? placeId, @JsonKey(name: 'name')  String? name, @JsonKey(name: 'day')  int? day, @JsonKey(name: 'slot')  String? slot)  $default,) {final _that = this;
 switch (_that) {
 case _ItemToEdit():
-return $default(_that.placeId,_that.name);case _:
+return $default(_that.placeId,_that.name,_that.day,_that.slot);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -553,10 +555,10 @@ return $default(_that.placeId,_that.name);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'place_id')  String? placeId, @JsonKey(name: 'name')  String? name)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'place_id')  String? placeId, @JsonKey(name: 'name')  String? name, @JsonKey(name: 'day')  int? day, @JsonKey(name: 'slot')  String? slot)?  $default,) {final _that = this;
 switch (_that) {
 case _ItemToEdit() when $default != null:
-return $default(_that.placeId,_that.name);case _:
+return $default(_that.placeId,_that.name,_that.day,_that.slot);case _:
   return null;
 
 }
@@ -568,11 +570,13 @@ return $default(_that.placeId,_that.name);case _:
 @JsonSerializable()
 
 class _ItemToEdit implements ItemToEdit {
-  const _ItemToEdit({@JsonKey(name: 'place_id') this.placeId, @JsonKey(name: 'name') this.name});
+  const _ItemToEdit({@JsonKey(name: 'place_id') this.placeId, @JsonKey(name: 'name') this.name, @JsonKey(name: 'day') this.day, @JsonKey(name: 'slot') this.slot});
   factory _ItemToEdit.fromJson(Map<String, dynamic> json) => _$ItemToEditFromJson(json);
 
 @override@JsonKey(name: 'place_id') final  String? placeId;
 @override@JsonKey(name: 'name') final  String? name;
+@override@JsonKey(name: 'day') final  int? day;
+@override@JsonKey(name: 'slot') final  String? slot;
 
 /// Create a copy of ItemToEdit
 /// with the given fields replaced by the non-null parameter values.
@@ -587,16 +591,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemToEdit&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemToEdit&&(identical(other.placeId, placeId) || other.placeId == placeId)&&(identical(other.name, name) || other.name == name)&&(identical(other.day, day) || other.day == day)&&(identical(other.slot, slot) || other.slot == slot));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,placeId,name);
+int get hashCode => Object.hash(runtimeType,placeId,name,day,slot);
 
 @override
 String toString() {
-  return 'ItemToEdit(placeId: $placeId, name: $name)';
+  return 'ItemToEdit(placeId: $placeId, name: $name, day: $day, slot: $slot)';
 }
 
 
@@ -607,7 +611,7 @@ abstract mixin class _$ItemToEditCopyWith<$Res> implements $ItemToEditCopyWith<$
   factory _$ItemToEditCopyWith(_ItemToEdit value, $Res Function(_ItemToEdit) _then) = __$ItemToEditCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'place_id') String? placeId,@JsonKey(name: 'name') String? name
+@JsonKey(name: 'place_id') String? placeId,@JsonKey(name: 'name') String? name,@JsonKey(name: 'day') int? day,@JsonKey(name: 'slot') String? slot
 });
 
 
@@ -624,10 +628,12 @@ class __$ItemToEditCopyWithImpl<$Res>
 
 /// Create a copy of ItemToEdit
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? placeId = freezed,Object? name = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? placeId = freezed,Object? name = freezed,Object? day = freezed,Object? slot = freezed,}) {
   return _then(_ItemToEdit(
 placeId: freezed == placeId ? _self.placeId : placeId // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,day: freezed == day ? _self.day : day // ignore: cast_nullable_to_non_nullable
+as int?,slot: freezed == slot ? _self.slot : slot // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

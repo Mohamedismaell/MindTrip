@@ -65,10 +65,17 @@ Map<String, dynamic> _$EditPlanRequestModelToJson(
 _ItemToEdit _$ItemToEditFromJson(Map<String, dynamic> json) => _ItemToEdit(
   placeId: json['place_id'] as String?,
   name: json['name'] as String?,
+  day: (json['day'] as num?)?.toInt(),
+  slot: json['slot'] as String?,
 );
 
 Map<String, dynamic> _$ItemToEditToJson(_ItemToEdit instance) =>
-    <String, dynamic>{'place_id': instance.placeId, 'name': instance.name};
+    <String, dynamic>{
+      'place_id': instance.placeId,
+      'name': instance.name,
+      'day': instance.day,
+      'slot': instance.slot,
+    };
 
 _ConversationTurnModel _$ConversationTurnModelFromJson(
   Map<String, dynamic> json,

@@ -11,7 +11,6 @@ import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/core/shared/presentation/widget/custom_gradient_button.dart';
 import 'package:mindtrip/features/trips/domain/entities/trip.dart';
 import 'package:mindtrip/features/trips/presentation/widgets/trip_menu_button.dart';
-import 'package:mindtrip/features/profile/presentation/widgets/profile/favorite_trip_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 //Todo: Edit compeleted Trips Ui
 //Todo: Chanege the progress count for the trip
@@ -62,8 +61,9 @@ class TripCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Image
-              Hero(
+              _OptionalHero(
                 tag: 'trip-image-${trip.tripId}',
+                enabled: trip.tripId.isNotEmpty,
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: ClipRRect(
@@ -318,5 +318,25 @@ class TripCard extends StatelessWidget {
       default:
         return status.name.capitalize();
     }
+  }
+}
+
+class _OptionalHero extends StatelessWidget {
+  const _OptionalHero({
+    required this.tag,
+    required this.child,
+    required this.enabled,
+  });
+
+  final String tag;
+  final Widget child;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    if (enabled) {
+      return Hero(tag: tag, child: child);
+    }
+    return child;
   }
 }

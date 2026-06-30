@@ -30,8 +30,8 @@ class ThemeIcon extends StatelessWidget {
                     onPressed: () => context.read<ThemeCubit>().toggleTheme(),
                     style: ElevatedButton.styleFrom(
                       elevation: 10,
-                      backgroundColor: context.colorTheme.surface.withOpacity(
-                        0.7,
+                      backgroundColor: context.colorTheme.surface.withValues(
+                        alpha: 0.7,
                       ),
                       // backgroundColor: Colors.transparent,
                       padding: EdgeInsets.all(6.r),

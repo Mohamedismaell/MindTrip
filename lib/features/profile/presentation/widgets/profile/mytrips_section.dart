@@ -166,3 +166,23 @@ class _MyTripCard extends StatelessWidget {
     );
   }
 }
+
+// class _OptionalHero extends StatelessWidget {
+//   const _OptionalHero({
+//     required this.tag,
+//     required this.child,
+//     required this.enabled,
+//   });
+
+//   final String tag;
+//   final Widget child;
+//   final bool enabled;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (enabled) {
+//       return Hero(tag: tag, child: child);
+//     }
+//     return child;
+//   }
+// }

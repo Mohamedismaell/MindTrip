@@ -359,4 +359,19 @@ class AiPlannerCubit extends SafeCubit<AiPlannerState> {
       mustInclude: mustIncludeNames,
     );
   }
+
+  // CollectedPlannerDataEntity _buildCollectedData(
+  //   GeneratePlanRequestModel request,
+  // ) {
+  //   return CollectedPlannerDataEntity(
+  //     destination: request.city,
+  //     days: request.days,
+  //     budget: request.budget,
+  //     interests: request.interests,
+  //     people: request.people,
+  //     mustInclude: request.mustInclude
+  //         .where((e) => e.trim().isNotEmpty)
+  //         .toList(),
+  //   );
+  // }
 }

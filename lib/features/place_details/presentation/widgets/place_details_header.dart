@@ -51,7 +51,7 @@ class PlaceDetailsHeader extends StatelessWidget {
             SizedBox(width: 8.w),
             Expanded(
               child: Text(
-                '${place.location.city}, Egypt',
+                '${place.location.cityEn}, Egypt',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: context.textTheme.bodyLarge?.copyWith(

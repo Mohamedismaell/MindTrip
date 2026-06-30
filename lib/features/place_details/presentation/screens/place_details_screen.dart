@@ -157,8 +157,11 @@ class _PlaceDetailsBody extends StatelessWidget {
                               PlaceDetailsPhotoStrip(imageUrls: imageUrls),
                             ],
                             SizedBox(height: 27.h),
-                            PlaceDetailsOverview(place: place),
-                            // SizedBox(height: 32.h),
+                            if (place.description != '' &&
+                                place.description != null) ...[
+                              PlaceDetailsOverview(place: place),
+                              SizedBox(height: 32.h),
+                            ],
                             PlaceDetailsTripButton(place: place),
                             SizedBox(height: 30.h),
                             PlaceDetailsVisitInfo(place: place),
