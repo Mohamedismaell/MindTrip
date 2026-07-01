@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/utils/dummy_data.dart';
-import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_cached_image.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
+import 'package:mindtrip/core/shared/routes/app_routes.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/theme/app_text_styles.dart';
 import 'package:mindtrip/core/utils/distance_calculator.dart';
+import 'package:mindtrip/core/utils/dummy_data.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PlaceDetailsNearbyPlaces extends StatefulWidget {
   final PlaceEntity currentPlace;
+
   const PlaceDetailsNearbyPlaces({super.key, required this.currentPlace});
 
   @override
@@ -62,6 +65,7 @@ class _PlaceDetailsNearbyPlacesState extends State<PlaceDetailsNearbyPlaces> {
           previous.nearbyPlaces != current.nearbyPlaces,
       builder: (context, state) {
         final cubit = context.read<PlaceDetailsCubit>();
+
         if (state.nearbyStatus == NearbyStatus.error) {
           return AppErrorWidget(
             title: 'Nearby places unavailable',
@@ -151,69 +155,86 @@ class _NearbyPlaceCard extends StatelessWidget {
       endLng: place.location.longitude,
     );
 
-    return Container(
-      width: 152.w,
-      decoration: BoxDecoration(
-        color: AppColors.pureWhite,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: context.colorTheme.outline),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: AppCachedImage(
-              imagePath: image,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+        onTap: () {
+          if (place.id == currentPlace.id) return;
+
+          context.push(
+            '${AppRoutes.placeDetails}?placeId=${place.id}',
+            extra: place,
+          );
+        },
+        child: Container(
+          width: 152.w,
+          decoration: BoxDecoration(
+            color: AppColors.pureWhite,
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(color: context.colorTheme.outline),
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      place.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.h8SemiBold.copyWith(
-                        color: context.colorTheme.onSurface,
-                      ),
-                    ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: AppCachedImage(
+                  imagePath: image,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 5.w,
+                    vertical: 10.h,
                   ),
-                  SizedBox(height: 4.h),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.directions_car_filled_outlined,
-                          size: 20.r,
-                          color: context.colorTheme.primary,
-                        ),
-                        SizedBox(width: 8.w),
-                        Expanded(
-                          child: Text(
-                            DistanceCalculator.formatDistance(distance),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colorTheme.primary,
-                            ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          place.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.h8SemiBold.copyWith(
+                            color: context.colorTheme.onSurface,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.directions_car_filled_outlined,
+                              size: 20.r,
+                              color: context.colorTheme.primary,
+                            ),
+                            SizedBox(width: 8.w),
+                            Expanded(
+                              child: Text(
+                                DistanceCalculator.formatDistance(distance),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  color: context.colorTheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -49,7 +49,7 @@ enum PlaceCategory {
     PlaceCategory.entertainment => 'entertainment',
     PlaceCategory.shopping => 'shopping',
     PlaceCategory.artsCulture => 'arts_culture',
-    PlaceCategory.hotels => 'hotels',
+    PlaceCategory.hotels => 'hotel',
   };
   String get displayName => switch (this) {
     PlaceCategory.all => 'All',

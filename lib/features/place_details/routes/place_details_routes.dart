@@ -21,9 +21,10 @@ class PlaceDetailsRoutes {
         final preview = state.extra as PlaceEntity?;
 
         return BlocProvider(
-          create: (_) => sl<PlaceDetailsCubit>()
-            ..loadPlaceDetails(placeId, preview: preview),
-          child: PlaceDetailsScreen(heroTag: heroTag),
+          create: (_) =>
+              sl<PlaceDetailsCubit>()
+                ..loadPlaceDetails(placeId, preview: preview),
+          child: PlaceDetailsScreen(heroTag: heroTag, placeId: placeId),
         );
       },
       transition: AppTransitionRoute.fade,

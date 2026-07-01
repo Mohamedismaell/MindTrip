@@ -82,7 +82,8 @@ class _RecommendedCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: (isLoading || (Skeletonizer.maybeOf(context)?.enabled ?? false))
+            child:
+                (isLoading || (Skeletonizer.maybeOf(context)?.enabled ?? false))
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(20.r),
                     child: Stack(
@@ -95,9 +96,9 @@ class _RecommendedCard extends StatelessWidget {
                           top: 10.h,
                           left: 10.w,
                           child: FavoriteButton(
-                            isFavorite: context.watch<FavoriteCubit>().isFavorite(
-                              destination.id,
-                            ),
+                            isFavorite: context
+                                .watch<FavoriteCubit>()
+                                .isFavorite(destination.id),
                             onTap: () {
                               final cubit = context.read<FavoriteCubit>();
                               cubit.toggleFavorite(
@@ -118,7 +119,9 @@ class _RecommendedCard extends StatelessWidget {
                                 vertical: 4.h,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.pureWhite.withValues(alpha: 0.92),
+                                color: AppColors.pureWhite.withValues(
+                                  alpha: 0.92,
+                                ),
                                 borderRadius: BorderRadius.circular(20.r),
                               ),
                               child: Text(
@@ -144,9 +147,9 @@ class _RecommendedCard extends StatelessWidget {
                             top: 10.h,
                             left: 10.w,
                             child: FavoriteButton(
-                              isFavorite: context.watch<FavoriteCubit>().isFavorite(
-                                destination.id,
-                              ),
+                              isFavorite: context
+                                  .watch<FavoriteCubit>()
+                                  .isFavorite(destination.id),
                               onTap: () {
                                 final cubit = context.read<FavoriteCubit>();
                                 cubit.toggleFavorite(
@@ -167,7 +170,9 @@ class _RecommendedCard extends StatelessWidget {
                                   vertical: 4.h,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.pureWhite.withValues(alpha: 0.92),
+                                  color: AppColors.pureWhite.withValues(
+                                    alpha: 0.92,
+                                  ),
                                   borderRadius: BorderRadius.circular(20.r),
                                 ),
                                 child: Text(

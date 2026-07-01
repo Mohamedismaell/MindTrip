@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mindtrip/core/utils/dummy_data.dart';
-import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:mindtrip/core/shared/presentation/widget/app_error_widget.dart';
 import 'package:mindtrip/core/theme/app_colors.dart';
 import 'package:mindtrip/core/utils/app_assets.dart';
+import 'package:mindtrip/core/utils/dummy_data.dart';
 import 'package:mindtrip/core/utils/extension.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_cubit.dart';
 import 'package:mindtrip/features/place_details/presentation/cubit/place_details_state.dart';
@@ -13,17 +12,41 @@ import 'package:mindtrip/features/place_details/presentation/widgets/place_detai
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_image_cover.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_info_chips.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_location_section.dart';
-import 'package:mindtrip/features/place_details/presentation/widgets/place_details_overview.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_nearby_places.dart';
+import 'package:mindtrip/features/place_details/presentation/widgets/place_details_overview.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_photo_strip.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_reviews.dart';
-import 'package:mindtrip/features/place_details/presentation/widgets/place_details_visit_info.dart';
 import 'package:mindtrip/features/place_details/presentation/widgets/place_details_trip_button.dart';
+import 'package:mindtrip/features/place_details/presentation/widgets/place_details_visit_info.dart';
+import 'package:mindtrip/features/places/domain/entity/place_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class PlaceDetailsScreen extends StatelessWidget {
+class PlaceDetailsScreen extends StatefulWidget {
+  final String placeId;
   final String? heroTag;
-  const PlaceDetailsScreen({super.key, this.heroTag});
+  final PlaceEntity? previewPlace;
+
+  const PlaceDetailsScreen({
+    super.key,
+    required this.placeId,
+    this.heroTag,
+    this.previewPlace,
+  });
+
+  @override
+  State<PlaceDetailsScreen> createState() => _PlaceDetailsScreenState();
+}
+
+class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<PlaceDetailsCubit>().loadPlaceDetails(widget.placeId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +71,16 @@ class PlaceDetailsScreen extends StatelessWidget {
             previous.preview != current.preview ||
             previous.nearbyError != current.nearbyError,
         builder: (context, state) {
-          final place = state.place ?? state.preview ?? DummyData.placeDetails;
+          final place =
+              state.place ??
+              widget.previewPlace ??
+              state.preview ??
+              DummyData.placeDetails;
 
           return _PlaceDetailsBody(
             place: place,
             placeDetailsStatus: state.placeDetailsStatus,
-            heroTag: heroTag,
+            heroTag: widget.heroTag,
           );
         },
       ),
@@ -65,6 +92,7 @@ class _PlaceDetailsBody extends StatelessWidget {
   final PlaceEntity place;
   final PlaceDetailsStatus placeDetailsStatus;
   final String? heroTag;
+
   const _PlaceDetailsBody({
     required this.place,
     required this.placeDetailsStatus,
@@ -76,6 +104,7 @@ class _PlaceDetailsBody extends StatelessWidget {
     final imageUrls = place.imageUrls ?? const <String>[];
     final isMainLoading = placeDetailsStatus == PlaceDetailsStatus.loading;
     final isMainError = placeDetailsStatus == PlaceDetailsStatus.error;
+
     return RefreshIndicator(
       color: context.colorTheme.primary,
       backgroundColor: Colors.white,
@@ -96,7 +125,7 @@ class _PlaceDetailsBody extends StatelessWidget {
                   imageUrls: place.imageUrls,
                   placeId: place.id,
                   place: place,
-                  heroTag: heroTag,
+                  heroTag: heroTag ?? 'place_${place.id}',
                 ),
                 Positioned(
                   left: 0,
@@ -144,8 +173,6 @@ class _PlaceDetailsBody extends StatelessWidget {
                         enabled: isMainLoading,
                         justifyMultiLineText: true,
                         enableSwitchAnimation: true,
-
-                        // ignorePointers: false,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -66,8 +66,47 @@ class NavigaiotnStep extends StatelessWidget {
                   color: context.colorTheme.onSurface,
                 ),
                 SizedBox(width: 12.w),
+
+                // Expanded(
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Row(
+                //         children: [
+                //           Expanded(
+                //             child: Text(
+                //               distanceText,
+                //               style: AppTextStyles.h8SemiBold.copyWith(
+                //                 color: context.colorTheme.onSurface,
+                //               ),
+                //               maxLines: 1,
+                //               overflow: TextOverflow.ellipsis,
+                //             ),
+                //           ),
+                //           SizedBox(width: 8.w),
+                //           Text(
+                //             durationText,
+                //             style: AppTextStyles.h9SemiBold.copyWith(
+                //               color: context.colorTheme.onSurface,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //       SizedBox(height: 2.h),
+                //       Flexible(
+                //         child: Text(
+                //           instructionText,
+                //           style: context.textTheme.bodyMedium,
+                //           maxLines: 2,
+                //           overflow: TextOverflow.ellipsis,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Expanded(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
@@ -92,13 +131,11 @@ class NavigaiotnStep extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 2.h),
-                      Flexible(
-                        child: Text(
-                          instructionText,
-                          style: context.textTheme.bodyMedium,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      Text(
+                        instructionText,
+                        style: context.textTheme.bodyMedium,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
