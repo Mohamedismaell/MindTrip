@@ -75,12 +75,7 @@ class ExploreSectionHeader extends StatelessWidget {
 }
 
 class _ActionChip extends StatelessWidget {
-  const _ActionChip({
-    required this.label,
-    required this.onTap,
-    this.svgIcon,
-    this.icon,
-  });
+  const _ActionChip({required this.label, required this.onTap, this.svgIcon});
 
   final IconData? icon;
   final String label;

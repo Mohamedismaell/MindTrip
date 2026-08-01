@@ -1,5 +1,4 @@
 import '../models/day_plan_model.dart';
-import 'plan_place_mapper.dart';
 import '../../domain/entities/day_plan_entity.dart';
 
 extension DayPlanModelMapper on DayPlanModel {

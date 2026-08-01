@@ -19,6 +19,7 @@ class FacebookAuthProvider implements SocialAuthProvider {
       case LoginStatus.operationInProgress:
         throw Exception('Facebook sign in already in progress');
     }
+    return null;
   }
 
   @override
